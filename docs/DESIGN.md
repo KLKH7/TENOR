@@ -286,3 +286,25 @@ Query-side only, dev only; details, error analysis and ablations in `docs/CONCEN
   tokens; summaries-only b1 scores 64%. b0's retired accuracy was not run (≈ $29 at N = ∞). The
   benchmark has no verbatim-quote questions, so the main expected loss is untested. See
   `docs/RETIREMENT.md`.
+
+## Report provenance: judge reasons, data version, per-system k (workstream R, 2026-11-02)
+
+- **Judge reason kept.** Per-question JSONL rows used to merge `{**details, **asdict(row)}`,
+  which overwrote the judge's `{verdict, reason}` with the row's verdict string, so the reason
+  was lost. Rows now keep `verdict` as the string (what `failures.py`, `judge_check.py` and old
+  readers expect) and add `judge` (the structured judge output) and `judge_reason` (the field
+  the results explorer shows). Reports written before this have no reason; the explorer copes.
+- **Data version pinned.** `meta.data` records `content_sha256`: a sha256 over sorted
+  `(relative path, sha256(file))` for `notes/*.json`, `questions.jsonl` and `world.json`, plus
+  the file count and `generator`/`scale`/`seed` from `manifest.json`. Paths are relative, so a
+  copied or regenerated fixture set hashes the same; `manifest.json` isn't hashed, since it
+  describes the data rather than being the data. This matters because XL fixtures are gitignored:
+  a report can now be checked against the exact data later (`fixtures_version(path)`).
+- **Per-system settings.** `meta.systems[name]` records `k` (b0/b1; `null` otherwise) and, for
+  write-time systems with `config()` (c, b4, b5), the config and a 12-hex `config_sha256` (same
+  JSON canonicalisation as their store paths, but a longer digest). The markdown header shows
+  `Retrieval: b0_topk k=…`, the memory config hashes and the data hash. This makes the
+  **pre-registered final XL setting visible: b0 top-k with k=10** (chosen for budget before any
+  test results were seen; base runs keep the default k=20).
+- These helpers can't crash report writing: a failing `config()` or unreadable fixtures is
+  recorded as an `*_error` field, because the report is written only after the money is spent.

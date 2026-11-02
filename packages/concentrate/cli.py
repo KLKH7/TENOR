@@ -265,6 +265,7 @@ def eval_cmd(
             notes=notes,
             batch=batch,
             latency_sample=latency_sample,
+            fixtures=fixtures,
             meta={"k": k, "embedder": getattr(embedder, "name", None), "fixtures": str(fixtures)},
         )
     typer.echo((Path(report["paths"]["md"])).read_text())

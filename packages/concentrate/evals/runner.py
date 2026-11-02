@@ -8,6 +8,7 @@ record all of those. Spending is capped: the run stops before the ledger would e
 
 from __future__ import annotations
 
+import hashlib
 import importlib
 import json
 import os
@@ -303,6 +304,72 @@ def _git() -> dict[str, Any]:
     return {"sha": run("rev-parse", "--short", "HEAD"), "dirty": bool(run("status", "--porcelain"))}
 
 
+def fixtures_version(fixtures: Path) -> dict[str, Any]:
+    """Pin the exact benchmark data a report was produced from.
+
+    ``content_sha256`` is a sha256 over the sorted ``(relative path, sha256(file))`` pairs of
+    ``notes/*.json``, ``questions.jsonl`` and ``world.json`` (missing files are skipped), so a
+    report can be checked later against a regenerated or copied fixture set (XL is
+    gitignored). ``generator`` comes from ``manifest.json`` when present.
+    """
+    files = sorted(fixtures.glob("notes/*.json")) + [
+        f for f in (fixtures / "questions.jsonl", fixtures / "world.json") if f.exists()
+    ]
+    pairs = sorted(
+        (f.relative_to(fixtures).as_posix(), hashlib.sha256(f.read_bytes()).hexdigest())
+        for f in files
+    )
+    digest = hashlib.sha256("".join(f"{p}\t{h}\n" for p, h in pairs).encode()).hexdigest()
+    manifest_path = fixtures / "manifest.json"
+    manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else {}
+    return {
+        "path": str(fixtures),
+        "content_sha256": digest,
+        "files": len(pairs),
+        "generator": manifest.get("generator"),
+        "scale": manifest.get("scale"),
+        "seed": manifest.get("seed"),
+    }
+
+
+def _safe_version(fixtures: Path) -> dict[str, Any]:
+    try:  # report writing must never fail after a paid run
+        return fixtures_version(fixtures)
+    except (OSError, ValueError) as exc:
+        return {"path": str(fixtures), "error": repr(exc)}
+
+
+def system_settings(systems: list[System]) -> dict[str, dict[str, Any]]:
+    """Per-system settings that change results: retrieval ``k`` (b0/b1) and, for write-time
+    systems exposing ``config()``, a short hash of that memory-store config (plus the config)."""
+    out: dict[str, dict[str, Any]] = {}
+    for s in systems:
+        entry: dict[str, Any] = {"k": getattr(s, "k", None)}
+        config = getattr(s, "config", None)
+        if callable(config):
+            try:  # report writing must never fail after a paid run
+                cfg = config()
+            except Exception as exc:
+                entry["config_error"] = repr(exc)
+                out[s.name] = entry
+                continue
+            entry["config"] = cfg
+            entry["config_sha256"] = hashlib.sha256(
+                json.dumps(cfg, sort_keys=True, default=str).encode()
+            ).hexdigest()[:12]
+        out[s.name] = entry
+    return out
+
+
+def jsonl_row(detail: dict[str, Any], row: Row) -> dict[str, Any]:
+    """One per-question JSONL record. ``verdict`` stays the judge's verdict string (what older
+    readers expect); the judge's structured output is kept under ``judge`` and its reason is
+    surfaced as ``judge_reason`` (the field the results explorer shows)."""
+    judge_out = detail["verdict"]
+    rest = {k: v for k, v in detail.items() if k != "verdict"}
+    return {**rest, **asdict(row), "judge": judge_out, "judge_reason": judge_out.get("reason")}
+
+
 def run_eval(
     systems: list[System],
     questions: list[Question],
@@ -317,6 +384,7 @@ def run_eval(
     batch: bool = False,
     latency_sample: int = 10,
     batch_backend: BatchBackend | None = None,
+    fixtures: Path | None = None,
 ) -> dict[str, Any]:
     """Run, judge, aggregate and write ``<out_dir>/<stamp>.{json,md}`` plus per-question JSONL.
 
@@ -329,6 +397,9 @@ def run_eval(
     run as usual (cache hits; B3 and failed batch items run interactively), (C) all judge calls
     are prefetched in one batch, then judged from cache. Each batch is estimated first and
     refused if it would exceed the remaining budget.
+
+    With ``fixtures``, the report's ``meta.data`` pins the data version (``fixtures_version``).
+    ``meta.systems`` always records per-system ``k`` and write-time config hashes.
     """
     stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -464,6 +535,8 @@ def run_eval(
             "ingest": ingest,
             "stopped_early": stopped,
             "batch": batch_info,
+            "systems": system_settings(systems),
+            **({"data": _safe_version(fixtures)} if fixtures is not None else {}),
             **(meta or {}),
         },
         "metrics": summarize(rows, seed),
@@ -472,7 +545,7 @@ def run_eval(
     (out_dir / f"{stamp}.json").write_text(json.dumps(report, indent=2, default=str))
     (out_dir / f"{stamp}.jsonl").write_text(
         "".join(
-            json.dumps({**d, **asdict(r)}, default=str) + "\n"
+            json.dumps(jsonl_row(d, r), default=str) + "\n"
             for d, r in zip(details, rows, strict=True)
         )
     )
@@ -496,6 +569,21 @@ def to_markdown(report: dict[str, Any]) -> str:
         f"{m['seed']} · git `{m['git']['sha']}`{' (dirty)' if m['git']['dirty'] else ''} · "
         f"spent ${m['spent_usd']:.2f} of ${m['budget_usd']:.2f}",
     ]
+    settings = m.get("systems") or {}
+    ks = [f"{n} k={v['k']}" for n, v in settings.items() if v.get("k") is not None]
+    cfgs = [f"{n} `{v['config_sha256']}`" for n, v in settings.items() if v.get("config_sha256")]
+    data = m.get("data") or {}
+    if ks or cfgs or data:
+        lines.append("")
+    if ks:
+        lines.append(f"**Retrieval:** {', '.join(ks)} (meetings per question)  ")
+    if cfgs:
+        lines.append(f"**Memory config:** {', '.join(cfgs)}  ")
+    if data.get("content_sha256"):
+        lines.append(
+            f"**Data:** `{data['path']}` · generator `{data.get('generator')}` · "
+            f"{data['files']} files · sha256 `{data['content_sha256'][:16]}`"
+        )
     b = m.get("batch") or {}
     if b.get("enabled"):
         batched = ", ".join(b.get("batched_systems") or []) or "none"
