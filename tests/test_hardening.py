@@ -5,9 +5,12 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
 import random
+import signal
 import threading
 import time
+from collections.abc import Iterator
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
@@ -40,6 +43,15 @@ from concentrate.llm.resilience import (
 )
 
 MODEL = "claude-opus-5-5"
+
+
+@pytest.fixture(autouse=True)
+def _clean_watchdog_state() -> Iterator[None]:
+    yield
+    watchdog.reset_stop()
+    watchdog.on_forced_exit("t", None)
+
+
 FAST = RetryPolicy(max_attempts=4, base_s=0.0, cap_s=0.0, deadline_s=60.0)
 
 
@@ -313,29 +325,78 @@ def test_mem0_client_retries_and_meters_once(monkeypatch: pytest.MonkeyPatch) ->
 # -- watchdog --------------------------------------------------------------------------------
 
 
-def test_watchdog_fires_only_after_a_stall() -> None:
+def test_watchdog_asks_first_then_forces_after_the_grace(tmp_path: Path) -> None:
     fired: list[int] = []
     offset = [0.0]
+    marker = tmp_path / "FORCED_EXIT"
+    watchdog.on_forced_exit("t", lambda: marker.write_text("x"))
     dog = watchdog.Watchdog(
-        600, what="ingest b4", clock=lambda: time.monotonic() + offset[0], on_stall=fired.append
+        600,
+        what="ingest b5",
+        grace_s=300,
+        clock=lambda: time.monotonic() + offset[0],
+        on_stall=fired.append,
     )
     watchdog.beat()
-    assert not dog.check()
     offset[0] = 599
-    assert not dog.check()
-    offset[0] = 601
+    assert not dog.check() and not watchdog.stop_requested()
+    offset[0] = 601  # stalled: ask for a clean stop, don't kill yet
+    assert not dog.check() and watchdog.stop_requested() and not fired
+    with pytest.raises(watchdog.StopRequested, match="stalled"):
+        watchdog.raise_if_stopping()
+    offset[0] = 899
+    assert not dog.check() and not marker.exists()
+    offset[0] = 902  # still stuck after the grace: hooks, then the hard exit
     assert dog.check() and fired == [watchdog.STALL_EXIT_CODE]
+    assert marker.exists()
     assert not dog.check()  # fires once
 
 
 def test_watchdog_beats_keep_it_quiet_and_silence_trips_it() -> None:
     tripped = threading.Event()
-    with watchdog.Watchdog(0.3, check_s=0.02, on_stall=lambda code: tripped.set()):
+    dog = watchdog.Watchdog(0.3, grace_s=0.1, check_s=0.02, on_stall=lambda code: tripped.set())
+    with dog:
         for _ in range(10):  # 0.5 s of steady progress: no stall
             watchdog.beat()
             time.sleep(0.05)
-        assert not tripped.is_set()
-        assert tripped.wait(timeout=3)  # then silence: it fires
+        assert not tripped.is_set() and not watchdog.stop_requested()
+        assert tripped.wait(timeout=3)  # then silence: it asks, waits the grace, then fires
+    assert watchdog.stop_requested()
+
+
+def test_retries_stop_once_a_stop_is_requested() -> None:
+    attempts = []
+
+    def fn() -> str:
+        attempts.append(1)
+        watchdog.request_stop("SIGTERM")  # arrives while the first attempt is in flight
+        raise _timeout()
+
+    with pytest.raises(watchdog.StopRequested):
+        call_with_retries(fn, what="t", policy=FAST, sleep=lambda s: None)
+    assert len(attempts) == 1
+
+
+def test_first_sigterm_asks_second_interrupts() -> None:
+    with watchdog.graceful_signals():
+        os.kill(os.getpid(), signal.SIGTERM)
+        time.sleep(0.05)  # the handler runs in this (main) thread between bytecodes
+        assert watchdog.stop_requested()
+        with pytest.raises(KeyboardInterrupt):
+            os.kill(os.getpid(), signal.SIGTERM)
+            time.sleep(1)
+    assert signal.getsignal(signal.SIGTERM) is signal.SIG_DFL  # handler restored
+
+
+def test_cli_turns_a_clean_stop_into_exit_75() -> None:
+    import typer
+
+    from concentrate.cli import _stall_guard
+
+    with pytest.raises(typer.Exit) as exc, _stall_guard(0, "ingest b5"):
+        watchdog.request_stop("SIGTERM")
+        watchdog.raise_if_stopping()
+    assert exc.value.exit_code == watchdog.STALL_EXIT_CODE
 
 
 def test_llm_calls_and_retries_beat(tmp_path: Path) -> None:
@@ -380,3 +441,56 @@ def test_read_progress_refuses_corruption_in_the_middle(tmp_path: Path) -> None:
     with pytest.raises(ValueError, match="corrupt row 2"):
         read_progress(path)
     assert read_progress(tmp_path / "missing.jsonl") == []
+
+
+# -- Kuzu: probe in a child process, checkpoint on close ------------------------------------
+
+
+def _kuzu_with_wal(tmp_path: Path) -> Path:
+    """A real Kuzu store whose writer died without checkpointing (a WAL is left behind)."""
+    import subprocess
+    import sys
+
+    db = tmp_path / "graph.kuzu"
+    code = (
+        "import os, sys, kuzu\n"
+        "db = kuzu.Database(sys.argv[1]); c = kuzu.Connection(db)\n"
+        "c.execute('CREATE NODE TABLE Episodic(uuid STRING, PRIMARY KEY(uuid))')\n"
+        "c.execute('CHECKPOINT')\n"
+        "for i in range(20): c.execute(f\"CREATE (:Episodic {{uuid: 'u{i}'}})\")\n"
+        "os._exit(0)\n"
+    )
+    subprocess.run([sys.executable, "-c", code, str(db)], check=True)
+    return db
+
+
+def test_probe_replays_a_healthy_wal_in_a_child(tmp_path: Path) -> None:
+    from concentrate.agents.kuzu_safety import needs_probe, probe_kuzu, wal_path
+
+    db = _kuzu_with_wal(tmp_path)
+    assert wal_path(db).stat().st_size > 0 and needs_probe(db)
+    assert probe_kuzu(db) is None
+
+
+def test_probe_reports_a_native_crash_instead_of_dying(tmp_path: Path) -> None:
+    from concentrate.agents.kuzu_safety import probe_kuzu
+
+    bus_error = "import os, signal\nos.kill(os.getpid(), signal.SIGBUS)\n"
+    problem = probe_kuzu(tmp_path / "graph.kuzu", code=bus_error)
+    assert problem is not None and "SIGBUS" in problem
+    assert "exit 3" in (probe_kuzu(tmp_path, code="raise SystemExit(3)") or "")
+
+
+def test_close_kuzu_checkpoints_away_the_wal(tmp_path: Path) -> None:
+    import kuzu
+
+    from concentrate.agents.kuzu_safety import close_kuzu, needs_probe, wal_path
+
+    db_path = _kuzu_with_wal(tmp_path)
+    db = kuzu.Database(str(db_path))
+    driver = SimpleNamespace(db=db, client=kuzu.AsyncConnection(db))
+    asyncio.run(driver.client.execute("CREATE (:Episodic {uuid: 'late'})"))
+    close_kuzu(driver)
+    assert not wal_path(db_path).exists() and not needs_probe(db_path)
+    conn = kuzu.Connection(kuzu.Database(str(db_path)))
+    assert conn.execute("MATCH (n:Episodic) RETURN count(n)").get_next() == [21]

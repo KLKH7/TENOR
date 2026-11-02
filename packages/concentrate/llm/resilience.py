@@ -15,6 +15,7 @@ The policy here:
   timeouts, dropped connections, 408/409/429/5xx/529; never 400/401/403/404/413 (retrying a bad
   request cannot help). Exponential backoff with full jitter, honouring ``Retry-After``, under a
   per-call wall-clock deadline. Every retry is logged at WARNING so a stall is never silent.
+  Once a stop is requested (``concentrate.watchdog``), no further retry starts.
 
 Idempotency: a retried Messages call is safe for *our* state because nothing is cached or
 accounted until a complete reply arrives. It is not free: the server may have generated (and
@@ -35,7 +36,7 @@ from typing import Any, TypeVar
 import httpx
 import httpx2  # the HTTP library the anthropic SDK (>= 2.x) is built on
 
-from concentrate.watchdog import beat
+from concentrate.watchdog import StopRequested, beat, stop_requested
 
 logger = logging.getLogger("concentrate.llm")
 
@@ -170,6 +171,8 @@ def call_with_retries(
             delay = _next_delay(exc, attempt, policy, rng)
             if _give_up(exc, attempt, clock() - start, delay, policy):
                 raise
+            if stop_requested():  # winding down: don't start another attempt
+                raise StopRequested(f"{what}: not retried, stop requested") from exc
             _log_retry(what, exc, attempt, policy, delay)
             beat()  # alive and handling it; a dead network ends at the deadline, not here
             sleep(delay)
@@ -198,6 +201,8 @@ async def acall_with_retries(
             delay = _next_delay(exc, attempt, policy, rng)
             if _give_up(exc, attempt, clock() - start, delay, policy):
                 raise
+            if stop_requested():  # winding down: don't start another attempt
+                raise StopRequested(f"{what}: not retried, stop requested") from exc
             _log_retry(what, exc, attempt, policy, delay)
             beat()
             await sleep(delay)

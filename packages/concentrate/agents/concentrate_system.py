@@ -28,6 +28,7 @@ from dataclasses import asdict
 from pathlib import Path
 from typing import Any
 
+from concentrate import watchdog
 from concentrate.agents import corpus as cv
 from concentrate.agents.baselines import (
     ANSWER_PROMPT,
@@ -214,6 +215,7 @@ class ConcentrateSystem:
             for i, m in enumerate(ordered):
                 if store.has_meeting(m.note_id):
                     continue
+                watchdog.raise_if_stopping()  # SIGTERM / stall: stop between meetings
                 row = builder.ingest(m, ordered[:i])
                 log.write(json.dumps({"note_id": m.note_id, **row}) + "\n")
                 log.flush()

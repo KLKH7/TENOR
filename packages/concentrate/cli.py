@@ -4,7 +4,8 @@ from __future__ import annotations
 
 import logging
 import os
-from contextlib import AbstractContextManager, ExitStack
+from collections.abc import Iterator
+from contextlib import ExitStack, contextmanager
 from enum import StrEnum
 from pathlib import Path
 from typing import Annotated
@@ -425,10 +426,19 @@ def hand_check(
 # -- stall watchdog (workstream I) -------------------------------------------------------------
 
 
-def _stall_guard(minutes: float, what: str) -> AbstractContextManager[object]:
-    """A :class:`~concentrate.watchdog.Watchdog` for ``minutes`` (a no-op when 0)."""
-    from contextlib import nullcontext
+@contextmanager
+def _stall_guard(minutes: float, what: str) -> Iterator[None]:
+    """Run a long command under the stall watchdog (off when ``minutes`` is 0) and graceful
+    SIGTERM/SIGINT handling; a requested stop closes stores cleanly and exits 75."""
+    from concentrate import watchdog
 
-    from concentrate.watchdog import Watchdog
-
-    return Watchdog(minutes * 60, what=what) if minutes > 0 else nullcontext()
+    watchdog.reset_stop()
+    with ExitStack() as stack:
+        stack.enter_context(watchdog.graceful_signals())
+        if minutes > 0:
+            stack.enter_context(watchdog.Watchdog(minutes * 60, what=what))
+        try:
+            yield
+        except watchdog.StopRequested as exc:
+            typer.echo(f"{what}: stopped cleanly ({exc}); rerun to resume", err=True)
+            raise typer.Exit(watchdog.STALL_EXIT_CODE) from None

@@ -201,3 +201,17 @@ connection could block for up to 50 minutes. Full write-up: [`HARDENING.md`](HAR
 - abandoned attempts may still be billed, and the ledger can't see it;
 - `batches.create` can duplicate a batch on a lost reply;
 - Mem0 and Graphiti have a one-chunk double-write window on kill.
+
+**Follow-up: stopping safely (same day).** A SIGTERM during a Graphiti write left Kuzu's WAL
+torn, and every restart died natively replaying it (about $10.66 of work was lost recovering by
+hand). So stopping is now two-phase:
+- a stall or signal *asks* the run to stop between items, and the Graphiti store is
+  checkpointed and closed;
+- the watchdog only forces `os._exit` after a 6-minute grace, leaving a `FORCED_EXIT` marker.
+
+An unclean store is test-opened in a child process before use, and fails with recovery steps
+instead of a bus error. Resume reconciles `progress.jsonl` against the Episodic uuids in Kuzu,
+and reports lost spend separately (`orphaned_cost_usd`).
+
+Trade-off: a stall now takes up to 15 + 6 minutes to end instead of 15, in exchange for
+closing the database cleanly whenever the main thread can still move.
