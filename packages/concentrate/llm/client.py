@@ -11,6 +11,10 @@ Responsibilities:
   and latency, aggregated per pipeline stage.
 * **Robustness.** SDK retries for 429/5xx; server-side refusal fallback; refusals and truncation
   raise typed errors instead of returning partial JSON.
+* **Batch prefetch.** :func:`prefetch_turns` / :func:`prefetch_structured` send many requests
+  through the Message Batches API (50% price) and write each result into the *same* cache file
+  the interactive path would, so the normal code then replays it with no divergence. Batch
+  completions are flagged (``batch=True``): priced at the batch rate, never used for latency.
 
 The backend is pluggable so tests run with a fake and never touch the network.
 """
@@ -20,8 +24,10 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 import time
-from collections import defaultdict
+from collections import Counter, defaultdict
+from collections.abc import Callable, Iterable, Sequence
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any, Protocol, TypeVar
@@ -62,6 +68,9 @@ class LLMTruncated(LLMError):
 # cost 1.25x the input price (5-minute TTL).
 CACHE_READ_PER_MTOK: dict[str, float] = {"claude-opus-5-5": 0.20, "claude-sonnet-5-5": 0.20}
 CACHE_WRITE_MULTIPLIER = 1.25
+# Message Batches API: "All usage is charged at 50 percent of the standard API prices"
+# (platform.claude.com/docs/en/build-with-claude/batch-processing, checked 2026-11-02).
+BATCH_DISCOUNT = 0.5
 
 
 def cost_usd(
@@ -70,21 +79,25 @@ def cost_usd(
     output_tokens: int,
     cache_read_tokens: int = 0,
     cache_write_tokens: int = 0,
+    *,
+    batch: bool = False,
 ) -> float:
     """Price a call. ``input_tokens`` excludes cached tokens, as the API reports it.
 
-    Unknown models raise so we never silently report $0.
+    ``batch`` applies the Message Batches discount to every token class. Unknown models raise
+    so we never silently report $0.
     """
     if model not in PRICING:
         raise KeyError(f"no pricing for model {model!r}; add it to concentrate.llm.client.PRICING")
     p_in, p_out = PRICING[model]
     p_read = CACHE_READ_PER_MTOK.get(model, p_in * 0.1)
-    return (
+    full = (
         input_tokens * p_in
         + output_tokens * p_out
         + cache_read_tokens * p_read
         + cache_write_tokens * p_in * CACHE_WRITE_MULTIPLIER
     ) / 1_000_000
+    return full * BATCH_DISCOUNT if batch else full
 
 
 def estimate_tokens(text: str) -> int:
@@ -112,10 +125,25 @@ class Completion:
     input_tokens: int
     output_tokens: int
     stop_reason: str
+    batch: bool = False  # produced by the Message Batches API (batch price, no latency)
 
 
 class Backend(Protocol):
     def complete(self, request: LLMRequest, model: str) -> Completion: ...
+
+
+def structured_params(request: LLMRequest, model: str) -> dict[str, Any]:
+    """Messages API params for a single-turn structured call (shared by interactive and batch)."""
+    return {
+        "model": model,
+        "max_tokens": request.max_tokens,
+        "system": request.system,
+        "messages": [{"role": "user", "content": request.user}],
+        "output_config": {
+            "effort": request.effort,
+            "format": {"type": "json_schema", "schema": request.schema},
+        },
+    }
 
 
 class AnthropicBackend:
@@ -127,16 +155,7 @@ class AnthropicBackend:
         self._client = anthropic.Anthropic(max_retries=max_retries)
 
     def complete(self, request: LLMRequest, model: str) -> Completion:
-        kwargs: dict[str, Any] = {
-            "model": model,
-            "max_tokens": request.max_tokens,
-            "system": request.system,
-            "messages": [{"role": "user", "content": request.user}],
-            "output_config": {
-                "effort": request.effort,
-                "format": {"type": "json_schema", "schema": request.schema},
-            },
-        }
+        kwargs = structured_params(request, model)
         if model in _FALLBACK_MODELS:
             kwargs["betas"] = ["server-side-fallback-2026-07-01"]
             kwargs["fallbacks"] = "default"
@@ -162,6 +181,7 @@ class CallRecord:
     cached: bool
     latency_s: float
     key: str
+    batch: bool = False  # completion came from the Message Batches API: latency is not real
 
 
 @dataclass
@@ -229,13 +249,23 @@ class LLMClient:
         blob = json.dumps(payload, sort_keys=True, ensure_ascii=False).encode()
         return hashlib.sha256(blob).hexdigest()
 
+    def cache_path(self, req: LLMRequest) -> Path:
+        return self._cache_dir / f"{self._key(req)}.json"
+
     def is_cached(self, req: LLMRequest) -> bool:
-        return (self._cache_dir / f"{self._key(req)}.json").exists()
+        return self.cache_path(req).exists()
+
+    def write_cache(self, req: LLMRequest, completion: Completion) -> None:
+        """Persist ``completion`` exactly as :meth:`structured` does after a live call."""
+        path = self.cache_path(req)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        entry = {"request": asdict(req), "model": self.model, "completion": asdict(completion)}
+        path.write_text(json.dumps(entry, ensure_ascii=False, indent=1))
 
     def structured(self, req: LLMRequest, out_type: type[M]) -> M:
         """Run ``req`` and validate the JSON reply as ``out_type``."""
         key = self._key(req)
-        path = self._cache_dir / f"{key}.json"
+        path = self.cache_path(req)
         start = time.perf_counter()
         if path.exists():
             entry = json.loads(path.read_text())
@@ -251,9 +281,7 @@ class LLMClient:
                 raise LLMRefusal(f"{req.prompt_id}: model declined the request")
             if completion.stop_reason == "max_tokens":
                 raise LLMTruncated(f"{req.prompt_id}: output truncated at {req.max_tokens}")
-            path.parent.mkdir(parents=True, exist_ok=True)
-            entry = {"request": asdict(req), "model": self.model, "completion": asdict(completion)}
-            path.write_text(json.dumps(entry, ensure_ascii=False, indent=1))
+            self.write_cache(req, completion)
             cached = False
         self.ledger.add(
             CallRecord(
@@ -263,11 +291,15 @@ class LLMClient:
                 input_tokens=completion.input_tokens,
                 output_tokens=completion.output_tokens,
                 cost_usd=cost_usd(
-                    completion.model, completion.input_tokens, completion.output_tokens
+                    completion.model,
+                    completion.input_tokens,
+                    completion.output_tokens,
+                    batch=completion.batch,
                 ),
                 cached=cached,
-                latency_s=time.perf_counter() - start,
+                latency_s=0.0 if completion.batch else time.perf_counter() - start,
                 key=key,
+                batch=completion.batch,
             )
         )
         return out_type.model_validate_json(completion.text)
@@ -307,7 +339,8 @@ class TurnCompletion:
     output_tokens: int
     cache_read_tokens: int = 0
     cache_write_tokens: int = 0
-    latency_s: float = 0.0  # of the original (uncached) call
+    latency_s: float = 0.0  # of the original (uncached) call; 0 for batch results
+    batch: bool = False  # produced by the Message Batches API (batch price, no latency)
 
     @property
     def tool_uses(self) -> list[dict[str, Any]]:
@@ -322,7 +355,8 @@ class ToolBackend(Protocol):
     def turn(self, request: TurnRequest, model: str) -> TurnCompletion: ...
 
 
-def _anthropic_turn(client: Any, request: TurnRequest, model: str) -> TurnCompletion:
+def turn_params(request: TurnRequest, model: str) -> dict[str, Any]:
+    """Messages API params for one turn (shared by the interactive and batch paths)."""
     system: list[dict[str, Any]] = [{"type": "text", "text": request.system}]
     if request.cache_system:
         system[0]["cache_control"] = {"type": "ephemeral"}
@@ -338,25 +372,38 @@ def _anthropic_turn(client: Any, request: TurnRequest, model: str) -> TurnComple
     }
     if request.tools:
         kwargs["tools"] = list(request.tools)
+    return kwargs
+
+
+def turn_completion(
+    message: dict[str, Any], *, latency_s: float = 0.0, batch: bool = False
+) -> TurnCompletion:
+    """Build a :class:`TurnCompletion` from a Messages API ``Message`` serialised to JSON."""
+    usage = message.get("usage") or {}
+    content: list[dict[str, Any]] = list(message.get("content") or [])
+    return TurnCompletion(
+        content=content,
+        text="".join(b.get("text", "") for b in content if b.get("type") == "text"),
+        stop_reason=str(message.get("stop_reason")),
+        model=str(message["model"]),
+        input_tokens=int(usage.get("input_tokens") or 0),
+        output_tokens=int(usage.get("output_tokens") or 0),
+        cache_read_tokens=int(usage.get("cache_read_input_tokens") or 0),
+        cache_write_tokens=int(usage.get("cache_creation_input_tokens") or 0),
+        latency_s=latency_s,
+        batch=batch,
+    )
+
+
+def _anthropic_turn(client: Any, request: TurnRequest, model: str) -> TurnCompletion:
+    kwargs = turn_params(request, model)
     if model in _FALLBACK_MODELS:
         kwargs["betas"] = ["server-side-fallback-2026-07-01"]
         kwargs["fallbacks"] = "default"
     start = time.perf_counter()
     response = client.beta.messages.create(**kwargs)
     latency = time.perf_counter() - start
-    usage = response.usage
-    content = [b.model_dump(mode="json", exclude_none=True) for b in response.content]
-    return TurnCompletion(
-        content=content,
-        text="".join(b.get("text", "") for b in content if b.get("type") == "text"),
-        stop_reason=str(response.stop_reason),
-        model=response.model,
-        input_tokens=usage.input_tokens,
-        output_tokens=usage.output_tokens,
-        cache_read_tokens=getattr(usage, "cache_read_input_tokens", 0) or 0,
-        cache_write_tokens=getattr(usage, "cache_creation_input_tokens", 0) or 0,
-        latency_s=latency,
-    )
+    return turn_completion(response.model_dump(mode="json", exclude_none=True), latency_s=latency)
 
 
 def _turn_key(model: str, request: TurnRequest) -> str:
@@ -366,12 +413,24 @@ def _turn_key(model: str, request: TurnRequest) -> str:
     return hashlib.sha256(blob).hexdigest()
 
 
+def turn_cache_path(client: LLMClient, request: TurnRequest) -> Path:
+    """Where :func:`run_turn` caches ``request`` for ``client``'s model."""
+    return client.cache_dir / "turns" / f"{_turn_key(client.model, request)}.json"
+
+
+def write_turn_cache(client: LLMClient, request: TurnRequest, completion: TurnCompletion) -> None:
+    """Persist ``completion`` exactly as :func:`run_turn` does after a live call."""
+    path = turn_cache_path(client, request)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps({"completion": asdict(completion)}, ensure_ascii=False))
+
+
 def run_turn(
     client: LLMClient, request: TurnRequest, backend: ToolBackend | None = None
 ) -> TurnCompletion:
     """Run one cached, accounted Messages call (with optional tools) through ``client``."""
     key = _turn_key(client.model, request)
-    path = client.cache_dir / "turns" / f"{key}.json"
+    path = turn_cache_path(client, request)
     if path.exists():
         completion = TurnCompletion(**json.loads(path.read_text())["completion"])
         cached = True
@@ -387,8 +446,7 @@ def run_turn(
             raise LLMRefusal(f"{request.prompt_id}: model declined the request")
         if completion.stop_reason == "max_tokens":
             raise LLMTruncated(f"{request.prompt_id}: output truncated at {request.max_tokens}")
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps({"completion": asdict(completion)}, ensure_ascii=False))
+        write_turn_cache(client, request, completion)
         cached = False
     client.ledger.add(
         CallRecord(
@@ -397,19 +455,25 @@ def run_turn(
             model=completion.model,
             input_tokens=completion.total_input_tokens,
             output_tokens=completion.output_tokens,
-            cost_usd=cost_usd(
-                completion.model,
-                completion.input_tokens,
-                completion.output_tokens,
-                completion.cache_read_tokens,
-                completion.cache_write_tokens,
-            ),
+            cost_usd=_turn_cost(completion),
             cached=cached,
             latency_s=completion.latency_s,
             key=key,
+            batch=completion.batch,
         )
     )
     return completion
+
+
+def _turn_cost(c: TurnCompletion) -> float:
+    return cost_usd(
+        c.model,
+        c.input_tokens,
+        c.output_tokens,
+        c.cache_read_tokens,
+        c.cache_write_tokens,
+        batch=c.batch,
+    )
 
 
 class _SdkToolBackend:
@@ -444,3 +508,250 @@ def count_tokens(texts: list[str], model: str, cache_dir: Path) -> list[int]:
         path.write_text(str(result.input_tokens))
         out.append(result.input_tokens)
     return out
+
+
+# -- Message Batches prefetch -------------------------------------------------------------------
+
+# API limits (platform.claude.com/docs/en/api/messages/batches/create, checked 2026-11-02):
+# custom_id must match ^[a-zA-Z0-9_-]{1,64}$; a batch holds <= 100,000 requests and <= 256 MB.
+# The cache keys are 64-char sha256 hex digests, so they are valid custom_ids as-is.
+BATCH_MAX_REQUESTS = 100_000
+BATCH_MAX_BYTES = 200 * 1024 * 1024  # stay well under the 256 MB cap (JSON framing overhead)
+_CUSTOM_ID = re.compile(r"^[a-zA-Z0-9_-]{1,64}$")
+
+
+@dataclass(frozen=True)
+class BatchItemResult:
+    """One line of a batch's results, SDK-independent."""
+
+    custom_id: str
+    type: str  # succeeded | errored | canceled | expired
+    message: dict[str, Any] | None = None  # the Messages API Message (JSON) when succeeded
+    error: str = ""
+
+
+class BatchBackend(Protocol):
+    """The three Message Batches operations prefetch needs (fakeable in tests)."""
+
+    def create(self, requests: list[dict[str, Any]]) -> str:
+        """Submit ``[{custom_id, params}]``; return the batch id."""
+        ...
+
+    def retrieve(self, batch_id: str) -> str:
+        """Return the batch's ``processing_status`` (``in_progress``/``canceling``/``ended``)."""
+        ...
+
+    def results(self, batch_id: str) -> Iterable[BatchItemResult]:
+        """Stream an ended batch's results (any order)."""
+        ...
+
+
+class AnthropicBatchBackend:
+    """Message Batches over the official SDK (``client.messages.batches``, no beta header).
+
+    The server-side ``fallbacks`` parameter is rejected by the Batches API, so batch params
+    never carry it; a refused item is simply not cached and the run falls back to the
+    interactive call (which does use ``fallbacks``).
+    """
+
+    def __init__(self, max_retries: int = 4) -> None:
+        import anthropic
+
+        self._client = anthropic.Anthropic(max_retries=max_retries)
+
+    def create(self, requests: list[dict[str, Any]]) -> str:
+        batch = self._client.messages.batches.create(requests=requests)  # type: ignore[arg-type]
+        return str(batch.id)
+
+    def retrieve(self, batch_id: str) -> str:
+        return str(self._client.messages.batches.retrieve(batch_id).processing_status)
+
+    def results(self, batch_id: str) -> Iterable[BatchItemResult]:
+        for item in self._client.messages.batches.results(batch_id):
+            r = item.result
+            if r.type == "succeeded":
+                message = r.message.model_dump(mode="json", exclude_none=True)
+                yield BatchItemResult(item.custom_id, "succeeded", message)
+            elif r.type == "errored":
+                err = r.error.model_dump(mode="json")
+                detail = err.get("error", err)
+                yield BatchItemResult(
+                    item.custom_id,
+                    "errored",
+                    error=f"{detail.get('type', '')}: {detail.get('message', '')}",
+                )
+            else:
+                yield BatchItemResult(item.custom_id, str(r.type))
+
+
+@dataclass
+class BatchReport:
+    """What a prefetch did. ``fallback`` items were not cached: the run calls them live."""
+
+    requested: int = 0  # distinct requests asked for
+    already_cached: int = 0  # skipped: the cache already had them
+    submitted: int = 0
+    succeeded: int = 0  # written to the cache
+    fallback: dict[str, int] = field(default_factory=dict)  # reason -> count (not cached)
+    batch_ids: list[str] = field(default_factory=list)
+    seconds: float = 0.0  # submit -> all results written
+    cost_usd: float = 0.0  # billed (all succeeded items, incl. refused/truncated), batch price
+
+
+@dataclass(frozen=True)
+class _Item:
+    key: str
+    params: dict[str, Any]
+    stage: str
+    prompt_id: str
+    write: Callable[[dict[str, Any]], None]  # write the cache entry from a usable Message
+
+
+def _chunks(items: list[_Item]) -> list[list[_Item]]:
+    out: list[list[_Item]] = [[]]
+    size = 0
+    for it in items:
+        n = len(json.dumps({"custom_id": it.key, "params": it.params}, ensure_ascii=False))
+        if out[-1] and (len(out[-1]) >= BATCH_MAX_REQUESTS or size + n > BATCH_MAX_BYTES):
+            out.append([])
+            size = 0
+        out[-1].append(it)
+        size += n
+    return [c for c in out if c]
+
+
+def _run_batch(
+    client: LLMClient,
+    items: list[_Item],
+    already_cached: int,
+    backend: BatchBackend | None,
+    sleep: Callable[[float], None],
+    poll_s: float,
+    max_poll_s: float,
+) -> BatchReport:
+    report = BatchReport(requested=len(items) + already_cached, already_cached=already_cached)
+    if not items or client.offline:
+        return report
+    for it in items:
+        if not _CUSTOM_ID.match(it.key):
+            raise ValueError(f"cache key {it.key!r} is not a valid batch custom_id")
+    backend = backend or AnthropicBatchBackend()
+    by_id = {it.key: it for it in items}
+    start = time.perf_counter()
+    for chunk in _chunks(items):
+        reqs = [{"custom_id": it.key, "params": it.params} for it in chunk]
+        report.batch_ids.append(backend.create(reqs))
+        report.submitted += len(chunk)
+    pending = list(report.batch_ids)
+    interval = poll_s
+    while pending:
+        pending = [b for b in pending if backend.retrieve(b) != "ended"]
+        if pending:
+            sleep(interval)
+            interval = min(max_poll_s, interval * 1.5)
+    seen: set[str] = set()
+    fallback: Counter[str] = Counter()
+    for batch_id in report.batch_ids:
+        for res in backend.results(batch_id):
+            item = by_id.get(res.custom_id)
+            if item is None or res.custom_id in seen:
+                continue
+            seen.add(res.custom_id)
+            if res.type != "succeeded" or res.message is None:
+                fallback[res.type] += 1  # errored/canceled/expired items are not billed
+                continue
+            # A succeeded item is billed even when we can't use it, so it is always recorded.
+            c = turn_completion(res.message, batch=True)
+            usd = _turn_cost(c)
+            report.cost_usd += usd
+            client.ledger.add(
+                CallRecord(
+                    stage=f"{item.stage}.batch",
+                    prompt_id=item.prompt_id,
+                    model=c.model,
+                    input_tokens=c.total_input_tokens,
+                    output_tokens=c.output_tokens,
+                    cost_usd=usd,
+                    cached=False,
+                    latency_s=0.0,
+                    key=item.key,
+                    batch=True,
+                )
+            )
+            if c.stop_reason in ("refusal", "max_tokens"):  # as the interactive path: no cache
+                fallback[c.stop_reason] += 1
+                continue
+            item.write(res.message)
+            report.succeeded += 1
+    missing = len(by_id) - len(seen)
+    if missing:
+        fallback["missing"] += missing
+    report.fallback = dict(fallback)
+    report.seconds = time.perf_counter() - start
+    return report
+
+
+def prefetch_turns(
+    client: LLMClient,
+    requests: Sequence[TurnRequest],
+    backend: BatchBackend | None = None,
+    *,
+    sleep: Callable[[float], None] = time.sleep,
+    poll_s: float = 5.0,
+    max_poll_s: float = 60.0,
+) -> BatchReport:
+    """Batch every uncached ``TurnRequest`` and write results where :func:`run_turn` reads them.
+
+    Already-cached and duplicate requests are skipped. Errored, expired, canceled, refused or
+    truncated items are left uncached, so :func:`run_turn` calls them interactively later.
+    """
+    items: dict[str, _Item] = {}
+    cached = 0
+    for req in requests:
+        key = _turn_key(client.model, req)
+        if key in items:
+            continue
+        if turn_cache_path(client, req).exists():
+            cached += 1
+            continue
+
+        def write(message: dict[str, Any], req: TurnRequest = req) -> None:
+            write_turn_cache(client, req, turn_completion(message, batch=True))
+
+        items[key] = _Item(key, turn_params(req, client.model), req.stage, req.prompt_id, write)
+    return _run_batch(client, list(items.values()), cached, backend, sleep, poll_s, max_poll_s)
+
+
+def prefetch_structured(
+    client: LLMClient,
+    requests: Sequence[LLMRequest],
+    backend: BatchBackend | None = None,
+    *,
+    sleep: Callable[[float], None] = time.sleep,
+    poll_s: float = 5.0,
+    max_poll_s: float = 60.0,
+) -> BatchReport:
+    """Batch every uncached ``LLMRequest`` and write results where
+    :meth:`LLMClient.structured` reads them (same skip/fallback rules as :func:`prefetch_turns`).
+    """
+    items: dict[str, _Item] = {}
+    cached = 0
+    for req in requests:
+        key = client._key(req)
+        if key in items:
+            continue
+        if client.is_cached(req):
+            cached += 1
+            continue
+
+        def write(message: dict[str, Any], req: LLMRequest = req) -> None:
+            t = turn_completion(message, batch=True)
+            # Same text rule as AnthropicBackend.complete: the first text block.
+            text = next((b.get("text", "") for b in t.content if b.get("type") == "text"), "")
+            c = Completion(text, t.model, t.input_tokens, t.output_tokens, t.stop_reason, True)
+            client.write_cache(req, c)
+
+        items[key] = _Item(
+            key, structured_params(req, client.model), req.stage, req.prompt_id, write
+        )
+    return _run_batch(client, list(items.values()), cached, backend, sleep, poll_s, max_poll_s)

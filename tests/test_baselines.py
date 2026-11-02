@@ -16,13 +16,21 @@ from concentrate.agents.baselines import (
     AgentTools,
     FullContextSystem,
     MeetingRetriever,
+    OracleSystem,
     SummariesOnlySystem,
     TopKSystem,
 )
 from concentrate.core.models import MeetingNote
 from concentrate.evals.runner import estimate, load_corpus, load_questions, run_eval
-from concentrate.evals.scoring import bootstrap_ci, citation_scores, exact_match
-from concentrate.llm.client import Completion, LLMClient, LLMRequest, TurnCompletion, TurnRequest
+from concentrate.evals.scoring import bootstrap_ci, citation_scores, exact_match, judge_request
+from concentrate.llm.client import (
+    Completion,
+    LLMClient,
+    LLMRequest,
+    TurnCompletion,
+    TurnRequest,
+    _turn_key,
+)
 from concentrate.synth.questions import Question
 
 FIXTURES = Path(__file__).resolve().parent.parent / "data" / "fixtures" / "northwind"
@@ -226,6 +234,37 @@ def test_citation_scores_and_bootstrap() -> None:
     p, r = citation_scores(q, ["[not_AAAAAAAAAAAAAA:0001]", "not_BBBBBBBBBBBBBB:0009"])
     assert (p, r) == (0.5, 0.5)
     assert bootstrap_ci([1, 0, 1, 1], seed=1) == bootstrap_ci([1, 0, 1, 1], seed=1)
+
+
+def test_turn_request_keeps_pre_batch_cache_keys(
+    notes: list[MeetingNote], client: LLMClient, llm: FakeLLM
+) -> None:
+    """``turn_request(q)`` (used by batch prefetch) and ``run(q)`` send the same request, and
+    its cache key equals the one computed before the refactor, so existing caches still hit.
+    Keys pinned from commit 3aeebb5 (pre-batch) with this fixture and HashEmbedder."""
+    pinned = {
+        "b0_topk": "88fbe3fc19070678460e17d379989403fe22208529c147ef78ab957a64220970",
+        "b1_summaries": "96a4ddf912dbc3c2c0a297571a959cdb5520502c2dfab50e17bfb9fa2105b00f",
+        "b2_full": "eeb4daaaa8724ef5ecbda78c148bd2141f6fa35311dad6f9228290245786e53a",
+        "b2o_oracle": "e6ddf58a5539f698b7fe772bca8cb20a34206bf5ce7730a00ac0c4bb7eba6f10",
+    }
+    r = MeetingRetriever(notes, HashEmbedder())
+    q = load_questions(FIXTURES, "dev", limit=1)[0]
+    systems = [
+        TopKSystem(client, r, k=3, backend=llm),
+        SummariesOnlySystem(client, r, k=3, backend=llm),
+        FullContextSystem(client, notes, backend=llm),
+        OracleSystem(client, notes, r, backend=llm),
+    ]
+    for s in systems:
+        req = s.turn_request(q)
+        s.run(q)
+        assert llm.turns[-1] == req
+        assert _turn_key("claude-opus-5-5", req) == pinned[s.name]
+    judge_key = LLMClient(model="claude-opus-5-5")._key(
+        judge_request(_q(), "Tomás Herrera owns Falcon.", False)
+    )
+    assert judge_key == "21f42ec7e9ede1ae0d6591e70164e02ba76da9c7280b551bb39c36700bb90d7d"
 
 
 def test_estimate_prices_cached_full_context_below_topk(

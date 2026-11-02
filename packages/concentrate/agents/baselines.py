@@ -80,6 +80,7 @@ class SystemResult:
     tool_calls: int = 0
     context_tokens_est: int = 0
     retrieved: list[str] = field(default_factory=list)  # note IDs put in context / read
+    batched: bool = False  # served by a Message Batches result: latency_s is not a measurement
 
 
 @dataclass
@@ -131,7 +132,19 @@ class System(Protocol):
         ...
 
 
+@dataclass(frozen=True)
+class _Prompt:
+    """What a single-turn system sends for one question."""
+
+    system: str
+    user: str
+    cache_system: bool
+    retrieved: list[str]
+
+
 class _Base:
+    """Single-turn systems: one cached ``answer.v1`` call per question (batchable)."""
+
     name = "base"
     prompt_ids: tuple[str, ...] = (ANSWER_PROMPT,)
     OUTPUT_TOKENS_EST = 300  # measured: ~250 output tokens per answer in the pilot
@@ -141,31 +154,36 @@ class _Base:
         self.backend = backend
         self.instructions = load_prompt(ANSWER_PROMPT)
 
-    def _call(
-        self, q: QuestionLike, system: str, user: str, *, cache_system: bool, retrieved: list[str]
-    ) -> SystemResult:
+    def _prompt(self, q: QuestionLike) -> _Prompt:
+        raise NotImplementedError
+
+    def _turn_request(self, p: _Prompt) -> TurnRequest:
+        return TurnRequest(
+            stage=f"eval.{self.name}",
+            prompt_id=ANSWER_PROMPT,
+            system=p.system,
+            messages=({"role": "user", "content": p.user},),
+            schema=ANSWER_SCHEMA,
+            max_tokens=8000,
+            cache_system=p.cache_system,
+        )
+
+    def turn_request(self, q: QuestionLike) -> TurnRequest:
+        """The single Messages request ``run(q)`` sends, without sending it (batch prefetch)."""
+        return self._turn_request(self._prompt(q))
+
+    def run(self, q: QuestionLike) -> SystemResult:
+        p = self._prompt(q)
         before = len(self.client.ledger.records)
         start = time.perf_counter()
-        completion = run_turn(
-            self.client,
-            TurnRequest(
-                stage=f"eval.{self.name}",
-                prompt_id=ANSWER_PROMPT,
-                system=system,
-                messages=({"role": "user", "content": user},),
-                schema=ANSWER_SCHEMA,
-                max_tokens=8000,
-                cache_system=cache_system,
-            ),
-            self.backend,
-        )
+        completion = run_turn(self.client, self._turn_request(p), self.backend)
         return _result(
             self.client,
             before,
             start,
             Answer.model_validate_json(completion.text),
-            retrieved,
-            context=estimate_tokens(system) + estimate_tokens(user),
+            p.retrieved,
+            context=estimate_tokens(p.system) + estimate_tokens(p.user),
         )
 
 
@@ -193,6 +211,7 @@ def _result(
         tool_calls=tool_calls,
         context_tokens_est=context,
         retrieved=retrieved,
+        batched=any(r.batch for r in records),
     )
 
 
@@ -244,9 +263,9 @@ class TopKSystem(_Base):
             m.note_id for m in meetings
         ]
 
-    def run(self, q: QuestionLike) -> SystemResult:
+    def _prompt(self, q: QuestionLike) -> _Prompt:
         user, retrieved = self._context(q)
-        return self._call(q, self.instructions, user, cache_system=False, retrieved=retrieved)
+        return _Prompt(self.instructions, user, cache_system=False, retrieved=retrieved)
 
     def prompt_texts(self, q: QuestionLike) -> tuple[str, str]:
         """(system, user) exactly as sent, for exact token counting."""
@@ -283,8 +302,8 @@ class FullContextSystem(_Base):
         self.system = f"{self.instructions}\n\n<meetings>\n{body}\n</meetings>"
         self.ids = [m.note_id for m in notes]
 
-    def run(self, q: QuestionLike) -> SystemResult:
-        return self._call(q, self.system, _user_prompt(q), cache_system=True, retrieved=self.ids)
+    def _prompt(self, q: QuestionLike) -> _Prompt:
+        return _Prompt(self.system, _user_prompt(q), cache_system=True, retrieved=self.ids)
 
     def prompt_texts(self, q: QuestionLike) -> tuple[str, str]:
         return self.system, _user_prompt(q)
@@ -325,10 +344,10 @@ class OracleSystem(_Base):
         body = "\n\n".join(cv.full_view(m) for m in self._meetings(q))
         return self.instructions, f"<meetings>\n{body}\n</meetings>\n\n{_user_prompt(q)}"
 
-    def run(self, q: QuestionLike) -> SystemResult:
+    def _prompt(self, q: QuestionLike) -> _Prompt:
         system, user = self.prompt_texts(q)
         ids = [m.note_id for m in self._meetings(q)]
-        return self._call(q, system, user, cache_system=False, retrieved=ids)
+        return _Prompt(system, user, cache_system=False, retrieved=ids)
 
     def estimate(self, q: QuestionLike) -> tuple[int, int]:
         system, user = self.prompt_texts(q)

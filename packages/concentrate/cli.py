@@ -160,6 +160,17 @@ def eval_cmd(
     ] = False,
     offline: Annotated[bool, typer.Option(help="Use cached LLM results only.")] = False,
     yes: Annotated[bool, typer.Option("--yes", help="Skip the >$2 confirmation.")] = False,
+    batch: Annotated[
+        bool,
+        typer.Option(
+            "--batch/--no-batch",
+            help="Run single-turn systems and the judge via the Message Batches API (50% off).",
+        ),
+    ] = True,
+    latency_sample: Annotated[
+        int,
+        typer.Option(help="With --batch: first N questions run interactively to measure latency."),
+    ] = 10,
 ) -> None:
     """Run the baselines on the benchmark and write a report."""
     from concentrate.agents.retrieval import SentenceTransformerEmbedder
@@ -182,17 +193,32 @@ def eval_cmd(
     needs_index = {"b0", "b1", "b2o"} & set(names)
     embedder = SentenceTransformerEmbedder() if embeddings and needs_index else None
     built = build_systems(names, client, notes, embedder, k)
-    ests = estimate(built, questions, client.model, client=client, notes=notes)
+    ests = estimate(
+        built,
+        questions,
+        client.model,
+        client=client,
+        notes=notes,
+        batch=batch,
+        latency_sample=latency_sample,
+    )
     typer.echo(
         f"{fixtures}: {len(notes)} meetings · {len(questions)} questions ({split}) · "
         f"{len(built)} systems · {client.model}"
     )
+    if batch:
+        typer.echo(
+            f"  batch mode: Message Batches API at 50% for single-turn systems and the judge, "
+            f"except the first {min(latency_sample, len(questions))} questions (interactive, "
+            "full price, the only latency source)"
+        )
     for e in ests:
         tag = "exact" if e.exact else "est. "
         ingest = f", ingest ${e.ingest_usd:.2f}" if e.ingest_usd else ""
+        disc = ", batch 50%" if e.batch else ""
         typer.echo(
             f"  {e.system:<13} ~{e.input_tokens / max(1, e.questions):>8,.0f} in-tok/q ({tag}) "
-            f"≈ ${e.usd:6.2f}  (incl. judge{ingest})"
+            f"≈ ${e.usd:6.2f}  (incl. judge{ingest}{disc})"
         )
     total = sum(e.usd for e in ests)
     typer.echo(f"  estimated total ≈ ${total:.2f} (before cache reuse) · cap ${budget:.2f}")
@@ -213,6 +239,8 @@ def eval_cmd(
         budget_usd=budget,
         out_dir=out,
         notes=notes,
+        batch=batch,
+        latency_sample=latency_sample,
         meta={"k": k, "embedder": getattr(embedder, "name", None), "fixtures": str(fixtures)},
     )
     typer.echo((Path(report["paths"]["md"])).read_text())
