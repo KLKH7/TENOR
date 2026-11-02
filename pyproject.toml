@@ -14,6 +14,7 @@ dependencies = [
   "mcp>=2.3.0",
   "rank-bm25>=0.2.2",
   "sentence-transformers>=6.2.0",
+  "graphiti-core[anthropic,kuzu]>=0.31.2",
 ]
 
 [project.scripts]
