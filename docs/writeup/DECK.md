@@ -3,9 +3,10 @@
 Same claims as [MEMO.md](MEMO.md), and the same `{{TBD: source}}` convention. Every chart should be generated from a report file, never redrawn by hand. Footer on every slide: *synthetic benchmark · n shown · dev/test split*.
 
 ## 1. Apple juice from concentrate?
-- Granola's CEO, July 2026: agents should get a compressed, always-ready context instead of searching at query time ([Platformer](https://www.platformer.news/granola-chris-pedregal-interview/)).
-- That's testable: precomputed memory vs per-query retrieval, on accuracy, $ and latency.
-- Plus the follow-on question: once you have the memory, can you delete transcripts?
+- Chris Pedregal ([Platformer](https://www.platformer.news/granola-chris-pedregal-interview/), Jul 2026): connected to Claude, the agent does "a relatively dumb job at extracting information"; Granola should send "apple juice from concentrate" instead. He framed it as a direction, not a shipped product.
+- In the same interview: Granola is looking into "whether we should delete the transcript automatically", and is trying an enhanced transcript "built for agents".
+- Granola is already researching these ideas; this project is an independent measurement of them, not a claim to have invented them.
+- What gets measured: precomputed memory vs per-query retrieval (accuracy, $, latency), then what deleting transcripts costs.
 - **Chart:** none. A two-column picture: "look it up when asked" vs "study ahead of time".
 
 ## 2. There was no meeting-memory benchmark, so I built one
