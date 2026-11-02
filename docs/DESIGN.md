@@ -154,3 +154,11 @@ The remote 38+ word monologue tail is a content limitation of scripted turns and
   - Reports (JSON, Markdown and per-question JSONL) record the git SHA and dirty flag, model, prompt versions, seed, split and spend.
   - `CONCENTRATE_BUDGET_USD` is a hard per-run cap, checked before each question, and partial reports say so.
   - Estimates are offline (heuristic tokens; B3 assumed), so a small pilot run should calibrate them before a full run.
+
+### Batch mode (2026-11-02)
+- `concentrate eval --batch` (default) sends the single-turn systems (B0, B1, B2, B2o) and the judge through the Message Batches API at 50% of the price. B3 is multi-turn and stays interactive.
+- **No second code path.** Each batch result is written to the exact cache file the interactive call would write (the custom_id is the 64-char cache key), then the normal code replays it. Single-turn systems expose `turn_request(q)`, and a test pins the pre-batch cache keys so old caches still hit.
+- **Honest accounting.** Batch completions are flagged `batch`: the cost is recorded once at the batch rate, and replays are cache hits. Refused or truncated items are billed but not cached. Errored, expired, refused and truncated items fall back to the interactive call during the run, and the report counts them.
+- **Honest latency.** The first `--latency-sample` questions (default 10) run fully interactively at full price, and they are the only latency source for batched systems. The report says how many rows each p50/p95 comes from.
+- **Budget.** Each batch is estimated before it is submitted and refused if it would exceed the remaining cap. The estimate uses exact token counts when an API key is set, otherwise the heuristic ×1.93.
+- **Differences from interactive.** The Batches API rejects the server-side `fallbacks` parameter, so a refusal in a batch is retried interactively, with the fallback. Prompt caching inside a batch is best-effort, so B2's cache-read assumption is optimistic in batch mode.

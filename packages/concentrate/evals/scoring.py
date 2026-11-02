@@ -83,21 +83,23 @@ JUDGE_SCHEMA: dict[str, Any] = {
 }
 
 
-def judge(client: LLMClient, q: Question, answer: str, abstained: bool) -> JudgeOutput:
+def judge_request(q: Question, answer: str, abstained: bool) -> LLMRequest:
+    """The judge call for one answer, unsent (``judge`` sends it; batch mode prefetches it)."""
     gold = "UNANSWERABLE" if q.answer_norm == [UNANSWERABLE] else q.answer
     system_answer = f"(abstained) {answer}" if abstained else answer
-    return client.structured(
-        LLMRequest(
-            stage="eval.judge",
-            prompt_id=JUDGE_PROMPT,
-            system=load_prompt(JUDGE_PROMPT),
-            user=f"Question: {q.question}\n\nGold answer: {gold}\n\nSystem answer: {system_answer}",
-            schema=JUDGE_SCHEMA,
-            max_tokens=2000,
-            effort="low",
-        ),
-        JudgeOutput,
+    return LLMRequest(
+        stage="eval.judge",
+        prompt_id=JUDGE_PROMPT,
+        system=load_prompt(JUDGE_PROMPT),
+        user=f"Question: {q.question}\n\nGold answer: {gold}\n\nSystem answer: {system_answer}",
+        schema=JUDGE_SCHEMA,
+        max_tokens=2000,
+        effort="low",
     )
+
+
+def judge(client: LLMClient, q: Question, answer: str, abstained: bool) -> JudgeOutput:
+    return client.structured(judge_request(q, answer, abstained), JudgeOutput)
 
 
 # -- aggregation --------------------------------------------------------------------------------
@@ -122,6 +124,9 @@ class Row:
     cost_usd: float
     latency_s: float
     tool_calls: int
+    # False when latency_s is not a real measurement (answer served by a batch result, or a
+    # batched system outside the interactive latency sample): excluded from p50/p95.
+    latency_measured: bool = True
 
 
 def bootstrap_ci(values: list[float], seed: int, n: int = 2000) -> tuple[float, float]:
@@ -157,6 +162,7 @@ def summarize(rows: list[Row], seed: int) -> dict[str, Any]:
             cats[r.category].append(float(r.correct))
         precs = [r.cite_precision for r in rs if r.cite_precision is not None]
         recs = [r.cite_recall for r in rs if r.cite_recall is not None]
+        lat = [r.latency_s for r in rs if r.latency_measured]
         out[system] = {
             "n": len(rs),
             "accuracy": statistics.fmean(acc),
@@ -174,8 +180,9 @@ def summarize(rows: list[Row], seed: int) -> dict[str, Any]:
             "output_tokens_per_q": statistics.fmean(r.output_tokens for r in rs),
             "cost_per_q": statistics.fmean(r.cost_usd for r in rs),
             "cost_total": sum(r.cost_usd for r in rs),
-            "latency_p50": _pct([r.latency_s for r in rs], 0.5),
-            "latency_p95": _pct([r.latency_s for r in rs], 0.95),
+            "latency_p50": _pct(lat, 0.5),
+            "latency_p95": _pct(lat, 0.95),
+            "latency_n": len(lat),
             "tool_calls_per_q": statistics.fmean(r.tool_calls for r in rs),
             "by_category": {
                 c: {"n": len(v), "accuracy": statistics.fmean(v)} for c, v in sorted(cats.items())
