@@ -1,0 +1,4994 @@
+{
+ "summary": {
+  "memory": {
+   "meetings": 93,
+   "commitments": {
+    "precision": 0.504786771105309,
+    "recall": 0.9446254071661238,
+    "f1": 0.6579693703913783,
+    "staleness": 0.02959094865100087,
+    "citation_precision": 1.0,
+    "shown": 1149,
+    "gold": 614,
+    "tp": 580,
+    "stale": 34
+   },
+   "changes": {
+    "precision": 0.20118343195266272,
+    "recall": 0.6071428571428571,
+    "f1": 0.3022222222222222,
+    "staleness": 0.0,
+    "citation_precision": 1.0,
+    "shown": 169,
+    "gold": 56,
+    "tp": 34,
+    "stale": 0
+   },
+   "requests": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "staleness": 0.0,
+    "citation_precision": 1.0,
+    "shown": 24,
+    "gold": 24,
+    "tp": 24,
+    "stale": 0
+   },
+   "commitments_any_owner": {
+    "precision": 0.5317667536988686,
+    "recall": 0.995114006514658,
+    "f1": 0.6931366988088485,
+    "staleness": 0.03220191470844212,
+    "citation_precision": 1.0,
+    "shown": 1149,
+    "gold": 614,
+    "tp": 611,
+    "stale": 37
+   },
+   "last_meeting_accuracy": 1.0
+  }
+ },
+ "meetings": [
+  {
+   "note_id": "not_JQEktc0eauNYt8",
+   "title": "Eng standup",
+   "memory": {
+    "note_id": "not_JQEktc0eauNYt8",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.9090909090909091,
+     "recall": 1.0,
+     "f1": 0.9523809523809523,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 11,
+     "gold": 10,
+     "tp": 10,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.4,
+     "recall": 1.0,
+     "f1": 0.5714285714285715,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 5,
+     "gold": 2,
+     "tp": 2,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.9090909090909091,
+     "recall": 1.0,
+     "f1": 0.9523809523809523,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 11,
+     "gold": 10,
+     "tp": 10,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_AAQQKEATiCks96",
+   "title": "Support triage",
+   "memory": {
+    "note_id": "not_AAQQKEATiCks96",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.5,
+     "recall": 1.0,
+     "f1": 0.6666666666666666,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 4,
+     "gold": 2,
+     "tp": 2,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.3333333333333333,
+     "recall": 1.0,
+     "f1": 0.5,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 3,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.5,
+     "recall": 1.0,
+     "f1": 0.6666666666666666,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 4,
+     "gold": 2,
+     "tp": 2,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_drHit8VR5zPkqr",
+   "title": "Harbor weekly sync",
+   "memory": {
+    "note_id": "not_drHit8VR5zPkqr",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.3333333333333333,
+     "recall": 1.0,
+     "f1": 0.5,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 3,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.3333333333333333,
+     "recall": 1.0,
+     "f1": 0.5,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 3,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_SHvvyPKlEfLuUK",
+   "title": "Kite weekly sync",
+   "memory": {
+    "note_id": "not_SHvvyPKlEfLuUK",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.6666666666666666,
+     "recall": 1.0,
+     "f1": 0.8,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 6,
+     "gold": 4,
+     "tp": 4,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.3333333333333333,
+     "recall": 1.0,
+     "f1": 0.5,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 3,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.6666666666666666,
+     "recall": 1.0,
+     "f1": 0.8,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 6,
+     "gold": 4,
+     "tp": 4,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_5Y7XCvKfsm4JDf",
+   "title": "Marketing sync",
+   "memory": {
+    "note_id": "not_5Y7XCvKfsm4JDf",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.5,
+     "recall": 1.0,
+     "f1": 0.6666666666666666,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 6,
+     "gold": 3,
+     "tp": 3,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.4,
+     "recall": 1.0,
+     "f1": 0.5714285714285715,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 5,
+     "gold": 2,
+     "tp": 2,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.5,
+     "recall": 1.0,
+     "f1": 0.6666666666666666,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 6,
+     "gold": 3,
+     "tp": 3,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_18Z4cqW3N3Un9L",
+   "title": "Atlas weekly sync",
+   "memory": {
+    "note_id": "not_18Z4cqW3N3Un9L",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.5714285714285714,
+     "recall": 1.0,
+     "f1": 0.7272727272727273,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 7,
+     "gold": 4,
+     "tp": 4,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.3333333333333333,
+     "recall": 1.0,
+     "f1": 0.5,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 3,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.5714285714285714,
+     "recall": 1.0,
+     "f1": 0.7272727272727273,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 7,
+     "gold": 4,
+     "tp": 4,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_7kbSNidpUOGScS",
+   "title": "Weekly metrics review",
+   "memory": {
+    "note_id": "not_7kbSNidpUOGScS",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.5,
+     "recall": 1.0,
+     "f1": 0.6666666666666666,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 6,
+     "gold": 3,
+     "tp": 3,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.3333333333333333,
+     "recall": 1.0,
+     "f1": 0.5,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 3,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.5,
+     "recall": 1.0,
+     "f1": 0.6666666666666666,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 6,
+     "gold": 3,
+     "tp": 3,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_suD7e0XvWb7gGy",
+   "title": "Juniper weekly sync",
+   "memory": {
+    "note_id": "not_suD7e0XvWb7gGy",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.7,
+     "recall": 1.0,
+     "f1": 0.8235294117647058,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 10,
+     "gold": 7,
+     "tp": 7,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.7,
+     "recall": 1.0,
+     "f1": 0.8235294117647058,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 10,
+     "gold": 7,
+     "tp": 7,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_JCoDDT2BuFED3x",
+   "title": "Hiring debrief",
+   "memory": {
+    "note_id": "not_JCoDDT2BuFED3x",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.5,
+     "recall": 1.0,
+     "f1": 0.6666666666666666,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 6,
+     "gold": 3,
+     "tp": 3,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.5,
+     "recall": 1.0,
+     "f1": 0.6666666666666666,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 6,
+     "gold": 3,
+     "tp": 3,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_4o46WwYlR2JDZH",
+   "title": "Sparrow weekly sync",
+   "memory": {
+    "note_id": "not_4o46WwYlR2JDZH",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.7,
+     "recall": 1.0,
+     "f1": 0.8235294117647058,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 10,
+     "gold": 7,
+     "tp": 7,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.4,
+     "recall": 1.0,
+     "f1": 0.5714285714285715,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 5,
+     "gold": 2,
+     "tp": 2,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.7,
+     "recall": 1.0,
+     "f1": 0.8235294117647058,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 10,
+     "gold": 7,
+     "tp": 7,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_u75n1WRnnxnv2e",
+   "title": "Eng standup",
+   "memory": {
+    "note_id": "not_u75n1WRnnxnv2e",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.8421052631578947,
+     "recall": 1.0,
+     "f1": 0.9142857142857143,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 19,
+     "gold": 16,
+     "tp": 16,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.42857142857142855,
+     "recall": 1.0,
+     "f1": 0.6,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 7,
+     "gold": 3,
+     "tp": 3,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.8421052631578947,
+     "recall": 1.0,
+     "f1": 0.9142857142857143,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 19,
+     "gold": 16,
+     "tp": 16,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_SSAdGyQAhLN2Mv",
+   "title": "Support triage",
+   "memory": {
+    "note_id": "not_SSAdGyQAhLN2Mv",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.5714285714285714,
+     "recall": 1.0,
+     "f1": 0.7272727272727273,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 7,
+     "gold": 4,
+     "tp": 4,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.5,
+     "recall": 1.0,
+     "f1": 0.6666666666666666,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 2,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.5714285714285714,
+     "recall": 1.0,
+     "f1": 0.7272727272727273,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 7,
+     "gold": 4,
+     "tp": 4,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_92DZT6wg4BXgwB",
+   "title": "Harbor weekly sync",
+   "memory": {
+    "note_id": "not_92DZT6wg4BXgwB",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.6666666666666666,
+     "recall": 1.0,
+     "f1": 0.8,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 9,
+     "gold": 6,
+     "tp": 6,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.6666666666666666,
+     "recall": 1.0,
+     "f1": 0.8,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 3,
+     "gold": 2,
+     "tp": 2,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.6666666666666666,
+     "recall": 1.0,
+     "f1": 0.8,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 9,
+     "gold": 6,
+     "tp": 6,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_CcP5wLgXLIpsrR",
+   "title": "Kite weekly sync",
+   "memory": {
+    "note_id": "not_CcP5wLgXLIpsrR",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.7857142857142857,
+     "recall": 1.0,
+     "f1": 0.88,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 14,
+     "gold": 11,
+     "tp": 11,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 1,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.7857142857142857,
+     "recall": 1.0,
+     "f1": 0.88,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 14,
+     "gold": 11,
+     "tp": 11,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_YqyZZ2WKkO000z",
+   "title": "Meridian weekly sync",
+   "memory": {
+    "note_id": "not_YqyZZ2WKkO000z",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.6666666666666666,
+     "recall": 1.0,
+     "f1": 0.8,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 9,
+     "gold": 6,
+     "tp": 6,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.6666666666666666,
+     "recall": 1.0,
+     "f1": 0.8,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 9,
+     "gold": 6,
+     "tp": 6,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_zmkR1DhlwbcQnz",
+   "title": "Marketing sync",
+   "memory": {
+    "note_id": "not_zmkR1DhlwbcQnz",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.625,
+     "recall": 1.0,
+     "f1": 0.7692307692307693,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 8,
+     "gold": 5,
+     "tp": 5,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 1,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.625,
+     "recall": 1.0,
+     "f1": 0.7692307692307693,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 8,
+     "gold": 5,
+     "tp": 5,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_mtLKgHw7gpTvfi",
+   "title": "Redwood Media call",
+   "memory": {
+    "note_id": "not_mtLKgHw7gpTvfi",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.25,
+     "recall": 1.0,
+     "f1": 0.4,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 4,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "changes": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 1,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.25,
+     "recall": 1.0,
+     "f1": 0.4,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 4,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_S7ik3arAnQ3QQs",
+   "title": "Weekly metrics review",
+   "memory": {
+    "note_id": "not_S7ik3arAnQ3QQs",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.6363636363636364,
+     "recall": 1.0,
+     "f1": 0.7777777777777778,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 11,
+     "gold": 7,
+     "tp": 7,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 1,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.6363636363636364,
+     "recall": 1.0,
+     "f1": 0.7777777777777778,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 11,
+     "gold": 7,
+     "tp": 7,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_4xftaRUgO1hn5Y",
+   "title": "Priya / Megan 1:1",
+   "memory": {
+    "note_id": "not_4xftaRUgO1hn5Y",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.5,
+     "recall": 1.0,
+     "f1": 0.6666666666666666,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 8,
+     "gold": 4,
+     "tp": 4,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.5,
+     "recall": 1.0,
+     "f1": 0.6666666666666666,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 8,
+     "gold": 4,
+     "tp": 4,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_51wMOICSnzMUAK",
+   "title": "Juniper weekly sync",
+   "memory": {
+    "note_id": "not_51wMOICSnzMUAK",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.6666666666666666,
+     "recall": 0.8888888888888888,
+     "f1": 0.761904761904762,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 12,
+     "gold": 9,
+     "tp": 8,
+     "stale": 0
+    },
+    "changes": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.6666666666666666,
+     "recall": 0.8888888888888888,
+     "f1": 0.761904761904762,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 12,
+     "gold": 9,
+     "tp": 8,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_lNcOnSoFLkgFus",
+   "title": "Priya / Tomás 1:1",
+   "memory": {
+    "note_id": "not_lNcOnSoFLkgFus",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.2,
+     "recall": 1.0,
+     "f1": 0.33333333333333337,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 5,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "changes": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.2,
+     "recall": 1.0,
+     "f1": 0.33333333333333337,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 5,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_8UPgaVpZBWk6yi",
+   "title": "Kite weekly sync",
+   "memory": {
+    "note_id": "not_8UPgaVpZBWk6yi",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.7222222222222222,
+     "recall": 1.0,
+     "f1": 0.8387096774193548,
+     "staleness": 0.05555555555555555,
+     "citation_precision": 1.0,
+     "shown": 18,
+     "gold": 13,
+     "tp": 13,
+     "stale": 1
+    },
+    "changes": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 1,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.7222222222222222,
+     "recall": 1.0,
+     "f1": 0.8387096774193548,
+     "staleness": 0.05555555555555555,
+     "citation_precision": 1.0,
+     "shown": 18,
+     "gold": 13,
+     "tp": 13,
+     "stale": 1
+    }
+   }
+  },
+  {
+   "note_id": "not_2No74qJmT2XI4v",
+   "title": "Teams launch sync",
+   "memory": {
+    "note_id": "not_2No74qJmT2XI4v",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.6,
+     "recall": 0.75,
+     "f1": 0.6666666666666665,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 10,
+     "gold": 8,
+     "tp": 6,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 2,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.7,
+     "recall": 0.875,
+     "f1": 0.7777777777777777,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 10,
+     "gold": 8,
+     "tp": 7,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_yp4TK3bTtySPSc",
+   "title": "Priya / Lena 1:1",
+   "memory": {
+    "note_id": "not_yp4TK3bTtySPSc",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 4,
+     "gold": 1,
+     "tp": 0,
+     "stale": 0
+    },
+    "changes": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.25,
+     "recall": 1.0,
+     "f1": 0.4,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 4,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_eoDAAlvxc1xW4l",
+   "title": "Tidewater Foods call",
+   "memory": {
+    "note_id": "not_eoDAAlvxc1xW4l",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.2,
+     "recall": 1.0,
+     "f1": 0.33333333333333337,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 5,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 1,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.2,
+     "recall": 1.0,
+     "f1": 0.33333333333333337,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 5,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_dhMgww6Nq7nqno",
+   "title": "Priya / Hana 1:1",
+   "memory": {
+    "note_id": "not_dhMgww6Nq7nqno",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.2,
+     "recall": 1.0,
+     "f1": 0.33333333333333337,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 5,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "changes": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.2,
+     "recall": 1.0,
+     "f1": 0.33333333333333337,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 5,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_k3A6FEL7I1neZu",
+   "title": "Marketing sync",
+   "memory": {
+    "note_id": "not_k3A6FEL7I1neZu",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.3333333333333333,
+     "recall": 0.6666666666666666,
+     "f1": 0.4444444444444444,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 6,
+     "gold": 3,
+     "tp": 2,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.3333333333333333,
+     "recall": 1.0,
+     "f1": 0.5,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 3,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.5,
+     "recall": 1.0,
+     "f1": 0.6666666666666666,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 6,
+     "gold": 3,
+     "tp": 3,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_T2mp6LqwAnIdd6",
+   "title": "Atlas weekly sync",
+   "memory": {
+    "note_id": "not_T2mp6LqwAnIdd6",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.6363636363636364,
+     "recall": 1.0,
+     "f1": 0.7777777777777778,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 11,
+     "gold": 7,
+     "tp": 7,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 2,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.6363636363636364,
+     "recall": 1.0,
+     "f1": 0.7777777777777778,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 11,
+     "gold": 7,
+     "tp": 7,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_0ENAhTLFe9dvDC",
+   "title": "Lumen Health call",
+   "memory": {
+    "note_id": "not_0ENAhTLFe9dvDC",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.2,
+     "recall": 1.0,
+     "f1": 0.33333333333333337,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 5,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 1,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.2,
+     "recall": 1.0,
+     "f1": 0.33333333333333337,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 5,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_GyIKVDDt9wgkBk",
+   "title": "Priya / Inês 1:1",
+   "memory": {
+    "note_id": "not_GyIKVDDt9wgkBk",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.42857142857142855,
+     "recall": 1.0,
+     "f1": 0.6,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 7,
+     "gold": 3,
+     "tp": 3,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.42857142857142855,
+     "recall": 1.0,
+     "f1": 0.6,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 7,
+     "gold": 3,
+     "tp": 3,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_ppF0RSn9wQyHCy",
+   "title": "Weekly metrics review",
+   "memory": {
+    "note_id": "not_ppF0RSn9wQyHCy",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.4444444444444444,
+     "recall": 1.0,
+     "f1": 0.6153846153846153,
+     "staleness": 0.1111111111111111,
+     "citation_precision": 1.0,
+     "shown": 9,
+     "gold": 4,
+     "tp": 4,
+     "stale": 1
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 2,
+     "gold": 1,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.4444444444444444,
+     "recall": 1.0,
+     "f1": 0.6153846153846153,
+     "staleness": 0.1111111111111111,
+     "citation_precision": 1.0,
+     "shown": 9,
+     "gold": 4,
+     "tp": 4,
+     "stale": 1
+    }
+   }
+  },
+  {
+   "note_id": "not_2Z9XHeFfbkpYvX",
+   "title": "Orchard Labs call",
+   "memory": {
+    "note_id": "not_2Z9XHeFfbkpYvX",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.2,
+     "recall": 1.0,
+     "f1": 0.33333333333333337,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 5,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 1,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.2,
+     "recall": 1.0,
+     "f1": 0.33333333333333337,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 5,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_qKNarWCX1FCDYi",
+   "title": "Sparrow weekly sync",
+   "memory": {
+    "note_id": "not_qKNarWCX1FCDYi",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.5,
+     "recall": 1.0,
+     "f1": 0.6666666666666666,
+     "staleness": 0.14285714285714285,
+     "citation_precision": 1.0,
+     "shown": 14,
+     "gold": 7,
+     "tp": 7,
+     "stale": 2
+    },
+    "changes": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 3,
+     "gold": 2,
+     "tp": 1,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.5,
+     "recall": 1.0,
+     "f1": 0.6666666666666666,
+     "staleness": 0.14285714285714285,
+     "citation_precision": 1.0,
+     "shown": 14,
+     "gold": 7,
+     "tp": 7,
+     "stale": 2
+    }
+   }
+  },
+  {
+   "note_id": "not_HTjalCIOKH1eMt",
+   "title": "Pinecrest Logistics call",
+   "memory": {
+    "note_id": "not_HTjalCIOKH1eMt",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.2,
+     "recall": 1.0,
+     "f1": 0.33333333333333337,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 5,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 2,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 1,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.2,
+     "recall": 1.0,
+     "f1": 0.33333333333333337,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 5,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_lYVL2gzbhKahdt",
+   "title": "Eng standup",
+   "memory": {
+    "note_id": "not_lYVL2gzbhKahdt",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.75,
+     "recall": 0.9473684210526315,
+     "f1": 0.8372093023255814,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 24,
+     "gold": 19,
+     "tp": 18,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 3,
+     "gold": 1,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.7916666666666666,
+     "recall": 1.0,
+     "f1": 0.8837209302325582,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 24,
+     "gold": 19,
+     "tp": 19,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_QCFFIm9A3qJ3Xi",
+   "title": "Support triage",
+   "memory": {
+    "note_id": "not_QCFFIm9A3qJ3Xi",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.5454545454545454,
+     "recall": 1.0,
+     "f1": 0.7058823529411764,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 11,
+     "gold": 6,
+     "tp": 6,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.5454545454545454,
+     "recall": 1.0,
+     "f1": 0.7058823529411764,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 11,
+     "gold": 6,
+     "tp": 6,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_Q0Bebh8wXYWpju",
+   "title": "Harbor weekly sync",
+   "memory": {
+    "note_id": "not_Q0Bebh8wXYWpju",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.46153846153846156,
+     "recall": 1.0,
+     "f1": 0.631578947368421,
+     "staleness": 0.07692307692307693,
+     "citation_precision": 1.0,
+     "shown": 13,
+     "gold": 6,
+     "tp": 6,
+     "stale": 1
+    },
+    "changes": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 3,
+     "gold": 2,
+     "tp": 1,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.46153846153846156,
+     "recall": 1.0,
+     "f1": 0.631578947368421,
+     "staleness": 0.07692307692307693,
+     "citation_precision": 1.0,
+     "shown": 13,
+     "gold": 6,
+     "tp": 6,
+     "stale": 1
+    }
+   }
+  },
+  {
+   "note_id": "not_3i6bxXiJuyjkSY",
+   "title": "Priya / Megan 1:1",
+   "memory": {
+    "note_id": "not_3i6bxXiJuyjkSY",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.5384615384615384,
+     "recall": 1.0,
+     "f1": 0.7000000000000001,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 13,
+     "gold": 7,
+     "tp": 7,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.5384615384615384,
+     "recall": 1.0,
+     "f1": 0.7000000000000001,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 13,
+     "gold": 7,
+     "tp": 7,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_4bV9IqetQCpb9h",
+   "title": "Kite weekly sync",
+   "memory": {
+    "note_id": "not_4bV9IqetQCpb9h",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.5,
+     "recall": 0.8333333333333334,
+     "f1": 0.625,
+     "staleness": 0.1,
+     "citation_precision": 1.0,
+     "shown": 20,
+     "gold": 12,
+     "tp": 10,
+     "stale": 2
+    },
+    "changes": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 3,
+     "gold": 2,
+     "tp": 1,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.6,
+     "recall": 1.0,
+     "f1": 0.7499999999999999,
+     "staleness": 0.1,
+     "citation_precision": 1.0,
+     "shown": 20,
+     "gold": 12,
+     "tp": 12,
+     "stale": 2
+    }
+   }
+  },
+  {
+   "note_id": "not_1nu9WOgy826MOr",
+   "title": "Orchard Labs call",
+   "memory": {
+    "note_id": "not_1nu9WOgy826MOr",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.16666666666666666,
+     "recall": 1.0,
+     "f1": 0.2857142857142857,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 6,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "changes": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 3,
+     "gold": 3,
+     "tp": 3,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.16666666666666666,
+     "recall": 1.0,
+     "f1": 0.2857142857142857,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 6,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_DdiP4POF7oRcHF",
+   "title": "Meridian weekly sync",
+   "memory": {
+    "note_id": "not_DdiP4POF7oRcHF",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.5333333333333333,
+     "recall": 0.8888888888888888,
+     "f1": 0.6666666666666667,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 15,
+     "gold": 9,
+     "tp": 8,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 1,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.6,
+     "recall": 1.0,
+     "f1": 0.7499999999999999,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 15,
+     "gold": 9,
+     "tp": 9,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_TCnAK280c7tVay",
+   "title": "Priya / Elena 1:1",
+   "memory": {
+    "note_id": "not_TCnAK280c7tVay",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 5,
+     "gold": 1,
+     "tp": 0,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.2,
+     "recall": 1.0,
+     "f1": 0.33333333333333337,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 5,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_06do68L0dQ0CGL",
+   "title": "Marketing sync",
+   "memory": {
+    "note_id": "not_06do68L0dQ0CGL",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.5,
+     "recall": 1.0,
+     "f1": 0.6666666666666666,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 8,
+     "gold": 4,
+     "tp": 4,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 1,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.5,
+     "recall": 1.0,
+     "f1": 0.6666666666666666,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 8,
+     "gold": 4,
+     "tp": 4,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_HUwg0R6z1GekE3",
+   "title": "Atlas weekly sync",
+   "memory": {
+    "note_id": "not_HUwg0R6z1GekE3",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.6666666666666666,
+     "recall": 1.0,
+     "f1": 0.8,
+     "staleness": 0.06666666666666667,
+     "citation_precision": 1.0,
+     "shown": 15,
+     "gold": 10,
+     "tp": 10,
+     "stale": 1
+    },
+    "changes": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.6666666666666666,
+     "recall": 1.0,
+     "f1": 0.8,
+     "staleness": 0.06666666666666667,
+     "citation_precision": 1.0,
+     "shown": 15,
+     "gold": 10,
+     "tp": 10,
+     "stale": 1
+    }
+   }
+  },
+  {
+   "note_id": "not_sRLN8g6YTRomiR",
+   "title": "Priya / Ruth 1:1",
+   "memory": {
+    "note_id": "not_sRLN8g6YTRomiR",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.42857142857142855,
+     "recall": 1.0,
+     "f1": 0.6,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 7,
+     "gold": 3,
+     "tp": 3,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.42857142857142855,
+     "recall": 1.0,
+     "f1": 0.6,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 7,
+     "gold": 3,
+     "tp": 3,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_hLKyjnAT8JQsYz",
+   "title": "Juniper weekly sync",
+   "memory": {
+    "note_id": "not_hLKyjnAT8JQsYz",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.6875,
+     "recall": 0.9166666666666666,
+     "f1": 0.7857142857142857,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 16,
+     "gold": 12,
+     "tp": 11,
+     "stale": 0
+    },
+    "changes": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.75,
+     "recall": 1.0,
+     "f1": 0.8571428571428571,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 16,
+     "gold": 12,
+     "tp": 12,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_noUd3EPW0BHoBk",
+   "title": "Priya / Theo 1:1",
+   "memory": {
+    "note_id": "not_noUd3EPW0BHoBk",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.2,
+     "recall": 1.0,
+     "f1": 0.33333333333333337,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 5,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.2,
+     "recall": 1.0,
+     "f1": 0.33333333333333337,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 5,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_mgwGo738pHtRcH",
+   "title": "Hiring debrief",
+   "memory": {
+    "note_id": "not_mgwGo738pHtRcH",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.25,
+     "recall": 1.0,
+     "f1": 0.4,
+     "staleness": 0.125,
+     "citation_precision": 1.0,
+     "shown": 8,
+     "gold": 2,
+     "tp": 2,
+     "stale": 1
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.25,
+     "recall": 1.0,
+     "f1": 0.4,
+     "staleness": 0.125,
+     "citation_precision": 1.0,
+     "shown": 8,
+     "gold": 2,
+     "tp": 2,
+     "stale": 1
+    }
+   }
+  },
+  {
+   "note_id": "not_0GA3jx4XBKQG9I",
+   "title": "Sparrow weekly sync",
+   "memory": {
+    "note_id": "not_0GA3jx4XBKQG9I",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.5,
+     "recall": 0.8888888888888888,
+     "f1": 0.64,
+     "staleness": 0.125,
+     "citation_precision": 1.0,
+     "shown": 16,
+     "gold": 9,
+     "tp": 8,
+     "stale": 2
+    },
+    "changes": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.5625,
+     "recall": 1.0,
+     "f1": 0.72,
+     "staleness": 0.125,
+     "citation_precision": 1.0,
+     "shown": 16,
+     "gold": 9,
+     "tp": 9,
+     "stale": 2
+    }
+   }
+  },
+  {
+   "note_id": "not_nHpLAD5JRE5FWs",
+   "title": "Priya / Alex 1:1",
+   "memory": {
+    "note_id": "not_nHpLAD5JRE5FWs",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.14285714285714285,
+     "recall": 1.0,
+     "f1": 0.25,
+     "staleness": 0.14285714285714285,
+     "citation_precision": 1.0,
+     "shown": 7,
+     "gold": 1,
+     "tp": 1,
+     "stale": 1
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 2,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.14285714285714285,
+     "recall": 1.0,
+     "f1": 0.25,
+     "staleness": 0.14285714285714285,
+     "citation_precision": 1.0,
+     "shown": 7,
+     "gold": 1,
+     "tp": 1,
+     "stale": 1
+    }
+   }
+  },
+  {
+   "note_id": "not_4i3VrPvoRzpS1n",
+   "title": "Vantage Legal call",
+   "memory": {
+    "note_id": "not_4i3VrPvoRzpS1n",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 6,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 2,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 1,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 6,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_rGGDMRAv47YxKN",
+   "title": "Eng standup",
+   "memory": {
+    "note_id": "not_rGGDMRAv47YxKN",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.7142857142857143,
+     "recall": 0.9523809523809523,
+     "f1": 0.8163265306122449,
+     "staleness": 0.03571428571428571,
+     "citation_precision": 1.0,
+     "shown": 28,
+     "gold": 21,
+     "tp": 20,
+     "stale": 1
+    },
+    "changes": {
+     "precision": 0.25,
+     "recall": 1.0,
+     "f1": 0.4,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 4,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.75,
+     "recall": 1.0,
+     "f1": 0.8571428571428571,
+     "staleness": 0.03571428571428571,
+     "citation_precision": 1.0,
+     "shown": 28,
+     "gold": 21,
+     "tp": 21,
+     "stale": 1
+    }
+   }
+  },
+  {
+   "note_id": "not_C0fSHQkO4PKFw8",
+   "title": "Support triage",
+   "memory": {
+    "note_id": "not_C0fSHQkO4PKFw8",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.5333333333333333,
+     "recall": 1.0,
+     "f1": 0.6956521739130436,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 15,
+     "gold": 8,
+     "tp": 8,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.5333333333333333,
+     "recall": 1.0,
+     "f1": 0.6956521739130436,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 15,
+     "gold": 8,
+     "tp": 8,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_nfbrgIjj8qDpGa",
+   "title": "Harbor weekly sync",
+   "memory": {
+    "note_id": "not_nfbrgIjj8qDpGa",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.4375,
+     "recall": 1.0,
+     "f1": 0.6086956521739131,
+     "staleness": 0.0625,
+     "citation_precision": 1.0,
+     "shown": 16,
+     "gold": 7,
+     "tp": 7,
+     "stale": 1
+    },
+    "changes": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.4375,
+     "recall": 1.0,
+     "f1": 0.6086956521739131,
+     "staleness": 0.0625,
+     "citation_precision": 1.0,
+     "shown": 16,
+     "gold": 7,
+     "tp": 7,
+     "stale": 1
+    }
+   }
+  },
+  {
+   "note_id": "not_KzGM1TwBXV00PH",
+   "title": "Lumen Health call",
+   "memory": {
+    "note_id": "not_KzGM1TwBXV00PH",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 6,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "changes": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 3,
+     "gold": 3,
+     "tp": 3,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 6,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_HB6DbX78uOS3Vm",
+   "title": "Priya / Kofi 1:1",
+   "memory": {
+    "note_id": "not_HB6DbX78uOS3Vm",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.25,
+     "recall": 1.0,
+     "f1": 0.4,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 8,
+     "gold": 2,
+     "tp": 2,
+     "stale": 0
+    },
+    "changes": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.25,
+     "recall": 1.0,
+     "f1": 0.4,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 8,
+     "gold": 2,
+     "tp": 2,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_HkEl3AuLFvcY3U",
+   "title": "Priya / Inês 1:1",
+   "memory": {
+    "note_id": "not_HkEl3AuLFvcY3U",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.25,
+     "recall": 1.0,
+     "f1": 0.4,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 8,
+     "gold": 2,
+     "tp": 2,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.25,
+     "recall": 1.0,
+     "f1": 0.4,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 8,
+     "gold": 2,
+     "tp": 2,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_UPhF2Z7AZw70RJ",
+   "title": "Meridian weekly sync",
+   "memory": {
+    "note_id": "not_UPhF2Z7AZw70RJ",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.5294117647058824,
+     "recall": 0.9,
+     "f1": 0.6666666666666667,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 17,
+     "gold": 10,
+     "tp": 9,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.5882352941176471,
+     "recall": 1.0,
+     "f1": 0.7407407407407407,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 17,
+     "gold": 10,
+     "tp": 10,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_WzcSce6AYbjoMf",
+   "title": "Priya / Tomás 1:1",
+   "memory": {
+    "note_id": "not_WzcSce6AYbjoMf",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.3333333333333333,
+     "recall": 1.0,
+     "f1": 0.5,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 9,
+     "gold": 3,
+     "tp": 3,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 2,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.3333333333333333,
+     "recall": 1.0,
+     "f1": 0.5,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 9,
+     "gold": 3,
+     "tp": 3,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_N49303KfFicwIy",
+   "title": "Marketing sync",
+   "memory": {
+    "note_id": "not_N49303KfFicwIy",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.36363636363636365,
+     "recall": 0.8,
+     "f1": 0.5000000000000001,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 11,
+     "gold": 5,
+     "tp": 4,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.45454545454545453,
+     "recall": 1.0,
+     "f1": 0.625,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 11,
+     "gold": 5,
+     "tp": 5,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_Iwkdg7ySuZhz9x",
+   "title": "Priya / Hana 1:1",
+   "memory": {
+    "note_id": "not_Iwkdg7ySuZhz9x",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.125,
+     "recall": 1.0,
+     "f1": 0.2222222222222222,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 8,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.125,
+     "recall": 1.0,
+     "f1": 0.2222222222222222,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 8,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_Z6C0Xk5SJNOoGE",
+   "title": "Sparrow weekly sync",
+   "memory": {
+    "note_id": "not_Z6C0Xk5SJNOoGE",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.47619047619047616,
+     "recall": 0.9090909090909091,
+     "f1": 0.6249999999999999,
+     "staleness": 0.09523809523809523,
+     "citation_precision": 1.0,
+     "shown": 21,
+     "gold": 11,
+     "tp": 10,
+     "stale": 2
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.5238095238095238,
+     "recall": 1.0,
+     "f1": 0.6875000000000001,
+     "staleness": 0.09523809523809523,
+     "citation_precision": 1.0,
+     "shown": 21,
+     "gold": 11,
+     "tp": 11,
+     "stale": 2
+    }
+   }
+  },
+  {
+   "note_id": "not_2R9wVxRCLVRl86",
+   "title": "Priya / Lena 1:1",
+   "memory": {
+    "note_id": "not_2R9wVxRCLVRl86",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.1111111111111111,
+     "recall": 1.0,
+     "f1": 0.19999999999999998,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 9,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 2,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.1111111111111111,
+     "recall": 1.0,
+     "f1": 0.19999999999999998,
+     "staleness": 0.1111111111111111,
+     "citation_precision": 1.0,
+     "shown": 9,
+     "gold": 1,
+     "tp": 1,
+     "stale": 1
+    }
+   }
+  },
+  {
+   "note_id": "not_uoNPcWPOopI5JT",
+   "title": "Eng standup",
+   "memory": {
+    "note_id": "not_uoNPcWPOopI5JT",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.7142857142857143,
+     "recall": 0.9259259259259259,
+     "f1": 0.8064516129032259,
+     "staleness": 0.02857142857142857,
+     "citation_precision": 1.0,
+     "shown": 35,
+     "gold": 27,
+     "tp": 25,
+     "stale": 1
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 3,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.7714285714285715,
+     "recall": 1.0,
+     "f1": 0.870967741935484,
+     "staleness": 0.02857142857142857,
+     "citation_precision": 1.0,
+     "shown": 35,
+     "gold": 27,
+     "tp": 27,
+     "stale": 1
+    }
+   }
+  },
+  {
+   "note_id": "not_jHanS0wJn0bjPW",
+   "title": "Support triage",
+   "memory": {
+    "note_id": "not_jHanS0wJn0bjPW",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.4666666666666667,
+     "recall": 1.0,
+     "f1": 0.6363636363636364,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 15,
+     "gold": 7,
+     "tp": 7,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.4666666666666667,
+     "recall": 1.0,
+     "f1": 0.6363636363636364,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 15,
+     "gold": 7,
+     "tp": 7,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_EixfmkuBEpzrng",
+   "title": "Kite weekly sync",
+   "memory": {
+    "note_id": "not_EixfmkuBEpzrng",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.4444444444444444,
+     "recall": 1.0,
+     "f1": 0.6153846153846153,
+     "staleness": 0.1111111111111111,
+     "citation_precision": 1.0,
+     "shown": 18,
+     "gold": 8,
+     "tp": 8,
+     "stale": 2
+    },
+    "changes": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.4444444444444444,
+     "recall": 1.0,
+     "f1": 0.6153846153846153,
+     "staleness": 0.1111111111111111,
+     "citation_precision": 1.0,
+     "shown": 18,
+     "gold": 8,
+     "tp": 8,
+     "stale": 2
+    }
+   }
+  },
+  {
+   "note_id": "not_zTANJuX4PaYmmx",
+   "title": "Vantage Legal call",
+   "memory": {
+    "note_id": "not_zTANJuX4PaYmmx",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.125,
+     "recall": 1.0,
+     "f1": 0.2222222222222222,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 8,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 3,
+     "gold": 3,
+     "tp": 3,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.125,
+     "recall": 1.0,
+     "f1": 0.2222222222222222,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 8,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_5eyBeHD2np5emw",
+   "title": "Pinecrest Logistics call",
+   "memory": {
+    "note_id": "not_5eyBeHD2np5emw",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.2,
+     "recall": 1.0,
+     "f1": 0.33333333333333337,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 10,
+     "gold": 2,
+     "tp": 2,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 3,
+     "gold": 3,
+     "tp": 3,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.2,
+     "recall": 1.0,
+     "f1": 0.33333333333333337,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 10,
+     "gold": 2,
+     "tp": 2,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_FlCZY25Thm6vxP",
+   "title": "Marketing sync",
+   "memory": {
+    "note_id": "not_FlCZY25Thm6vxP",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.2222222222222222,
+     "recall": 0.5,
+     "f1": 0.30769230769230765,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 9,
+     "gold": 4,
+     "tp": 2,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 1,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.4444444444444444,
+     "recall": 1.0,
+     "f1": 0.6153846153846153,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 9,
+     "gold": 4,
+     "tp": 4,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_MX1VBL2uoUhUwx",
+   "title": "Teams launch sync",
+   "memory": {
+    "note_id": "not_MX1VBL2uoUhUwx",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.2857142857142857,
+     "recall": 1.0,
+     "f1": 0.4444444444444445,
+     "staleness": 0.07142857142857142,
+     "citation_precision": 1.0,
+     "shown": 14,
+     "gold": 4,
+     "tp": 4,
+     "stale": 1
+    },
+    "changes": {
+     "precision": 0.18181818181818182,
+     "recall": 0.5,
+     "f1": 0.26666666666666666,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 11,
+     "gold": 4,
+     "tp": 2,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.2857142857142857,
+     "recall": 1.0,
+     "f1": 0.4444444444444445,
+     "staleness": 0.07142857142857142,
+     "citation_precision": 1.0,
+     "shown": 14,
+     "gold": 4,
+     "tp": 4,
+     "stale": 1
+    }
+   }
+  },
+  {
+   "note_id": "not_JLv3xIpcHjcaoi",
+   "title": "Atlas weekly sync",
+   "memory": {
+    "note_id": "not_JLv3xIpcHjcaoi",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.5909090909090909,
+     "recall": 0.9285714285714286,
+     "f1": 0.7222222222222223,
+     "staleness": 0.045454545454545456,
+     "citation_precision": 1.0,
+     "shown": 22,
+     "gold": 14,
+     "tp": 13,
+     "stale": 1
+    },
+    "changes": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.6363636363636364,
+     "recall": 1.0,
+     "f1": 0.7777777777777778,
+     "staleness": 0.045454545454545456,
+     "citation_precision": 1.0,
+     "shown": 22,
+     "gold": 14,
+     "tp": 14,
+     "stale": 1
+    }
+   }
+  },
+  {
+   "note_id": "not_ETw8sxDlrgBxna",
+   "title": "Weekly metrics review",
+   "memory": {
+    "note_id": "not_ETw8sxDlrgBxna",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.38461538461538464,
+     "recall": 0.7142857142857143,
+     "f1": 0.5,
+     "staleness": 0.07692307692307693,
+     "citation_precision": 1.0,
+     "shown": 13,
+     "gold": 7,
+     "tp": 5,
+     "stale": 1
+    },
+    "changes": {
+     "precision": null,
+     "recall": 0.0,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 2,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.5384615384615384,
+     "recall": 1.0,
+     "f1": 0.7000000000000001,
+     "staleness": 0.07692307692307693,
+     "citation_precision": 1.0,
+     "shown": 13,
+     "gold": 7,
+     "tp": 7,
+     "stale": 1
+    }
+   }
+  },
+  {
+   "note_id": "not_TPS3Rmv0jYjlVR",
+   "title": "Priya / Theo 1:1",
+   "memory": {
+    "note_id": "not_TPS3Rmv0jYjlVR",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.125,
+     "recall": 0.5,
+     "f1": 0.2,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 8,
+     "gold": 2,
+     "tp": 1,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.25,
+     "recall": 1.0,
+     "f1": 0.4,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 8,
+     "gold": 2,
+     "tp": 2,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_W4Sa5rfG3S44Mv",
+   "title": "Juniper weekly sync",
+   "memory": {
+    "note_id": "not_W4Sa5rfG3S44Mv",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.6363636363636364,
+     "recall": 0.9333333333333333,
+     "f1": 0.7567567567567568,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 22,
+     "gold": 15,
+     "tp": 14,
+     "stale": 0
+    },
+    "changes": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.6818181818181818,
+     "recall": 1.0,
+     "f1": 0.8108108108108109,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 22,
+     "gold": 15,
+     "tp": 15,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_oZqJHjL8mbjRyC",
+   "title": "Priya / Ruth 1:1",
+   "memory": {
+    "note_id": "not_oZqJHjL8mbjRyC",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.3333333333333333,
+     "recall": 1.0,
+     "f1": 0.5,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 9,
+     "gold": 3,
+     "tp": 3,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.3333333333333333,
+     "recall": 1.0,
+     "f1": 0.5,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 9,
+     "gold": 3,
+     "tp": 3,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_qpBjhPddV7FulR",
+   "title": "Priya / Alex 1:1",
+   "memory": {
+    "note_id": "not_qpBjhPddV7FulR",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.2,
+     "recall": 1.0,
+     "f1": 0.33333333333333337,
+     "staleness": 0.1,
+     "citation_precision": 1.0,
+     "shown": 10,
+     "gold": 2,
+     "tp": 2,
+     "stale": 1
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.2,
+     "recall": 1.0,
+     "f1": 0.33333333333333337,
+     "staleness": 0.1,
+     "citation_precision": 1.0,
+     "shown": 10,
+     "gold": 2,
+     "tp": 2,
+     "stale": 1
+    }
+   }
+  },
+  {
+   "note_id": "not_ZJs9aGLg7C4zTV",
+   "title": "Sparrow weekly sync",
+   "memory": {
+    "note_id": "not_ZJs9aGLg7C4zTV",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.5714285714285714,
+     "recall": 1.0,
+     "f1": 0.7272727272727273,
+     "staleness": 0.09523809523809523,
+     "citation_precision": 1.0,
+     "shown": 21,
+     "gold": 12,
+     "tp": 12,
+     "stale": 2
+    },
+    "changes": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.5714285714285714,
+     "recall": 1.0,
+     "f1": 0.7272727272727273,
+     "staleness": 0.09523809523809523,
+     "citation_precision": 1.0,
+     "shown": 21,
+     "gold": 12,
+     "tp": 12,
+     "stale": 2
+    }
+   }
+  },
+  {
+   "note_id": "not_TzYFg1XTaQBeIo",
+   "title": "Priya / Elena 1:1",
+   "memory": {
+    "note_id": "not_TzYFg1XTaQBeIo",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.14285714285714285,
+     "recall": 1.0,
+     "f1": 0.25,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 7,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.14285714285714285,
+     "recall": 1.0,
+     "f1": 0.25,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 7,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_iTVzrsLPwSa2SB",
+   "title": "Tidewater Foods call",
+   "memory": {
+    "note_id": "not_iTVzrsLPwSa2SB",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.2222222222222222,
+     "recall": 1.0,
+     "f1": 0.3636363636363636,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 9,
+     "gold": 2,
+     "tp": 2,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 3,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 3,
+     "gold": 3,
+     "tp": 3,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.2222222222222222,
+     "recall": 1.0,
+     "f1": 0.3636363636363636,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 9,
+     "gold": 2,
+     "tp": 2,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_Zue7w068bRonJB",
+   "title": "Eng standup",
+   "memory": {
+    "note_id": "not_Zue7w068bRonJB",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.7027027027027027,
+     "recall": 0.9629629629629629,
+     "f1": 0.8125,
+     "staleness": 0.02702702702702703,
+     "citation_precision": 1.0,
+     "shown": 37,
+     "gold": 27,
+     "tp": 26,
+     "stale": 1
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 3,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.7297297297297297,
+     "recall": 1.0,
+     "f1": 0.8437499999999999,
+     "staleness": 0.02702702702702703,
+     "citation_precision": 1.0,
+     "shown": 37,
+     "gold": 27,
+     "tp": 27,
+     "stale": 1
+    }
+   }
+  },
+  {
+   "note_id": "not_rsETXMaGFA5t9J",
+   "title": "Priya / Hana 1:1",
+   "memory": {
+    "note_id": "not_rsETXMaGFA5t9J",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 6,
+     "gold": 1,
+     "tp": 0,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.16666666666666666,
+     "recall": 1.0,
+     "f1": 0.2857142857142857,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 6,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_sicPjX0XMIrovM",
+   "title": "Priya / Lena 1:1",
+   "memory": {
+    "note_id": "not_sicPjX0XMIrovM",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.25,
+     "recall": 1.0,
+     "f1": 0.4,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 8,
+     "gold": 2,
+     "tp": 2,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.25,
+     "recall": 1.0,
+     "f1": 0.4,
+     "staleness": 0.125,
+     "citation_precision": 1.0,
+     "shown": 8,
+     "gold": 2,
+     "tp": 2,
+     "stale": 1
+    }
+   }
+  },
+  {
+   "note_id": "not_YvyJR04VR0zJ6f",
+   "title": "Support triage",
+   "memory": {
+    "note_id": "not_YvyJR04VR0zJ6f",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.5,
+     "recall": 1.0,
+     "f1": 0.6666666666666666,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 14,
+     "gold": 7,
+     "tp": 7,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.5,
+     "recall": 1.0,
+     "f1": 0.6666666666666666,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 14,
+     "gold": 7,
+     "tp": 7,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_5FBRo9EBLAQ1vO",
+   "title": "Redwood Media call",
+   "memory": {
+    "note_id": "not_5FBRo9EBLAQ1vO",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.14285714285714285,
+     "recall": 1.0,
+     "f1": 0.25,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 7,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 3,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 3,
+     "gold": 3,
+     "tp": 3,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.14285714285714285,
+     "recall": 1.0,
+     "f1": 0.25,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 7,
+     "gold": 1,
+     "tp": 1,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_pSqgne6JtxtYwj",
+   "title": "Kite weekly sync",
+   "memory": {
+    "note_id": "not_pSqgne6JtxtYwj",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.4444444444444444,
+     "recall": 1.0,
+     "f1": 0.6153846153846153,
+     "staleness": 0.1111111111111111,
+     "citation_precision": 1.0,
+     "shown": 18,
+     "gold": 8,
+     "tp": 8,
+     "stale": 2
+    },
+    "changes": {
+     "precision": 0.3333333333333333,
+     "recall": 1.0,
+     "f1": 0.5,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 6,
+     "gold": 2,
+     "tp": 2,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.4444444444444444,
+     "recall": 1.0,
+     "f1": 0.6153846153846153,
+     "staleness": 0.1111111111111111,
+     "citation_precision": 1.0,
+     "shown": 18,
+     "gold": 8,
+     "tp": 8,
+     "stale": 2
+    }
+   }
+  },
+  {
+   "note_id": "not_lHIER5iaFv7bqN",
+   "title": "Meridian weekly sync",
+   "memory": {
+    "note_id": "not_lHIER5iaFv7bqN",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.5,
+     "recall": 1.0,
+     "f1": 0.6666666666666666,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 18,
+     "gold": 9,
+     "tp": 9,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 1,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.5,
+     "recall": 1.0,
+     "f1": 0.6666666666666666,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 18,
+     "gold": 9,
+     "tp": 9,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_9Hf6T9vaXsAPkE",
+   "title": "Priya / Nadia 1:1",
+   "memory": {
+    "note_id": "not_9Hf6T9vaXsAPkE",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.3,
+     "recall": 1.0,
+     "f1": 0.4615384615384615,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 10,
+     "gold": 3,
+     "tp": 3,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.3,
+     "recall": 1.0,
+     "f1": 0.4615384615384615,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 10,
+     "gold": 3,
+     "tp": 3,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_FIWlIaLukWliRj",
+   "title": "Marketing sync",
+   "memory": {
+    "note_id": "not_FIWlIaLukWliRj",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.3333333333333333,
+     "recall": 0.8,
+     "f1": 0.47058823529411764,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 12,
+     "gold": 5,
+     "tp": 4,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 2,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.4166666666666667,
+     "recall": 1.0,
+     "f1": 0.5882352941176471,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 12,
+     "gold": 5,
+     "tp": 5,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_McGrj4gw9NNyT2",
+   "title": "All hands",
+   "memory": {
+    "note_id": "not_McGrj4gw9NNyT2",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.7101449275362319,
+     "recall": 0.9423076923076923,
+     "f1": 0.8099173553719008,
+     "staleness": 0.043478260869565216,
+     "citation_precision": 1.0,
+     "shown": 69,
+     "gold": 52,
+     "tp": 49,
+     "stale": 3
+    },
+    "changes": {
+     "precision": 0.26666666666666666,
+     "recall": 0.2857142857142857,
+     "f1": 0.2758620689655172,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 15,
+     "gold": 14,
+     "tp": 4,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.7536231884057971,
+     "recall": 1.0,
+     "f1": 0.859504132231405,
+     "staleness": 0.057971014492753624,
+     "citation_precision": 1.0,
+     "shown": 69,
+     "gold": 52,
+     "tp": 52,
+     "stale": 4
+    }
+   }
+  },
+  {
+   "note_id": "not_FMEeWI9Htkryiy",
+   "title": "Juniper weekly sync",
+   "memory": {
+    "note_id": "not_FMEeWI9Htkryiy",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.5384615384615384,
+     "recall": 0.9333333333333333,
+     "f1": 0.6829268292682926,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 26,
+     "gold": 15,
+     "tp": 14,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.5769230769230769,
+     "recall": 1.0,
+     "f1": 0.7317073170731707,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 26,
+     "gold": 15,
+     "tp": 15,
+     "stale": 0
+    }
+   }
+  },
+  {
+   "note_id": "not_Bg70E4tj6oBvbK",
+   "title": "Sparrow weekly sync",
+   "memory": {
+    "note_id": "not_Bg70E4tj6oBvbK",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.5416666666666666,
+     "recall": 0.9285714285714286,
+     "f1": 0.6842105263157894,
+     "staleness": 0.08333333333333333,
+     "citation_precision": 1.0,
+     "shown": 24,
+     "gold": 14,
+     "tp": 13,
+     "stale": 2
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 4,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.5416666666666666,
+     "recall": 0.9285714285714286,
+     "f1": 0.6842105263157894,
+     "staleness": 0.08333333333333333,
+     "citation_precision": 1.0,
+     "shown": 24,
+     "gold": 14,
+     "tp": 13,
+     "stale": 2
+    }
+   }
+  },
+  {
+   "note_id": "not_n6G4gJM9yoiwAA",
+   "title": "Teams launch sync",
+   "memory": {
+    "note_id": "not_n6G4gJM9yoiwAA",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.5714285714285714,
+     "recall": 1.0,
+     "f1": 0.7272727272727273,
+     "staleness": 0.03571428571428571,
+     "citation_precision": 1.0,
+     "shown": 28,
+     "gold": 16,
+     "tp": 16,
+     "stale": 1
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 3,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.5714285714285714,
+     "recall": 1.0,
+     "f1": 0.7272727272727273,
+     "staleness": 0.03571428571428571,
+     "citation_precision": 1.0,
+     "shown": 28,
+     "gold": 16,
+     "tp": 16,
+     "stale": 1
+    }
+   }
+  },
+  {
+   "note_id": "not_EyYygyVut5A79t",
+   "title": "Priya / Tomás 1:1",
+   "memory": {
+    "note_id": "not_EyYygyVut5A79t",
+    "split": "test",
+    "last_meeting_ok": true,
+    "commitments": {
+     "precision": 0.25,
+     "recall": 0.75,
+     "f1": 0.375,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 12,
+     "gold": 4,
+     "tp": 3,
+     "stale": 0
+    },
+    "changes": {
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "staleness": 0.0,
+     "citation_precision": null,
+     "shown": 1,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "requests": {
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "staleness": null,
+     "citation_precision": null,
+     "shown": 0,
+     "gold": 0,
+     "tp": 0,
+     "stale": 0
+    },
+    "commitments_any_owner": {
+     "precision": 0.3333333333333333,
+     "recall": 1.0,
+     "f1": 0.5,
+     "staleness": 0.0,
+     "citation_precision": 1.0,
+     "shown": 12,
+     "gold": 4,
+     "tp": 4,
+     "stale": 0
+    }
+   }
+  }
+ ],
+ "meta": {
+  "git_sha": "42f8787",
+  "date": "2026-11-02T22:30:58+00:00",
+  "fixtures": "data/fixtures/large/northwind-xl",
+  "store": "data/cache/concentrate/78a4767dabf454ae/538d0b7f/memory.sqlite",
+  "split": "test",
+  "limit": 0,
+  "seed": 42,
+  "baseline": null,
+  "spent_usd": 0.0
+ }
+}

@@ -230,3 +230,14 @@ connection could block for up to 50 minutes. Full write-up: [`HARDENING.md`](HAR
 **Decision:** before colouring citations, the explorer recomputes each answer's citation precision/recall from the gold lines and only trusts a fixture version that reproduces the stored values. It reads fixtures at the report's git SHA when they're committed. **Why:** utterance ids are positional, and the pilot report shows the risk: against today's regenerated fixtures 18/36 answers don't reproduce; at the run's SHA all 36 do.
 
 **Trade-off:** a `git show` per opened note (cheap, local), and gitignored fixtures (XL) can only be checked for drift, not pinned. **Found:** the runner's jsonl drops the judge's reason (the row's `verdict` string overwrites the judge's object); the explorer shows it once the runner keeps it.
+
+## Pre-meeting brief (workstream H, 2026-11-02)
+
+**Built:** `concentrate brief <note_id>` prints a cited brief for an upcoming meeting: open commitments, what changed since the series last met, open customer requests, and the last meeting's digest. `concentrate brief-eval` grades briefs against the generator's world. Details and results are in [`BRIEF.md`](BRIEF.md).
+
+**Decisions:**
+- The brief is a deterministic **as-of query**: it reads only rows recorded before the meeting starts, so a historical brief has no leakage and every meeting is a test case.
+- Gold lines come from protected spoken spans found in the fixture text, not from re-rendering, because the XL fixtures predate generator 1.1.
+- The baseline gets top-24 chunks from earlier meetings, plus the previous series meeting's summary.
+
+**Result (XL test sample of 36):** memory finds 91% of open commitments vs 30% for top-k + Sonnet, and 58% vs 5% of "changes since last met". It is less precise on commitments (43% vs 90%), mostly because of owner attribution in in-person meetings and owner promises the world doesn't track.
