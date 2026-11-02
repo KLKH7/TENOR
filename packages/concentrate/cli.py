@@ -405,3 +405,158 @@ def hand_check(
             f"{name:<20} vs human: {s['agreement']:.1%} agree on correct/not "
             f"(kappa {s['kappa']:.2f}, n={s['n']}) · 3-way {s['agreement_3way']:.1%}"
         )
+
+
+# -- workstream C: transcript-retirement curve --
+
+
+@app.command("retire-curve")
+def retire_curve(
+    settings: Annotated[
+        str, typer.Option(help="Concentrate retirement settings N (days); inf = none.")
+    ] = "inf,30,14,7,0",
+    b0_settings: Annotated[
+        str, typer.Option(help="Settings for b0 top-k with transcripts deleted ('' = skip).")
+    ] = "inf,14,0",
+    b1: Annotated[bool, typer.Option("--b1/--no-b1", help="Include b1 (summaries only).")] = True,
+    split: Annotated[str, typer.Option(help="dev | test | all. Tune only on dev.")] = "dev",
+    limit: Annotated[int, typer.Option(help="Max questions (0 = all).")] = 0,
+    k: Annotated[int, typer.Option(help="Meetings retrieved by b0/b1.")] = 20,
+    seed: Annotated[int, typer.Option(help="Seed for bootstrap CIs.")] = 42,
+    fixtures: Annotated[Path, typer.Option(help="Benchmark fixture set.")] = NORTHWIND_XL,
+    out: Annotated[Path, typer.Option(help="Report directory.")] = Path("evals/reports/retirement"),
+    estimate_only: Annotated[
+        bool, typer.Option("--estimate", help="Estimate cost and exit.")
+    ] = False,
+    offline: Annotated[bool, typer.Option(help="Use cached LLM results only.")] = False,
+    yes: Annotated[bool, typer.Option("--yes", help="Skip the >$2 confirmation.")] = False,
+    latency_sample: Annotated[
+        int, typer.Option(help="First N questions run interactively (latency sample).")
+    ] = 5,
+) -> None:
+    """Sweep transcript retirement (Concentrate vs b0 with deleted transcripts vs b1)."""
+    import json
+
+    from concentrate.agents.baselines import MeetingRetriever, SummariesOnlySystem, System
+    from concentrate.agents.concentrate_system import COMPLETE_MARKER, ConcentrateSystem
+    from concentrate.agents.retrieval import SentenceTransformerEmbedder
+    from concentrate.evals import retirement as rt
+    from concentrate.evals.runner import estimate, load_corpus, load_questions, run_eval
+
+    client = LLMClient(offline=offline)
+    budget = float(os.environ.get("CONCENTRATE_BUDGET_USD") or 25)
+    notes = load_corpus(fixtures)
+    questions = load_questions(fixtures, split, limit)
+    embedder = SentenceTransformerEmbedder()
+    c_ns, b0_ns = rt.parse_settings(settings), rt.parse_settings(b0_settings)
+
+    systems: list[System] = []
+    for n in c_ns:
+        c = ConcentrateSystem(
+            client,
+            embedder=embedder,
+            directory_path=fixtures / "directory.json",
+            retire_after_days=n,
+        )
+        c.name = f"concentrate@{rt.label(n)}"
+        systems.append(c)
+    store_dir = systems[0].store_dir(notes) if systems else None  # type: ignore[attr-defined]
+    complete = store_dir is None or (store_dir / COMPLETE_MARKER).exists()
+    if not complete and not estimate_only:
+        raise typer.BadParameter(
+            f"Concentrate store {store_dir} is not complete; this command never builds memory "
+            "(run `concentrate eval --systems c` or wait for the build)"
+        )
+    retriever = MeetingRetriever(notes, embedder) if b0_ns or b1 else None
+    for n in b0_ns:
+        assert retriever is not None
+        systems.append(rt.RetiredTopKSystem(client, retriever, k, retire_after_days=n))
+    if b1:
+        assert retriever is not None
+        systems.append(SummariesOnlySystem(client, retriever, k))
+
+    ests = estimate(
+        systems,
+        questions,
+        client.model,
+        client=client,
+        notes=notes,
+        batch=True,
+        latency_sample=latency_sample,
+    )
+    typer.echo(
+        f"{fixtures}: {len(notes)} meetings · {len(questions)} questions ({split}) · "
+        f"{len(systems)} systems · {client.model} · batch mode"
+    )
+    for e in ests:
+        typer.echo(
+            f"  {e.system:<18} ~{e.input_tokens / max(1, e.questions):>8,.0f} in-tok/q "
+            f"≈ ${e.usd:6.2f}  (incl. judge)"
+        )
+    total = sum(e.usd for e in ests)
+    typer.echo(f"  estimated total ≈ ${total:.2f} (before cache reuse) · cap ${budget:.2f}")
+    if estimate_only:
+        return
+    if not offline and not os.environ.get("ANTHROPIC_API_KEY"):
+        raise typer.BadParameter("ANTHROPIC_API_KEY is not set (put it in .env)")
+    if total > BUDGET_CONFIRM_USD and not offline and not yes:
+        typer.confirm(
+            f"Estimated ${total:.2f} exceeds ${BUDGET_CONFIRM_USD:.0f}. Proceed?", abort=True
+        )
+    out.mkdir(parents=True, exist_ok=True)
+    report = run_eval(
+        systems,
+        questions,
+        client,
+        seed=seed,
+        split=split,
+        budget_usd=budget,
+        out_dir=out,
+        notes=notes,
+        batch=True,
+        latency_sample=latency_sample,
+        meta={"k": k, "embedder": embedder.name, "fixtures": str(fixtures), "retirement": True},
+    )
+
+    # Post-process: gold evidence in each context, tokens kept, retired share, curve.
+    by_name = {s.name: s for s in systems}
+    evidence: dict[tuple[str, str], float | None] = {}
+    for s in systems:
+        for q in questions:
+            if isinstance(s, ConcentrateSystem):
+                ctx = s._user(q)[0]
+            elif isinstance(s, rt.RetiredTopKSystem | SummariesOnlySystem):
+                ctx = s._context(q)[0]
+            else:
+                continue
+            evidence[(s.name, q.id)] = rt.gold_evidence(ctx, q.gold_utterance_ids)
+    rows = rt.load_rows(Path(report["paths"]["jsonl"]))
+    all_ns = list(dict.fromkeys([*c_ns, *b0_ns]))
+    store_meetings = by_name[systems[0].name].store.meetings()  # type: ignore[attr-defined]
+    as_ofs = [q.as_of for q in questions]
+    result = {
+        "meta": {
+            **{k_: report["meta"][k_] for k_ in ("date", "git", "model", "seed", "split")},
+            "questions": len(questions),
+            "prompts": report["meta"]["prompts"],
+            "spent_usd": report["meta"]["spent_usd"],
+            "store": str(store_dir),
+            "eval_report": report["paths"]["md"],
+        },
+        "settings": {
+            s.name: getattr(s, "retire_after_days", None)
+            for s in systems
+            if not isinstance(s, SummariesOnlySystem)
+        },
+        "order": [rt.label(n) for n in sorted(all_ns, key=lambda n: -1 if n is None else -n)],
+        "kept": {rt.label(n): rt.tokens_kept(store_meetings, as_ofs, n) for n in all_ns},
+        "retired_share": {rt.label(n): rt.retired_share(notes, as_ofs, n) for n in all_ns},
+        "curve": rt.curve(rows, evidence, seed),
+    }
+    stem = out / f"{report['meta']['date']}.curve"
+    Path(f"{stem}.json").write_text(json.dumps(result, indent=2, default=str))
+    Path(f"{stem}.md").write_text(rt.to_markdown(result))
+    cats = sorted({r["category"] for r in rows})
+    Path(f"{stem}.svg").write_text(rt.to_svg(result, cats))
+    typer.echo(rt.to_markdown(result))
+    typer.echo(f"spent ${report['meta']['spent_usd']:.2f} · curve: {stem}.md / .svg")
