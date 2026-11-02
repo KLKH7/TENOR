@@ -134,7 +134,7 @@ class System(Protocol):
 class _Base:
     name = "base"
     prompt_ids: tuple[str, ...] = (ANSWER_PROMPT,)
-    OUTPUT_TOKENS_EST = 900  # answer JSON + adaptive thinking allowance (planning only)
+    OUTPUT_TOKENS_EST = 300  # measured: ~250 output tokens per answer in the pilot
 
     def __init__(self, client: LLMClient, backend: ToolBackend | None = None) -> None:
         self.client = client
@@ -248,6 +248,10 @@ class TopKSystem(_Base):
         user, retrieved = self._context(q)
         return self._call(q, self.instructions, user, cache_system=False, retrieved=retrieved)
 
+    def prompt_texts(self, q: QuestionLike) -> tuple[str, str]:
+        """(system, user) exactly as sent, for exact token counting."""
+        return self.instructions, self._context(q)[0]
+
     def estimate(self, q: QuestionLike) -> tuple[int, int]:
         user, _ = self._context(q)
         return estimate_tokens(self.instructions) + estimate_tokens(user), self.OUTPUT_TOKENS_EST
@@ -282,8 +286,53 @@ class FullContextSystem(_Base):
     def run(self, q: QuestionLike) -> SystemResult:
         return self._call(q, self.system, _user_prompt(q), cache_system=True, retrieved=self.ids)
 
+    def prompt_texts(self, q: QuestionLike) -> tuple[str, str]:
+        return self.system, _user_prompt(q)
+
     def estimate(self, q: QuestionLike) -> tuple[int, int]:
         return estimate_tokens(self.system) + 60, self.OUTPUT_TOKENS_EST
+
+
+class OracleSystem(_Base):
+    """B2o: only the meetings that contain the gold evidence: a ceiling for *reasoning* given
+    perfect retrieval. Used when the corpus is too large for B2 (full context) to fit.
+
+    Unanswerable questions have no gold meetings; the oracle then gets the retriever's top
+    ``fallback_k`` meetings, so it can't infer "unanswerable" from an empty context.
+    """
+
+    name = "b2o_oracle"
+
+    def __init__(
+        self,
+        client: LLMClient,
+        notes: list[MeetingNote],
+        retriever: MeetingRetriever,
+        fallback_k: int = 5,
+        backend: ToolBackend | None = None,
+    ) -> None:
+        super().__init__(client, backend)
+        self.notes = {m.note_id: m for m in notes}
+        self.retriever, self.fallback_k = retriever, fallback_k
+
+    def _meetings(self, q: QuestionLike) -> list[MeetingNote]:
+        gold: list[str] = list(getattr(q, "gold_utterance_ids", []) or [])
+        ids = list(dict.fromkeys(u.split(":")[0] for u in gold))
+        found = [self.notes[i] for i in ids if i in self.notes]
+        return cv.by_date(found or self.retriever.top_meetings(q.question, self.fallback_k))
+
+    def prompt_texts(self, q: QuestionLike) -> tuple[str, str]:
+        body = "\n\n".join(cv.full_view(m) for m in self._meetings(q))
+        return self.instructions, f"<meetings>\n{body}\n</meetings>\n\n{_user_prompt(q)}"
+
+    def run(self, q: QuestionLike) -> SystemResult:
+        system, user = self.prompt_texts(q)
+        ids = [m.note_id for m in self._meetings(q)]
+        return self._call(q, system, user, cache_system=False, retrieved=ids)
+
+    def estimate(self, q: QuestionLike) -> tuple[int, int]:
+        system, user = self.prompt_texts(q)
+        return estimate_tokens(system) + estimate_tokens(user), self.OUTPUT_TOKENS_EST
 
 
 # -- B3: agentic retrieval mirroring Granola's MCP ----------------------------------------------
@@ -457,8 +506,9 @@ class AgenticSystem:
 
     name = "b3_agentic"
     prompt_ids: tuple[str, ...] = (AGENT_PROMPT,)
-    # Planning estimate: ~6 tool turns with a growing transcript (no measurement yet).
-    INPUT_TOKENS_EST, OUTPUT_TOKENS_EST = 45_000, 2_500
+    # Pilot (40 meetings): 22.9k input / 0.85k output tokens per question. Larger corpora return
+    # bigger search results, so plan for more until XL is measured.
+    INPUT_TOKENS_EST, OUTPUT_TOKENS_EST = 32_000, 1_000
 
     def __init__(
         self,

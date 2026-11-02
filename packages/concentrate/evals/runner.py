@@ -8,17 +8,23 @@ record all of those. Spending is capped: the run stops before the ledger would e
 
 from __future__ import annotations
 
+import importlib
 import json
+import os
 import subprocess
+import time
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from concentrate.agents import corpus as cv
 from concentrate.agents.baselines import (
     AgenticSystem,
     FullContextSystem,
+    IngestStats,
     MeetingRetriever,
+    OracleSystem,
     SummariesOnlySystem,
     System,
     TopKSystem,
@@ -34,13 +40,27 @@ from concentrate.evals.scoring import (
     judge,
     summarize,
 )
-from concentrate.llm.client import LLMClient, ToolBackend, cost_usd
+from concentrate.llm.client import LLMClient, ToolBackend, cost_usd, count_tokens, estimate_tokens
 from concentrate.sources.fixtures import FixtureSource
 from concentrate.sources.poller import sync
 from concentrate.synth.questions import UNANSWERABLE, Question
 
-SYSTEMS = ("b0", "b1", "b2", "b3")
-JUDGE_TOKENS_EST = (700, 300)  # per question (input, output incl. thinking), planning only
+SYSTEMS = ("b0", "b1", "b2", "b2o", "b3", "b4", "b5")
+JUDGE_TOKENS_EST = (800, 80)  # per question (input, output); measured ~780 / ~60 in the pilot
+CONTEXT_LIMIT_TOKENS = 950_000  # 1M-token window minus room for instructions and the answer
+HEURISTIC_TO_EXACT = 1.93  # measured: chars/3.5 undercounts transcripts with line IDs ~1.9x
+
+
+def ingest_model() -> str:
+    return os.environ.get("CONCENTRATE_INGEST_MODEL") or "claude-sonnet-5-5"
+
+
+def corpus_tokens(notes: list[MeetingNote], model: str, cache_dir: Path) -> int:
+    """Exact token size of the corpus (full views), or a calibrated estimate if offline."""
+    views = [cv.full_view(m) for m in notes]
+    if os.environ.get("ANTHROPIC_API_KEY"):
+        return sum(count_tokens(views, model, cache_dir))
+    return round(sum(estimate_tokens(v) for v in views) * HEURISTIC_TO_EXACT)
 
 
 def load_corpus(fixtures: Path) -> list[MeetingNote]:
@@ -82,7 +102,7 @@ def build_systems(
     k: int,
     backend: ToolBackend | None = None,
 ) -> list[System]:
-    retriever = MeetingRetriever(notes, embedder) if {"b0", "b1"} & set(names) else None
+    retriever = MeetingRetriever(notes, embedder) if {"b0", "b1", "b2o"} & set(names) else None
     built: list[System] = []
     for n in names:
         if n == "b0" and retriever:
@@ -90,9 +110,28 @@ def build_systems(
         elif n == "b1" and retriever:
             built.append(SummariesOnlySystem(client, retriever, k, backend))
         elif n == "b2":
+            size = corpus_tokens(notes, client.model, client.cache_dir)
+            if size > CONTEXT_LIMIT_TOKENS:
+                raise ValueError(
+                    f"b2 (full context) needs {size:,} tokens, over the {CONTEXT_LIMIT_TOKENS:,} "
+                    "window: use b2o (oracle ceiling) for this corpus"
+                )
             built.append(FullContextSystem(client, notes, backend))
+        elif n == "b2o" and retriever:
+            built.append(OracleSystem(client, notes, retriever, backend=backend))
         elif n == "b3":
             built.append(AgenticSystem(client, notes, backend))
+        elif n in ("b4", "b5"):
+            # Optional write-time competitors live in their own modules (heavy dependencies).
+            module, cls = {
+                "b4": ("mem0_system", "Mem0System"),
+                "b5": ("graphiti_system", "GraphitiSystem"),
+            }[n]
+            try:
+                mod = importlib.import_module(f"concentrate.agents.{module}")
+            except ImportError as exc:
+                raise ValueError(f"{n} is not available: {exc}") from exc
+            built.append(getattr(mod, cls)(client, notes))
         else:
             raise ValueError(f"unknown system {n!r}; choose from {SYSTEMS}")
     return built
@@ -105,16 +144,42 @@ class Estimate:
     input_tokens: int
     output_tokens: int
     usd: float
+    exact: bool = False  # input tokens counted with the real tokenizer
+    ingest_usd: float = 0.0  # write-time systems: one-off memory build
 
 
-def estimate(systems: list[System], questions: list[Question], model: str) -> list[Estimate]:
-    """Offline cost estimate per system (+ judge). B2 assumes prompt caching after call one."""
+def _exact_input(s: System, q: Question, client: LLMClient) -> int | None:
+    texts = getattr(s, "prompt_texts", None)
+    if texts is None or not os.environ.get("ANTHROPIC_API_KEY"):
+        return None
+    system, user = texts(q)
+    return count_tokens([f"{system}\n\n{user}"], client.model, client.cache_dir)[0]
+
+
+def estimate(
+    systems: list[System],
+    questions: list[Question],
+    model: str,
+    *,
+    client: LLMClient | None = None,
+    notes: list[MeetingNote] | None = None,
+) -> list[Estimate]:
+    """Cost estimate per system (+ judge, + ingestion for write-time systems).
+
+    With a ``client`` and an API key, prompt-assembling systems are counted exactly with the
+    free token-counting endpoint; others use their calibrated planning estimates. B2 assumes
+    prompt caching after the first call.
+    """
     out = []
     for s in systems:
         tin = tout = 0
         usd = 0.0
+        exact = client is not None and hasattr(s, "prompt_texts")
         for i, q in enumerate(questions):
             a, b = s.estimate(q)
+            counted = _exact_input(s, q, client) if client is not None else None
+            if counted is not None:
+                a = counted
             tin, tout = tin + a, tout + b
             if s.name == "b2_full":  # first call writes the cache, the rest read it
                 usd += cost_usd(model, 60, b, 0 if i == 0 else a, a if i == 0 else 0)
@@ -122,7 +187,12 @@ def estimate(systems: list[System], questions: list[Question], model: str) -> li
                 usd += cost_usd(model, a, b)
         jin, jout = JUDGE_TOKENS_EST
         usd += cost_usd(model, jin * len(questions), jout * len(questions))
-        out.append(Estimate(s.name, len(questions), tin, tout, usd))
+        ingest_usd = 0.0
+        estimate_ingest = getattr(s, "estimate_ingest", None)
+        if estimate_ingest is not None and notes is not None:
+            iin, iout = estimate_ingest(notes)
+            ingest_usd = cost_usd(ingest_model(), iin, iout)
+        out.append(Estimate(s.name, len(questions), tin, tout, usd + ingest_usd, exact, ingest_usd))
     return out
 
 
@@ -152,20 +222,41 @@ def run_eval(
     budget_usd: float,
     out_dir: Path,
     meta: dict[str, Any] | None = None,
+    notes: list[MeetingNote] | None = None,
 ) -> dict[str, Any]:
-    """Run, judge, aggregate and write ``<out_dir>/<stamp>.{json,md}`` plus per-question JSONL."""
+    """Run, judge, aggregate and write ``<out_dir>/<stamp>.{json,md}`` plus per-question JSONL.
+
+    Write-time systems (those with ``ingest``) build their memory first; that one-off cost is
+    reported separately and counts against ``budget_usd``.
+    """
     stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
     out_dir.mkdir(parents=True, exist_ok=True)
     rows: list[Row] = []
     details: list[dict[str, Any]] = []
+    ingest: dict[str, dict[str, Any]] = {}
     stopped = None
+
+    def spent() -> float:
+        return client.ledger.spent_usd() + sum(
+            float(i["cost_usd"]) for i in ingest.values() if not i["cached"]
+        )
+
     try:
+        for s in systems:
+            build = getattr(s, "ingest", None)
+            if build is not None:
+                if notes is None:
+                    raise ValueError(f"{s.name} needs the corpus (notes) to ingest")
+                start = time.perf_counter()
+                stats: IngestStats = build(notes)
+                stats.seconds = stats.seconds or time.perf_counter() - start
+                ingest[s.name] = asdict(stats)
+                if spent() > budget_usd:
+                    raise BudgetExceeded(f"ingestion pushed spend to ${spent():.2f}")
         for q in questions:
             for s in systems:
-                if client.ledger.spent_usd() > budget_usd:
-                    raise BudgetExceeded(
-                        f"spent ${client.ledger.spent_usd():.2f} > budget ${budget_usd:.2f}"
-                    )
+                if spent() > budget_usd:
+                    raise BudgetExceeded(f"spent ${spent():.2f} > budget ${budget_usd:.2f}")
                 res = s.run(q)
                 verdict = judge(client, q, res.answer.answer, res.answer.abstain)
                 precision, recall = citation_scores(q, res.answer.citations)
@@ -212,7 +303,8 @@ def run_eval(
             "questions": len(questions),
             "prompts": {s.name: list(s.prompt_ids) for s in systems} | {"judge": [JUDGE_PROMPT]},
             "budget_usd": budget_usd,
-            "spent_usd": client.ledger.spent_usd(),
+            "spent_usd": spent(),
+            "ingest": ingest,
             "stopped_early": stopped,
             **(meta or {}),
         },
@@ -285,5 +377,19 @@ def to_markdown(report: dict[str, Any]) -> str:
                 for s in names
             ]
             lines.append(f"| {c} | {n} | " + " | ".join(vals) + " |")
+    if m.get("ingest"):
+        lines += [
+            "",
+            "## Write-time ingestion (one-off)",
+            "",
+            "| System | LLM calls | Input tok | Output tok | $ | Minutes | Reused |",
+            "|---|---|---|---|---|---|---|",
+        ]
+        for name, i in m["ingest"].items():
+            lines.append(
+                f"| {name} | {i['llm_calls']:,} | {i['input_tokens']:,} | "
+                f"{i['output_tokens']:,} | {i['cost_usd']:.2f} | "
+                f"{i['seconds'] / 60:.1f} | {'yes' if i['cached'] else 'no'} |"
+            )
     lines += ["", f"Prompts: `{json.dumps(m['prompts'])}`", ""]
     return "\n".join(lines)

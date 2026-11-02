@@ -10,3 +10,6 @@ data/cache/
 data/fixtures/large/
 web/node_modules/
 web/.next/
+
+# Claude Code local state (subagent worktrees, settings)
+.claude/

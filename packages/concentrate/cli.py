@@ -141,7 +141,10 @@ def synth(
 
 @app.command("eval")
 def eval_cmd(
-    systems: Annotated[str, typer.Option(help="Comma-separated: b0,b1,b2,b3.")] = "b0,b1,b2,b3",
+    systems: Annotated[
+        str, typer.Option(help="Comma-separated: b0,b1,b2,b2o,b3,b4,b5 (default depends on set).")
+    ] = "",
+    xl: Annotated[bool, typer.Option("--xl", help="Use the Northwind-XL benchmark.")] = False,
     split: Annotated[str, typer.Option(help="dev | test | all. Tune only on dev.")] = "dev",
     limit: Annotated[int, typer.Option(help="Max questions (0 = all in split).")] = 0,
     category: Annotated[
@@ -158,7 +161,7 @@ def eval_cmd(
     offline: Annotated[bool, typer.Option(help="Use cached LLM results only.")] = False,
     yes: Annotated[bool, typer.Option("--yes", help="Skip the >$2 confirmation.")] = False,
 ) -> None:
-    """Run the Phase 3 baselines on the benchmark and write a report."""
+    """Run the baselines on the benchmark and write a report."""
     from concentrate.agents.retrieval import SentenceTransformerEmbedder
     from concentrate.evals.runner import (
         build_systems,
@@ -168,22 +171,31 @@ def eval_cmd(
         run_eval,
     )
 
-    names = tuple(s.strip() for s in systems.split(",") if s.strip())
+    if xl and fixtures == NORTHWIND:
+        fixtures = NORTHWIND_XL
+    default = "b0,b1,b2o,b3" if fixtures == NORTHWIND_XL else "b0,b1,b2,b3"
+    names = tuple(s.strip() for s in (systems or default).split(",") if s.strip())
     client = LLMClient(offline=offline)
     budget = float(os.environ.get("CONCENTRATE_BUDGET_USD") or 25)
     notes = load_corpus(fixtures)
     questions = load_questions(fixtures, split, limit, tuple(category or ()))
-    embedder = SentenceTransformerEmbedder() if embeddings and {"b0", "b1"} & set(names) else None
+    needs_index = {"b0", "b1", "b2o"} & set(names)
+    embedder = SentenceTransformerEmbedder() if embeddings and needs_index else None
     built = build_systems(names, client, notes, embedder, k)
-    ests = estimate(built, questions, client.model)
-    typer.echo(f"{len(questions)} questions ({split}), {len(built)} systems, {client.model}")
+    ests = estimate(built, questions, client.model, client=client, notes=notes)
+    typer.echo(
+        f"{fixtures}: {len(notes)} meetings · {len(questions)} questions ({split}) · "
+        f"{len(built)} systems · {client.model}"
+    )
     for e in ests:
+        tag = "exact" if e.exact else "est. "
+        ingest = f", ingest ${e.ingest_usd:.2f}" if e.ingest_usd else ""
         typer.echo(
-            f"  {e.system:<13} ~{e.input_tokens / max(1, e.questions):>8,.0f} in-tok/q  "
-            f"≈ ${e.usd:6.2f}  (incl. judge)"
+            f"  {e.system:<13} ~{e.input_tokens / max(1, e.questions):>8,.0f} in-tok/q ({tag}) "
+            f"≈ ${e.usd:6.2f}  (incl. judge{ingest})"
         )
     total = sum(e.usd for e in ests)
-    typer.echo(f"  estimated total ≈ ${total:.2f} (uncached; heuristic tokens) · cap ${budget:.2f}")
+    typer.echo(f"  estimated total ≈ ${total:.2f} (before cache reuse) · cap ${budget:.2f}")
     if estimate_only:
         return
     if not offline and not os.environ.get("ANTHROPIC_API_KEY"):
@@ -200,7 +212,8 @@ def eval_cmd(
         split=split,
         budget_usd=budget,
         out_dir=out,
-        meta={"k": k, "embedder": getattr(embedder, "name", None)},
+        notes=notes,
+        meta={"k": k, "embedder": getattr(embedder, "name", None), "fixtures": str(fixtures)},
     )
     typer.echo((Path(report["paths"]["md"])).read_text())
-    typer.echo(f"spent ${client.ledger.spent_usd():.2f} · report: {report['paths']['md']}")
+    typer.echo(f"spent ${report['meta']['spent_usd']:.2f} · report: {report['paths']['md']}")
