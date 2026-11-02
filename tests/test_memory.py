@@ -342,3 +342,75 @@ def test_unresolved_owner_is_kept_with_candidates_not_guessed() -> None:
         confidence=0.6,
     )
     assert claim_text(c).startswith("unresolved (one of: sam_p, kofi) committed to")
+
+
+# -- query-side resolution (workstream L) ---------------------------------------------------------
+
+
+def test_role_in_question_narrows_an_ambiguous_first_name() -> None:
+    from datetime import date
+
+    from concentrate.memory.query import parse_question
+
+    d = load_directory(DIRECTORY)
+    day = date(2026, 10, 24)
+    assert parse_question("What did Sam the backend engineer commit to?", day, d).entities == [
+        "sam_p"
+    ]
+    assert set(parse_question("What did Sam commit to?", day, d).entities) == {"sam_p", "sam_o"}
+
+
+def test_question_anchors_the_named_meeting_by_title_and_date() -> None:
+    from datetime import date
+
+    from concentrate.memory.query import anchored_meetings
+
+    ms = [
+        {"note_id": "not_a", "title": "Eng standup", "day": "2026-08-31"},
+        {"note_id": "not_b", "title": "Eng standup", "day": "2026-09-07"},
+        {"note_id": "not_c", "title": "Kite weekly sync", "day": "2026-08-31"},
+    ]
+    q = 'In the "Eng standup" meeting on Monday, August 31, what did Sam commit to?'
+    assert anchored_meetings(q, date(2026, 10, 24), ms) == ["not_a"]
+    assert anchored_meetings('What happened in "Eng standup"?', date(2026, 10, 24), ms) == [
+        "not_a",
+        "not_b",
+    ]
+    assert (
+        anchored_meetings("As of Monday, August 31, who owned Kite?", date(2026, 10, 24), ms) == []
+    )
+
+
+def test_list_questions_about_reassignments_get_every_reassigned_commitment() -> None:
+    from datetime import date
+
+    from concentrate.memory.query import MemoryIndex, build_context, parse_question
+
+    s = MemoryStore(":memory:")
+    common = {"recorded_at": "2026-09-01T10:00:00+00:00", "quote": "q", "confidence": 0.9}
+    for i in range(20):
+        cid = s.add_commitment(
+            owner="sam_p",
+            task=f"task number {i}",
+            due=None,
+            note_id=N,
+            made_on="2026-09-01",
+            source_lines=[f"{N}:{i:04d}"],
+            **common,
+        )
+        if i % 2:
+            s.add_commitment_event(
+                cid,
+                kind="reassigned",
+                day="2026-09-08",
+                recorded_at="2026-09-08T10:00:00+00:00",
+                note_id=N,
+                source_lines=[f"{N}:{i + 100:04d}"],
+                quote="q",
+                new_due=None,
+                new_owner="ruth",
+            )
+    d = load_directory(DIRECTORY)
+    q = "Which commitments were reassigned to someone else, and to whom?"
+    ctx = build_context(MemoryIndex(s, d), q, parse_question(q, date(2026, 10, 24), d))
+    assert ctx.text.count("reassigned new owner Ruth Abebe") == 10

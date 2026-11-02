@@ -1,0 +1,533 @@
+{
+  "meta": {
+    "date": "20261102T223309Z",
+    "git": {
+      "sha": "b113208",
+      "dirty": true
+    },
+    "model": "claude-opus-5-5",
+    "seed": 42,
+    "split": "dev",
+    "questions": 90,
+    "prompts": {
+      "concentrate": [
+        "answer.v1",
+        "extract.v2",
+        "entail.v2"
+      ],
+      "c_no_entities": [
+        "answer.v1",
+        "extract.v2",
+        "entail.v2"
+      ],
+      "c_no_supersession": [
+        "answer.v1",
+        "extract.v2",
+        "entail.v2"
+      ],
+      "judge": [
+        "judge.v1"
+      ]
+    },
+    "budget_usd": 25.0,
+    "spent_usd": 4.848726000000002,
+    "ingest": {
+      "concentrate": {
+        "llm_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0,
+        "seconds": 0.6099992080125958,
+        "cached": true,
+        "detail": {
+          "store": "data/cache/concentrate/78a4767dabf454ae/6b9c4de7",
+          "built": {
+            "llm_calls": 229,
+            "input_tokens": 2839723,
+            "output_tokens": 98979,
+            "cost_usd": 4.955382799999999,
+            "seconds": 867.4186936219921,
+            "cached": false,
+            "detail": {
+              "store": "data/cache/concentrate/78a4767dabf454ae/6b9c4de7",
+              "meetings": 184,
+              "facts_extracted": 373,
+              "commitments_extracted": 117,
+              "updates_extracted": 80,
+              "entailment_checked": 56,
+              "kept": {
+                "inserted": 191,
+                "commitment": 117,
+                "restated": 49,
+                "update_done": 50,
+                "update_slipped": 12,
+                "superseded": 127,
+                "update_reassigned": 11
+              },
+              "rejected": {
+                "not_entailed": 13
+              },
+              "fact_rows": 318,
+              "current_facts": 191,
+              "contradictions": 0,
+              "commitments": 117,
+              "tiers_tokens": {
+                "L0": 672656,
+                "L1": 870364,
+                "L2": 15858,
+                "L3": 17908
+              },
+              "cache_read_tokens": 873506,
+              "cache_write_tokens": 14478,
+              "wall_seconds_this_run": 704.0024762919638,
+              "config": {
+                "ingest_model": "claude-sonnet-5-5",
+                "entail_model": "claude-haiku-5-5",
+                "enhancer": "enhance-v1",
+                "prompts": {
+                  "extract.v2": "ea88800a",
+                  "entail.v2": "e0b6e663"
+                },
+                "directory": "f5818163",
+                "build": {
+                  "effort": "medium",
+                  "window_lines": null,
+                  "entailment": true,
+                  "entail_effort": "low",
+                  "low_confidence": 0.75,
+                  "max_keys": 80,
+                  "max_open_commitments": 40
+                },
+                "format": 1
+              }
+            }
+          }
+        }
+      },
+      "c_no_entities": {
+        "llm_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0,
+        "seconds": 0.6579348329687491,
+        "cached": true,
+        "detail": {
+          "store": "data/cache/concentrate/78a4767dabf454ae/6b9c4de7",
+          "built": {
+            "llm_calls": 229,
+            "input_tokens": 2839723,
+            "output_tokens": 98979,
+            "cost_usd": 4.955382799999999,
+            "seconds": 867.4186936219921,
+            "cached": false,
+            "detail": {
+              "store": "data/cache/concentrate/78a4767dabf454ae/6b9c4de7",
+              "meetings": 184,
+              "facts_extracted": 373,
+              "commitments_extracted": 117,
+              "updates_extracted": 80,
+              "entailment_checked": 56,
+              "kept": {
+                "inserted": 191,
+                "commitment": 117,
+                "restated": 49,
+                "update_done": 50,
+                "update_slipped": 12,
+                "superseded": 127,
+                "update_reassigned": 11
+              },
+              "rejected": {
+                "not_entailed": 13
+              },
+              "fact_rows": 318,
+              "current_facts": 191,
+              "contradictions": 0,
+              "commitments": 117,
+              "tiers_tokens": {
+                "L0": 672656,
+                "L1": 870364,
+                "L2": 15858,
+                "L3": 17908
+              },
+              "cache_read_tokens": 873506,
+              "cache_write_tokens": 14478,
+              "wall_seconds_this_run": 704.0024762919638,
+              "config": {
+                "ingest_model": "claude-sonnet-5-5",
+                "entail_model": "claude-haiku-5-5",
+                "enhancer": "enhance-v1",
+                "prompts": {
+                  "extract.v2": "ea88800a",
+                  "entail.v2": "e0b6e663"
+                },
+                "directory": "f5818163",
+                "build": {
+                  "effort": "medium",
+                  "window_lines": null,
+                  "entailment": true,
+                  "entail_effort": "low",
+                  "low_confidence": 0.75,
+                  "max_keys": 80,
+                  "max_open_commitments": 40
+                },
+                "format": 1
+              }
+            }
+          }
+        }
+      },
+      "c_no_supersession": {
+        "llm_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0,
+        "seconds": 0.596857083030045,
+        "cached": true,
+        "detail": {
+          "store": "data/cache/concentrate/78a4767dabf454ae/6b9c4de7",
+          "built": {
+            "llm_calls": 229,
+            "input_tokens": 2839723,
+            "output_tokens": 98979,
+            "cost_usd": 4.955382799999999,
+            "seconds": 867.4186936219921,
+            "cached": false,
+            "detail": {
+              "store": "data/cache/concentrate/78a4767dabf454ae/6b9c4de7",
+              "meetings": 184,
+              "facts_extracted": 373,
+              "commitments_extracted": 117,
+              "updates_extracted": 80,
+              "entailment_checked": 56,
+              "kept": {
+                "inserted": 191,
+                "commitment": 117,
+                "restated": 49,
+                "update_done": 50,
+                "update_slipped": 12,
+                "superseded": 127,
+                "update_reassigned": 11
+              },
+              "rejected": {
+                "not_entailed": 13
+              },
+              "fact_rows": 318,
+              "current_facts": 191,
+              "contradictions": 0,
+              "commitments": 117,
+              "tiers_tokens": {
+                "L0": 672656,
+                "L1": 870364,
+                "L2": 15858,
+                "L3": 17908
+              },
+              "cache_read_tokens": 873506,
+              "cache_write_tokens": 14478,
+              "wall_seconds_this_run": 704.0024762919638,
+              "config": {
+                "ingest_model": "claude-sonnet-5-5",
+                "entail_model": "claude-haiku-5-5",
+                "enhancer": "enhance-v1",
+                "prompts": {
+                  "extract.v2": "ea88800a",
+                  "entail.v2": "e0b6e663"
+                },
+                "directory": "f5818163",
+                "build": {
+                  "effort": "medium",
+                  "window_lines": null,
+                  "entailment": true,
+                  "entail_effort": "low",
+                  "low_confidence": 0.75,
+                  "max_keys": 80,
+                  "max_open_commitments": 40
+                },
+                "format": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "stopped_early": null,
+    "batch": {
+      "enabled": true,
+      "latency_sample": 10,
+      "batched_systems": [
+        "concentrate",
+        "c_no_entities",
+        "c_no_supersession"
+      ],
+      "systems": {
+        "requested": 167,
+        "already_cached": 0,
+        "submitted": 167,
+        "succeeded": 167,
+        "fallback": {},
+        "batch_ids": [
+          "msgbatch_01FHgPm8JQwjWXEz18Nrnx3V"
+        ],
+        "seconds": 163.91635616705753,
+        "cost_usd": 3.3015499999999993,
+        "estimated_usd": 3.8936679999999977
+      },
+      "judge": {
+        "requested": 233,
+        "already_cached": 69,
+        "submitted": 164,
+        "succeeded": 164,
+        "fallback": {},
+        "batch_ids": [
+          "msgbatch_01K8JozUjET16XVjwf6KZmzv"
+        ],
+        "seconds": 164.51388362504076,
+        "cost_usd": 0.3599120000000001,
+        "estimated_usd": 0.28896399999999983
+      },
+      "fallback_interactive": 0
+    },
+    "variants": [
+      "full",
+      "no_entities",
+      "no_supersession"
+    ],
+    "fixtures": "data/fixtures/large/northwind-xl"
+  },
+  "metrics": {
+    "concentrate": {
+      "n": 90,
+      "accuracy": 0.9,
+      "accuracy_ci95": [
+        0.8333333333333334,
+        0.9555555555555556
+      ],
+      "exact_match": 0.7663299663299663,
+      "abstain_precision": 0.8888888888888888,
+      "abstain_recall": 1.0,
+      "cite_precision": 0.6631568414074325,
+      "cite_recall": 0.8838418904147024,
+      "input_tokens_per_q": 9174.744444444445,
+      "output_tokens_per_q": 231.2888888888889,
+      "cost_per_q": 0.02291602222222222,
+      "cost_total": 2.062442,
+      "latency_p50": 2.6971340420423076,
+      "latency_p95": 6.5824696669587865,
+      "latency_n": 10,
+      "tool_calls_per_q": 0.0,
+      "by_category": {
+        "aggregation": {
+          "n": 8,
+          "accuracy": 0.5
+        },
+        "commitment_status": {
+          "n": 9,
+          "accuracy": 1.0
+        },
+        "decision_change": {
+          "n": 8,
+          "accuracy": 1.0
+        },
+        "entity_disambiguation": {
+          "n": 10,
+          "accuracy": 0.7
+        },
+        "latest_state": {
+          "n": 11,
+          "accuracy": 1.0
+        },
+        "multi_hop": {
+          "n": 7,
+          "accuracy": 1.0
+        },
+        "single_hop": {
+          "n": 11,
+          "accuracy": 0.9090909090909091
+        },
+        "temporal": {
+          "n": 18,
+          "accuracy": 0.9444444444444444
+        },
+        "unanswerable": {
+          "n": 8,
+          "accuracy": 1.0
+        }
+      }
+    },
+    "c_no_entities": {
+      "n": 90,
+      "accuracy": 0.8888888888888888,
+      "accuracy_ci95": [
+        0.8222222222222222,
+        0.9555555555555556
+      ],
+      "exact_match": 0.7639730639730639,
+      "abstain_precision": 0.8,
+      "abstain_recall": 1.0,
+      "cite_precision": 0.6338768574805809,
+      "cite_recall": 0.8635124171619868,
+      "input_tokens_per_q": 8004.433333333333,
+      "output_tokens_per_q": 229.38888888888889,
+      "cost_per_q": 0.020512155555555554,
+      "cost_total": 1.8460940000000006,
+      "latency_p50": 2.8003954589366913,
+      "latency_p95": 5.844707333017141,
+      "latency_n": 10,
+      "tool_calls_per_q": 0.0,
+      "by_category": {
+        "aggregation": {
+          "n": 8,
+          "accuracy": 0.5
+        },
+        "commitment_status": {
+          "n": 9,
+          "accuracy": 0.8888888888888888
+        },
+        "decision_change": {
+          "n": 8,
+          "accuracy": 1.0
+        },
+        "entity_disambiguation": {
+          "n": 10,
+          "accuracy": 0.7
+        },
+        "latest_state": {
+          "n": 11,
+          "accuracy": 1.0
+        },
+        "multi_hop": {
+          "n": 7,
+          "accuracy": 1.0
+        },
+        "single_hop": {
+          "n": 11,
+          "accuracy": 0.9090909090909091
+        },
+        "temporal": {
+          "n": 18,
+          "accuracy": 0.9444444444444444
+        },
+        "unanswerable": {
+          "n": 8,
+          "accuracy": 1.0
+        }
+      }
+    },
+    "c_no_supersession": {
+      "n": 90,
+      "accuracy": 0.8444444444444444,
+      "accuracy_ci95": [
+        0.7666666666666667,
+        0.9222222222222223
+      ],
+      "exact_match": 0.7626262626262627,
+      "abstain_precision": 0.8888888888888888,
+      "abstain_recall": 1.0,
+      "cite_precision": 0.6411522633744856,
+      "cite_recall": 0.8824263851882216,
+      "input_tokens_per_q": 8925.011111111111,
+      "output_tokens_per_q": 232.9,
+      "cost_per_q": 0.022374266666666667,
+      "cost_total": 2.013684,
+      "latency_p50": 2.8818357499549165,
+      "latency_p95": 6.036197750014253,
+      "latency_n": 10,
+      "tool_calls_per_q": 0.0,
+      "by_category": {
+        "aggregation": {
+          "n": 8,
+          "accuracy": 0.25
+        },
+        "commitment_status": {
+          "n": 9,
+          "accuracy": 0.8888888888888888
+        },
+        "decision_change": {
+          "n": 8,
+          "accuracy": 1.0
+        },
+        "entity_disambiguation": {
+          "n": 10,
+          "accuracy": 0.6
+        },
+        "latest_state": {
+          "n": 11,
+          "accuracy": 0.9090909090909091
+        },
+        "multi_hop": {
+          "n": 7,
+          "accuracy": 1.0
+        },
+        "single_hop": {
+          "n": 11,
+          "accuracy": 0.9090909090909091
+        },
+        "temporal": {
+          "n": 18,
+          "accuracy": 0.9444444444444444
+        },
+        "unanswerable": {
+          "n": 8,
+          "accuracy": 1.0
+        }
+      }
+    }
+  },
+  "ledger_by_stage": {
+    "eval.c_no_entities.batch": {
+      "calls": 60,
+      "cached": 0,
+      "input_tokens": 476727,
+      "output_tokens": 13494,
+      "usd": 1.0883940000000005
+    },
+    "eval.c_no_supersession.batch": {
+      "calls": 80,
+      "cached": 0,
+      "input_tokens": 711170,
+      "output_tokens": 19620,
+      "usd": 1.6185399999999996
+    },
+    "eval.concentrate.batch": {
+      "calls": 27,
+      "cached": 0,
+      "input_tokens": 250938,
+      "output_tokens": 9274,
+      "usd": 0.5946160000000001
+    },
+    "eval.concentrate": {
+      "calls": 90,
+      "cached": 81,
+      "input_tokens": 825727,
+      "output_tokens": 20816,
+      "usd": 0.370004
+    },
+    "eval.judge": {
+      "calls": 270,
+      "cached": 243,
+      "input_tokens": 208544,
+      "output_tokens": 16643,
+      "usd": 0.11112000000000002
+    },
+    "eval.c_no_entities": {
+      "calls": 90,
+      "cached": 82,
+      "input_tokens": 720399,
+      "output_tokens": 20645,
+      "usd": 0.310996
+    },
+    "eval.c_no_supersession": {
+      "calls": 90,
+      "cached": 80,
+      "input_tokens": 803251,
+      "output_tokens": 20961,
+      "usd": 0.39514400000000005
+    },
+    "eval.judge.batch": {
+      "calls": 164,
+      "cached": 0,
+      "input_tokens": 128851,
+      "output_tokens": 10221,
+      "usd": 0.3599120000000001
+    }
+  }
+}

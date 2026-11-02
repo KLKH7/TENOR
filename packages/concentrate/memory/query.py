@@ -12,6 +12,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass, field
 from datetime import date, timedelta
+from typing import Any
 
 from concentrate.agents.retrieval import Embedder, HybridIndex
 from concentrate.memory.entities import EntityDirectory
@@ -19,6 +20,7 @@ from concentrate.memory.store import Commitment, Fact, MemoryStore
 
 MAX_PREDICATES_PER_SUBJECT = 12
 MAX_COMMITMENTS = 15
+MAX_LIST_COMMITMENTS = 40
 MAX_SOURCE_LINES = 150
 _INTENTS: list[tuple[str, re.Pattern[str]]] = [
     (
@@ -60,7 +62,64 @@ def parse_question(text: str, as_of: date, directory: EntityDirectory) -> Parsed
     """Resolve the question's entities (directory names/aliases) and its intent flags."""
     low = text.lower()
     intents = [name for name, rx in _INTENTS if rx.search(low)]
-    return ParsedQuestion(directory.find(text), intents or ["open"], as_of)
+    return ParsedQuestion(
+        _by_role(low, directory.find(text), directory), intents or ["open"], as_of
+    )
+
+
+def _by_role(low: str, ids: list[str], directory: EntityDirectory) -> list[str]:
+    """Narrow an ambiguous first name by a role the question states ("Sam the backend
+    engineer" -> Sam Patel): keep the one namesake whose directory role appears in the text."""
+    groups: dict[str, list[str]] = {}
+    for i in ids:
+        e = directory.get(i)
+        if e is not None and e.kind == "person":
+            groups.setdefault(e.name.split()[0].lower(), []).append(i)
+    drop: set[str] = set()
+    for group in groups.values():
+        hits = [i for i in group if (r := directory.by_id[i].role) and r.lower() in low]
+        if len(group) > 1 and len(hits) == 1:
+            drop |= set(group) - set(hits)
+    return [i for i in ids if i not in drop]
+
+
+_MONTHS = [
+    "january",
+    "february",
+    "march",
+    "april",
+    "may",
+    "june",
+    "july",
+    "august",
+    "september",
+    "october",
+    "november",
+    "december",
+]
+_TITLE_RX = re.compile(r'"([^"]+)"')
+_DAY_RX = re.compile(r"\b(" + "|".join(_MONTHS) + r")\s+(\d{1,2})\b")
+_REASSIGNED_RX = re.compile(r"\breassign|\bhanded (over|off)|\bto someone else\b")
+_NO_FOLLOW_RX = re.compile(r"never (been )?follow|no follow|without (any )?follow")
+
+
+def anchored_meetings(question: str, as_of: date, meetings: list[dict[str, Any]]) -> list[str]:
+    """Note IDs of the meeting a question names by quoted title, narrowed by any calendar date
+    it gives ("in the \"Eng standup\" meeting on Monday, August 31")."""
+    titles = {t.lower() for t in _TITLE_RX.findall(question)}
+    if not titles:
+        return []
+    days = set()
+    for month, dd in _DAY_RX.findall(question.lower()):
+        try:
+            days.add(date(as_of.year, _MONTHS.index(month) + 1, int(dd)).isoformat())
+        except ValueError:
+            continue
+    return [
+        m["note_id"]
+        for m in meetings
+        if (m["title"] or "").lower() in titles and (not days or m["day"] in days)
+    ]
 
 
 def _tokens(s: str) -> set[str]:
@@ -102,7 +161,15 @@ class MemoryIndex:
         return [("fact", i) if i < n else ("digest", i - n) for i in self.index.search(query, k)]
 
 
-def _fact_line(f: Fact, as_of: str, directory: EntityDirectory) -> str:
+def _fact_line(
+    f: Fact, as_of: str, directory: EntityDirectory, *, supersession: bool = True
+) -> str:
+    if not supersession:  # ablation: an append-only fact log (stated date, no validity/state)
+        reason = f" | reason: {f.reason}" if f.reason else ""
+        return (
+            f'- {directory.name(f.subject)} | {f.predicate} = "{f.value}" | stated '
+            f"{f.recorded_at[:10]}{reason} | lines [{', '.join(f.all_lines())}]"
+        )
     live = f.live_at(as_of, known_at=as_of)
     end = f.valid_to if (f.valid_to and (f.valid_to_recorded_at or "")[:10] <= as_of) else None
     state = "CURRENT" if live else ("superseded" if end else "not yet valid")
@@ -154,13 +221,19 @@ def build_context(
     k_facts: int = 20,
     k_digests: int = 4,
     retire_after_days: int | None = None,
+    supersession: bool = True,
 ) -> Context:
-    """Render the memory slice for one question (structured lookup + retrieval + lines)."""
+    """Render the memory slice for one question (structured lookup + retrieval + lines).
+
+    ``supersession=False`` (ablation) renders facts as an append-only log: each value with the
+    date it was stated, but no validity interval and no CURRENT/superseded state.
+    """
     store, directory = idx.store, idx.directory
     day = pq.as_of.isoformat()
     known = [f for f in idx.facts if f.recorded_at[:10] <= day]
     meetings = {m["note_id"]: m for m in store.meetings()}
     q_tokens = _tokens(question)
+    anchors = set(anchored_meetings(question, pq.as_of, list(meetings.values())))
     shown: dict[int, Fact] = {}
     sections: list[str] = []
 
@@ -191,46 +264,96 @@ def build_context(
         look.append(f"### {directory.name(subject)} ({subject})")
         for p in sorted(keep):
             for f in preds[p]:
-                look.append(_fact_line(f, day, directory))
+                look.append(_fact_line(f, day, directory, supersession=supersession))
                 shown[f.id] = f
         for f in related:
-            look.append(_fact_line(f, day, directory))
+            look.append(_fact_line(f, day, directory, supersession=supersession))
             shown[f.id] = f
     if look:
         sections.append(
             f"## Structured lookup (facts known as of {day}, by entity)\n" + "\n".join(look)
         )
 
-    # 2. commitments
+    # 2. commitments: the named meeting's first, then the most on-topic; list questions about
+    # reassignments / missing follow-ups get every matching commitment
+    low = question.lower()
     cs = [c for c in store.commitments() if c.made_on <= day]
-    picked = [c for c in cs if c.owner in people or set(c.owner.lstrip("?").split("|")) & people]
-    for c in cs:
-        overlap = q_tokens & _tokens(c.task)
-        if c not in picked and (
-            len(overlap) >= 2 or (overlap and len(overlap) / max(1, len(_tokens(c.task))) >= 0.5)
-        ):
-            picked.append(c)
+    cap = MAX_COMMITMENTS
+    if _REASSIGNED_RX.search(low) and not people:
+        picked = [
+            c
+            for c in cs
+            if c.status_at(day)["status"] == "reassigned"
+            or any(ev["kind"] == "reassigned" and ev["day"] <= day for ev in c.events)
+        ]
+        cap = MAX_LIST_COMMITMENTS
+    elif _NO_FOLLOW_RX.search(low) and not people:
+        picked = [c for c in cs if c.status_at(day)["status"] == "no_follow_up"]
+        cap = MAX_LIST_COMMITMENTS
+    else:
+
+        def relevance(c: Commitment) -> tuple[bool, int]:
+            return c.note_id in anchors, len(q_tokens & _tokens(c.task))
+
+        picked = [
+            c
+            for c in cs
+            if c.note_id in anchors
+            or c.owner in people
+            or set(c.owner.lstrip("?").split("|")) & people
+        ]
+        for c in cs:
+            overlap = q_tokens & _tokens(c.task)
+            if c not in picked and (
+                len(overlap) >= 2
+                or (overlap and len(overlap) / max(1, len(_tokens(c.task))) >= 0.5)
+            ):
+                picked.append(c)
+        picked.sort(key=relevance, reverse=True)
+        if "list" in pq.intents:
+            cap = MAX_LIST_COMMITMENTS
+    picked = picked[:cap]
     if picked:
         sections.append(
             "## Commitments (status as of the question date; no event = no recorded follow-up)\n"
-            + "\n".join(_commitment_line(c, day, directory) for c in picked[:MAX_COMMITMENTS])
+            + "\n".join(_commitment_line(c, day, directory) for c in picked)
         )
+
+    # 2b. facts stated or restated in the meeting the question names
+    named = [
+        f
+        for f in known
+        if f.id not in shown
+        and (f.note_id in anchors or any(e["note_id"] in anchors for e in f.evidence))
+    ]
+    if named:
+        sections.append(
+            "## Facts stated in the meeting the question names\n"
+            + "\n".join(_fact_line(f, day, directory, supersession=supersession) for f in named)
+        )
+        shown.update({f.id: f for f in named})
 
     # 3. hybrid retrieval over facts and digests
     hits = idx.search(question, k=k_facts + k_digests + len(shown) + 20)
     extra_facts: list[Fact] = []
-    digests: list[dict[str, str]] = []
+    digests: list[dict[str, str]] = [d for d in idx.digests if d["note_id"] in anchors]
     for kind, i in hits:
         if kind == "fact":
             f = idx.facts[i]
             if f.id not in shown and f.recorded_at[:10] <= day and len(extra_facts) < k_facts:
                 extra_facts.append(f)
-        elif len(digests) < k_digests and idx.digests[i]["day"] <= day:
+        elif (
+            len(digests) < k_digests
+            and idx.digests[i]["day"] <= day
+            and idx.digests[i] not in digests
+        ):
             digests.append(idx.digests[i])
     if extra_facts:
         sections.append(
             "## Related facts (search)\n"
-            + "\n".join(_fact_line(f, day, directory) for f in extra_facts)
+            + "\n".join(
+                _fact_line(f, day, directory, supersession=supersession) for f in extra_facts
+            )
         )
         shown.update({f.id: f for f in extra_facts})
     if digests:
@@ -250,7 +373,7 @@ def build_context(
     wanted: list[str] = []
     for f in shown.values():
         wanted += f.all_lines()
-    for c in picked[:MAX_COMMITMENTS]:
+    for c in picked:
         st = c.status_at(day)
         wanted += st["lines"]
     wanted = list(dict.fromkeys(wanted))
@@ -283,6 +406,7 @@ def build_context(
     used = (
         {f.note_id for f in shown.values()}
         | {c.note_id for c in picked}
+        | anchors
         | {d["note_id"] for d in digests}
     )
     preamble = (

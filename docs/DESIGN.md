@@ -269,3 +269,9 @@ and reports lost spend separately (`orphaned_cost_usd`).
 
 Trade-off: a stall now takes up to 15 + 6 minutes to end instead of 15, in exchange for
 closing the database cleanly whenever the main thread can still move.
+
+## Concentrate tuning on XL dev (workstream L, 2026-11-02)
+Query-side only, dev only; details, error analysis and ablations in `docs/CONCENTRATE_TUNING.md`.
+- **Decision:** fix lookup misses in `memory/query.py` (role-qualified names, named-meeting anchoring, list-wide commitment lookups) rather than re-extract. Dev accuracy 89% → 90% (within noise); gold lines in context 70% → 86%.
+- **Ablations:** removing supersession/validity state costs 6 pts on dev, the largest effect; removing query-time entity linking costs 1 pt.
+- **Trade-off:** the entail.v2 false rejects on commitment updates have a measured fix (owner-free update claims; 5 of 7 flip, Δ 0 on dev). It ships only with an explicit `entail.v3` rebuild, so the cached store and the code stay consistent.
