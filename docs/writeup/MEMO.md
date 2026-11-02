@@ -12,7 +12,9 @@ Pick the headline that matches the result, delete the other two, and delete this
 
 ## The question
 
-In July 2026 Granola's CEO said agents should get a compressed, always-ready context instead of searching meetings at question time: ["apple juice from concentrate"](https://www.platformer.news/granola-chris-pedregal-interview/). That's a testable claim. **Does a memory built ahead of time answer an agent's questions about months of meetings better, cheaper or faster than retrieving at query time? And if it does, can the transcripts behind it be deleted?** I built an open benchmark to measure this. Concentrate is my entry, but the benchmark is the main contribution, and the write-up is meant to hold whichever way the result goes.
+In a [July 2026 Platformer interview](https://www.platformer.news/granola-chris-pedregal-interview/), Chris Pedregal said that when Granola is connected to Claude, the agent looks at the most relevant meetings and does "a relatively dumb job at extracting information". He said Granola should instead compress that into "apple juice from concentrate", ready to send to agents. He described it as where they're heading, not something that exists yet. In the same interview he said Granola is looking into "whether we should delete the transcript automatically" after a while, is researching how to compress it, and is experimenting with an enhanced transcript "built for agents" (e.g. knowing which Sam you mean).
+
+Granola is already researching all of these ideas, so my contribution isn't the ideas. It's an **independent, reproducible measurement** of them. **Does a memory built ahead of time answer an agent's questions about months of meetings better, cheaper or faster than retrieving at query time? And if it does, can the transcripts behind it be deleted?** I built an open benchmark to measure this. Concentrate is my entry, but the benchmark is the main contribution, and the write-up is meant to hold whichever way the result goes.
 
 ## What I built
 

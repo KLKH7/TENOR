@@ -12,8 +12,11 @@ This file pairs every claim in [MEMO.md](MEMO.md) (and the deck and emails that 
 
 | Claim | Source | Status |
 |---|---|---|
-| CEO quote "apple juice from concentrate", July 2026, Platformer link | `README.md` on `main` and on the `worktree-agent-*` branches cites `https://www.platformer.news/granola-chris-pedregal-interview/` | ⚠️ Read the article and check the exact wording, the date and that it's Chris Pedregal speaking. The current branch's README doesn't contain the link (ws-s is rewriting README). |
-| "Granola has said it's weighing deleting old transcripts" (founder email, retirement section) | `README.md` §What's here item 5; `docs/SCOPE.md` §3.2 | ⚠️ The repo asserts this but gives no primary source. Find the quote/link, or soften to "I understand Granola is weighing…". |
+| Pedregal: connected to Claude, the agent does "a relatively dumb job at extracting information"; Granola should send "apple juice from concentrate" | [Platformer interview by Casey Newton, 30 Jul 2026](https://www.platformer.news/granola-chris-pedregal-interview/), read in full by the coordinator session | ✅ The exact wording is verified. He says "connected to Claude", not "MCP": tying it to the MCP connector is our inference, so the memo doesn't say "MCP" in the quote. He frames it as a direction ("we're in this awkward phase right now"), not a shipped feature. |
+| Granola is looking into "whether we should delete the transcript automatically", and researching compression | same interview | ✅ Stated directly by Pedregal. "Working memory" is Newton's intro wording, not his, so don't put it in quotation marks as his. |
+| Enhanced transcript "built for agents" (which Sam you mean) | same interview ("something we're playing around with") | ✅ |
+| Granola never stored audio; MCP is the "fastest-growing chart" | same interview | ✅ Not used in the memo; available if needed. |
+| "Granola is already researching these ideas; this is independent measurement, not invention" | follows from the three rows above | ✅ framing |
 
 ## What I built
 
@@ -113,4 +116,4 @@ This file pairs every claim in [MEMO.md](MEMO.md) (and the deck and emails that 
 | Fields tagged VERIFIED/ASSUMED | `docs/SCHEMA_NOTES.md` | ✅ |
 | Pilot saturated at 90–100% | `README.md` status box | ✅ |
 | Builds hung; traced to SDK timeout defaults | `docs/HARDENING.md` §1 (the cause is *inferred*, with no stack trace) | ✅ Keep "traced to", not "proved". |
-| The emails say "Chris" | the Platformer URL slug | ⚠️ Confirm the name before sending. |
+| The emails say "Chris" (Pedregal) | Platformer interview, verified | ✅ |
