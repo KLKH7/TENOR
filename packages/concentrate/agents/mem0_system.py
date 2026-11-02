@@ -30,6 +30,7 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any, Protocol
 
+from concentrate import watchdog
 from concentrate.agents import corpus as cv
 from concentrate.agents.baselines import (
     ANSWER_PROMPT,
@@ -469,6 +470,7 @@ class Mem0System:
             for c in chunks:
                 if c.key in done:
                     continue
+                watchdog.raise_if_stopping()  # SIGTERM / stall: stop between chunks
                 before = len(self.meter.records)
                 t0 = time.perf_counter()
                 result = memory.add(

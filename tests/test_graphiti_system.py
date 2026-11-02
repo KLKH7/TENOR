@@ -12,6 +12,7 @@ import pytest
 from graphiti_core.prompts.dedupe_edges import EdgeDuplicate
 from graphiti_core.prompts.models import Message
 
+from concentrate import watchdog
 from concentrate.agents.baselines import ANSWER_PROMPT, ANSWER_SCHEMA
 from concentrate.agents.graphiti_system import (
     AccountedAnthropicClient,
@@ -24,6 +25,12 @@ from concentrate.agents.graphiti_system import (
     KuzuGraphiti,
     build_context,
     episodes_for,
+)
+from concentrate.agents.kuzu_safety import (
+    FORCED_EXIT_MARKER,
+    ORPHANED_FILE,
+    GraphStoreError,
+    Probe,
 )
 from concentrate.core.models import MeetingNote
 from concentrate.evals.runner import load_corpus
@@ -131,12 +138,20 @@ def test_cost_accounting_from_fake_usage() -> None:
     assert ledger.by_prompt()["EdgeDuplicate"]["calls"] == 2
 
 
+# Episode uuids "persisted" per store path, surviving across FakeGraph instances like Kuzu.
+_STORED: dict[str, set[str]] = {}
+
+
 class FakeGraph:
     """A GraphBackend that makes one accounted LLM call per episode and serves fixed facts."""
 
-    def __init__(self, llm: AccountedAnthropicClient, fail_on: int | None = None) -> None:
+    def __init__(
+        self, llm: AccountedAnthropicClient, fail_on: int | None = None, path: Path | None = None
+    ) -> None:
         self.llm, self.fail_on = llm, fail_on
         self.added: list[Episode] = []
+        self.stored = _STORED.setdefault(str(path), set())
+        self.closed = 0
 
     async def add_episode(self, ep: Episode) -> str:
         if self.fail_on is not None and len(self.added) == self.fail_on:
@@ -146,6 +161,7 @@ class FakeGraph:
             response_model=EdgeDuplicate,
         )
         self.added.append(ep)
+        self.stored.add(f"uuid-{ep.key}")
         return f"uuid-{ep.key}"
 
     async def search(
@@ -161,12 +177,22 @@ class FakeGraph:
     async def counts(self) -> dict[str, int]:
         return {"episodes": len(self.added), "entities": 2, "facts": 2}
 
+    async def episode_uuids(self) -> set[str]:
+        return set(self.stored)
+
+    def close(self) -> None:
+        self.closed += 1
+
 
 def _system(
-    tmp_path: Path, client: LLMClient, graphs: list[FakeGraph], fail_on: int | None = None
+    tmp_path: Path,
+    client: LLMClient,
+    graphs: list[FakeGraph],
+    fail_on: int | None = None,
+    probe: Probe | None = None,
 ) -> GraphitiSystem:
     def factory(path: Path, llm: AccountedAnthropicClient, emb: Any, fresh: bool) -> FakeGraph:
-        g = FakeGraph(llm, fail_on)
+        g = FakeGraph(llm, fail_on, path)
         graphs.append(g)
         return g
 
@@ -177,6 +203,7 @@ def _system(
         anthropic_client=FakeSDK(),
         graph_factory=factory,
         cache_root=tmp_path / "graphiti",
+        probe=probe or (lambda db: None),
     )
 
 
@@ -196,7 +223,9 @@ def test_ingest_persists_resumes_and_reuses(
     assert len(graphs[-1].added) == 2
 
     resumed = _system(tmp_path, client, graphs).ingest(corpus)
-    assert len(graphs[-1].added) == 7  # only the seven remaining episodes (9 in total)
+    builder, reopened = graphs[-2:]  # a finished build checkpoints, closes and reopens
+    assert len(builder.added) == 7  # only the seven remaining episodes (9 in total)
+    assert builder.closed == 1 and not reopened.added and not reopened.closed
     assert not resumed.cached and resumed.detail["resumed"]
     assert resumed.llm_calls == 9 and resumed.input_tokens == 9000  # earlier spend still counted
     assert resumed.cost_usd == pytest.approx(9 * cost_usd("claude-sonnet-5-5", 1000, 100))
@@ -207,7 +236,7 @@ def test_ingest_persists_resumes_and_reuses(
     assert again.llm_calls == 9 and again.cost_usd == pytest.approx(resumed.cost_usd)
 
     other = _system(tmp_path, client, graphs).ingest(corpus[:1])  # different corpus, new graph
-    assert not other.cached and len(graphs[-1].added) == 5
+    assert not other.cached and len(graphs[-2].added) == 5
 
 
 def test_context_lists_facts_with_validity_and_sources() -> None:
@@ -295,6 +324,127 @@ def test_resume_survives_a_kill_mid_progress_write(
     full: list[FakeGraph] = []
     _system(tmp_path / "full", client, full).ingest(corpus)
     # Exactly the episodes after the two that landed before the kill: none re-added or skipped.
-    assert [e.key for e in graphs[-1].added] == [e.key for e in full[-1].added][2:]
+    # (A finished build checkpoints, closes and reopens its graph, so the builder is [-2].)
+    assert [e.key for e in graphs[-2].added] == [e.key for e in full[-2].added][2:]
     assert resumed.llm_calls > 0
     assert all(json.loads(line) for line in progress.read_text().splitlines())
+
+
+# -- safe stop, reconcile and open (docs/HARDENING.md) ------------------------------------------
+
+
+def _store(tmp_path: Path) -> Path:
+    return next((tmp_path / "graphiti").glob("*/progress.jsonl")).parent
+
+
+def _episode_total(tmp_path: Path, client: LLMClient, corpus: list[MeetingNote]) -> int:
+    """Episodes a full build of ``corpus`` adds (so tests don't pin fixture sizes)."""
+    full: list[FakeGraph] = []
+    _system(tmp_path / "full-count", client, full).ingest(corpus)
+    return len(full[-2].added)  # a finished build checkpoints, closes and reopens
+
+
+def test_a_requested_stop_finishes_the_episode_and_closes_the_store(
+    notes: list[MeetingNote], tmp_path: Path, client: LLMClient
+) -> None:
+    corpus = _pricing(notes)
+    graphs: list[FakeGraph] = []
+    system = _system(tmp_path, client, graphs)
+    real_add = FakeGraph.add_episode
+
+    async def add_then_sigterm(self: FakeGraph, ep: Episode) -> str:
+        uuid = await real_add(self, ep)
+        watchdog.request_stop("SIGTERM")  # arrives mid-episode: this one still completes
+        return uuid
+
+    try:
+        FakeGraph.add_episode = add_then_sigterm  # type: ignore[method-assign]
+        with pytest.raises(watchdog.StopRequested):
+            system.ingest(corpus)
+    finally:
+        FakeGraph.add_episode = real_add  # type: ignore[method-assign]
+        watchdog.reset_stop()
+    assert len(graphs[0].added) == 1 and graphs[0].closed == 1 and system.graph is None
+    assert len((_store(tmp_path) / "progress.jsonl").read_text().splitlines()) == 1
+    resumed = _system(tmp_path, client, graphs).ingest(corpus)
+    total = _episode_total(tmp_path, client, corpus)
+    assert len(graphs[-2].added) == total - 1 and resumed.llm_calls == total
+
+
+def test_a_crash_closes_the_store_and_unregisters_the_hook(
+    notes: list[MeetingNote], tmp_path: Path, client: LLMClient
+) -> None:
+    graphs: list[FakeGraph] = []
+    with pytest.raises(RuntimeError):
+        _system(tmp_path, client, graphs, fail_on=1).ingest(_pricing(notes))
+    assert graphs[0].closed == 1
+    assert not watchdog._forced_exit_hooks  # registered only while the store is open
+
+
+def test_a_forced_exit_mid_build_leaves_a_recovery_marker(
+    notes: list[MeetingNote], tmp_path: Path, client: LLMClient
+) -> None:
+    class Forced(BaseException):
+        pass
+
+    real_add = FakeGraph.add_episode
+
+    async def stuck(self: FakeGraph, ep: Episode) -> str:
+        watchdog._run_forced_exit_hooks()  # what the watchdog does just before os._exit
+        raise Forced
+
+    try:
+        FakeGraph.add_episode = stuck  # type: ignore[method-assign]
+        with pytest.raises(Forced):
+            _system(tmp_path, client, []).ingest(_pricing(notes))
+    finally:
+        FakeGraph.add_episode = real_add  # type: ignore[method-assign]
+    marker = next((tmp_path / "graphiti").glob(f"*/{FORCED_EXIT_MARKER}"))
+    assert "WAL may need recovery" in marker.read_text()
+
+
+def test_resume_drops_progress_rows_whose_episode_was_lost(
+    notes: list[MeetingNote], tmp_path: Path, client: LLMClient
+) -> None:
+    corpus = _pricing(notes)
+    graphs: list[FakeGraph] = []
+    with pytest.raises(RuntimeError):
+        _system(tmp_path, client, graphs, fail_on=2).ingest(corpus)
+    lost = next(iter(sorted(graphs[0].stored)))
+    graphs[0].stored.discard(lost)  # its writes were only in a WAL that was set aside
+    resumed = _system(tmp_path, client, graphs).ingest(corpus)
+    total = _episode_total(tmp_path, client, corpus)
+    assert len(graphs[-2].added) == total - 1  # the lost episode is rebuilt, the kept one is not
+    assert resumed.detail["orphaned_rows"] == 1 and resumed.detail["orphaned_cost_usd"] > 0
+    assert resumed.llm_calls == total  # the rebuilt store's spend; the lost spend is separate
+    orphaned = (_store(tmp_path) / ORPHANED_FILE).read_text().splitlines()
+    assert [json.loads(o)["uuid"] for o in orphaned] == [lost]
+
+
+def test_an_unopenable_store_fails_clearly_with_recovery_steps(
+    notes: list[MeetingNote], tmp_path: Path, client: LLMClient
+) -> None:
+    corpus = _pricing(notes)
+    with pytest.raises(RuntimeError):
+        _system(tmp_path, client, [], fail_on=1).ingest(corpus)
+    store = _store(tmp_path)
+    (store / "graph.kuzu").write_bytes(b"main")
+    (store / "graph.kuzu.wal").write_bytes(b"half-written")
+    probed: list[Path] = []
+
+    def crashing(db: Path) -> str:
+        probed.append(db)
+        return "crashed with SIGBUS"
+
+    graphs: list[FakeGraph] = []
+    with pytest.raises(GraphStoreError) as err:
+        _system(tmp_path, client, graphs, probe=crashing).ingest(corpus)
+    assert probed and not graphs  # never opened in-process
+    msg = str(err.value)
+    assert "SIGBUS" in msg and "graph.kuzu.wal.broken" in msg and "HARDENING.md" in msg
+
+    (store / "graph.kuzu.wal").rename(store / "graph.kuzu.wal.broken")  # step 2 of the recovery
+    (store / FORCED_EXIT_MARKER).write_text("forced")
+    resumed = _system(tmp_path, client, graphs, probe=lambda db: None).ingest(corpus)
+    total = _episode_total(tmp_path, client, _pricing(notes))
+    assert resumed.llm_calls == total and not (store / FORCED_EXIT_MARKER).exists()

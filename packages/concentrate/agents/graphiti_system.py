@@ -25,6 +25,7 @@ from __future__ import annotations
 import asyncio
 import hashlib
 import json
+import logging
 import os
 import shutil
 import time
@@ -59,6 +60,7 @@ from graphiti_core.search.search_config import (
 )
 from pydantic import BaseModel
 
+from concentrate import watchdog
 from concentrate.agents import corpus as cv
 from concentrate.agents.baselines import (
     ANSWER_PROMPT,
@@ -69,6 +71,16 @@ from concentrate.agents.baselines import (
     SystemResult,
     _result,
     _user_prompt,
+)
+from concentrate.agents.kuzu_safety import (
+    RECOVERY_DOC,
+    GraphStoreError,
+    Probe,
+    check_openable,
+    close_kuzu,
+    probe_kuzu,
+    reconcile,
+    write_forced_exit_marker,
 )
 from concentrate.agents.progress import read_progress
 from concentrate.agents.retrieval import Embedder
@@ -92,6 +104,8 @@ MIN_TAIL_UTTERANCES = 10  # a shorter trailing chunk is merged into the previous
 K_EDGES, K_NODES = 30, 10
 _FALLBACK_BETA = "server-side-fallback-2026-07-01"
 _FALLBACK_MODELS = {"claude-opus-5-5", "claude-sonnet-5-5", "claude-opus-5", "claude-fable-5-1"}
+logger = logging.getLogger(__name__)
+
 _FORMAT_VERSION = 1  # bump when the episode text or ingestion config changes meaningfully
 
 # Ingestion cost model, calibrated on the 2-meeting smoke test (docs/baselines/graphiti.md).
@@ -389,6 +403,14 @@ class GraphBackend(Protocol):
 
     async def counts(self) -> dict[str, int]: ...
 
+    async def episode_uuids(self) -> set[str]:
+        """UUIDs of every Episodic node actually stored (used to reconcile progress.jsonl)."""
+        ...
+
+    def close(self) -> None:
+        """Finish in-flight writes, checkpoint and close the store."""
+        ...
+
 
 def _fact(e: EntityEdge) -> Fact:
     return Fact(e.uuid, e.fact, e.name, e.valid_at, e.invalid_at, e.expired_at, tuple(e.episodes))
@@ -469,6 +491,13 @@ class KuzuGraphiti:
             rows, _, _ = await self.driver.execute_query(q)
             out[key] = int(typing.cast(list[dict[str, Any]], rows)[0]["c"]) if rows else 0
         return out
+
+    async def episode_uuids(self) -> set[str]:
+        rows, _, _ = await self.driver.execute_query("MATCH (e:Episodic) RETURN e.uuid AS uuid")
+        return {str(r["uuid"]) for r in typing.cast(list[dict[str, Any]], rows or [])}
+
+    def close(self) -> None:
+        close_kuzu(self.driver)
 
 
 # -- context ------------------------------------------------------------------------------------
@@ -556,8 +585,10 @@ class GraphitiSystem:
         k_edges: int = K_EDGES,
         k_nodes: int = K_NODES,
         backend: ToolBackend | None = None,
+        probe: Probe = probe_kuzu,
     ) -> None:
         self.client, self.backend = client, backend
+        self._probe = probe
         self.ingest_model = (
             ingest_model or os.environ.get("CONCENTRATE_INGEST_MODEL") or DEFAULT_INGEST_MODEL
         )
@@ -583,8 +614,15 @@ class GraphitiSystem:
         return self._loop.run_until_complete(coro)
 
     def close(self) -> None:
+        self._close_graph()
         if not self._loop.is_closed():
             self._loop.close()
+
+    def _close_graph(self) -> None:
+        """Checkpoint and close the graph store (idempotent)."""
+        graph, self.graph = self.graph, None
+        if graph is not None:
+            graph.close()
 
     def config(self) -> dict[str, Any]:
         import graphiti_core
@@ -612,10 +650,18 @@ class GraphitiSystem:
             effort=self.ingest_effort,
             thinking=self.ingest_thinking,
         )
+        if not fresh:
+            check_openable(path, self._probe)  # a crashing WAL replay fails here, clearly
         if self._graph_factory is not None:
             return self._graph_factory(path, llm, self.embedder, fresh)
-        graph = KuzuGraphiti(path, llm, self.embedder, fresh=fresh)
-        self._run(graph.setup())
+        try:
+            graph = KuzuGraphiti(path, llm, self.embedder, fresh=fresh)
+            self._run(graph.setup())
+        except Exception as exc:
+            raise GraphStoreError(
+                f"Graphiti store {path} failed to open ({type(exc).__name__}: {exc}); "
+                f"see {RECOVERY_DOC}"
+            ) from exc
         return graph
 
     def episodes(self, notes: Sequence[MeetingNote]) -> list[Episode]:
@@ -646,30 +692,56 @@ class GraphitiSystem:
         if not progress and d.exists():  # a crash before the first episode finished: start clean
             shutil.rmtree(d)
         d.mkdir(parents=True, exist_ok=True)
-        self.graph = self._open(db, fresh=not progress)
-        done_keys = {p["key"] for p in progress}
-        self.manifest = {p["uuid"]: EpisodeRef(**p["ref"]) for p in progress}
-        start = time.perf_counter()
-        with progress_path.open("a") as fh:
-            for ep in self.episodes(notes):
-                if ep.key in done_keys:
-                    continue
-                before, t0 = len(self.ledger.calls), time.perf_counter()
-                uuid = self._run(self.graph.add_episode(ep))
-                ref = EpisodeRef(ep.note_id, ep.title, ep.reference_time.date().isoformat())
-                self.manifest[uuid] = ref
-                row = {
-                    "key": ep.key,
-                    "uuid": uuid,
-                    "ref": asdict(ref),
-                    "corpus_tokens": estimate_tokens(ep.body),
-                    "seconds": time.perf_counter() - t0,
-                    **self.ledger.totals(before),
-                }
-                fh.write(json.dumps(row) + "\n")
-                fh.flush()
-                progress.append(row)
-        counts = self._run(self.graph.counts())
+        self._close_graph()
+        self.graph = graph = self._open(db, fresh=not progress)
+        # While the store is open, a forced exit leaves a marker so the next open probes it.
+        watchdog.on_forced_exit(str(db), lambda: write_forced_exit_marker(db))
+        try:
+            orphaned: list[dict[str, Any]] = []
+            if progress:  # rows whose episode never reached the main file are redone
+                stored = self._run(graph.episode_uuids())
+                progress, orphaned = reconcile(progress_path, progress, stored)
+                extra = len(stored - {p["uuid"] for p in progress})
+                if extra:
+                    logger.warning(
+                        "%s: %d episodes are in the graph but not in progress.jsonl (killed "
+                        "between the write and the log line); they will be added again",
+                        d,
+                        extra,
+                    )
+            done_keys = {p["key"] for p in progress}
+            self.manifest = {p["uuid"]: EpisodeRef(**p["ref"]) for p in progress}
+            start = time.perf_counter()
+            with progress_path.open("a") as fh:
+                for ep in self.episodes(notes):
+                    if ep.key in done_keys:
+                        continue
+                    watchdog.raise_if_stopping()  # SIGTERM / stall: stop between episodes
+                    before, t0 = len(self.ledger.calls), time.perf_counter()
+                    uuid = self._run(graph.add_episode(ep))
+                    ref = EpisodeRef(ep.note_id, ep.title, ep.reference_time.date().isoformat())
+                    self.manifest[uuid] = ref
+                    row = {
+                        "key": ep.key,
+                        "uuid": uuid,
+                        "ref": asdict(ref),
+                        "corpus_tokens": estimate_tokens(ep.body),
+                        "seconds": time.perf_counter() - t0,
+                        **self.ledger.totals(before),
+                    }
+                    fh.write(json.dumps(row) + "\n")
+                    fh.flush()
+                    progress.append(row)
+            counts = self._run(graph.counts())
+        except BaseException:
+            self._close_graph()  # stop, crash or Ctrl-C: checkpoint so the WAL is not left behind
+            raise
+        finally:
+            watchdog.on_forced_exit(str(db), None)
+        # Build finished: checkpoint (fold the WAL into the main file) and reopen for search, so
+        # an unclean exit later in the process (e.g. during an eval) has nothing to replay.
+        self._close_graph()
+        self.graph = self._open(db, fresh=False)
         total = {
             k: sum(p[k] for p in progress)
             for k in (
@@ -689,6 +761,8 @@ class GraphitiSystem:
             "cache_write_tokens": sum(p.get("cache_write_tokens", 0) for p in progress),
             "by_prompt": self.ledger.by_prompt(),
             "resumed": len(done_keys) > 0,
+            "orphaned_rows": len(orphaned),  # redone after their episodes were lost
+            "orphaned_cost_usd": sum(float(o.get("cost_usd", 0.0)) for o in orphaned),
             "this_run_seconds": time.perf_counter() - start,
             "config": self.config(),
         }

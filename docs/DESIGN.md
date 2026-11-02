@@ -255,3 +255,17 @@ Details and metrics are in `docs/FIDELITY_V2.md`.
 - **Fixture-length-dependent test expectations re-pinned.** These are the batch cache keys and the Graphiti episode counts.
 
 **Known gaps.** Template signatures, a short long tail (p90 26 vs 38), "like" density, and summaries at ~270 words vs ~420. See FIDELITY_V2 §4.
+
+**Follow-up: stopping safely (same day).** A SIGTERM during a Graphiti write left Kuzu's WAL
+torn, and every restart died natively replaying it (about $10.66 of work was lost recovering by
+hand). So stopping is now two-phase:
+- a stall or signal *asks* the run to stop between items, and the Graphiti store is
+  checkpointed and closed;
+- the watchdog only forces `os._exit` after a 6-minute grace, leaving a `FORCED_EXIT` marker.
+
+An unclean store is test-opened in a child process before use, and fails with recovery steps
+instead of a bus error. Resume reconciles `progress.jsonl` against the Episodic uuids in Kuzu,
+and reports lost spend separately (`orphaned_cost_usd`).
+
+Trade-off: a stall now takes up to 15 + 6 minutes to end instead of 15, in exchange for
+closing the database cleanly whenever the main thread can still move.
