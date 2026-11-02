@@ -72,3 +72,19 @@ class Enhancer:
 
 
 STUB_ENHANCER = Enhancer("stub-v1", stub_enhance, stub_enhanced_line, _stub_directory)
+
+
+DEFAULT_DIRECTORY = Path("data/fixtures/northwind/directory.json")
+
+
+def _real_directory(path: Path | None) -> Any:
+    from concentrate.enhance.directory import Directory
+
+    return Directory.load(path or DEFAULT_DIRECTORY)
+
+
+def real_enhancer() -> Enhancer:
+    """The real Enhance stage: speaker attribution, mention linking, attendee resolution."""
+    from concentrate.enhance import enhancer as enh
+
+    return Enhancer("enhance-v1", enh.enhance, enh.enhanced_line, _real_directory)

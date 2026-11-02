@@ -11,6 +11,7 @@ import pytest
 from concentrate.agents.concentrate_system import COMPLETE_MARKER, ConcentrateSystem
 from concentrate.core.models import MeetingNote
 from concentrate.llm.client import LLMClient, cost_usd, turn_cache_path
+from concentrate.memory.enhance_stub import STUB_ENHANCER
 from tests.memory_helpers import ScriptedLLM, extraction, fact, make_note
 
 A, B, C = "not_AAAAAAAAAAAAAA", "not_BBBBBBBBBBBBBB", "not_CCCCCCCCCCCCCC"
@@ -137,8 +138,14 @@ def _system(tmp_path: Path, llm: ScriptedLLM, **kw: object) -> ConcentrateSystem
         ingest_model="claude-sonnet-5-5",
         directory_path=DIRECTORY,
         cache_root=tmp_path / "concentrate",
-        **kw,  # type: ignore[arg-type]
+        **{"enhancer": STUB_ENHANCER, **kw},  # type: ignore[arg-type]
     )
+
+
+def test_real_enhancer_is_the_default(tmp_path: Path) -> None:
+    client = LLMClient(model="claude-opus-5-5", cache_dir=tmp_path / "llm")
+    system = ConcentrateSystem(client, backend=ScriptedLLM({}), directory_path=DIRECTORY)
+    assert system.enhancer.name == "enhance-v1"
 
 
 def _q(text: str, as_of: str) -> SimpleNamespace:

@@ -53,7 +53,7 @@ from concentrate.llm.client import (
     load_prompt,
     run_turn,
 )
-from concentrate.memory.enhance_stub import STUB_ENHANCER, Enhancer
+from concentrate.memory.enhance_stub import Enhancer, real_enhancer
 from concentrate.memory.entities import EntityDirectory, load_directory
 from concentrate.memory.extract import EXTRACT_PROMPT
 from concentrate.memory.pipeline import BuildConfig, MemoryBuilder
@@ -103,7 +103,7 @@ class ConcentrateSystem:
         ingest_backend: ToolBackend | None = None,
         ingest_model: str | None = None,
         entail_model: str | None = DEFAULT_ENTAIL_MODEL,
-        enhancer: Enhancer = STUB_ENHANCER,
+        enhancer: Enhancer | None = None,
         directory_path: Path | None = DEFAULT_DIRECTORY,
         embedder: Embedder | None = None,
         cache_root: Path = DEFAULT_CACHE_ROOT,
@@ -116,7 +116,8 @@ class ConcentrateSystem:
         self.ingest_backend = ingest_backend
         self.ingest_model = ingest_model or os.environ.get(INGEST_MODEL_ENV) or DEFAULT_INGEST_MODEL
         self.entail_model = entail_model
-        self.enhancer, self.directory_path = enhancer, directory_path
+        self.enhancer = enhancer if enhancer is not None else real_enhancer()
+        self.directory_path = directory_path
         self.embedder, self.cache_root = embedder, cache_root
         self.build = build or BuildConfig()
         self.k_facts, self.k_digests = k_facts, k_digests
