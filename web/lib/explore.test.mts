@@ -6,6 +6,7 @@ import {
   applyFilters,
   citationScores,
   classifyLines,
+  failureTypes,
   filterQuery,
   paretoFront,
   parseFilters,
@@ -45,7 +46,7 @@ test("questionFlags: disagree and everyone wrong over the selected systems", () 
 test("filters round-trip through the query string and apply", () => {
   const all = ["a", "b"];
   const f = parseFilters({ cat: "temporal", sys: "b,zzz", wrong: "1" }, all);
-  assert.deepEqual(f, { category: "temporal", systems: ["b"], disagree: false, wrong: true });
+  assert.deepEqual(f, { category: "temporal", systems: ["b"], disagree: false, wrong: true, failure: null });
   assert.equal(filterQuery(f), "?cat=temporal&sys=b&wrong=1");
   const items = [
     item("q1", "temporal", { a: "correct", b: "incorrect" }),
@@ -55,6 +56,24 @@ test("filters round-trip through the query string and apply", () => {
   assert.deepEqual(applyFilters(items, f, all).map((i) => i.qid), ["q1"]);
   const g = parseFilters({ disagree: "1" }, all);
   assert.deepEqual(applyFilters(items, g, all).map((i) => i.qid), ["q1"]);
+});
+
+test("failure filter keeps questions where a selected system failed that way", () => {
+  const all = ["a", "b"];
+  const items = [
+    item("q1", "temporal", { a: "correct", b: "incorrect" }),
+    item("q2", "temporal", { a: "incorrect", b: "incorrect" }),
+  ];
+  items[0].bySystem.get("b")!.failure = { primary: "stale_value" } as ResultRow["failure"];
+  items[1].bySystem.get("a")!.failure = { primary: "retrieval_miss" } as ResultRow["failure"];
+  items[1].bySystem.get("b")!.failure = { primary: "stale_value" } as ResultRow["failure"];
+  const f = parseFilters({ fail: "stale_value" }, all);
+  assert.equal(filterQuery(f), "?fail=stale_value");
+  assert.deepEqual(applyFilters(items, f, all).map((i) => i.qid), ["q1", "q2"]);
+  const onlyA = parseFilters({ fail: "stale_value", sys: "a" }, all);
+  assert.deepEqual(applyFilters(items, onlyA, all).map((i) => i.qid), []);
+  const rows = items.flatMap((i) => [...i.bySystem.values()]);
+  assert.deepEqual(failureTypes(rows), ["stale_value", "retrieval_miss"]);
 });
 
 test("paretoFront keeps only undominated systems, cheapest first", () => {

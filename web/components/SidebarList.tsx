@@ -76,10 +76,17 @@ export function SidebarList({
   items,
   activeId,
   initials,
+  corpus,
+  query: linkQuery,
+  nav,
 }: {
   items: SidebarItem[];
   activeId: string;
   initials: string;
+  corpus: string;
+  query: string;
+  /** Section links (Overview, Results, Memory, Brief), rendered server-side. */
+  nav: React.ReactNode;
 }) {
   const [searching, setSearching] = useState(false);
   const [query, setQuery] = useState("");
@@ -152,7 +159,12 @@ export function SidebarList({
         )}
       </div>
 
+      <div className="px-4 pt-4">{nav}</div>
+
       <h1 className="px-5 pb-1 pt-5 font-serif text-[2.1rem] leading-none text-ink">My notes</h1>
+      <p className="px-5 text-[12.5px] text-muted">
+        {corpus} · {items.length} meetings
+      </p>
 
       <div className="flex-1 overflow-y-auto px-3 pb-8">
         {shown.length === 0 && (
@@ -167,7 +179,7 @@ export function SidebarList({
                 return (
                   <li key={item.id}>
                     <Link
-                      href={`/notes/${item.id}`}
+                      href={`/notes/${item.id}${linkQuery}`}
                       aria-current={active ? "page" : undefined}
                       className={`flex items-center gap-3 rounded-[18px] border px-3 py-2.5 transition-colors ${
                         active

@@ -29,7 +29,16 @@ function who(s: Speaker): { label: string; initial: string; slot: number } {
 
 /** Speaker rows as in Granola's transcript sheet: initial circle, bold name, grey text,
  *  hairline dividers, no timestamps (the start offset is in the row's tooltip). */
-export function Transcript({ lines, noteId }: { lines: Line[]; noteId: string }) {
+export function Transcript({
+  lines,
+  noteId,
+  highlight,
+}: {
+  lines: Line[];
+  noteId: string;
+  /** Utterance ids to mark (a citation being followed). */
+  highlight?: Set<string>;
+}) {
   if (!lines.length) return <p className="py-6 text-[15px] text-muted">No transcript.</p>;
   const start = lines[0].item.start_time;
   const blocks: Line[][] = [];
@@ -60,7 +69,12 @@ export function Transcript({ lines, noteId }: { lines: Line[]; noteId: string })
                 {block.map((l) => {
                   const uid = `${noteId}:${String(l.index).padStart(4, "0")}`;
                   return (
-                    <span key={l.index} id={uid} data-utterance={uid}>
+                    <span
+                      key={l.index}
+                      id={uid}
+                      data-utterance={uid}
+                      className={highlight?.has(uid) ? "rounded bg-lime/40 text-ink" : undefined}
+                    >
                       {l.segments
                         ? l.segments.map((seg, i) =>
                             seg.link ? (

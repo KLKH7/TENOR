@@ -8,6 +8,7 @@ import {
   applyFilters,
   classifyLines,
   cleanCitation,
+  failureLabel,
   filterQuery,
   parseFilters,
   pct,
@@ -260,6 +261,32 @@ function AnswerCard({
       </div>
 
       <p className="mt-3 flex-1 whitespace-pre-wrap text-[14.5px] leading-[1.6] text-ink">{row.answer.answer}</p>
+      {row.failure && (
+        <div className="mt-3 rounded-xl border border-date-red/20 bg-date-red/5 px-3 py-2 text-[12.5px] leading-relaxed">
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className="text-[10.5px] uppercase tracking-[0.05em] text-faint">Failure type</span>
+            <span className="rounded-full bg-date-red/10 px-2 py-0.5 font-medium text-date-red">
+              {failureLabel(row.failure.primary)}
+            </span>
+            {row.failure.tags
+              .filter((t) => t.type !== row.failure!.primary)
+              .map((t) => (
+                <span key={t.type} className="rounded-full bg-canvas px-2 py-0.5 text-muted" title={t.detail}>
+                  also {failureLabel(t.type).toLowerCase()}
+                </span>
+              ))}
+          </div>
+          {row.failure.tags.find((t) => t.type === row.failure!.primary)?.detail && (
+            <p className="mt-1 text-muted">{row.failure.tags.find((t) => t.type === row.failure!.primary)!.detail}</p>
+          )}
+          {row.failure.llm_type && (
+            <p className="mt-1 text-muted">
+              <span className="font-medium text-ink">LLM classifier: {failureLabel(row.failure.llm_type)}. </span>
+              {row.failure.llm_reason}
+            </p>
+          )}
+        </div>
+      )}
       {row.judge_reason && (
         <p className="mt-3 rounded-xl bg-sheet px-3 py-2 text-[12.5px] leading-relaxed text-muted">
           <span className="font-medium text-ink">Judge: </span>

@@ -58,6 +58,8 @@ export interface Filters {
   systems: string[]; // empty = all systems
   disagree: boolean;
   wrong: boolean;
+  /** Primary failure type (`concentrate analyze`): some selected system failed this way. */
+  failure: string | null;
 }
 
 type Params = Record<string, string | string[] | undefined>;
@@ -71,6 +73,7 @@ export function parseFilters(p: Params, allSystems: string[]): Filters {
     systems: sys,
     disagree: one(p.disagree) === "1",
     wrong: one(p.wrong) === "1",
+    failure: one(p.fail),
   };
 }
 
@@ -89,6 +92,7 @@ export function applyFilters(items: QuestionItem[], f: Filters, allSystems: stri
     const flags = questionFlags(q.bySystem, systems);
     if (f.disagree && !flags.disagree) return false;
     if (f.wrong && !flags.everyoneWrong) return false;
+    if (f.failure && !systems.some((s) => q.bySystem.get(s)?.failure?.primary === f.failure)) return false;
     return true;
   });
 }
@@ -100,8 +104,33 @@ export function filterQuery(f: Filters): string {
   if (f.systems.length) q.set("sys", f.systems.join(","));
   if (f.disagree) q.set("disagree", "1");
   if (f.wrong) q.set("wrong", "1");
+  if (f.failure) q.set("fail", f.failure);
   const s = q.toString();
   return s ? `?${s}` : "";
+}
+
+/** Failure types present in the rows, in docs/ANALYSIS.md's precedence order. */
+export const FAILURE_ORDER = [
+  "abstained_wrongly",
+  "should_have_abstained",
+  "stale_value",
+  "wrong_entity",
+  "partial_list",
+  "retrieval_miss",
+  "reasoning_or_reading",
+  "unclassified",
+];
+
+export function failureTypes(rows: Iterable<{ failure?: { primary: string } }>): string[] {
+  const seen = new Set<string>();
+  for (const r of rows) if (r.failure) seen.add(r.failure.primary);
+  const rank = (t: string) => (FAILURE_ORDER.includes(t) ? FAILURE_ORDER.indexOf(t) : 99);
+  return [...seen].sort((a, b) => rank(a) - rank(b) || a.localeCompare(b));
+}
+
+export function failureLabel(t: string): string {
+  const s = t.replace(/_/g, " ");
+  return s[0].toUpperCase() + s.slice(1);
 }
 
 /** Display helper: 0.9 → "90%"; null → "–". */

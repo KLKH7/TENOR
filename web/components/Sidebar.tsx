@@ -1,9 +1,22 @@
+import { AppNav } from "@/components/AppNav";
 import { SidebarList, type SidebarItem } from "@/components/SidebarList";
 import { meetingStart } from "@/lib/data";
 import type { Note } from "@/lib/types";
 
 /** Granola-style "My notes" list. Server part: shapes the data the client list needs. */
-export function Sidebar({ notes, activeId }: { notes: Note[]; activeId: string }) {
+export function Sidebar({
+  notes,
+  activeId,
+  setLabel,
+  query,
+}: {
+  notes: Note[];
+  activeId: string;
+  /** Which fixture corpus is listed (Northwind or Northwind-XL). */
+  setLabel: string;
+  /** Appended to note links so they stay in this corpus (e.g. "?set=xl"). */
+  query: string;
+}) {
   const owner = notes[0]?.owner;
   const items: SidebarItem[] = notes.map((n) => ({
     id: n.id,
@@ -21,5 +34,14 @@ export function Sidebar({ notes, activeId }: { notes: Note[]; activeId: string }
     .join("")
     .slice(0, 2)
     .toUpperCase();
-  return <SidebarList items={items} activeId={activeId} initials={initials} />;
+  return (
+    <SidebarList
+      items={items}
+      activeId={activeId}
+      initials={initials}
+      corpus={setLabel}
+      query={query}
+      nav={<AppNav current="notes" />}
+    />
+  );
 }

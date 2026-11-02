@@ -12,7 +12,9 @@ import {
 import { Sidebar } from "@/components/Sidebar";
 import { Markdownish, TypedNotes } from "@/components/Summary";
 import { type Line, Transcript } from "@/components/Transcript";
-import { getDirectory, getNote, listNotes, meetingStart } from "@/lib/data";
+import { AppNav } from "@/components/AppNav";
+import { ScrollToLine } from "@/components/results/ScrollToLine";
+import { getDirectory, getNote, listNotes, meetingStart, setOf } from "@/lib/data";
 import { dayLabel, timeLabel } from "@/lib/format";
 import { type Link as EntityLink, linkText } from "@/lib/linker";
 
@@ -23,13 +25,22 @@ interface Query {
   view?: string;
   transcript?: string;
   raw?: string;
+  /** Comma-separated utterance ids to highlight (links from Memory and Brief). */
+  line?: string;
+  /** Fixture set: "xl" for Northwind-XL (shares note ids with base Northwind). */
+  set?: string;
 }
 
-function href(id: string, q: { view: View; transcript: boolean; raw: boolean }): string {
+function href(
+  id: string,
+  q: { view: View; transcript: boolean; raw: boolean; line: string[]; set: string },
+): string {
   const p = new URLSearchParams();
+  if (q.set !== "northwind") p.set("set", q.set);
   if (q.view !== "enhanced") p.set("view", q.view);
   if (q.transcript) p.set("transcript", "1");
   if (q.raw) p.set("raw", "1");
+  if (q.transcript && q.line.length) p.set("line", q.line.join(","));
   const s = p.toString();
   return `/notes/${id}${s ? `?${s}` : ""}`;
 }
@@ -77,15 +88,20 @@ export default async function NotePage({
 }) {
   const { id } = await params;
   const query = await searchParams;
-  const note = getNote(id);
-  if (!note) notFound();
+  const set = setOf(id, query.set);
+  const note = set && getNote(id, set.root);
+  if (!set || !note) notFound();
+  const line = (query.line ?? "").split(",").filter((l) => l.startsWith(`${id}:`));
   const state = {
     view: (query.view === "mine" ? "mine" : "enhanced") as View,
-    transcript: query.transcript === "1",
+    // Following a cited line opens the transcript on it.
+    transcript: query.transcript === "1" || line.length > 0,
     raw: query.raw === "1",
+    line,
+    set: set.key,
   };
-  const notes = listNotes();
-  const dir = getDirectory();
+  const notes = listNotes(set.root);
+  const dir = getDirectory(set.root);
   const items = note.transcript ?? [];
   const start = meetingStart(note);
   const inPerson = items.length > 0 && items.every((i) => i.speaker.source === "microphone");
@@ -115,13 +131,19 @@ export default async function NotePage({
   return (
     <div className="flex min-h-screen">
       <aside className="sticky top-0 h-screen w-[17.5rem] shrink-0 max-lg:hidden">
-        <Sidebar notes={notes} activeId={note.id} />
+        <Sidebar
+          notes={notes}
+          activeId={note.id}
+          setLabel={set.label}
+          query={set.key === "northwind" ? "" : `?set=${set.key}`}
+        />
       </aside>
 
       <main className="flex min-w-0 flex-1 gap-3 py-4 pr-4 max-lg:p-2">
         {/* Note sheet */}
         <article className="relative flex min-h-[calc(100vh-2rem)] min-w-0 flex-1 flex-col rounded-[32px] bg-sheet shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
-          <div className="mx-auto flex w-full max-w-[40rem] flex-1 flex-col px-8 pt-14 max-sm:px-5">
+          <div className="mx-auto flex w-full max-w-[40rem] flex-1 flex-col px-8 pt-14 max-lg:pt-6 max-sm:px-5">
+            <AppNav current="notes" className="mb-8 self-start lg:hidden" />
             <h1 className="font-serif text-[2.75rem] leading-[1.08] tracking-[-0.01em] text-ink">
               {note.title}
             </h1>
@@ -243,13 +265,20 @@ export default async function NotePage({
                 </Link>
               </div>
             </header>
+            {state.line.length > 0 && (
+              <p className="mx-5 mt-2 rounded-xl bg-accent-soft px-3 py-2 text-[12.5px] leading-snug text-accent">
+                Highlighted: the {state.line.length === 1 ? "line" : `${state.line.length} lines`} cited by
+                the memory item you followed.
+              </p>
+            )}
             {inPerson && (
               <p className="mx-5 mt-2 rounded-xl bg-warn-soft px-3 py-2 text-[12.5px] leading-snug text-warn">
                 In person: one microphone, so all speech is attributed to “Me”.
               </p>
             )}
             <div className="flex-1 overflow-y-auto px-5">
-              <Transcript lines={lines} noteId={note.id} />
+              <Transcript lines={lines} noteId={note.id} highlight={new Set(state.line)} />
+              {state.line[0] && <ScrollToLine id={state.line[0]} />}
             </div>
             {!state.raw && (
               <footer className="border-t border-hairline px-5 py-3 text-[11.5px] leading-snug text-faint">

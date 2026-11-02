@@ -92,6 +92,56 @@ export interface ResultRow {
   latency_measured?: boolean;
   /** The judge's one-line reason, when the report carries it (see normalizeRow). */
   judge_reason?: string;
+  /** From <stamp>.failures.jsonl (`concentrate analyze`), for answers not judged correct. */
+  failure?: Failure;
+}
+
+/** One line of <stamp>.failures.jsonl: deterministic failure type plus optional LLM label. */
+export interface Failure {
+  system: string;
+  qid: string;
+  primary: string;
+  tags: { type: string; detail: string }[];
+  llm_type: string | null;
+  llm_reason: string | null;
+}
+
+/** One paired comparison from <stamp>.analysis.json (McNemar exact + Holm). */
+export interface PairTest {
+  family: string;
+  a: string;
+  b: string;
+  n: number;
+  acc_a: number;
+  acc_b: number;
+  diff: number;
+  ci_low: number;
+  ci_high: number;
+  a_only: number;
+  b_only: number;
+  p: number;
+  p_holm: number;
+  significant: boolean;
+}
+
+export interface ParetoPoint {
+  name: string;
+  accuracy: number;
+  usd_per_q: number;
+  latency_p50: number | null;
+  dominated_by: string[];
+  on_frontier: boolean;
+}
+
+/** The subset of <stamp>.analysis.json the explorer shows (see docs/ANALYSIS.md). */
+export interface Analysis {
+  meta: { report: string; seed: number; volume: number; alpha: number; fixtures: string | null };
+  pairs: { overall: PairTest[] } & Record<string, PairTest[]>;
+  power: {
+    per_pair: { pair: string; discordance: number; needed: Record<string, number>; mde: Record<string, number> }[];
+  };
+  pareto: Record<string, ParetoPoint[]>;
+  breakeven: { write: string; query: string; volume: number | null }[];
 }
 
 /** A gold question from <fixtures>/questions.jsonl. */
@@ -123,6 +173,8 @@ export interface LoadedReport {
   questions: Map<string, Question>;
   fixtures: ResolvedFixtures | null;
   judgechecks: { model: string; markdown: string }[];
+  /** <stamp>.analysis.json when `concentrate analyze` has been run on this report. */
+  analysis: Analysis | null;
 }
 
 /** The runner merges `{**details, **asdict(row)}`, so the row's verdict string overwrites the
@@ -134,6 +186,14 @@ function normalizeRow(raw: Record<string, unknown>): ResultRow {
     return { ...(raw as unknown as ResultRow), verdict: v.verdict, judge_reason: v.reason };
   }
   return raw as unknown as ResultRow;
+}
+
+function readJsonl<T>(file: string): T[] {
+  if (!existsSync(file)) return [];
+  return readFileSync(file, "utf8")
+    .split("\n")
+    .filter((l) => l.trim())
+    .map((l) => JSON.parse(l) as T);
 }
 
 export function isStamp(s: string): boolean {
@@ -286,7 +346,11 @@ export function loadReport(stamp: string): LoadedReport | undefined {
   if (!isStamp(stamp)) return undefined;
   const base = path.join(REPORTS, stamp);
   if (!existsSync(`${base}.json`) || !existsSync(`${base}.jsonl`)) return undefined;
-  const mtime = Math.max(statSync(`${base}.json`).mtimeMs, statSync(`${base}.jsonl`).mtimeMs);
+  const mtime = Math.max(
+    ...[".json", ".jsonl", ".failures.jsonl", ".analysis.json"]
+      .filter((ext) => existsSync(`${base}${ext}`))
+      .map((ext) => statSync(`${base}${ext}`).mtimeMs),
+  );
   const hit = cache.get(stamp);
   if (hit && hit.mtime === mtime) return hit.value;
 
@@ -295,6 +359,12 @@ export function loadReport(stamp: string): LoadedReport | undefined {
     .split("\n")
     .filter((l) => l.trim())
     .map((l) => normalizeRow(JSON.parse(l)));
+  const failures = readJsonl<Failure>(`${base}.failures.jsonl`);
+  const byKey = new Map(failures.map((f) => [`${f.system}/${f.qid}`, f]));
+  for (const r of rows) r.failure = byKey.get(`${r.system}/${r.qid}`);
+  const analysis = existsSync(`${base}.analysis.json`)
+    ? (JSON.parse(readFileSync(`${base}.analysis.json`, "utf8")) as Analysis)
+    : null;
   const fx = resolveFixtures(report.meta, rows);
   const judgechecks = readdirSync(REPORTS)
     .filter((f) => f.startsWith(`${stamp}.judgecheck.`) && f.endsWith(".md"))
@@ -309,6 +379,7 @@ export function loadReport(stamp: string): LoadedReport | undefined {
     questions: fx?.questions ?? new Map(),
     fixtures: fx ? { set: fx.set, label: fx.label, inferred: fx.inferred, checked: fx.checked, drift: fx.drift } : null,
     judgechecks,
+    analysis,
   };
   cache.set(stamp, { mtime, value });
   return value;
