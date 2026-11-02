@@ -174,3 +174,11 @@ The remote 38+ word monologue tail is a content limitation of scripted turns and
 - numbers on the transcript-retirement question they've said they're weighing.
 
 **Trade-off:** the work hardly changes, but polish moves to the benchmark: a card ([`BENCHMARK.md`](BENCHMARK.md)), one command per system, and a documented way to add a system. Its biggest weakness, being synthetic, is stated up front.
+
+## Results explorer (workstream E, 2026-11-02)
+
+`/results` in the web app reads eval reports straight from `evals/reports/` (no DB) and makes every number clickable down to the transcript line a system cited. Details: [`RESULTS_EXPLORER.md`](RESULTS_EXPLORER.md).
+
+**Decision:** before colouring citations, the explorer recomputes each answer's citation precision/recall from the gold lines and only trusts a fixture version that reproduces the stored values. It reads fixtures at the report's git SHA when they're committed. **Why:** utterance ids are positional, and the pilot report shows the risk: against today's regenerated fixtures 18/36 answers don't reproduce; at the run's SHA all 36 do.
+
+**Trade-off:** a `git show` per opened note (cheap, local), and gitignored fixtures (XL) can only be checked for drift, not pinned. **Found:** the runner's jsonl drops the judge's reason (the row's `verdict` string overwrites the judge's object); the explorer shows it once the runner keeps it.
