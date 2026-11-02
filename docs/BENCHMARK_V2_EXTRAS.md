@@ -2,7 +2,9 @@
 
 Workstream P. v2 ([FIDELITY_V2.md](FIDELITY_V2.md)) fixed *wording*. v2.1 adds five *situations* that real
 meeting memory has to survive and that v1/v2 under-test: hybrid rooms, identity mess, corrections,
-implicit or out-of-band commitments, and long-horizon questions. No LLM calls were made for anything
+implicit or out-of-band commitments, and long-horizon questions. It also adds two
+**transcript-only** question families, exact quotes and speaker attribution, which the coordinator
+requested after WS-C found that v2 has no question that needs the raw transcript. No LLM calls were made for anything
 in this document ($0).
 
 **Where things are.**
@@ -14,13 +16,13 @@ in this document ($0).
 - **Opt-in.** Without `--extras` the generator is still `northwind-2`, and its output is byte-identical,
   including the committed base fixture.
 - **v2 inside v2.1 is untouched.** With `--extras`, every v2 note, question ID, answer and split is
-  byte-identical (tested). v2.1 = v2 + 10 meetings + 26 questions with IDs `x001`–`x026`. How:
+  byte-identical (tested). v2.1 = v2 + 10 meetings + 51 questions with IDs `x001`–`x051`. How:
   - extras meetings use the key prefix `v21-`;
   - they pad from their own RNG stream;
   - their facts are hidden from the v2 question generators (`extras.base_view`);
   - their questions get their own seeded split and are appended after the stratified XL selection.
-- **Comparability.** v2.1 scores on the 296 v2 questions are directly comparable with v2. Report the 26
-  extras questions as separate categories. The 10 extra meetings add ~40k words (+5%) of distractor text
+- **Comparability.** v2.1 scores on the 296 v2 questions are directly comparable with v2. Report the 51
+  extras questions as separate categories. XL v2.1 has 347 questions in total. The 10 extra meetings add ~40k words (+5%) of distractor text
   for v2 questions, so expect at most a small shift.
 
 ## The phenomena
@@ -39,6 +41,8 @@ key must occur in the gold utterances.
 | 3 | **Corrections** | (a) In the same meeting: "twelve endpoints" … later "correction… it's nine". (b) Across meetings: "Ignore what I said last week, the number is actually 340 pilot users" (was 400). (c) By someone else: Jordan says "November fifth"; Felix replies "No, it's still October twenty ninth". Wrong values are recorded as retracted facts in `world.extras.retracted` | `correction` 4 (1/3) | Supersession by **retraction**, not by change. The wrong value was never true, yet it appears in the transcript, and 1–3 of the 3 also appear in AI summaries (§Probes) |
 | 4 | **Implicit / silent / out-of-band commitments** | Implicit commitments ("I can look into…", "Let me see if legal can…", "I could probably mock up…"); two are never mentioned again. Three are resolved outside meetings ("as discussed on Slack, it's done", "sent it over email yesterday") and count as **done** | `commitment_tracking` 6 (2/4) | Detecting commitments without "I'll X by Friday". Silence ≠ done. An out-of-band report closes the loop even though the work happened outside the corpus |
 | 5 | **Long horizon** | The Halyard launch date moves Oct 1 → Oct 15 (sandbox failed load testing, w4) → Oct 29 (unsigned webhooks, w6) → Nov 12 (docs not ready, w8): **3 moves** in 7 weeks. Jordan's "November 5" in week 7 is a misstatement and **not** a move. Rosa's commitments span w1–w6, across her name change | `long_horizon` 3 (1/2) | Aggregation over 4+ meetings 7 weeks apart, while ignoring a retracted value; it composes 1, 2a and 3 |
+| 6 | **Exact wording** (transcript-only) | "Quote, word for word, the commitment Megan Liu made in *Eng standup* on Monday, October 5" (8 questions, drawn from commitments across the whole world). "What exactly did Priya say about the pilot price of Acmeway in …? Quote the exact words." (4 questions, where Priya *states* the value). The gold answer is the clean wording; key phrases are its protected spans | `exact_quote` 12 (4/8) | The **wording itself**, which no fact store keeps. This is the loss everyone expects from retiring transcripts, and v2 didn't test it |
+| 7 | **Speaker attribution** (transcript-only) | "Who said '<distinctive phrase>' in <meeting>?" uses phrases of 4+ words that occur in exactly one beat. It is stratified across 4 in-person meetings (one shared microphone, no labels), 4 remote and 3 hybrid-room. "Who first raised <topic>, and in which meeting?" asks for the speaker and date of the first stated version of a fact that later changed | `speaker_attribution` 13 (4/9) | Who spoke, across all three capture settings. It includes "Four hundred pilot users" → the *procurement* Daniel Cho (namesake plus attribution) |
 
 ## Probes: free and deterministic (`python -m concentrate.synth.extras_checks <dir>`)
 
@@ -50,6 +54,8 @@ gives the same picture.
 |---|---|---|
 | BM25 meeting recall@5 (all gold meetings in top 5) | room_attribution **1.00**, identity 1.00, correction 1.00, commitment_tracking 0.67, long_horizon 1.00; v2 categories 0.45–0.97 | The extras are **findable**. "Halyard" is a distinctive token, so their difficulty is reasoning, not search. This is a confound to keep in mind (see limitations) |
 | "Who said it?" read off the speaker label of the gold passages | room_attribution **0.00** (n = 6), identity namesakes/contractor 0.00 (n = 2); v2 who-said 0.40 (n = 5) | The label is never sufficient in a room. A system that trusts `name` gets "Room 4B" or Jordan |
+| Exact quotes: is the clean quote verbatim in the transcript; are its key phrases in the AI summary? | 0.58 verbatim; 0.50 key phrases in summary (n = 12) | ASR noise (fillers, repeats, digits) changes 42% of quotes, so judge on key phrases plus wording, not exact match. Summaries keep the key phrases half the time and the wording never: this is the retirement loss |
+| "Who said" by label, transcript-only family | speaker_attribution 0.54 (n = 13) | Labels answer only the remote half; in-person and room items need cues |
 | Retracted values still visible | each of the 3 misstatements: 1 transcript passage; AI summaries repeat 3 of 3 on XL (2 of 3 on base) | A summary-only system reads the wrong value as a summary bullet ("Partner sandbox has 12 endpoints"). Summaries are lossy and order-blind, which is realistic |
 | Names heard on calls that resolve to exactly one directory entry | unique 39, none 2 (`Room 4B`, `Rosa Delgado`), ambiguous 1 (`Daniel Cho`); 2 attendee emails not in the directory (old Rosa email, Jamie's Gmail) | Directory-driven linking breaks exactly where intended |
 
@@ -77,11 +83,19 @@ style stays in range. The small rise in shared first-6 words comes from more fil
 | Namesakes | ✗ | ✗ | ~ | ~ | ✗ merges the two Daniels | ✗ merges them by name |
 | Corrections | ~ latest chunk wins if retrieved | ✗ summary repeats the wrong value | ✓ | ~ | ✗ stores both, often returns the first | ~ the bitemporal store handles supersession, not "never true" |
 | Implicit / out-of-band commitments | ✗ "dropped" needs proof of absence | ✗ | ~ | ✗ | ✗ extraction keys on "I'll … by" | ~ depends on the extraction prompt |
+| Exact quote | ~ if the chunk is retrieved | ✗ paraphrase at best | ✓ | ✓ reads transcripts | ✗ facts are paraphrased at ingest | ✗ once transcripts are retired, key phrases at best |
+| Speaker attribution | ~ remote labels; ✗ in-person / room | ✗ | ~ cues needed for in-person / room | ~ | ✗ unless the speaker is stored per fact | ~ the fact keeps a speaker only if the resolver got it |
 | Long horizon (count moves) | ✗ needs 4 meetings and k is small | ✗ lossy, and includes the misstatement | ✓ if it ignores Nov 5 | ~ | ~ | ✓ if retractions are modelled, else 4 (wrong) |
 
 ## Limitations (honest read)
 
-- **Small n.** There are 26 questions: 3–7 per category. Category accuracy CIs will be ±20–40 points.
+- **Transcript-only families are marked.** `questions.NEEDS_TRANSCRIPT` = {`exact_quote`, `speaker_attribution`,
+  `room_attribution`} lets the retirement curve report them separately. We used categories rather than a
+  new `Question` field so v2's `questions.jsonl` keeps its exact bytes.
+- **Exact-quote gold is the clean wording**, but the transcript shows a noisy rendering (58% verbatim).
+  The judge must accept the transcript's wording. Key-phrase judging alone cannot tell a faithful
+  paraphrase from a quote; the LLM judge sees the gold quote and has to make that call.
+- **Small n.** There are 51 questions: 3–13 per category. Category accuracy CIs will be ±20–40 points.
   Use these questions as **diagnostics with examples**, not a leaderboard. Scaling up means turning the
   hand-authored story into a seeded family; that is not done.
 - **One storyline.** All phenomena hang off Halyard and Corvid, so a system that does well on Halyard
@@ -104,5 +118,5 @@ style stays in range. The small rise in shared first-6 words comes from more fil
    keep, and the committed base fixture and every pinned test value stay stable while other workstreams
    merge.
 2. Should the extras go in the headline comparison? Recommendation: **no, only as a diagnostic appendix**
-   (26 questions; per-category n is too small). Run them only if a v2 run happens anyway: the extra
+   (51 questions; per-category n is too small), except that `NEEDS_TRANSCRIPT` should be reported on the retirement curve. Run them only if a v2 run happens anyway: the extra
    ingest is about 5% of corpus tokens.

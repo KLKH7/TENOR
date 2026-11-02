@@ -25,11 +25,19 @@ from __future__ import annotations
 import random
 from datetime import date
 
-from concentrate.synth.questions import NOW, Category, Question, _fmt, _Gen
+from concentrate.synth.questions import (
+    NOW,
+    Category,
+    Question,
+    _fmt,
+    _Gen,
+    _label,
+    _subject,
+)
 from concentrate.synth.render import BeatMap
 from concentrate.synth.roster import RENAMES, person
 from concentrate.synth.story import M, Story, day
-from concentrate.synth.world import Commitment, ExtrasTruth, Fact, Room, World
+from concentrate.synth.world import Beat, Commitment, Evidence, ExtrasTruth, Fact, Room, World
 
 PREFIX = "v21-"  # meeting keys of extras meetings
 MON, TUE, WED, THU, FRI = range(5)
@@ -581,6 +589,10 @@ def base_view(world: World) -> World:
     )
 
 
+def _name(subject: str) -> str:
+    return "Halyard" if subject == HALYARD else _subject(subject)
+
+
 class _ExtrasGen(_Gen):
     def __init__(self, world: World, beat_map: BeatMap, seed: int) -> None:
         super().__init__(world, beat_map, seed)
@@ -863,6 +875,129 @@ class _ExtrasGen(_Gen):
             [x.id for x in rosa],
         )
 
+    # -- transcript-dependent families (exact wording, speaker attribution) ------------------
+    # Added for the transcript-retirement curve: answers that a fact store or a summary does
+    # not keep (verbatim wording, who spoke). They span the whole world, v2 meetings included.
+
+    def _unique_spans(self) -> dict[str, int]:
+        """How many beats in the whole world contain each protected span (lowercased)."""
+        texts = [b.text.lower() for m in self.w.meetings for b in m.beats]
+        spans = {p.lower() for m in self.w.meetings for b in m.beats for p in b.protect}
+        return {sp: sum(sp in t for t in texts) for sp in spans}
+
+    def _beat(self, e: Evidence) -> Beat:
+        return self.meeting[e.meeting].beats[e.beat]
+
+    def exact_quotes(self, rng: random.Random) -> None:
+        """'Quote what X said': gold is the beat's clean wording; key phrases are its protected
+        spans (noise-free in the transcript). The judge compares wording against the quote."""
+        made: dict[tuple[str, str], list[Commitment]] = {}
+        for c in self.w.commitments:
+            made.setdefault((c.owner, c.made_in), []).append(c)
+        pool = []
+        for (owner, _key), cs in sorted(made.items()):
+            beats = [e for e in cs[0].made_evidence if self._beat(e).speaker == owner]
+            if len(cs) == 1 and len(beats) == 1 and self._beat(beats[0]).privacy is None:
+                pool.append((cs[0], beats[0]))
+        for c, e in rng.sample(pool, min(8, len(pool))):
+            b, m = self._beat(e), self.meeting[e.meeting]
+            self.add(
+                "exact_quote",
+                f'Quote, word for word, the commitment {person(c.owner).name} made in "{m.title}" '
+                f"on {_fmt(m.day)}.",
+                f'"{b.text}"',
+                [p.lower() for p in b.protect],
+                list(b.protect),
+                [e],
+                [c.id],
+            )
+        stated = []
+        for f in self.w.facts:
+            if f.privacy:
+                continue
+            by_owner = [  # Priya *states* the value (not just asks about it)
+                e
+                for e in f.evidence
+                if self._beat(e).speaker == "priya"
+                and any(sp in self._beat(e).text for sp in f.spoken)
+                and not self._beat(e).text.endswith("?")
+            ]
+            if len(by_owner) == 1 and self._beat(by_owner[0]).protect:
+                stated.append((f, by_owner[0]))
+        for f, e in rng.sample(stated, min(4, len(stated))):
+            b, m = self._beat(e), self.meeting[e.meeting]
+            self.add(
+                "exact_quote",
+                f"What exactly did Priya say about the {_label(f.predicate)} of "
+                f'{_name(f.subject)} in "{m.title}" on {_fmt(m.day)}? Quote the exact words.',
+                f'"{b.text}"',
+                [p.lower() for p in b.protect],
+                list(b.protect),
+                [e],
+                [f.id],
+            )
+
+    def speaker_attributions(self, rng: random.Random) -> None:
+        """'Who said <phrase>?' and 'who first raised <topic>?', across remote, in-person and
+        hybrid-room meetings. Phrases are protected spans that occur in exactly one beat."""
+        counts = self._unique_spans()
+        pools: dict[str, list[tuple[str, Evidence]]] = {"remote": [], "in_person": [], "room": []}
+        for m in self.w.meetings:
+            room = self.truth.rooms.get(m.key)
+            for i, b in enumerate(m.beats):
+                if b.filler or b.privacy or b.speaker == "priya":
+                    continue
+                for sp in b.protect:
+                    distinctive = len(sp.split()) >= 4 and not sp.lower().startswith("by ")
+                    if distinctive and counts[sp.lower()] == 1:
+                        kind = "room" if room and b.speaker in room.members else m.mode
+                        if kind in pools:
+                            pools[kind].append((sp, Evidence(meeting=m.key, beat=i)))
+                        break
+        quota = {"in_person": 4, "remote": 4, "room": 3}
+        for setting, n in quota.items():
+            for sp, e in rng.sample(pools[setting], min(n, len(pools[setting]))):
+                b, m = self._beat(e), self.meeting[e.meeting]
+                p = person(b.speaker)
+                self.add(
+                    "speaker_attribution",
+                    f'Who said "{sp}" in "{m.title}" on {_fmt(m.day)}?',
+                    f"{p.name} ({p.role})",
+                    [b.speaker],
+                    [sp],
+                    [e],
+                    [],
+                )
+        firsts = []
+        for subject, predicate in sorted({(f.subject, f.predicate) for f in self.w.facts}):
+            first = self.versions(subject, predicate)[0]
+            if first.privacy or first.kind == "attribute":
+                continue
+            stating = [
+                e
+                for e in first.evidence
+                if any(sp in self._beat(e).text for sp in first.spoken)
+                and self._beat(e).speaker != "priya"
+            ]
+            if len(stating) == 1 and len(self.versions(subject, predicate)) > 1:
+                firsts.append((first, stating[0]))
+        in_person = [x for x in firsts if self.meeting[x[1].meeting].mode == "in_person"]
+        rest = [x for x in firsts if x not in in_person]
+        picks = in_person[:1] + rng.sample(rest, min(4 - len(in_person[:1]), len(rest)))
+        for f, e in picks:
+            b, m = self._beat(e), self.meeting[e.meeting]
+            p = person(b.speaker)
+            self.add(
+                "speaker_attribution",
+                f"Who first raised the {_label(f.predicate)} for {_name(f.subject)}, and in "
+                "which meeting?",
+                f'{p.name} ({p.role}), in "{m.title}" on {m.day.isoformat()}',
+                [b.speaker, m.day.isoformat()],
+                [sp for sp in f.spoken if sp in b.text],
+                [e],
+                [f.id],
+            )
+
 
 def extras_questions(world: World, beat_map: BeatMap, seed: int) -> list[Question]:
     """The v2.1 questions (ids ``x001``…), with their own seeded dev/test split."""
@@ -872,6 +1007,9 @@ def extras_questions(world: World, beat_map: BeatMap, seed: int) -> list[Questio
     g.corrections()
     g.commitments()
     g.long_horizon()
+    transcript_rng = random.Random(f"{seed}:extras-transcript")  # keeps earlier splits stable
+    g.exact_quotes(transcript_rng)
+    g.speaker_attributions(transcript_rng)
     g.split()
     for q in g.qs:
         assert q.as_of <= NOW

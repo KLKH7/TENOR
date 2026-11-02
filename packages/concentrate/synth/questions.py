@@ -34,8 +34,13 @@ Category = Literal[
     "commitment_status", "decision_change", "aggregation", "unanswerable",
     # v2.1 extras (synth.extras, docs/BENCHMARK_V2_EXTRAS.md)
     "room_attribution", "identity_resolution", "correction", "commitment_tracking",
-    "long_horizon",
+    "long_horizon", "exact_quote", "speaker_attribution",
 ]  # fmt: skip
+# Categories whose answer lives only in the transcript (verbatim wording, who spoke): a fact
+# store or summary cannot answer them. The transcript-retirement curve reports them separately.
+NEEDS_TRANSCRIPT: frozenset[str] = frozenset(
+    {"exact_quote", "speaker_attribution", "room_attribution"}
+)
 NOW = date(2026, 10, 24)  # the day after the last meeting: "today" for latest-state questions
 UNANSWERABLE = "UNANSWERABLE"
 DEV_FRACTION = 0.3

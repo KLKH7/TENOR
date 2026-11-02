@@ -13,7 +13,7 @@ from concentrate.synth.extras import PREFIX, ROOM, ROOM_EMAIL
 from concentrate.synth.extras_checks import probe
 from concentrate.synth.noise import NoiseRates
 from concentrate.synth.pipeline import EXTRAS_VERSION, build, generate_dataset
-from concentrate.synth.questions import Question
+from concentrate.synth.questions import NEEDS_TRANSCRIPT, Question
 from concentrate.synth.render import GoldMap, folder_models, render_meeting
 from concentrate.synth.world import World
 
@@ -116,6 +116,8 @@ def test_extras_gold_answers(extras_set: Path) -> None:
         "correction",
         "commitment_tracking",
         "long_horizon",
+        "exact_quote",
+        "speaker_attribution",
     }
     assert {q.split for q in qs} == {"dev", "test"}
     moves = next(q for q in qs if q.question.startswith("How many times did the Halyard"))
@@ -151,3 +153,19 @@ def test_free_probes_show_the_intended_difficulty(extras_set: Path) -> None:
     assert r["bm25_meeting_recall@5"]["room_attribution"] == 1.0  # findable, still hard
     assert set(r["directory"]["unresolved_names"]) == {"Daniel Cho", ROOM, "Rosa Delgado"}
     assert all(t["passages"] >= 1 for t in r["retracted_traps"].values())
+
+
+def test_transcript_dependent_families(extras_set: Path) -> None:
+    qs = [q for q in _questions(extras_set) if q.category in NEEDS_TRANSCRIPT]
+    world = World.model_validate_json((extras_set / "world.json").read_text())
+    modes = {m.note_id: m.mode for m in world.meetings}
+    quotes = [q for q in qs if q.category == "exact_quote"]
+    assert len(quotes) >= 8 and all(q.answer.startswith('"') for q in quotes)
+    said = [q for q in qs if q.category == "speaker_attribution"]
+    assert len(said) >= 8
+    in_person = [q for q in said if modes[q.gold_utterance_ids[0].rsplit(":", 1)[0]] != "remote"]
+    assert in_person  # attribution on one shared microphone, no channel to lean on
+    assert any("Halyard weekly sync" in q.question for q in said)  # hybrid room
+    # The x001-x026 block is untouched by the new families (ids and splits are stable).
+    first = {q.id: q.category for q in _questions(extras_set) if q.id.startswith("x")}
+    assert [first[f"x{i:03d}"] for i in (1, 26)] == ["room_attribution", "long_horizon"]

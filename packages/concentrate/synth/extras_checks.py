@@ -8,6 +8,8 @@ the extras are hard for the *intended* reason before paying for a model run:
   reasoning from search.
 * ``label_attribution``: answer "who said X?" by reading the speaker label on the gold
   passages. Works for named remote speakers; must fail for a hybrid room.
+* ``exact_quote``: is the clean quote verbatim in the noisy transcript, and are its key
+  phrases in the AI summary (what survives if transcripts are retired)?
 * ``retracted_traps``: how often each misstated value is still in transcripts and in AI
   summaries, i.e. what a mention-counting or summary-only system would see.
 * ``directory``: do the names that appear on calls resolve to exactly one directory entry?
@@ -30,7 +32,12 @@ from concentrate.synth.questions import Question
 from concentrate.synth.world import World
 
 K = 5
-WHO_CATEGORIES = ("room_attribution", "entity_disambiguation", "identity_resolution")
+WHO_CATEGORIES = (
+    "room_attribution",
+    "speaker_attribution",
+    "entity_disambiguation",
+    "identity_resolution",
+)
 
 
 def _questions(fixtures: Path) -> list[Question]:
@@ -70,6 +77,21 @@ def probe(fixtures: Path) -> dict[str, Any]:
         c: {"n": len(v), "correct": round(sum(v) / len(v), 2)} for c, v in sorted(label.items())
     }
 
+    # -- exact quotes: is the wording recoverable without the raw transcript? ----------------
+    quotes = [q for q in qs if q.category == "exact_quote"]
+    verbatim = in_summary = 0
+    for q in quotes:
+        note = by_utt[q.gold_utterance_ids[0]][0]
+        said = " ".join(by_utt[u][1].text for u in q.gold_utterance_ids).lower()
+        verbatim += q.answer.strip('"').lower() in said
+        summary = (note.summary_markdown or "").replace("*", "").lower()
+        in_summary += all(k in summary or written(k).lower() in summary for k in q.answer_norm)
+    exact_quote = {
+        "n": len(quotes),
+        "clean_quote_verbatim_in_transcript": round(verbatim / max(1, len(quotes)), 2),
+        "key_phrases_in_summary": round(in_summary / max(1, len(quotes)), 2),
+    }
+
     # -- retracted values: still visible in transcripts and summaries? ------------------------
     traps: dict[str, dict[str, int]] = {}
     retracted = world.extras.retracted if world.extras else []
@@ -97,6 +119,7 @@ def probe(fixtures: Path) -> dict[str, Any]:
         "questions": len(qs),
         f"bm25_meeting_recall@{K}": retrieval,
         "label_attribution": label_attribution,
+        "exact_quote": exact_quote,
         "retracted_traps": traps,
         "directory": {
             "names_heard": dict(resolves),

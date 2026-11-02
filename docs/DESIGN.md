@@ -259,8 +259,9 @@ Details and metrics are in `docs/FIDELITY_V2.md`.
 ## Benchmark v2.1 extras (workstream P, generator `northwind-2.1`, 2026-11-02)
 
 Details: [BENCHMARK_V2_EXTRAS.md](BENCHMARK_V2_EXTRAS.md).
-- **Additive and opt-in.** `--extras` appends 10 hand-authored meetings about one new project (Halyard) and 26 questions in five new categories:
-  `room_attribution`, `identity_resolution`, `correction`, `commitment_tracking`, `long_horizon`.
+- **Additive and opt-in.** `--extras` appends 10 hand-authored meetings about one new project (Halyard) and 51 questions in seven new categories:
+  `room_attribution`, `identity_resolution`, `correction`, `commitment_tracking`, `long_horizon`, and the transcript-only `exact_quote` and `speaker_attribution`.
+  `questions.NEEDS_TRANSCRIPT` marks the categories the retirement curve should report separately.
   - **Why opt-in:** every v2 note, question and split stays byte-identical, so v2 scores remain comparable and the committed fixture and pinned test values don't churn.
   - **Trade-off:** extras live in one storyline with small n, so they are a diagnostic, not a leaderboard.
 - **New ground truth: `World.extras`.** It records which facts are retractions (never true), which commitments were implicit, which were resolved out of band, and which meetings had a shared room channel.
