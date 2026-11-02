@@ -510,6 +510,8 @@ def analyze(
         volume=volume, gt_note=gt_note,
     )  # fmt: skip
     typer.echo("written: " + ", ".join(str(p) for p in paths.values()))
+
+
 # -- MCP server (workstream D) --------------------------------------------------------------------
 
 
