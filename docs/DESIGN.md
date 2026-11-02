@@ -162,3 +162,15 @@ The remote 38+ word monologue tail is a content limitation of scripted turns and
 - **Honest latency.** The first `--latency-sample` questions (default 10) run fully interactively at full price, and they are the only latency source for batched systems. The report says how many rows each p50/p95 comes from.
 - **Budget.** Each batch is estimated before it is submitted and refused if it would exceed the remaining cap. The estimate uses exact token counts when an API key is set, otherwise the heuristic ×1.93.
 - **Differences from interactive.** The Batches API rejects the server-side `fallbacks` parameter, so a refusal in a batch is retried interactively, with the fallback. Prompt caching inside a batch is best-effort, so B2's cache-read assumption is optimistic in batch mode.
+
+## Framing: benchmark first (2026-11-02)
+
+**Decision (with the author):** the headline deliverable is the open meeting-memory benchmark and the head-to-head comparison. Concentrate is one entry in it, not the pitch.
+
+**Why:** Granola has publicly described prototyping agent-oriented "enhanced transcripts" (resolving which Sam, expanding project names), so Concentrate's techniques are unlikely to be new to them. What an outsider can add:
+- an independent, reproducible measurement;
+- a public benchmark on meetings (we found none; existing ones are chat logs);
+- concrete live-probe findings;
+- numbers on the transcript-retirement question they've said they're weighing.
+
+**Trade-off:** the work hardly changes, but polish moves to the benchmark: a card ([`BENCHMARK.md`](BENCHMARK.md)), one command per system, and a documented way to add a system. Its biggest weakness, being synthetic, is stated up front.
