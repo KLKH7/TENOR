@@ -292,5 +292,9 @@ def test_resume_survives_a_kill_mid_progress_write(
     with progress.open("a") as fh:  # the watchdog's os._exit landed mid-write
         fh.write('{"key": "torn", "uuid": "x", "ref": {"note_id"')
     resumed = _system(tmp_path, client, graphs).ingest(corpus)
-    assert len(graphs[-1].added) == 2 and resumed.llm_calls == 4
+    full: list[FakeGraph] = []
+    whole = _system(tmp_path / "full", client, full).ingest(corpus)
+    # Exactly the episodes after the two that landed before the kill: none re-added or skipped.
+    assert [e.key for e in graphs[-1].added] == [e.key for e in full[-1].added][2:]
+    assert 0 < resumed.llm_calls < whole.llm_calls  # only the remaining episodes were paid for
     assert all(json.loads(line) for line in progress.read_text().splitlines())

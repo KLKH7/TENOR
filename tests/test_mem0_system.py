@@ -10,6 +10,7 @@ from typing import Any
 
 import pytest
 
+from concentrate.agents import corpus as cv
 from concentrate.agents.baselines import ANSWER_PROMPT, ANSWER_SCHEMA
 from concentrate.agents.mem0_system import (
     COMPLETE_MARKER,
@@ -287,7 +288,7 @@ def test_ingest_resumes_after_a_kill_with_a_torn_progress_line(
         fh.write('{"key": "torn')
     factory = Factory()
     stats = _system(tmp_path, factory).ingest(notes)
-    chunks = [c.key for m in notes for c in ingest_chunks(m)]
+    chunks = [c.key for m in cv.by_date(notes) for c in ingest_chunks(m)]  # ingest order
     resumed = [a["metadata"]["chunk_id"] for a in factory.built[0].added]
     assert resumed == chunks[2:]  # nothing re-added, nothing skipped
     assert stats.llm_calls == len(chunks)
