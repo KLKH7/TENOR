@@ -45,6 +45,9 @@ class EntityDirectory:
         return self.by_id.get(entity_id)
 
     def name(self, entity_id: str) -> str:
+        if entity_id.startswith("?"):  # unresolved owner: "?sam_p|kofi"
+            names = [self.name(c) for c in entity_id[1:].split("|") if c]
+            return f"unresolved ({' or '.join(names)})" if names else "unresolved"
         e = self.by_id.get(entity_id)
         return e.name if e else entity_id
 

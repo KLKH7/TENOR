@@ -14,7 +14,7 @@ from concentrate.memory.schema import (
     Extraction,
 )
 from concentrate.memory.store import MemoryStore, norm_value
-from concentrate.memory.verify import check_item, gate_eval, quote_supported
+from concentrate.memory.verify import check_item, check_value, gate_eval, quote_supported
 
 DIRECTORY = (
     Path(__file__).resolve().parent.parent / "data" / "fixtures" / "northwind" / "directory.json"
@@ -277,3 +277,68 @@ def test_directory_matching_prefers_longest_and_keeps_ambiguity() -> None:
     assert d.find("the onboarding redesign") == ["beacon"]
     assert set(d.find("What did Sam say?")) == {"sam_p", "sam_o"}
     assert d.find("Falcon (the payments migration)") == ["falcon"]
+
+
+# The seven values the XL build wrongly rejected (2026-11-02), with the line each one cited.
+FALSE_REJECTS = [
+    (
+        "2026-09-25",
+        "So my main thing is the Safari date picker, should be done by FridayI mean, .",
+        True,
+    ),
+    (
+        "2026-10-08",
+        "Realistic Falcon cutover is October eighthI mean, , after we fix the refund",
+        False,
+    ),
+    ("2026-10-28", "And the launch moved to the twenty eighth,", True),
+    (
+        "2026-10-01 afternoon out",
+        "I'm out Thursday afternoon for a doctor's appointment, just so you know.",
+        True,
+    ),
+    ("shipped 2026-10-06", "Good news, the CSV export of seat usage shipped on Tuesday.", True),
+    ("2026-10-16", "I'm on the settings page, I'll have it by Fridaylike, .", True),
+    ("returned 2026-10-09", "First, the Corvid questionnaire went back last Friday.", True),
+]
+
+
+@pytest.mark.parametrize(("value", "line", "relative"), FALSE_REJECTS)
+def test_check_value_accepts_the_xl_false_rejects(value: str, line: str, relative: bool) -> None:
+    ok, detail, rel = check_value(value, line)
+    assert ok, detail
+    assert rel == relative  # relative dates still go on to the entailment check
+
+
+@pytest.mark.parametrize(
+    ("value", "line"),
+    [
+        ("2026-10-08", "The cutover is on the ninth of October."),  # wrong day, month said
+        ("shipped 2026-10-06 for 40 seats", "It shipped on Tuesday for thirty seats."),  # number
+        ("2026-10-13", "We talked about the cutover."),  # no date at all
+    ],
+)
+def test_check_value_still_rejects_unsupported_values(value: str, line: str) -> None:
+    assert not check_value(value, line)[0]
+
+
+def test_unresolved_owner_is_kept_with_candidates_not_guessed() -> None:
+    from concentrate.memory.pipeline import owner_key
+    from concentrate.memory.schema import ExtractedCommitment
+    from concentrate.memory.verify import claim_text
+
+    assert owner_key("sam_p") == "sam_p"
+    assert owner_key("unresolved", ["sam_p", "Kofi", "sam_p"]) == "?sam_p|kofi"
+    assert owner_key("unresolved") == "?"
+    d = load_directory(DIRECTORY)
+    assert d.name("?sam_p|kofi") == "unresolved (Sam Patel or Kofi Mensah)"
+    c = ExtractedCommitment(
+        owner="unresolved",
+        owner_candidates=["sam_p", "kofi"],
+        task="refund reconciliation job",
+        due="2026-09-17",
+        source_lines=[f"{N}:0003"],
+        quote="I'll get the refund reconciliation job done",
+        confidence=0.6,
+    )
+    assert claim_text(c).startswith("unresolved (one of: sam_p, kofi) committed to")

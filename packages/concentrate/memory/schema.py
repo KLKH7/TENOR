@@ -1,4 +1,4 @@
-"""What the extractor returns (``extract.v1``) and the JSON schema that constrains it.
+"""What the extractor returns (``extract.v2``) and the JSON schema that constrains it.
 
 Line references inside an extraction are *local* 4-digit indexes (``"0037"``) to keep prompts
 small; :mod:`concentrate.memory.extract` maps them to canonical utterance IDs
@@ -37,9 +37,13 @@ class ExtractedFact(BaseModel):
     privacy: Privacy
 
 
+UNRESOLVED = "unresolved"  # owner when the speaker can't be pinned down; see owner_candidates
+
+
 class ExtractedCommitment(BaseModel):
     model_config = ConfigDict(extra="forbid")
-    owner: str  # person id
+    owner: str  # person id, or UNRESOLVED
+    owner_candidates: list[str] = []  # person ids the owner could be, when UNRESOLVED
     task: str
     due: str | None  # ISO date
     source_lines: list[str]
@@ -50,7 +54,8 @@ class ExtractedCommitment(BaseModel):
 class ExtractedUpdate(BaseModel):
     model_config = ConfigDict(extra="forbid")
     commitment_id: str | None  # id from the open-commitments list, when known
-    owner: str
+    owner: str  # person id, or UNRESOLVED
+    owner_candidates: list[str] = []
     task: str
     kind: UpdateKind
     new_due: str | None
@@ -107,6 +112,7 @@ EXTRACTION_SCHEMA: dict[str, Any] = _obj(
             "items": _obj(
                 {
                     "owner": _STR,
+                    "owner_candidates": _LINES,
                     "task": _STR,
                     "due": _NSTR,
                     "source_lines": _LINES,
@@ -121,6 +127,7 @@ EXTRACTION_SCHEMA: dict[str, Any] = _obj(
                 {
                     "commitment_id": _NSTR,
                     "owner": _STR,
+                    "owner_candidates": _LINES,
                     "task": _STR,
                     "kind": {"type": "string", "enum": list(UPDATE_KINDS)},
                     "new_due": _NSTR,
@@ -139,8 +146,8 @@ EXTRACTION_SCHEMA: dict[str, Any] = _obj(
 class Verdict(BaseModel):
     model_config = ConfigDict(extra="forbid")
     index: int
-    entailed: bool
     reason: str
+    entailed: bool
 
 
 class Entailment(BaseModel):
@@ -153,7 +160,7 @@ ENTAILMENT_SCHEMA: dict[str, Any] = _obj(
         "verdicts": {
             "type": "array",
             "items": _obj(
-                {"index": {"type": "integer"}, "entailed": {"type": "boolean"}, "reason": _STR}
+                {"index": {"type": "integer"}, "reason": _STR, "entailed": {"type": "boolean"}}
             ),
         }
     }

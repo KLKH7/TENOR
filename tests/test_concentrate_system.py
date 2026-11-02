@@ -165,7 +165,7 @@ def test_ingest_extracts_verifies_and_consolidates(
     stats = sys1.ingest(notes)
     d = stats.detail
     assert not stats.cached and stats.llm_calls == 4  # 3 extractions + 1 entailment
-    assert llm.count("extract.v1") == 3 and llm.count("entail.v1") == 1
+    assert llm.count("extract.v2") == 3 and llm.count("entail.v2") == 1
     assert d["facts_extracted"] == 4 and d["rejected"] == {"quote_mismatch": 1}
     assert d["kept"]["superseded"] == 1 and d["kept"]["update_done"] == 1
     assert d["entailment_checked"] == 1 and d["cache_read_tokens"] == 6000
@@ -209,7 +209,7 @@ def test_ingest_is_cached_and_resumable(tmp_path: Path, notes: list[MeetingNote]
 
     llm = ScriptedLLM(_script())
     stats = _system(tmp_path, llm).ingest(notes)
-    assert llm.count("extract.v1") == 1  # only the meeting that crashed
+    assert llm.count("extract.v2") == 1  # only the meeting that crashed
     assert stats.detail["meetings"] == 3 and (store_dir / COMPLETE_MARKER).exists()
     assert stats.llm_calls == 4  # totals include the earlier run's meetings
 

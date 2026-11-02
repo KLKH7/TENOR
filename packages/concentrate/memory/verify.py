@@ -28,23 +28,27 @@ from typing import Any
 from concentrate.core.spoken import spoken_numbers
 from concentrate.memory.schema import (
     ENTAILMENT_SCHEMA,
+    UNRESOLVED,
     Entailment,
     ExtractedCommitment,
     ExtractedFact,
     ExtractedUpdate,
 )
 
-ENTAIL_PROMPT = "entail.v1"
+ENTAIL_PROMPT = "entail.v2"  # v2: reason before verdict; unresolved speakers
 LOW_CONFIDENCE = 0.75
 _MONTHS = [
     "january", "february", "march", "april", "may", "june", "july", "august", "september",
     "october", "november", "december",
 ]  # fmt: skip
+# No trailing \b: ASR text can glue the next word on ("by FridayI mean"), see ``_unglue``.
 _RELATIVE = re.compile(
     r"\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday|today|tomorrow|tonight|"
-    r"yesterday|next week|this week|end of (?:the )?(?:week|month|quarter)|weekend|eod|eow)\b"
+    r"yesterday|next week|this week|last week|end of (?:the )?(?:week|month|quarter)|weekend|"
+    r"eod|eow)"
 )
 _ISO = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+_ISO_ANY = re.compile(r"\b\d{4}-\d{2}-\d{2}\b")
 
 Item = ExtractedFact | ExtractedCommitment | ExtractedUpdate
 
@@ -83,26 +87,46 @@ def _numbers(text: str) -> set[int]:
     return out
 
 
+def _unglue(text: str) -> str:
+    """Split words glued by transcription ("eighthI mean" -> "eighth I mean")."""
+    return re.sub(r"([a-z])([A-Z])", r"\1 \2", text)
+
+
+def _check_date(v: str, low: str, said: set[int]) -> tuple[bool, str, bool]:
+    try:
+        d = date.fromisoformat(v)
+    except ValueError:
+        return False, f"{v} is not a calendar date", False
+    if _MONTHS[d.month - 1] in low and d.day in said:
+        return True, "", False
+    if _RELATIVE.search(low):
+        return True, "relative date", True
+    if d.day in said:  # "the twenty eighth": day said, month implied -> let entailment decide
+        return True, "day without month", True
+    return False, f"date {v} not said in cited lines", False
+
+
 def check_value(value_norm: str, cited_text: str) -> tuple[bool, str, bool]:
     """Numbers and dates in ``value_norm`` vs. the cited text.
 
     Returns ``(ok, detail, relative)``; ``relative`` means a date that is only said relatively
-    ("by Thursday"), so it passes here but should be entailment-checked.
+    ("by Thursday", "the twenty eighth"), so it passes here but should be entailment-checked.
+    ISO dates inside a longer value ("shipped 2026-10-06") get the same date check, and their
+    digits are not then checked as plain numbers.
     """
     v = value_norm.strip()
-    low = cited_text.lower()
-    said = _numbers(cited_text)
+    text = _unglue(cited_text)
+    low = text.lower()
+    said = _numbers(text)
+    relative = False
+    for iso in _ISO_ANY.findall(v):
+        ok, detail, rel = _check_date(iso, low, said)
+        if not ok:
+            return False, detail, False
+        relative = relative or rel
     if _ISO.match(v):
-        try:
-            d = date.fromisoformat(v)
-        except ValueError:
-            return False, f"{v} is not a calendar date", False
-        if _MONTHS[d.month - 1] in low and d.day in said:
-            return True, "", False
-        if _RELATIVE.search(low):
-            return True, "relative date", True
-        return False, f"date {v} not said in cited lines", False
-    digits = re.findall(r"\d+(?:\.\d+)?", v.replace(",", ""))
+        return True, "relative date" if relative else "", relative
+    digits = re.findall(r"\d+(?:\.\d+)?", _ISO_ANY.sub(" ", v).replace(",", ""))
     for tok in digits:
         if "." in tok:
             whole = tok.split(".")[0]
@@ -112,7 +136,7 @@ def check_value(value_norm: str, cited_text: str) -> tuple[bool, str, bool]:
         n = int(tok)
         if n not in said and str(n) not in low:
             return False, f"number {n} not said in cited lines", False
-    return True, "", False
+    return True, "", relative
 
 
 def check_item(
@@ -157,12 +181,15 @@ def claim_text(item: Item) -> str:
     if isinstance(item, ExtractedFact):
         when = f" (from {item.valid_from})" if item.valid_from else ""
         return f"{item.subject} {item.predicate} = {item.value}{when}"
+    owner = item.owner
+    if owner.strip().lower() == UNRESOLVED:
+        owner = f"unresolved (one of: {', '.join(item.owner_candidates) or 'unknown'})"
     if isinstance(item, ExtractedCommitment):
         due = f", due {item.due}" if item.due else ""
-        return f"{item.owner} committed to: {item.task}{due}"
+        return f"{owner} committed to: {item.task}{due}"
     extra = f" (new due {item.new_due})" if item.new_due else ""
     extra += f" (new owner {item.new_owner})" if item.new_owner else ""
-    return f"{item.owner}'s commitment '{item.task}' is {item.kind}{extra}"
+    return f"{owner}'s commitment '{item.task}' is {item.kind}{extra}"
 
 
 EntailFn = Callable[[str, dict[str, Any]], Entailment]  # (user prompt, schema) -> verdicts

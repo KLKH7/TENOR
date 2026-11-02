@@ -203,7 +203,7 @@ def build_context(
 
     # 2. commitments
     cs = [c for c in store.commitments() if c.made_on <= day]
-    picked = [c for c in cs if c.owner in people]
+    picked = [c for c in cs if c.owner in people or set(c.owner.lstrip("?").split("|")) & people]
     for c in cs:
         overlap = q_tokens & _tokens(c.task)
         if c not in picked and (

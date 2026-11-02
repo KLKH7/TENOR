@@ -41,6 +41,7 @@ from concentrate.memory.extract import (
     windows,
 )
 from concentrate.memory.schema import (
+    UNRESOLVED,
     Entailment,
     ExtractedCommitment,
     ExtractedFact,
@@ -74,6 +75,13 @@ class BuildConfig:
 
 def snake(s: str) -> str:
     return _SNAKE.sub("_", s.strip().lower()).strip("_")
+
+
+def owner_key(owner: str, candidates: Sequence[str] = ()) -> str:
+    """Stored owner id: a person id, or ``?a|b`` for an unresolved owner with candidates."""
+    if owner.strip().lower() in {UNRESOLVED, "?", "unknown", ""}:
+        return "?" + "|".join(dict.fromkeys(snake(c) for c in candidates if c.strip()))
+    return snake(owner)
 
 
 def _tokens(s: str) -> set[str]:
@@ -251,13 +259,15 @@ class MemoryBuilder:
                     kept_text.append(f"{it.subject}.{it.predicate} = {it.value} {it.source_lines}")
                 elif isinstance(it, ExtractedCommitment):
                     if any(
-                        it.owner == c.owner and set(it.source_lines) & set(c.source_lines)
+                        owner_key(it.owner, it.owner_candidates)
+                        == owner_key(c.owner, c.owner_candidates)
+                        and set(it.source_lines) & set(c.source_lines)
                         for _, c in made
                     ):
                         actions["commitment_duplicate"] += 1
                         continue
                     cid = self.store.add_commitment(
-                        owner=snake(it.owner),
+                        owner=owner_key(it.owner, it.owner_candidates),
                         task=it.task,
                         due=it.due,
                         note_id=m.note_id,
@@ -270,7 +280,8 @@ class MemoryBuilder:
                     made.append((cid, it))
                     actions["commitment"] += 1
                     kept_text.append(
-                        f"{it.owner} committed: {it.task} due {it.due} {it.source_lines}"
+                        f"{owner_key(it.owner, it.owner_candidates)} committed: {it.task} "
+                        f"due {it.due} {it.source_lines}"
                     )
                 elif isinstance(it, ExtractedUpdate):
                     target = self._match_commitment(it, open_cs, made)
@@ -363,11 +374,13 @@ class MemoryBuilder:
                 return int(mt.group(1))
         want = _tokens(u.task)
         best, best_score = None, 0.0
-        cands = [(c.id, c.owner, c.task) for c in open_cs] + [(i, c.owner, c.task) for i, c in made]
+        cands = [(c.id, c.owner, c.task) for c in open_cs] + [
+            (i, owner_key(c.owner, c.owner_candidates), c.task) for i, c in made
+        ]
         for cid, owner, task in cands:
             have = _tokens(task)
             score = len(want & have) / max(1, len(want | have)) + (
-                0.3 if snake(u.owner) == owner else 0
+                0.3 if owner_key(u.owner, u.owner_candidates) == owner else 0
             )
             if score > best_score:
                 best, best_score = cid, score

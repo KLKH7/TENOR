@@ -122,12 +122,12 @@ class ScriptedLLM:
     def turn(self, request: TurnRequest, model: str) -> TurnCompletion:
         self.requests.append(request)
         user = str(request.messages[0]["content"])
-        if request.prompt_id == "extract.v1":
+        if request.prompt_id == "extract.v2":
             title = user.split("\n", 1)[0].removeprefix("Meeting: ")
             if self.fail_on == title:
                 raise RuntimeError("simulated crash")
             return completion(self.extractions.get(title, extraction()), model, cache_read=2000)
-        if request.prompt_id == "entail.v1":
+        if request.prompt_id == "entail.v2":
             claims = [b for b in user.split("\n\n") if b.startswith("Claim ")]
             verdicts = [
                 {"index": i, "entailed": "NOT ENTAILED" not in c, "reason": "fake"}

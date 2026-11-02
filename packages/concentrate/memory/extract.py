@@ -21,7 +21,7 @@ from concentrate.core.models import MeetingNote
 from concentrate.llm.client import TurnRequest
 from concentrate.memory.schema import EXTRACTION_SCHEMA, Extraction
 
-EXTRACT_PROMPT = "extract.v1"
+EXTRACT_PROMPT = "extract.v2"  # v2: enhanced speaker labels; unresolved owners
 WINDOW_OVERLAP = 6
 EXTRACT_MAX_TOKENS = 16000
 _LOCAL = re.compile(r"^\[?(\d{1,4})\]?$")
