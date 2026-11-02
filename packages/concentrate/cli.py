@@ -794,6 +794,27 @@ def tune_c(
     typer.echo(f"{len(questions)} questions ({split}) · estimated total ≈ ${total:.2f}")
     if estimate_only:
         return
+    if total > BUDGET_CONFIRM_USD and not offline and not yes:
+        typer.confirm(
+            f"Estimated ${total:.2f} exceeds ${BUDGET_CONFIRM_USD:.0f}. Proceed?", abort=True
+        )
+    report = run_eval(
+        systems,
+        questions,
+        client,
+        seed=seed,
+        split=split,
+        budget_usd=float(os.environ.get("CONCENTRATE_BUDGET_USD") or 25),
+        out_dir=out,
+        notes=notes,
+        batch=batch,
+        latency_sample=latency_sample,
+        meta={"variants": names, "fixtures": str(NORTHWIND_XL)},
+    )
+    typer.echo((Path(report["paths"]["md"])).read_text())
+    typer.echo(f"spent ${report['meta']['spent_usd']:.2f} · report: {report['paths']['md']}")
+
+
 # -- workstream C: transcript-retirement curve --
 
 
@@ -921,15 +942,6 @@ def retire_curve(
         client,
         seed=seed,
         split=split,
-        budget_usd=float(os.environ.get("CONCENTRATE_BUDGET_USD") or 25),
-        out_dir=out,
-        notes=notes,
-        batch=batch,
-        latency_sample=latency_sample,
-        meta={"variants": names, "fixtures": str(NORTHWIND_XL)},
-    )
-    typer.echo((Path(report["paths"]["md"])).read_text())
-    typer.echo(f"spent ${report['meta']['spent_usd']:.2f} · report: {report['paths']['md']}")
         budget_usd=budget,
         out_dir=out,
         notes=notes,
