@@ -563,7 +563,7 @@ def retire_curve(
             for s in systems
             if not isinstance(s, SummariesOnlySystem)
         },
-        "order": [rt.label(n) for n in sorted(all_ns, key=lambda n: -1 if n is None else -n)],
+        "order": [rt.label(n) for n in rt.ordered(all_ns)],
         "kept": {rt.label(n): rt.tokens_kept(store_meetings, as_ofs, n) for n in all_ns},
         "retired_share": {rt.label(n): rt.retired_share(notes, as_ofs, n) for n in all_ns},
         "curve": rt.curve(rows, evidence, seed, pointers),

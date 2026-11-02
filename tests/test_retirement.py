@@ -15,6 +15,7 @@ from tests.test_baselines import HashEmbedder, _q, client, llm, notes  # noqa: F
 def test_parse_settings_and_cutoff() -> None:
     assert rt.parse_settings("inf, 30,14,7,0") == [None, 30, 14, 7, 0]
     assert rt.label(None) == "inf" and rt.label(7) == "7"
+    assert rt.ordered([7, None, 0, 30]) == [None, 30, 7, 0]
     as_of = date(2026, 10, 24)
     assert rt.is_retired(date(2026, 10, 16), as_of, 7)
     assert not rt.is_retired(date(2026, 10, 17), as_of, 7)  # exactly N days old: kept

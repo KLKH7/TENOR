@@ -58,6 +58,11 @@ def parse_settings(text: str) -> list[int | None]:
     return out
 
 
+def ordered(ns: Sequence[int | None]) -> list[int | None]:
+    """Plot order, from most to least transcript kept: ∞ first, then decreasing N."""
+    return sorted(ns, key=lambda n: (n is not None, -(n or 0)))
+
+
 def meeting_day(m: MeetingNote) -> date:
     return (m.scheduled_start or m.created_at).date()
 
