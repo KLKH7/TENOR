@@ -44,3 +44,21 @@ def test_renderers() -> None:
     assert say_thousands(312) == "three hundred twelve k"
     assert say_code("PAY", 212) == "PAY two twelve"
     assert say_date(date(2026, 11, 2)) == "November second"
+
+
+def test_written_form_matches_asr_smart_formatting() -> None:
+    from concentrate.core.spoken import written
+
+    cases = {
+        "So twenty five dollars a seat.": "So $25 a seat.",
+        "we're at three hundred twelve k ARR": "we're at 312K ARR",
+        "launches on October fourteenth.": "launches on October 14.",
+        "not on the fourteenth": "not on the 14th",
+        "PAY two twelve is done": "PAY 212 is done",
+        "forty percent of them": "40% of them",
+        "two or three times, wait a second": "two or three times, wait a second",
+        "one hundred and five people": "105 people",
+    }
+    for spoken, want in cases.items():
+        assert written(spoken) == want
+        assert written(want) == want  # idempotent

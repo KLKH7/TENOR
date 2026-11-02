@@ -17,17 +17,26 @@ from concentrate.synth.roster import PEOPLE
 
 
 class NoiseRates(BaseModel):
-    """Per-opportunity probabilities. Defaults approximate casual meeting speech."""
+    """Per-opportunity probabilities, calibrated on real Granola output (docs/FIDELITY_V2.md).
 
-    filler_per_word: float = 0.04
-    repeat_per_word: float = 0.015
-    false_start_per_turn: float = 0.06
+    v1 defaults (filler 0.04, repeat 0.015, false starts 0.06) gave 5-8x the real filler rate
+    and hyphenated false starts that Granola's ASR never emits; real remote passages also often
+    end without punctuation or trail off with "...", and numbers come out as digits, $ and %.
+    """
+
+    filler_per_word: float = 0.0035  # um/uh/you know/I mean, inserted before a word
+    like_per_word: float = 0.012  # discourse "like" (real speech: ~6 per 100 words, all senses)
+    repeat_per_word: float = 0.006
+    false_start_per_turn: float = 0.0  # "wo- word": never seen in real Granola transcripts
     name_mishear: float = 0.5  # per mention of a name that has known ASR variants
     homophone: float = 0.05
     drop_short_word: float = 0.01
+    no_end_punct: float = 0.12  # per remote passage: final period dropped
+    trail_off: float = 0.06  # per remote passage: ends with "..."
+    digit_share: float = 0.75  # per turn: numbers written as digits, $ and % (core.spoken)
 
 
-_FILLERS = ["um", "uh", "like", "you know", "I mean"]
+_FILLERS = ["um", "um", "uh", "uh", "you know", "I mean"]
 _HOMOPHONES = {"their": "there", "there": "their", "to": "too", "then": "than", "its": "it's",
                "your": "you're", "know": "no", "right": "write"}  # fmt: skip
 _SHORT = {"the", "a", "of", "to", "and", "that", "is"}
@@ -71,6 +80,8 @@ def _noisy_words(chunk: str, rng: random.Random, r: NoiseRates) -> str:
             continue
         if core and rng.random() < r.filler_per_word:  # not before bare punctuation
             out.append(rng.choice(_FILLERS) + ",")
+        elif core and out and rng.random() < r.like_per_word:
+            out.append("like")
         out.append(w)
         if core and core == w and rng.random() < r.repeat_per_word:  # "the the", not "feel? feel?"
             out.append(w)
@@ -89,6 +100,18 @@ def noisify(text: str, protect: tuple[str, ...], rng: random.Random, rates: Nois
         if first and not any(out.startswith(p) for p in protect):
             out = f"{first.rstrip(',.?!')}- {out}"
     return re.sub(r"\s+", " ", out).strip()
+
+
+def end_style(passage: str, rng: random.Random, rates: NoiseRates) -> str:
+    """Real remote passages often stop mid-thought: no final period, or a trailing "..."."""
+    if not passage.endswith("."):
+        return passage
+    r = rng.random()
+    if r < rates.trail_off:
+        return passage[:-1] + "..."
+    if r < rates.trail_off + rates.no_end_punct:
+        return passage[:-1]
+    return passage
 
 
 def split_sentences(text: str) -> list[str]:
@@ -112,6 +135,8 @@ def fragment(
     than 7 words are, with probability ``split_rate``, cut at one or two word boundaries
     (preferring commas). Cuts never fall inside a protected span.
     """
+    if len(text.split()) > 40:  # monologues mostly arrive as one long passage
+        keep_whole_rate = max(keep_whole_rate, 0.7)
     if rng.random() < keep_whole_rate:
         return [text.strip()] if text.strip() else []
     out: list[str] = []
@@ -132,6 +157,8 @@ def fragment(
         start = 0
         for c in [*cuts, len(sent)]:
             piece = sent[start:c].strip()
+            if piece.endswith(",") and rng.random() < 0.7:  # ASR passages rarely end on ","
+                piece = piece[:-1]
             if piece:
                 out.append(piece)
             start = c
@@ -139,4 +166,3 @@ def fragment(
 
 
 LEAD_INS = ["So", "Yeah", "Um", "Okay", "Right", "I mean", "And"]
-BACKCHANNELS = ["Yeah.", "Mm-hm.", "Right.", "Okay.", "Got it.", "Sure.", "Yep.", "Totally."]

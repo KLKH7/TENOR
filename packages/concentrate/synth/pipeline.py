@@ -33,7 +33,10 @@ from concentrate.synth.scenario import build_world
 from concentrate.synth.world import World
 
 # 1.1: artefact fixes (docs/FIDELITY.md a-e). XL v1 comes from git tag northwind-xl-v1.
-GENERATOR_VERSION = "northwind-1.1"
+# 2: realistic wording (docs/FIDELITY_V2.md): compositional filler, slot-scaled length,
+# calibrated noise, digits, heavy-tailed timing, richer summaries. Write XL v2 to
+# data/fixtures/large/northwind-xl-v2 (v1 stays in northwind-xl).
+GENERATOR_VERSION = "northwind-2"
 
 
 class SynthResult(BaseModel):
@@ -75,8 +78,9 @@ def directory(scale: str = "base") -> dict[str, Any]:
     }
 
 
-# Northwind-XL meetings are padded longer: real 30-minute meetings run thousands of words.
-PAD_FACTOR = {"base": 1.0, "xl": 2.5}
+# Filler words per calendar-slot minute is ``pad.WORDS_PER_SLOT_MINUTE * factor``. XL matches
+# real remote meetings (~3,500 words per 30 minutes); the committed base set stays shorter.
+PAD_FACTOR = {"base": 0.35, "xl": 1.0}
 
 
 def build(seed: int, scale: str = "base") -> World:

@@ -405,3 +405,22 @@ def hand_check(
             f"{name:<20} vs human: {s['agreement']:.1%} agree on correct/not "
             f"(kappa {s['kappa']:.2f}, n={s['n']}) · 3-way {s['agreement_3way']:.1%}"
         )
+
+
+# -- fidelity (workstream G) -------------------------------------------------------------------
+
+
+@app.command()
+def fidelity(
+    target: Annotated[
+        str, typer.Argument(help="Fixture directory, or a NoteStore .db (e.g. data/real.db).")
+    ],
+) -> None:
+    """Aggregate style statistics of a corpus (docs/FIDELITY_V2.md). Prints no transcript text."""
+    import json
+
+    from concentrate.synth.fidelity import fixture_corpus, report, store_corpus
+
+    path = Path(target)
+    corpus = store_corpus(path) if path.suffix == ".db" else fixture_corpus(path)
+    typer.echo(json.dumps(report(corpus), indent=1))

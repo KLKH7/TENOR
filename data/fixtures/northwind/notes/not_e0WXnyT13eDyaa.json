@@ -7,7 +7,7 @@
     "email": "priya@northwind.dev"
   },
   "created_at": "2026-09-25T10:00:12Z",
-  "updated_at": "2026-09-25T10:40:00Z",
+  "updated_at": "2026-09-25T10:27:00Z",
   "deleted_at": null,
   "web_url": "https://notes.granola.ai/d/16dbafc1-de38-09e5-9a3b-91d5ac83000d",
   "calendar_event": null,
@@ -23,8 +23,8 @@
     }
   ],
   "space_membership": [],
-  "summary_text": "Personal\nSam has PT on Tuesday mornings\nSam wants to own the design system",
-  "summary_markdown": "### Personal\n- Sam has PT on Tuesday mornings\n- Sam wants to own the design system",
+  "summary_text": "Personal\nSam wants to own the design system\nOn-call load and spreadsheet and workload\nReal issue may be follow ups rather than on-call load\nOn-call load is half done\nFeedback on on-call load from the data folks: they had the same question\nSpreadsheet is bigger than we scoped\nConcern with spreadsheet: that it's a bigger change than it looks\nSpreadsheet: nothing jumped out\nNo clear owner for spreadsheet\nWorkload: a couple of things looked off\nPreference to run it by support rather than do a quick spike\nTradeoffs and manager track and follow ups\nTradeoffs is way overdue\nTradeoffs is the obvious next thing\nFeedback on tradeoffs from someone on sales: they had some good ideas\nManager track is under control\nFollow ups: it's honestly fine\nEdge cases and risks and doc\nSuggestion to test it with a few users before touching edge cases\nRisks: nobody's really touched it in a while\nNo clear owner for doc",
+  "summary_markdown": "### Personal\n- Sam wants to own the design system\n\n### On-call load and spreadsheet and workload\n- Real issue may be follow ups rather than on-call load\n  - On-call load is half done\n  - Feedback on on-call load from the data folks: they had the same question\n- Spreadsheet is bigger than we scoped\n  - Concern with spreadsheet: that it's a bigger change than it looks\n  - Spreadsheet: nothing jumped out\n  - No clear owner for spreadsheet\n- Workload: a couple of things looked off\n- Preference to run it by support rather than do a quick spike\n\n### Tradeoffs and manager track and follow ups\n- Tradeoffs is way overdue\n  - Tradeoffs is the obvious next thing\n  - Feedback on tradeoffs from someone on sales: they had some good ideas\n- Manager track is under control\n- Follow ups: it's honestly fine\n\n### Edge cases and risks and doc\n- Suggestion to test it with a few users before touching edge cases\n- Risks: nobody's really touched it in a while\n- No clear owner for doc",
   "private_notes_text": null,
   "private_notes_markdown": null,
   "transcript": [
@@ -34,71 +34,215 @@
       },
       "text": "Hey, thanks for grabbing a room.",
       "start_time": "2026-09-25T10:00:29.047000Z",
-      "end_time": "2026-09-25T10:00:31.355000Z"
+      "end_time": "2026-09-25T10:00:31.047000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Anything I like, can do to unblock you? Let me pull up the doc so we're all looking at the same thing. I think the question really really about scope. I'd like more time for deep work if possible.",
-      "start_time": "2026-09-25T10:00:32.321000Z",
-      "end_time": "2026-09-25T10:00:48.821000Z"
+      "text": "The way I see it, that's basically what we saw with the edge cases on this.",
+      "start_time": "2026-09-25T10:00:31.552000Z",
+      "end_time": "2026-09-25T10:00:36.886000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Sorry, I was on mute. uh, I was saying I agree.",
-      "start_time": "2026-09-25T10:00:49.413000Z",
-      "end_time": "2026-09-25T10:00:53.643000Z"
+      "text": "Like, we lost a dozen tickets on the retro format the other day, kind of. Basically I'm cautiously optimistic like about the review process, which is fine.",
+      "start_time": "2026-09-25T10:00:47.923000Z",
+      "end_time": "2026-09-25T10:00:57.216000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Let's not go down that rabbit hole um, right now. I've been thinking a lot about where I want to grow. That's good to hear. Quick heads up, I've started physical therapy for my back on Tuesday mornings, so I'll be in late those like, days. That's good to hear.",
-      "start_time": "2026-09-25T10:00:54.096000Z",
-      "end_time": "2026-09-25T10:01:16.311000Z"
+      "text": "So we keep going back and forth on the spreadsheet and stuff. Right, and the thing I'd push on like is the ownership question and stuff.",
+      "start_time": "2026-09-25T10:01:08.479000Z",
+      "end_time": "2026-09-25T10:01:17.146000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Okay, so where did did we land on that last time? I'm not sure that's like, the right framing, honestly. Can we park that and come uh, back to it at the end? I've- I've been been thinking a lot about where I want you know, to grow. Yeah, I agree with that. The team dynamic feels good right um, now. Do we have any data on that or is you know, it gut feel? I'd- I'd like more time for deep work if possible. Can you share your screen? I think the question is really about scope. Can we park that and come um, back like, to it at the end? Let me pull up the doc so we're all looking at the the same thing.",
-      "start_time": "2026-09-25T10:01:16.905000Z",
-      "end_time": "2026-09-25T10:02:12.657000Z"
+      "text": "And it's less about the on-call load and more about the follow ups, at least for now.",
+      "start_time": "2026-09-25T10:01:17.204000Z",
+      "end_time": "2026-09-25T10:01:22.871000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Okay, so where did we land on that last time? uh, Bigger thing, I'd really like to own the design system. How are you feeling about the workload generally? Let's make sure we write down goals for next quarter. Hold on, my laptop is about to die, let me grab a charger. That's fair. I hadn't thought about it that way. Honestly, it's been a busy couple of weeks. Yeah, that makes sense to me. Right, right. Keep going. Can you share your screen?",
-      "start_time": "2026-09-25T10:02:12.985000Z",
-      "end_time": "2026-09-25T10:02:49.688000Z"
+      "text": "I think if the risks slips again, this is going to feel it. Yep, yep. So the last time we touched the edge cases it was mostly cosmetic, if that makes sense. Just to add, we lost like 15 calls on like the feedback over the weekend, or whatever. Anyway, the data folks keep asking about the shadowing idea, or whatever. Sorry, on this, it was slower than I expected, so yeah. So is the timeline still unclear, or did that change?",
+      "start_time": "2026-09-25T10:01:22.959000Z",
+      "end_time": "2026-09-25T10:01:53.154000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "I think that's mostly right, but there's a nuance there. Sorry, can you say that again? You cut out for a second.",
-      "start_time": "2026-09-25T10:02:50.320000Z",
-      "end_time": "2026-09-25T10:02:59.496000Z"
+      "text": "I think part of me wants to cut the scope, part of me thinks it's way more complicated than it looks. This is kind of the test case for the interview loop, for what it's worth. I feel like deep work time took like three weeks last time. Yeah, I saw that. From my side, the short version is the spreadsheet is bigger than we scoped.",
+      "start_time": "2026-09-25T10:01:53.220000Z",
+      "end_time": "2026-09-25T10:02:15.943000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "I- I think think that's mostly right, but there's a nuance there.",
-      "start_time": "2026-09-25T10:02:59.754000Z",
-      "end_time": "2026-09-25T10:03:04.369000Z"
+      "text": "Quick heads up, I've started physical therapy for my back on Tuesday mornings, so I'll be in late those days.",
+      "start_time": "2026-09-25T10:02:16.626000Z",
+      "end_time": "2026-09-25T10:02:23.292000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Sorry, can you say I mean, that again? You cut out for a second. I mean, Yeah, you know, I agree with that. How are you feeling about the workload generally? Let me you know, talk to Lena.",
-      "start_time": "2026-09-25T10:03:04.796000Z",
-      "end_time": "2026-09-25T10:03:20.967000Z"
+      "text": "The last time we touched the risks it was mostly fine, right. A couple of the engineers keep asking about the meeting load, kind of. On this, the docs don't match reality, at least for like now.",
+      "start_time": "2026-09-25T10:02:23.332000Z",
+      "end_time": "2026-09-25T10:02:36.833000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "So yeah, that's basically what we saw with stretch project um, on this. Plus my worry with the spreadsheet is that it's a bigger change than it looks.",
+      "start_time": "2026-09-25T10:02:36.923000Z",
+      "end_time": "2026-09-25T10:02:46.256000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Actually, the dependencies took like like five people last time, you know what I mean. From my side, the last time we touched the scope it was the obvious next thing, I think. Plus I was looking at the workload before this call and a couple of things looked off, honestly. Well, for this, I think the dependencies like is the part that's basically done. If the shadowing idea slips again, this is going to feel it. But did anyone look at the open questions over the weekend? Plus like if the notes from like last time slips again, this is going to feel it. From my side, our solutions engineer keep asking about the original proposal, at least for now.",
+      "start_time": "2026-09-25T10:02:47.749000Z",
+      "end_time": "2026-09-25T10:03:28.082000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I think the risk is how how it lands with people, in my opinion.",
+      "start_time": "2026-09-25T10:03:28.155000Z",
+      "end_time": "2026-09-25T10:03:32.822000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Okay, if we revisit it next cycle, then the on-call load gets a lot easier. Look, we should probably map out the edge cases before we touch the priority list. I keep coming back to the handoff, you know what I mean. Okay, so the tradeoffs is way overdue, but the review process is low risk.",
+      "start_time": "2026-09-25T10:03:36.934000Z",
+      "end_time": "2026-09-25T10:03:56.011000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Basically I think the risk is is that we end up rebuilding it, to be honest. Right, and we said we'd map out the edge cases and then the workload happened. Yeah, I think for this, I think the timeline is the part that's under control. So I'd rather run it by support than do a quick spike, which is fine. It's funny, the timeline looked not like urgent after standup and now it seems to come and go. And do we know who's looking at the conference talk? Anyway, the short version is the manager track is under control, honestly. Plus can we test it with a few users?",
+      "start_time": "2026-09-25T10:03:56.878000Z",
+      "end_time": "2026-09-25T10:04:33.545000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Makes sense.",
+      "start_time": "2026-09-25T10:04:33.635000Z",
+      "end_time": "2026-09-25T10:04:34.301000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "If we check with legal, then the dependencies gets a lot easier. For what it's worth, the last time we touched the requirements it was not where I'd want it, I like don't know.",
+      "start_time": "2026-09-25T10:04:35.744000Z",
+      "end_time": "2026-09-25T10:04:47.077000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Mm-hm. I was looking at the follow ups this morning and it's honestly fine, anyway. Real quick, for this specifically, the tradeoffs is the obvious next thing, if that makes sense.",
+      "start_time": "2026-09-25T10:04:47.132000Z",
+      "end_time": "2026-09-25T10:05:08.906000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "So should we just keep it behind a like flag?",
+      "start_time": "2026-09-25T10:05:09.339000Z",
+      "end_time": "2026-09-25T10:05:12.673000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Yeah, so for this specifically, the side project is a rabbit hole. I think it's like, the on-call load is half done and nobody wants to say it. Yeah no, on this, there are a few loose ends and stuff. Honestly, we should probably test it with a few users before we touch the edge cases. So does the risks actually matter for this?",
+      "start_time": "2026-09-25T10:05:12.881000Z",
+      "end_time": "2026-09-25T10:05:34.215000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Well, we keep going back and forth on the manager track and stuff. Bigger thing, I'd really like to own the design system.",
+      "start_time": "2026-09-25T10:05:34.296000Z",
+      "end_time": "2026-09-25T10:05:42.036000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I guess we've been saying uh, we'd sanity check the assumptions for a while, or whatever. But we lost a week or two on the team dynamic earlier. Can you scroll down a bit? Look, I spent like 15 minutes on the communication plan and it was slower than I expected. I wouldn't block on the next steps, which is fine. Mm-hm.",
+      "start_time": "2026-09-25T10:05:42.067000Z",
+      "end_time": "2026-09-25T10:06:07.522000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Yeah, there's a world where we map out the edge cases and the metrics just goes away. So do we know who's looking at the timeline? Okay yeah, part of me wants to get more data, part of me thinks it's the scary part.",
+      "start_time": "2026-09-25T10:06:09.173000Z",
+      "end_time": "2026-09-25T10:06:23.840000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Real quick, on this, we're doing it two different ways, or whatever. Funny enough, I just want to make sure the career ladder doesn't fall through the cracks.",
+      "start_time": "2026-09-25T10:06:24.005000Z",
+      "end_time": "2026-09-25T10:06:33.367000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "It's funny, the metrics looked kind of fragile honestly last night and now I had more questions than answers. Right, right.",
+      "start_time": "2026-09-25T10:06:34.034000Z",
+      "end_time": "2026-09-25T10:06:41.839000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Oh, I was looking at the risks over the weekend and nobody's really touched it in a while, or whatever. Real quick, how did you know, the communication plan go? I feel like part of me wants to cut the scope, part of me thinks it's pretty close. Okay yeah, I talked to someone on sales about the tradeoffs and they had some good ideas. Anyway, I talked to the data folks about the on-call load and they had the same question.",
+      "start_time": "2026-09-25T10:06:42.130000Z",
+      "end_time": "2026-09-25T10:07:20.167000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "But I was looking at uh, the spreadsheet a while back and nothing jumped out. To be fair, nobody really owns doc right now, in my opinion.",
+      "start_time": "2026-09-25T10:07:21.530000Z",
+      "end_time": "2026-09-25T10:07:30.530000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Just to add, I wouldn't block on the scope, I think. Okay, so nobody really owns the spreadsheet right now, if that helps. um, Let me talk to Lena.",
+      "start_time": "2026-09-25T10:07:30.596000Z",
+      "end_time": "2026-09-25T10:07:40.304000Z"
     }
   ]
 }

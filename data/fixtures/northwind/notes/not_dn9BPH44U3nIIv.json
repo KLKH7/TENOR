@@ -67,658 +67,826 @@
     }
   ],
   "space_membership": [],
-  "summary_text": "Driftwood Retail\nDriftwood renews for 6 months\nDriftwood needs bulk user import",
-  "summary_markdown": "### Driftwood Retail\n- Driftwood renews for 6 months\n- Driftwood needs bulk user import",
-  "private_notes_text": "driftwood needs bulk user import",
-  "private_notes_markdown": "driftwood needs bulk user import",
+  "summary_text": "Driftwood Retail\nDriftwood renews for 6 months\nDriftwood needs bulk user import\nPermissions model and contract redlines and onboarding calls\nPermissions model is on the critical path\nContract redlines is still pretty rough\nContract redlines and edge cases seen as one underlying problem\nOpen question: what the plan is for onboarding calls\nEscalation path and executive sponsor and feedback\nEscalation path: i had more questions than answers\nReal issue may be permissions model rather than escalation path\nReal issue may be feedback from their managers rather than executive sponsor\nFeedback is not urgent\nSlack thread and requirements and follow ups\nSlack thread is a little behind\nRequirements is a nice to have\nFollow ups is better than last week",
+  "summary_markdown": "### Driftwood Retail\n- Driftwood renews for 6 months\n- Driftwood needs bulk user import\n\n### Permissions model and contract redlines and onboarding calls\n- Permissions model is on the critical path\n- Contract redlines is still pretty rough\n  - Contract redlines and edge cases seen as one underlying problem\n- Open question: what the plan is for onboarding calls\n\n### Escalation path and executive sponsor and feedback\n- Escalation path: i had more questions than answers\n  - Real issue may be permissions model rather than escalation path\n- Real issue may be feedback from their managers rather than executive sponsor\n- Feedback is not urgent\n\n### Slack thread and requirements and follow ups\n- Slack thread is a little behind\n- Requirements is a nice to have\n- Follow ups is better than last week",
+  "private_notes_text": "driftwood renews for 6 months\ndriftwood needs bulk user import",
+  "private_notes_markdown": "driftwood renews for 6 months\ndriftwood needs bulk user import",
   "transcript": [
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "Morning all.",
+      "text": "And.",
       "start_time": "2026-10-16T17:02:17.135000Z",
-      "end_time": "2026-10-16T17:02:17.935000Z"
+      "end_time": "2026-10-16T17:02:17.735000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "And.",
-      "start_time": "2026-10-16T17:02:18.843000Z",
-      "end_time": "2026-10-16T17:02:19.643000Z"
+      "text": "Morning all.",
+      "start_time": "2026-10-16T17:02:27.949000Z",
+      "end_time": "2026-10-16T17:02:28.616000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "That's fair.",
-      "start_time": "2026-10-16T17:02:20.449000Z",
-      "end_time": "2026-10-16T17:02:21.249000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "I hadn't thought about it that way.",
-      "start_time": "2026-10-16T17:02:21.925000Z",
-      "end_time": "2026-10-16T17:02:24.617000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "So.",
-      "start_time": "2026-10-16T17:02:24.955000Z",
-      "end_time": "2026-10-16T17:02:25.755000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Can you share your screen?",
-      "start_time": "2026-10-16T17:02:26.911000Z",
-      "end_time": "2026-10-16T17:02:28.834000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Can we park that and come back to um, it at the end?",
-      "start_time": "2026-10-16T17:02:29.142000Z",
-      "end_time": "2026-10-16T17:02:34.142000Z"
+      "text": "And I think the permissions model is on the critical path and the communication plan is unclear, so maybe make it someone's job. So the contract redlines is still pretty rough, in my opinion. I feel like on Driftwood Retail, there are a few loose ends, more or less. And what would it take to look at it with fresh eyes? Anyway, what's the plan for the onboarding calls? Which, I wouldn't block on the metrics, at least for now. To be fair, I'm cautiously optimistic about the original proposal, honestly. Also, I wouldn't block on the rollout plan, for what it's worth.",
+      "start_time": "2026-10-16T17:02:28.617000Z",
+      "end_time": "2026-10-16T17:03:02.950000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Sure.",
-      "start_time": "2026-10-16T17:02:32.959000Z",
-      "end_time": "2026-10-16T17:02:33.559000Z"
+      "text": "Okay.",
+      "start_time": "2026-10-16T17:02:52.019000Z",
+      "end_time": "2026-10-16T17:02:52.619000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "I",
-      "start_time": "2026-10-16T17:02:34.449000Z",
-      "end_time": "2026-10-16T17:02:35.249000Z"
+      "text": "Yeah, yeah, my worry with the trial period is that we don't have enough signal yet.",
+      "start_time": "2026-10-16T17:03:10.064000Z",
+      "end_time": "2026-10-16T17:03:15.397000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "think the question is really about scope.",
-      "start_time": "2026-10-16T17:02:36.188000Z",
-      "end_time": "2026-10-16T17:02:38.881000Z"
+      "text": "But I just want to make sure the sandbox account doesn't fall through the cracks.",
+      "start_time": "2026-10-16T17:03:19.635000Z",
+      "end_time": "2026-10-16T17:03:24.635000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Which, I keep coming back to the action items, for what like it's worth.",
+      "start_time": "2026-10-16T17:03:24.646000Z",
+      "end_time": "2026-10-16T17:03:29.313000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "I keep coming back to the timeline, more or less.",
+      "start_time": "2026-10-16T17:03:29.387000Z",
+      "end_time": "2026-10-16T17:03:32.721000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Does the",
+      "start_time": "2026-10-16T17:03:32.774000Z",
+      "end_time": "2026-10-16T17:03:33.440000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "open questions actually matter for Driftwood Retail?",
+      "start_time": "2026-10-16T17:03:33.527000Z",
+      "end_time": "2026-10-16T17:03:35.860000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "And we lost twelve steps on the security questionnaire last night, honestly.",
+      "start_time": "2026-10-16T17:03:35.886000Z",
+      "end_time": "2026-10-16T17:03:39.886000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "On Driftwood Retail, it's been quiet",
+      "start_time": "2026-10-16T17:03:39.910000Z",
+      "end_time": "2026-10-16T17:03:41.910000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "if that makes sense.",
+      "start_time": "2026-10-16T17:03:41.959000Z",
+      "end_time": "2026-10-16T17:03:43.293000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "The way I see it",
+      "start_time": "2026-10-16T17:03:43.371000Z",
+      "end_time": "2026-10-16T17:03:45.038000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "for Driftwood Retail specifically",
+      "start_time": "2026-10-16T17:03:45.136000Z",
+      "end_time": "2026-10-16T17:03:46.469000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "the tradeoffs is a bit of a black box, if that makes sense.",
+      "start_time": "2026-10-16T17:03:46.544000Z",
+      "end_time": "2026-10-16T17:03:50.877000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "That's a common request from customers your size.",
-      "start_time": "2026-10-16T17:02:39.901000Z",
-      "end_time": "2026-10-16T17:02:42.978000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Let me pull up the doc so we're all looking at at the same thing.",
-      "start_time": "2026-10-16T17:02:44.104000Z",
-      "end_time": "2026-10-16T17:02:49.874000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Hold on, you know, my laptop is uh, about to die,",
-      "start_time": "2026-10-16T17:02:50.665000Z",
-      "end_time": "2026-10-16T17:02:54.895000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "um,",
-      "start_time": "2026-10-16T17:02:55.580000Z",
-      "end_time": "2026-10-16T17:02:56.380000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "let me grab a charger.",
-      "start_time": "2026-10-16T17:02:56.803000Z",
-      "end_time": "2026-10-16T17:02:58.726000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "you know, Our managers mostly um, live in email, if that helps.",
-      "start_time": "2026-10-16T17:02:59.386000Z",
-      "end_time": "2026-10-16T17:03:04.001000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "So.",
-      "start_time": "2026-10-16T17:03:05.193000Z",
-      "end_time": "2026-10-16T17:03:05.993000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Our procurement process can be a bit slow, just so you know.",
-      "start_time": "2026-10-16T17:03:06.399000Z",
-      "end_time": "2026-10-16T17:03:11.014000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "And.",
-      "start_time": "2026-10-16T17:03:11.638000Z",
-      "end_time": "2026-10-16T17:03:12.438000Z"
+      "text": "Sorry, we lost about 30 tickets on the doc last week, for what it's worth. Yeah, I wouldn't block on the trial period, anyway",
+      "start_time": "2026-10-16T17:03:59.528000Z",
+      "end_time": "2026-10-16T17:04:07.528000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
       "text": "My coffee machine broke so apologies in advance.",
-      "start_time": "2026-10-16T17:03:13.490000Z",
-      "end_time": "2026-10-16T17:03:16.567000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Right, right. Keep going.",
-      "start_time": "2026-10-16T17:03:16.824000Z",
-      "end_time": "2026-10-16T17:03:18.362000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Yeah.",
-      "start_time": "2026-10-16T17:03:19.383000Z",
-      "end_time": "2026-10-16T17:03:20.183000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "That's a a common request from customers your size.",
-      "start_time": "2026-10-16T17:03:21.145000Z",
-      "end_time": "2026-10-16T17:03:24.607000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Um.",
-      "start_time": "2026-10-16T17:03:25.453000Z",
-      "end_time": "2026-10-16T17:03:26.253000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Do we have any data on that or or is it gut feel?",
-      "start_time": "2026-10-16T17:03:27.432000Z",
-      "end_time": "2026-10-16T17:03:32.432000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Is there anyone else on your I mean,",
-      "start_time": "2026-10-16T17:03:32.785000Z",
-      "end_time": "2026-10-16T17:03:35.862000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "side we should loop in?",
-      "start_time": "2026-10-16T17:03:36.310000Z",
-      "end_time": "2026-10-16T17:03:38.233000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Yeah, that makes sense to me.",
-      "start_time": "2026-10-16T17:03:38.437000Z",
-      "end_time": "2026-10-16T17:03:40.745000Z"
+      "start_time": "2026-10-16T17:04:14.370000Z",
+      "end_time": "2026-10-16T17:04:17.036000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "That's fair.",
-      "start_time": "2026-10-16T17:03:41.646000Z",
-      "end_time": "2026-10-16T17:03:42.446000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "I hadn't thought about it uh, that way.",
-      "start_time": "2026-10-16T17:03:43.513000Z",
-      "end_time": "2026-10-16T17:03:46.590000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Can you you know, walk me through how that process works I mean, today?",
-      "start_time": "2026-10-16T17:03:47.045000Z",
-      "end_time": "2026-10-16T17:03:52.429000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Right, right.",
-      "start_time": "2026-10-16T17:03:53.270000Z",
-      "end_time": "2026-10-16T17:03:54.070000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Keep going.",
-      "start_time": "2026-10-16T17:03:54.976000Z",
-      "end_time": "2026-10-16T17:03:55.776000Z"
+      "text": "Basically we keep going like back and forth on the roadmap call, anyway.",
+      "start_time": "2026-10-16T17:04:17.109000Z",
+      "end_time": "2026-10-16T17:04:21.442000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "We'll renew, but six months, not a year.",
-      "start_time": "2026-10-16T17:03:55.986000Z",
-      "end_time": "2026-10-16T17:03:59.063000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Let's see how the new onboarding does.",
-      "start_time": "2026-10-16T17:03:59.869000Z",
-      "end_time": "2026-10-16T17:04:02.562000Z"
+      "text": "Like, it's funny, the user provisioning looked under control the other day and now there's more going on than I thought. Honestly, for Driftwood Retail specifically, the dependencies is not urgent, you know what I mean",
+      "start_time": "2026-10-16T17:04:22.169000Z",
+      "end_time": "2026-10-16T17:04:34.169000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Our managers mostly live in um, email, if that helps.",
-      "start_time": "2026-10-16T17:04:03.397000Z",
-      "end_time": "2026-10-16T17:04:07.243000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Our procurement process can be a bit slow,",
-      "start_time": "2026-10-16T17:04:08.355000Z",
-      "end_time": "2026-10-16T17:04:11.432000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "like, just so you know.",
-      "start_time": "2026-10-16T17:04:12.046000Z",
-      "end_time": "2026-10-16T17:04:13.969000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Hold on, my laptop is about to die, let me I mean, grab a charger.",
-      "start_time": "2026-10-16T17:04:15.111000Z",
-      "end_time": "2026-10-16T17:04:20.880000Z"
+      "text": "That's basically what we saw with the support tickets on Driftwood Retail.",
+      "start_time": "2026-10-16T17:04:34.191000Z",
+      "end_time": "2026-10-16T17:04:38.191000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "Yeah.",
-      "start_time": "2026-10-16T17:04:18.106000Z",
-      "end_time": "2026-10-16T17:04:18.706000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Sorry, I was on mute.",
-      "start_time": "2026-10-16T17:04:21.735000Z",
-      "end_time": "2026-10-16T17:04:23.658000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "I like, was saying I agree.",
-      "start_time": "2026-10-16T17:04:23.873000Z",
-      "end_time": "2026-10-16T17:04:26.181000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Um.",
-      "start_time": "2026-10-16T17:04:26.867000Z",
-      "end_time": "2026-10-16T17:04:27.667000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Yeah, I agree with that.",
-      "start_time": "2026-10-16T17:04:27.920000Z",
-      "end_time": "2026-10-16T17:04:29.843000Z"
+      "text": "Okay, so we've been saying we'd split it into like two pieces for a while, so yeah. And it's like, the email digests is a bit messy and nobody wants to say it. Anyway, on Driftwood Retail, a couple of things looked off, if that makes sense. But I was looking at the escalation path after standup and I had more questions than answers, or whatever. Where are we on the handoff for Driftwood Retail? Yeah, I think it's less about the escalation path like and more about the permissions permissions model. But I don't like know if the permissions model is really the issue, at least for now.",
+      "start_time": "2026-10-16T17:04:38.231000Z",
+      "end_time": "2026-10-16T17:05:14.564000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Sorry, I mean, I was on mute.",
-      "start_time": "2026-10-16T17:04:30.953000Z",
-      "end_time": "2026-10-16T17:04:33.645000Z"
+      "text": "Exactly.",
+      "start_time": "2026-10-16T17:05:05.404000Z",
+      "end_time": "2026-10-16T17:05:06.004000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "I was saying I agree.",
-      "start_time": "2026-10-16T17:04:34.612000Z",
-      "end_time": "2026-10-16T17:04:36.535000Z"
+      "text": "Same.",
+      "start_time": "2026-10-16T17:05:14.923000Z",
+      "end_time": "2026-10-16T17:05:15.523000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "I'm um, not sure that's the right framing, honestly.",
-      "start_time": "2026-10-16T17:04:37.708000Z",
-      "end_time": "2026-10-16T17:04:41.170000Z"
+      "text": "And.",
+      "start_time": "2026-10-16T17:05:15.573000Z",
+      "end_time": "2026-10-16T17:05:16.173000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Yeah",
+      "start_time": "2026-10-16T17:05:16.196000Z",
+      "end_time": "2026-10-16T17:05:16.796000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "the roadmap call came up after standup too",
+      "start_time": "2026-10-16T17:05:16.891000Z",
+      "end_time": "2026-10-16T17:05:19.557000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "to be honest.",
+      "start_time": "2026-10-16T17:05:19.565000Z",
+      "end_time": "2026-10-16T17:05:20.565000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I guess it's less about the executive sponsor and more about the feedback from their managers.",
+      "start_time": "2026-10-16T17:05:21.174000Z",
+      "end_time": "2026-10-16T17:05:26.507000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "Thanks for uh,",
-      "start_time": "2026-10-16T17:04:41.759000Z",
-      "end_time": "2026-10-16T17:04:42.913000Z"
+      "text": "We'll renew,",
+      "start_time": "2026-10-16T17:05:26.541000Z",
+      "end_time": "2026-10-16T17:05:27.208000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "the context, that's super helpful.",
-      "start_time": "2026-10-16T17:04:43.977000Z",
-      "end_time": "2026-10-16T17:04:45.900000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "That's- That's really useful feedback, I'm writing it down.",
-      "start_time": "2026-10-16T17:04:46.474000Z",
-      "end_time": "2026-10-16T17:04:49.935000Z"
+      "text": "but six months, not a year.",
+      "start_time": "2026-10-16T17:05:27.460000Z",
+      "end_time": "2026-10-16T17:05:29.460000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "Can we park um, that come back to it at the end?",
-      "start_time": "2026-10-16T17:04:50.726000Z",
-      "end_time": "2026-10-16T17:04:55.342000Z"
+      "text": "Let's see how the new onboarding does...",
+      "start_time": "2026-10-16T17:05:29.552000Z",
+      "end_time": "2026-10-16T17:05:31.886000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "And we need bulk user import, adding uh, three hundred store staff by hand is not happening.",
-      "start_time": "2026-10-16T17:04:55.767000Z",
-      "end_time": "2026-10-16T17:05:02.306000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "I think that's mostly right, but there's a nuance there.",
-      "start_time": "2026-10-16T17:05:03.454000Z",
-      "end_time": "2026-10-16T17:05:07.300000Z"
+      "text": "Can everyone hear like me okay?",
+      "start_time": "2026-10-16T17:05:32.266000Z",
+      "end_time": "2026-10-16T17:05:34.266000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "Can- Can you walk me through how that process works today?",
-      "start_time": "2026-10-16T17:05:07.879000Z",
-      "end_time": "2026-10-16T17:05:12.109000Z"
+      "text": "Okay, the executive sponsor took like a week or two last time, or whatever.",
+      "start_time": "2026-10-16T17:05:34.297000Z",
+      "end_time": "2026-10-16T17:05:38.963000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "How are your",
-      "start_time": "2026-10-16T17:05:13.234000Z",
-      "end_time": "2026-10-16T17:05:14.388000Z"
+      "text": "The Slack thread took like 15 minutes last time, to be honest.",
+      "start_time": "2026-10-16T17:05:38.967000Z",
+      "end_time": "2026-10-16T17:05:42.967000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "teams using it day to day right now?",
-      "start_time": "2026-10-16T17:05:15.048000Z",
-      "end_time": "2026-10-16T17:05:18.125000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Let me pull you know, up the doc so we're all looking at the same thing.",
-      "start_time": "2026-10-16T17:05:19.009000Z",
-      "end_time": "2026-10-16T17:05:25.163000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Yeah.",
-      "start_time": "2026-10-16T17:05:25.653000Z",
-      "end_time": "2026-10-16T17:05:26.453000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Let's not go down that rabbit hole right now.",
-      "start_time": "2026-10-16T17:05:26.835000Z",
-      "end_time": "2026-10-16T17:05:30.296000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Honestly, the team likes you know, it so far.",
-      "start_time": "2026-10-16T17:05:31.210000Z",
-      "end_time": "2026-10-16T17:05:34.672000Z"
+      "text": "Okay.",
+      "start_time": "2026-10-16T17:05:43.016000Z",
+      "end_time": "2026-10-16T17:05:43.616000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "Okay, I mean, so where did we land on that last time?",
-      "start_time": "2026-10-16T17:05:34.910000Z",
-      "end_time": "2026-10-16T17:05:39.525000Z"
+      "text": "When I looked at the support tickets for Driftwood Retail, there are a few loose ends.",
+      "start_time": "2026-10-16T17:05:43.626000Z",
+      "end_time": "2026-10-16T17:05:48.959000Z"
     },
     {
       "speaker": {
         "source": "microphone"
+      },
+      "text": "Sorry, which tab is that?",
+      "start_time": "2026-10-16T17:05:49.859000Z",
+      "end_time": "2026-10-16T17:05:51.526000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "I feel like for Driftwood Retail specifically, the trial period is better than last week, in my opinion. So the integration with their HR system came up like before this call too.",
+      "start_time": "2026-10-16T17:05:52.088000Z",
+      "end_time": "2026-10-16T17:06:02.755000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Well, the the short version is the feedback is not urgent, or whatever. Basically I spent eight screens on the trial period and I got kind of lost.",
+      "start_time": "2026-10-16T17:06:02.832000Z",
+      "end_time": "2026-10-16T17:06:12.165000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Okay yeah, it's funny, the communication plan looked sort of on hold this morning and now it seems to come and go. So for Driftwood Retail specifically, the handoff is half done, honestly. So if we timebox it, then the priority list gets a lot easier. So when I looked at the escalation path for Driftwood Retail, it's been quiet. Which, how did the ownership question go?",
+      "start_time": "2026-10-16T17:06:12.184000Z",
+      "end_time": "2026-10-16T17:06:34.517000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Okay.",
+      "start_time": "2026-10-16T17:06:34.635000Z",
+      "end_time": "2026-10-16T17:06:35.235000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "write, and for Driftwood Retail, I think the user provisioning is the part that's sort of on hold",
+      "start_time": "2026-10-16T17:06:35.856000Z",
+      "end_time": "2026-10-16T17:06:41.856000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Okay.",
+      "start_time": "2026-10-16T17:06:39.640000Z",
+      "end_time": "2026-10-16T17:06:40.240000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
       },
       "text": "I mean.",
-      "start_time": "2026-10-16T17:05:39.838000Z",
-      "end_time": "2026-10-16T17:05:40.638000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "We've had some internal changes on our side, so bear with us.",
-      "start_time": "2026-10-16T17:05:41.434000Z",
-      "end_time": "2026-10-16T17:05:46.049000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Okay, so where did we land on that last time?",
-      "start_time": "2026-10-16T17:05:46.611000Z",
-      "end_time": "2026-10-16T17:05:50.457000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Can like, you share your screen?",
-      "start_time": "2026-10-16T17:05:51.104000Z",
-      "end_time": "2026-10-16T17:05:53.411000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Do we have any data on that or is it gut feel?",
-      "start_time": "2026-10-16T17:05:53.618000Z",
-      "end_time": "2026-10-16T17:05:58.234000Z"
+      "start_time": "2026-10-16T17:06:41.913000Z",
+      "end_time": "2026-10-16T17:06:42.579000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "Sorry, like, can you say um, that again? You cut out for a second.",
-      "start_time": "2026-10-16T17:05:59.351000Z",
-      "end_time": "2026-10-16T17:06:04.735000Z"
+      "text": "Yeah, yeah.",
+      "start_time": "2026-10-16T17:06:42.618000Z",
+      "end_time": "2026-10-16T17:06:43.284000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "Let's not not go uh,",
-      "start_time": "2026-10-16T17:06:05.647000Z",
-      "end_time": "2026-10-16T17:06:07.570000Z"
+      "text": "Right.",
+      "start_time": "2026-10-16T17:06:43.350000Z",
+      "end_time": "2026-10-16T17:06:43.950000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "down that rabbit hole hole right now.",
-      "start_time": "2026-10-16T17:06:07.859000Z",
-      "end_time": "2026-10-16T17:06:10.551000Z"
+      "text": "The way I see it,",
+      "start_time": "2026-10-16T17:06:43.952000Z",
+      "end_time": "2026-10-16T17:06:45.619000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "it's like",
+      "start_time": "2026-10-16T17:06:45.664000Z",
+      "end_time": "2026-10-16T17:06:46.330000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "the dependencies is not where I'd want it and nobody wants to say it.",
+      "start_time": "2026-10-16T17:06:46.421000Z",
+      "end_time": "2026-10-16T17:06:51.088000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "I keep coming back to the spreadsheet, kind of...",
+      "start_time": "2026-10-16T17:06:51.690000Z",
+      "end_time": "2026-10-16T17:06:54.690000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Oh, okay.",
+      "start_time": "2026-10-16T17:06:53.949000Z",
+      "end_time": "2026-10-16T17:06:54.549000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Can we write it down?",
+      "start_time": "2026-10-16T17:06:54.721000Z",
+      "end_time": "2026-10-16T17:06:56.387000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "And then I spent like like five people on the support tickets and there's more going on than I thought.",
+      "start_time": "2026-10-16T17:06:57.592000Z",
+      "end_time": "2026-10-16T17:07:04.258000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "But it feels like the scope",
+      "start_time": "2026-10-16T17:07:04.259000Z",
+      "end_time": "2026-10-16T17:07:06.259000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "and the requirements are kind of the same problem.",
+      "start_time": "2026-10-16T17:07:06.641000Z",
+      "end_time": "2026-10-16T17:07:09.641000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Oh, there's a world where we look at it with fresh eyes and the ownership question just goes away.",
+      "start_time": "2026-10-16T17:07:09.706000Z",
+      "end_time": "2026-10-16T17:07:16.040000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Well, the annoying thing about the data residency question is it's hard to reason about.",
+      "start_time": "2026-10-16T17:07:16.089000Z",
+      "end_time": "2026-10-16T17:07:21.089000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Which,",
+      "start_time": "2026-10-16T17:07:21.186000Z",
+      "end_time": "2026-10-16T17:07:21.786000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "it feels like the contract redlines edge cases are kind of the same problem.",
+      "start_time": "2026-10-16T17:07:21.837000Z",
+      "end_time": "2026-10-16T17:07:26.503000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Right.",
+      "start_time": "2026-10-16T17:07:26.955000Z",
+      "end_time": "2026-10-16T17:07:27.555000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "So yeah",
+      "start_time": "2026-10-16T17:07:27.647000Z",
+      "end_time": "2026-10-16T17:07:28.314000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "the last time we touched the data residency question it was on the critical path",
+      "start_time": "2026-10-16T17:07:28.681000Z",
+      "end_time": "2026-10-16T17:07:33.681000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "anyway.",
+      "start_time": "2026-10-16T17:07:33.758000Z",
+      "end_time": "2026-10-16T17:07:34.358000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "I spent like five people on the legal review and a couple of things looked off.",
+      "start_time": "2026-10-16T17:07:35.942000Z",
+      "end_time": "2026-10-16T17:07:41.276000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "A few customers mentioned the permissions model on Friday, so it's on people's radar.",
+      "start_time": "2026-10-16T17:07:41.334000Z",
+      "end_time": "2026-10-16T17:07:46Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "And then Driftwood Retail is kind of the test case for the escalation path, honestly.",
+      "start_time": "2026-10-16T17:07:46.083000Z",
+      "end_time": "2026-10-16T17:07:51.083000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Look,",
+      "start_time": "2026-10-16T17:07:51.129000Z",
+      "end_time": "2026-10-16T17:07:51.729000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "honestly the security questionnaire only needs most of the afternoon if we split it into two two pieces",
+      "start_time": "2026-10-16T17:07:51.792000Z",
+      "end_time": "2026-10-16T17:07:57.792000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "And the annoying thing about the support",
+      "start_time": "2026-10-16T17:07:57.854000Z",
+      "end_time": "2026-10-16T17:08:00.187000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "tickets is it's a rabbit hole.",
+      "start_time": "2026-10-16T17:08:00.780000Z",
+      "end_time": "2026-10-16T17:08:02.780000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "And.",
+      "start_time": "2026-10-16T17:08:02.829000Z",
+      "end_time": "2026-10-16T17:08:03.429000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "And we need bulk user import, adding three hundred store staff by hand is not happening.",
+      "start_time": "2026-10-16T17:08:03.509000Z",
+      "end_time": "2026-10-16T17:08:08.843000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Yeah no, on Driftwood Retail, half of it is outdated. Plus like the tradeoffs is under control, kind of.",
+      "start_time": "2026-10-16T17:08:09.855000Z",
+      "end_time": "2026-10-16T17:08:16.189000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Okay yeah, for Driftwood Retail, I think SSO setup is the part that's surprisingly okay. The thing I'd push on is the sandbox account, if that makes sense.",
+      "start_time": "2026-10-16T17:08:16.407000Z",
+      "end_time": "2026-10-16T17:08:25.740000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "To be fair, I'd like love to test it with a few users, but the trial period is hard to reason about",
+      "start_time": "2026-10-16T17:08:33.186000Z",
+      "end_time": "2026-10-16T17:08:40.519000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Oh, we've been saying we'd split it into two pieces for a while. Okay, so on Driftwood Retail, like the feedback was mixed, I don't know",
+      "start_time": "2026-10-16T17:08:40.933000Z",
+      "end_time": "2026-10-16T17:08:49.600000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Honestly, the short version is the legal review is way overdue, which is fine. Actually, when I looked at the action items for Driftwood Retail, people seem confused by it.",
+      "start_time": "2026-10-16T17:08:49.664000Z",
+      "end_time": "2026-10-16T17:08:59.664000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Right, so I think the risk is how it lands with people, but yeah. Sorry, do like we know who's looking at the Slack thread?",
+      "start_time": "2026-10-16T17:09:00.665000Z",
+      "end_time": "2026-10-16T17:09:08.999000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Interesting.",
+      "start_time": "2026-10-16T17:09:07.999000Z",
+      "end_time": "2026-10-16T17:09:08.599000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Yeah, so it's like, the process is bigger than we scoped and nobody wants to say it.",
+      "start_time": "2026-10-16T17:09:09.711000Z",
+      "end_time": "2026-10-16T17:09:15.378000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "And we lost a dozen tickets on the backlog the other day",
+      "start_time": "2026-10-16T17:09:19.973000Z",
+      "end_time": "2026-10-16T17:09:23.973000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "in my opinion",
+      "start_time": "2026-10-16T17:09:34.776000Z",
+      "end_time": "2026-10-16T17:09:35.776000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Okay yeah, the thing I'd push on is the follow ups, so yeah.",
+      "start_time": "2026-10-16T17:09:37.264000Z",
+      "end_time": "2026-10-16T17:09:41.597000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Yeah, yeah, the Slack thread is a little behind.",
+      "start_time": "2026-10-16T17:09:41.672000Z",
+      "end_time": "2026-10-16T17:09:44.672000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "And I feel like the requirements is a nice to have, I don't know.",
+      "start_time": "2026-10-16T17:09:44.702000Z",
+      "end_time": "2026-10-16T17:09:49.369000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "And then",
+      "start_time": "2026-10-16T17:09:49.696000Z",
+      "end_time": "2026-10-16T17:09:50.362000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "the like follow ups like is better than last week and stuff.",
+      "start_time": "2026-10-16T17:09:50.607000Z",
+      "end_time": "2026-10-16T17:09:54.607000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Okay.",
+      "start_time": "2026-10-16T17:09:54.904000Z",
+      "end_time": "2026-10-16T17:09:55.504000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I'm kind of on the fence about the legal review, which is like fine.",
+      "start_time": "2026-10-16T17:09:55.729000Z",
+      "end_time": "2026-10-16T17:10:00.395000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
       "text": "Also I'll be out most of December, I'm having surgery, so loop in my deputy.",
-      "start_time": "2026-10-16T17:06:10.997000Z",
-      "end_time": "2026-10-16T17:06:16.767000Z"
+      "start_time": "2026-10-16T17:10:01.027000Z",
+      "end_time": "2026-10-16T17:10:06.027000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Thanks for you know, the context, that's um, super helpful.",
-      "start_time": "2026-10-16T17:06:17.147000Z",
-      "end_time": "2026-10-16T17:06:20.993000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "I'm- I'm not sure that's the write framing, honestly.",
-      "start_time": "2026-10-16T17:06:22.108000Z",
-      "end_time": "2026-10-16T17:06:25.570000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "That's really useful feedback, I'm writing it down.",
-      "start_time": "2026-10-16T17:06:25.930000Z",
-      "end_time": "2026-10-16T17:06:29.007000Z"
+      "text": "Um.",
+      "start_time": "2026-10-16T17:10:06.037000Z",
+      "end_time": "2026-10-16T17:10:06.637000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "I think the question is really about scope.",
-      "start_time": "2026-10-16T17:06:30.173000Z",
-      "end_time": "2026-10-16T17:06:33.250000Z"
+      "text": "Okay, so for Driftwood Retail specifically, the action items is basically done, to be honest...",
+      "start_time": "2026-10-16T17:10:06.643000Z",
+      "end_time": "2026-10-16T17:10:11.643000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Okay, that works.",
+      "start_time": "2026-10-16T17:10:10.357000Z",
+      "end_time": "2026-10-16T17:10:10.957000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Sorry, you know, can you say that again? You cut out for a second.",
-      "start_time": "2026-10-16T17:06:34.255000Z",
-      "end_time": "2026-10-16T17:06:39.640000Z"
+      "text": "The way I see it, I feel like the original proposal is pretty solid, write. The way I see it, if audit trail slips again, Driftwood Retail is going to feel it. Also, part of me wants too draw it on a whiteboard, part of me thinks it's hard to like reason about. Well, I'm a bit skeptical about the Slack thread.",
+      "start_time": "2026-10-16T17:10:20.029000Z",
+      "end_time": "2026-10-16T17:10:40.696000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "like, Yeah, that makes sense to me.",
-      "start_time": "2026-10-16T17:06:39.985000Z",
-      "end_time": "2026-10-16T17:06:42.677000Z"
+      "text": "My worry with the training sessions is that we're too optimistic. And then we keep going back and forth on the open questions. Yeah, Driftwood Retail is kind of the test case for the executive sponsor, you know what I mean. But I spent 20 minutes on the usage reports and it happened two or three times. Honestly, it's funny, the change management like piece looked the scary part a while back and now it's mostly noise. So if the sandbox account slips again, Driftwood Retail is going to feel it. Plus I feel like the doc is low risk, or whatever.",
+      "start_time": "2026-10-16T17:10:40.721000Z",
+      "end_time": "2026-10-16T17:11:14.721000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "We've had some internal changes on our side, so bear with us.",
-      "start_time": "2026-10-16T17:06:43.396000Z",
-      "end_time": "2026-10-16T17:06:48.011000Z"
+      "text": "Mm.",
+      "start_time": "2026-10-16T17:11:16.188000Z",
+      "end_time": "2026-10-16T17:11:16.788000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "So.",
-      "start_time": "2026-10-16T17:06:49.176000Z",
-      "end_time": "2026-10-16T17:06:49.976000Z"
+      "text": "Okay, so I don't know if the notification settings is really issue, anyway.",
+      "start_time": "2026-10-16T17:11:16.831000Z",
+      "end_time": "2026-10-16T17:11:21.164000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Gotcha.",
+      "start_time": "2026-10-16T17:11:19.641000Z",
+      "end_time": "2026-10-16T17:11:20.241000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Well, part of me wants to do do a proper write-up, part of me thinks it's the blocker.",
+      "start_time": "2026-10-16T17:11:21.259000Z",
+      "end_time": "2026-10-16T17:11:27.259000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "I think that's mostly right, but there's a nuance there.",
-      "start_time": "2026-10-16T17:06:50.422000Z",
-      "end_time": "2026-10-16T17:06:54.268000Z"
+      "text": "Fair.",
+      "start_time": "2026-10-16T17:11:24.937000Z",
+      "end_time": "2026-10-16T17:11:25.537000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "Honestly, the team likes it so far.",
-      "start_time": "2026-10-16T17:06:54.619000Z",
-      "end_time": "2026-10-16T17:06:57.311000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Alright, thanks all, I mean, have a good one.",
-      "start_time": "2026-10-16T17:06:57.925000Z",
-      "end_time": "2026-10-16T17:07:01.386000Z"
+      "text": "Alright, thanks all, have a good one.",
+      "start_time": "2026-10-16T17:11:27.357000Z",
+      "end_time": "2026-10-16T17:11:29.690000Z"
     }
   ]
 }

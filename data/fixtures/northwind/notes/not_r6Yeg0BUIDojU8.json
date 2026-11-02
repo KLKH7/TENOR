@@ -7,7 +7,7 @@
     "email": "priya@northwind.dev"
   },
   "created_at": "2026-09-23T15:03:12Z",
-  "updated_at": "2026-09-23T16:02:00Z",
+  "updated_at": "2026-09-23T15:55:00Z",
   "deleted_at": null,
   "web_url": "https://notes.granola.ai/d/c546e7f4-04bc-c4dc-30db-fef6191c4f38",
   "calendar_event": {
@@ -44,11 +44,11 @@
       "email": "priya@northwind.dev"
     },
     {
-      "name": null,
+      "name": "Sam Okafor",
       "email": "sam.o@northwind.dev"
     },
     {
-      "name": null,
+      "name": "Lena Fischer",
       "email": "lena.f@northwind.dev"
     },
     {
@@ -56,7 +56,7 @@
       "email": "elena.p@northwind.dev"
     },
     {
-      "name": null,
+      "name": "Megan Liu",
       "email": "megan.l@northwind.dev"
     },
     {
@@ -74,8 +74,8 @@
     }
   ],
   "space_membership": [],
-  "summary_text": "Beacon onboarding\nSSO login step moves before workspace naming",
-  "summary_markdown": "### Beacon onboarding\n- SSO login step moves before workspace naming",
+  "summary_text": "Beacon onboarding\nSSO login step moves before workspace naming\nTooltip pattern and priority list and slack thread\nTooltip pattern is a moving target\nSuggestion to do a quick spike before touching tooltip pattern\nTooltip pattern is hard to reason about\nPriority list is a bit of a black box\nSlack thread is the blocker\nReal issue may be first-run experience rather than slack thread\nSlack thread: i couldn't reproduce it\nNotes on slack thread added to the doc\nPreference to make it someone's job rather than revisit it next cycle\nMetrics and avatar treatment and empty state\nMetrics is bigger than we scoped\nMetrics is pretty solid\nAvatar treatment is good enough for now\nNotes on avatar treatment added to the doc\nNotes on empty state added to the doc\nEmpty state is way overdue\nPreference to get more data rather than draw it on a whiteboard\nColor tokens and dashboard cards and search results page\nFeedback on color tokens from the data folks: they pushed back a bit\nDashboard cards: i got kind of lost\nDashboard cards is in a weird spot\nSearch results page is in good shape\nIcon set and nav and communication plan\nIcon set is way more complicated than it looks\nNav is hard to reason about\nNo clear owner for communication plan\nOnboarding flow and spreadsheet\nOnboarding flow is in a weird spot\nSpreadsheet is the easy part",
+  "summary_markdown": "### Beacon onboarding\n- SSO login step moves before workspace naming\n\n### Tooltip pattern and priority list and slack thread\n- Tooltip pattern is a moving target\n  - Suggestion to do a quick spike before touching tooltip pattern\n  - Tooltip pattern is hard to reason about\n- Priority list is a bit of a black box\n- Slack thread is the blocker\n  - Real issue may be first-run experience rather than slack thread\n  - Slack thread: i couldn't reproduce it\n  - Notes on slack thread added to the doc\n- Preference to make it someone's job rather than revisit it next cycle\n\n### Metrics and avatar treatment and empty state\n- Metrics is bigger than we scoped\n  - Metrics is pretty solid\n- Avatar treatment is good enough for now\n  - Notes on avatar treatment added to the doc\n- Notes on empty state added to the doc\n  - Empty state is way overdue\n- Preference to get more data rather than draw it on a whiteboard\n\n### Color tokens and dashboard cards and search results page\n- Feedback on color tokens from the data folks: they pushed back a bit\n- Dashboard cards: i got kind of lost\n  - Dashboard cards is in a weird spot\n- Search results page is in good shape\n\n### Icon set and nav and communication plan\n- Icon set is way more complicated than it looks\n- Nav is hard to reason about\n- No clear owner for communication plan\n\n### Onboarding flow and spreadsheet\n- Onboarding flow is in a weird spot\n- Spreadsheet is the easy part",
   "private_notes_text": null,
   "private_notes_markdown": null,
   "transcript": [
@@ -86,136 +86,368 @@
       },
       "text": "Okay I think we're good to start.",
       "start_time": "2026-09-23T15:03:41.672000Z",
-      "end_time": "2026-09-23T15:03:44.365000Z"
+      "end_time": "2026-09-23T15:03:44.006000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Okay, so is the next steps still fine for now, or did that change? Plus do we know who's looking at the requirements?",
+      "start_time": "2026-09-23T15:03:44.650000Z",
+      "end_time": "2026-09-23T15:03:52.317000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Lena Fischer"
+      },
+      "text": "I mean",
+      "start_time": "2026-09-23T15:03:52.345000Z",
+      "end_time": "2026-09-23T15:03:53.011000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Honestly, honestly the copy on that screen only needs an like hour if we timebox it.",
+      "start_time": "2026-09-23T15:03:53.089000Z",
+      "end_time": "2026-09-23T15:03:58.422000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Lena Fischer"
+      },
+      "text": "And honestly the search results page only needs an hour if we check with legal.",
+      "start_time": "2026-09-23T15:03:58.642000Z",
+      "end_time": "2026-09-23T15:04:03.642000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "So yeah",
+      "start_time": "2026-09-23T15:04:03.656000Z",
+      "end_time": "2026-09-23T15:04:04.323000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "we've been saying we'd start with the boring version for a while",
+      "start_time": "2026-09-23T15:04:05.207000Z",
+      "end_time": "2026-09-23T15:04:09.207000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "you know what I mean...",
+      "start_time": "2026-09-23T15:04:09.654000Z",
+      "end_time": "2026-09-23T15:04:11.320000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Megan Liu"
+      },
+      "text": "So yeah, I wouldn't block on the metrics, but yeah.",
+      "start_time": "2026-09-23T15:04:11.369000Z",
+      "end_time": "2026-09-23T15:04:14.703000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Okay...",
+      "start_time": "2026-09-23T15:04:14.744000Z",
+      "end_time": "2026-09-23T15:04:15.344000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Right, and honestly the nav only needs a dozen tickets if we pair on it",
+      "start_time": "2026-09-23T15:04:15.395000Z",
+      "end_time": "2026-09-23T15:04:20.395000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Elena Petrova"
+      },
+      "text": "Hmm.",
+      "start_time": "2026-09-23T15:04:19.179000Z",
+      "end_time": "2026-09-23T15:04:19.779000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Right,",
+      "start_time": "2026-09-23T15:04:23.135000Z",
+      "end_time": "2026-09-23T15:04:23.735000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "and the short version is the tooltip pattern is a moving target,",
+      "start_time": "2026-09-23T15:04:23.834000Z",
+      "end_time": "2026-09-23T15:04:27.834000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "to be honest...",
+      "start_time": "2026-09-23T15:04:28.338000Z",
+      "end_time": "2026-09-23T15:04:29.338000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Okay",
+      "start_time": "2026-09-23T15:04:29.415000Z",
+      "end_time": "2026-09-23T15:04:30.015000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "it's like",
+      "start_time": "2026-09-23T15:04:30.627000Z",
+      "end_time": "2026-09-23T15:04:31.294000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "the priority list is a bit of a black box and nobody wants to say it.",
+      "start_time": "2026-09-23T15:04:31.376000Z",
+      "end_time": "2026-09-23T15:04:36.709000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "But the Slack thread is the blocker",
+      "start_time": "2026-09-23T15:04:36.915000Z",
+      "end_time": "2026-09-23T15:04:39.249000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Sam Okafor"
       },
-      "text": "I like the hierarchy, the primary action is much clearer now.",
-      "start_time": "2026-09-23T15:03:45.041000Z",
-      "end_time": "2026-09-23T15:03:49.272000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Elena Petrova"
-      },
-      "text": "I mean.",
-      "start_time": "2026-09-23T15:03:49.863000Z",
-      "end_time": "2026-09-23T15:03:50.663000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Elena Petrova"
-      },
-      "text": "I think that's mostly right,",
-      "start_time": "2026-09-23T15:03:51.040000Z",
-      "end_time": "2026-09-23T15:03:52.963000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Elena Petrova"
-      },
-      "text": "but there's a nuance there.",
-      "start_time": "2026-09-23T15:03:53.651000Z",
-      "end_time": "2026-09-23T15:03:55.574000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Lena Fischer"
-      },
-      "text": "That's fair.",
-      "start_time": "2026-09-23T15:03:56.684000Z",
-      "end_time": "2026-09-23T15:03:57.484000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Lena Fischer"
-      },
-      "text": "I hadn't uh, thought about it that way.",
-      "start_time": "2026-09-23T15:03:58.411000Z",
-      "end_time": "2026-09-23T15:04:01.488000Z"
+      "text": "Yeah, fair.",
+      "start_time": "2026-09-23T15:04:38.656000Z",
+      "end_time": "2026-09-23T15:04:39.256000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Um.",
-      "start_time": "2026-09-23T15:04:02.238000Z",
-      "end_time": "2026-09-23T15:04:03.038000Z"
+      "text": "If the pricing page slips um, again",
+      "start_time": "2026-09-23T15:04:40.312000Z",
+      "end_time": "2026-09-23T15:04:42.645000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Yeah, I agree with that.",
-      "start_time": "2026-09-23T15:04:04.060000Z",
-      "end_time": "2026-09-23T15:04:05.984000Z"
+      "text": "Beacon is going too feel it",
+      "start_time": "2026-09-23T15:04:42.966000Z",
+      "end_time": "2026-09-23T15:04:44.966000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Megan Liu"
+      },
+      "text": "Oh, really?",
+      "start_time": "2026-09-23T15:04:45.065000Z",
+      "end_time": "2026-09-23T15:04:45.732000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "True.",
+      "start_time": "2026-09-23T15:04:45.807000Z",
+      "end_time": "2026-09-23T15:04:46.407000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Lena Fischer"
       },
-      "text": "And.",
-      "start_time": "2026-09-23T15:04:06.673000Z",
-      "end_time": "2026-09-23T15:04:07.473000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Lena Fischer"
-      },
-      "text": "Let me pull up the doc so we're all looking at the the",
-      "start_time": "2026-09-23T15:04:07.819000Z",
-      "end_time": "2026-09-23T15:04:12.819000Z"
+      "text": "Sorry, we should probably go back to the original plan before we touch next steps.",
+      "start_time": "2026-09-23T15:04:46.438000Z",
+      "end_time": "2026-09-23T15:04:51.438000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "same thing.",
-      "start_time": "2026-09-23T15:04:13.746000Z",
-      "end_time": "2026-09-23T15:04:14.546000Z"
+      "text": "Where are we on requirements for Beacon?",
+      "start_time": "2026-09-23T15:04:52.406000Z",
+      "end_time": "2026-09-23T15:04:54.740000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Yeah, totally.",
+      "start_time": "2026-09-23T15:04:53.707000Z",
+      "end_time": "2026-09-23T15:04:54.307000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Real quick",
+      "start_time": "2026-09-23T15:04:54.791000Z",
+      "end_time": "2026-09-23T15:04:55.458000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "the annoying thing about the spacing is it's hard to reason about.",
+      "start_time": "2026-09-23T15:04:56.180000Z",
+      "end_time": "2026-09-23T15:05:00.180000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Elena Petrova"
       },
-      "text": "uh, Sorry, I was on mute. I mean, I was saying I agree.",
-      "start_time": "2026-09-23T15:04:14.864000Z",
-      "end_time": "2026-09-23T15:04:19.864000Z"
+      "text": "Same.",
+      "start_time": "2026-09-23T15:04:58.696000Z",
+      "end_time": "2026-09-23T15:04:59.296000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Lena Fischer"
+      },
+      "text": "So.",
+      "start_time": "2026-09-23T15:05:02.119000Z",
+      "end_time": "2026-09-23T15:05:02.719000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Lena Fischer"
+      },
+      "text": "The thing I'd push on is the dark mode pass",
+      "start_time": "2026-09-23T15:05:02.768000Z",
+      "end_time": "2026-09-23T15:05:06.102000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Lena Fischer"
+      },
+      "text": "but yeah.",
+      "start_time": "2026-09-23T15:05:06.108000Z",
+      "end_time": "2026-09-23T15:05:06.775000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Lena Fischer"
+      },
+      "text": "Yeah.",
+      "start_time": "2026-09-23T15:05:06.860000Z",
+      "end_time": "2026-09-23T15:05:07.460000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Lena Fischer"
+      },
+      "text": "I think the data folks mentioned the button hierarchy before this call",
+      "start_time": "2026-09-23T15:05:07.548000Z",
+      "end_time": "2026-09-23T15:05:11.548000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Lena Fischer"
+      },
+      "text": "so it's on people's radar.",
+      "start_time": "2026-09-23T15:05:12.640000Z",
+      "end_time": "2026-09-23T15:05:14.307000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Right.",
-      "start_time": "2026-09-23T15:04:20.264000Z",
-      "end_time": "2026-09-23T15:04:21.064000Z"
+      "text": "Okay, so I just want to make sure the follow ups doesn't fall through the cracks.",
+      "start_time": "2026-09-23T15:05:14.378000Z",
+      "end_time": "2026-09-23T15:05:19.711000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Fair.",
+      "start_time": "2026-09-23T15:05:18.491000Z",
+      "end_time": "2026-09-23T15:05:19.091000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "The illustration style",
-      "start_time": "2026-09-23T15:04:21.695000Z",
-      "end_time": "2026-09-23T15:04:22.849000Z"
+      "text": "For Beacon specifically, the design critique is kind of a mystery, anyway.",
+      "start_time": "2026-09-23T15:05:19.729000Z",
+      "end_time": "2026-09-23T15:05:23.729000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Interesting.",
+      "start_time": "2026-09-23T15:05:22.168000Z",
+      "end_time": "2026-09-23T15:05:22.768000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "doesn't quite match the rest of the app.",
-      "start_time": "2026-09-23T15:04:23.900000Z",
-      "end_time": "2026-09-23T15:04:26.977000Z"
+      "text": "Oh, really?",
+      "start_time": "2026-09-23T15:05:24.045000Z",
+      "end_time": "2026-09-23T15:05:24.711000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Elena Petrova"
+      },
+      "text": "Okay yeah, the last time we touched the filter bar it was not where I'd want it, I think.",
+      "start_time": "2026-09-23T15:05:24.723000Z",
+      "end_time": "2026-09-23T15:05:31.056000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Sam Okafor"
+      },
+      "text": "I mean",
+      "start_time": "2026-09-23T15:05:31.095000Z",
+      "end_time": "2026-09-23T15:05:31.762000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Sam Okafor"
+      },
+      "text": "Yeah, so the error messages is mostly fine, but the search results page is kind of a mystery.",
+      "start_time": "2026-09-23T15:05:31.819000Z",
+      "end_time": "2026-09-23T15:05:37.819000Z"
     },
     {
       "speaker": {
@@ -223,396 +455,887 @@
         "name": "Sam Okafor"
       },
       "text": "How was everyone's weekend?",
-      "start_time": "2026-09-23T15:04:28.145000Z",
-      "end_time": "2026-09-23T15:04:29.683000Z"
+      "start_time": "2026-09-23T15:05:39.052000Z",
+      "end_time": "2026-09-23T15:05:40.385000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Just to add, I don't know if the uh, handoff to eng is really the issue.",
+      "start_time": "2026-09-23T15:05:40.418000Z",
+      "end_time": "2026-09-23T15:05:45.751000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Yeah no, for for Beacon, I think the illustration style is the part that's a little fragile.",
+      "start_time": "2026-09-23T15:05:45.761000Z",
+      "end_time": "2026-09-23T15:05:51.428000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "Do we have any data on that or is it gut feel?",
-      "start_time": "2026-09-23T15:04:30.181000Z",
-      "end_time": "2026-09-23T15:04:34.797000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "And.",
-      "start_time": "2026-09-23T15:04:35.257000Z",
-      "end_time": "2026-09-23T15:04:36.057000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Right, right. Keep going.",
-      "start_time": "2026-09-23T15:04:36.329000Z",
-      "end_time": "2026-09-23T15:04:37.867000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "The empty state still feels like, a bit cold to me.",
-      "start_time": "2026-09-23T15:04:38.096000Z",
-      "end_time": "2026-09-23T15:04:42.327000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Sam Okafor"
-      },
-      "text": "Sorry, I was on mute.",
-      "start_time": "2026-09-23T15:04:43.480000Z",
-      "end_time": "2026-09-23T15:04:45.403000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Sam Okafor"
-      },
-      "text": "I was saying I agree.",
-      "start_time": "2026-09-23T15:04:46.191000Z",
-      "end_time": "2026-09-23T15:04:48.115000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Can we park that like, and come back to it at um, the end?",
-      "start_time": "2026-09-23T15:04:48.613000Z",
-      "end_time": "2026-09-23T15:04:53.997000Z"
+      "text": "Makes sense.",
+      "start_time": "2026-09-23T15:05:49.096000Z",
+      "end_time": "2026-09-23T15:05:49.696000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "Users kept hesitating on that you know,",
-      "start_time": "2026-09-23T15:04:54.666000Z",
-      "end_time": "2026-09-23T15:04:57.358000Z"
+      "text": "The short version is the metrics is bigger than",
+      "start_time": "2026-09-23T15:05:51.720000Z",
+      "end_time": "2026-09-23T15:05:54.720000Z"
     },
     {
       "speaker": {
         "source": "speaker",
-        "name": "Elena Petrova"
+        "name": "Lena Fischer"
       },
-      "text": "screen in the sessions.",
-      "start_time": "2026-09-23T15:04:57.563000Z",
-      "end_time": "2026-09-23T15:04:59.101000Z"
+      "text": "we scoped",
+      "start_time": "2026-09-23T15:05:54.735000Z",
+      "end_time": "2026-09-23T15:05:55.401000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Lena Fischer"
+      },
+      "text": "But I'm more positive about the notes from last time, honestly.",
+      "start_time": "2026-09-23T15:05:55.556000Z",
+      "end_time": "2026-09-23T15:05:59.223000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Right, right. Keep going.",
-      "start_time": "2026-09-23T15:04:59.577000Z",
-      "end_time": "2026-09-23T15:05:01.116000Z"
+      "text": "Basically I'm like not like convinced the avatar treatment like is good enough for now,",
+      "start_time": "2026-09-23T15:05:59.270000Z",
+      "end_time": "2026-09-23T15:06:04.270000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "And.",
-      "start_time": "2026-09-23T15:05:01.773000Z",
-      "end_time": "2026-09-23T15:05:02.573000Z"
+      "text": "to be honest.",
+      "start_time": "2026-09-23T15:06:06.792000Z",
+      "end_time": "2026-09-23T15:06:07.792000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Yeah, I agree with that.",
-      "start_time": "2026-09-23T15:05:02.844000Z",
-      "end_time": "2026-09-23T15:05:04.767000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Sam Okafor"
-      },
-      "text": "We're cutting the product tour video. Nobody watched it in testing.",
-      "start_time": "2026-09-23T15:05:05.640000Z",
-      "end_time": "2026-09-23T15:05:09.871000Z"
+      "text": "We said we'd timebox timebox it and than the tooltip pattern happened.",
+      "start_time": "2026-09-23T15:06:07.831000Z",
+      "end_time": "2026-09-23T15:06:11.831000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "What happens you know, on mobile? The layout looks tight.",
-      "start_time": "2026-09-23T15:05:10.179000Z",
-      "end_time": "2026-09-23T15:05:14.025000Z"
+      "text": "I mean.",
+      "start_time": "2026-09-23T15:06:11.889000Z",
+      "end_time": "2026-09-23T15:06:12.556000Z"
     },
     {
       "speaker": {
-        "source": "speaker"
+        "source": "microphone"
       },
-      "text": "Yeah.",
-      "start_time": "2026-09-23T15:05:12.133000Z",
-      "end_time": "2026-09-23T15:05:12.733000Z"
+      "text": "Can we go back to the",
+      "start_time": "2026-09-23T15:06:12.758000Z",
+      "end_time": "2026-09-23T15:06:14.758000Z"
     },
     {
       "speaker": {
-        "source": "speaker"
+        "source": "microphone"
       },
-      "text": "I'm not sure um, that's the right framing, honestly.",
-      "start_time": "2026-09-23T15:05:14.825000Z",
-      "end_time": "2026-09-23T15:05:18.286000Z"
+      "text": "original plan?",
+      "start_time": "2026-09-23T15:06:14.842000Z",
+      "end_time": "2026-09-23T15:06:15.508000Z"
     },
     {
       "speaker": {
-        "source": "speaker",
-        "name": "Elena Petrova"
+        "source": "microphone"
       },
-      "text": "Users kept hesitating on that screen in the sessions.",
-      "start_time": "2026-09-23T15:05:19.145000Z",
-      "end_time": "2026-09-23T15:05:22.607000Z"
+      "text": "And I'm more positive about the breadcrumbs",
+      "start_time": "2026-09-23T15:06:15.588000Z",
+      "end_time": "2026-09-23T15:06:17.922000Z"
     },
     {
       "speaker": {
-        "source": "speaker",
-        "name": "Elena Petrova"
+        "source": "microphone"
       },
-      "text": "Yeah, that makes sense to me.",
-      "start_time": "2026-09-23T15:05:22.971000Z",
-      "end_time": "2026-09-23T15:05:25.278000Z"
+      "text": "kind of.",
+      "start_time": "2026-09-23T15:06:17.972000Z",
+      "end_time": "2026-09-23T15:06:18.639000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "And for Beacon, I think the prototype is the part that's uh, a nice to have.",
+      "start_time": "2026-09-23T15:06:28.685000Z",
+      "end_time": "2026-09-23T15:06:34.019000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Megan Liu"
       },
-      "text": "Let's not go down that rabbit hole right now.",
-      "start_time": "2026-09-23T15:05:26.418000Z",
-      "end_time": "2026-09-23T15:05:29.879000Z"
+      "text": "Yes.",
+      "start_time": "2026-09-23T15:06:31.485000Z",
+      "end_time": "2026-09-23T15:06:32.085000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Megan Liu"
+      },
+      "text": "Okay.",
+      "start_time": "2026-09-23T15:06:34.099000Z",
+      "end_time": "2026-09-23T15:06:34.699000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Megan Liu"
+      },
+      "text": "Out of curiosity, should we just clean up the backlog? Also, it's funny, the requirements looked the blocker over the weekend and now it kind of works.",
+      "start_time": "2026-09-23T15:06:34.733000Z",
+      "end_time": "2026-09-23T15:06:43.733000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Lena Fischer"
+      },
+      "text": "So yeah, I don't know if the dark mode pass is really I mean, the issue.",
+      "start_time": "2026-09-23T15:06:43.823000Z",
+      "end_time": "2026-09-23T15:06:49.156000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Megan Liu"
+      },
+      "text": "Actually, I put some notes on the empty state in the doc, honestly",
+      "start_time": "2026-09-23T15:06:49.251000Z",
+      "end_time": "2026-09-23T15:06:53.584000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Megan Liu"
+      },
+      "text": "So the annoying thing about the error messages is it's half done.",
+      "start_time": "2026-09-23T15:06:53.916000Z",
+      "end_time": "2026-09-23T15:06:57.916000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Megan Liu"
+      },
+      "text": "So I'd rather make it someone's job than revisit it next cycle, so yeah",
+      "start_time": "2026-09-23T15:06:58.753000Z",
+      "end_time": "2026-09-23T15:07:03.419000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Megan Liu"
+      },
+      "text": "Sorry, I keep coming back to the spreadsheet,",
+      "start_time": "2026-09-23T15:07:08.718000Z",
+      "end_time": "2026-09-23T15:07:11.385000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Megan Liu"
+      },
+      "text": "but yeah.",
+      "start_time": "2026-09-23T15:07:18.255000Z",
+      "end_time": "2026-09-23T15:07:18.921000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Megan Liu"
+      },
+      "text": "Okay yeah, for the onboarding redesign specifically, the spacing is pretty solid.",
+      "start_time": "2026-09-23T15:07:18.946000Z",
+      "end_time": "2026-09-23T15:07:22.946000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Elena Petrova"
       },
-      "text": "Okay, so um, where did we land like, on that last last time?",
-      "start_time": "2026-09-23T15:05:30.374000Z",
-      "end_time": "2026-09-23T15:05:35.374000Z"
+      "text": "Yeah.",
+      "start_time": "2026-09-23T15:07:23.212000Z",
+      "end_time": "2026-09-23T15:07:23.812000Z"
     },
     {
       "speaker": {
         "source": "speaker",
-        "name": "Lena Fischer"
+        "name": "Elena Petrova"
       },
-      "text": "Um.",
-      "start_time": "2026-09-23T15:05:36.339000Z",
-      "end_time": "2026-09-23T15:05:37.139000Z"
+      "text": "Funny enough, when I looked at the first-run experience for Beacon, nobody's really touched it in a while.",
+      "start_time": "2026-09-23T15:07:24.647000Z",
+      "end_time": "2026-09-23T15:07:30.647000Z"
     },
     {
       "speaker": {
         "source": "speaker",
-        "name": "Lena Fischer"
+        "name": "Elena Petrova"
       },
-      "text": "Can Can you share your like, screen?",
-      "start_time": "2026-09-23T15:05:38.085000Z",
-      "end_time": "2026-09-23T15:05:40.778000Z"
+      "text": "For Beacon specifically, the type scale is bigger than we scoped, like I don't know.",
+      "start_time": "2026-09-23T15:07:30.711000Z",
+      "end_time": "2026-09-23T15:07:35.711000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Elena Petrova"
+      },
+      "text": "Cool.",
+      "start_time": "2026-09-23T15:07:36.592000Z",
+      "end_time": "2026-09-23T15:07:37.192000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Sam Okafor"
+      },
+      "text": "The like annoying thing",
+      "start_time": "2026-09-23T15:07:37.593000Z",
+      "end_time": "2026-09-23T15:07:38.926000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Sam Okafor"
+      },
+      "text": "about the tooltip pattern is it's a little behind.",
+      "start_time": "2026-09-23T15:07:49.263000Z",
+      "end_time": "2026-09-23T15:07:52.263000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Sam Okafor"
+      },
+      "text": "So does the timeline timeline actually matter for the onboarding redesign?",
+      "start_time": "2026-09-23T15:07:52.814000Z",
+      "end_time": "2026-09-23T15:07:56.481000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Megan Liu"
+      },
+      "text": "Yeah.",
+      "start_time": "2026-09-23T15:08:06.057000Z",
+      "end_time": "2026-09-23T15:08:06.657000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Megan Liu"
+      },
+      "text": "that's basically what we saw with the icon set on the onboarding redesign.",
+      "start_time": "2026-09-23T15:08:06.784000Z",
+      "end_time": "2026-09-23T15:08:11.117000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Megan Liu"
+      },
+      "text": "I think the annoying thing about the requirements is it's fine for now.",
+      "start_time": "2026-09-23T15:08:11.128000Z",
+      "end_time": "2026-09-23T15:08:15.462000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "That spacing feels off, but that's a polish thing.",
-      "start_time": "2026-09-23T15:05:41.327000Z",
-      "end_time": "2026-09-23T15:05:44.788000Z"
+      "text": "Okay",
+      "start_time": "2026-09-23T15:08:16.062000Z",
+      "end_time": "2026-09-23T15:08:16.662000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Sam Okafor"
+      },
+      "text": "Like, on the onboarding redesign, there's more going like on on than I thought. But honestly like the type scale only needs most of the afternoon like if we check with legal.",
+      "start_time": "2026-09-23T15:08:16.721000Z",
+      "end_time": "2026-09-23T15:08:27.388000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "From my side, I think the risk is how it lands with people, to be honest.",
+      "start_time": "2026-09-23T15:08:29.369000Z",
+      "end_time": "2026-09-23T15:08:34.702000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Elena Petrova"
       },
-      "text": "I mean.",
-      "start_time": "2026-09-23T15:05:45.318000Z",
-      "end_time": "2026-09-23T15:05:46.118000Z"
+      "text": "Yeah, totally.",
+      "start_time": "2026-09-23T15:08:33.936000Z",
+      "end_time": "2026-09-23T15:08:34.536000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "And then for the onboarding redesign,",
+      "start_time": "2026-09-23T15:08:34.792000Z",
+      "end_time": "2026-09-23T15:08:36.792000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I think the button hierarchy is the part that's overdue for a cleanup.",
+      "start_time": "2026-09-23T15:08:36.794000Z",
+      "end_time": "2026-09-23T15:08:41.127000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Fair.",
+      "start_time": "2026-09-23T15:08:41.402000Z",
+      "end_time": "2026-09-23T15:08:42.002000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Lena Fischer"
+      },
+      "text": "Can everyone hear me okay?",
+      "start_time": "2026-09-23T15:08:42.064000Z",
+      "end_time": "2026-09-23T15:08:43.730000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I feel like it's less about the usability sessions and more about the requirements, I don't know. But I keep coming back too the motion specs, so yeah. Like, it's like, the next steps is under control and nobody wants to say it.",
+      "start_time": "2026-09-23T15:08:43.782000Z",
+      "end_time": "2026-09-23T15:08:58.115000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Makes sense.",
+      "start_time": "2026-09-23T15:08:58.860000Z",
+      "end_time": "2026-09-23T15:08:59.527000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Okay",
+      "start_time": "2026-09-23T15:08:59.553000Z",
+      "end_time": "2026-09-23T15:09:00.153000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "so we should probably do a quick spike before we touch the tooltip pattern",
+      "start_time": "2026-09-23T15:09:00.694000Z",
+      "end_time": "2026-09-23T15:09:05.361000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Yeah",
+      "start_time": "2026-09-23T15:09:05.746000Z",
+      "end_time": "2026-09-23T15:09:06.346000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "so my worry with the spacing is that it's hard to roll back.",
+      "start_time": "2026-09-23T15:09:06.377000Z",
+      "end_time": "2026-09-23T15:09:10.710000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Sure.",
+      "start_time": "2026-09-23T15:09:08.977000Z",
+      "end_time": "2026-09-23T15:09:09.577000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I spent eight screens on the handoff to eng and it it seems to come and go. But I put some notes on the avatar treatment in the doc, if that helps. From my like side, we keep going back and forth on the process. And then for Beacon, I think the risks is the part that's lower priority than we think. Okay, Beacon is kind of the test case for the empty state. And it's funny, the breadcrumbs looked a rabbit hole a while back and now there are a few loose ends. I think we said we'd run it by support and then the first-run experience happened...",
+      "start_time": "2026-09-23T15:09:10.760000Z",
+      "end_time": "2026-09-23T15:09:47.093000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Elena Petrova"
       },
-      "text": "I think that's mostly right, but there's a nuance there.",
-      "start_time": "2026-09-23T15:05:46.528000Z",
-      "end_time": "2026-09-23T15:05:50.374000Z"
+      "text": "Hmm.",
+      "start_time": "2026-09-23T15:09:34.272000Z",
+      "end_time": "2026-09-23T15:09:34.872000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Sam Okafor"
+      },
+      "text": "We're cutting the product tour video.",
+      "start_time": "2026-09-23T15:09:47.364000Z",
+      "end_time": "2026-09-23T15:09:49.364000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Sam Okafor"
+      },
+      "text": "Nobody watched it in testing",
+      "start_time": "2026-09-23T15:09:51.934000Z",
+      "end_time": "2026-09-23T15:09:53.600000Z"
     },
     {
       "speaker": {
         "source": "microphone"
+      },
+      "text": "The way I see it",
+      "start_time": "2026-09-23T15:09:53.602000Z",
+      "end_time": "2026-09-23T15:09:55.269000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "we said we'd check with legal and then the dashboard cards happened.",
+      "start_time": "2026-09-23T15:09:55.844000Z",
+      "end_time": "2026-09-23T15:09:59.844000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "So I think the tooltip pattern is hard to reason about and the color tokens is way overdue, so maybe clean up the backlog.",
+      "start_time": "2026-09-23T15:09:59.849000Z",
+      "end_time": "2026-09-23T15:10:07.849000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Yeah, fair.",
+      "start_time": "2026-09-23T15:10:03.886000Z",
+      "end_time": "2026-09-23T15:10:04.486000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "So it's less about the Slack um, thread and more about the first-run experience, right.",
+      "start_time": "2026-09-23T15:10:08.314000Z",
+      "end_time": "2026-09-23T15:10:13.314000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "So for the onboarding redesign, I think the avatar treatment is the part that's in a weird spot.",
+      "start_time": "2026-09-23T15:10:13.981000Z",
+      "end_time": "2026-09-23T15:10:19.981000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Lena Fischer"
+      },
+      "text": "Should we just split it",
+      "start_time": "2026-09-23T15:10:20.054000Z",
+      "end_time": "2026-09-23T15:10:21.720000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Lena Fischer"
+      },
+      "text": "into two pieces?",
+      "start_time": "2026-09-23T15:10:22.407000Z",
+      "end_time": "2026-09-23T15:10:23.407000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Sam Okafor"
+      },
+      "text": "I talked to the data folks about the color tokens and they pushed back a bit",
+      "start_time": "2026-09-23T15:10:23.504000Z",
+      "end_time": "2026-09-23T15:10:28.838000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Lena Fischer"
+      },
+      "text": "Hmm",
+      "start_time": "2026-09-23T15:10:28.922000Z",
+      "end_time": "2026-09-23T15:10:29.522000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Look, on Beacon, I had more questions than answers...",
+      "start_time": "2026-09-23T15:10:31.308000Z",
+      "end_time": "2026-09-23T15:10:34.308000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Okay, the thing I'd push on is the dashboard cards",
+      "start_time": "2026-09-23T15:10:36.032000Z",
+      "end_time": "2026-09-23T15:10:39.365000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "honestly.",
+      "start_time": "2026-09-23T15:10:39.382000Z",
+      "end_time": "2026-09-23T15:10:39.982000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Sam Okafor"
+      },
+      "text": "Well, I spent a dozen tickets on the backlog and the feedback was mixed. Yeah. I I just want to make sure the metrics doesn't fall through the cracks.",
+      "start_time": "2026-09-23T15:10:40.882000Z",
+      "end_time": "2026-09-23T15:10:50.549000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I was looking at the dashboard cards over the weekend and I got kind of lost, right.",
+      "start_time": "2026-09-23T15:10:53.968000Z",
+      "end_time": "2026-09-23T15:10:59.635000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "To be fair, I'd love to cut the scope, but the search results page is in good shape.",
+      "start_time": "2026-09-23T15:10:59.682000Z",
+      "end_time": "2026-09-23T15:11:05.682000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Elena Petrova"
+      },
+      "text": "That's fair.",
+      "start_time": "2026-09-23T15:11:04.617000Z",
+      "end_time": "2026-09-23T15:11:05.217000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Megan Liu"
+      },
+      "text": "Out of curiosity, can we cut the scope? And then the modal pattern is fine in theory, but the requirements is a rabbit hole. Plus the last time we touched the accessibility audit it was better than last week, if that helps. Yeah, so it's funny, the design critique looked fine in theory after standup and now we're doing it two different ways. Yeah no, we should probably start with the boring version before we touch the mobile layout. Are we worried about the action items?",
+      "start_time": "2026-09-23T15:11:05.732000Z",
+      "end_time": "2026-09-23T15:11:34.398000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Megan Liu"
+      },
+      "text": "Mm, I keep coming back to the spreadsheet. And then I'm not convinced the next steps is a little behind, in my opinion.",
+      "start_time": "2026-09-23T15:11:35.423000Z",
+      "end_time": "2026-09-23T15:11:43.090000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
       },
       "text": "I mean.",
-      "start_time": "2026-09-23T15:05:51.187000Z",
-      "end_time": "2026-09-23T15:05:51.987000Z"
+      "start_time": "2026-09-23T15:11:43.169000Z",
+      "end_time": "2026-09-23T15:11:43.836000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Yeah no, if the backlog slips again, the onboarding redesign is going to feel it. So the table density came up over the weekend too, at least for now. Which, a few managers mentioned the motion specs before this call, so it's on people's radar.",
+      "start_time": "2026-09-23T15:11:44.231000Z",
+      "end_time": "2026-09-23T15:11:59.231000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "you know,",
-      "start_time": "2026-09-23T15:05:52.545000Z",
-      "end_time": "2026-09-23T15:05:53.345000Z"
+      "text": "Oh, really?",
+      "start_time": "2026-09-23T15:11:53.161000Z",
+      "end_time": "2026-09-23T15:11:53.761000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Megan Liu"
+      },
+      "text": "I feel like the thing I'd push on the motion specs, honestly.",
+      "start_time": "2026-09-23T15:11:59.830000Z",
+      "end_time": "2026-09-23T15:12:03.830000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Elena Petrova"
+      },
+      "text": "Let me pull up the doc.",
+      "start_time": "2026-09-23T15:12:03.925000Z",
+      "end_time": "2026-09-23T15:12:05.925000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Hold on, my laptop is about to die, let me grab charger.",
-      "start_time": "2026-09-23T15:05:54.079000Z",
-      "end_time": "2026-09-23T15:05:58.695000Z"
+      "text": "Fair.",
+      "start_time": "2026-09-23T15:12:06.013000Z",
+      "end_time": "2026-09-23T15:12:06.613000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Sam Patel, you had a point about like,",
-      "start_time": "2026-09-23T15:05:59.591000Z",
-      "end_time": "2026-09-23T15:06:02.668000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "SSO?",
-      "start_time": "2026-09-23T15:06:03.794000Z",
-      "end_time": "2026-09-23T15:06:04.594000Z"
+      "text": "Sam Patel, you had a point about SSO?",
+      "start_time": "2026-09-23T15:12:06.955000Z",
+      "end_time": "2026-09-23T15:12:09.621000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
       "text": "Yeah, for SSO customers the login step has to come before workspace naming, otherwise we create orphan workspaces.",
-      "start_time": "2026-09-23T15:06:05.430000Z",
-      "end_time": "2026-09-23T15:06:12.353000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Elena Petrova"
-      },
-      "text": "Hold on, my laptop is about to die, let me grab um, a charger.",
-      "start_time": "2026-09-23T15:06:13.286000Z",
-      "end_time": "2026-09-23T15:06:18.671000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Megan Liu"
-      },
-      "text": "Sorry, can you say that again? You cut out for a second.",
-      "start_time": "2026-09-23T15:06:19.119000Z",
-      "end_time": "2026-09-23T15:06:23.734000Z"
+      "start_time": "2026-09-23T15:12:09.645000Z",
+      "end_time": "2026-09-23T15:12:15.645000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Sam Okafor"
       },
-      "text": "I think the question is really about scope.",
-      "start_time": "2026-09-23T15:06:24.691000Z",
-      "end_time": "2026-09-23T15:06:27.768000Z"
+      "text": "Funny enough, I wouldn't block on the mobile like layout.",
+      "start_time": "2026-09-23T15:12:26.341000Z",
+      "end_time": "2026-09-23T15:12:29.674000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "So.",
-      "start_time": "2026-09-23T15:06:28.601000Z",
-      "end_time": "2026-09-23T15:06:29.401000Z"
+      "text": "Yeah.",
+      "start_time": "2026-09-23T15:12:30.255000Z",
+      "end_time": "2026-09-23T15:12:30.855000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Can we try a version with less copy on that screen?",
-      "start_time": "2026-09-23T15:06:30.379000Z",
-      "end_time": "2026-09-23T15:06:34.610000Z"
+      "text": "So I just want too make sure the tradeoffs doesn't fall through the cracks.",
+      "start_time": "2026-09-23T15:12:36.444000Z",
+      "end_time": "2026-09-23T15:12:41.111000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Can you share your screen?",
-      "start_time": "2026-09-23T15:06:34.882000Z",
-      "end_time": "2026-09-23T15:06:36.805000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Megan Liu"
-      },
-      "text": "The illustration style doesn't quite match the rest of the app.",
-      "start_time": "2026-09-23T15:06:37.142000Z",
-      "end_time": "2026-09-23T15:06:41.372000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Elena Petrova"
-      },
-      "text": "I like the hierarchy, the primary action is much clearer now.",
-      "start_time": "2026-09-23T15:06:42.288000Z",
-      "end_time": "2026-09-23T15:06:46.519000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Um.",
-      "start_time": "2026-09-23T15:06:47.054000Z",
-      "end_time": "2026-09-23T15:06:47.854000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "I'm not sure that's the right framing, honestly.",
-      "start_time": "2026-09-23T15:06:48.389000Z",
-      "end_time": "2026-09-23T15:06:51.466000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Sam Okafor"
-      },
-      "text": "Do we have any like, data on that or is it gut feel?",
-      "start_time": "2026-09-23T15:06:52.072000Z",
-      "end_time": "2026-09-23T15:06:57.072000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "The empty state still feels a bit cold to me.",
-      "start_time": "2026-09-23T15:06:57.282000Z",
-      "end_time": "2026-09-23T15:07:01.128000Z"
+      "text": "And I'd love to pair on it, but the design critique is the obvious next thing.",
+      "start_time": "2026-09-23T15:12:41.131000Z",
+      "end_time": "2026-09-23T15:12:46.464000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Lena Fischer"
       },
-      "text": "Okay.",
-      "start_time": "2026-09-23T15:07:01.646000Z",
-      "end_time": "2026-09-23T15:07:02.446000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Lena Fischer"
-      },
-      "text": "I'd want to see it with real data before we commit.",
-      "start_time": "2026-09-23T15:07:02.684000Z",
-      "end_time": "2026-09-23T15:07:06.915000Z"
+      "text": "For sure.",
+      "start_time": "2026-09-23T15:12:45.552000Z",
+      "end_time": "2026-09-23T15:12:46.152000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "I think the question is really about scope.",
-      "start_time": "2026-09-23T15:07:07.598000Z",
-      "end_time": "2026-09-23T15:07:10.675000Z"
+      "text": "To be fair, for Beacon specifically, the ownership question is way um, overdue.",
+      "start_time": "2026-09-23T15:12:46.483000Z",
+      "end_time": "2026-09-23T15:12:50.817000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Yeah.",
+      "start_time": "2026-09-23T15:12:50.880000Z",
+      "end_time": "2026-09-23T15:12:51.480000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Just to add, for the onboarding redesign specifically, the icon set is way more complicated than it looks, if that makes sense.",
+      "start_time": "2026-09-23T15:12:51.719000Z",
+      "end_time": "2026-09-23T15:12:59.052000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Funny enough, part of me wants to agree on what done means, part of me thinks it's a moving target.",
+      "start_time": "2026-09-23T15:12:59.733000Z",
+      "end_time": "2026-09-23T15:13:06.400000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Lena Fischer"
+      },
+      "text": "I think part of me wants to do it properly",
+      "start_time": "2026-09-23T15:13:06.462000Z",
+      "end_time": "2026-09-23T15:13:09.795000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Yeah, agreed.",
+      "start_time": "2026-09-23T15:13:08.273000Z",
+      "end_time": "2026-09-23T15:13:08.873000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Lena Fischer"
+      },
+      "text": "part of me thinks it's a rabbit hole.",
+      "start_time": "2026-09-23T15:13:10.078000Z",
+      "end_time": "2026-09-23T15:13:12.745000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Lena Fischer"
+      },
+      "text": "So the nav is hard to reason about, but the onboarding flow is bigger than we scoped.",
+      "start_time": "2026-09-23T15:13:13.306000Z",
+      "end_time": "2026-09-23T15:13:18.972000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I mean.",
+      "start_time": "2026-09-23T15:13:19.027000Z",
+      "end_time": "2026-09-23T15:13:19.694000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "too be fair, we've been like saying we'd map out the edge cases for a while and stuff.",
+      "start_time": "2026-09-23T15:13:19.920000Z",
+      "end_time": "2026-09-23T15:13:25.920000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Love that.",
+      "start_time": "2026-09-23T15:13:23.178000Z",
+      "end_time": "2026-09-23T15:13:23.778000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "When I looked at the empty state for Beacon, the docs don't match reality. Yeah, I think the risk is that it just sits there, kind of.",
+      "start_time": "2026-09-23T15:13:37.537000Z",
+      "end_time": "2026-09-23T15:13:46.537000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Right, so nobody really owns the communication plan right now, you know what I mean. Real quick, there's a world where we do a proper write-up and dependencies just goes away",
+      "start_time": "2026-09-23T15:13:46.538000Z",
+      "end_time": "2026-09-23T15:13:56.871000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Elena Petrova"
+      },
+      "text": "And.",
+      "start_time": "2026-09-23T15:13:58.014000Z",
+      "end_time": "2026-09-23T15:13:58.614000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Elena Petrova"
+      },
+      "text": "Yeah",
+      "start_time": "2026-09-23T15:13:58.702000Z",
+      "end_time": "2026-09-23T15:13:59.302000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Elena Petrova"
+      },
+      "text": "I think part of me wants to run it by support",
+      "start_time": "2026-09-23T15:13:59.850000Z",
+      "end_time": "2026-09-23T15:14:03.516000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Elena Petrova"
+      },
+      "text": "part of like me thinks it's overdue for a cleanup.",
+      "start_time": "2026-09-23T15:14:03.530000Z",
+      "end_time": "2026-09-23T15:14:06.863000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Right, and we lost twelve steps on the requirements after standup, honestly.",
+      "start_time": "2026-09-23T15:14:06.906000Z",
+      "end_time": "2026-09-23T15:14:10.906000Z"
     },
     {
       "speaker": {
@@ -620,180 +1343,274 @@
         "name": "Sam Okafor"
       },
       "text": "Good catch, I'll swap them.",
-      "start_time": "2026-09-23T15:07:11.153000Z",
-      "end_time": "2026-09-23T15:07:13.076000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Elena Petrova"
-      },
-      "text": "That- That spacing feels off, but that's a polish thing.",
-      "start_time": "2026-09-23T15:07:14.082000Z",
-      "end_time": "2026-09-23T15:07:17.928000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Elena Petrova"
-      },
-      "text": "Um.",
-      "start_time": "2026-09-23T15:07:18.993000Z",
-      "end_time": "2026-09-23T15:07:19.793000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Elena Petrova"
-      },
-      "text": "I'd want to see",
-      "start_time": "2026-09-23T15:07:20.317000Z",
-      "end_time": "2026-09-23T15:07:21.855000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Elena Petrova"
-      },
-      "text": "it with real data before we commit.",
-      "start_time": "2026-09-23T15:07:22.349000Z",
-      "end_time": "2026-09-23T15:07:25.041000Z"
+      "start_time": "2026-09-23T15:14:10.954000Z",
+      "end_time": "2026-09-23T15:14:12.621000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "The button labels could be more specific.",
-      "start_time": "2026-09-23T15:07:25.702000Z",
-      "end_time": "2026-09-23T15:07:28.394000Z"
+      "text": "The way I see it, we've been saying we'd check with legal for a while, which is fine.",
+      "start_time": "2026-09-23T15:14:12.809000Z",
+      "end_time": "2026-09-23T15:14:18.809000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Okay, so where did we land on that last time?",
-      "start_time": "2026-09-23T15:07:29.523000Z",
-      "end_time": "2026-09-23T15:07:33.369000Z"
+      "text": "I feel like the metrics is pretty solid and stuff. Yeah, yeah, a few managers mentioned the action items while back, so it's on people's radar. Okay, so it's like, the empty state is way overdue and nobody wants to say it.",
+      "start_time": "2026-09-23T15:14:18.833000Z",
+      "end_time": "2026-09-23T15:14:32.833000Z"
     },
     {
       "speaker": {
-        "source": "speaker"
+        "source": "speaker",
+        "name": "Lena Fischer"
+      },
+      "text": "Basically I'd rather get more data than draw it on a whiteboard, kind of. I guess we like keep going back and forth on the modal pattern, honestly.",
+      "start_time": "2026-09-23T15:14:32.892000Z",
+      "end_time": "2026-09-23T15:14:42.225000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Lena Fischer"
+      },
+      "text": "Yeah, so I wouldn't block on the table density, if that helps. Which, we said we'd do it properly and then the button hierarchy happened.",
+      "start_time": "2026-09-23T15:14:49.326000Z",
+      "end_time": "2026-09-23T15:14:57.660000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Megan Liu"
+      },
+      "text": "The short version like is the edge cases is hard to reason like about.",
+      "start_time": "2026-09-23T15:14:57.704000Z",
+      "end_time": "2026-09-23T15:15:02.371000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Okay, that works.",
+      "start_time": "2026-09-23T15:15:01.392000Z",
+      "end_time": "2026-09-23T15:15:01.992000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Lena Fischer"
+      },
+      "text": "Okay, yeah.",
+      "start_time": "2026-09-23T15:15:02.701000Z",
+      "end_time": "2026-09-23T15:15:03.368000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
       },
       "text": "Got it.",
-      "start_time": "2026-09-23T15:07:32.143000Z",
-      "end_time": "2026-09-23T15:07:32.743000Z"
+      "start_time": "2026-09-23T15:15:03.658000Z",
+      "end_time": "2026-09-23T15:15:04.325000Z"
     },
     {
       "speaker": {
         "source": "speaker",
-        "name": "Lena Fischer"
+        "name": "Elena Petrova"
       },
-      "text": "Let's not go down that rabbit hole",
-      "start_time": "2026-09-23T15:07:34.426000Z",
-      "end_time": "2026-09-23T15:07:37.119000Z"
+      "text": "And.",
+      "start_time": "2026-09-23T15:15:05.534000Z",
+      "end_time": "2026-09-23T15:15:06.134000Z"
     },
     {
       "speaker": {
         "source": "speaker",
-        "name": "Lena Fischer"
+        "name": "Elena Petrova"
       },
-      "text": "right now.",
-      "start_time": "2026-09-23T15:07:38.243000Z",
-      "end_time": "2026-09-23T15:07:39.043000Z"
+      "text": "Honestly, if the mobile layout slips again, Beacon is going to feel it.",
+      "start_time": "2026-09-23T15:15:06.211000Z",
+      "end_time": "2026-09-23T15:15:10.544000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Yeah, I think it feels like the design critique and the illustration style are kind uh, of the same problem.",
+      "start_time": "2026-09-23T15:15:10.912000Z",
+      "end_time": "2026-09-23T15:15:17.578000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Elena Petrova"
+      },
+      "text": "Okay, that works.",
+      "start_time": "2026-09-23T15:15:16.254000Z",
+      "end_time": "2026-09-23T15:15:16.854000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Sorry, I spent a couple of hours on the pricing page and it happened two or three times. Like, the pricing page is in good shape, right.",
+      "start_time": "2026-09-23T15:15:17.598000Z",
+      "end_time": "2026-09-23T15:15:26.598000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Elena Petrova"
+      },
+      "text": "From my side, the annoying thing about the nav is it's a bit messy.",
+      "start_time": "2026-09-23T15:15:26.628000Z",
+      "end_time": "2026-09-23T15:15:31.295000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Like, the ownership question is kind of a mystery, but yeah.",
+      "start_time": "2026-09-23T15:15:31.350000Z",
+      "end_time": "2026-09-23T15:15:35.016000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Elena Petrova"
+      },
+      "text": "Mm.",
+      "start_time": "2026-09-23T15:15:34.524000Z",
+      "end_time": "2026-09-23T15:15:35.124000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Okay, I was looking at the Slack thread on Friday and I couldn't reproduce it, right. But honestly the illustration style only needs most of the afternoon if we sanity check the assumptions.",
+      "start_time": "2026-09-23T15:15:35.024000Z",
+      "end_time": "2026-09-23T15:15:46.024000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Right, so for the onboarding redesign specifically, the risks is the scary part, I don't know.",
+      "start_time": "2026-09-23T15:15:47.243000Z",
+      "end_time": "2026-09-23T15:15:52.577000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Megan Liu"
       },
-      "text": "Can we park that and come back to it at the end?",
-      "start_time": "2026-09-23T15:07:39.548000Z",
-      "end_time": "2026-09-23T15:07:44.163000Z"
+      "text": "And then the error messages took like like five people last time,",
+      "start_time": "2026-09-23T15:15:52.673000Z",
+      "end_time": "2026-09-23T15:15:56.673000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Megan Liu"
       },
-      "text": "Let me pull pull up the doc so we're all looking at the same thing.",
-      "start_time": "2026-09-23T15:07:44.911000Z",
-      "end_time": "2026-09-23T15:07:50.680000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "What happens on mobile?",
-      "start_time": "2026-09-23T15:07:51.240000Z",
-      "end_time": "2026-09-23T15:07:52.778000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "The layout layout looks tight.",
-      "start_time": "2026-09-23T15:07:53.219000Z",
-      "end_time": "2026-09-23T15:07:55.143000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Yeah, that makes sense to me.",
-      "start_time": "2026-09-23T15:07:55.915000Z",
-      "end_time": "2026-09-23T15:07:58.222000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Can we try a version with less I mean, copy on that screen?",
-      "start_time": "2026-09-23T15:07:59.245000Z",
-      "end_time": "2026-09-23T15:08:04.245000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Okay.",
-      "start_time": "2026-09-23T15:08:04.893000Z",
-      "end_time": "2026-09-23T15:08:05.693000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Sam Okafor"
-      },
-      "text": "That's fair.",
-      "start_time": "2026-09-23T15:08:06.849000Z",
-      "end_time": "2026-09-23T15:08:07.649000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Sam Okafor"
-      },
-      "text": "I hadn't thought about it that way.",
-      "start_time": "2026-09-23T15:08:07.957000Z",
-      "end_time": "2026-09-23T15:08:10.649000Z"
+      "text": "you know what I mean.",
+      "start_time": "2026-09-23T15:15:56.765000Z",
+      "end_time": "2026-09-23T15:15:58.432000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Lena Fischer"
       },
-      "text": "Um.",
-      "start_time": "2026-09-23T15:08:11.543000Z",
-      "end_time": "2026-09-23T15:08:12.343000Z"
+      "text": "The way I see it, I'm not super excited about the original proposal, which is fine.",
+      "start_time": "2026-09-23T15:15:58.445000Z",
+      "end_time": "2026-09-23T15:16:03.779000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Megan Liu"
+      },
+      "text": "I mean",
+      "start_time": "2026-09-23T15:16:03.807000Z",
+      "end_time": "2026-09-23T15:16:04.474000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Megan Liu"
+      },
+      "text": "I'd love to cut the scope, but the dashboard cards is in a weird spot. Anyway, I like put some notes on the Slack thread in the doc, I don't know. I spent 40 minutes on the dark like mode pass and the feedback was mixed. And I think the edge cases is a nice to have and the color tokens is bigger than we scoped, so maybe run it by support. So yeah, I'd love to go back to the original plan, but the spacing is bigger than we scoped. The short version is the onboarding flow flow is in like a weird spot, in my opinion. Plus the annoying thing about the avatar treatment is it's basically done. So are we worried about the nav?",
+      "start_time": "2026-09-23T15:16:04.567000Z",
+      "end_time": "2026-09-23T15:16:46.901000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Okay, for the onboarding redesign specifically, the spreadsheet is the easy part, or whatever.",
+      "start_time": "2026-09-23T15:16:46.945000Z",
+      "end_time": "2026-09-23T15:16:51.612000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Lena Fischer"
       },
-      "text": "Great, that's it from me. Talk soon.",
-      "start_time": "2026-09-23T15:08:13.018000Z",
-      "end_time": "2026-09-23T15:08:15.711000Z"
+      "text": "Well, honestly the usability sessions only needs 40 minutes if we do a proper write-up.",
+      "start_time": "2026-09-23T15:16:52.666000Z",
+      "end_time": "2026-09-23T15:16:57.666000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Megan Liu"
+      },
+      "text": "Yeah, and is the doc still ahead of where I expected, or did that change? The thing I'd push on is the spacing, or whatever.",
+      "start_time": "2026-09-23T15:16:57.708000Z",
+      "end_time": "2026-09-23T15:17:06.041000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "From my like side,",
+      "start_time": "2026-09-23T15:17:06.112000Z",
+      "end_time": "2026-09-23T15:17:07.445000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "there's a world where we set up a short sync and the timeline just goes away.",
+      "start_time": "2026-09-23T15:17:17.672000Z",
+      "end_time": "2026-09-23T15:17:23.005000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Yeah, yeah.",
+      "start_time": "2026-09-23T15:17:20.451000Z",
+      "end_time": "2026-09-23T15:17:21.051000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Lena Fischer"
+      },
+      "text": "Great, that's it from like me...",
+      "start_time": "2026-09-23T15:17:24.154000Z",
+      "end_time": "2026-09-23T15:17:26.154000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Lena Fischer"
+      },
+      "text": "Talk soon.",
+      "start_time": "2026-09-23T15:17:27.220000Z",
+      "end_time": "2026-09-23T15:17:27.887000Z"
     }
   ]
 }

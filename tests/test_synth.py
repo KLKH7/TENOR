@@ -9,6 +9,7 @@ from pathlib import Path
 import pytest
 
 from concentrate.core import granola
+from concentrate.core.spoken import written
 from concentrate.core.store import NoteStore
 from concentrate.llm.client import Completion, LLMClient, LLMRequest
 from concentrate.sources.fixtures import FixtureSource
@@ -114,7 +115,7 @@ def test_private_content_is_in_transcripts_for_redaction_evals(dataset: Path) ->
         for i in json.loads(p.read_text())["transcript"]
     )
     for phrase in ("physical therapy for my back", "parental leave", "one hundred sixty five k"):
-        assert phrase in text
+        assert phrase in text or written(phrase) in text  # ASR may write "165K"
 
 
 # -- polish ---------------------------------------------------------------------------------
@@ -196,3 +197,21 @@ def test_transcripts_match_live_granola_format(dataset: Path) -> None:
     assert mixed > 0  # identified speakers still appear as bare "System audio" sometimes
     assert short / total > 0.3
     assert nameless > 0
+
+
+def test_filler_is_varied_and_fact_free() -> None:
+    import random
+
+    from concentrate.synth.filler import FillerContext, summary_points, turn
+    from concentrate.synth.roster import PEOPLE
+
+    rng = random.Random(0)
+    ctx = FillerContext("eng", ("Falcon", "Acmeway"))
+    turns = [turn(ctx, rng) for _ in range(2000)]
+    long = [t for t in turns if len(t.split()) >= 6]
+    assert len(set(long)) / len(long) > 0.97  # v1: 69 fixed sentences
+    assert any(len(t.split()) >= 40 for t in turns)  # monologues
+    names = {p.first for p in PEOPLE.values()}
+    assert not any(w.strip(",.?") in names for t in turns for w in t.split())
+    assert not any(ch.isdigit() for t in turns for ch in t)  # numbers only via render
+    assert sum(len(summary_points(t)) for t in turns) > 500

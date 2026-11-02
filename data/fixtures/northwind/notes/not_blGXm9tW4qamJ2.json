@@ -7,7 +7,7 @@
     "email": "priya@northwind.dev"
   },
   "created_at": "2026-09-04T11:00:12Z",
-  "updated_at": "2026-09-04T12:04:00Z",
+  "updated_at": "2026-09-04T12:00:00Z",
   "deleted_at": null,
   "web_url": "https://notes.granola.ai/d/0a7f904f-bd89-66e4-b036-699f1fc69ef5",
   "calendar_event": {
@@ -47,7 +47,7 @@
       "email": "priya@northwind.dev"
     },
     {
-      "name": null,
+      "name": "Marcus Chen",
       "email": "marcus@northwind.dev"
     },
     {
@@ -81,722 +81,1579 @@
     }
   ],
   "space_membership": [],
-  "summary_text": "Northwind Teams launch\nNorthwind Teams launch date set: Oct 14\nLaunch depends on Falcon being live",
-  "summary_markdown": "### Northwind Teams launch\n- Northwind Teams launch date set: Oct 14\n- Launch depends on Falcon being live",
-  "private_notes_text": null,
-  "private_notes_markdown": null,
+  "summary_text": "Northwind Teams launch\nLaunch depends on Falcon being live\nSlack thread and connection pool and incident review\nSlack thread is fine in theory\nConnection pool: it seems to come and go\nNo clear owner for connection pool\nConnection pool is pretty close\nIncident review is pretty solid\nIncident review is kind of a mystery\nIncident review and read replicas seen as one underlying problem\nPreference to do a proper write-up rather than pair on it\nRunbook and follow ups and rate limiter\nSuggestion to pair on it before touching runbook\nFollow ups is good enough for now\nFollow ups is better than last week\nRate limiter is the obvious next thing\nFlaky integration tests and api versioning and error budget\nFlaky integration tests is mostly fine\nApi versioning is the blocker\nNo clear owner for error budget\nError budget is weirdly controversial\nTest fixtures and handoff and backlog\nTest fixtures is basically done\nConcern with handoff: that we're too optimistic\nBacklog is kind of stuck\nBacklog and timeout settings seen as one underlying problem\nRetry logic and load test and pagination bug\nSuggestion to set up a short sync before touching retry logic\nLoad test is half done\nReal issue may be retry logic rather than pagination bug",
+  "summary_markdown": "### Northwind Teams launch\n- Launch depends on Falcon being live\n\n### Slack thread and connection pool and incident review\n- Slack thread is fine in theory\n- Connection pool: it seems to come and go\n  - No clear owner for connection pool\n  - Connection pool is pretty close\n- Incident review is pretty solid\n  - Incident review is kind of a mystery\n  - Incident review and read replicas seen as one underlying problem\n- Preference to do a proper write-up rather than pair on it\n\n### Runbook and follow ups and rate limiter\n- Suggestion to pair on it before touching runbook\n- Follow ups is good enough for now\n  - Follow ups is better than last week\n- Rate limiter is the obvious next thing\n\n### Flaky integration tests and api versioning and error budget\n- Flaky integration tests is mostly fine\n- Api versioning is the blocker\n- No clear owner for error budget\n  - Error budget is weirdly controversial\n\n### Test fixtures and handoff and backlog\n- Test fixtures is basically done\n- Concern with handoff: that we're too optimistic\n- Backlog is kind of stuck\n  - Backlog and timeout settings seen as one underlying problem\n\n### Retry logic and load test and pagination bug\n- Suggestion to set up a short sync before touching retry logic\n- Load test is half done\n- Real issue may be retry logic rather than pagination bug",
+  "private_notes_text": "northwind teams launch date set oct 14\nlaunch depends on falcon being live",
+  "private_notes_markdown": "northwind teams launch date set oct 14\nlaunch depends on falcon being live",
   "transcript": [
     {
       "speaker": {
         "source": "speaker",
         "name": "Marcus Chen"
       },
-      "text": "Can everyone hear me okay?",
+      "text": "Yeah.",
       "start_time": "2026-09-04T11:00:53.563000Z",
-      "end_time": "2026-09-04T11:00:55.486000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "I spent most of yesterday in code review,",
-      "start_time": "2026-09-04T11:00:55.883000Z",
-      "end_time": "2026-09-04T11:00:58.960000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Elena Petrova"
-      },
-      "text": "Totally.",
-      "start_time": "2026-09-04T11:00:58.002000Z",
-      "end_time": "2026-09-04T11:00:58.602000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "there was a lot in the queue.",
-      "start_time": "2026-09-04T11:01:00.088000Z",
-      "end_time": "2026-09-04T11:01:02.780000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Jordan Blake"
-      },
-      "text": "Yeah.",
-      "start_time": "2026-09-04T11:01:02.366000Z",
-      "end_time": "2026-09-04T11:01:02.966000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Let me pull pull up the doc so we're all looking at the same",
-      "start_time": "2026-09-04T11:01:03.691000Z",
-      "end_time": "2026-09-04T11:01:09.076000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Elena Petrova"
-      },
-      "text": "thing.",
-      "start_time": "2026-09-04T11:01:09.928000Z",
-      "end_time": "2026-09-04T11:01:10.728000Z"
+      "end_time": "2026-09-04T11:00:54.163000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Marcus Chen"
       },
-      "text": "uh, Sorry, can can you say that again? You cut out for a second.",
-      "start_time": "2026-09-04T11:01:11.025000Z",
-      "end_time": "2026-09-04T11:01:16.410000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Jordan Blake"
-      },
-      "text": "We should probably write that",
-      "start_time": "2026-09-04T11:01:17.569000Z",
-      "end_time": "2026-09-04T11:01:19.492000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Jordan Blake"
-      },
-      "text": "down somewhere so we don't forget.",
-      "start_time": "2026-09-04T11:01:19.938000Z",
-      "end_time": "2026-09-04T11:01:22.245000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Jordan Blake"
-      },
-      "text": "I mean.",
-      "start_time": "2026-09-04T11:01:22.530000Z",
-      "end_time": "2026-09-04T11:01:23.330000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Jordan Blake"
-      },
-      "text": "I paired on the migration stuff for a bit,",
-      "start_time": "2026-09-04T11:01:24.136000Z",
-      "end_time": "2026-09-04T11:01:27.597000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Jordan Blake"
-      },
-      "text": "it's gnarly um, but but fine.",
-      "start_time": "2026-09-04T11:01:28.331000Z",
-      "end_time": "2026-09-04T11:01:30.639000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "uh, Okay, so where did we land on that last time?",
-      "start_time": "2026-09-04T11:01:31.442000Z",
-      "end_time": "2026-09-04T11:01:35.673000Z"
+      "text": "Can everyone hear me okay?",
+      "start_time": "2026-09-04T11:00:54.500000Z",
+      "end_time": "2026-09-04T11:00:56.167000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Olivia Grant"
       },
-      "text": "Right, right.",
-      "start_time": "2026-09-04T11:01:35.994000Z",
-      "end_time": "2026-09-04T11:01:36.794000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Olivia Grant"
-      },
-      "text": "Keep going.",
-      "start_time": "2026-09-04T11:01:37.583000Z",
-      "end_time": "2026-09-04T11:01:38.383000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Jordan Blake"
-      },
-      "text": "Sorry, I was on mute.",
-      "start_time": "2026-09-04T11:01:39.008000Z",
-      "end_time": "2026-09-04T11:01:40.931000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Jordan Blake"
-      },
-      "text": "I was saying I agree.",
-      "start_time": "2026-09-04T11:01:41.913000Z",
-      "end_time": "2026-09-04T11:01:43.836000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Can you share your screen?",
-      "start_time": "2026-09-04T11:01:44.865000Z",
-      "end_time": "2026-09-04T11:01:46.788000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Do I mean,",
-      "start_time": "2026-09-04T11:01:47.477000Z",
-      "end_time": "2026-09-04T11:01:48.631000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "we have any data on on that or is it gut feel?",
-      "start_time": "2026-09-04T11:01:49.601000Z",
-      "end_time": "2026-09-04T11:01:54.216000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Jordan Blake"
-      },
-      "text": "Is the staging environment back up?",
-      "start_time": "2026-09-04T11:01:55.024000Z",
-      "end_time": "2026-09-04T11:01:57.331000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Jordan Blake"
-      },
-      "text": "It I mean, was down earlier.",
-      "start_time": "2026-09-04T11:01:58.028000Z",
-      "end_time": "2026-09-04T11:02:00.335000Z"
+      "text": "I'm not convinced the Slack thread is fine in theory,",
+      "start_time": "2026-09-04T11:00:56.504000Z",
+      "end_time": "2026-09-04T11:00:59.838000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "Right.",
-      "start_time": "2026-09-04T11:02:01.441000Z",
-      "end_time": "2026-09-04T11:02:02.241000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Alex Kim"
-      },
-      "text": "I don't have any blockers really.",
-      "start_time": "2026-09-04T11:02:02.604000Z",
-      "end_time": "2026-09-04T11:02:04.911000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "We should probably write that down somewhere so we don't you know, forget.",
-      "start_time": "2026-09-04T11:02:05.188000Z",
-      "end_time": "2026-09-04T11:02:10.188000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "And.",
-      "start_time": "2026-09-04T11:02:11.217000Z",
-      "end_time": "2026-09-04T11:02:12.017000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Alex Kim"
-      },
-      "text": "My coffee",
-      "start_time": "2026-09-04T11:02:13.112000Z",
-      "end_time": "2026-09-04T11:02:13.912000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Alex Kim"
-      },
-      "text": "machine broke so apologies in advance.",
-      "start_time": "2026-09-04T11:02:15.022000Z",
-      "end_time": "2026-09-04T11:02:17.329000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Jordan Blake"
-      },
-      "text": "I looked at the error dashboard and nothing",
-      "start_time": "2026-09-04T11:02:17.914000Z",
-      "end_time": "2026-09-04T11:02:20.991000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Jordan Blake"
-      },
-      "text": "scary.",
-      "start_time": "2026-09-04T11:02:21.948000Z",
-      "end_time": "2026-09-04T11:02:22.748000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Something- Something to keep an eye on, anyway.",
-      "start_time": "2026-09-04T11:02:23.145000Z",
-      "end_time": "2026-09-04T11:02:26.222000Z"
+      "text": "for what it's worth",
+      "start_time": "2026-09-04T11:01:09.734000Z",
+      "end_time": "2026-09-04T11:01:11.067000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Dev Iyer"
       },
-      "text": "Yeah, that makes sense to me.",
-      "start_time": "2026-09-04T11:02:26.784000Z",
-      "end_time": "2026-09-04T11:02:29.092000Z"
+      "text": "So.",
+      "start_time": "2026-09-04T11:01:12.243000Z",
+      "end_time": "2026-09-04T11:01:12.843000Z"
     },
     {
       "speaker": {
         "source": "speaker",
-        "name": "Jordan Blake"
+        "name": "Dev Iyer"
       },
-      "text": "I'm not sure that's the write framing, honestly.",
-      "start_time": "2026-09-04T11:02:29.457000Z",
-      "end_time": "2026-09-04T11:02:32.534000Z"
+      "text": "Just to add, like I spent couple of hours on the spreadsheet and it was slower than I expected",
+      "start_time": "2026-09-04T11:01:13.364000Z",
+      "end_time": "2026-09-04T11:01:19.697000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Oh, nice.",
+      "start_time": "2026-09-04T11:01:19.773000Z",
+      "end_time": "2026-09-04T11:01:20.440000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "So",
+      "start_time": "2026-09-04T11:01:21.591000Z",
+      "end_time": "2026-09-04T11:01:22.191000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Honestly, I was looking at the the connection pool after standup and it seems to come and go, honestly. Also, it's like, the incident review is pretty solid and nobody wants to say it.",
+      "start_time": "2026-09-04T11:01:22.208000Z",
+      "end_time": "2026-09-04T11:01:33.542000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Right",
+      "start_time": "2026-09-04T11:01:33.549000Z",
+      "end_time": "2026-09-04T11:01:34.149000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "and part of me wants to get more data",
+      "start_time": "2026-09-04T11:01:34.488000Z",
+      "end_time": "2026-09-04T11:01:37.488000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "part of me thinks it's the easy part.",
+      "start_time": "2026-09-04T11:01:37.579000Z",
+      "end_time": "2026-09-04T11:01:40.245000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "And on the team plan, I had more questions than answers, if that helps.",
+      "start_time": "2026-09-04T11:01:41.535000Z",
+      "end_time": "2026-09-04T11:01:46.202000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Elena Petrova"
       },
-      "text": "I think that's mostly right, but there's a nuance nuance there.",
-      "start_time": "2026-09-04T11:02:33.304000Z",
-      "end_time": "2026-09-04T11:02:37.534000Z"
+      "text": "Yeah, so the annoying thing about the feature flag cleanup is it's in good shape. The way like I see it, there's a world where we simplify it and the open questions just goes away",
+      "start_time": "2026-09-04T11:01:46.617000Z",
+      "end_time": "2026-09-04T11:01:58.283000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Olivia Grant"
       },
-      "text": "Do we have any data on that or is it gut feel?",
-      "start_time": "2026-09-04T11:02:38.165000Z",
-      "end_time": "2026-09-04T11:02:42.780000Z"
+      "text": "From my side, I'm not convinced the dead letter queue is a known issue.",
+      "start_time": "2026-09-04T11:01:59.454000Z",
+      "end_time": "2026-09-04T11:02:04.121000Z"
     },
     {
       "speaker": {
         "source": "speaker",
-        "name": "Alex Kim"
+        "name": "Dev Iyer"
       },
-      "text": "There's a lot of tech uh, debt in that area, for what it's worth.",
-      "start_time": "2026-09-04T11:02:43.267000Z",
-      "end_time": "2026-09-04T11:02:48.652000Z"
+      "text": "Sure.",
+      "start_time": "2026-09-04T11:02:04.182000Z",
+      "end_time": "2026-09-04T11:02:04.782000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "Sorry, are we worried about the auth middleware?",
+      "start_time": "2026-09-04T11:02:05.223000Z",
+      "end_time": "2026-09-04T11:02:07.890000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "Can we agree on what done means? Also, what would it take to keep it behind a flag?",
+      "start_time": "2026-09-04T11:02:07.914000Z",
+      "end_time": "2026-09-04T11:02:13.914000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Elena Petrova"
       },
-      "text": "Sorry, can you say that again? You cut out for a second.",
-      "start_time": "2026-09-04T11:02:48.907000Z",
-      "end_time": "2026-09-04T11:02:53.523000Z"
+      "text": "Okay, so it's funny",
+      "start_time": "2026-09-04T11:02:13.963000Z",
+      "end_time": "2026-09-04T11:02:15.296000Z"
     },
     {
       "speaker": {
-        "source": "speaker"
+        "source": "speaker",
+        "name": "Elena Petrova"
       },
-      "text": "I think that's mostly right,",
-      "start_time": "2026-09-04T11:02:54.571000Z",
-      "end_time": "2026-09-04T11:02:56.494000Z"
+      "text": "the pagination bug looked a little behind earlier and now it's better than it you know,",
+      "start_time": "2026-09-04T11:02:15.322000Z",
+      "end_time": "2026-09-04T11:02:20.655000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Elena Petrova"
+      },
+      "text": "was.",
+      "start_time": "2026-09-04T11:02:20.742000Z",
+      "end_time": "2026-09-04T11:02:21.342000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Elena Petrova"
+      },
+      "text": "For what it's worth, I feel like the priority list is weirdly controversial, I think.",
+      "start_time": "2026-09-04T11:02:21.745000Z",
+      "end_time": "2026-09-04T11:02:26.745000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "But when I looked at the timeout settings for Northwind Teams, we're doing like it two different ways. Well, I wouldn't block on the dependencies, kind of. Sorry, for Northwind Teams, I think the spreadsheet is the part that's kind of stuck. Okay, the last time we like touched the requirements it was unclear, anyway. To be fair, the last time we touched the feedback it was not urgent, at least for now",
+      "start_time": "2026-09-04T11:02:26.768000Z",
+      "end_time": "2026-09-04T11:02:51.101000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Okay yeah",
+      "start_time": "2026-09-04T11:02:57.270000Z",
+      "end_time": "2026-09-04T11:02:57.937000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "if the rate limiter slips again,",
+      "start_time": "2026-09-04T11:02:58.930000Z",
+      "end_time": "2026-09-04T11:03:00.930000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "the team plan is going to feel it.",
+      "start_time": "2026-09-04T11:03:00.965000Z",
+      "end_time": "2026-09-04T11:03:03.631000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Kim"
+      },
+      "text": "So if the rollback plan slips again",
+      "start_time": "2026-09-04T11:03:05.387000Z",
+      "end_time": "2026-09-04T11:03:07.720000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Kim"
+      },
+      "text": "Northwind Teams is going to feel it...",
+      "start_time": "2026-09-04T11:03:07.764000Z",
+      "end_time": "2026-09-04T11:03:10.097000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I feel like it's like, the alerting thresholds is not a big deal and nobody wants to say it",
+      "start_time": "2026-09-04T11:03:10.132000Z",
+      "end_time": "2026-09-04T11:03:16.466000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Olivia Grant"
       },
-      "text": "but there's a nuance there.",
-      "start_time": "2026-09-04T11:02:57.124000Z",
-      "end_time": "2026-09-04T11:02:59.047000Z"
+      "text": "Quick question, what's the plan for for the monorepo tooling?",
+      "start_time": "2026-09-04T11:03:17.354000Z",
+      "end_time": "2026-09-04T11:03:20.687000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "But like the annoying thing about the",
+      "start_time": "2026-09-04T11:03:20.698000Z",
+      "end_time": "2026-09-04T11:03:23.031000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "Slack thread is it's still pretty rough...",
+      "start_time": "2026-09-04T11:03:23.221000Z",
+      "end_time": "2026-09-04T11:03:25.554000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "I feel like we should probably pair on it before we touch the the runbook.",
+      "start_time": "2026-09-04T11:03:25.649000Z",
+      "end_time": "2026-09-04T11:03:30.649000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "From my side, I like think the follow ups is good enough for now like and the retry logic is bigger than we scoped, so maybe simplify it.",
+      "start_time": "2026-09-04T11:03:30.654000Z",
+      "end_time": "2026-09-04T11:03:39.987000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "Also, we lost most of the afternoon on the tracing setup last night.",
+      "start_time": "2026-09-04T11:03:40.909000Z",
+      "end_time": "2026-09-04T11:03:45.242000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "Which",
+      "start_time": "2026-09-04T11:03:45.330000Z",
+      "end_time": "2026-09-04T11:03:45.930000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "I think the risk is how it lands with people, kind of.",
+      "start_time": "2026-09-04T11:03:45.965000Z",
+      "end_time": "2026-09-04T11:03:49.965000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "But should we",
+      "start_time": "2026-09-04T11:03:50.364000Z",
+      "end_time": "2026-09-04T11:03:51.364000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "just start with the boring version?",
+      "start_time": "2026-09-04T11:03:52.794000Z",
+      "end_time": "2026-09-04T11:03:54.794000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "When I looked at the cron jobs for Northwind Teams, it's a lot cleaner now.",
+      "start_time": "2026-09-04T11:03:54.822000Z",
+      "end_time": "2026-09-04T11:03:59.822000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Dev Iyer"
       },
-      "text": "uh, Something to keep an like, eye on, anyway.",
-      "start_time": "2026-09-04T11:02:59.401000Z",
-      "end_time": "2026-09-04T11:03:02.862000Z"
+      "text": "From my side, I think the risk is that customers notice before we do. Yeah, so I keep coming back too the load test, in my opinion.",
+      "start_time": "2026-09-04T11:03:59.913000Z",
+      "end_time": "2026-09-04T11:04:08.913000Z"
     },
     {
       "speaker": {
         "source": "speaker",
-        "name": "Marcus Chen"
+        "name": "Alex Kim"
       },
-      "text": "Okay.",
-      "start_time": "2026-09-04T11:03:03.453000Z",
-      "end_time": "2026-09-04T11:03:04.253000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Marcus Chen"
-      },
-      "text": "Okay so let's lock it. Northwind Northwind Teams launches on October fourteenth.",
-      "start_time": "2026-09-04T11:03:05.226000Z",
-      "end_time": "2026-09-04T11:03:09.841000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Jordan Blake"
-      },
-      "text": "Okay.",
-      "start_time": "2026-09-04T11:03:10.923000Z",
-      "end_time": "2026-09-04T11:03:11.723000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Jordan Blake"
-      },
-      "text": "you know, Yeah, I agree with that.",
-      "start_time": "2026-09-04T11:03:12.531000Z",
-      "end_time": "2026-09-04T11:03:15.223000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "The test suite has has been pretty flaky this week,",
-      "start_time": "2026-09-04T11:03:16.296000Z",
-      "end_time": "2026-09-04T11:03:20.142000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "just flagging it.",
-      "start_time": "2026-09-04T11:03:21.278000Z",
-      "end_time": "2026-09-04T11:03:22.432000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "There's a a lot of tech debt in that area, for what it's worth.",
-      "start_time": "2026-09-04T11:03:23.396000Z",
-      "end_time": "2026-09-04T11:03:28.781000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "I mean.",
-      "start_time": "2026-09-04T11:03:29.960000Z",
-      "end_time": "2026-09-04T11:03:30.760000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Is the staging environment back up? It was down earlier.",
-      "start_time": "2026-09-04T11:03:30.986000Z",
-      "end_time": "2026-09-04T11:03:34.832000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Marcus Chen"
-      },
-      "text": "And.",
-      "start_time": "2026-09-04T11:03:35.256000Z",
-      "end_time": "2026-09-04T11:03:36.056000Z"
+      "text": "My My coffee like machine broke so so apologies in advance.",
+      "start_time": "2026-09-04T11:04:08.933000Z",
+      "end_time": "2026-09-04T11:04:12.599000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "The logs are super noisy right now, it's hard to find anything.",
-      "start_time": "2026-09-04T11:03:36.583000Z",
-      "end_time": "2026-09-04T11:03:41.199000Z"
+      "text": "I think the risk is that we lose context, I think.",
+      "start_time": "2026-09-04T11:04:21.576000Z",
+      "end_time": "2026-09-04T11:04:25.243000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Elena Petrova"
+      },
+      "text": "So part of me wants to do a quick spike, part of me thinks it's mostly cosmetic.",
+      "start_time": "2026-09-04T11:04:34.037000Z",
+      "end_time": "2026-09-04T11:04:39.703000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Right.",
-      "start_time": "2026-09-04T11:03:42.282000Z",
-      "end_time": "2026-09-04T11:03:43.082000Z"
+      "text": "Basically if we get a second opinion",
+      "start_time": "2026-09-04T11:04:39.776000Z",
+      "end_time": "2026-09-04T11:04:42.110000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Can you share your uh, screen?",
-      "start_time": "2026-09-04T11:03:43.497000Z",
-      "end_time": "2026-09-04T11:03:45.805000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "I paired on the migration migration stuff for a bit, it's gnarly but fine.",
-      "start_time": "2026-09-04T11:03:46.231000Z",
-      "end_time": "2026-09-04T11:03:51.616000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Marcus Chen"
-      },
-      "text": "Okay.",
-      "start_time": "2026-09-04T11:03:52.252000Z",
-      "end_time": "2026-09-04T11:03:53.052000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Marcus Chen"
-      },
-      "text": "I spent most of yesterday in code review, there was a lot in the queue.",
-      "start_time": "2026-09-04T11:03:53.863000Z",
-      "end_time": "2026-09-04T11:03:59.632000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Jordan Blake"
-      },
-      "text": "Yeah, that makes sense to me.",
-      "start_time": "2026-09-04T11:04:00.359000Z",
-      "end_time": "2026-09-04T11:04:02.667000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Marcus Chen"
-      },
-      "text": "I looked at the",
-      "start_time": "2026-09-04T11:04:03.846000Z",
-      "end_time": "2026-09-04T11:04:05.385000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Marcus Chen"
-      },
-      "text": "error dashboard and nothing scary.",
-      "start_time": "2026-09-04T11:04:06.467000Z",
-      "end_time": "2026-09-04T11:04:08.390000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Dev Iyer"
-      },
-      "text": "The one dependency I'm worried about is Falcon.",
-      "start_time": "2026-09-04T11:04:09.235000Z",
-      "end_time": "2026-09-04T11:04:12.312000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Dev Iyer"
-      },
-      "text": "The new billing has to be live before we can sell seats.",
-      "start_time": "2026-09-04T11:04:12.816000Z",
-      "end_time": "2026-09-04T11:04:17.431000Z"
+      "text": "then the follow ups gets a lot easier",
+      "start_time": "2026-09-04T11:04:42.182000Z",
+      "end_time": "2026-09-04T11:04:44.849000Z"
     },
     {
       "speaker": {
         "source": "microphone"
-      },
-      "text": "Hold on,",
-      "start_time": "2026-09-04T11:04:17.687000Z",
-      "end_time": "2026-09-04T11:04:18.487000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "my laptop is about to I mean, die, let me grab a charger.",
-      "start_time": "2026-09-04T11:04:19.254000Z",
-      "end_time": "2026-09-04T11:04:24.254000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Can we park that and come back to it at the end?",
-      "start_time": "2026-09-04T11:04:24.455000Z",
-      "end_time": "2026-09-04T11:04:29.071000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Jordan Blake"
-      },
-      "text": "I don't have any blockers really.",
-      "start_time": "2026-09-04T11:04:29.291000Z",
-      "end_time": "2026-09-04T11:04:31.599000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Yeah.",
-      "start_time": "2026-09-04T11:04:32.210000Z",
-      "end_time": "2026-09-04T11:04:33.010000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "That's fair.",
-      "start_time": "2026-09-04T11:04:34.206000Z",
-      "end_time": "2026-09-04T11:04:35.006000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "I hadn't thought about it that way.",
-      "start_time": "2026-09-04T11:04:35.475000Z",
-      "end_time": "2026-09-04T11:04:38.168000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Let's not go down that rabbit hole right now.",
-      "start_time": "2026-09-04T11:04:39.110000Z",
-      "end_time": "2026-09-04T11:04:42.571000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Dev Iyer"
       },
       "text": "Um.",
-      "start_time": "2026-09-04T11:04:43.465000Z",
-      "end_time": "2026-09-04T11:04:44.265000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Dev Iyer"
-      },
-      "text": "I think the question is really about scope.",
-      "start_time": "2026-09-04T11:04:44.638000Z",
-      "end_time": "2026-09-04T11:04:47.715000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Dev Iyer"
-      },
-      "text": "Can we park that and come back",
-      "start_time": "2026-09-04T11:04:48.305000Z",
-      "end_time": "2026-09-04T11:04:50.997000Z"
+      "start_time": "2026-09-04T11:04:44.929000Z",
+      "end_time": "2026-09-04T11:04:45.529000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Got it.",
-      "start_time": "2026-09-04T11:04:50.158000Z",
-      "end_time": "2026-09-04T11:04:50.758000Z"
+      "text": "The way I see it",
+      "start_time": "2026-09-04T11:04:45.538000Z",
+      "end_time": "2026-09-04T11:04:47.205000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "the last time we touched the notes from last time it was fine for now,",
+      "start_time": "2026-09-04T11:04:47.242000Z",
+      "end_time": "2026-09-04T11:04:52.242000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "you know what I mean.",
+      "start_time": "2026-09-04T11:04:52.318000Z",
+      "end_time": "2026-09-04T11:04:53.984000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Also, honestly the process only needs an hour if we make it someone's job.",
+      "start_time": "2026-09-04T11:04:54.983000Z",
+      "end_time": "2026-09-04T11:04:59.650000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "And I'm not convinced the the rate limiter uh, is the obvious next thing...",
+      "start_time": "2026-09-04T11:04:59.726000Z",
+      "end_time": "2026-09-04T11:05:04.392000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Dev Iyer"
       },
-      "text": "to it at the end?",
-      "start_time": "2026-09-04T11:04:51.295000Z",
-      "end_time": "2026-09-04T11:04:53.219000Z"
+      "text": "Interesting.",
+      "start_time": "2026-09-04T11:05:02.684000Z",
+      "end_time": "2026-09-04T11:05:03.284000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Yeah no, I don't know if the monorepo tooling is really the issue, honestly.",
+      "start_time": "2026-09-04T11:05:04.453000Z",
+      "end_time": "2026-09-04T11:05:09.119000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Wait",
+      "start_time": "2026-09-04T11:05:09.185000Z",
+      "end_time": "2026-09-04T11:05:09.785000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "does the canary setup actually matter for the team plan?",
+      "start_time": "2026-09-04T11:05:10.828000Z",
+      "end_time": "2026-09-04T11:05:14.162000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "But But can we check with legal?",
+      "start_time": "2026-09-04T11:05:14.168000Z",
+      "end_time": "2026-09-04T11:05:16.501000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Kim"
+      },
+      "text": "Um...",
+      "start_time": "2026-09-04T11:05:16.543000Z",
+      "end_time": "2026-09-04T11:05:17.143000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "From my side, we lost about thirty tickets on the backlog the other day.",
+      "start_time": "2026-09-04T11:05:17.197000Z",
+      "end_time": "2026-09-04T11:05:21.863000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I was looking at the preview environments over the weekend and I couldn't reproduce it. Right, and the annoying thing about the staging deploy is it's a moving target.",
+      "start_time": "2026-09-04T11:05:21.908000Z",
+      "end_time": "2026-09-04T11:05:31.574000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Yeah, I think when I looked at the notes from last time for the team plan, it kind works. Yeah, so it's funny, the edge cases looked kind of a mystery before this call and now it's a lot cleaner now. And I think the risk is that it breaks something downstream, you know what I mean. Also, I feel like the communication plan is hard to reason about, so yeah.",
+      "start_time": "2026-09-04T11:05:33.033000Z",
+      "end_time": "2026-09-04T11:05:56.700000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Elena Petrova"
+      },
+      "text": "Part of me wants wants to cut the scope, part of me me thinks it's in a weird like spot. Basically the team plan is kind of the test case for the alerting thresholds.",
+      "start_time": "2026-09-04T11:05:57.764000Z",
+      "end_time": "2026-09-04T11:06:09.097000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Look, the data folks mentioned the connection pool the other day, so it's on people's radar.",
+      "start_time": "2026-09-04T11:06:09.184000Z",
+      "end_time": "2026-09-04T11:06:14.518000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Plus I'd like rather do a proper write-up than pair",
+      "start_time": "2026-09-04T11:06:14.605000Z",
+      "end_time": "2026-09-04T11:06:17.938000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "on it and stuff",
+      "start_time": "2026-09-04T11:06:18.035000Z",
+      "end_time": "2026-09-04T11:06:19.368000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Mm, if we draw it on a whiteboard, then the dead letter queue gets a lot easier. Yeah, yeah, we lost like five people on the error budget last week, for what it's worth. So it's funny, the preview environments looked way more complicated than it looks the other day and now it's mostly noise. I was looking at the CI pipeline this morning and I had more questions than answers, if that makes sense. Anyway, the last time we touched the backlog it was low risk, at least for now. For what it's worth, if the Slack thread slips again, the team plan is going to feel it. Anyway, that's basically what we saw with the logging format on Northwind Teams. If we do a proper write-up, then the webhook handler gets a lot easier.",
+      "start_time": "2026-09-04T11:06:20.826000Z",
+      "end_time": "2026-09-04T11:07:06.159000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Jordan Blake"
+      },
+      "text": "Totally.",
+      "start_time": "2026-09-04T11:06:56.497000Z",
+      "end_time": "2026-09-04T11:06:57.097000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Yeah.",
+      "start_time": "2026-09-04T11:07:06.193000Z",
+      "end_time": "2026-09-04T11:07:06.793000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Olivia Grant"
       },
-      "text": "Pricing Pricing we'll settle next week, I want want Jordan's input from the pipeline.",
-      "start_time": "2026-09-04T11:04:53.825000Z",
-      "end_time": "2026-09-04T11:04:59.209000Z"
+      "text": "Real quick",
+      "start_time": "2026-09-04T11:07:06.882000Z",
+      "end_time": "2026-09-04T11:07:07.549000Z"
     },
     {
       "speaker": {
-        "source": "speaker"
+        "source": "speaker",
+        "name": "Olivia Grant"
       },
-      "text": "I think the question is really about scope.",
-      "start_time": "2026-09-04T11:05:00.081000Z",
-      "end_time": "2026-09-04T11:05:03.158000Z"
+      "text": "are we worried about the incident review?",
+      "start_time": "2026-09-04T11:07:07.553000Z",
+      "end_time": "2026-09-04T11:07:09.887000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "Look, it's funny, the feedback looked kind of a mystery on Friday and now a couple of things looked off.",
+      "start_time": "2026-09-04T11:07:09.920000Z",
+      "end_time": "2026-09-04T11:07:16.587000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "Nobody really owns the feature flag cleanup right now, right.",
+      "start_time": "2026-09-04T11:07:27.373000Z",
+      "end_time": "2026-09-04T11:07:30.706000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Right, right. Keep going.",
-      "start_time": "2026-09-04T11:05:03.689000Z",
-      "end_time": "2026-09-04T11:05:05.228000Z"
+      "text": "I mean, Got it.",
+      "start_time": "2026-09-04T11:07:31.452000Z",
+      "end_time": "2026-09-04T11:07:32.785000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "So.",
+      "start_time": "2026-09-04T11:07:37.399000Z",
+      "end_time": "2026-09-04T11:07:37.999000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "Yeah, I wouldn't block on the tradeoffs. And then the last time we touched the rate limiter it was sort of on hold, you know what I mean.",
+      "start_time": "2026-09-04T11:07:38.516000Z",
+      "end_time": "2026-09-04T11:07:47.849000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Mm.",
+      "start_time": "2026-09-04T11:07:48.691000Z",
+      "end_time": "2026-09-04T11:07:49.291000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Okay, like I feel like like the flaky integration tests is mostly fine,",
+      "start_time": "2026-09-04T11:07:52.345000Z",
+      "end_time": "2026-09-04T11:07:56.678000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "Okay, that works.",
+      "start_time": "2026-09-04T11:07:56.064000Z",
+      "end_time": "2026-09-04T11:07:56.664000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "so yeah.",
+      "start_time": "2026-09-04T11:07:56.726000Z",
+      "end_time": "2026-09-04T11:07:57.393000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Yeah no",
+      "start_time": "2026-09-04T11:08:02.552000Z",
+      "end_time": "2026-09-04T11:08:03.218000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "honestly the metrics only needs three weeks if we just ship the smaller version.",
+      "start_time": "2026-09-04T11:08:03.313000Z",
+      "end_time": "2026-09-04T11:08:07.980000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Okay so so let's lock it.",
+      "start_time": "2026-09-04T11:08:08.055000Z",
+      "end_time": "2026-09-04T11:08:10.055000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Northwind Teams launches on October 14.",
+      "start_time": "2026-09-04T11:08:10.100000Z",
+      "end_time": "2026-09-04T11:08:12.100000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Dev Iyer"
+      },
+      "text": "Okay.",
+      "start_time": "2026-09-04T11:08:12.171000Z",
+      "end_time": "2026-09-04T11:08:12.771000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Dev Iyer"
+      },
+      "text": "Yeah, yeah, people on the other team mentioned the dashboards a while back, so like it's on people's radar.",
+      "start_time": "2026-09-04T11:08:22.753000Z",
+      "end_time": "2026-09-04T11:08:29.087000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Right.",
+      "start_time": "2026-09-04T11:08:29.718000Z",
+      "end_time": "2026-09-04T11:08:30.318000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Yeah no, it's like, the API versioning is the blocker and nobody wants to say it.",
+      "start_time": "2026-09-04T11:08:30.325000Z",
+      "end_time": "2026-09-04T11:08:35.658000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "Yeah, totally.",
+      "start_time": "2026-09-04T11:08:34.107000Z",
+      "end_time": "2026-09-04T11:08:34.707000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "The way I see it, nobody really owns the error budget right now, which is fine.",
+      "start_time": "2026-09-04T11:08:35.710000Z",
+      "end_time": "2026-09-04T11:08:41.043000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Yeah, yeah.",
+      "start_time": "2026-09-04T11:08:39.076000Z",
+      "end_time": "2026-09-04T11:08:39.676000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Oh, nice...",
+      "start_time": "2026-09-04T11:08:41.115000Z",
+      "end_time": "2026-09-04T11:08:41.782000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Elena Petrova"
+      },
+      "text": "And.",
+      "start_time": "2026-09-04T11:08:41.789000Z",
+      "end_time": "2026-09-04T11:08:42.389000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Elena Petrova"
+      },
+      "text": "Hmm.",
+      "start_time": "2026-09-04T11:08:46.621000Z",
+      "end_time": "2026-09-04T11:08:47.221000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Okay...",
+      "start_time": "2026-09-04T11:08:47.855000Z",
+      "end_time": "2026-09-04T11:08:48.455000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Sorry, we lost three or like four tries on the handoff over the weekend, which is fine. Right, so nobody really owns the connection pool right now, I think. Actually, if we do it properly, then the requirements gets a lot easier. I was looking at the canary setup last night and people seem confused by it, write. So I think the risk is that customers notice before we do, at least for now. For what what it's worth, I feel like the preview environments is good enough for now, which is fine. I think when I looked at the Slack thread for Northwind Teams, it's honestly fine. Yeah. I'm not convinced the release checklist is under control, I think.",
+      "start_time": "2026-09-04T11:08:48.536000Z",
+      "end_time": "2026-09-04T11:09:28.536000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "We keep going back and forth on the ownership question, at least for now.",
+      "start_time": "2026-09-04T11:09:28.547000Z",
+      "end_time": "2026-09-04T11:09:33.214000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "So the short version is the error budget is weirdly controversial, more or less. Nobody really owns timeout settings right now and stuff",
+      "start_time": "2026-09-04T11:09:33.216000Z",
+      "end_time": "2026-09-04T11:09:40.883000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Kim"
+      },
+      "text": "Right,",
+      "start_time": "2026-09-04T11:09:49.861000Z",
+      "end_time": "2026-09-04T11:09:50.461000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Kim"
+      },
+      "text": "and I was looking at the logging format yesterday and it's mostly noise",
+      "start_time": "2026-09-04T11:09:52.070000Z",
+      "end_time": "2026-09-04T11:09:56.403000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Kim"
+      },
+      "text": "so yeah.",
+      "start_time": "2026-09-04T11:09:56.423000Z",
+      "end_time": "2026-09-04T11:09:57.089000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Real quick,",
+      "start_time": "2026-09-04T11:09:57.157000Z",
+      "end_time": "2026-09-04T11:09:57.824000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "like does the canary setup actually matter for Northwind Teams?",
+      "start_time": "2026-09-04T11:09:57.836000Z",
+      "end_time": "2026-09-04T11:10:01.170000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Oh no.",
+      "start_time": "2026-09-04T11:10:00.191000Z",
+      "end_time": "2026-09-04T11:10:00.791000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "I",
+      "start_time": "2026-09-04T11:10:02.352000Z",
+      "end_time": "2026-09-04T11:10:02.952000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Dev Iyer"
+      },
+      "text": "just want to make sure the spreadsheet doesn't fall through the cracks.",
+      "start_time": "2026-09-04T11:10:02.985000Z",
+      "end_time": "2026-09-04T11:10:06.985000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Dev Iyer"
+      },
+      "text": "Which",
+      "start_time": "2026-09-04T11:10:13.112000Z",
+      "end_time": "2026-09-04T11:10:13.712000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Dev Iyer"
+      },
+      "text": "the test fixtures is basically done, right.",
+      "start_time": "2026-09-04T11:10:13.773000Z",
+      "end_time": "2026-09-04T11:10:16.106000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Dev Iyer"
+      },
+      "text": "Also",
+      "start_time": "2026-09-04T11:10:16.187000Z",
+      "end_time": "2026-09-04T11:10:16.787000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Dev Iyer"
+      },
+      "text": "my worry with the handoff is that we're too optimistic.",
+      "start_time": "2026-09-04T11:10:16.835000Z",
+      "end_time": "2026-09-04T11:10:20.168000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Okay, yeah.",
+      "start_time": "2026-09-04T11:10:19.444000Z",
+      "end_time": "2026-09-04T11:10:20.044000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Elena Petrova"
+      },
+      "text": "Sorry, for the team plan specifically, the CI pipeline is not where I'd uh, want it, so yeah. Yeah. we've been saying we'd get a second opinion for a while, honestly. I'd love too just ship the smaller version, but the backlog is kind of stuck. So I'd love to look at it with fresh eyes, but the follow like ups is better than last week.",
+      "start_time": "2026-09-04T11:10:20.375000Z",
+      "end_time": "2026-09-04T11:10:42.375000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Dev Iyer"
+      },
+      "text": "Yep, yep.",
+      "start_time": "2026-09-04T11:10:42.381000Z",
+      "end_time": "2026-09-04T11:10:43.048000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "So it's funny",
+      "start_time": "2026-09-04T11:10:43.799000Z",
+      "end_time": "2026-09-04T11:10:44.799000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "the um",
+      "start_time": "2026-09-04T11:10:44.970000Z",
+      "end_time": "2026-09-04T11:10:45.636000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "code owners file looked still a like mess over the weekend and now it seems to come and go.",
+      "start_time": "2026-09-04T11:10:45.841000Z",
+      "end_time": "2026-09-04T11:10:52.175000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Elena Petrova"
+      },
+      "text": "Yep, yep.",
+      "start_time": "2026-09-04T11:10:49.583000Z",
+      "end_time": "2026-09-04T11:10:50.183000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Okay, so we lost three or four tries on the load like test earlier",
+      "start_time": "2026-09-04T11:10:52.253000Z",
+      "end_time": "2026-09-04T11:10:56.920000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Out of curiosity, do we know who's looking at like the doc?",
+      "start_time": "2026-09-04T11:10:56.935000Z",
+      "end_time": "2026-09-04T11:11:00.935000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "So yeah, Northwind Teams is kind of the test case for the canary setup, more or less.",
+      "start_time": "2026-09-04T11:11:02.209000Z",
+      "end_time": "2026-09-04T11:11:07.875000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Dev Iyer"
+      },
+      "text": "The one dependency I'm worried about is Falcon. The new billing has to be live before we can sell seats.",
+      "start_time": "2026-09-04T11:11:07.938000Z",
+      "end_time": "2026-09-04T11:11:14.605000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "Well, I think the risk is that we lose context and stuff.",
+      "start_time": "2026-09-04T11:11:14.655000Z",
+      "end_time": "2026-09-04T11:11:18.655000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "Anyway,",
+      "start_time": "2026-09-04T11:11:21.849000Z",
+      "end_time": "2026-09-04T11:11:22.449000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "for the team plan specifically, the config drift is a nice to have,",
+      "start_time": "2026-09-04T11:11:22.481000Z",
+      "end_time": "2026-09-04T11:11:26.814000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Makes sense.",
+      "start_time": "2026-09-04T11:11:25.375000Z",
+      "end_time": "2026-09-04T11:11:25.975000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "so yeah.",
+      "start_time": "2026-09-04T11:11:27.763000Z",
+      "end_time": "2026-09-04T11:11:28.430000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "Okay, so the handoff came up earlier too, but yeah.",
+      "start_time": "2026-09-04T11:11:28.521000Z",
+      "end_time": "2026-09-04T11:11:31.854000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Elena Petrova"
+      },
+      "text": "Okay, so what's the plan for the backfill job?",
+      "start_time": "2026-09-04T11:11:32.298000Z",
+      "end_time": "2026-09-04T11:11:35.298000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Real quick, it's like, the incident review is kind of a mystery and nobody wants to say it. Plus I just want to like make sure the notes from last time doesn't fall through the cracks.",
+      "start_time": "2026-09-04T11:11:35.781000Z",
+      "end_time": "2026-09-04T11:11:47.781000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Elena Petrova"
+      },
+      "text": "I mean",
+      "start_time": "2026-09-04T11:11:47.894000Z",
+      "end_time": "2026-09-04T11:11:48.561000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Elena Petrova"
+      },
+      "text": "Just to add, we keep going back and forth on the like config drift, in my opinion.",
+      "start_time": "2026-09-04T11:11:48.591000Z",
+      "end_time": "2026-09-04T11:11:54.258000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "If the tracing setup slips again, Northwind Teams is going to feel it.",
+      "start_time": "2026-09-04T11:11:54.931000Z",
+      "end_time": "2026-09-04T11:11:59.264000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Dev Iyer"
+      },
+      "text": "Well, there's a world where we document the decision and the action items just goes away. Anyway, when I looked at the auth middleware for the team plan, nothing jumped out.",
+      "start_time": "2026-09-04T11:11:59.302000Z",
+      "end_time": "2026-09-04T11:12:09.635000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Elena Petrova"
+      },
+      "text": "So I keep coming back to the load test, if that makes sense. Also, nobody really owns the like spreadsheet right now, which is fine. Anyway, the last time we touched the timeline it was mostly cosmetic, like write. Yeah. it's like, the on-call handoff is pretty solid and nobody wants to say it",
+      "start_time": "2026-09-04T11:12:09.690000Z",
+      "end_time": "2026-09-04T11:12:27.690000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Um, what's the plan for the CI pipeline?",
+      "start_time": "2026-09-04T11:12:29.113000Z",
+      "end_time": "2026-09-04T11:12:31.780000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Yeah, yeah, it's funny, the dependency upgrade looked the scary part before this call and now it like happened two or three times",
+      "start_time": "2026-09-04T11:12:31.791000Z",
+      "end_time": "2026-09-04T11:12:39.458000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "So...",
+      "start_time": "2026-09-04T11:12:39.551000Z",
+      "end_time": "2026-09-04T11:12:40.151000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "I feel like we've been saying",
+      "start_time": "2026-09-04T11:12:40.158000Z",
+      "end_time": "2026-09-04T11:12:42.158000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "we'd set up a short sync for a while",
+      "start_time": "2026-09-04T11:12:42.258000Z",
+      "end_time": "2026-09-04T11:12:45.258000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Kim"
+      },
+      "text": "Look, we should probably set up a short sync before we touch the retry logic.",
+      "start_time": "2026-09-04T11:12:45.349000Z",
+      "end_time": "2026-09-04T11:12:50.349000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Elena Petrova"
+      },
+      "text": "Basically for Northwind Teams",
+      "start_time": "2026-09-04T11:12:59.175000Z",
+      "end_time": "2026-09-04T11:13:00.508000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "I think the preview environments is the part that's way overdue.",
+      "start_time": "2026-09-04T11:13:00.526000Z",
+      "end_time": "2026-09-04T11:13:04.192000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Elena Petrova"
+      },
+      "text": "And then where are we on the process",
+      "start_time": "2026-09-04T11:13:04.228000Z",
+      "end_time": "2026-09-04T11:13:06.895000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Elena Petrova"
+      },
+      "text": "for the team plan?",
+      "start_time": "2026-09-04T11:13:06.986000Z",
+      "end_time": "2026-09-04T11:13:08.319000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Jordan Blake"
+      },
+      "text": "Okay.",
+      "start_time": "2026-09-04T11:13:08.413000Z",
+      "end_time": "2026-09-04T11:13:09.013000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Jordan Blake"
+      },
+      "text": "What's the plan for the logging format? Which, should we just draw it on a whiteboard?",
+      "start_time": "2026-09-04T11:13:09.064000Z",
+      "end_time": "2026-09-04T11:13:14.397000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Okay, the load test is half done, but the code owners file is not where I'd want it.",
+      "start_time": "2026-09-04T11:13:14.433000Z",
+      "end_time": "2026-09-04T11:13:20.433000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
       "text": "Yeah.",
-      "start_time": "2026-09-04T11:05:05.589000Z",
-      "end_time": "2026-09-04T11:05:06.389000Z"
+      "start_time": "2026-09-04T11:13:20.503000Z",
+      "end_time": "2026-09-04T11:13:21.103000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Sorry, I I was on mute.",
-      "start_time": "2026-09-04T11:05:06.941000Z",
-      "end_time": "2026-09-04T11:05:09.249000Z"
+      "text": "Well, I think the alerting alerting thresholds is way overdue and the tracing setup is ahead of where I expected, so maybe do it properly. And then it's like, the backfill job is the blocker and nobody wants to say it.",
+      "start_time": "2026-09-04T11:13:21.192000Z",
+      "end_time": "2026-09-04T11:13:34.858000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Pricing we'll settle next week, I want Jordan's input from the pipeline.",
+      "start_time": "2026-09-04T11:13:46.665000Z",
+      "end_time": "2026-09-04T11:13:50.665000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "I was saying I agree.",
-      "start_time": "2026-09-04T11:05:10.371000Z",
-      "end_time": "2026-09-04T11:05:12.294000Z"
+      "text": "Real quick",
+      "start_time": "2026-09-04T11:14:00.665000Z",
+      "end_time": "2026-09-04T11:14:01.331000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I just want to make sure the dependency upgrade doesn't fall through the cracks",
+      "start_time": "2026-09-04T11:14:01.418000Z",
+      "end_time": "2026-09-04T11:14:06.085000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "So it's like",
+      "start_time": "2026-09-04T11:14:06.147000Z",
+      "end_time": "2026-09-04T11:14:07.147000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "the like spreadsheet is the obvious next thing and nobody wants to say it",
+      "start_time": "2026-09-04T11:14:08.482000Z",
+      "end_time": "2026-09-04T11:14:13.149000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "And we keep going back and",
+      "start_time": "2026-09-04T11:14:13.233000Z",
+      "end_time": "2026-09-04T11:14:15.233000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "forth on the tradeoffs.",
+      "start_time": "2026-09-04T11:14:15.250000Z",
+      "end_time": "2026-09-04T11:14:16.583000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Which, is the config drift still a nice to have, or did that like change?",
+      "start_time": "2026-09-04T11:14:19.836000Z",
+      "end_time": "2026-09-04T11:14:24.836000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "But I just want to make sure the feedback doesn't fall through the cracks.",
+      "start_time": "2026-09-04T11:14:25.004000Z",
+      "end_time": "2026-09-04T11:14:29.671000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Oh, okay.",
+      "start_time": "2026-09-04T11:14:27.622000Z",
+      "end_time": "2026-09-04T11:14:28.222000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "So should we just loop in the",
+      "start_time": "2026-09-04T11:14:30.092000Z",
+      "end_time": "2026-09-04T11:14:32.425000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "other team?",
+      "start_time": "2026-09-04T11:14:39.441000Z",
+      "end_time": "2026-09-04T11:14:40.108000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Sorry, it's less about the pagination bug and more about the retry logic.",
+      "start_time": "2026-09-04T11:14:40.179000Z",
+      "end_time": "2026-09-04T11:14:44.513000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Mm, for Northwind Teams, I think the release checklist is the part that's the obvious next thing. Anyway, I think the ownership question is pretty close and the dependencies is on the critical path, like so maybe write it down",
+      "start_time": "2026-09-04T11:14:44.518000Z",
+      "end_time": "2026-09-04T11:14:57.852000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "I guess it feels like the incident review and the read replicas are kind of the same problem.",
+      "start_time": "2026-09-04T11:14:57.869000Z",
+      "end_time": "2026-09-04T11:15:03.869000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Kim"
+      },
+      "text": "Which, I feel like the connection pool is pretty close",
+      "start_time": "2026-09-04T11:15:03.953000Z",
+      "end_time": "2026-09-04T11:15:07.286000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Olivia Grant"
       },
-      "text": "Yeah, I agree with that.",
-      "start_time": "2026-09-04T11:05:12.934000Z",
-      "end_time": "2026-09-04T11:05:14.857000Z"
+      "text": "Sorry, is metrics still a bit messy, or did that change?",
+      "start_time": "2026-09-04T11:15:07.301000Z",
+      "end_time": "2026-09-04T11:15:10.968000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Okay, that works.",
+      "start_time": "2026-09-04T11:15:10.492000Z",
+      "end_time": "2026-09-04T11:15:11.092000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "I feel like we've been saying we'd draw it on a whiteboard for a while,",
+      "start_time": "2026-09-04T11:15:12.416000Z",
+      "end_time": "2026-09-04T11:15:17.416000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "Cool, I'll let you you know, all go. Thanks.",
-      "start_time": "2026-09-04T11:05:16.051000Z",
-      "end_time": "2026-09-04T11:05:19.512000Z"
+      "text": "right.",
+      "start_time": "2026-09-04T11:15:17.715000Z",
+      "end_time": "2026-09-04T11:15:18.315000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "So I wouldn't block on the staging deploy",
+      "start_time": "2026-09-04T11:15:18.354000Z",
+      "end_time": "2026-09-04T11:15:21.020000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "um, Okay",
+      "start_time": "2026-09-04T11:15:21.632000Z",
+      "end_time": "2026-09-04T11:15:22.299000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "so how did the deploy freeze go?",
+      "start_time": "2026-09-04T11:15:22.392000Z",
+      "end_time": "2026-09-04T11:15:24.725000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "So on the team plan,",
+      "start_time": "2026-09-04T11:15:24.750000Z",
+      "end_time": "2026-09-04T11:15:26.417000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "it seems to come and go.",
+      "start_time": "2026-09-04T11:15:37.586000Z",
+      "end_time": "2026-09-04T11:15:39.586000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Okay, so what's the plan for the open questions? Oh, I keep coming back to the database indexes, which is fine.",
+      "start_time": "2026-09-04T11:15:39.659000Z",
+      "end_time": "2026-09-04T11:15:46.659000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Dev Iyer"
+      },
+      "text": "Mm, I feel like the timeout settings settings is kind of stuck, so yeah.",
+      "start_time": "2026-09-04T11:15:47.468000Z",
+      "end_time": "2026-09-04T11:15:52.135000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Dev Iyer"
+      },
+      "text": "And if we simplify it",
+      "start_time": "2026-09-04T11:15:52.538000Z",
+      "end_time": "2026-09-04T11:15:54.204000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Dev Iyer"
+      },
+      "text": "then the caching layer gets a lot easier.",
+      "start_time": "2026-09-04T11:15:54.211000Z",
+      "end_time": "2026-09-04T11:15:56.877000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Funny enough, Northwind Teams is kind of the test case for the doc.",
+      "start_time": "2026-09-04T11:15:56.890000Z",
+      "end_time": "2026-09-04T11:16:01.224000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Dev Iyer"
+      },
+      "text": "Well, we lost like 15 calls calls on the timeout settings last night, at least for now...",
+      "start_time": "2026-09-04T11:16:01.982000Z",
+      "end_time": "2026-09-04T11:16:07.648000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Dev Iyer"
+      },
+      "text": "But it feels like the backlog and",
+      "start_time": "2026-09-04T11:16:07.713000Z",
+      "end_time": "2026-09-04T11:16:10.046000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Dev Iyer"
+      },
+      "text": "the timeout settings are kind of",
+      "start_time": "2026-09-04T11:16:10.710000Z",
+      "end_time": "2026-09-04T11:16:12.710000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Dev Iyer"
+      },
+      "text": "the same problem",
+      "start_time": "2026-09-04T11:16:12.774000Z",
+      "end_time": "2026-09-04T11:16:13.774000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Cool, I'll um, let um, you all go. Thanks.",
+      "start_time": "2026-09-04T11:16:14.059000Z",
+      "end_time": "2026-09-04T11:16:17.059000Z"
     }
   ]
 }

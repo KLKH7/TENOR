@@ -85,7 +85,7 @@ def _pricing(notes: list[MeetingNote]) -> list[MeetingNote]:
 def test_episodes_carry_header_speakers_and_meeting_time(notes: list[MeetingNote]) -> None:
     m = next(n for n in notes if n.note_id == W2)
     eps = episodes_for(m, size=40)
-    assert len(eps) == 2  # 82 utterances: 40 + 42 (the 2-line tail is merged)
+    assert len(eps) == 5  # 170 utterances: 4 x 40 + 10
     assert all(e.reference_time == m.scheduled_start for e in eps)
     assert eps[0].body.startswith("Meeting: Pricing review: Northwind Teams\nDate: Tue 2026-09-08")
     assert "Marcus Chen" in eps[0].body and "Them (Olivia Grant): Morning all." in eps[0].body
@@ -196,18 +196,18 @@ def test_ingest_persists_resumes_and_reuses(
     assert len(graphs[-1].added) == 2
 
     resumed = _system(tmp_path, client, graphs).ingest(corpus)
-    assert len(graphs[-1].added) == 2  # only the two remaining episodes (4 in total)
+    assert len(graphs[-1].added) == 7  # only the seven remaining episodes (9 in total)
     assert not resumed.cached and resumed.detail["resumed"]
-    assert resumed.llm_calls == 4 and resumed.input_tokens == 4000  # earlier spend still counted
-    assert resumed.cost_usd == pytest.approx(4 * cost_usd("claude-sonnet-5-5", 1000, 100))
-    assert resumed.detail["episodes"] == 2  # this fake only counts its own session
+    assert resumed.llm_calls == 9 and resumed.input_tokens == 9000  # earlier spend still counted
+    assert resumed.cost_usd == pytest.approx(9 * cost_usd("claude-sonnet-5-5", 1000, 100))
+    assert resumed.detail["episodes"] == 7  # this fake only counts its own session
 
     again = _system(tmp_path, client, graphs).ingest(corpus)
     assert again.cached and not graphs[-1].added
-    assert again.llm_calls == 4 and again.cost_usd == pytest.approx(resumed.cost_usd)
+    assert again.llm_calls == 9 and again.cost_usd == pytest.approx(resumed.cost_usd)
 
     other = _system(tmp_path, client, graphs).ingest(corpus[:1])  # different corpus, new graph
-    assert not other.cached and len(graphs[-1].added) == 2
+    assert not other.cached and len(graphs[-1].added) == 5
 
 
 def test_context_lists_facts_with_validity_and_sources() -> None:
@@ -272,7 +272,7 @@ def test_real_graphiti_on_embedded_kuzu_offline(notes: list[MeetingNote], tmp_pa
         cache_root=tmp_path / "graphiti",
     )
     stats = s.ingest([m])
-    assert stats.detail["episodes"] == 2 and stats.detail["facts"] == 0
+    assert stats.detail["episodes"] == 5 and stats.detail["facts"] == 0
     assert stats.llm_calls == len(sdk.requests) > 0
     assert all("tool_choice" not in r for r in sdk.requests)
     assert isinstance(s.graph, KuzuGraphiti)

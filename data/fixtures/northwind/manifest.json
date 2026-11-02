@@ -1,5 +1,5 @@
 {
-  "generator": "northwind-1.1",
+  "generator": "northwind-2",
   "scale": "base",
   "seed": 42,
   "polish": {
@@ -9,17 +9,21 @@
     "stats": null
   },
   "noise_rates": {
-    "filler_per_word": 0.04,
-    "repeat_per_word": 0.015,
-    "false_start_per_turn": 0.06,
+    "filler_per_word": 0.0035,
+    "like_per_word": 0.012,
+    "repeat_per_word": 0.006,
+    "false_start_per_turn": 0.0,
     "name_mishear": 0.5,
     "homophone": 0.05,
-    "drop_short_word": 0.01
+    "drop_short_word": 0.01,
+    "no_end_punct": 0.12,
+    "trail_off": 0.06,
+    "digit_share": 0.75
   },
   "counts": {
     "meetings": 40,
-    "utterances": 2860,
-    "words": 20378,
+    "utterances": 4327,
+    "words": 57553,
     "facts": 53,
     "commitments": 32,
     "questions": 230

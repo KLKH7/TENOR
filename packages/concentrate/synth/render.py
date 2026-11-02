@@ -11,7 +11,10 @@ Faithful to what Granola actually produces (docs/SCHEMA_NOTES.md):
 * attendees without a calendar display name have ``name: null`` (the MCP shows their handle);
 * in-person meetings recorded on iOS get ``diarization_label`` ("Speaker A"...);
 * short backchannels from the other channel overlap long turns (crosstalk);
-* ``summary_markdown`` is a lossy AI summary (~20% of points omitted); typed notes are sparse.
+* ``summary_markdown`` is a lossy AI summary (~20% of facts omitted) with 4-6 ``###`` sections
+  and two-level bullets, the rest drawn from what was discussed; typed notes are sparse;
+* a share of turns has numbers written as digits, $ and % (ASR smart formatting), and remote
+  passages sometimes end without punctuation or with "...".
 
 Notes are built as ``core.granola.Note`` models and serialized from them, so fixtures match the
 wire schema by construction.
@@ -27,7 +30,9 @@ from datetime import UTC, datetime, timedelta
 
 from concentrate.core import granola
 from concentrate.core.models import utterance_id
-from concentrate.synth.noise import BACKCHANNELS, LEAD_INS, NoiseRates, fragment, noisify
+from concentrate.core.spoken import written
+from concentrate.synth.filler import SHORT, summary_points
+from concentrate.synth.noise import LEAD_INS, NoiseRates, end_style, fragment, noisify
 from concentrate.synth.roster import OWNER_ID, PEOPLE, person
 from concentrate.synth.story import granola_id
 from concentrate.synth.world import Meeting, World
@@ -48,6 +53,11 @@ UNLABELED_PASSAGE_RATE = 0.1  # identified speakers still appear as bare "System
 LEAD_IN_RATE = 0.2  # a turn opens with its own one-word passage ("So", "Yeah")
 NULL_NAME_RATE = 0.25  # attendees with no display name on the calendar invite
 LOSSY_SUMMARY_DROP = 0.2
+# v2 summaries (docs/FIDELITY_V2.md): real ones have 4-6 sections, ~30 two-level bullets and
+# ~400 words. Discussion sections are drawn from what the filler actually said.
+SUMMARY_SECTIONS = (4, 6)
+SUMMARY_BULLETS = 30
+WORDS_PER_SECOND = 3.0  # within-passage speech rate (real: 3.0)
 TYPED_NOTES_RATE = 0.4
 
 BeatMap = dict[tuple[str, int], list[str]]  # (meeting key, beat index) -> utterance IDs
@@ -122,6 +132,17 @@ TOPIC = {
 UPDATES, NEXT_STEPS = "Progress updates", "Next steps"
 
 
+def _gap(rng: random.Random) -> float:
+    """Seconds of silence before the next passage: heavy-tailed like real transcripts
+    (p10/p50/p90 ≈ 0 / 0.07 / 4 s): mostly back-to-back, sometimes a long pause."""
+    r = rng.random()
+    if r < 0.55:
+        return rng.uniform(0.0, 0.1)
+    if r < 0.91:
+        return rng.lognormvariate(-0.4, 0.8)
+    return rng.uniform(3.0, 12.0)
+
+
 def _summary(meeting: Meeting, world: World, rng: random.Random) -> list[tuple[str, str]]:
     """(heading, bullet) pairs for this meeting, before lossy dropping."""
     points: list[tuple[str, str]] = []
@@ -145,10 +166,44 @@ def _summary(meeting: Meeting, world: World, rng: random.Random) -> list[tuple[s
     return points
 
 
-def _summary_markdown(points: list[tuple[str, str]], rng: random.Random) -> str:
+def _discussion(texts: list[str], n_sections: int, n_bullets: int) -> list[str]:
+    """Markdown blocks for discussion topics: a heading per pair of topics, nested bullets."""
+    by_noun: dict[str, list[str]] = {}
+    for text in texts:
+        for noun, bullet in summary_points(text):
+            if bullet not in by_noun.get(noun, []):
+                by_noun.setdefault(noun, []).append(bullet)
+    nouns = [n for n in by_noun if n]
+    if n_sections <= 0 or not nouns:
+        return []
+    per = max(1, -(-len(nouns) // n_sections))
+    loose = by_noun.get("", [])
+    blocks, used = [], 0
+    for k in range(0, min(len(nouns), per * n_sections), per):
+        group = nouns[k : k + per][:3]
+        heading = " and ".join(g.removeprefix("the ") for g in group)
+        lines = []
+        for g in group:
+            top, *rest = by_noun[g]
+            lines.append(f"- {top}")
+            lines += [f"  - {b}" for b in rest[:4]]
+        if loose:
+            lines.append(f"- {loose.pop(0)}")
+        used += len(lines)
+        blocks.append(f"### {heading[0].upper()}{heading[1:]}\n" + "\n".join(lines))
+        if used >= n_bullets:
+            break
+    return blocks
+
+
+def _summary_markdown(points: list[tuple[str, str]], texts: list[str], rng: random.Random) -> str:
     kept = [p for p in points if rng.random() >= LOSSY_SUMMARY_DROP] or points[:1]
+    topics = len({h for h, _ in kept})
+    target = rng.randint(*SUMMARY_SECTIONS)
+    discussion = _discussion(texts, target - topics, SUMMARY_BULLETS - len(kept))
     if not kept:
-        return "### Discussion\n- General discussion; no decisions recorded."
+        fallback = "### Discussion\n- General discussion; no decisions recorded."
+        return "\n\n".join(discussion) or fallback
     order: list[str] = []
     for h, _ in kept:
         if h not in order and h not in (UPDATES, NEXT_STEPS):
@@ -158,7 +213,9 @@ def _summary_markdown(points: list[tuple[str, str]], rng: random.Random) -> str:
     for h in order:
         bullets = "\n".join(f"- {b}" for hh, b in kept if hh == h)
         blocks.append(f"### {h}\n{bullets}")
-    return "\n\n".join(blocks)
+    topical = [b for b in blocks if not b.startswith((f"### {UPDATES}", f"### {NEXT_STEPS}"))]
+    closing = blocks[len(topical) :]
+    return "\n\n".join([*topical, *discussion, *closing])
 
 
 def _plain(markdown: str) -> str:
@@ -251,13 +308,19 @@ def render_meeting(
 
     evidence_segments: dict[int, list[int]] = {}
     for i, (beat, text) in enumerate(zip(meeting.beats, texts, strict=True)):
-        protect = tuple(p for p in beat.protect if p in text)
+        if rng.random() < rates.digit_share:  # ASR smart formatting: "$25", "40%", "Oct 14"
+            text = written(text)
+            protect = tuple(written(p) for p in beat.protect if written(p) in text)
+        else:
+            protect = tuple(p for p in beat.protect if p in text)
         noisy = noisify(text, protect, rng, rates)
         segs = fragment(noisy, protect, rng) if meeting.mode == "remote" else [noisy]
         if meeting.mode == "remote" and rng.random() < LEAD_IN_RATE:
             segs = [rng.choice(LEAD_INS) + ".", *segs]
+        if meeting.mode == "remote":
+            segs = [end_style(seg, rng, rates) for seg in segs]
         for seg in segs:
-            dur = max(0.8, len(seg.split()) / 2.6)
+            dur = max(0.6, len(seg.split()) / WORDS_PER_SECOND)
             item = granola.TranscriptItem(
                 speaker=speaker_for(beat.speaker),
                 text=seg,
@@ -276,7 +339,7 @@ def render_meeting(
                         (
                             granola.TranscriptItem(
                                 speaker=speaker_for(other),
-                                text=rng.choice(BACKCHANNELS),
+                                text=rng.choice(SHORT),
                                 start_time=_ts(bt),
                                 end_time=_ts(bt + timedelta(seconds=0.6)),
                             ),
@@ -284,7 +347,7 @@ def render_meeting(
                         )
                     )
                     spoken_by.append((other, None))
-            t += timedelta(seconds=dur + rng.uniform(0.2, 1.2))
+            t += timedelta(seconds=dur + _gap(rng))
 
     raw = [(pid, beat, item.text) for (item, _), (pid, beat) in zip(items, spoken_by, strict=True)]
     remap = {k: k for k in range(len(items))}
@@ -309,7 +372,9 @@ def render_meeting(
 
     end = meeting.start + timedelta(minutes=meeting.minutes)
     points = _summary(meeting, world, rng)
-    summary_md = _summary_markdown(points, rng)
+    summary_md = _summary_markdown(
+        points, [t for b, t in zip(meeting.beats, texts, strict=True) if b.filler], rng
+    )
     typed = _typed_notes(points, rng)
     event = None
     attendees: list[granola.User] = []
