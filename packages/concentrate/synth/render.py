@@ -22,6 +22,7 @@ from __future__ import annotations
 import hashlib
 import random
 import uuid
+from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 
 from concentrate.core import granola
@@ -50,6 +51,25 @@ LOSSY_SUMMARY_DROP = 0.2
 TYPED_NOTES_RATE = 0.4
 
 BeatMap = dict[tuple[str, int], list[str]]  # (meeting key, beat index) -> utterance IDs
+
+
+@dataclass(frozen=True)
+class GoldUtterance:
+    """Ground truth for one rendered utterance: who spoke it (word counts) and its beats.
+
+    Remote passages have exactly one speaker. In-person blocks merge consecutive turns, so they
+    can carry several speakers; ``speaker`` is the one who spoke most of its words.
+    """
+
+    words_by_speaker: dict[str, int]
+    beats: tuple[int, ...]  # beat indexes (empty for backchannels)
+
+    @property
+    def speaker(self) -> str:
+        return max(sorted(self.words_by_speaker), key=lambda p: self.words_by_speaker[p])
+
+
+GoldMap = dict[str, GoldUtterance]  # utterance ID -> gold
 
 
 def _ts(dt: datetime) -> datetime:
@@ -164,7 +184,7 @@ def _merge_in_person(
     items: list[tuple[granola.TranscriptItem, int | None]],
     evidence: dict[int, list[int]],
     rng: random.Random,
-) -> tuple[list[tuple[granola.TranscriptItem, int | None]], dict[int, list[int]]]:
+) -> tuple[list[tuple[granola.TranscriptItem, int | None]], dict[int, list[int]], dict[int, int]]:
     """One shared microphone transcribes in long runs that span speakers (median ~25 words).
 
     Consecutive items merge until a block reaches a target length drawn log-uniformly from
@@ -189,7 +209,7 @@ def _merge_in_person(
             target, words = 5 * 28 ** rng.random(), n
         remap[k] = len(merged) - 1
     new_evidence = {b: sorted({remap[k] for k in ks}) for b, ks in evidence.items()}
-    return merged, new_evidence
+    return merged, new_evidence, remap
 
 
 def render_meeting(
@@ -199,12 +219,18 @@ def render_meeting(
     seed: int,
     rates: NoiseRates,
     folders: dict[str, granola.Folder],
+    gold_out: GoldMap | None = None,
 ) -> tuple[granola.Note, BeatMap]:
-    """Render one meeting; return the note and the beat → utterance-ID map."""
+    """Render one meeting; return the note and the beat → utterance-ID map.
+
+    If ``gold_out`` is given, it is filled with every utterance's true speaker and beats (used
+    by the enhance evaluation). Recording gold draws no random numbers, so output is unchanged.
+    """
     rng = random.Random(f"{seed}:render:{meeting.key}")
     owner = OWNER_ID
     labels: dict[str, str] = {}
     items: list[tuple[granola.TranscriptItem, int | None]] = []  # (item, beat index or None)
+    spoken_by: list[tuple[str, int | None]] = []  # (true speaker, beat) parallel to ``items``
     t = meeting.start + timedelta(seconds=rng.uniform(20, 90))
     named = meeting.mode == "remote" and rng.random() < NAMED_MEETING_RATE
     identified = {
@@ -239,6 +265,7 @@ def render_meeting(
                 end_time=_ts(t + timedelta(seconds=dur)),
             )
             items.append((item, i))
+            spoken_by.append((beat.speaker, i))
             if not protect or any(p in seg for p in protect):
                 evidence_segments.setdefault(i, []).append(len(items) - 1)
             if meeting.mode == "remote" and len(seg.split()) > 6 and rng.random() < 0.25:
@@ -256,16 +283,29 @@ def render_meeting(
                             None,
                         )
                     )
+                    spoken_by.append((other, None))
             t += timedelta(seconds=dur + rng.uniform(0.2, 1.2))
 
+    raw = [(pid, beat, item.text) for (item, _), (pid, beat) in zip(items, spoken_by, strict=True)]
+    remap = {k: k for k in range(len(items))}
     if meeting.mode == "in_person":
-        items, evidence_segments = _merge_in_person(items, evidence_segments, rng)
+        items, evidence_segments, remap = _merge_in_person(items, evidence_segments, rng)
     order = sorted(range(len(items)), key=lambda k: (items[k][0].start_time, k))
     position = {k: n for n, k in enumerate(order)}
     beat_map: BeatMap = {
         (meeting.key, i): [utterance_id(meeting.note_id, position[k]) for k in segs]
         for i, segs in evidence_segments.items()
     }
+    if gold_out is not None:
+        parts: dict[int, list[tuple[str, int | None, str]]] = {}
+        for k, part in enumerate(raw):
+            parts.setdefault(remap[k], []).append(part)
+        for k, ps in parts.items():
+            words: dict[str, int] = {}
+            for pid, _, text in ps:
+                words[pid] = words.get(pid, 0) + max(1, len(text.split()))
+            beats = tuple(sorted({b for _, b, _ in ps if b is not None}))
+            gold_out[utterance_id(meeting.note_id, position[k])] = GoldUtterance(words, beats)
 
     end = meeting.start + timedelta(minutes=meeting.minutes)
     points = _summary(meeting, world, rng)
