@@ -25,7 +25,7 @@ from pydantic import BaseModel
 
 from concentrate.core import granola
 from concentrate.synth.render import BeatMap
-from concentrate.synth.roster import ORG_BY_ID, person
+from concentrate.synth.roster import ORG_BY_ID, PEOPLE, PROJECT_BY_ID, person
 from concentrate.synth.world import Commitment, Evidence, Fact, World
 
 Category = Literal[
@@ -78,6 +78,19 @@ REQUEST_TOPIC = {
     "eu_residency": "where their data is stored", "slack": "integrations",
     "pen_test": "security documentation", "bulk_import": "adding users",
     "sso_audit_logs": "what they need in order to sign", "onboarding": "onboarding",
+    "audit_logs": "audit logging", "scim": "user provisioning", "hipaa": "compliance paperwork",
+}  # fmt: skip
+# Labels for Northwind-XL predicates (base predicates are in LABEL above).
+XL_LABEL = {
+    "quoted_price": "quoted per-seat price", "decision": "hiring decision",
+    "weekly_active_teams": "weekly active teams", "activation_rate": "activation rate",
+    "nps": "NPS", "ticket_backlog": "support ticket backlog", "target_date": "target ship date",
+}  # fmt: skip
+# Benchmark subset for scale="xl": per-category quotas (~300 questions, ~10% unanswerable).
+BENCHMARK_QUOTAS = {
+    "single_hop": 40, "temporal": 50, "latest_state": 40, "entity_disambiguation": 35,
+    "commitment_status": 35, "decision_change": 30, "multi_hop": 25, "aggregation": 20,
+    "unanswerable": 25,
 }  # fmt: skip
 AMBIGUOUS = {
     "sam_p": "Sam the backend engineer", "sam_o": "Sam the designer",
@@ -86,7 +99,27 @@ AMBIGUOUS = {
 
 
 def _subject(s: str) -> str:
-    return ORG_BY_ID[s].name if s in ORG_BY_ID else SUBJECT.get(s, s)
+    if s in ORG_BY_ID:
+        return ORG_BY_ID[s].name
+    if s in SUBJECT:
+        return SUBJECT[s]
+    if s in PROJECT_BY_ID:
+        return PROJECT_BY_ID[s].name
+    if s.startswith("candidate:"):
+        return f"the candidate {s.split(':', 1)[1]}"
+    if s == "support":
+        return "the support team"
+    return PEOPLE[s].name if s in PEOPLE else s
+
+
+def _label(predicate: str) -> str:
+    if predicate in LABEL:
+        return LABEL[predicate]
+    if predicate in XL_LABEL:
+        return XL_LABEL[predicate]
+    if predicate.startswith("metric:"):
+        return predicate.split(":", 1)[1]
+    return predicate.replace("_", " ")
 
 
 def _fmt(d: date) -> str:
@@ -99,6 +132,7 @@ class _Gen:
         self.bm = beat_map
         self.rng = random.Random(f"{seed}:questions")
         self.qs: list[Question] = []
+        self._texts: set[str] = set()
         self.meeting = {m.key: m for m in world.meetings}
 
     # -- helpers ----------------------------------------------------------------------------
@@ -122,6 +156,9 @@ class _Gen:
         sources: list[str],
         as_of: date = NOW,
     ) -> None:
+        if question in self._texts:  # e.g. a status that changed to "at risk" twice
+            return
+        self._texts.add(question)
         self.qs.append(
             Question(
                 id=f"q{len(self.qs) + 1:03d}",
@@ -165,7 +202,7 @@ class _Gen:
             elif f.kind == "attribute":
                 continue
             else:
-                label = LABEL[f.predicate]
+                label = _label(f.predicate)
                 q = self.rng.choice(
                     [
                         f"What was the {label} for {subj}, as stated in {self.where(f)}?",
@@ -235,7 +272,11 @@ class _Gen:
                 f = self.at(vs, d)
                 if f is None:
                     continue
-                label = LABEL.get(predicate, predicate.split(":")[-1].replace("_", " "))
+                label = (
+                    _label(predicate)
+                    if not predicate.startswith("request:")
+                    else predicate.split(":")[-1].replace("_", " ")
+                )
                 q = f"As of {_fmt(d)}, what was the {label} for {_subject(subject)}?"
                 self.add(
                     "temporal",
@@ -260,23 +301,31 @@ class _Gen:
             if vs[0].privacy or not (len(vs) > 1 or status_like):
                 continue
             f = vs[-1]
-            label = LABEL.get(
-                predicate,
-                f"status of the request about {REQUEST_TOPIC.get(predicate.split(':')[-1], '')}",
+            label = (
+                f"status of the request about {REQUEST_TOPIC.get(predicate.split(':')[-1], '')}"
+                if predicate.startswith(("request:", "complaint:"))
+                else _label(predicate)
             )
             q = f"What is the current {label} for {_subject(subject)}?"
             self.add("latest_state", q, f.value, [f.value_norm], list(f.spoken), f.evidence, [f.id])
 
     def decision_change_questions(self) -> None:
-        for subject, predicate in [
+        hand = [
             ("teams", "price_per_seat"),
             ("teams", "launch_date"),
             ("falcon", "owner"),
             ("falcon", "cutover_date"),
-        ]:
+        ]
+        changed = sorted(
+            {(f.subject, f.predicate) for f in self.w.facts if f.reason and f.supersedes}
+            - set(hand)
+        )
+        for subject, predicate in [*hand, *changed]:
             vs = self.versions(subject, predicate)
             for old, new in itertools.pairwise(vs):
-                label = LABEL[predicate]
+                if not new.reason:
+                    continue
+                label = _label(predicate)
                 m = self.meeting[new.evidence[0].meeting]
                 answer = (
                     f"On {_fmt(new.valid_from)} ({m.title}) the {label} changed from "
@@ -335,7 +384,7 @@ class _Gen:
             )
 
     def aggregation_questions(self) -> None:
-        for org in ("acmeway", "beacon_freight", "corvid", "driftwood"):
+        for org in ORG_BY_ID:
             groups = sorted(
                 {
                     f.predicate
@@ -498,6 +547,65 @@ class _Gen:
                 [f.id for f in fs],
             )
 
+    def cross_entity_questions(self) -> None:
+        """Questions that need facts from several meetings (only arise at scale="xl").
+
+        * which customers asked for the same thing (aggregation across customer calls);
+        * who owned a project, or what its target was, at the moment its status changed
+          (multi-hop: join two time-versioned facts on the date one of them changed).
+        """
+        askers: dict[str, list[Fact]] = {}
+        for f in self.w.facts:
+            if f.predicate.startswith("request:") and f.subject in ORG_BY_ID:
+                firsts = askers.setdefault(f.predicate, [])
+                if not any(g.subject == f.subject for g in firsts):
+                    firsts.append(f)
+        for predicate, firsts in sorted(askers.items()):
+            if len(firsts) < 2:
+                continue
+            topic = REQUEST_TOPIC.get(predicate.split(":", 1)[1], predicate)
+            names = [ORG_BY_ID[f.subject].name for f in firsts]
+            self.add(
+                "aggregation",
+                f"Which customers raised {topic} as a request?",
+                "; ".join(names),
+                [f.subject for f in firsts],
+                [k for f in firsts for k in f.spoken],
+                [e for f in firsts for e in f.evidence],
+                [f.id for f in firsts],
+            )
+        for pid in PROJECT_BY_ID:
+            statuses = self.versions(pid, "status")[1:]
+            owners = self.versions(pid, "owner")
+            targets = self.versions(pid, "target_date")
+            for st in statuses:
+                owner = self.at(owners, st.valid_from)
+                target = self.at(targets, st.valid_from)
+                name = PROJECT_BY_ID[pid].name
+                if owner is not None and len(owners) > 1:
+                    self.add(
+                        "multi_hop",
+                        f"Who owned {name} at the time it was marked {st.value_norm} "
+                        f"({_fmt(st.valid_from)})?",
+                        owner.value,
+                        [owner.value_norm],
+                        [*owner.spoken, *st.spoken],
+                        [*owner.evidence, *st.evidence],
+                        [owner.id, st.id],
+                    )
+                if target is not None and st.value_norm == "blocked":
+                    self.add(
+                        "multi_hop",
+                        f"When {name} was marked blocked on {_fmt(st.valid_from)}, what "
+                        "was its target ship date at that moment?",
+                        target.value,
+                        [target.value_norm],
+                        [*target.spoken, *st.spoken],
+                        [*target.evidence, *st.evidence],
+                        [target.id, st.id],
+                        as_of=st.valid_from,
+                    )
+
     def unanswerable_questions(self) -> None:
         """Plausible questions the corpus cannot answer; each guarded against the world."""
         subjects_preds = {(f.subject, f.predicate) for f in self.w.facts}
@@ -599,9 +707,24 @@ def generate(world: World, beat_map: BeatMap, seed: int) -> list[Question]:
     g.commitment_questions()
     g.aggregation_questions()
     g.multi_hop_questions()
+    g.cross_entity_questions()
     g.unanswerable_questions()
     g.split()
     return g.qs
+
+
+def select_benchmark(questions: list[Question], seed: int) -> list[Question]:
+    """Stratified benchmark subset: up to ``BENCHMARK_QUOTAS`` questions per category.
+
+    Sampling is seeded and keeps the original order and dev/test labels, so the split stays
+    stratified and the subset is reproducible.
+    """
+    rng = random.Random(f"{seed}:select")
+    keep: set[str] = set()
+    for category, quota in BENCHMARK_QUOTAS.items():
+        pool = [q.id for q in questions if q.category == category]
+        keep.update(rng.sample(pool, min(quota, len(pool))))
+    return [q for q in questions if q.id in keep]
 
 
 class ValidationReport(BaseModel):

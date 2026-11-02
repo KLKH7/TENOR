@@ -115,9 +115,57 @@ PROJECTS: tuple[Project, ...] = (
             "New per-seat team plan; the launch the company is working towards"),
 )  # fmt: skip
 
-PEOPLE: dict[str, Person] = {p.id: p for p in STAFF} | {c.id: c for o in ORGS for c in o.contacts}
-ORG_BY_ID: dict[str, Org] = {o.id: o for o in ORGS}
-PROJECT_BY_ID: dict[str, Project] = {p.id: p for p in PROJECTS}
+# -- Northwind-XL additions (scale="xl" only) -------------------------------------------------
+# More customers whose asks and prices sit close to the plot's (near-miss distractors), a third
+# Sam, and projects whose names collide with other entities (Harbor vs Harbor Ventures).
+
+XL_ORGS: tuple[Org, ...] = (
+    Org("lumen", "Lumen Health", "customer", "lumenhealth.com",
+        (_ext("ava", "Ava Lindqvist", "ava@lumenhealth.com", "IT Director", "Lumen Health"),)),
+    Org("orchard", "Orchard Labs", "customer", "orchardlabs.io",
+        (_ext("sam_r", "Sam Rivera", "sam@orchardlabs.io", "Head of Ops", "Orchard Labs"),)),
+    Org("pinecrest", "Pinecrest Logistics", "customer", "pinecrest.co",
+        (_ext("noor", "Noor Haddad", "noor@pinecrest.co", "VP Engineering",
+              "Pinecrest Logistics"),)),
+    Org("quarry", "Quarry Bank", "customer", "quarrybank.com",
+        (_ext("ivan", "Ivan Petrov", "ivan.petrov@quarrybank.com", "Security Lead",
+              "Quarry Bank"),)),
+    Org("redwood", "Redwood Media", "customer", "redwoodmedia.com",
+        (_ext("tess", "Tess Morgan", "tess@redwoodmedia.com", "COO", "Redwood Media"),)),
+    Org("summit", "Summit Schools", "customer", "summitschools.org",
+        (_ext("joel", "Joel Brooks", "jbrooks@summitschools.org", "District CTO",
+              "Summit Schools"),)),
+    Org("tidewater", "Tidewater Foods", "customer", "tidewaterfoods.com",
+        (_ext("maya", "Maya Okoye", "maya@tidewaterfoods.com", "Finance Director",
+              "Tidewater Foods"),)),
+    Org("vantage", "Vantage Legal", "customer", "vantagelegal.com",
+        (_ext("hugo", "Hugo Lefevre", "hugo@vantagelegal.com", "Managing Partner",
+              "Vantage Legal"),)),
+)  # fmt: skip
+
+XL_PROJECTS: tuple[Project, ...] = (
+    Project("kite", "Kite", ("the permissions overhaul", "KITE-88"),
+            "Overhaul of roles and permissions"),
+    Project("atlas", "Atlas", ("the warehouse migration", "DATA-41"),
+            "Migration of the data warehouse to the new cluster"),
+    Project("juniper", "Juniper", ("the billing emails revamp",),
+            "Rewrite of billing and invoice emails"),
+    Project("harbor_hc", "Harbor", ("the help center relaunch",),
+            "Relaunch of the help center (not the investor Harbor Ventures)"),
+    Project("sparrow", "Sparrow", ("the mobile onboarding test",),
+            "A/B test of a shorter mobile onboarding"),
+    Project("meridian", "Meridian", ("the admin console",),
+            "Enterprise admin console"),
+)  # fmt: skip
+
+ALL_ORGS = ORGS + XL_ORGS
+ALL_PROJECTS = PROJECTS + XL_PROJECTS
+
+PEOPLE: dict[str, Person] = {p.id: p for p in STAFF} | {
+    c.id: c for o in ALL_ORGS for c in o.contacts
+}
+ORG_BY_ID: dict[str, Org] = {o.id: o for o in ALL_ORGS}
+PROJECT_BY_ID: dict[str, Project] = {p.id: p for p in ALL_PROJECTS}
 
 
 def person(pid: str) -> Person:

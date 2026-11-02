@@ -418,3 +418,29 @@ class _SdkToolBackend:
 
     def turn(self, request: TurnRequest, model: str) -> TurnCompletion:
         return _anthropic_turn(self._client, request, model)
+
+
+def count_tokens(texts: list[str], model: str, cache_dir: Path) -> list[int]:
+    """Exact input-token counts via the free ``messages.count_tokens`` endpoint (cached).
+
+    Counts include a few tokens of message framing per text, which is what a call would pay.
+    """
+    import anthropic
+
+    out: list[int] = []
+    sdk: Any = None
+    for text in texts:
+        key = hashlib.sha256(f"{model}\n{text}".encode()).hexdigest()
+        path = cache_dir / "tokens" / f"{key}.txt"
+        if path.exists():
+            out.append(int(path.read_text()))
+            continue
+        if sdk is None:
+            sdk = anthropic.Anthropic(max_retries=6)
+        result = sdk.messages.count_tokens(
+            model=model, messages=[{"role": "user", "content": text}]
+        )
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(str(result.input_tokens))
+        out.append(result.input_tokens)
+    return out

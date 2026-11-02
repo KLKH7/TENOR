@@ -134,13 +134,14 @@ def _speakers(meeting: Meeting) -> list[str]:
     return speakers if meeting.kind == "all_hands" else sorted(set(meeting.attendees))
 
 
-def pad_world(world: World, seed: int) -> World:
+def pad_world(world: World, seed: int, factor: float = 1.0) -> World:
     """Return a copy of ``world`` with filler beats inserted and evidence remapped."""
     rng = random.Random(f"{seed}:pad")
     world = world.model_copy(deep=True)
     remap: dict[str, dict[int, int]] = {}
     for meeting in world.meetings:
-        need = max(0, TARGET_TURNS.get(meeting.kind, 45) - len(meeting.beats))
+        target = round(TARGET_TURNS.get(meeting.kind, 45) * factor)
+        need = max(0, target - len(meeting.beats))
         locked = _locked_gaps(meeting, world)
         # Never before the opener or after the closer.
         gaps = [g for g in range(1, len(meeting.beats)) if g not in locked]

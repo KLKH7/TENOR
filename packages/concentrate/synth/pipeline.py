@@ -26,9 +26,9 @@ from concentrate.llm.client import LLMClient, cost_usd
 from concentrate.synth.noise import NoiseRates
 from concentrate.synth.pad import pad_world
 from concentrate.synth.polish import PROMPT_ID, PolishStats, estimate_cost_tokens, polish_meeting
-from concentrate.synth.questions import ValidationReport, generate, validate
+from concentrate.synth.questions import ValidationReport, generate, select_benchmark, validate
 from concentrate.synth.render import BeatMap, folder_models, folders_output, render_meeting
-from concentrate.synth.roster import ORGS, PEOPLE, PROJECTS
+from concentrate.synth.roster import ALL_ORGS, ALL_PROJECTS, ORGS, PROJECTS, STAFF
 from concentrate.synth.scenario import build_world
 from concentrate.synth.world import World
 
@@ -46,12 +46,14 @@ class SynthResult(BaseModel):
     llm_spent_usd: float
 
 
-def directory() -> dict[str, Any]:
+def directory(scale: str = "base") -> dict[str, Any]:
     """The org directory + glossary a deployment would have (HRIS, CRM, project tracker).
 
     Deliberately excludes ``asr_variants``: a real system doesn't know how ASR will mishear
     names, so linkers must cope with misspellings themselves.
     """
+    orgs = ALL_ORGS if scale == "xl" else ORGS
+    projects = ALL_PROJECTS if scale == "xl" else PROJECTS
     return {
         "people": [
             {
@@ -62,19 +64,23 @@ def directory() -> dict[str, Any]:
                 "team": p.team,
                 "org": p.org,
             }
-            for p in PEOPLE.values()
+            for p in [*STAFF, *(c for o in orgs for c in o.contacts)]
         ],
-        "orgs": [{"id": o.id, "name": o.name, "kind": o.kind, "domain": o.domain} for o in ORGS],
+        "orgs": [{"id": o.id, "name": o.name, "kind": o.kind, "domain": o.domain} for o in orgs],
         "projects": [
             {"id": p.id, "name": p.name, "aliases": list(p.aliases), "description": p.description}
-            for p in PROJECTS
+            for p in projects
         ],
     }
 
 
-def build(seed: int) -> World:
+# Northwind-XL meetings are padded longer: real 30-minute meetings run thousands of words.
+PAD_FACTOR = {"base": 1.0, "xl": 2.5}
+
+
+def build(seed: int, scale: str = "base") -> World:
     """The padded ground-truth world for ``seed`` (no rendering)."""
-    return pad_world(build_world(seed), seed)
+    return pad_world(build_world(seed, scale), seed, PAD_FACTOR[scale])
 
 
 # Current Claude models think adaptively even at low effort; thinking is billed as output.
@@ -99,12 +105,17 @@ def generate_dataset(
     *,
     llm: LLMClient | None = None,
     rates: NoiseRates | None = None,
+    scale: str = "base",
 ) -> SynthResult:
-    """Generate and write the dataset. ``llm=None`` means template-only rendering."""
+    """Generate and write the dataset. ``llm=None`` means template-only rendering.
+
+    At ``scale="xl"`` every generated question goes to ``questions_all.jsonl`` and a stratified
+    benchmark subset (``select_benchmark``) to ``questions.jsonl``.
+    """
     rates = rates or NoiseRates()
-    world = build(seed)
+    world = build(seed, scale)
     stats = PolishStats() if llm else None
-    folders = folder_models(seed)
+    folders = folder_models(seed, scale)
     notes: list[granola.Note] = []
     beat_map: BeatMap = {}
     for meeting in world.meetings:
@@ -117,7 +128,8 @@ def generate_dataset(
         notes.append(note)
         beat_map.update(bm)
 
-    questions = generate(world, beat_map, seed)
+    all_questions = generate(world, beat_map, seed)
+    questions = select_benchmark(all_questions, seed) if scale == "xl" else all_questions
     report = validate(questions, notes)
 
     (out / "notes").mkdir(parents=True, exist_ok=True)
@@ -128,15 +140,20 @@ def generate_dataset(
             _dump(note.model_dump(mode="json", exclude_unset=True))
         )
     (out / "folders.json").write_text(
-        _dump(folders_output(seed).model_dump(mode="json", exclude_unset=True))
+        _dump(folders_output(seed, scale).model_dump(mode="json", exclude_unset=True))
     )
     (out / "world.json").write_text(_dump(world.model_dump(mode="json")))
-    (out / "directory.json").write_text(_dump(directory()))
+    (out / "directory.json").write_text(_dump(directory(scale)))
+    if scale == "xl":
+        (out / "questions_all.jsonl").write_text(
+            "".join(q.model_dump_json() + "\n" for q in all_questions)
+        )
     (out / "questions.jsonl").write_text("".join(q.model_dump_json() + "\n" for q in questions))
     utterances = sum(len(n.transcript or []) for n in notes)
     words = sum(len(i.text.split()) for n in notes for i in n.transcript or [])
     manifest = {
         "generator": GENERATOR_VERSION,
+        "scale": scale,
         "seed": seed,
         "polish": {
             "enabled": llm is not None,

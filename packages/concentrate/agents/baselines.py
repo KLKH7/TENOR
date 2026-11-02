@@ -82,6 +82,40 @@ class SystemResult:
     retrieved: list[str] = field(default_factory=list)  # note IDs put in context / read
 
 
+@dataclass
+class IngestStats:
+    """Write-time cost of building a memory from the corpus (paid once, not per question)."""
+
+    llm_calls: int = 0
+    input_tokens: int = 0
+    output_tokens: int = 0
+    cost_usd: float = 0.0
+    seconds: float = 0.0
+    cached: bool = False  # True when an existing on-disk memory was reused
+    detail: dict[str, Any] = field(default_factory=dict)  # e.g. facts/nodes/edges created
+
+
+class WriteTimeSystem(Protocol):
+    """A system that builds a memory once (``ingest``) and answers from it (``run``).
+
+    Mem0, Graphiti and Concentrate are write-time systems; B0-B3 are not. Ingestion must be
+    idempotent and persisted under ``data/cache/<system>/<corpus hash>/`` so a rerun reuses it.
+    """
+
+    name: str
+    prompt_ids: tuple[str, ...]
+
+    def ingest(self, notes: list[MeetingNote]) -> IngestStats: ...
+
+    def estimate_ingest(self, notes: list[MeetingNote]) -> tuple[int, int]:
+        """(input, output) tokens ingestion would cost, without calling any model."""
+        ...
+
+    def run(self, q: QuestionLike) -> SystemResult: ...
+
+    def estimate(self, q: QuestionLike) -> tuple[int, int]: ...
+
+
 def _user_prompt(q: QuestionLike) -> str:
     return f"Today's date: {q.as_of.isoformat()}\n\nQuestion: {q.question}"
 

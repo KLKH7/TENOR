@@ -211,8 +211,12 @@ def _close(s: Story, m: M, who: str) -> None:
     m.say(who, s.pick(CLOSERS))
 
 
-def build_world(seed: int) -> World:
-    """Construct the full ground-truth world for ``seed``."""
+def build_world(seed: int, scale: str = "base") -> World:
+    """Construct the ground-truth world for ``seed``.
+
+    ``scale="xl"`` adds the procedural Northwind-XL meetings (``synth.extend``) on top of the
+    hand-authored plot, which is identical at both scales.
+    """
     s = Story(seed)
     eng = _StandupEngine(s)
     facts: dict[str, Fact | Commitment] = {}
@@ -1787,6 +1791,10 @@ def build_world(seed: int) -> World:
     )
     _close(s, m, "marcus")
 
+    if scale == "xl":
+        from concentrate.synth.extend import extend_story
+
+        extend_story(s)
     return World(
         seed=seed,
         owner="priya",

@@ -56,8 +56,17 @@ def _ts(dt: datetime) -> datetime:
     return dt.replace(microsecond=(dt.microsecond // 1000) * 1000)
 
 
-def folder_models(seed: int) -> dict[str, granola.Folder]:
-    ids = {name: granola_id("fol", seed, name) for name, _ in FOLDERS}
+def folder_list(scale: str = "base") -> list[tuple[str, str | None]]:
+    if scale == "xl":
+        from concentrate.synth.extend import XL_FOLDERS
+
+        return [*FOLDERS, *XL_FOLDERS]
+    return FOLDERS
+
+
+def folder_models(seed: int, scale: str = "base") -> dict[str, granola.Folder]:
+    folders = folder_list(scale)
+    ids = {name: granola_id("fol", seed, name) for name, _ in folders}
     return {
         name: granola.Folder(
             id=ids[name],
@@ -66,12 +75,12 @@ def folder_models(seed: int) -> dict[str, granola.Folder]:
             parent_folder_id=ids[parent] if parent else None,
             space_id=None,
         )
-        for name, parent in FOLDERS
+        for name, parent in folders
     }
 
 
-def folders_output(seed: int) -> granola.ListFoldersOutput:
-    folders = sorted(folder_models(seed).values(), key=lambda f: f.name)
+def folders_output(seed: int, scale: str = "base") -> granola.ListFoldersOutput:
+    folders = sorted(folder_models(seed, scale).values(), key=lambda f: f.name)
     return granola.ListFoldersOutput(folders=folders, hasMore=False, cursor=None)
 
 

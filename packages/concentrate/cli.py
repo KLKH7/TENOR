@@ -82,6 +82,7 @@ def sync(
 
 
 NORTHWIND = Path("data/fixtures/northwind")
+NORTHWIND_XL = Path("data/fixtures/large/northwind-xl")  # gitignored: several MB
 BUDGET_CONFIRM_USD = 2.0
 
 
@@ -95,14 +96,17 @@ def synth(
         bool, typer.Option(help="Print the polish cost estimate and exit.")
     ] = False,
     yes: Annotated[bool, typer.Option("--yes", help="Skip the >$2 cost confirmation.")] = False,
+    scale: Annotated[str, typer.Option(help="base (40 meetings) or xl (~185 meetings).")] = "base",
 ) -> None:
     """Generate the synthetic Northwind Labs dataset and benchmark questions."""
+    if scale == "xl" and out == NORTHWIND:
+        out = NORTHWIND_XL
     from concentrate.synth.pipeline import build, estimate_polish_usd, generate_dataset
 
     llm = None
     if polish or estimate:
         llm = LLMClient(offline=offline)
-        tin, tout, usd = estimate_polish_usd(build(seed), llm.model)
+        tin, tout, usd = estimate_polish_usd(build(seed, scale), llm.model)
         typer.echo(
             f"polish estimate ({llm.model}): ~{tin:,} input + ~{tout:,} output tokens "
             f"≈ ${usd:.2f} (uncached; heuristic counts incl. 30% thinking allowance)"
@@ -113,7 +117,7 @@ def synth(
             typer.confirm(
                 f"Estimated cost ${usd:.2f} exceeds ${BUDGET_CONFIRM_USD:.0f}. Proceed?", abort=True
             )
-    result = generate_dataset(seed, out, llm=llm)
+    result = generate_dataset(seed, out, llm=llm, scale=scale)
     v = result.validation
     typer.echo(
         f"wrote {result.meetings} notes, {result.utterances:,} utterances, "

@@ -1,5 +1,6 @@
 {
   "generator": "northwind-1",
+  "scale": "base",
   "seed": 42,
   "polish": {
     "enabled": false,
