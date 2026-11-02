@@ -275,3 +275,14 @@ Query-side only, dev only; details, error analysis and ablations in `docs/CONCEN
 - **Decision:** fix lookup misses in `memory/query.py` (role-qualified names, named-meeting anchoring, list-wide commitment lookups) rather than re-extract. Dev accuracy 89% → 90% (within noise); gold lines in context 70% → 86%.
 - **Ablations:** removing supersession/validity state costs 6 pts on dev, the largest effect; removing query-time entity linking costs 1 pt.
 - **Trade-off:** the entail.v2 false rejects on commitment updates have a measured fix (owner-free update claims; 5 of 7 flip, Δ 0 on dev). It ships only with an explicit `entail.v3` rebuild, so the cached store and the code stay consistent.
+
+## Transcript-retirement curve (workstream C, 2026-11-02)
+- **Decision:** retirement is applied identically to every system (`evals/retirement.is_retired`:
+  `day < as_of − N`). For b0, deleting a transcript removes its chunks from the index too (the
+  meeting is still findable through its summary or notes), so b0's N = 0 limit is b1.
+- **Decision:** "evidence in context" is split into gold line *text* shown vs gold line *ID*
+  referenced, since Concentrate keeps IDs as provenance pointers after retirement.
+- **Result (XL dev, $7.04):** Concentrate 89% at N = ∞ → 88% at N = 0, keeping ~5% of transcript
+  tokens; summaries-only b1 scores 64%. b0's retired accuracy was not run (≈ $29 at N = ∞). The
+  benchmark has no verbatim-quote questions, so the main expected loss is untested. See
+  `docs/RETIREMENT.md`.

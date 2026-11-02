@@ -1,0 +1,608 @@
+{
+  "meta": {
+    "date": "20261102T222859Z",
+    "git": {
+      "sha": "5b8d024",
+      "dirty": true
+    },
+    "model": "claude-opus-5-5",
+    "seed": 42,
+    "split": "dev",
+    "questions": 90,
+    "prompts": {
+      "concentrate@inf": [
+        "answer.v1",
+        "extract.v2",
+        "entail.v2"
+      ],
+      "concentrate@30": [
+        "answer.v1",
+        "extract.v2",
+        "entail.v2"
+      ],
+      "concentrate@14": [
+        "answer.v1",
+        "extract.v2",
+        "entail.v2"
+      ],
+      "concentrate@7": [
+        "answer.v1",
+        "extract.v2",
+        "entail.v2"
+      ],
+      "concentrate@0": [
+        "answer.v1",
+        "extract.v2",
+        "entail.v2"
+      ],
+      "b1_summaries": [
+        "answer.v1"
+      ],
+      "judge": [
+        "judge.v1"
+      ]
+    },
+    "spent_usd": 7.039803999999998,
+    "store": "data/cache/concentrate/78a4767dabf454ae/6b9c4de7",
+    "eval_report": "evals/reports/retirement/20261102T222859Z.md"
+  },
+  "settings": {
+    "concentrate@inf": null,
+    "concentrate@30": 30,
+    "concentrate@14": 14,
+    "concentrate@7": 7,
+    "concentrate@0": 0
+  },
+  "order": [
+    "30",
+    "14",
+    "7",
+    "inf",
+    "0"
+  ],
+  "kept": {
+    "inf": {
+      "transcript": 623826.4333333333,
+      "memory": 31414.0,
+      "total": 1462493.7666666666,
+      "share": 1.0
+    },
+    "30": {
+      "transcript": 352750.6111111111,
+      "memory": 31414.0,
+      "total": 839611.8888888889,
+      "share": 0.600768502842778
+    },
+    "14": {
+      "transcript": 159925.36666666667,
+      "memory": 31414.0,
+      "total": 397985.4666666667,
+      "share": 0.3086274669989108
+    },
+    "7": {
+      "transcript": 80680.62222222223,
+      "memory": 31414.0,
+      "total": 216155.61111111112,
+      "share": 0.18139720585038926
+    },
+    "0": {
+      "transcript": 2875.4777777777776,
+      "memory": 31414.0,
+      "total": 38060.37777777778,
+      "share": 0.03411917902410074
+    }
+  },
+  "retired_share": {
+    "inf": 0.0,
+    "30": 0.40591633585594916,
+    "14": 0.7031235462515653,
+    "7": 0.8316164295802501,
+    "0": 0.9869812828549082
+  },
+  "curve": {
+    "concentrate@inf": {
+      "n": 90,
+      "accuracy": 0.8888888888888888,
+      "accuracy_ci95": [
+        0.8222222222222222,
+        0.9555555555555556
+      ],
+      "gold_evidence": 0.9251078886839289,
+      "input_tokens_per_q": 8983.166666666666,
+      "by_category": {
+        "aggregation": {
+          "n": 8,
+          "accuracy": 0.5,
+          "accuracy_ci95": [
+            0.125,
+            0.875
+          ]
+        },
+        "commitment_status": {
+          "n": 9,
+          "accuracy": 0.8888888888888888,
+          "accuracy_ci95": [
+            0.6666666666666666,
+            1.0
+          ]
+        },
+        "decision_change": {
+          "n": 8,
+          "accuracy": 1.0,
+          "accuracy_ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "entity_disambiguation": {
+          "n": 10,
+          "accuracy": 0.7,
+          "accuracy_ci95": [
+            0.4,
+            1.0
+          ]
+        },
+        "latest_state": {
+          "n": 11,
+          "accuracy": 1.0,
+          "accuracy_ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "multi_hop": {
+          "n": 7,
+          "accuracy": 1.0,
+          "accuracy_ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "single_hop": {
+          "n": 11,
+          "accuracy": 0.9090909090909091,
+          "accuracy_ci95": [
+            0.7272727272727273,
+            1.0
+          ]
+        },
+        "temporal": {
+          "n": 18,
+          "accuracy": 0.9444444444444444,
+          "accuracy_ci95": [
+            0.8333333333333334,
+            1.0
+          ]
+        },
+        "unanswerable": {
+          "n": 8,
+          "accuracy": 1.0,
+          "accuracy_ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    "concentrate@30": {
+      "n": 90,
+      "accuracy": 0.8777777777777778,
+      "accuracy_ci95": [
+        0.8,
+        0.9444444444444444
+      ],
+      "gold_evidence": 0.8960938033750084,
+      "input_tokens_per_q": 6702.733333333334,
+      "by_category": {
+        "aggregation": {
+          "n": 8,
+          "accuracy": 0.375,
+          "accuracy_ci95": [
+            0.125,
+            0.75
+          ]
+        },
+        "commitment_status": {
+          "n": 9,
+          "accuracy": 0.8888888888888888,
+          "accuracy_ci95": [
+            0.6666666666666666,
+            1.0
+          ]
+        },
+        "decision_change": {
+          "n": 8,
+          "accuracy": 1.0,
+          "accuracy_ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "entity_disambiguation": {
+          "n": 10,
+          "accuracy": 0.7,
+          "accuracy_ci95": [
+            0.4,
+            1.0
+          ]
+        },
+        "latest_state": {
+          "n": 11,
+          "accuracy": 1.0,
+          "accuracy_ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "multi_hop": {
+          "n": 7,
+          "accuracy": 1.0,
+          "accuracy_ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "single_hop": {
+          "n": 11,
+          "accuracy": 0.9090909090909091,
+          "accuracy_ci95": [
+            0.7272727272727273,
+            1.0
+          ]
+        },
+        "temporal": {
+          "n": 18,
+          "accuracy": 0.9444444444444444,
+          "accuracy_ci95": [
+            0.8333333333333334,
+            1.0
+          ]
+        },
+        "unanswerable": {
+          "n": 8,
+          "accuracy": 1.0,
+          "accuracy_ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    "concentrate@14": {
+      "n": 90,
+      "accuracy": 0.8777777777777778,
+      "accuracy_ci95": [
+        0.8,
+        0.9444444444444444
+      ],
+      "gold_evidence": 0.8705229042836646,
+      "input_tokens_per_q": 5717.777777777777,
+      "by_category": {
+        "aggregation": {
+          "n": 8,
+          "accuracy": 0.5,
+          "accuracy_ci95": [
+            0.125,
+            0.875
+          ]
+        },
+        "commitment_status": {
+          "n": 9,
+          "accuracy": 0.8888888888888888,
+          "accuracy_ci95": [
+            0.6666666666666666,
+            1.0
+          ]
+        },
+        "decision_change": {
+          "n": 8,
+          "accuracy": 0.875,
+          "accuracy_ci95": [
+            0.625,
+            1.0
+          ]
+        },
+        "entity_disambiguation": {
+          "n": 10,
+          "accuracy": 0.7,
+          "accuracy_ci95": [
+            0.4,
+            1.0
+          ]
+        },
+        "latest_state": {
+          "n": 11,
+          "accuracy": 1.0,
+          "accuracy_ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "multi_hop": {
+          "n": 7,
+          "accuracy": 1.0,
+          "accuracy_ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "single_hop": {
+          "n": 11,
+          "accuracy": 0.9090909090909091,
+          "accuracy_ci95": [
+            0.7272727272727273,
+            1.0
+          ]
+        },
+        "temporal": {
+          "n": 18,
+          "accuracy": 0.9444444444444444,
+          "accuracy_ci95": [
+            0.8333333333333334,
+            1.0
+          ]
+        },
+        "unanswerable": {
+          "n": 8,
+          "accuracy": 1.0,
+          "accuracy_ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    "concentrate@7": {
+      "n": 90,
+      "accuracy": 0.8777777777777778,
+      "accuracy_ci95": [
+        0.8,
+        0.9444444444444444
+      ],
+      "gold_evidence": 0.8627728530436564,
+      "input_tokens_per_q": 5355.733333333334,
+      "by_category": {
+        "aggregation": {
+          "n": 8,
+          "accuracy": 0.5,
+          "accuracy_ci95": [
+            0.125,
+            0.875
+          ]
+        },
+        "commitment_status": {
+          "n": 9,
+          "accuracy": 0.8888888888888888,
+          "accuracy_ci95": [
+            0.6666666666666666,
+            1.0
+          ]
+        },
+        "decision_change": {
+          "n": 8,
+          "accuracy": 1.0,
+          "accuracy_ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "entity_disambiguation": {
+          "n": 10,
+          "accuracy": 0.6,
+          "accuracy_ci95": [
+            0.3,
+            0.9
+          ]
+        },
+        "latest_state": {
+          "n": 11,
+          "accuracy": 1.0,
+          "accuracy_ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "multi_hop": {
+          "n": 7,
+          "accuracy": 1.0,
+          "accuracy_ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "single_hop": {
+          "n": 11,
+          "accuracy": 0.9090909090909091,
+          "accuracy_ci95": [
+            0.7272727272727273,
+            1.0
+          ]
+        },
+        "temporal": {
+          "n": 18,
+          "accuracy": 0.9444444444444444,
+          "accuracy_ci95": [
+            0.8333333333333334,
+            1.0
+          ]
+        },
+        "unanswerable": {
+          "n": 8,
+          "accuracy": 1.0,
+          "accuracy_ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    "concentrate@0": {
+      "n": 90,
+      "accuracy": 0.8777777777777778,
+      "accuracy_ci95": [
+        0.8111111111111111,
+        0.9444444444444444
+      ],
+      "gold_evidence": 0.844988300198128,
+      "input_tokens_per_q": 4989.4111111111115,
+      "by_category": {
+        "aggregation": {
+          "n": 8,
+          "accuracy": 0.5,
+          "accuracy_ci95": [
+            0.125,
+            0.875
+          ]
+        },
+        "commitment_status": {
+          "n": 9,
+          "accuracy": 0.8888888888888888,
+          "accuracy_ci95": [
+            0.6666666666666666,
+            1.0
+          ]
+        },
+        "decision_change": {
+          "n": 8,
+          "accuracy": 1.0,
+          "accuracy_ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "entity_disambiguation": {
+          "n": 10,
+          "accuracy": 0.6,
+          "accuracy_ci95": [
+            0.3,
+            0.9
+          ]
+        },
+        "latest_state": {
+          "n": 11,
+          "accuracy": 1.0,
+          "accuracy_ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "multi_hop": {
+          "n": 7,
+          "accuracy": 1.0,
+          "accuracy_ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "single_hop": {
+          "n": 11,
+          "accuracy": 0.9090909090909091,
+          "accuracy_ci95": [
+            0.7272727272727273,
+            1.0
+          ]
+        },
+        "temporal": {
+          "n": 18,
+          "accuracy": 0.9444444444444444,
+          "accuracy_ci95": [
+            0.8333333333333334,
+            1.0
+          ]
+        },
+        "unanswerable": {
+          "n": 8,
+          "accuracy": 1.0,
+          "accuracy_ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    "b1_summaries": {
+      "n": 90,
+      "accuracy": 0.6444444444444445,
+      "accuracy_ci95": [
+        0.5444444444444444,
+        0.7444444444444445
+      ],
+      "gold_evidence": 0.0,
+      "input_tokens_per_q": 5937.922222222222,
+      "by_category": {
+        "aggregation": {
+          "n": 8,
+          "accuracy": 0.0,
+          "accuracy_ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "commitment_status": {
+          "n": 9,
+          "accuracy": 0.6666666666666666,
+          "accuracy_ci95": [
+            0.3333333333333333,
+            1.0
+          ]
+        },
+        "decision_change": {
+          "n": 8,
+          "accuracy": 0.625,
+          "accuracy_ci95": [
+            0.25,
+            1.0
+          ]
+        },
+        "entity_disambiguation": {
+          "n": 10,
+          "accuracy": 0.3,
+          "accuracy_ci95": [
+            0.0,
+            0.6
+          ]
+        },
+        "latest_state": {
+          "n": 11,
+          "accuracy": 0.7272727272727273,
+          "accuracy_ci95": [
+            0.45454545454545453,
+            0.9090909090909091
+          ]
+        },
+        "multi_hop": {
+          "n": 7,
+          "accuracy": 0.7142857142857143,
+          "accuracy_ci95": [
+            0.2857142857142857,
+            1.0
+          ]
+        },
+        "single_hop": {
+          "n": 11,
+          "accuracy": 0.7272727272727273,
+          "accuracy_ci95": [
+            0.45454545454545453,
+            1.0
+          ]
+        },
+        "temporal": {
+          "n": 18,
+          "accuracy": 0.8333333333333334,
+          "accuracy_ci95": [
+            0.6666666666666666,
+            1.0
+          ]
+        },
+        "unanswerable": {
+          "n": 8,
+          "accuracy": 1.0,
+          "accuracy_ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      }
+    }
+  }
+}
