@@ -104,4 +104,12 @@ The **retirement curve** comes from deleting L0 and L1 for meetings older than N
 ## Open questions for review
 1. **Ingestion model:** Sonnet 5.5 (cheaper, consistent with Mem0/Graphiti here), or Opus 5.5 for extraction quality? Budget favours Sonnet.
 2. **Chunking:** whole meetings (more context, fewer calls) or ~40-line windows (cheaper retries, lower recall of cross-chunk facts)?
-3. **Speaker attribution scope:** remote meetings only (where cues exist), or also attempt in-person?
+3. ~~Speaker attribution scope~~ **Decided (2026-11-02, with the author):** remote platforms (Meet/Zoom) already give Granola names: 82% of remote "Them" lines were named in the author's real meetings. So:
+   - **Remote:** attribution only for the unnamed remainder. The effort goes into **cross-meeting identity**: platform display name ↔ calendar email handle ↔ directory, which is the miss observed live.
+   - **In person (and hybrid rooms):** full inference, because one microphone (or one "Room 4B" participant) carries several voices. The signals are:
+     - addressing cues ("Megan, …" → next speaker);
+     - self-references resolved by later meetings ("I'll take X" … "Sam's X is done");
+     - role priors (the CFO reports runway);
+     - the attendee list as the candidate set;
+     - **label propagation over iOS diarization clusters**: one confident line names the whole "Speaker A" cluster.
+   - **Benchmark follow-up:** add hybrid meetings where a conference room joins as one participant.
