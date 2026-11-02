@@ -174,3 +174,21 @@ The remote 38+ word monologue tail is a content limitation of scripted turns and
 - numbers on the transcript-retirement question they've said they're weighing.
 
 **Trade-off:** the work hardly changes, but polish moves to the benchmark: a card ([`BENCHMARK.md`](BENCHMARK.md)), one command per system, and a documented way to add a system. Its biggest weakness, being synthetic, is stated up front.
+
+## Unit economics and scale curve (workstream F, 2026-11-02)
+
+Details and results: [`ECONOMICS.md`](ECONOMICS.md).
+
+- **Re-price measured tokens, don't estimate costs.** `concentrate economics` reads the builds'
+  `progress.jsonl` and an eval report's per-question rows, infers each build's model by
+  re-pricing, and re-prices on any model. The only guesses are usage volumes (CLI flags).
+- **Scale curve holds the questions fixed.** Questions are the dev questions answerable inside
+  the 50% prefix; each size runs the subset answerable there. Comparing different question
+  samples per size would confound haystack size with question difficulty. Cost: smaller n
+  (only 21 dev questions are answerable in the first 25% of meetings, 8 of them unanswerable).
+- **Concentrate by transaction-time rollback, not rebuild.** Ingestion is causal (each meeting
+  sees only earlier ones), so the store as of a prefix is the full store with later rows deleted
+  and their supersessions undone. A test checks rollback == building on the prefix.
+- **Haiku for the curve.** Opus would cost ~$47, Sonnet ~$24 for the full design; Haiku ~$1.35.
+  The curve measures a *trend* with model held constant; absolute accuracy is not comparable to
+  the Opus headline numbers.

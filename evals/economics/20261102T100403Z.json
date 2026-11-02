@@ -1,0 +1,298 @@
+{
+  "scenario": {
+    "meetings": 40.0,
+    "questions": 30.0,
+    "ingest_model": null,
+    "answer_model": null,
+    "batch_ingest": true,
+    "batch_queries": false,
+    "batch_discount": 0.5,
+    "cache_hit": null
+  },
+  "report": "evals/reports/20261102T100403Z.jsonl",
+  "costs": [
+    {
+      "system": "b1 summaries",
+      "kind": "query-time",
+      "ingest_per_meeting": 0.0,
+      "answer_per_question": 0.0305472,
+      "accuracy": 0.7,
+      "latency_p50": 2.6699845420080237,
+      "answer_source": "evals/reports/20261102T100403Z.jsonl",
+      "ingest_model": null,
+      "answer_model": "claude-opus-5-5",
+      "n": 10,
+      "monthly": 0.916416,
+      "ingest_share": 0.0,
+      "breakeven": {}
+    },
+    {
+      "system": "b2 full context",
+      "kind": "query-time",
+      "ingest_per_meeting": 0.0,
+      "answer_per_question": 0.09247495999999998,
+      "accuracy": 1.0,
+      "latency_p50": 4.348172791476827,
+      "answer_source": "evals/reports/20261102T100403Z.jsonl",
+      "ingest_model": null,
+      "answer_model": "claude-opus-5-5",
+      "n": 10,
+      "monthly": 2.7742487999999996,
+      "ingest_share": 0.0,
+      "breakeven": {}
+    },
+    {
+      "system": "b3 agent",
+      "kind": "query-time",
+      "ingest_per_meeting": 0.0,
+      "answer_per_question": 0.1084976,
+      "accuracy": 0.9,
+      "latency_p50": 12.653507791517768,
+      "answer_source": "evals/reports/20261102T100403Z.jsonl",
+      "ingest_model": null,
+      "answer_model": "claude-opus-5-5",
+      "n": 10,
+      "monthly": 3.254928,
+      "ingest_share": 0.0,
+      "breakeven": {}
+    },
+    {
+      "system": "b0 top-k",
+      "kind": "query-time",
+      "ingest_per_meeting": 0.0,
+      "answer_per_question": 0.2769088,
+      "accuracy": 0.9,
+      "latency_p50": 4.739660270512104,
+      "answer_source": "evals/reports/20261102T100403Z.jsonl",
+      "ingest_model": null,
+      "answer_model": "claude-opus-5-5",
+      "n": 10,
+      "monthly": 8.307264,
+      "ingest_share": 0.0,
+      "breakeven": {}
+    },
+    {
+      "system": "concentrate",
+      "kind": "write-time",
+      "ingest_per_meeting": 0.013870011413043478,
+      "answer_per_question": 0.0278,
+      "accuracy": null,
+      "latency_p50": null,
+      "answer_source": "planning estimate (ASSUMED)",
+      "ingest_model": "claude-sonnet-5-5",
+      "answer_model": "claude-opus-5-5",
+      "n": 0,
+      "monthly": 1.3888004565217391,
+      "ingest_share": 0.3994817642206433,
+      "breakeven": {
+        "b0 top-k": 2.227141138818617,
+        "b1 summaries": 201.95124363779078,
+        "b2 full context": 8.578288359540375,
+        "b3 agent": 6.875055224960087
+      }
+    },
+    {
+      "system": "mem0",
+      "kind": "write-time",
+      "ingest_per_meeting": 0.04624824673913044,
+      "answer_per_question": 0.025,
+      "accuracy": null,
+      "latency_p50": null,
+      "answer_source": "planning estimate (ASSUMED)",
+      "ingest_model": "claude-sonnet-5-5",
+      "answer_model": "claude-opus-5-5",
+      "n": 0,
+      "monthly": 2.5999298695652175,
+      "ingest_share": 0.7115306805850801,
+      "breakeven": {
+        "b0 top-k": 7.343649247526159,
+        "b1 summaries": 333.4889438933549,
+        "b2 full context": 27.41653895852948,
+        "b3 agent": 22.155485541682843
+      }
+    },
+    {
+      "system": "graphiti",
+      "kind": "write-time",
+      "ingest_per_meeting": 0.16193284782608694,
+      "answer_per_question": 0.032,
+      "accuracy": null,
+      "latency_p50": null,
+      "answer_source": "planning estimate (ASSUMED)",
+      "ingest_model": "claude-sonnet-5-5",
+      "answer_model": "claude-opus-5-5",
+      "n": 0,
+      "monthly": 7.437313913043478,
+      "ingest_share": 0.8709211401825647,
+      "breakeven": {
+        "b0 top-k": 26.447861052944923,
+        "b1 summaries": null,
+        "b2 full context": 107.10736994358459,
+        "b3 agent": 84.67342652636786
+      }
+    }
+  ],
+  "sensitivity": [
+    {
+      "ingest_model": "claude-sonnet-5-5",
+      "answer_model": "claude-opus-5-5",
+      "monthly": {
+        "b1 summaries": 0.916416,
+        "b2 full context": 2.7742487999999996,
+        "b3 agent": 3.254928,
+        "b0 top-k": 8.307264,
+        "concentrate": 1.3888004565217391,
+        "mem0": 2.5999298695652175,
+        "graphiti": 7.437313913043478
+      }
+    },
+    {
+      "ingest_model": "claude-sonnet-5-5",
+      "answer_model": "claude-sonnet-5-5",
+      "monthly": {
+        "b1 summaries": 0.458208,
+        "b3 agent": 1.627464,
+        "b2 full context": 1.7238038526315786,
+        "b0 top-k": 4.153632,
+        "concentrate": 0.9718004565217391,
+        "mem0": 2.2249298695652175,
+        "graphiti": 6.957313913043478
+      }
+    },
+    {
+      "ingest_model": "claude-sonnet-5-5",
+      "answer_model": "claude-haiku-5-5",
+      "monthly": {
+        "b1 summaries": 0.022910400000000004,
+        "b3 agent": 0.0813732,
+        "b2 full context": 0.08619019263157893,
+        "b0 top-k": 0.20768160000000002,
+        "concentrate": 0.5756504565217392,
+        "mem0": 1.8686798695652176,
+        "graphiti": 6.501313913043478
+      }
+    },
+    {
+      "ingest_model": "claude-haiku-5-5",
+      "answer_model": "claude-opus-5-5",
+      "monthly": {
+        "b1 summaries": 0.916416,
+        "b2 full context": 2.7742487999999996,
+        "b3 agent": 3.254928,
+        "b0 top-k": 8.307264,
+        "mem0": 0.8424964934782608,
+        "concentrate": 0.861740022826087,
+        "graphiti": 1.283865695652174
+      }
+    },
+    {
+      "ingest_model": "claude-haiku-5-5",
+      "answer_model": "claude-sonnet-5-5",
+      "monthly": {
+        "b1 summaries": 0.458208,
+        "b3 agent": 1.627464,
+        "b2 full context": 1.7238038526315786,
+        "b0 top-k": 4.153632,
+        "concentrate": 0.44474002282608693,
+        "mem0": 0.4674964934782609,
+        "graphiti": 0.8038656956521739
+      }
+    },
+    {
+      "ingest_model": "claude-haiku-5-5",
+      "answer_model": "claude-haiku-5-5",
+      "monthly": {
+        "b1 summaries": 0.022910400000000004,
+        "b3 agent": 0.0813732,
+        "b2 full context": 0.08619019263157893,
+        "b0 top-k": 0.20768160000000002,
+        "concentrate": 0.04859002282608696,
+        "mem0": 0.11124649347826089,
+        "graphiti": 0.34786569565217396
+      }
+    }
+  ],
+  "builds": {
+    "mem0": {
+      "system": "mem0",
+      "build": "mem0/78a4767dabf454ae/1c12c4af",
+      "model": "claude-sonnet-5-5",
+      "model_error": 1.0437274857212872e-15,
+      "meetings": 184,
+      "complete": true,
+      "total": {
+        "calls": 1089.0,
+        "input_tokens": 3883069.0,
+        "output_tokens": 643458.0,
+        "cache_read_tokens": 13622784.0,
+        "cache_write_tokens": 37632.0,
+        "recorded_usd": 17.019354799999984,
+        "seconds": 4871.346850318718
+      },
+      "per_meeting": {
+        "calls": 5.918478260869565,
+        "input_tokens": 21103.635869565216,
+        "output_tokens": 3497.054347826087,
+        "cache_read_tokens": 74036.86956521739,
+        "cache_write_tokens": 204.52173913043478,
+        "recorded_usd": 0.09249649347826078,
+        "seconds": 26.474711143036508
+      },
+      "updated": 1793658439.338327
+    },
+    "graphiti": {
+      "system": "graphiti",
+      "build": "graphiti/83b368aecdbb2a76",
+      "model": "claude-sonnet-5-5",
+      "model_error": 1.1923600908913063e-16,
+      "meetings": 92,
+      "complete": false,
+      "total": {
+        "calls": 1564.0,
+        "input_tokens": 13897527.0,
+        "output_tokens": 200059.0,
+        "cache_read_tokens": 0.0,
+        "cache_write_tokens": 0.0,
+        "recorded_usd": 29.795644000000003,
+        "seconds": 3198.352875918732
+      },
+      "per_meeting": {
+        "calls": 17.0,
+        "input_tokens": 151060.0760869565,
+        "output_tokens": 2174.554347826087,
+        "cache_read_tokens": 0.0,
+        "cache_write_tokens": 0.0,
+        "recorded_usd": 0.32386569565217393,
+        "seconds": 34.7647051730297
+      },
+      "updated": 1793658746.5191307
+    },
+    "concentrate": {
+      "system": "concentrate",
+      "build": "concentrate/78a4767dabf454ae/6b9c4de7",
+      "model": "claude-sonnet-5-5",
+      "model_error": 0.03002419913957034,
+      "meetings": 184,
+      "complete": true,
+      "total": {
+        "calls": 229.0,
+        "input_tokens": 1951739.0,
+        "output_tokens": 98979.0,
+        "cache_read_tokens": 873506.0,
+        "cache_write_tokens": 14478.0,
+        "recorded_usd": 4.955382799999999,
+        "seconds": 867.4186936219921
+      },
+      "per_meeting": {
+        "calls": 1.2445652173913042,
+        "input_tokens": 10607.277173913044,
+        "output_tokens": 537.929347826087,
+        "cache_read_tokens": 4747.315217391304,
+        "cache_write_tokens": 78.68478260869566,
+        "recorded_usd": 0.02693142826086956,
+        "seconds": 4.714232030554305
+      },
+      "updated": 1793658327.7691133
+    }
+  }
+}

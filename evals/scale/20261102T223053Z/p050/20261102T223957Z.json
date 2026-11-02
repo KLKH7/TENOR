@@ -1,0 +1,329 @@
+{
+  "meta": {
+    "date": "20261102T223957Z",
+    "git": {
+      "sha": "6498f3d",
+      "dirty": true
+    },
+    "model": "claude-haiku-5-5",
+    "seed": 42,
+    "split": "dev",
+    "questions": 45,
+    "prompts": {
+      "b0_topk": [
+        "answer.v1"
+      ],
+      "b3_agentic": [
+        "agent.v1"
+      ],
+      "concentrate": [
+        "answer.v1",
+        "extract.v2",
+        "entail.v2"
+      ],
+      "judge": [
+        "judge.v1"
+      ]
+    },
+    "budget_usd": 3.0,
+    "spent_usd": 0.70079665,
+    "ingest": {
+      "concentrate": {
+        "llm_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0,
+        "seconds": 0.3927637079032138,
+        "cached": true,
+        "detail": {
+          "store": "data/cache/scale-curve/concentrate/ed736cbeffe19f24/6b9c4de7",
+          "built": {
+            "rewound_from": "data/cache/concentrate/78a4767dabf454ae/6b9c4de7",
+            "meetings": 92,
+            "removed": {
+              "meetings": 92,
+              "facts": 138,
+              "evidence": 27,
+              "contradictions": 0,
+              "commitments": 51,
+              "commitment_events": 38,
+              "rejections": 8,
+              "lines": 16203,
+              "entities": 17
+            }
+          }
+        }
+      }
+    },
+    "stopped_early": null,
+    "batch": {
+      "enabled": true,
+      "latency_sample": 0,
+      "batched_systems": [
+        "b0_topk",
+        "concentrate"
+      ],
+      "systems": {
+        "requested": 90,
+        "already_cached": 0,
+        "submitted": 90,
+        "succeeded": 90,
+        "fallback": {},
+        "batch_ids": [
+          "msgbatch_0112vKrRBBrpZ8CSaY9As1RK"
+        ],
+        "seconds": 165.17698300001211,
+        "cost_usd": 0.3831981000000001,
+        "estimated_usd": 0.38298385
+      },
+      "judge": {
+        "requested": 135,
+        "already_cached": 14,
+        "submitted": 121,
+        "succeeded": 121,
+        "fallback": {},
+        "batch_ids": [
+          "msgbatch_01TRcNNDhiVDDGk1ARnE7Aba"
+        ],
+        "seconds": 163.99640208401252,
+        "cost_usd": 0.0068044,
+        "estimated_usd": 0.00492545
+      },
+      "fallback_interactive": 0
+    },
+    "k": 20,
+    "fraction": 0.5,
+    "meetings": 92,
+    "concentrate_source": "data/cache/concentrate/78a4767dabf454ae/6b9c4de7"
+  },
+  "metrics": {
+    "b0_topk": {
+      "n": 45,
+      "accuracy": 0.9111111111111111,
+      "accuracy_ci95": [
+        0.8222222222222222,
+        0.9777777777777777
+      ],
+      "exact_match": 0.8444444444444444,
+      "abstain_precision": 0.8888888888888888,
+      "abstain_recall": 1.0,
+      "cite_precision": 0.7893518518518519,
+      "cite_recall": 0.9207207207207209,
+      "input_tokens_per_q": 158750.46666666667,
+      "output_tokens_per_q": 467.68888888888887,
+      "cost_per_q": 0.008054445555555557,
+      "cost_total": 0.3624500500000001,
+      "latency_p50": NaN,
+      "latency_p95": NaN,
+      "latency_n": 0,
+      "tool_calls_per_q": 0.0,
+      "by_category": {
+        "aggregation": {
+          "n": 3,
+          "accuracy": 1.0
+        },
+        "commitment_status": {
+          "n": 2,
+          "accuracy": 1.0
+        },
+        "decision_change": {
+          "n": 3,
+          "accuracy": 0.6666666666666666
+        },
+        "entity_disambiguation": {
+          "n": 7,
+          "accuracy": 0.5714285714285714
+        },
+        "latest_state": {
+          "n": 5,
+          "accuracy": 1.0
+        },
+        "multi_hop": {
+          "n": 2,
+          "accuracy": 1.0
+        },
+        "single_hop": {
+          "n": 7,
+          "accuracy": 1.0
+        },
+        "temporal": {
+          "n": 8,
+          "accuracy": 1.0
+        },
+        "unanswerable": {
+          "n": 8,
+          "accuracy": 1.0
+        }
+      }
+    },
+    "b3_agentic": {
+      "n": 45,
+      "accuracy": 0.9111111111111111,
+      "accuracy_ci95": [
+        0.8222222222222222,
+        0.9777777777777777
+      ],
+      "exact_match": 0.8555555555555555,
+      "abstain_precision": 1.0,
+      "abstain_recall": 1.0,
+      "cite_precision": 0.7421875,
+      "cite_recall": 0.6513513513513514,
+      "input_tokens_per_q": 18007.088888888888,
+      "output_tokens_per_q": 959.9555555555555,
+      "cost_per_q": 0.0022806866666666664,
+      "cost_total": 0.1026309,
+      "latency_p50": 6.877262499998324,
+      "latency_p95": 12.974841250106692,
+      "latency_n": 45,
+      "tool_calls_per_q": 4.711111111111111,
+      "by_category": {
+        "aggregation": {
+          "n": 3,
+          "accuracy": 1.0
+        },
+        "commitment_status": {
+          "n": 2,
+          "accuracy": 1.0
+        },
+        "decision_change": {
+          "n": 3,
+          "accuracy": 1.0
+        },
+        "entity_disambiguation": {
+          "n": 7,
+          "accuracy": 0.7142857142857143
+        },
+        "latest_state": {
+          "n": 5,
+          "accuracy": 1.0
+        },
+        "multi_hop": {
+          "n": 2,
+          "accuracy": 1.0
+        },
+        "single_hop": {
+          "n": 7,
+          "accuracy": 0.8571428571428571
+        },
+        "temporal": {
+          "n": 8,
+          "accuracy": 0.875
+        },
+        "unanswerable": {
+          "n": 8,
+          "accuracy": 1.0
+        }
+      }
+    },
+    "concentrate": {
+      "n": 45,
+      "accuracy": 0.7555555555555555,
+      "accuracy_ci95": [
+        0.6222222222222222,
+        0.8666666666666667
+      ],
+      "exact_match": 0.6296296296296297,
+      "abstain_precision": 0.5714285714285714,
+      "abstain_recall": 1.0,
+      "cite_precision": 0.7686379928315412,
+      "cite_recall": 0.772972972972973,
+      "input_tokens_per_q": 7625.688888888889,
+      "output_tokens_per_q": 319.1333333333333,
+      "cost_per_q": 0.0004610677777777778,
+      "cost_total": 0.020748050000000004,
+      "latency_p50": NaN,
+      "latency_p95": NaN,
+      "latency_n": 0,
+      "tool_calls_per_q": 0.0,
+      "by_category": {
+        "aggregation": {
+          "n": 3,
+          "accuracy": 0.6666666666666666
+        },
+        "commitment_status": {
+          "n": 2,
+          "accuracy": 1.0
+        },
+        "decision_change": {
+          "n": 3,
+          "accuracy": 1.0
+        },
+        "entity_disambiguation": {
+          "n": 7,
+          "accuracy": 0.42857142857142855
+        },
+        "latest_state": {
+          "n": 5,
+          "accuracy": 1.0
+        },
+        "multi_hop": {
+          "n": 2,
+          "accuracy": 1.0
+        },
+        "single_hop": {
+          "n": 7,
+          "accuracy": 0.7142857142857143
+        },
+        "temporal": {
+          "n": 8,
+          "accuracy": 0.625
+        },
+        "unanswerable": {
+          "n": 8,
+          "accuracy": 0.875
+        }
+      }
+    }
+  },
+  "ledger_by_stage": {
+    "eval.concentrate.batch": {
+      "calls": 66,
+      "cached": 0,
+      "input_tokens": 473772,
+      "output_tokens": 19177,
+      "usd": 0.02848285
+    },
+    "eval.b0_topk.batch": {
+      "calls": 66,
+      "cached": 0,
+      "input_tokens": 10438839,
+      "output_tokens": 26795,
+      "usd": 0.5286407
+    },
+    "eval.b0_topk": {
+      "calls": 66,
+      "cached": 66,
+      "input_tokens": 10438839,
+      "output_tokens": 26795,
+      "usd": 0.0
+    },
+    "eval.b3_agentic": {
+      "calls": 270,
+      "cached": 33,
+      "input_tokens": 1138769,
+      "output_tokens": 60569,
+      "usd": 0.133705
+    },
+    "eval.concentrate": {
+      "calls": 66,
+      "cached": 66,
+      "input_tokens": 473772,
+      "output_tokens": 19177,
+      "usd": 0.0
+    },
+    "eval.judge.batch": {
+      "calls": 179,
+      "cached": 0,
+      "input_tokens": 132622,
+      "output_tokens": 13348,
+      "usd": 0.009968100000000004
+    },
+    "eval.judge": {
+      "calls": 198,
+      "cached": 198,
+      "input_tokens": 145274,
+      "output_tokens": 14424,
+      "usd": 0.0
+    }
+  }
+}

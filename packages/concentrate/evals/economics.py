@@ -162,6 +162,7 @@ class IngestProfile:
     complete: bool  # the build covered the whole corpus
     total: Usage
     per_meeting: Usage
+    updated: float = 0.0  # progress-file mtime, to prefer the newest of equal builds
 
 
 # Builds whose progress rows count ``input_tokens`` as the whole prompt (cache reads and writes
@@ -217,6 +218,7 @@ def ingest_profile(system: str, progress: Path, cache_root: Path) -> IngestProfi
         complete=complete,
         total=total,
         per_meeting=total.scaled(1 / len(by_meeting)),
+        updated=progress.stat().st_mtime,
     )
 
 
@@ -232,11 +234,15 @@ def load_ingest(cache_root: Path) -> list[IngestProfile]:
 
 
 def pick_builds(profiles: Iterable[IngestProfile]) -> dict[str, IngestProfile]:
-    """One build per system: prefer complete builds, then the one with most meetings."""
+    """One build per system: prefer complete builds, then most meetings, then most recent."""
     best: dict[str, IngestProfile] = {}
     for p in profiles:
         cur = best.get(p.system)
-        if cur is None or (p.complete, p.meetings) > (cur.complete, cur.meetings):
+        if cur is None or (p.complete, p.meetings, p.updated) > (
+            cur.complete,
+            cur.meetings,
+            cur.updated,
+        ):
             best[p.system] = p
     return best
 

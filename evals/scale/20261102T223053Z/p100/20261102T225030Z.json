@@ -1,0 +1,329 @@
+{
+  "meta": {
+    "date": "20261102T225030Z",
+    "git": {
+      "sha": "6498f3d",
+      "dirty": true
+    },
+    "model": "claude-haiku-5-5",
+    "seed": 42,
+    "split": "dev",
+    "questions": 45,
+    "prompts": {
+      "b0_topk": [
+        "answer.v1"
+      ],
+      "b3_agentic": [
+        "agent.v1"
+      ],
+      "concentrate": [
+        "answer.v1",
+        "extract.v2",
+        "entail.v2"
+      ],
+      "judge": [
+        "judge.v1"
+      ]
+    },
+    "budget_usd": 3.0,
+    "spent_usd": 1.1902964500000002,
+    "ingest": {
+      "concentrate": {
+        "llm_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0,
+        "seconds": 0.7081855840515345,
+        "cached": true,
+        "detail": {
+          "store": "data/cache/scale-curve/concentrate/78a4767dabf454ae/6b9c4de7",
+          "built": {
+            "rewound_from": "data/cache/concentrate/78a4767dabf454ae/6b9c4de7",
+            "meetings": 184,
+            "removed": {
+              "meetings": 0,
+              "facts": 0,
+              "evidence": 0,
+              "contradictions": 0,
+              "commitments": 0,
+              "commitment_events": 0,
+              "rejections": 0,
+              "lines": 0,
+              "entities": 0
+            }
+          }
+        }
+      }
+    },
+    "stopped_early": null,
+    "batch": {
+      "enabled": true,
+      "latency_sample": 0,
+      "batched_systems": [
+        "b0_topk",
+        "concentrate"
+      ],
+      "systems": {
+        "requested": 90,
+        "already_cached": 0,
+        "submitted": 90,
+        "succeeded": 90,
+        "fallback": {},
+        "batch_ids": [
+          "msgbatch_01LzLHC8Zk2FJ8C8RLpN9aTc"
+        ],
+        "seconds": 108.18622158409562,
+        "cost_usd": 0.38893335,
+        "estimated_usd": 0.3879306500000002
+      },
+      "judge": {
+        "requested": 135,
+        "already_cached": 17,
+        "submitted": 118,
+        "succeeded": 118,
+        "fallback": {},
+        "batch_ids": [
+          "msgbatch_01XgqkejjqdJKUKZJKJGLLUj"
+        ],
+        "seconds": 163.602398415911,
+        "cost_usd": 0.006682649999999996,
+        "estimated_usd": 0.004816200000000002
+      },
+      "fallback_interactive": 0
+    },
+    "k": 20,
+    "fraction": 1.0,
+    "meetings": 184,
+    "concentrate_source": "data/cache/concentrate/78a4767dabf454ae/6b9c4de7"
+  },
+  "metrics": {
+    "b0_topk": {
+      "n": 45,
+      "accuracy": 0.8,
+      "accuracy_ci95": [
+        0.6888888888888889,
+        0.9111111111111111
+      ],
+      "exact_match": 0.8537037037037036,
+      "abstain_precision": 0.8888888888888888,
+      "abstain_recall": 1.0,
+      "cite_precision": 0.7743055555555556,
+      "cite_recall": 0.8734234234234235,
+      "input_tokens_per_q": 160097.26666666666,
+      "output_tokens_per_q": 497.4888888888889,
+      "cost_per_q": 0.008129235555555557,
+      "cost_total": 0.3658156,
+      "latency_p50": NaN,
+      "latency_p95": NaN,
+      "latency_n": 0,
+      "tool_calls_per_q": 0.0,
+      "by_category": {
+        "aggregation": {
+          "n": 3,
+          "accuracy": 0.0
+        },
+        "commitment_status": {
+          "n": 2,
+          "accuracy": 0.5
+        },
+        "decision_change": {
+          "n": 3,
+          "accuracy": 1.0
+        },
+        "entity_disambiguation": {
+          "n": 7,
+          "accuracy": 0.42857142857142855
+        },
+        "latest_state": {
+          "n": 5,
+          "accuracy": 0.8
+        },
+        "multi_hop": {
+          "n": 2,
+          "accuracy": 1.0
+        },
+        "single_hop": {
+          "n": 7,
+          "accuracy": 1.0
+        },
+        "temporal": {
+          "n": 8,
+          "accuracy": 1.0
+        },
+        "unanswerable": {
+          "n": 8,
+          "accuracy": 1.0
+        }
+      }
+    },
+    "b3_agentic": {
+      "n": 45,
+      "accuracy": 0.8222222222222222,
+      "accuracy_ci95": [
+        0.7111111111111111,
+        0.9333333333333333
+      ],
+      "exact_match": 0.7703703703703704,
+      "abstain_precision": 1.0,
+      "abstain_recall": 0.875,
+      "cite_precision": 0.6277777777777778,
+      "cite_recall": 0.554954954954955,
+      "input_tokens_per_q": 21515.51111111111,
+      "output_tokens_per_q": 1086.6222222222223,
+      "cost_per_q": 0.0026948622222222225,
+      "cost_total": 0.12126880000000001,
+      "latency_p50": 6.179686416988261,
+      "latency_p95": 11.38070258393418,
+      "latency_n": 45,
+      "tool_calls_per_q": 4.933333333333334,
+      "by_category": {
+        "aggregation": {
+          "n": 3,
+          "accuracy": 0.0
+        },
+        "commitment_status": {
+          "n": 2,
+          "accuracy": 1.0
+        },
+        "decision_change": {
+          "n": 3,
+          "accuracy": 1.0
+        },
+        "entity_disambiguation": {
+          "n": 7,
+          "accuracy": 0.7142857142857143
+        },
+        "latest_state": {
+          "n": 5,
+          "accuracy": 0.6
+        },
+        "multi_hop": {
+          "n": 2,
+          "accuracy": 1.0
+        },
+        "single_hop": {
+          "n": 7,
+          "accuracy": 0.8571428571428571
+        },
+        "temporal": {
+          "n": 8,
+          "accuracy": 1.0
+        },
+        "unanswerable": {
+          "n": 8,
+          "accuracy": 1.0
+        }
+      }
+    },
+    "concentrate": {
+      "n": 45,
+      "accuracy": 0.7333333333333333,
+      "accuracy_ci95": [
+        0.6,
+        0.8666666666666667
+      ],
+      "exact_match": 0.7037037037037037,
+      "abstain_precision": 0.6666666666666666,
+      "abstain_recall": 1.0,
+      "cite_precision": 0.7898989898989899,
+      "cite_recall": 0.827027027027027,
+      "input_tokens_per_q": 8426.111111111111,
+      "output_tokens_per_q": 369.68888888888887,
+      "cost_per_q": 0.0005137277777777778,
+      "cost_total": 0.02311775,
+      "latency_p50": NaN,
+      "latency_p95": NaN,
+      "latency_n": 0,
+      "tool_calls_per_q": 0.0,
+      "by_category": {
+        "aggregation": {
+          "n": 3,
+          "accuracy": 0.3333333333333333
+        },
+        "commitment_status": {
+          "n": 2,
+          "accuracy": 1.0
+        },
+        "decision_change": {
+          "n": 3,
+          "accuracy": 1.0
+        },
+        "entity_disambiguation": {
+          "n": 7,
+          "accuracy": 0.42857142857142855
+        },
+        "latest_state": {
+          "n": 5,
+          "accuracy": 0.8
+        },
+        "multi_hop": {
+          "n": 2,
+          "accuracy": 1.0
+        },
+        "single_hop": {
+          "n": 7,
+          "accuracy": 0.7142857142857143
+        },
+        "temporal": {
+          "n": 8,
+          "accuracy": 0.625
+        },
+        "unanswerable": {
+          "n": 8,
+          "accuracy": 1.0
+        }
+      }
+    }
+  },
+  "ledger_by_stage": {
+    "eval.concentrate.batch": {
+      "calls": 111,
+      "cached": 0,
+      "input_tokens": 852947,
+      "output_tokens": 35813,
+      "usd": 0.05160059999999997
+    },
+    "eval.b0_topk.batch": {
+      "calls": 111,
+      "cached": 0,
+      "input_tokens": 17643216,
+      "output_tokens": 49182,
+      "usd": 0.8944563000000003
+    },
+    "eval.b0_topk": {
+      "calls": 111,
+      "cached": 111,
+      "input_tokens": 17643216,
+      "output_tokens": 49182,
+      "usd": 0.0
+    },
+    "eval.b3_agentic": {
+      "calls": 463,
+      "cached": 109,
+      "input_tokens": 2106967,
+      "output_tokens": 109467,
+      "usd": 0.2275888000000001
+    },
+    "eval.concentrate": {
+      "calls": 111,
+      "cached": 111,
+      "input_tokens": 852947,
+      "output_tokens": 35813,
+      "usd": 0.0
+    },
+    "eval.judge.batch": {
+      "calls": 297,
+      "cached": 0,
+      "input_tokens": 221250,
+      "output_tokens": 22353,
+      "usd": 0.016650750000000006
+    },
+    "eval.judge": {
+      "calls": 333,
+      "cached": 333,
+      "input_tokens": 245775,
+      "output_tokens": 24513,
+      "usd": 0.0
+    }
+  }
+}
