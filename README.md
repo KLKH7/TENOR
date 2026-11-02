@@ -112,6 +112,8 @@ A Granola-style note viewer shows enhanced transcripts with linked mentions (Nex
 cd web && npm install && npm run dev
 ```
 
+The same app has a **results explorer** at `/results`: leaderboard, cost-vs-accuracy, a category heatmap, and a drill-down from any question to every system's answer and the transcript lines it cited (see [docs/RESULTS_EXPLORER.md](docs/RESULTS_EXPLORER.md)).
+
 ## Honest limits
 
 - **The benchmark is synthetic.** That's its biggest weakness. Real meetings are messier, and calibration used a handful of real meetings, not thousands.
