@@ -275,3 +275,116 @@ def ingest(
     for s in built:
         stats = s.ingest(notes)  # type: ignore[attr-defined]
         typer.echo(f"{s.name}: " + _json.dumps(asdict(stats), default=str))
+
+
+def _report_paths(report: Path) -> tuple[Path, Path]:
+    """``evals/reports/<stamp>`` (any extension or none) -> its ``.json`` and ``.jsonl``."""
+    stem = report.with_suffix("") if report.suffix in {".json", ".jsonl", ".md"} else report
+    js, jl = stem.with_suffix(".json"), stem.with_suffix(".jsonl")
+    if not jl.exists():
+        raise typer.BadParameter(f"{jl} not found")
+    return js, jl
+
+
+@app.command("judge-check")
+def judge_check(
+    report: Annotated[Path, typer.Argument(help="A report from `eval` (any of its files).")],
+    model: Annotated[str, typer.Option(help="Second judge model.")] = "claude-sonnet-5-5",
+    batch: Annotated[bool, typer.Option("--batch/--no-batch", help="Batch API (50% off).")] = True,
+    estimate_only: Annotated[
+        bool, typer.Option("--estimate", help="Estimate cost and exit.")
+    ] = False,
+    yes: Annotated[bool, typer.Option("--yes", help="Skip the >$2 confirmation.")] = False,
+) -> None:
+    """Re-judge a saved report with a second model and report agreement with the first."""
+    import json as _json
+
+    from concentrate.evals.judge_check import judge_check_markdown, load_report, rejudge_request
+    from concentrate.evals.runner import JUDGE_TOKENS_EST
+    from concentrate.evals.scoring import JudgeOutput
+    from concentrate.llm.client import cost_usd, estimate_tokens, prefetch_structured
+
+    js, jl = _report_paths(report)
+    primary = _json.loads(js.read_text())["meta"]["model"] if js.exists() else "unknown"
+    if model == primary:
+        raise typer.BadParameter(f"the second judge must differ from the primary ({primary})")
+    answers = load_report(jl)
+    client = LLMClient(model=model)
+    reqs = [rejudge_request(a) for a in answers]
+    todo = [r for r in reqs if not client.is_cached(r)]
+    usd = sum(
+        cost_usd(
+            model,
+            estimate_tokens(r.system) + estimate_tokens(r.user),
+            JUDGE_TOKENS_EST[1],
+            batch=batch,
+        )
+        for r in todo
+    )
+    typer.echo(f"{jl.name}: {len(answers)} answers · {len(todo)} uncached · {model} ≈ ${usd:.2f}")
+    if estimate_only:
+        return
+    if usd > BUDGET_CONFIRM_USD and not yes:
+        typer.confirm(
+            f"Estimated ${usd:.2f} exceeds ${BUDGET_CONFIRM_USD:.0f}. Proceed?", abort=True
+        )
+    batch_usd = prefetch_structured(client, todo).cost_usd if batch and todo else 0.0
+    second = [client.structured(r, JudgeOutput) for r in reqs]
+    md = judge_check_markdown(
+        answers, second, primary_model=primary, second_model=model, report_name=jl.stem
+    )
+    out = jl.with_name(f"{jl.stem}.judgecheck.{model}.md")
+    out.write_text(md)
+    typer.echo(md)
+    typer.echo(f"spent ${batch_usd + client.ledger.spent_usd():.2f} · written: {out}")
+
+
+@app.command("hand-check")
+def hand_check(
+    report: Annotated[Path, typer.Argument(help="A report from `eval` (any of its files).")],
+    n: Annotated[int, typer.Option(help="Answers to sample for hand-labelling.")] = 50,
+    seed: Annotated[int, typer.Option(help="Sampling seed.")] = 42,
+    score: Annotated[
+        bool, typer.Option("--score", help="Score a filled-in sheet instead of exporting one.")
+    ] = False,
+    second_model: Annotated[
+        str, typer.Option(help="Also score this judge's verdicts (from `judge-check`'s cache).")
+    ] = "claude-sonnet-5-5",
+) -> None:
+    """Export a blind sample for a person to label, then score the judges against it. Free."""
+    from concentrate.evals.judge_check import (
+        hand_sample,
+        load_report,
+        rejudge_request,
+        score_hand_check,
+        write_hand_check,
+    )
+    from concentrate.evals.scoring import JudgeOutput
+
+    _, jl = _report_paths(report)
+    sheet, key = (
+        jl.with_name(f"{jl.stem}.handcheck.csv"),
+        jl.with_name(f"{jl.stem}.handcheck.key.json"),
+    )
+    answers = load_report(jl)
+    if not score:
+        if sheet.exists():
+            raise typer.BadParameter(f"{sheet} exists; label it and pass --score")
+        write_hand_check(hand_sample(answers, n, seed), sheet, key)
+        typer.echo(
+            f"Wrote {sheet}. Fill `your_verdict` with c / p / i (correct / partially / "
+            f"incorrect) comparing `answer` to `gold` only, then rerun with --score."
+        )
+        return
+    judges = {"primary": {a.key: a.verdict for a in answers}}
+    second = LLMClient(model=second_model, offline=True)
+    cached = {a.key: a for a in answers if second.is_cached(rejudge_request(a))}
+    if cached:
+        judges[second_model] = {
+            k: second.structured(rejudge_request(a), JudgeOutput).verdict for k, a in cached.items()
+        }
+    for name, s in score_hand_check(sheet, key, judges).items():
+        typer.echo(
+            f"{name:<20} vs human: {s['agreement']:.1%} agree on correct/not "
+            f"(kappa {s['kappa']:.2f}, n={s['n']}) · 3-way {s['agreement_3way']:.1%}"
+        )

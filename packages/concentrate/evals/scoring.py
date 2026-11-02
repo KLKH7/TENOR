@@ -85,13 +85,22 @@ JUDGE_SCHEMA: dict[str, Any] = {
 
 def judge_request(q: Question, answer: str, abstained: bool) -> LLMRequest:
     """The judge call for one answer, unsent (``judge`` sends it; batch mode prefetches it)."""
-    gold = "UNANSWERABLE" if q.answer_norm == [UNANSWERABLE] else q.answer
+    return judge_request_for(
+        q.question, q.answer, q.answer_norm == [UNANSWERABLE], answer, abstained
+    )
+
+
+def judge_request_for(
+    question: str, gold_answer: str, unanswerable: bool, answer: str, abstained: bool
+) -> LLMRequest:
+    """``judge_request`` from plain fields, so a saved report can be re-judged verbatim."""
+    gold = "UNANSWERABLE" if unanswerable else gold_answer
     system_answer = f"(abstained) {answer}" if abstained else answer
     return LLMRequest(
         stage="eval.judge",
         prompt_id=JUDGE_PROMPT,
         system=load_prompt(JUDGE_PROMPT),
-        user=f"Question: {q.question}\n\nGold answer: {gold}\n\nSystem answer: {system_answer}",
+        user=f"Question: {question}\n\nGold answer: {gold}\n\nSystem answer: {system_answer}",
         schema=JUDGE_SCHEMA,
         max_tokens=2000,
         effort="low",
