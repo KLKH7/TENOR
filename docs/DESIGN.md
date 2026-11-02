@@ -174,3 +174,9 @@ The remote 38+ word monologue tail is a content limitation of scripted turns and
 - numbers on the transcript-retirement question they've said they're weighing.
 
 **Trade-off:** the work hardly changes, but polish moves to the benchmark: a card ([`BENCHMARK.md`](BENCHMARK.md)), one command per system, and a documented way to add a system. Its biggest weakness, being synthetic, is stated up front.
+
+## Concentrate tuning on XL dev (workstream L, 2026-11-02)
+Query-side only, dev only; details, error analysis and ablations in `docs/CONCENTRATE_TUNING.md`.
+- **Decision:** fix lookup misses in `memory/query.py` (role-qualified names, named-meeting anchoring, list-wide commitment lookups) rather than re-extract. Dev accuracy 89% → 90% (within noise); gold lines in context 70% → 86%.
+- **Ablations:** removing supersession/validity state costs 6 pts on dev, the largest effect; removing query-time entity linking costs 1 pt.
+- **Trade-off:** the entail.v2 false rejects on commitment updates have a measured fix (owner-free update claims; 5 of 7 flip, Δ 0 on dev). It ships only with an explicit `entail.v3` rebuild, so the cached store and the code stay consistent.

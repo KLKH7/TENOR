@@ -1,0 +1,229 @@
+{
+  "meta": {
+    "date": "20261102T222559Z",
+    "git": {
+      "sha": "b113208",
+      "dirty": true
+    },
+    "model": "claude-opus-5-5",
+    "seed": 42,
+    "split": "dev",
+    "questions": 90,
+    "prompts": {
+      "concentrate": [
+        "answer.v1",
+        "extract.v2",
+        "entail.v2"
+      ],
+      "judge": [
+        "judge.v1"
+      ]
+    },
+    "budget_usd": 25.0,
+    "spent_usd": 2.2123280000000016,
+    "ingest": {
+      "concentrate": {
+        "llm_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0,
+        "seconds": 0.9079551250906661,
+        "cached": true,
+        "detail": {
+          "store": "data/cache/concentrate/78a4767dabf454ae/6b9c4de7",
+          "built": {
+            "llm_calls": 229,
+            "input_tokens": 2839723,
+            "output_tokens": 98979,
+            "cost_usd": 4.955382799999999,
+            "seconds": 867.4186936219921,
+            "cached": false,
+            "detail": {
+              "store": "data/cache/concentrate/78a4767dabf454ae/6b9c4de7",
+              "meetings": 184,
+              "facts_extracted": 373,
+              "commitments_extracted": 117,
+              "updates_extracted": 80,
+              "entailment_checked": 56,
+              "kept": {
+                "inserted": 191,
+                "commitment": 117,
+                "restated": 49,
+                "update_done": 50,
+                "update_slipped": 12,
+                "superseded": 127,
+                "update_reassigned": 11
+              },
+              "rejected": {
+                "not_entailed": 13
+              },
+              "fact_rows": 318,
+              "current_facts": 191,
+              "contradictions": 0,
+              "commitments": 117,
+              "tiers_tokens": {
+                "L0": 672656,
+                "L1": 870364,
+                "L2": 15858,
+                "L3": 17908
+              },
+              "cache_read_tokens": 873506,
+              "cache_write_tokens": 14478,
+              "wall_seconds_this_run": 704.0024762919638,
+              "config": {
+                "ingest_model": "claude-sonnet-5-5",
+                "entail_model": "claude-haiku-5-5",
+                "enhancer": "enhance-v1",
+                "prompts": {
+                  "extract.v2": "ea88800a",
+                  "entail.v2": "e0b6e663"
+                },
+                "directory": "f5818163",
+                "build": {
+                  "effort": "medium",
+                  "window_lines": null,
+                  "entailment": true,
+                  "entail_effort": "low",
+                  "low_confidence": 0.75,
+                  "max_keys": 80,
+                  "max_open_commitments": 40
+                },
+                "format": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "stopped_early": null,
+    "batch": {
+      "enabled": true,
+      "latency_sample": 10,
+      "batched_systems": [
+        "concentrate"
+      ],
+      "systems": {
+        "requested": 80,
+        "already_cached": 0,
+        "submitted": 80,
+        "succeeded": 80,
+        "fallback": {},
+        "batch_ids": [
+          "msgbatch_014KkVVwCEbuPCJpcjMmCJsJ"
+        ],
+        "seconds": 107.2019314999925,
+        "cost_usd": 1.601346,
+        "estimated_usd": 1.8556780000000004
+      },
+      "judge": {
+        "requested": 80,
+        "already_cached": 0,
+        "submitted": 80,
+        "succeeded": 80,
+        "fallback": {},
+        "batch_ids": [
+          "msgbatch_01DoWaQJ4hVKN8nx474GTYLj"
+        ],
+        "seconds": 585.8126632500207,
+        "cost_usd": 0.1716020000000001,
+        "estimated_usd": 0.13264800000000004
+      },
+      "fallback_interactive": 0
+    },
+    "variants": [
+      "full"
+    ],
+    "fixtures": "data/fixtures/large/northwind-xl"
+  },
+  "metrics": {
+    "concentrate": {
+      "n": 90,
+      "accuracy": 0.8888888888888888,
+      "accuracy_ci95": [
+        0.8222222222222222,
+        0.9555555555555556
+      ],
+      "exact_match": 0.7496632996632997,
+      "abstain_precision": 0.7272727272727273,
+      "abstain_recall": 1.0,
+      "cite_precision": 0.6700120554550935,
+      "cite_recall": 0.8623189519710324,
+      "input_tokens_per_q": 8983.166666666666,
+      "output_tokens_per_q": 204.7111111111111,
+      "cost_per_q": 0.022234155555555555,
+      "cost_total": 2.001074,
+      "latency_p50": 2.5358691660221666,
+      "latency_p95": 8.193870709044859,
+      "latency_n": 10,
+      "tool_calls_per_q": 0.0,
+      "by_category": {
+        "aggregation": {
+          "n": 8,
+          "accuracy": 0.5
+        },
+        "commitment_status": {
+          "n": 9,
+          "accuracy": 0.8888888888888888
+        },
+        "decision_change": {
+          "n": 8,
+          "accuracy": 1.0
+        },
+        "entity_disambiguation": {
+          "n": 10,
+          "accuracy": 0.7
+        },
+        "latest_state": {
+          "n": 11,
+          "accuracy": 1.0
+        },
+        "multi_hop": {
+          "n": 7,
+          "accuracy": 1.0
+        },
+        "single_hop": {
+          "n": 11,
+          "accuracy": 0.9090909090909091
+        },
+        "temporal": {
+          "n": 18,
+          "accuracy": 0.9444444444444444
+        },
+        "unanswerable": {
+          "n": 8,
+          "accuracy": 1.0
+        }
+      }
+    }
+  },
+  "ledger_by_stage": {
+    "eval.concentrate.batch": {
+      "calls": 80,
+      "cached": 0,
+      "input_tokens": 714348,
+      "output_tokens": 17265,
+      "usd": 1.601346
+    },
+    "eval.concentrate": {
+      "calls": 90,
+      "cached": 80,
+      "input_tokens": 808485,
+      "output_tokens": 18424,
+      "usd": 0.399728
+    },
+    "eval.judge": {
+      "calls": 90,
+      "cached": 80,
+      "input_tokens": 68534,
+      "output_tokens": 5436,
+      "usd": 0.03965199999999999
+    },
+    "eval.judge.batch": {
+      "calls": 80,
+      "cached": 0,
+      "input_tokens": 61311,
+      "output_tokens": 4898,
+      "usd": 0.1716020000000001
+    }
+  }
+}
