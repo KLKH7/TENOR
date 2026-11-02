@@ -245,3 +245,33 @@ def eval_cmd(
     )
     typer.echo((Path(report["paths"]["md"])).read_text())
     typer.echo(f"spent ${report['meta']['spent_usd']:.2f} · report: {report['paths']['md']}")
+
+
+@app.command()
+def ingest(
+    systems: Annotated[str, typer.Option(help="Write-time systems to build: b4,b5.")] = "b4,b5",
+    xl: Annotated[bool, typer.Option("--xl", help="Use the Northwind-XL benchmark.")] = False,
+    fixtures: Annotated[Path, typer.Option(help="Benchmark fixture set.")] = NORTHWIND,
+    estimate_only: Annotated[
+        bool, typer.Option("--estimate", help="Estimate cost and exit.")
+    ] = False,
+) -> None:
+    """Build write-time memories once (Mem0, Graphiti, ...). Resumable; reruns are free."""
+    import json as _json
+    from dataclasses import asdict
+
+    from concentrate.evals.runner import build_systems, estimate, load_corpus
+
+    if xl and fixtures == NORTHWIND:
+        fixtures = NORTHWIND_XL
+    client = LLMClient()
+    notes = load_corpus(fixtures)
+    names = tuple(s.strip() for s in systems.split(",") if s.strip())
+    built = build_systems(names, client, notes, None, 0)
+    for e in estimate(built, [], client.model, notes=notes):
+        typer.echo(f"{e.system}: ingest ≈ ${e.ingest_usd:.2f} for {len(notes)} meetings")
+    if estimate_only:
+        return
+    for s in built:
+        stats = s.ingest(notes)  # type: ignore[attr-defined]
+        typer.echo(f"{s.name}: " + _json.dumps(asdict(stats), default=str))
