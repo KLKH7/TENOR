@@ -136,3 +136,21 @@ Measured on the author's 4 MCP-synced meetings (aggregates only, recorded in `PR
 - in-person meetings merge into long single-microphone blocks.
 
 The remote 38+ word monologue tail is a content limitation of scripted turns and is documented rather than faked.
+
+## Phase 3: baselines and eval harness (2026-11-02)
+- **Four baselines, all with the same structured answer** (`answer`, `abstain`, `citations`):
+  - **B0 top-k:** the 20 most relevant meetings, with full notes and transcripts in context. Retrieval is hybrid over transcript chunks and summaries: BM25 plus `all-MiniLM-L6-v2` embeddings, fused with RRF and ranked at meeting level.
+  - **B1 summaries-only:** the same retrieval, but AI summaries and typed notes only.
+  - **B2 full-context:** every meeting in a **cached system prompt**. That's more context but the cheapest per question after the first call, so it's an honest ceiling.
+  - **B3 agentic:** a tool-using agent whose four tools mirror the live MCP (`search_meetings` over titles, summaries and typed notes only; `get_meetings`; `search_transcripts` returning 240-character passages *without speakers*; `get_meeting_transcript` returning chunks with speakers and line IDs). It has a 12-turn budget, and exhausting it counts as a failed answer. This is the baseline that matters after the probe.
+- **Deviation from the real MCP:** transcript chunks carry our line IDs so every system can cite at line level, which makes citation metrics comparable. Granola's MCP passages have timestamps instead.
+- **Scoring:**
+  - The primary signal is an LLM judge (`judge.v1`), counting "correct" only.
+  - Shown alongside so judge bias is visible: exact match of gold normalized values (date, number and person aware), and citation precision/recall against gold line IDs.
+  - Abstention precision/recall, tokens (cache reads included), cost, latency p50/p95, and tool calls.
+  - Accuracy has 95% bootstrap CIs (seeded).
+- **Reproducibility and cost:**
+  - Every turn is disk-cached by its full request, and reruns report the *original* latency, not the cached ~0 s.
+  - Reports (JSON, Markdown and per-question JSONL) record the git SHA and dirty flag, model, prompt versions, seed, split and spend.
+  - `CONCENTRATE_BUDGET_USD` is a hard per-run cap, checked before each question, and partial reports say so.
+  - Estimates are offline (heuristic tokens; B3 assumed), so a small pilot run should calibrate them before a full run.

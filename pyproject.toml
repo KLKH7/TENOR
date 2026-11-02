@@ -12,6 +12,8 @@ dependencies = [
   "python-dotenv>=1.0",
   "anthropic>=2.3.0",
   "mcp>=2.3.0",
+  "rank-bm25>=0.2.2",
+  "sentence-transformers>=6.2.0",
 ]
 
 [project.scripts]
@@ -47,4 +49,8 @@ known-first-party = ["concentrate", "tests"]
 python_version = "3.11"
 strict = true
 plugins = ["pydantic.mypy"]
-files = ["packages/concentrate/core", "packages/concentrate/sources", "packages/concentrate/llm", "packages/concentrate/synth", "packages/concentrate/cli.py"]
+files = ["packages/concentrate/core", "packages/concentrate/sources", "packages/concentrate/llm", "packages/concentrate/synth", "packages/concentrate/agents", "packages/concentrate/evals", "packages/concentrate/cli.py"]
+
+[[tool.mypy.overrides]]
+module = ["rank_bm25", "sentence_transformers"]
+ignore_missing_imports = true

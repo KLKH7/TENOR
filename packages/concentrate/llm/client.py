@@ -58,12 +58,33 @@ class LLMTruncated(LLMError):
     """Output hit ``max_tokens``; the JSON is incomplete."""
 
 
-def cost_usd(model: str, input_tokens: int, output_tokens: int) -> float:
-    """Price a call. Unknown models raise so we never silently report $0."""
+# Prompt caching: reads cost $0.20/MTok on the current Opus and Sonnet (model table); writes
+# cost 1.25x the input price (5-minute TTL).
+CACHE_READ_PER_MTOK: dict[str, float] = {"claude-opus-5-5": 0.20, "claude-sonnet-5-5": 0.20}
+CACHE_WRITE_MULTIPLIER = 1.25
+
+
+def cost_usd(
+    model: str,
+    input_tokens: int,
+    output_tokens: int,
+    cache_read_tokens: int = 0,
+    cache_write_tokens: int = 0,
+) -> float:
+    """Price a call. ``input_tokens`` excludes cached tokens, as the API reports it.
+
+    Unknown models raise so we never silently report $0.
+    """
     if model not in PRICING:
         raise KeyError(f"no pricing for model {model!r}; add it to concentrate.llm.client.PRICING")
     p_in, p_out = PRICING[model]
-    return (input_tokens * p_in + output_tokens * p_out) / 1_000_000
+    p_read = CACHE_READ_PER_MTOK.get(model, p_in * 0.1)
+    return (
+        input_tokens * p_in
+        + output_tokens * p_out
+        + cache_read_tokens * p_read
+        + cache_write_tokens * p_in * CACHE_WRITE_MULTIPLIER
+    ) / 1_000_000
 
 
 def estimate_tokens(text: str) -> int:
@@ -191,6 +212,10 @@ class LLMClient:
         self.ledger = ledger or Ledger()
         self.offline = offline  # cache-only: raise instead of calling the API on a miss
 
+    @property
+    def cache_dir(self) -> Path:
+        return self._cache_dir
+
     def _key(self, req: LLMRequest) -> str:
         payload = {
             "model": self.model,
@@ -252,3 +277,144 @@ def load_prompt(prompt_id: str, root: Path | None = None) -> str:
     """Read ``prompts/<prompt_id>.md`` (e.g. ``synth_polish.v1``)."""
     base = root or Path(__file__).resolve().parents[3] / "prompts"
     return (base / f"{prompt_id}.md").read_text()
+
+
+# -- multi-turn tool use (agentic baselines) ----------------------------------------------------
+
+
+@dataclass(frozen=True)
+class TurnRequest:
+    """One Messages API call in a (possibly multi-turn, tool-using) conversation."""
+
+    stage: str
+    prompt_id: str
+    system: str
+    messages: tuple[dict[str, Any], ...]
+    tools: tuple[dict[str, Any], ...] = ()
+    schema: dict[str, Any] | None = None  # JSON schema for the final text answer
+    max_tokens: int = 16000
+    effort: str = "medium"
+    cache_system: bool = False  # mark the system prompt as a cache breakpoint (shared corpus)
+
+
+@dataclass(frozen=True)
+class TurnCompletion:
+    content: list[dict[str, Any]]  # assistant content blocks, replayable verbatim
+    text: str
+    stop_reason: str
+    model: str
+    input_tokens: int
+    output_tokens: int
+    cache_read_tokens: int = 0
+    cache_write_tokens: int = 0
+    latency_s: float = 0.0  # of the original (uncached) call
+
+    @property
+    def tool_uses(self) -> list[dict[str, Any]]:
+        return [b for b in self.content if b.get("type") == "tool_use"]
+
+    @property
+    def total_input_tokens(self) -> int:
+        return self.input_tokens + self.cache_read_tokens + self.cache_write_tokens
+
+
+class ToolBackend(Protocol):
+    def turn(self, request: TurnRequest, model: str) -> TurnCompletion: ...
+
+
+def _anthropic_turn(client: Any, request: TurnRequest, model: str) -> TurnCompletion:
+    system: list[dict[str, Any]] = [{"type": "text", "text": request.system}]
+    if request.cache_system:
+        system[0]["cache_control"] = {"type": "ephemeral"}
+    output_config: dict[str, Any] = {"effort": request.effort}
+    if request.schema is not None:
+        output_config["format"] = {"type": "json_schema", "schema": request.schema}
+    kwargs: dict[str, Any] = {
+        "model": model,
+        "max_tokens": request.max_tokens,
+        "system": system,
+        "messages": list(request.messages),
+        "output_config": output_config,
+    }
+    if request.tools:
+        kwargs["tools"] = list(request.tools)
+    if model in _FALLBACK_MODELS:
+        kwargs["betas"] = ["server-side-fallback-2026-07-01"]
+        kwargs["fallbacks"] = "default"
+    start = time.perf_counter()
+    response = client.beta.messages.create(**kwargs)
+    latency = time.perf_counter() - start
+    usage = response.usage
+    content = [b.model_dump(mode="json", exclude_none=True) for b in response.content]
+    return TurnCompletion(
+        content=content,
+        text="".join(b.get("text", "") for b in content if b.get("type") == "text"),
+        stop_reason=str(response.stop_reason),
+        model=response.model,
+        input_tokens=usage.input_tokens,
+        output_tokens=usage.output_tokens,
+        cache_read_tokens=getattr(usage, "cache_read_input_tokens", 0) or 0,
+        cache_write_tokens=getattr(usage, "cache_creation_input_tokens", 0) or 0,
+        latency_s=latency,
+    )
+
+
+def _turn_key(model: str, request: TurnRequest) -> str:
+    payload = {"model": model, **asdict(request)}
+    payload.pop("stage")  # accounting label only; must not split the cache
+    blob = json.dumps(payload, sort_keys=True, ensure_ascii=False).encode()
+    return hashlib.sha256(blob).hexdigest()
+
+
+def run_turn(
+    client: LLMClient, request: TurnRequest, backend: ToolBackend | None = None
+) -> TurnCompletion:
+    """Run one cached, accounted Messages call (with optional tools) through ``client``."""
+    key = _turn_key(client.model, request)
+    path = client.cache_dir / "turns" / f"{key}.json"
+    if path.exists():
+        completion = TurnCompletion(**json.loads(path.read_text())["completion"])
+        cached = True
+    else:
+        if client.offline:
+            raise LLMError(f"cache miss in offline mode for {request.prompt_id} ({key[:12]})")
+        if backend is None:
+            import anthropic
+
+            backend = _SdkToolBackend(anthropic.Anthropic(max_retries=4))
+        completion = backend.turn(request, client.model)
+        if completion.stop_reason == "refusal":
+            raise LLMRefusal(f"{request.prompt_id}: model declined the request")
+        if completion.stop_reason == "max_tokens":
+            raise LLMTruncated(f"{request.prompt_id}: output truncated at {request.max_tokens}")
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps({"completion": asdict(completion)}, ensure_ascii=False))
+        cached = False
+    client.ledger.add(
+        CallRecord(
+            stage=request.stage,
+            prompt_id=request.prompt_id,
+            model=completion.model,
+            input_tokens=completion.total_input_tokens,
+            output_tokens=completion.output_tokens,
+            cost_usd=cost_usd(
+                completion.model,
+                completion.input_tokens,
+                completion.output_tokens,
+                completion.cache_read_tokens,
+                completion.cache_write_tokens,
+            ),
+            cached=cached,
+            latency_s=completion.latency_s,
+            key=key,
+        )
+    )
+    return completion
+
+
+class _SdkToolBackend:
+    def __init__(self, sdk_client: Any) -> None:
+        self._client = sdk_client
+
+    def turn(self, request: TurnRequest, model: str) -> TurnCompletion:
+        return _anthropic_turn(self._client, request, model)

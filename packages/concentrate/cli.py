@@ -133,3 +133,70 @@ def synth(
             typer.echo(f"  {e}", err=True)
         raise typer.Exit(1)
     typer.echo("validation: all gold answers are stated in their gold utterances ✓")
+
+
+@app.command("eval")
+def eval_cmd(
+    systems: Annotated[str, typer.Option(help="Comma-separated: b0,b1,b2,b3.")] = "b0,b1,b2,b3",
+    split: Annotated[str, typer.Option(help="dev | test | all. Tune only on dev.")] = "dev",
+    limit: Annotated[int, typer.Option(help="Max questions (0 = all in split).")] = 0,
+    category: Annotated[
+        list[str] | None, typer.Option(help="Restrict to categories (repeatable).")
+    ] = None,
+    k: Annotated[int, typer.Option(help="Meetings retrieved by b0/b1.")] = 20,
+    seed: Annotated[int, typer.Option(help="Seed for bootstrap CIs.")] = 42,
+    fixtures: Annotated[Path, typer.Option(help="Benchmark fixture set.")] = NORTHWIND,
+    out: Annotated[Path, typer.Option(help="Report directory.")] = Path("evals/reports"),
+    embeddings: Annotated[bool, typer.Option(help="Use dense embeddings in b0/b1.")] = True,
+    estimate_only: Annotated[
+        bool, typer.Option("--estimate", help="Estimate cost and exit.")
+    ] = False,
+    offline: Annotated[bool, typer.Option(help="Use cached LLM results only.")] = False,
+    yes: Annotated[bool, typer.Option("--yes", help="Skip the >$2 confirmation.")] = False,
+) -> None:
+    """Run the Phase 3 baselines on the benchmark and write a report."""
+    from concentrate.agents.retrieval import SentenceTransformerEmbedder
+    from concentrate.evals.runner import (
+        build_systems,
+        estimate,
+        load_corpus,
+        load_questions,
+        run_eval,
+    )
+
+    names = tuple(s.strip() for s in systems.split(",") if s.strip())
+    client = LLMClient(offline=offline)
+    budget = float(os.environ.get("CONCENTRATE_BUDGET_USD") or 25)
+    notes = load_corpus(fixtures)
+    questions = load_questions(fixtures, split, limit, tuple(category or ()))
+    embedder = SentenceTransformerEmbedder() if embeddings and {"b0", "b1"} & set(names) else None
+    built = build_systems(names, client, notes, embedder, k)
+    ests = estimate(built, questions, client.model)
+    typer.echo(f"{len(questions)} questions ({split}), {len(built)} systems, {client.model}")
+    for e in ests:
+        typer.echo(
+            f"  {e.system:<13} ~{e.input_tokens / max(1, e.questions):>8,.0f} in-tok/q  "
+            f"≈ ${e.usd:6.2f}  (incl. judge)"
+        )
+    total = sum(e.usd for e in ests)
+    typer.echo(f"  estimated total ≈ ${total:.2f} (uncached; heuristic tokens) · cap ${budget:.2f}")
+    if estimate_only:
+        return
+    if not offline and not os.environ.get("ANTHROPIC_API_KEY"):
+        raise typer.BadParameter("ANTHROPIC_API_KEY is not set (put it in .env)")
+    if total > BUDGET_CONFIRM_USD and not offline and not yes:
+        typer.confirm(
+            f"Estimated ${total:.2f} exceeds ${BUDGET_CONFIRM_USD:.0f}. Proceed?", abort=True
+        )
+    report = run_eval(
+        built,
+        questions,
+        client,
+        seed=seed,
+        split=split,
+        budget_usd=budget,
+        out_dir=out,
+        meta={"k": k, "embedder": getattr(embedder, "name", None)},
+    )
+    typer.echo((Path(report["paths"]["md"])).read_text())
+    typer.echo(f"spent ${client.ledger.spent_usd():.2f} · report: {report['paths']['md']}")

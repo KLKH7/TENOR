@@ -112,7 +112,7 @@ Transcripts follow the format seen live: short fragmentary passages, the owner o
 
 1. ✅ Models, Source layer (API, MCP, fixtures), sync
 2. ✅ Synthetic benchmark, matched to the live transcript format (LLM polish built, not yet run)
-3. **Baselines:** an agentic retriever mirroring today's MCP (search → summaries → transcript chunks), plain top-k, summaries-only, and a full-context ceiling
+3. 🛠 **Baselines** (built and tested, not yet run): an agentic retriever mirroring today's MCP (search → summaries → transcript chunks), plain top-k, summaries-only, and a cached full-context ceiling, plus a judged eval harness with a budget cap. Run with `uv run concentrate eval --split dev --estimate` (free), then without `--estimate`
 4. **Concentrate core:** entity linking, grounded fact extraction, time-aware memory, compression tiers
 5. **Evaluation:** accuracy by question type, tokens, latency, and what's lost when transcripts are retired; failure analysis
 6. Later, if the results justify it: profiles, share-safe redaction, pre-meeting briefs, an MCP server, and the full UI
