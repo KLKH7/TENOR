@@ -1,0 +1,55 @@
+name: New system submission
+description: Propose a memory or retrieval system to evaluate on the benchmark.
+labels: [new-system]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        See CONTRIBUTING.md, "Add a system". Results on the `dev` split are welcome; the `test` split is run once, by the maintainer, for every system alike.
+  - type: input
+    id: name
+    attributes:
+      label: System name
+      placeholder: e.g. Letta, LangMem, your own
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind
+      options:
+        - Query-time (implements `System`)
+        - Write-time (implements `WriteTimeSystem`)
+    validations:
+      required: true
+  - type: textarea
+    id: how
+    attributes:
+      label: How it works
+      description: What it puts in front of the answer model, and what it builds ahead of time (if anything).
+    validations:
+      required: true
+  - type: textarea
+    id: cost
+    attributes:
+      label: Cost estimate
+      description: Output of `concentrate eval --xl --split dev --systems <key> --estimate`, including ingest cost for write-time systems.
+  - type: textarea
+    id: results
+    attributes:
+      label: Dev-split results (optional)
+      description: Report stamp, git SHA, models and prompt versions.
+  - type: input
+    id: link
+    attributes:
+      label: Link to code or PR
+  - type: checkboxes
+    id: rules
+    attributes:
+      label: Checks
+      options:
+        - label: Tuned on the dev split only
+          required: true
+        - label: Tests run without network or API keys
+          required: true
+        - label: LLM calls go through `concentrate.llm`
