@@ -93,7 +93,10 @@ def check_value(value_norm: str, cited_text: str) -> tuple[bool, str, bool]:
     low = cited_text.lower()
     said = _numbers(cited_text)
     if _ISO.match(v):
-        d = date.fromisoformat(v)
+        try:
+            d = date.fromisoformat(v)
+        except ValueError:
+            return False, f"{v} is not a calendar date", False
         if _MONTHS[d.month - 1] in low and d.day in said:
             return True, "", False
         if _RELATIVE.search(low):

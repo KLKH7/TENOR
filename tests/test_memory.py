@@ -197,6 +197,7 @@ def test_gate_accepts_grounded_fact_with_spoken_number() -> None:
         ({"source_lines": []}, "no_source_lines"),
         ({"quote": "thirty dollars a seat"}, "quote_mismatch"),
         ({"value_norm": "30"}, "value_not_in_lines"),
+        ({"value_norm": "2026-10-35"}, "value_not_in_lines"),  # not a calendar date
         ({"valid_from": "next week"}, "malformed"),
         (
             {"value_norm": "2026-10-09", "source_lines": [f"{N}:0002"], "quote": "October eighth"},

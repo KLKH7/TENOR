@@ -72,13 +72,20 @@ DB_FILE = "memory.sqlite"
 STORE_FORMAT = 1
 
 # Ingestion cost model, calibrated on the 2026-11-02 smoke run (4 base Northwind meetings,
-# Sonnet 5.5, effort medium; docs/concentrate/memory.md). Per extraction call:
-#   input  = cached system prompt (extract.v1 + directory) + header/summary/keys + transcript
-#   output = OUTPUT_BASE + OUTPUT_PER_LINE * lines  (JSON + adaptive thinking)
-EXACT_PER_ESTIMATED_TOKEN = 1.35  # count_tokens / estimate_tokens on transcript text
-CONTEXT_TOKENS = 450  # header, attendees, existing keys, open commitments
-OUTPUT_BASE, OUTPUT_PER_LINE = 900, 28.0
-ENTAIL_USD_PER_MEETING = 0.0005  # Haiku 5.5, ~1 call per meeting, a few hundred tokens
+# Sonnet 5.5, effort medium, whole meetings; docs/concentrate/memory.md). Per extraction call:
+#   cached prefix = extract.v1 + directory (count_tokens/estimate = 1.336) + structured-output
+#                   schema overhead (measured prefix 3,874 tokens - 2,540 counted = 1,334);
+#   uncached      = summary + transcript with local line IDs (measured/estimate = 1.65)
+#                   + context (header, existing keys, open commitments), which grows with the
+#                   memory until the max_keys / max_open_commitments caps;
+#   output        = OUTPUT_BASE + OUTPUT_PER_LINE * lines (JSON + adaptive thinking; measured
+#                   2,928 tokens for 291 lines).
+SYSTEM_EXACT_PER_ESTIMATED = 1.336
+SCHEMA_OVERHEAD_TOKENS = 1_334
+TRANSCRIPT_EXACT_PER_ESTIMATED = 1.65
+CONTEXT_BASE, CONTEXT_PER_MEETING, CONTEXT_CAP = 400, 100, 3_400
+OUTPUT_BASE, OUTPUT_PER_LINE = 40, 9.5
+ENTAIL_USD_PER_MEETING = 0.0003  # Haiku 5.5 at low effort: measured $0.0010 for 4 calls
 ANSWER_OUTPUT_TOKENS_EST = 400
 
 
@@ -268,14 +275,16 @@ class ConcentrateSystem:
 
     def _ingest_plan(self, notes: list[MeetingNote]) -> dict[str, int]:
         directory = load_directory(self.directory_path, notes)
-        system = round(
-            estimate_tokens(load_prompt(EXTRACT_PROMPT) + directory.prompt_block())
-            * EXACT_PER_ESTIMATED_TOKEN
-        )
+        prefix = estimate_tokens(load_prompt(EXTRACT_PROMPT) + directory.prompt_block())
+        system = round(prefix * SYSTEM_EXACT_PER_ESTIMATED) + SCHEMA_OVERHEAD_TOKENS
         uncached = output = calls = 0
-        for m in notes:
-            text = cv.summary_view(m) + "\n" + cv.transcript_lines(m.utterances)
-            uncached += round(estimate_tokens(text) * EXACT_PER_ESTIMATED_TOKEN) + CONTEXT_TOKENS
+        for i, m in enumerate(cv.by_date(notes)):
+            lines = "\n".join(
+                f"[{u.index:04d}] {cv.speaker_label(u)}: {u.text}" for u in m.utterances
+            )
+            text = f"{cv.summary_view(m)}\n{lines}"
+            context = min(CONTEXT_BASE + CONTEXT_PER_MEETING * i, CONTEXT_CAP)
+            uncached += round(estimate_tokens(text) * TRANSCRIPT_EXACT_PER_ESTIMATED) + context
             output += round(OUTPUT_BASE + OUTPUT_PER_LINE * len(m.utterances))
             calls += 1
         return {"calls": calls, "system": system, "uncached_input": uncached, "output": output}
