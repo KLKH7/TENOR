@@ -2404,16 +2404,6 @@
         },
         {
           "speaker": "alex_k",
-          "text": "Alex, anything to report?",
-          "protect": [],
-          "facts": [
-            "c003"
-          ],
-          "privacy": null,
-          "filler": false
-        },
-        {
-          "speaker": "alex_k",
           "text": "Yeah, the backend job description is done, that went out last week.",
           "protect": [
             "backend job description"
@@ -2435,6 +2425,14 @@
         {
           "speaker": "ruth",
           "text": "I looked at the error dashboard and nothing scary.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "ines",
+          "text": "Hold on, my laptop is about to die, let me grab a charger.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -2738,7 +2736,7 @@
         },
         {
           "speaker": "marcus",
-          "text": "I think the question is really about scope.",
+          "text": "Do we have any data on that or is it gut feel?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -2826,7 +2824,7 @@
         },
         {
           "speaker": "priya",
-          "text": "I'm worried about how this lands with existing customers.",
+          "text": "I don't love it, but I can live with it.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -2858,7 +2856,7 @@
         },
         {
           "speaker": "elena",
-          "text": "Can we park that and come back to it at the end?",
+          "text": "I think the question is really about scope.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -2866,7 +2864,7 @@
         },
         {
           "speaker": "elena",
-          "text": "I'd rather make a call today than drag it out.",
+          "text": "What's the downside if we're wrong about this?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -2938,7 +2936,7 @@
         },
         {
           "speaker": "priya",
-          "text": "Do we have any data on that or is it gut feel?",
+          "text": "Let's not go down that rabbit hole right now.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -2946,7 +2944,7 @@
         },
         {
           "speaker": "elena",
-          "text": "What's the downside if we're wrong about this?",
+          "text": "Can we park that and come back to it at the end?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -2954,7 +2952,7 @@
         },
         {
           "speaker": "olivia",
-          "text": "I don't love it, but I can live with it.",
+          "text": "I'm worried about how this lands with existing customers.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -3014,7 +3012,7 @@
         },
         {
           "speaker": "elena",
-          "text": "Yeah, I agree with that.",
+          "text": "I'd rather make a call today than drag it out.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -3038,7 +3036,7 @@
         },
         {
           "speaker": "elena",
-          "text": "Let's not go down that rabbit hole right now.",
+          "text": "Hold on, my laptop is about to die, let me grab a charger.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -3102,7 +3100,7 @@
         },
         {
           "speaker": "marcus",
-          "text": "Hold on, my laptop is about to die, let me grab a charger.",
+          "text": "Yeah, I agree with that.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -6824,16 +6822,6 @@
         },
         {
           "speaker": "alex_k",
-          "text": "Alex, what's on your plate?",
-          "protect": [],
-          "facts": [
-            "c015"
-          ],
-          "privacy": null,
-          "filler": false
-        },
-        {
-          "speaker": "alex_k",
           "text": "So my main thing is the on-call rotation, should be done by Thursday.",
           "protect": [
             "on-call rotation",
@@ -6854,8 +6842,16 @@
           "filler": true
         },
         {
+          "speaker": "kofi",
+          "text": "Yeah, I agree with that.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
           "speaker": "alex_k",
-          "text": "Inês, what's on your plate?",
+          "text": "Inês, you're up.",
           "protect": [],
           "facts": [
             "c016"
@@ -6974,63 +6970,7 @@
           "filler": false
         },
         {
-          "speaker": "priya",
-          "text": "I'd rather make a call today than drag it out.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
           "speaker": "dev",
-          "text": "I think that's mostly right, but there's a nuance there.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "tomas",
-          "text": "Can we park that and come back to it at the end?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "tomas",
-          "text": "Can you share your screen?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "dev",
-          "text": "I'm worried about how this lands with existing customers.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "alex_k",
-          "text": "That's fair. I hadn't thought about it that way.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "elena",
-          "text": "I don't love it, but I can live with it.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
           "text": "Let's not go down that rabbit hole right now.",
           "protect": [],
           "facts": [],
@@ -7038,16 +6978,8 @@
           "filler": true
         },
         {
-          "speaker": "priya",
-          "text": "I'm not sure that's the right framing, honestly.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "alex_k",
-          "text": "What do we need to believe for this to work?",
+          "speaker": "tomas",
+          "text": "That's fair. I hadn't thought about it that way.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7062,15 +6994,15 @@
           "filler": true
         },
         {
-          "speaker": "tomas",
-          "text": "Let's not go down that rabbit hole right now.",
+          "speaker": "dev",
+          "text": "Can we park that and come back to it at the end?",
           "protect": [],
           "facts": [],
           "privacy": null,
           "filler": true
         },
         {
-          "speaker": "priya",
+          "speaker": "alex_k",
           "text": "The board will ask about this, so let's have a clear story.",
           "protect": [],
           "facts": [],
@@ -7078,8 +7010,56 @@
           "filler": true
         },
         {
+          "speaker": "elena",
+          "text": "What's the downside if we're wrong about this?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Right, right. Keep going.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Yeah, I agree with that.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "alex_k",
+          "text": "I'm not sure that's the right framing, honestly.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
           "speaker": "tomas",
-          "text": "I don't love it, but I can live with it.",
+          "text": "Sorry, can you say that again? You cut out for a second.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "I think the question is really about scope.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "tomas",
+          "text": "Can you share your screen?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7095,7 +7075,7 @@
         },
         {
           "speaker": "priya",
-          "text": "Right, right. Keep going.",
+          "text": "We've been going back and forth on this for a while.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7103,7 +7083,7 @@
         },
         {
           "speaker": "priya",
-          "text": "Sorry, can you say that again? You cut out for a second.",
+          "text": "I'm worried about how this lands with existing customers.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7111,15 +7091,23 @@
         },
         {
           "speaker": "priya",
-          "text": "Let's make sure sales and marketing hear this at the same time.",
+          "text": "I think that's mostly right, but there's a nuance there.",
           "protect": [],
           "facts": [],
           "privacy": null,
           "filler": true
         },
         {
-          "speaker": "priya",
-          "text": "We need to be careful not to overcommit here.",
+          "speaker": "elena",
+          "text": "What do we need to believe for this to work?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "elena",
+          "text": "What do we need to believe for this to work?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7153,15 +7141,7 @@
         },
         {
           "speaker": "priya",
-          "text": "I think the question is really about scope.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "We've been going back and forth on this for a while.",
+          "text": "Can you share your screen?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7169,7 +7149,7 @@
         },
         {
           "speaker": "tomas",
-          "text": "Yeah, I agree with that.",
+          "text": "Do we have any data on that or is it gut feel?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7185,7 +7165,7 @@
         },
         {
           "speaker": "alex_k",
-          "text": "The board will ask about this, so let's have a clear story.",
+          "text": "Sorry, can you say that again? You cut out for a second.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7193,7 +7173,7 @@
         },
         {
           "speaker": "alex_k",
-          "text": "Yeah, that makes sense to me.",
+          "text": "We need to be careful not to overcommit here.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7201,7 +7181,7 @@
         },
         {
           "speaker": "marcus",
-          "text": "Do we have any data on that or is it gut feel?",
+          "text": "Okay, so where did we land on that last time?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7210,6 +7190,14 @@
         {
           "speaker": "alex_k",
           "text": "What's the downside if we're wrong about this?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "We need to be careful not to overcommit here.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7225,31 +7213,7 @@
         },
         {
           "speaker": "priya",
-          "text": "What's the downside if we're wrong about this?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Sorry, I was on mute. I was saying I agree.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "tomas",
-          "text": "We need to be careful not to overcommit here.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Okay, so where did we land on that last time?",
+          "text": "I don't love it, but I can live with it.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7264,8 +7228,8 @@
           "filler": true
         },
         {
-          "speaker": "alex_k",
-          "text": "We've been going back and forth on this for a while.",
+          "speaker": "tomas",
+          "text": "Sorry, I was on mute. I was saying I agree.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7273,7 +7237,31 @@
         },
         {
           "speaker": "priya",
-          "text": "I'm worried about how this lands with existing customers.",
+          "text": "I'd rather make a call today than drag it out.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "I think the question is really about scope.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Let's make sure sales and marketing hear this at the same time.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Yeah, I agree with that.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7281,7 +7269,15 @@
         },
         {
           "speaker": "dev",
-          "text": "I'm not sure that's the right framing, honestly.",
+          "text": "I'm worried about how this lands with existing customers.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "tomas",
+          "text": "We've been going back and forth on this for a while.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7330,55 +7326,15 @@
           "filler": false
         },
         {
-          "speaker": "priya",
-          "text": "Sorry, can you say that again? You cut out for a second.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "elena",
-          "text": "Hold on, my laptop is about to die, let me grab a charger.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "I think that's mostly right, but there's a nuance there.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "elena",
-          "text": "Users kept hesitating on that screen in the sessions.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "lena",
-          "text": "What happens on mobile? The layout looks tight.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Can you share your screen?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
           "speaker": "sam_o",
+          "text": "I like the hierarchy, the primary action is much clearer now.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "elena",
           "text": "I think that's mostly right, but there's a nuance there.",
           "protect": [],
           "facts": [],
@@ -7387,14 +7343,14 @@
         },
         {
           "speaker": "lena",
-          "text": "Let's not go down that rabbit hole right now.",
+          "text": "That's fair. I hadn't thought about it that way.",
           "protect": [],
           "facts": [],
           "privacy": null,
           "filler": true
         },
         {
-          "speaker": "elena",
+          "speaker": "priya",
           "text": "Yeah, I agree with that.",
           "protect": [],
           "facts": [],
@@ -7402,8 +7358,24 @@
           "filler": true
         },
         {
+          "speaker": "lena",
+          "text": "Let me pull up the doc so we're all looking at the same thing.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "elena",
+          "text": "Sorry, I was on mute. I was saying I agree.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
           "speaker": "priya",
-          "text": "Hold on, my laptop is about to die, let me grab a charger.",
+          "text": "The illustration style doesn't quite match the rest of the app.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7418,16 +7390,8 @@
           "filler": false
         },
         {
-          "speaker": "priya",
-          "text": "I'm not sure that's the right framing, honestly.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
           "speaker": "sam_p",
-          "text": "I'd want to see it with real data before we commit.",
+          "text": "Do we have any data on that or is it gut feel?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7435,7 +7399,7 @@
         },
         {
           "speaker": "priya",
-          "text": "The button labels could be more specific.",
+          "text": "Right, right. Keep going.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7443,7 +7407,7 @@
         },
         {
           "speaker": "priya",
-          "text": "Yeah, that makes sense to me.",
+          "text": "The empty state still feels a bit cold to me.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7459,23 +7423,7 @@
         },
         {
           "speaker": "priya",
-          "text": "Do we have any data on that or is it gut feel?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "sam_o",
-          "text": "Can we try a version with less copy on that screen?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "The button labels could be more specific.",
+          "text": "Can we park that and come back to it at the end?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7491,7 +7439,7 @@
         },
         {
           "speaker": "priya",
-          "text": "That's fair. I hadn't thought about it that way.",
+          "text": "Right, right. Keep going.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7499,7 +7447,7 @@
         },
         {
           "speaker": "priya",
-          "text": "Right, right. Keep going.",
+          "text": "Yeah, I agree with that.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7518,24 +7466,8 @@
           "filler": false
         },
         {
-          "speaker": "megan",
-          "text": "The illustration style doesn't quite match the rest of the app.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "sam_o",
-          "text": "I like the hierarchy, the primary action is much clearer now.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
           "speaker": "priya",
-          "text": "Okay, so where did we land on that last time?",
+          "text": "What happens on mobile? The layout looks tight.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7543,6 +7475,30 @@
         },
         {
           "speaker": "elena",
+          "text": "I'm not sure that's the right framing, honestly.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "elena",
+          "text": "Users kept hesitating on that screen in the sessions.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "elena",
+          "text": "Yeah, that makes sense to me.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "megan",
           "text": "Let's not go down that rabbit hole right now.",
           "protect": [],
           "facts": [],
@@ -7551,38 +7507,6 @@
         },
         {
           "speaker": "elena",
-          "text": "Do we have any data on that or is it gut feel?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "sam_o",
-          "text": "I'd want to see it with real data before we commit.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "megan",
-          "text": "I think the question is really about scope.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "elena",
-          "text": "The empty state still feels a bit cold to me.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "lena",
           "text": "Okay, so where did we land on that last time?",
           "protect": [],
           "facts": [],
@@ -7590,7 +7514,7 @@
           "filler": true
         },
         {
-          "speaker": "sam_p",
+          "speaker": "lena",
           "text": "Can you share your screen?",
           "protect": [],
           "facts": [],
@@ -7598,8 +7522,24 @@
           "filler": true
         },
         {
+          "speaker": "sam_p",
+          "text": "That spacing feels off, but that's a polish thing.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
           "speaker": "elena",
-          "text": "Sorry, can you say that again? You cut out for a second.",
+          "text": "I think that's mostly right, but there's a nuance there.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Hold on, my laptop is about to die, let me grab a charger.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7630,16 +7570,8 @@
           "filler": false
         },
         {
-          "speaker": "sam_o",
-          "text": "That spacing feels off, but that's a polish thing.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
           "speaker": "elena",
-          "text": "Let me pull up the doc so we're all looking at the same thing.",
+          "text": "Hold on, my laptop is about to die, let me grab a charger.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7647,7 +7579,7 @@
         },
         {
           "speaker": "megan",
-          "text": "Right, right. Keep going.",
+          "text": "Sorry, can you say that again? You cut out for a second.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7655,71 +7587,7 @@
         },
         {
           "speaker": "sam_o",
-          "text": "Can we park that and come back to it at the end?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
           "text": "I think the question is really about scope.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "I like the hierarchy, the primary action is much clearer now.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Can we park that and come back to it at the end?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "That spacing feels off, but that's a polish thing.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "sam_o",
-          "text": "Yeah, that makes sense to me.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "What happens on mobile? The layout looks tight.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "sam_o",
-          "text": "Good catch, I'll swap them.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": false
-        },
-        {
-          "speaker": "elena",
-          "text": "The empty state still feels a bit cold to me.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7735,15 +7603,23 @@
         },
         {
           "speaker": "priya",
-          "text": "Yeah, I agree with that.",
+          "text": "Can you share your screen?",
           "protect": [],
           "facts": [],
           "privacy": null,
           "filler": true
         },
         {
-          "speaker": "lena",
-          "text": "That's fair. I hadn't thought about it that way.",
+          "speaker": "megan",
+          "text": "The illustration style doesn't quite match the rest of the app.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "elena",
+          "text": "I like the hierarchy, the primary action is much clearer now.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7751,7 +7627,31 @@
         },
         {
           "speaker": "priya",
-          "text": "Let me pull up the doc so we're all looking at the same thing.",
+          "text": "I'm not sure that's the right framing, honestly.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "sam_o",
+          "text": "Do we have any data on that or is it gut feel?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "The empty state still feels a bit cold to me.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "lena",
+          "text": "I'd want to see it with real data before we commit.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7759,7 +7659,103 @@
         },
         {
           "speaker": "sam_p",
-          "text": "Sorry, I was on mute. I was saying I agree.",
+          "text": "I think the question is really about scope.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "sam_o",
+          "text": "Good catch, I'll swap them.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": false
+        },
+        {
+          "speaker": "elena",
+          "text": "That spacing feels off, but that's a polish thing.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "elena",
+          "text": "I'd want to see it with real data before we commit.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "The button labels could be more specific.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Okay, so where did we land on that last time?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "lena",
+          "text": "Let's not go down that rabbit hole right now.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "megan",
+          "text": "Can we park that and come back to it at the end?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "megan",
+          "text": "Let me pull up the doc so we're all looking at the same thing.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "What happens on mobile? The layout looks tight.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Yeah, that makes sense to me.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "sam_p",
+          "text": "Can we try a version with less copy on that screen?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "sam_o",
+          "text": "That's fair. I hadn't thought about it that way.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7828,7 +7824,7 @@
         },
         {
           "speaker": "priya",
-          "text": "I'm not sure that's the right framing, honestly.",
+          "text": "Let's not go down that rabbit hole right now.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7836,7 +7832,7 @@
         },
         {
           "speaker": "hana",
-          "text": "Welcome to everyone who joined recently.",
+          "text": "Do we have any data on that or is it gut feel?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7844,7 +7840,7 @@
         },
         {
           "speaker": "priya",
-          "text": "Yeah, I agree with that.",
+          "text": "We'll share the slides afterwards.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7852,7 +7848,15 @@
         },
         {
           "speaker": "hana",
-          "text": "Can you share your screen?",
+          "text": "Sorry, I was on mute. I was saying I agree.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "marcus",
+          "text": "I think that's mostly right, but there's a nuance there.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7860,70 +7864,6 @@
         },
         {
           "speaker": "priya",
-          "text": "Shout out to the support team, they've been amazing.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "olivia",
-          "text": "If you have questions, drop them in the chat.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "I'm not sure that's the right framing, honestly.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "hana",
-          "text": "A few reminders on the office before we wrap.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "felix",
-          "text": "Sorry, can you say that again? You cut out for a second.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Let me pull up the doc so we're all looking at the same thing.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Right, right. Keep going.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "olivia",
-          "text": "Sorry, can you say that again? You cut out for a second.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "olivia",
           "text": "Let's do a quick round of wins from each team.",
           "protect": [],
           "facts": [],
@@ -7931,23 +7871,7 @@
           "filler": true
         },
         {
-          "speaker": "felix",
-          "text": "Yeah, that makes sense to me.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Yeah, I agree with that.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
+          "speaker": "hana",
           "text": "That's fair. I hadn't thought about it that way.",
           "protect": [],
           "facts": [],
@@ -7955,15 +7879,7 @@
           "filler": true
         },
         {
-          "speaker": "hana",
-          "text": "If you have questions, drop them in the chat.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
+          "speaker": "felix",
           "text": "Right, right. Keep going.",
           "protect": [],
           "facts": [],
@@ -7979,16 +7895,8 @@
           "filler": true
         },
         {
-          "speaker": "felix",
-          "text": "Is it just me or is the office freezing today?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": false
-        },
-        {
           "speaker": "priya",
-          "text": "Yeah, that makes sense to me.",
+          "text": "Sorry, can you say that again? You cut out for a second.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -7996,7 +7904,71 @@
         },
         {
           "speaker": "priya",
-          "text": "Thanks everyone for the hard work this month.",
+          "text": "We'll share the slides afterwards.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Welcome to everyone who joined recently.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "I think the question is really about scope.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Sorry, I was on mute. I was saying I agree.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Okay, so where did we land on that last time?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Let's do a quick round of wins from each team.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "hana",
+          "text": "Let's not go down that rabbit hole right now.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Let me pull up the doc so we're all looking at the same thing.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "If you have questions, drop them in the chat.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8012,22 +7984,6 @@
         },
         {
           "speaker": "felix",
-          "text": "Okay, so where did we land on that last time?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "marcus",
-          "text": "Can we park that and come back to it at the end?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "felix",
           "text": "Yeah, I agree with that.",
           "protect": [],
           "facts": [],
@@ -8036,15 +7992,63 @@
         },
         {
           "speaker": "felix",
-          "text": "Hold on, my laptop is about to die, let me grab a charger.",
+          "text": "Is it just me or is the office freezing today?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": false
+        },
+        {
+          "speaker": "priya",
+          "text": "I'm not sure that's the right framing, honestly.",
           "protect": [],
           "facts": [],
           "privacy": null,
           "filler": true
         },
         {
-          "speaker": "olivia",
-          "text": "Sorry, I was on mute. I was saying I agree.",
+          "speaker": "felix",
+          "text": "Yeah, that makes sense to me.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Okay, so where did we land on that last time?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "marcus",
+          "text": "Thanks everyone for the hard work this month.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "felix",
+          "text": "Can we park that and come back to it at the end?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "felix",
+          "text": "Okay, so where did we land on that last time?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "marcus",
+          "text": "Let me pull up the doc so we're all looking at the same thing.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8052,7 +8056,15 @@
         },
         {
           "speaker": "hana",
-          "text": "Let me pull up the doc so we're all looking at the same thing.",
+          "text": "Can you share your screen?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Hold on, my laptop is about to die, let me grab a charger.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8071,8 +8083,16 @@
           "filler": false
         },
         {
+          "speaker": "marcus",
+          "text": "A few reminders on the office before we wrap.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
           "speaker": "olivia",
-          "text": "Let's do a quick round of wins from each team.",
+          "text": "Sorry, can you say that again? You cut out for a second.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8080,7 +8100,7 @@
         },
         {
           "speaker": "felix",
-          "text": "If you have questions, drop them in the chat.",
+          "text": "Can we park that and come back to it at the end?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8088,22 +8108,22 @@
         },
         {
           "speaker": "priya",
-          "text": "Right, right. Keep going.",
+          "text": "That's fair. I hadn't thought about it that way.",
           "protect": [],
           "facts": [],
           "privacy": null,
           "filler": true
         },
         {
-          "speaker": "priya",
-          "text": "Sorry, I was on mute. I was saying I agree.",
+          "speaker": "olivia",
+          "text": "Yeah, I agree with that.",
           "protect": [],
           "facts": [],
           "privacy": null,
           "filler": true
         },
         {
-          "speaker": "priya",
+          "speaker": "felix",
           "text": "Thanks everyone for the hard work this month.",
           "protect": [],
           "facts": [],
@@ -8112,15 +8132,7 @@
         },
         {
           "speaker": "priya",
-          "text": "Okay, so where did we land on that last time?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Let's do a quick round of wins from each team.",
+          "text": "Yeah, I agree with that.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8136,7 +8148,7 @@
         },
         {
           "speaker": "felix",
-          "text": "Let's not go down that rabbit hole right now.",
+          "text": "Hold on, my laptop is about to die, let me grab a charger.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8144,15 +8156,7 @@
         },
         {
           "speaker": "marcus",
-          "text": "That's fair. I hadn't thought about it that way.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "hana",
-          "text": "A few reminders on the office before we wrap.",
+          "text": "Shout out to the support team, they've been amazing.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8160,7 +8164,7 @@
         },
         {
           "speaker": "marcus",
-          "text": "We'll share the slides afterwards.",
+          "text": "Welcome to everyone who joined recently.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8179,8 +8183,16 @@
           "filler": false
         },
         {
-          "speaker": "hana",
-          "text": "That's fair. I hadn't thought about it that way.",
+          "speaker": "olivia",
+          "text": "I think the question is really about scope.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Hold on, my laptop is about to die, let me grab a charger.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8195,16 +8207,8 @@
           "filler": true
         },
         {
-          "speaker": "priya",
-          "text": "Sorry, I was on mute. I was saying I agree.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
           "speaker": "olivia",
-          "text": "I think the question is really about scope.",
+          "text": "If you have questions, drop them in the chat.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8212,7 +8216,7 @@
         },
         {
           "speaker": "priya",
-          "text": "I think that's mostly right, but there's a nuance there.",
+          "text": "Right, right. Keep going.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8220,6 +8224,14 @@
         },
         {
           "speaker": "marcus",
+          "text": "Let's do a quick round of wins from each team.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
           "text": "A few reminders on the office before we wrap.",
           "protect": [],
           "facts": [],
@@ -8227,31 +8239,15 @@
           "filler": true
         },
         {
-          "speaker": "olivia",
-          "text": "Hold on, my laptop is about to die, let me grab a charger.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "I think the question is really about scope.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "We'll share the slides afterwards.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
           "speaker": "marcus",
+          "text": "Sorry, I was on mute. I was saying I agree.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
           "text": "Yeah, that makes sense to me.",
           "protect": [],
           "facts": [],
@@ -8259,24 +8255,16 @@
           "filler": true
         },
         {
-          "speaker": "priya",
-          "text": "Welcome to everyone who joined recently.",
+          "speaker": "felix",
+          "text": "Do we have any data on that or is it gut feel?",
           "protect": [],
           "facts": [],
           "privacy": null,
           "filler": true
         },
         {
-          "speaker": "olivia",
-          "text": "Okay, so where did we land on that last time?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "olivia",
-          "text": "I think the question is really about scope.",
+          "speaker": "felix",
+          "text": "That's fair. I hadn't thought about it that way.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8292,7 +8280,15 @@
         },
         {
           "speaker": "hana",
-          "text": "Do we have any data on that or is it gut feel?",
+          "text": "Can we park that and come back to it at the end?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "A few reminders on the office before we wrap.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8307,16 +8303,16 @@
           "filler": false
         },
         {
-          "speaker": "priya",
-          "text": "Sorry, can you say that again? You cut out for a second.",
+          "speaker": "hana",
+          "text": "Welcome to everyone who joined recently.",
           "protect": [],
           "facts": [],
           "privacy": null,
           "filler": true
         },
         {
-          "speaker": "olivia",
-          "text": "Shout out to the support team, they've been amazing.",
+          "speaker": "priya",
+          "text": "Can you share your screen?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8324,7 +8320,23 @@
         },
         {
           "speaker": "marcus",
-          "text": "Do we have any data on that or is it gut feel?",
+          "text": "Shout out to the support team, they've been amazing.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "I'm not sure that's the right framing, honestly.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "If you have questions, drop them in the chat.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8332,31 +8344,7 @@
         },
         {
           "speaker": "hana",
-          "text": "Can we park that and come back to it at the end?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Let's not go down that rabbit hole right now.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
           "text": "I think that's mostly right, but there's a nuance there.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Do we have any data on that or is it gut feel?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8371,8 +8359,16 @@
           "filler": true
         },
         {
-          "speaker": "marcus",
-          "text": "Can we park that and come back to it at the end?",
+          "speaker": "priya",
+          "text": "I think the question is really about scope.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Shout out to the support team, they've been amazing.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8418,23 +8414,7 @@
         },
         {
           "speaker": "sam_o",
-          "text": "Yeah, I agree with that.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "sam_o",
-          "text": "I'm not sure that's the right framing, honestly.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Sorry, can you say that again? You cut out for a second.",
+          "text": "Anything I can do to unblock you?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8450,30 +8430,6 @@
         },
         {
           "speaker": "priya",
-          "text": "Can you share your screen?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Honestly, it's been a busy couple of weeks.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Okay, so where did we land on that last time?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
           "text": "I think the question is really about scope.",
           "protect": [],
           "facts": [],
@@ -8482,7 +8438,39 @@
         },
         {
           "speaker": "priya",
+          "text": "I'd like more time for deep work if possible.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
           "text": "Sorry, I was on mute. I was saying I agree.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Let's not go down that rabbit hole right now.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "sam_o",
+          "text": "I've been thinking a lot about where I want to grow.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "That's good to hear.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8501,16 +8489,8 @@
           "filler": false
         },
         {
-          "speaker": "sam_o",
-          "text": "Let's make sure we write down goals for next quarter.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "sam_o",
-          "text": "Right, right. Keep going.",
+          "speaker": "priya",
+          "text": "That's good to hear.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8526,15 +8506,7 @@
         },
         {
           "speaker": "priya",
-          "text": "Anything I can do to unblock you?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Yeah, that makes sense to me.",
+          "text": "I'm not sure that's the right framing, honestly.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8542,7 +8514,7 @@
         },
         {
           "speaker": "sam_o",
-          "text": "That's fair. I hadn't thought about it that way.",
+          "text": "Can we park that and come back to it at the end?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8550,31 +8522,7 @@
         },
         {
           "speaker": "sam_o",
-          "text": "Do we have any data on that or is it gut feel?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "I think the question is really about scope.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "I think that's mostly right, but there's a nuance there.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "sam_o",
-          "text": "Yeah, that makes sense to me.",
+          "text": "I've been thinking a lot about where I want to grow.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8590,7 +8538,63 @@
         },
         {
           "speaker": "priya",
-          "text": "I've been thinking a lot about where I want to grow.",
+          "text": "The team dynamic feels good right now.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Do we have any data on that or is it gut feel?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "I'd like more time for deep work if possible.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Can you share your screen?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "sam_o",
+          "text": "I think the question is really about scope.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "sam_o",
+          "text": "Can we park that and come back to it at the end?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "sam_o",
+          "text": "Let me pull up the doc so we're all looking at the same thing.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Okay, so where did we land on that last time?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8610,7 +8614,15 @@
         },
         {
           "speaker": "priya",
-          "text": "I think that's mostly right, but there's a nuance there.",
+          "text": "How are you feeling about the workload generally?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Let's make sure we write down goals for next quarter.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8626,7 +8638,7 @@
         },
         {
           "speaker": "priya",
-          "text": "That's good to hear.",
+          "text": "That's fair. I hadn't thought about it that way.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8634,31 +8646,7 @@
         },
         {
           "speaker": "priya",
-          "text": "How are you feeling about the workload generally?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Let's not go down that rabbit hole right now.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "The team dynamic feels good right now.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Sorry, I was on mute. I was saying I agree.",
+          "text": "Honestly, it's been a busy couple of weeks.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8666,7 +8654,7 @@
         },
         {
           "speaker": "sam_o",
-          "text": "I'd like more time for deep work if possible.",
+          "text": "Yeah, that makes sense to me.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8674,38 +8662,6 @@
         },
         {
           "speaker": "priya",
-          "text": "Can we park that and come back to it at the end?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "I've been thinking a lot about where I want to grow.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Can we park that and come back to it at the end?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "sam_o",
-          "text": "Can you share your screen?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "sam_o",
           "text": "Right, right. Keep going.",
           "protect": [],
           "facts": [],
@@ -8714,7 +8670,47 @@
         },
         {
           "speaker": "priya",
-          "text": "Let me pull up the doc so we're all looking at the same thing.",
+          "text": "Can you share your screen?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "I think that's mostly right, but there's a nuance there.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Sorry, can you say that again? You cut out for a second.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "I think that's mostly right, but there's a nuance there.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "sam_o",
+          "text": "Sorry, can you say that again? You cut out for a second.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Yeah, I agree with that.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8773,8 +8769,8 @@
           "filler": false
         },
         {
-          "speaker": "ruth",
-          "text": "I don't have any blockers really.",
+          "speaker": "sam_p",
+          "text": "I'm not sure that's the right framing, honestly.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8782,7 +8778,15 @@
         },
         {
           "speaker": "priya",
-          "text": "Sorry, can you say that again? You cut out for a second.",
+          "text": "I think that's mostly right, but there's a nuance there.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Do we have any data on that or is it gut feel?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8798,7 +8802,7 @@
         },
         {
           "speaker": "priya",
-          "text": "Is the staging environment back up? It was down earlier.",
+          "text": "There's a lot of tech debt in that area, for what it's worth.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8806,7 +8810,15 @@
         },
         {
           "speaker": "priya",
-          "text": "There's a lot of tech debt in that area, for what it's worth.",
+          "text": "Sorry, can you say that again? You cut out for a second.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "kofi",
+          "text": "We should probably write that down somewhere so we don't forget.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8819,14 +8831,6 @@
           "facts": [],
           "privacy": null,
           "filler": false
-        },
-        {
-          "speaker": "priya",
-          "text": "I paired on the migration stuff for a bit, it's gnarly but fine.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
         },
         {
           "speaker": "alex_k",
@@ -8842,7 +8846,7 @@
         },
         {
           "speaker": "ines",
-          "text": "Let me pull up the doc so we're all looking at the same thing.",
+          "text": "Is the staging environment back up? It was down earlier.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8858,18 +8862,26 @@
         },
         {
           "speaker": "tomas",
-          "text": "Can you share your screen?",
+          "text": "Right, right. Keep going.",
           "protect": [],
           "facts": [],
           "privacy": null,
           "filler": true
         },
         {
+          "speaker": "priya",
+          "text": "Alex, anything to report?",
+          "protect": [],
+          "facts": [
+            "c015"
+          ],
+          "privacy": null,
+          "filler": false
+        },
+        {
           "speaker": "alex_k",
-          "text": "Alex is heads down on other things this week, so Kofi is going to take the on-call rotation instead.",
+          "text": "Yeah, the on-call rotation is done, that went out last week.",
           "protect": [
-            "Alex",
-            "Kofi",
             "on-call rotation"
           ],
           "facts": [
@@ -8880,7 +8892,7 @@
         },
         {
           "speaker": "sam_p",
-          "text": "Yeah, I agree with that.",
+          "text": "I looked at the error dashboard and nothing scary.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8888,7 +8900,7 @@
         },
         {
           "speaker": "kofi",
-          "text": "The logs are super noisy right now, it's hard to find anything.",
+          "text": "Yeah, I agree with that.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8896,7 +8908,7 @@
         },
         {
           "speaker": "priya",
-          "text": "Yeah, that makes sense to me.",
+          "text": "The test suite has been pretty flaky this week, just flagging it.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8904,23 +8916,7 @@
         },
         {
           "speaker": "priya",
-          "text": "That's fair. I hadn't thought about it that way.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "ruth",
-          "text": "I don't have any blockers really.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "sam_p",
-          "text": "I think that's mostly right, but there's a nuance there.",
+          "text": "I paired on the migration stuff for a bit, it's gnarly but fine.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8950,7 +8946,7 @@
         },
         {
           "speaker": "megan",
-          "text": "The test suite has been pretty flaky this week, just flagging it.",
+          "text": "I don't have any blockers really.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8958,15 +8954,7 @@
         },
         {
           "speaker": "megan",
-          "text": "Okay, so where did we land on that last time?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "megan",
-          "text": "I'm not sure that's the right framing, honestly.",
+          "text": "That's fair. I hadn't thought about it that way.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -8983,32 +8971,8 @@
           "filler": false
         },
         {
-          "speaker": "sam_p",
-          "text": "I looked at the error dashboard and nothing scary.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
           "speaker": "ruth",
-          "text": "I spent most of yesterday in code review, there was a lot in the queue.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Can we park that and come back to it at the end?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Do we have any data on that or is it gut feel?",
+          "text": "That's fair. I hadn't thought about it that way.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9023,46 +8987,7 @@
           "filler": true
         },
         {
-          "speaker": "kofi",
-          "text": "Sorry, can you say that again? You cut out for a second.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
           "speaker": "priya",
-          "text": "Okay Megan, what about you?",
-          "protect": [],
-          "facts": [
-            "c018"
-          ],
-          "privacy": null,
-          "filler": false
-        },
-        {
-          "speaker": "megan",
-          "text": "So my main thing is the new pricing page, should be done by Friday.",
-          "protect": [
-            "new pricing page",
-            "by Friday"
-          ],
-          "facts": [
-            "c018"
-          ],
-          "privacy": null,
-          "filler": false
-        },
-        {
-          "speaker": "ines",
-          "text": "I'm not sure that's the right framing, honestly.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "ines",
           "text": "I think the question is really about scope.",
           "protect": [],
           "facts": [],
@@ -9070,8 +8995,47 @@
           "filler": true
         },
         {
+          "speaker": "priya",
+          "text": "Okay Kofi, what about you?",
+          "protect": [],
+          "facts": [
+            "c018"
+          ],
+          "privacy": null,
+          "filler": false
+        },
+        {
+          "speaker": "kofi",
+          "text": "I'm on the new event schema, I'll have it by Wednesday.",
+          "protect": [
+            "new event schema",
+            "by Wednesday"
+          ],
+          "facts": [
+            "c018"
+          ],
+          "privacy": null,
+          "filler": false
+        },
+        {
+          "speaker": "ines",
+          "text": "I spent most of yesterday in code review, there was a lot in the queue.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "ines",
+          "text": "Okay, so where did we land on that last time?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
           "speaker": "tomas",
-          "text": "I think that's mostly right, but there's a nuance there.",
+          "text": "Sorry, I was on mute. I was saying I agree.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9079,7 +9043,23 @@
         },
         {
           "speaker": "ruth",
-          "text": "Hold on, my laptop is about to die, let me grab a charger.",
+          "text": "Can we park that and come back to it at the end?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "ines",
+          "text": "The logs are super noisy right now, it's hard to find anything.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "tomas",
+          "text": "Right, right. Keep going.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9087,7 +9067,7 @@
         },
         {
           "speaker": "priya",
-          "text": "Sam, you're up.",
+          "text": "Megan, what's on your plate?",
           "protect": [],
           "facts": [
             "c019"
@@ -9096,10 +9076,10 @@
           "filler": false
         },
         {
-          "speaker": "sam_p",
-          "text": "So my main thing is the double charge retry bug, should be done by Wednesday.",
+          "speaker": "megan",
+          "text": "This week I'll get the new pricing page done by Wednesday.",
           "protect": [
-            "double charge retry bug",
+            "new pricing page",
             "by Wednesday"
           ],
           "facts": [
@@ -9110,38 +9090,23 @@
         },
         {
           "speaker": "priya",
-          "text": "Okay Kofi, what about you?",
-          "protect": [],
-          "facts": [
-            "c020"
-          ],
-          "privacy": null,
-          "filler": false
-        },
-        {
-          "speaker": "kofi",
-          "text": "This week I'll get the new event schema done by Thursday.",
-          "protect": [
-            "new event schema",
-            "by Thursday"
-          ],
-          "facts": [
-            "c020"
-          ],
-          "privacy": null,
-          "filler": false
-        },
-        {
-          "speaker": "ines",
-          "text": "Sorry, I was on mute. I was saying I agree.",
+          "text": "Let me pull up the doc so we're all looking at the same thing.",
           "protect": [],
           "facts": [],
           "privacy": null,
           "filler": true
         },
         {
-          "speaker": "alex_k",
-          "text": "Something to keep an eye on, anyway.",
+          "speaker": "megan",
+          "text": "Yeah, that makes sense to me.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "ruth",
+          "text": "Do we have any data on that or is it gut feel?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9149,7 +9114,38 @@
         },
         {
           "speaker": "priya",
-          "text": "Right, right. Keep going.",
+          "text": "Sam, you're up.",
+          "protect": [],
+          "facts": [
+            "c020"
+          ],
+          "privacy": null,
+          "filler": false
+        },
+        {
+          "speaker": "sam_p",
+          "text": "I'm on the double charge retry bug, I'll have it by Wednesday.",
+          "protect": [
+            "double charge retry bug",
+            "by Wednesday"
+          ],
+          "facts": [
+            "c020"
+          ],
+          "privacy": null,
+          "filler": false
+        },
+        {
+          "speaker": "alex_k",
+          "text": "Can you share your screen?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Hold on, my laptop is about to die, let me grab a charger.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9198,144 +9194,8 @@
           "filler": false
         },
         {
-          "speaker": "elena",
-          "text": "Let me pull up the doc so we're all looking at the same thing.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Yeah, I agree with that.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
           "speaker": "marcus",
-          "text": "That's fair. I hadn't thought about it that way.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "olivia",
-          "text": "What do we need to believe for this to work?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "I'm worried about how this lands with existing customers.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Can we park that and come back to it at the end?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "We need to be careful not to overcommit here.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "olivia",
-          "text": "Hold on, my laptop is about to die, let me grab a charger.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Let me pull up the doc so we're all looking at the same thing.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Can you share your screen?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "marcus",
-          "text": "Let's not go down that rabbit hole right now.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Sorry, I was on mute. I was saying I agree.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "jordan",
-          "text": "I think the question is really about scope.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "alex_r",
-          "text": "I'm not sure that's the right framing, honestly.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "elena",
-          "text": "Is it just me or is the office freezing today?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": false
-        },
-        {
-          "speaker": "priya",
-          "text": "I think the question is really about scope.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Yeah, that makes sense to me.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "elena",
-          "text": "Do we have any data on that or is it gut feel?",
+          "text": "Right, right. Keep going.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9350,6 +9210,62 @@
           "filler": true
         },
         {
+          "speaker": "marcus",
+          "text": "We've been going back and forth on this for a while.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "olivia",
+          "text": "The board will ask about this, so let's have a clear story.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "I'm not sure that's the right framing, honestly.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "I don't love it, but I can live with it.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Sorry, can you say that again? You cut out for a second.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "olivia",
+          "text": "I think that's mostly right, but there's a nuance there.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Right, right. Keep going.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
           "speaker": "priya",
           "text": "What do we need to believe for this to work?",
           "protect": [],
@@ -9359,15 +9275,7 @@
         },
         {
           "speaker": "marcus",
-          "text": "I don't love it, but I can live with it.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "elena",
-          "text": "Right, right. Keep going.",
+          "text": "I'm not sure that's the right framing, honestly.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9375,7 +9283,15 @@
         },
         {
           "speaker": "priya",
-          "text": "Do we have any data on that or is it gut feel?",
+          "text": "I don't love it, but I can live with it.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "jordan",
+          "text": "The board will ask about this, so let's have a clear story.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9383,7 +9299,87 @@
         },
         {
           "speaker": "alex_r",
-          "text": "Let's make sure sales and marketing hear this at the same time.",
+          "text": "Yeah, that makes sense to me.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Hold on, my laptop is about to die, let me grab a charger.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "elena",
+          "text": "Is it just me or is the office freezing today?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": false
+        },
+        {
+          "speaker": "jordan",
+          "text": "What's the downside if we're wrong about this?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "I think the question is really about scope.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "elena",
+          "text": "Can you share your screen?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "I'm worried about how this lands with existing customers.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "marcus",
+          "text": "Can we park that and come back to it at the end?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "elena",
+          "text": "I'm worried about how this lands with existing customers.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "That's fair. I hadn't thought about it that way.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "alex_r",
+          "text": "I think the question is really about scope.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9415,14 +9411,6 @@
         },
         {
           "speaker": "alex_r",
-          "text": "Hold on, my laptop is about to die, let me grab a charger.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "jordan",
           "text": "Sorry, I was on mute. I was saying I agree.",
           "protect": [],
           "facts": [],
@@ -9430,79 +9418,7 @@
           "filler": true
         },
         {
-          "speaker": "elena",
-          "text": "I don't love it, but I can live with it.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
           "speaker": "jordan",
-          "text": "Let's not go down that rabbit hole right now.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "alex_r",
-          "text": "I'd rather make a call today than drag it out.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Can you share your screen?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "The board will ask about this, so let's have a clear story.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "olivia",
-          "text": "We've been going back and forth on this for a while.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "olivia",
-          "text": "What's the downside if we're wrong about this?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "olivia",
-          "text": "I'm not sure that's the right framing, honestly.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Sorry, can you say that again? You cut out for a second.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
           "text": "Okay, so where did we land on that last time?",
           "protect": [],
           "facts": [],
@@ -9510,15 +9426,31 @@
           "filler": true
         },
         {
-          "speaker": "priya",
-          "text": "We've been going back and forth on this for a while.",
+          "speaker": "alex_r",
+          "text": "Can we park that and come back to it at the end?",
           "protect": [],
           "facts": [],
           "privacy": null,
           "filler": true
         },
         {
-          "speaker": "marcus",
+          "speaker": "priya",
+          "text": "Let's not go down that rabbit hole right now.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Hold on, my laptop is about to die, let me grab a charger.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "olivia",
           "text": "We need to be careful not to overcommit here.",
           "protect": [],
           "facts": [],
@@ -9527,15 +9459,7 @@
         },
         {
           "speaker": "olivia",
-          "text": "The board will ask about this, so let's have a clear story.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "What's the downside if we're wrong about this?",
+          "text": "That's fair. I hadn't thought about it that way.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9543,7 +9467,63 @@
         },
         {
           "speaker": "olivia",
-          "text": "Sorry, can you say that again? You cut out for a second.",
+          "text": "Let me pull up the doc so we're all looking at the same thing.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Do we have any data on that or is it gut feel?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "What do we need to believe for this to work?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Yeah, I agree with that.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "marcus",
+          "text": "Let me pull up the doc so we're all looking at the same thing.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "olivia",
+          "text": "Okay, so where did we land on that last time?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "We need to be careful not to overcommit here.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "olivia",
+          "text": "Do we have any data on that or is it gut feel?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9551,7 +9531,7 @@
         },
         {
           "speaker": "elena",
-          "text": "I think that's mostly right, but there's a nuance there.",
+          "text": "What's the downside if we're wrong about this?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9584,7 +9564,7 @@
         },
         {
           "speaker": "elena",
-          "text": "Right, right. Keep going.",
+          "text": "I'd rather make a call today than drag it out.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9592,31 +9572,7 @@
         },
         {
           "speaker": "alex_r",
-          "text": "Let's make sure sales and marketing hear this at the same time.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "jordan",
-          "text": "That's fair. I hadn't thought about it that way.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "I'm worried about how this lands with existing customers.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "jordan",
-          "text": "I'd rather make a call today than drag it out.",
+          "text": "Yeah, I agree with that.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9631,8 +9587,48 @@
           "filler": true
         },
         {
+          "speaker": "priya",
+          "text": "Let's make sure sales and marketing hear this at the same time.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "jordan",
+          "text": "We've been going back and forth on this for a while.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Can you share your screen?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "jordan",
+          "text": "Sorry, I was on mute. I was saying I agree.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Let's make sure sales and marketing hear this at the same time.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
           "speaker": "olivia",
-          "text": "Yeah, I agree with that.",
+          "text": "Let's not go down that rabbit hole right now.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9680,7 +9676,7 @@
         },
         {
           "speaker": "nadia",
-          "text": "That's really useful feedback, I'm writing it down.",
+          "text": "Okay, so where did we land on that last time?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9688,7 +9684,7 @@
         },
         {
           "speaker": "luis",
-          "text": "I think the question is really about scope.",
+          "text": "Hold on, my laptop is about to die, let me grab a charger.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9696,7 +9692,7 @@
         },
         {
           "speaker": "luis",
-          "text": "Let me pull up the doc so we're all looking at the same thing.",
+          "text": "Yeah, I agree with that.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9704,7 +9700,7 @@
         },
         {
           "speaker": "luis",
-          "text": "I think the question is really about scope.",
+          "text": "Can you walk me through how that process works today?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9712,7 +9708,7 @@
         },
         {
           "speaker": "priya",
-          "text": "Thanks for the context, that's super helpful.",
+          "text": "Honestly, the team likes it so far.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9720,7 +9716,7 @@
         },
         {
           "speaker": "priya",
-          "text": "That's fair. I hadn't thought about it that way.",
+          "text": "Can we park that and come back to it at the end?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9728,7 +9724,7 @@
         },
         {
           "speaker": "jordan",
-          "text": "Right, right. Keep going.",
+          "text": "Is there anyone else on your side we should loop in?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9747,48 +9743,8 @@
           "filler": false
         },
         {
-          "speaker": "luis",
-          "text": "I'm not sure that's the right framing, honestly.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
           "speaker": "nadia",
-          "text": "Okay, so where did we land on that last time?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "I think that's mostly right, but there's a nuance there.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "luis",
-          "text": "Honestly, the team likes it so far.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Yeah, I agree with that.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "jordan",
-          "text": "Can you share your screen?",
+          "text": "Sorry, can you say that again? You cut out for a second.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9803,31 +9759,7 @@
           "filler": true
         },
         {
-          "speaker": "priya",
-          "text": "I think that's mostly right, but there's a nuance there.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
           "speaker": "luis",
-          "text": "Our managers mostly live in email, if that helps.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "nadia",
-          "text": "That's a common request from customers your size.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
           "text": "Can you walk me through how that process works today?",
           "protect": [],
           "facts": [],
@@ -9835,8 +9767,24 @@
           "filler": true
         },
         {
-          "speaker": "luis",
-          "text": "Can we park that and come back to it at the end?",
+          "speaker": "priya",
+          "text": "Right, right. Keep going.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "jordan",
+          "text": "Sorry, I was on mute. I was saying I agree.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Do we have any data on that or is it gut feel?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9844,7 +9792,31 @@
         },
         {
           "speaker": "nadia",
-          "text": "Let me pull up the doc so we're all looking at the same thing.",
+          "text": "Do we have any data on that or is it gut feel?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Let's not go down that rabbit hole right now.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "luis",
+          "text": "Can you share your screen?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "nadia",
+          "text": "Yeah, I agree with that.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9860,31 +9832,7 @@
         },
         {
           "speaker": "priya",
-          "text": "Sorry, can you say that again? You cut out for a second.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "nadia",
-          "text": "Right, right. Keep going.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "luis",
-          "text": "Our procurement process can be a bit slow, just so you know.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Thanks for the context, that's super helpful.",
+          "text": "I think that's mostly right, but there's a nuance there.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9899,8 +9847,40 @@
           "filler": true
         },
         {
+          "speaker": "luis",
+          "text": "Let's not go down that rabbit hole right now.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
           "speaker": "priya",
-          "text": "How are your teams using it day to day right now?",
+          "text": "Our procurement process can be a bit slow, just so you know.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "nadia",
+          "text": "Let me pull up the doc so we're all looking at the same thing.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "nadia",
+          "text": "That's a common request from customers your size.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Okay, so where did we land on that last time?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9908,7 +9888,7 @@
         },
         {
           "speaker": "luis",
-          "text": "I'm not sure that's the right framing, honestly.",
+          "text": "That's fair. I hadn't thought about it that way.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9916,7 +9896,7 @@
         },
         {
           "speaker": "jordan",
-          "text": "Can you share your screen?",
+          "text": "I think that's mostly right, but there's a nuance there.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9924,7 +9904,7 @@
         },
         {
           "speaker": "priya",
-          "text": "Sorry, I was on mute. I was saying I agree.",
+          "text": "Sorry, can you say that again? You cut out for a second.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9932,7 +9912,7 @@
         },
         {
           "speaker": "priya",
-          "text": "That's really useful feedback, I'm writing it down.",
+          "text": "Hold on, my laptop is about to die, let me grab a charger.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9951,8 +9931,8 @@
           "filler": false
         },
         {
-          "speaker": "jordan",
-          "text": "Hold on, my laptop is about to die, let me grab a charger.",
+          "speaker": "nadia",
+          "text": "That's really useful feedback, I'm writing it down.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9960,7 +9940,7 @@
         },
         {
           "speaker": "nadia",
-          "text": "That's a common request from customers your size.",
+          "text": "I think the question is really about scope.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9968,7 +9948,7 @@
         },
         {
           "speaker": "priya",
-          "text": "Can you walk me through how that process works today?",
+          "text": "Our managers mostly live in email, if that helps.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9976,7 +9956,7 @@
         },
         {
           "speaker": "luis",
-          "text": "Can we park that and come back to it at the end?",
+          "text": "That's fair. I hadn't thought about it that way.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9984,7 +9964,7 @@
         },
         {
           "speaker": "luis",
-          "text": "Do we have any data on that or is it gut feel?",
+          "text": "Thanks for the context, that's super helpful.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -9992,7 +9972,15 @@
         },
         {
           "speaker": "nadia",
-          "text": "Is there anyone else on your side we should loop in?",
+          "text": "Sorry, I was on mute. I was saying I agree.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Yeah, that makes sense to me.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -10024,30 +10012,6 @@
           "filler": false
         },
         {
-          "speaker": "jordan",
-          "text": "Sorry, I was on mute. I was saying I agree.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "jordan",
-          "text": "We've had some internal changes on our side, so bear with us.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "luis",
-          "text": "That's fair. I hadn't thought about it that way.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
           "speaker": "priya",
           "text": "Yeah, that makes sense to me.",
           "protect": [],
@@ -10056,8 +10020,32 @@
           "filler": true
         },
         {
+          "speaker": "jordan",
+          "text": "I'm not sure that's the right framing, honestly.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
           "speaker": "luis",
-          "text": "Let's not go down that rabbit hole right now.",
+          "text": "We've had some internal changes on our side, so bear with us.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "That's a common request from customers your size.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "luis",
+          "text": "Can we park that and come back to it at the end?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -10065,6 +10053,14 @@
         },
         {
           "speaker": "jordan",
+          "text": "Can you share your screen?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
           "text": "How are your teams using it day to day right now?",
           "protect": [],
           "facts": [],
@@ -10081,30 +10077,6 @@
         },
         {
           "speaker": "nadia",
-          "text": "Let's not go down that rabbit hole right now.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Hold on, my laptop is about to die, let me grab a charger.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Do we have any data on that or is it gut feel?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
           "text": "We've had some internal changes on our side, so bear with us.",
           "protect": [],
           "facts": [],
@@ -10112,8 +10084,32 @@
           "filler": true
         },
         {
+          "speaker": "priya",
+          "text": "I think the question is really about scope.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "I'm not sure that's the right framing, honestly.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "How are your teams using it day to day right now?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
           "speaker": "nadia",
-          "text": "Yeah, that makes sense to me.",
+          "text": "Thanks for the context, that's super helpful.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -10160,7 +10156,7 @@
           "filler": false
         },
         {
-          "speaker": "priya",
+          "speaker": "mira",
           "text": "Do we have any data on that or is it gut feel?",
           "protect": [],
           "facts": [],
@@ -10169,7 +10165,31 @@
         },
         {
           "speaker": "yusuf",
+          "text": "I think the question is really about scope.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
           "text": "Can you share your screen?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "alex_r",
+          "text": "Can we park that and come back to it at the end?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "How are your teams using it day to day right now?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -10184,8 +10204,48 @@
           "filler": true
         },
         {
+          "speaker": "priya",
+          "text": "Sorry, can you say that again? You cut out for a second.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "That's really useful feedback, I'm writing it down.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "mira",
+          "text": "Yeah, that makes sense to me.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "yusuf",
+          "text": "Honestly, the team likes it so far.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
           "speaker": "alex_r",
-          "text": "How are your teams using it day to day right now?",
+          "text": "Can you walk me through how that process works today?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "alex_r",
+          "text": "Thanks for the context, that's super helpful.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -10193,14 +10253,14 @@
         },
         {
           "speaker": "priya",
-          "text": "Can we park that and come back to it at the end?",
+          "text": "Let me pull up the doc so we're all looking at the same thing.",
           "protect": [],
           "facts": [],
           "privacy": null,
           "filler": true
         },
         {
-          "speaker": "priya",
+          "speaker": "mira",
           "text": "Yeah, that makes sense to me.",
           "protect": [],
           "facts": [],
@@ -10209,7 +10269,15 @@
         },
         {
           "speaker": "priya",
-          "text": "I think that's mostly right, but there's a nuance there.",
+          "text": "That's fair. I hadn't thought about it that way.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "That's a common request from customers your size.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -10224,80 +10292,8 @@
           "filler": true
         },
         {
-          "speaker": "mira",
-          "text": "Okay, so where did we land on that last time?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "yusuf",
-          "text": "Let's not go down that rabbit hole right now.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "alex_r",
-          "text": "Thanks for the context, that's super helpful.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "alex_r",
-          "text": "I think that's mostly right, but there's a nuance there.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "That's a common request from customers your size.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "mira",
-          "text": "Okay, so where did we land on that last time?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
           "speaker": "priya",
           "text": "We've had some internal changes on our side, so bear with us.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Our procurement process can be a bit slow, just so you know.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Honestly, the team likes it so far.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Can you share your screen?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -10312,15 +10308,15 @@
           "filler": false
         },
         {
-          "speaker": "mira",
-          "text": "Is there anyone else on your side we should loop in?",
+          "speaker": "priya",
+          "text": "Our managers mostly live in email, if that helps.",
           "protect": [],
           "facts": [],
           "privacy": null,
           "filler": true
         },
         {
-          "speaker": "priya",
+          "speaker": "alex_r",
           "text": "Right, right. Keep going.",
           "protect": [],
           "facts": [],
@@ -10329,6 +10325,14 @@
         },
         {
           "speaker": "alex_r",
+          "text": "That's fair. I hadn't thought about it that way.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "mira",
           "text": "Thanks for the context, that's super helpful.",
           "protect": [],
           "facts": [],
@@ -10336,7 +10340,7 @@
           "filler": true
         },
         {
-          "speaker": "alex_r",
+          "speaker": "priya",
           "text": "Sorry, can you say that again? You cut out for a second.",
           "protect": [],
           "facts": [],
@@ -10344,24 +10348,8 @@
           "filler": true
         },
         {
-          "speaker": "mira",
-          "text": "That's really useful feedback, I'm writing it down.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Let me pull up the doc so we're all looking at the same thing.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
           "speaker": "yusuf",
-          "text": "Right, right. Keep going.",
+          "text": "Yeah, I agree with that.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -10369,7 +10357,7 @@
         },
         {
           "speaker": "mira",
-          "text": "Can we park that and come back to it at the end?",
+          "text": "Can you share your screen?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -10384,102 +10372,6 @@
           "filler": false
         },
         {
-          "speaker": "alex_r",
-          "text": "That's fair. I hadn't thought about it that way.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "mira",
-          "text": "Hold on, my laptop is about to die, let me grab a charger.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "mira",
-          "text": "Our procurement process can be a bit slow, just so you know.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "mira",
-          "text": "Can you walk me through how that process works today?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Sorry, I was on mute. I was saying I agree.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "I think the question is really about scope.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "yusuf",
-          "text": "Let me pull up the doc so we're all looking at the same thing.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "mira",
-          "text": "Hold on, my laptop is about to die, let me grab a charger.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "That's fair. I hadn't thought about it that way.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Let's not go down that rabbit hole right now.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "alex_r",
-          "text": "Yeah, that makes sense to me.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "alex_r",
-          "text": "Our managers mostly live in email, if that helps.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
           "speaker": "priya",
           "text": "Is there anyone else on your side we should loop in?",
           "protect": [],
@@ -10488,8 +10380,24 @@
           "filler": true
         },
         {
-          "speaker": "priya",
-          "text": "I think the question is really about scope.",
+          "speaker": "alex_r",
+          "text": "Hold on, my laptop is about to die, let me grab a charger.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "mira",
+          "text": "Sorry, I was on mute. I was saying I agree.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "mira",
+          "text": "I'm not sure that's the right framing, honestly.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -10505,7 +10413,103 @@
         },
         {
           "speaker": "priya",
-          "text": "Sorry, can you say that again? You cut out for a second.",
+          "text": "Can you walk me through how that process works today?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Let's not go down that rabbit hole right now.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "yusuf",
+          "text": "We've had some internal changes on our side, so bear with us.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Let me pull up the doc so we're all looking at the same thing.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "mira",
+          "text": "Let's not go down that rabbit hole right now.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "I think that's mostly right, but there's a nuance there.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Sorry, I was on mute. I was saying I agree.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "alex_r",
+          "text": "Hold on, my laptop is about to die, let me grab a charger.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "alex_r",
+          "text": "Okay, so where did we land on that last time?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Our procurement process can be a bit slow, just so you know.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Is there anyone else on your side we should loop in?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "mira",
+          "text": "Honestly, the team likes it so far.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "How are your teams using it day to day right now?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -10538,7 +10542,23 @@
         },
         {
           "speaker": "mira",
-          "text": "We've had some internal changes on our side, so bear with us.",
+          "text": "Okay, so where did we land on that last time?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Our procurement process can be a bit slow, just so you know.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "I think that's mostly right, but there's a nuance there.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -10553,39 +10573,15 @@
           "filler": true
         },
         {
-          "speaker": "priya",
-          "text": "Honestly, the team likes it so far.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Yeah, I agree with that.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
           "speaker": "alex_r",
-          "text": "Can you walk me through how that process works today?",
+          "text": "I think the question is really about scope.",
           "protect": [],
           "facts": [],
           "privacy": null,
           "filler": true
         },
         {
-          "speaker": "mira",
-          "text": "I'm not sure that's the right framing, honestly.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "alex_r",
+          "speaker": "priya",
           "text": "Do we have any data on that or is it gut feel?",
           "protect": [],
           "facts": [],
@@ -10631,64 +10627,8 @@
           "filler": false
         },
         {
-          "speaker": "alex_k",
-          "text": "I've been thinking a lot about where I want to grow.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
           "speaker": "priya",
-          "text": "Right, right. Keep going.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Can we park that and come back to it at the end?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "I'd like more time for deep work if possible.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Do we have any data on that or is it gut feel?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "I think that's mostly right, but there's a nuance there.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "alex_k",
-          "text": "How are you feeling about the workload generally?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "I think the question is really about scope.",
+          "text": "Let me pull up the doc so we're all looking at the same thing.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -10704,15 +10644,7 @@
         },
         {
           "speaker": "priya",
-          "text": "Anything I can do to unblock you?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "alex_k",
-          "text": "Let's not go down that rabbit hole right now.",
+          "text": "I'd like more time for deep work if possible.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -10720,7 +10652,7 @@
         },
         {
           "speaker": "priya",
-          "text": "I've been thinking a lot about where I want to grow.",
+          "text": "Yeah, I agree with that.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -10743,8 +10675,64 @@
           "filler": true
         },
         {
+          "speaker": "priya",
+          "text": "Yeah, that makes sense to me.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
           "speaker": "alex_k",
-          "text": "I'm not sure that's the right framing, honestly.",
+          "text": "I'd like more time for deep work if possible.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "The team dynamic feels good right now.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Anything I can do to unblock you?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "alex_k",
+          "text": "Sorry, I was on mute. I was saying I agree.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "alex_k",
+          "text": "Hold on, my laptop is about to die, let me grab a charger.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Yeah, that makes sense to me.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "alex_k",
+          "text": "Let's not go down that rabbit hole right now.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -10764,7 +10752,7 @@
         },
         {
           "speaker": "priya",
-          "text": "Can you share your screen?",
+          "text": "I've been thinking a lot about where I want to grow.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -10772,47 +10760,7 @@
         },
         {
           "speaker": "priya",
-          "text": "That's good to hear.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Let me pull up the doc so we're all looking at the same thing.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "alex_k",
-          "text": "Anything I can do to unblock you?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Let's make sure we write down goals for next quarter.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "alex_k",
-          "text": "Hold on, my laptop is about to die, let me grab a charger.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "alex_k",
-          "text": "I'd like more time for deep work if possible.",
+          "text": "How are you feeling about the workload generally?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -10827,48 +10775,8 @@
           "filler": true
         },
         {
-          "speaker": "alex_k",
-          "text": "That's fair. I hadn't thought about it that way.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
           "speaker": "priya",
-          "text": "I hear you. Let me take it to Marcus and come back next week.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": false
-        },
-        {
-          "speaker": "priya",
-          "text": "Okay, so where did we land on that last time?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Yeah, I agree with that.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "That's fair. I hadn't thought about it that way.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Yeah, that makes sense to me.",
+          "text": "Right, right. Keep going.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -10900,23 +10808,7 @@
         },
         {
           "speaker": "alex_k",
-          "text": "The team dynamic feels good right now.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "I'm not sure that's the right framing, honestly.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Let's not go down that rabbit hole right now.",
+          "text": "Right, right. Keep going.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -10924,6 +10816,94 @@
         },
         {
           "speaker": "alex_k",
+          "text": "Let me pull up the doc so we're all looking at the same thing.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "alex_k",
+          "text": "I've been thinking a lot about where I want to grow.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "That's fair. I hadn't thought about it that way.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "I hear you. Let me take it to Marcus and come back next week.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": false
+        },
+        {
+          "speaker": "priya",
+          "text": "Can we park that and come back to it at the end?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "That's fair. I hadn't thought about it that way.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "That's good to hear.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "alex_k",
+          "text": "Can you share your screen?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Anything I can do to unblock you?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "alex_k",
+          "text": "I'm not sure that's the right framing, honestly.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "alex_k",
+          "text": "Let's not go down that rabbit hole right now.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
           "text": "I think that's mostly right, but there's a nuance there.",
           "protect": [],
           "facts": [],
@@ -10932,7 +10912,23 @@
         },
         {
           "speaker": "priya",
-          "text": "Honestly, it's been a busy couple of weeks.",
+          "text": "Do we have any data on that or is it gut feel?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "The team dynamic feels good right now.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "How are you feeling about the workload generally?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -10988,23 +10984,7 @@
         },
         {
           "speaker": "priya",
-          "text": "Can you share your screen?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "ines",
-          "text": "Let's not go down that rabbit hole right now.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "There's a lot of tech debt in that area, for what it's worth.",
+          "text": "Yeah, I agree with that.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11012,7 +10992,7 @@
         },
         {
           "speaker": "kofi",
-          "text": "I paired on the migration stuff for a bit, it's gnarly but fine.",
+          "text": "The logs are super noisy right now, it's hard to find anything.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11020,7 +11000,7 @@
         },
         {
           "speaker": "tomas",
-          "text": "Let me pull up the doc so we're all looking at the same thing.",
+          "text": "I looked at the error dashboard and nothing scary.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11028,7 +11008,7 @@
         },
         {
           "speaker": "alex_k",
-          "text": "I don't have any blockers really.",
+          "text": "Sorry, can you say that again? You cut out for a second.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11036,7 +11016,53 @@
         },
         {
           "speaker": "sam_p",
-          "text": "Is the staging environment back up? It was down earlier.",
+          "text": "We should probably write that down somewhere so we don't forget.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "I paired on the migration stuff for a bit, it's gnarly but fine.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "alex_k",
+          "text": "Kofi, anything to report?",
+          "protect": [],
+          "facts": [
+            "c018"
+          ],
+          "privacy": null,
+          "filler": false
+        },
+        {
+          "speaker": "kofi",
+          "text": "Yeah, the new event schema is done, that went out last week.",
+          "protect": [
+            "new event schema"
+          ],
+          "facts": [
+            "c018"
+          ],
+          "privacy": null,
+          "filler": false
+        },
+        {
+          "speaker": "megan",
+          "text": "Let's not go down that rabbit hole right now.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "alex_k",
+          "text": "Can you share your screen?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11045,6 +11071,54 @@
         {
           "speaker": "priya",
           "text": "Can we park that and come back to it at the end?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Hold on, my laptop is about to die, let me grab a charger.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "The test suite has been pretty flaky this week, just flagging it.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "I don't have any blockers really.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "sam_p",
+          "text": "Let me pull up the doc so we're all looking at the same thing.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "ines",
+          "text": "Sorry, I was on mute. I was saying I agree.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "ines",
+          "text": "Can you share your screen?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11063,7 +11137,7 @@
           "text": "Megan, anything to report?",
           "protect": [],
           "facts": [
-            "c018"
+            "c019"
           ],
           "privacy": null,
           "filler": false
@@ -11075,14 +11149,14 @@
             "new pricing page"
           ],
           "facts": [
-            "c018"
+            "c019"
           ],
           "privacy": null,
           "filler": false
         },
         {
-          "speaker": "megan",
-          "text": "I think that's mostly right, but there's a nuance there.",
+          "speaker": "priya",
+          "text": "Something to keep an eye on, anyway.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11090,7 +11164,15 @@
         },
         {
           "speaker": "alex_k",
-          "text": "I'm not sure that's the right framing, honestly.",
+          "text": "There's a lot of tech debt in that area, for what it's worth.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "tomas",
+          "text": "Sorry, can you say that again? You cut out for a second.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11098,47 +11180,7 @@
         },
         {
           "speaker": "priya",
-          "text": "I spent most of yesterday in code review, there was a lot in the queue.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "I looked at the error dashboard and nothing scary.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Okay, so where did we land on that last time?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Do we have any data on that or is it gut feel?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "sam_p",
-          "text": "Right, right. Keep going.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "ines",
-          "text": "Right, right. Keep going.",
+          "text": "Yeah, I agree with that.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11152,68 +11194,22 @@
             "by Wednesday"
           ],
           "facts": [
-            "c019"
-          ],
-          "privacy": null,
-          "filler": false
-        },
-        {
-          "speaker": "priya",
-          "text": "The test suite has been pretty flaky this week, just flagging it.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "alex_k",
-          "text": "Something to keep an eye on, anyway.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "alex_k",
-          "text": "Something to keep an eye on, anyway.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "tomas",
-          "text": "Do we have any data on that or is it gut feel?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "alex_k",
-          "text": "Kofi, anything to report?",
-          "protect": [],
-          "facts": [
             "c020"
           ],
           "privacy": null,
           "filler": false
         },
         {
-          "speaker": "kofi",
-          "text": "Yeah, the new event schema is done, that went out last week.",
-          "protect": [
-            "new event schema"
-          ],
-          "facts": [
-            "c020"
-          ],
+          "speaker": "ines",
+          "text": "I spent most of yesterday in code review, there was a lot in the queue.",
+          "protect": [],
+          "facts": [],
           "privacy": null,
-          "filler": false
+          "filler": true
         },
         {
           "speaker": "kofi",
-          "text": "The logs are super noisy right now, it's hard to find anything.",
+          "text": "That's fair. I hadn't thought about it that way.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11221,7 +11217,7 @@
         },
         {
           "speaker": "ruth",
-          "text": "I think the question is really about scope.",
+          "text": "Yeah, that makes sense to me.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11229,7 +11225,7 @@
         },
         {
           "speaker": "megan",
-          "text": "That's fair. I hadn't thought about it that way.",
+          "text": "Right, right. Keep going.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11283,7 +11279,7 @@
         },
         {
           "speaker": "priya",
-          "text": "Yeah, that makes sense to me.",
+          "text": "Okay, so where did we land on that last time?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11291,7 +11287,7 @@
         },
         {
           "speaker": "priya",
-          "text": "Sorry, I was on mute. I was saying I agree.",
+          "text": "I think that's mostly right, but there's a nuance there.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11299,7 +11295,15 @@
         },
         {
           "speaker": "ruth",
-          "text": "Sorry, can you say that again? You cut out for a second.",
+          "text": "Do we have any data on that or is it gut feel?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "kofi",
+          "text": "I'm not sure that's the right framing, honestly.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11307,7 +11311,7 @@
         },
         {
           "speaker": "ines",
-          "text": "Yeah, I agree with that.",
+          "text": "Let me pull up the doc so we're all looking at the same thing.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11337,16 +11341,8 @@
           "filler": false
         },
         {
-          "speaker": "ines",
-          "text": "Hold on, my laptop is about to die, let me grab a charger.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
           "speaker": "priya",
-          "text": "That's fair. I hadn't thought about it that way.",
+          "text": "I think the question is really about scope.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11354,7 +11350,7 @@
         },
         {
           "speaker": "megan",
-          "text": "We should probably write that down somewhere so we don't forget.",
+          "text": "Is the staging environment back up? It was down earlier.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11362,7 +11358,7 @@
         },
         {
           "speaker": "ines",
-          "text": "Yeah, I agree with that.",
+          "text": "Right, right. Keep going.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11412,15 +11408,7 @@
         },
         {
           "speaker": "priya",
-          "text": "Let's not go down that rabbit hole right now.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Okay, so where did we land on that last time?",
+          "text": "That's fair. I hadn't thought about it that way.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11428,7 +11416,7 @@
         },
         {
           "speaker": "elena",
-          "text": "Do we have any data on that or is it gut feel?",
+          "text": "Yeah, I agree with that.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11436,7 +11424,7 @@
         },
         {
           "speaker": "priya",
-          "text": "I like the hierarchy, the primary action is much clearer now.",
+          "text": "What happens on mobile? The layout looks tight.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11444,7 +11432,7 @@
         },
         {
           "speaker": "priya",
-          "text": "Let me pull up the doc so we're all looking at the same thing.",
+          "text": "Can we try a version with less copy on that screen?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11452,6 +11440,14 @@
         },
         {
           "speaker": "ruth",
+          "text": "I think the question is really about scope.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "megan",
           "text": "Can you share your screen?",
           "protect": [],
           "facts": [],
@@ -11459,8 +11455,8 @@
           "filler": true
         },
         {
-          "speaker": "megan",
-          "text": "Sorry, can you say that again? You cut out for a second.",
+          "speaker": "sam_o",
+          "text": "I think that's mostly right, but there's a nuance there.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11468,15 +11464,7 @@
         },
         {
           "speaker": "sam_o",
-          "text": "The empty state still feels a bit cold to me.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "sam_o",
-          "text": "Can we park that and come back to it at the end?",
+          "text": "Hold on, my laptop is about to die, let me grab a charger.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11484,7 +11472,7 @@
         },
         {
           "speaker": "megan",
-          "text": "The button labels could be more specific.",
+          "text": "Sorry, I was on mute. I was saying I agree.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11492,7 +11480,7 @@
         },
         {
           "speaker": "sam_o",
-          "text": "Do we have any data on that or is it gut feel?",
+          "text": "That's fair. I hadn't thought about it that way.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11508,6 +11496,14 @@
         },
         {
           "speaker": "priya",
+          "text": "I think that's mostly right, but there's a nuance there.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
           "text": "That spacing feels off, but that's a polish thing.",
           "protect": [],
           "facts": [],
@@ -11516,6 +11512,22 @@
         },
         {
           "speaker": "ruth",
+          "text": "Users kept hesitating on that screen in the sessions.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Can you share your screen?",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
           "text": "Can we try a version with less copy on that screen?",
           "protect": [],
           "facts": [],
@@ -11523,8 +11535,8 @@
           "filler": true
         },
         {
-          "speaker": "priya",
-          "text": "I'm not sure that's the right framing, honestly.",
+          "speaker": "lena",
+          "text": "Sorry, I was on mute. I was saying I agree.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11532,7 +11544,7 @@
         },
         {
           "speaker": "priya",
-          "text": "Sorry, can you say that again? You cut out for a second.",
+          "text": "I think the question is really about scope.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11540,7 +11552,7 @@
         },
         {
           "speaker": "lena",
-          "text": "The button labels could be more specific.",
+          "text": "Let me pull up the doc so we're all looking at the same thing.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11548,15 +11560,7 @@
         },
         {
           "speaker": "priya",
-          "text": "What happens on mobile? The layout looks tight.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "lena",
-          "text": "That's fair. I hadn't thought about it that way.",
+          "text": "Do we have any data on that or is it gut feel?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11572,15 +11576,7 @@
         },
         {
           "speaker": "priya",
-          "text": "Sorry, I was on mute. I was saying I agree.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Okay, so where did we land on that last time?",
+          "text": "Do we have any data on that or is it gut feel?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11588,7 +11584,7 @@
         },
         {
           "speaker": "elena",
-          "text": "Right, right. Keep going.",
+          "text": "Sorry, can you say that again? You cut out for a second.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11596,7 +11592,7 @@
         },
         {
           "speaker": "sam_o",
-          "text": "I think the question is really about scope.",
+          "text": "Yeah, that makes sense to me.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11604,7 +11600,7 @@
         },
         {
           "speaker": "elena",
-          "text": "Let's not go down that rabbit hole right now.",
+          "text": "I'm not sure that's the right framing, honestly.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11612,7 +11608,7 @@
         },
         {
           "speaker": "lena",
-          "text": "That's fair. I hadn't thought about it that way.",
+          "text": "I like the hierarchy, the primary action is much clearer now.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11632,16 +11628,8 @@
           "filler": false
         },
         {
-          "speaker": "sam_o",
-          "text": "Yeah, I agree with that.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
           "speaker": "lena",
-          "text": "Users kept hesitating on that screen in the sessions.",
+          "text": "Let's not go down that rabbit hole right now.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11649,7 +11637,7 @@
         },
         {
           "speaker": "priya",
-          "text": "Hold on, my laptop is about to die, let me grab a charger.",
+          "text": "Right, right. Keep going.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11657,7 +11645,7 @@
         },
         {
           "speaker": "sam_o",
-          "text": "The empty state still feels a bit cold to me.",
+          "text": "I like the hierarchy, the primary action is much clearer now.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11665,15 +11653,15 @@
         },
         {
           "speaker": "sam_o",
-          "text": "Can you share your screen?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
           "text": "The illustration style doesn't quite match the rest of the app.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Okay, so where did we land on that last time?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11681,7 +11669,7 @@
         },
         {
           "speaker": "megan",
-          "text": "Sorry, I was on mute. I was saying I agree.",
+          "text": "Can we park that and come back to it at the end?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11689,7 +11677,7 @@
         },
         {
           "speaker": "sam_o",
-          "text": "The illustration style doesn't quite match the rest of the app.",
+          "text": "Okay, so where did we land on that last time?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11705,7 +11693,7 @@
         },
         {
           "speaker": "sam_o",
-          "text": "Yeah, that makes sense to me.",
+          "text": "The illustration style doesn't quite match the rest of the app.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11713,7 +11701,7 @@
         },
         {
           "speaker": "lena",
-          "text": "That spacing feels off, but that's a polish thing.",
+          "text": "The button labels could be more specific.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11721,7 +11709,7 @@
         },
         {
           "speaker": "sam_o",
-          "text": "Users kept hesitating on that screen in the sessions.",
+          "text": "The empty state still feels a bit cold to me.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11729,7 +11717,7 @@
         },
         {
           "speaker": "lena",
-          "text": "I like the hierarchy, the primary action is much clearer now.",
+          "text": "Can we park that and come back to it at the end?",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -11745,70 +11733,6 @@
         },
         {
           "speaker": "priya",
-          "text": "Yeah, that makes sense to me.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "I think that's mostly right, but there's a nuance there.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "megan",
-          "text": "Right, right. Keep going.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "megan",
-          "text": "Can we park that and come back to it at the end?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "lena",
-          "text": "I think the question is really about scope.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "sam_o",
-          "text": "I'd want to see it with real data before we commit.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "I think that's mostly right, but there's a nuance there.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
-          "text": "Can we try a version with less copy on that screen?",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "priya",
           "text": "Hold on, my laptop is about to die, let me grab a charger.",
           "protect": [],
           "facts": [],
@@ -11817,14 +11741,6 @@
         },
         {
           "speaker": "priya",
-          "text": "Yeah, I agree with that.",
-          "protect": [],
-          "facts": [],
-          "privacy": null,
-          "filler": true
-        },
-        {
-          "speaker": "megan",
           "text": "I'd want to see it with real data before we commit.",
           "protect": [],
           "facts": [],
@@ -11834,6 +11750,86 @@
         {
           "speaker": "megan",
           "text": "I'm not sure that's the right framing, honestly.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "megan",
+          "text": "The empty state still feels a bit cold to me.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "lena",
+          "text": "Yeah, that makes sense to me.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "sam_o",
+          "text": "Sorry, can you say that again? You cut out for a second.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "lena",
+          "text": "The button labels could be more specific.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Let's not go down that rabbit hole right now.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Right, right. Keep going.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "That spacing feels off, but that's a polish thing.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "priya",
+          "text": "Users kept hesitating on that screen in the sessions.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "megan",
+          "text": "Yeah, I agree with that.",
+          "protect": [],
+          "facts": [],
+          "privacy": null,
+          "filler": true
+        },
+        {
+          "speaker": "megan",
+          "text": "I'd want to see it with real data before we commit.",
           "protect": [],
           "facts": [],
           "privacy": null,
@@ -13240,7 +13236,7 @@
             "double charge retry bug"
           ],
           "facts": [
-            "c019"
+            "c020"
           ],
           "privacy": null,
           "filler": false
@@ -17780,11 +17776,11 @@
         },
         {
           "meeting": "w5-pricing",
-          "beat": 45
+          "beat": 43
         },
         {
           "meeting": "w5-pricing",
-          "beat": 46
+          "beat": 44
         }
       ],
       "supersedes": null,
@@ -17978,7 +17974,7 @@
       "evidence": [
         {
           "meeting": "w4-launch-sync",
-          "beat": 20
+          "beat": 19
         }
       ],
       "supersedes": "f015",
@@ -18004,11 +18000,11 @@
       "evidence": [
         {
           "meeting": "w4-launch-sync",
-          "beat": 20
+          "beat": 19
         },
         {
           "meeting": "w4-launch-sync",
-          "beat": 21
+          "beat": 20
         }
       ],
       "supersedes": "f009",
@@ -18034,7 +18030,7 @@
       "evidence": [
         {
           "meeting": "w4-design-beacon",
-          "beat": 23
+          "beat": 17
         }
       ],
       "supersedes": null,
@@ -18059,11 +18055,11 @@
       "evidence": [
         {
           "meeting": "w4-design-beacon",
-          "beat": 35
+          "beat": 28
         },
         {
           "meeting": "w4-design-beacon",
-          "beat": 36
+          "beat": 29
         }
       ],
       "supersedes": null,
@@ -18087,7 +18083,7 @@
       "evidence": [
         {
           "meeting": "w4-allhands",
-          "beat": 30
+          "beat": 32
         }
       ],
       "supersedes": null,
@@ -18111,7 +18107,7 @@
       "evidence": [
         {
           "meeting": "w4-allhands",
-          "beat": 43
+          "beat": 44
         }
       ],
       "supersedes": null,
@@ -18135,7 +18131,7 @@
       "evidence": [
         {
           "meeting": "w4-1on1-samo",
-          "beat": 10
+          "beat": 9
         }
       ],
       "supersedes": null,
@@ -18159,7 +18155,7 @@
       "evidence": [
         {
           "meeting": "w4-1on1-samo",
-          "beat": 23
+          "beat": 24
         }
       ],
       "supersedes": null,
@@ -18213,7 +18209,7 @@
       "evidence": [
         {
           "meeting": "w5-pricing",
-          "beat": 46
+          "beat": 44
         }
       ],
       "supersedes": null,
@@ -18261,7 +18257,7 @@
       "evidence": [
         {
           "meeting": "w5-driftwood",
-          "beat": 33
+          "beat": 31
         }
       ],
       "supersedes": null,
@@ -18285,7 +18281,7 @@
       "evidence": [
         {
           "meeting": "w5-1on1-alex",
-          "beat": 16
+          "beat": 15
         }
       ],
       "supersedes": null,
@@ -18879,10 +18875,6 @@
         {
           "meeting": "w2-standup",
           "beat": 15
-        },
-        {
-          "meeting": "w2-standup",
-          "beat": 16
         }
       ],
       "new_owner": null,
@@ -19153,7 +19145,7 @@
         },
         {
           "meeting": "w5-standup",
-          "beat": 8
+          "beat": 9
         }
       ],
       "new_owner": null,
@@ -19228,22 +19220,22 @@
         {
           "meeting": "w4-standup",
           "beat": 33
-        },
-        {
-          "meeting": "w4-standup",
-          "beat": 34
         }
       ],
-      "outcome": "reassigned",
+      "outcome": "kept",
       "resolved_in": "w5-standup",
-      "resolved_on": null,
+      "resolved_on": "2026-09-28",
       "resolved_evidence": [
         {
           "meeting": "w5-standup",
-          "beat": 12
+          "beat": 13
+        },
+        {
+          "meeting": "w5-standup",
+          "beat": 14
         }
       ],
-      "new_owner": "kofi",
+      "new_owner": null,
       "new_due": null
     },
     {
@@ -19305,19 +19297,19 @@
     },
     {
       "id": "c018",
-      "owner": "megan",
-      "task": "ship the new pricing page",
-      "task_spoken": "new pricing page",
-      "due": "2026-10-02",
+      "owner": "kofi",
+      "task": "document the new event schema",
+      "task_spoken": "new event schema",
+      "due": "2026-09-30",
       "made_in": "w5-standup",
       "made_evidence": [
         {
           "meeting": "w5-standup",
-          "beat": 31
+          "beat": 27
         },
         {
           "meeting": "w5-standup",
-          "beat": 32
+          "beat": 28
         }
       ],
       "outcome": "kept",
@@ -19326,11 +19318,11 @@
       "resolved_evidence": [
         {
           "meeting": "w6-standup",
-          "beat": 10
+          "beat": 7
         },
         {
           "meeting": "w6-standup",
-          "beat": 11
+          "beat": 8
         }
       ],
       "new_owner": null,
@@ -19338,6 +19330,39 @@
     },
     {
       "id": "c019",
+      "owner": "megan",
+      "task": "ship the new pricing page",
+      "task_spoken": "new pricing page",
+      "due": "2026-09-30",
+      "made_in": "w5-standup",
+      "made_evidence": [
+        {
+          "meeting": "w5-standup",
+          "beat": 35
+        },
+        {
+          "meeting": "w5-standup",
+          "beat": 36
+        }
+      ],
+      "outcome": "kept",
+      "resolved_in": "w6-standup",
+      "resolved_on": "2026-10-05",
+      "resolved_evidence": [
+        {
+          "meeting": "w6-standup",
+          "beat": 19
+        },
+        {
+          "meeting": "w6-standup",
+          "beat": 20
+        }
+      ],
+      "new_owner": null,
+      "new_due": null
+    },
+    {
+      "id": "c020",
       "owner": "sam_p",
       "task": "fix the double-charge retry bug",
       "task_spoken": "double charge retry bug",
@@ -19346,11 +19371,11 @@
       "made_evidence": [
         {
           "meeting": "w5-standup",
-          "beat": 37
+          "beat": 40
         },
         {
           "meeting": "w5-standup",
-          "beat": 38
+          "beat": 41
         }
       ],
       "outcome": "slipped",
@@ -19359,7 +19384,7 @@
       "resolved_evidence": [
         {
           "meeting": "w6-standup",
-          "beat": 20
+          "beat": 25
         },
         {
           "meeting": "w7-standup",
@@ -19368,39 +19393,6 @@
       ],
       "new_owner": null,
       "new_due": "2026-10-07"
-    },
-    {
-      "id": "c020",
-      "owner": "kofi",
-      "task": "document the new event schema",
-      "task_spoken": "new event schema",
-      "due": "2026-10-01",
-      "made_in": "w5-standup",
-      "made_evidence": [
-        {
-          "meeting": "w5-standup",
-          "beat": 39
-        },
-        {
-          "meeting": "w5-standup",
-          "beat": 40
-        }
-      ],
-      "outcome": "kept",
-      "resolved_in": "w6-standup",
-      "resolved_on": "2026-10-05",
-      "resolved_evidence": [
-        {
-          "meeting": "w6-standup",
-          "beat": 25
-        },
-        {
-          "meeting": "w6-standup",
-          "beat": 26
-        }
-      ],
-      "new_owner": null,
-      "new_due": null
     },
     {
       "id": "c021",
@@ -19412,11 +19404,11 @@
       "made_evidence": [
         {
           "meeting": "w5-driftwood",
-          "beat": 40
+          "beat": 39
         },
         {
           "meeting": "w5-driftwood",
-          "beat": 41
+          "beat": 40
         }
       ],
       "outcome": "dropped",
@@ -19436,11 +19428,11 @@
       "made_evidence": [
         {
           "meeting": "w5-corvid",
-          "beat": 45
+          "beat": 46
         },
         {
           "meeting": "w5-corvid",
-          "beat": 46
+          "beat": 47
         }
       ],
       "outcome": "kept",
@@ -19527,11 +19519,11 @@
       "made_evidence": [
         {
           "meeting": "w6-standup",
-          "beat": 38
+          "beat": 39
         },
         {
           "meeting": "w6-standup",
-          "beat": 39
+          "beat": 40
         }
       ],
       "outcome": "kept",

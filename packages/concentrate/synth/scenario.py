@@ -125,13 +125,13 @@ class _StandupEngine:
             who = s.first(c.owner)
             if action == "done":
                 # Name cues are deliberately unprotected: ASR may mishear them (Megan → Meghan).
-                p = m.say(runner, f"{who}, anything to report?")
+                p = [] if runner == c.owner else [m.say(runner, f"{who}, anything to report?")]
                 b = m.say(
                     c.owner,
                     f"Yeah, the {c.task_spoken} is done, that went out last week.",
                     c.task_spoken,
                 )
-                s.resolve(c, m, [p, b], resolved_on=m.day)
+                s.resolve(c, m, [*p, b], resolved_on=m.day)
             elif action == "late_done":
                 b = m.say(
                     c.owner,
@@ -155,14 +155,23 @@ class _StandupEngine:
             elif action == "reassign":
                 options = [e for e in ENG if e not in (c.owner, "alex_k")]
                 new = s.rng.choice(options)
-                b = m.say(
-                    "alex_k",
-                    f"{who} is heads down on other things this week, so "
-                    f"{s.first(new)} is going to take the {c.task_spoken} instead.",
-                    who,
-                    s.first(new),
-                    c.task_spoken,
-                )
+                if c.owner == "alex_k":  # Alex runs the standup: first person
+                    b = m.say(
+                        "alex_k",
+                        f"I'm heads down on other things this week, so "
+                        f"{s.first(new)} is going to take the {c.task_spoken} instead.",
+                        s.first(new),
+                        c.task_spoken,
+                    )
+                else:
+                    b = m.say(
+                        "alex_k",
+                        f"{who} is heads down on other things this week, so "
+                        f"{s.first(new)} is going to take the {c.task_spoken} instead.",
+                        who,
+                        s.first(new),
+                        c.task_spoken,
+                    )
                 s.resolve(c, m, [b], new_owner=new)
 
     def new_commitments(self, m: M, week: int, runner: str, count: int = 3) -> None:
@@ -173,15 +182,21 @@ class _StandupEngine:
             due = day(week, s.rng.choice([WED, THU, FRI]))
             wd = WEEKDAY[due.weekday()]
             who = s.first(owner)
-            prompt = m.say(
-                runner,
-                s.pick(
-                    [
-                        f"{who}, what's on your plate?",
-                        f"{who}, you're up.",
-                        f"Okay {who}, what about you?",
-                    ]
-                ),
+            prompt = (
+                []
+                if runner == owner  # the runner doesn't call on himself
+                else [
+                    m.say(
+                        runner,
+                        s.pick(
+                            [
+                                f"{who}, what's on your plate?",
+                                f"{who}, you're up.",
+                                f"Okay {who}, what about you?",
+                            ]
+                        ),
+                    )
+                ]
             )
             line = s.pick(
                 [
@@ -193,7 +208,13 @@ class _StandupEngine:
             b = m.say(owner, line, spoken, f"by {wd}")
             outcome = self._outcome(week)
             c = s.commit(
-                m, [prompt, b], owner=owner, task=task, task_spoken=spoken, due=due, outcome=outcome
+                m,
+                [*prompt, b],
+                owner=owner,
+                task=task,
+                task_spoken=spoken,
+                due=due,
+                outcome=outcome,
             )
             action = {"kept": "done", "slipped": "slip", "reassigned": "reassign"}.get(outcome)
             if action:

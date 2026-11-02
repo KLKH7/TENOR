@@ -101,7 +101,24 @@ def synth(
     """Generate the synthetic Northwind Labs dataset and benchmark questions."""
     if scale == "xl" and out == NORTHWIND:
         out = NORTHWIND_XL
-    from concentrate.synth.pipeline import build, estimate_polish_usd, generate_dataset
+    from concentrate.synth.pipeline import (
+        GENERATOR_VERSION,
+        build,
+        estimate_polish_usd,
+        generate_dataset,
+    )
+
+    manifest = out / "manifest.json"
+    if scale == "xl" and manifest.exists() and not estimate:
+        import json as _json
+
+        old = _json.loads(manifest.read_text()).get("generator")
+        if old != GENERATOR_VERSION:
+            raise typer.BadParameter(
+                f"{out} holds a {old} corpus that memories and results may be built on; "
+                f"this generator is {GENERATOR_VERSION}. Write elsewhere with --out (e.g. "
+                f"{out}-v2), or delete {out} first."
+            )
 
     llm = None
     if polish or estimate:

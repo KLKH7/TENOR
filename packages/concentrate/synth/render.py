@@ -146,7 +146,7 @@ def _summary(meeting: Meeting, world: World, rng: random.Random) -> list[tuple[s
 
 
 def _summary_markdown(points: list[tuple[str, str]], rng: random.Random) -> str:
-    kept = [p for p in points if rng.random() >= LOSSY_SUMMARY_DROP]
+    kept = [p for p in points if rng.random() >= LOSSY_SUMMARY_DROP] or points[:1]
     if not kept:
         return "### Discussion\n- General discussion; no decisions recorded."
     order: list[str] = []

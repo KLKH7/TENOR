@@ -93,7 +93,10 @@ class _Commitments:
         if not self.pool:
             return
         s = self.s
-        spoken = self.pool.pop()
+        task = self.pool.pop()
+        # "growth plan draft for Elena" stays the task (unique across 1:1s), but Elena says
+        # "the growth plan draft", not "the growth plan draft for Elena".
+        spoken = task.removesuffix(f" for {s.first(owner)}")
         due_day = s.rng.choice([WED, THU, FRI])
         due = day(_week(m), due_day) if due_day > m.day.weekday() else day(_week(m) + 1, due_day)
         wd = WEEKDAY[due.weekday()]
@@ -102,7 +105,7 @@ class _Commitments:
             m,
             [b],
             owner=owner,
-            task=spoken,
+            task=task,
             task_spoken=spoken,
             due=due,
             outcome=_outcome(s, last_week),

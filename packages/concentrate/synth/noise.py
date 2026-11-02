@@ -69,7 +69,7 @@ def _noisy_words(chunk: str, rng: random.Random, r: NoiseRates) -> str:
             w = w.replace(core, _HOMOPHONES[core.lower()])
         if core.lower() in _SHORT and rng.random() < r.drop_short_word:
             continue
-        if w and rng.random() < r.filler_per_word:
+        if core and rng.random() < r.filler_per_word:  # not before bare punctuation
             out.append(rng.choice(_FILLERS) + ",")
         out.append(w)
         if core and core == w and rng.random() < r.repeat_per_word:  # "the the", not "feel? feel?"

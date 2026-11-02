@@ -7,7 +7,7 @@
     "email": "priya@northwind.dev"
   },
   "created_at": "2026-09-10T16:00:12Z",
-  "updated_at": "2026-09-10T16:34:00Z",
+  "updated_at": "2026-09-10T16:37:00Z",
   "deleted_at": null,
   "web_url": "https://notes.granola.ai/d/74d03c3c-dc10-e4f8-e486-f0ac9b013a92",
   "calendar_event": {
@@ -39,7 +39,7 @@
       "email": "alex.r@northwind.dev"
     },
     {
-      "name": "Dana Ortiz",
+      "name": null,
       "email": "dana@acmeway.com"
     }
   ],
@@ -60,8 +60,8 @@
     }
   ],
   "space_membership": [],
-  "summary_text": "Next steps\nPriya to send Acmeway the order form by Friday",
-  "summary_markdown": "### Next steps\n- Priya to send Acmeway the order form by **Friday**",
+  "summary_text": "Acmeway\nAcmeway agreed to the pilot at $20/seat\nNext steps\nPriya to send Acmeway the order form by Friday",
+  "summary_markdown": "### Acmeway\n- Acmeway agreed to the pilot at $20/seat\n\n### Next steps\n- Priya to send Acmeway the order form by **Friday**",
   "private_notes_text": null,
   "private_notes_markdown": null,
   "transcript": [
@@ -659,53 +659,35 @@
     {
       "speaker": {
         "source": "speaker",
-        "name": "Alex Rivera"
-      },
-      "text": "Right.",
-      "start_time": "2026-09-10T16:04:33.498000Z",
-      "end_time": "2026-09-10T16:04:34.098000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
         "name": "Dana Ortiz"
       },
-      "text": "We've had some internal changes on uh, our side,",
-      "start_time": "2026-09-10T16:04:36.027000Z",
-      "end_time": "2026-09-10T16:04:39.488000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Dana Ortiz"
-      },
-      "text": "so bear with us.",
-      "start_time": "2026-09-10T16:04:40.234000Z",
-      "end_time": "2026-09-10T16:04:41.772000Z"
+      "text": "We've had some internal changes on our side, so bear with us.",
+      "start_time": "2026-09-10T16:04:35.442000Z",
+      "end_time": "2026-09-10T16:04:40.058000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "I mean.",
-      "start_time": "2026-09-10T16:04:42.726000Z",
-      "end_time": "2026-09-10T16:04:43.526000Z"
+      "text": "Got it.",
+      "start_time": "2026-09-10T16:04:38.833000Z",
+      "end_time": "2026-09-10T16:04:39.433000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
       "text": "Do we have any data on that or is it gut feel?",
-      "start_time": "2026-09-10T16:04:44.717000Z",
-      "end_time": "2026-09-10T16:04:49.333000Z"
+      "start_time": "2026-09-10T16:04:40.881000Z",
+      "end_time": "2026-09-10T16:04:45.496000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Our managers mostly live in email, like, if that helps.",
-      "start_time": "2026-09-10T16:04:49.983000Z",
-      "end_time": "2026-09-10T16:04:53.829000Z"
+      "text": "Our managers mostly live in email, if that helps.",
+      "start_time": "2026-09-10T16:04:46.140000Z",
+      "end_time": "2026-09-10T16:04:49.602000Z"
     },
     {
       "speaker": {
@@ -713,17 +695,34 @@
         "name": "Dana Ortiz"
       },
       "text": "That's fair.",
-      "start_time": "2026-09-10T16:04:54.820000Z",
-      "end_time": "2026-09-10T16:04:55.620000Z"
+      "start_time": "2026-09-10T16:04:50.649000Z",
+      "end_time": "2026-09-10T16:04:51.449000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Dana Ortiz"
       },
-      "text": "I hadn't thought about it that way.",
-      "start_time": "2026-09-10T16:04:55.861000Z",
-      "end_time": "2026-09-10T16:04:58.553000Z"
+      "text": "like, I hadn't thought you know,",
+      "start_time": "2026-09-10T16:04:52.449000Z",
+      "end_time": "2026-09-10T16:04:54.757000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Dana Ortiz"
+      },
+      "text": "about it that way.",
+      "start_time": "2026-09-10T16:04:54.998000Z",
+      "end_time": "2026-09-10T16:04:56.536000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "And.",
+      "start_time": "2026-09-10T16:04:57.722000Z",
+      "end_time": "2026-09-10T16:04:58.522000Z"
     },
     {
       "speaker": {
@@ -731,43 +730,43 @@
         "name": "Alex Rivera"
       },
       "text": "That's really useful feedback, I'm writing it down.",
-      "start_time": "2026-09-10T16:04:59.234000Z",
-      "end_time": "2026-09-10T16:05:02.311000Z"
+      "start_time": "2026-09-10T16:04:59.024000Z",
+      "end_time": "2026-09-10T16:05:02.101000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "I think that's mostly right, but there's a nuance there.",
-      "start_time": "2026-09-10T16:05:02.693000Z",
-      "end_time": "2026-09-10T16:05:06.539000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Dana Ortiz"
-      },
-      "text": "Sure.",
-      "start_time": "2026-09-10T16:05:05.514000Z",
-      "end_time": "2026-09-10T16:05:06.114000Z"
+      "text": "I think that's mostly right, but uh, there's a nuance there.",
+      "start_time": "2026-09-10T16:05:02.365000Z",
+      "end_time": "2026-09-10T16:05:06.596000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Alex Rivera"
       },
-      "text": "We've had some internal changes on I mean, our side, so bear with us.",
-      "start_time": "2026-09-10T16:05:07.274000Z",
-      "end_time": "2026-09-10T16:05:12.658000Z"
+      "text": "We've had some some internal changes on our side, so bear with us.",
+      "start_time": "2026-09-10T16:05:06.963000Z",
+      "end_time": "2026-09-10T16:05:11.963000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Alex Rivera"
       },
-      "text": "Alright- Alright, thanks all, have a good one.",
-      "start_time": "2026-09-10T16:05:12.947000Z",
-      "end_time": "2026-09-10T16:05:16.024000Z"
+      "text": "So.",
+      "start_time": "2026-09-10T16:05:13.035000Z",
+      "end_time": "2026-09-10T16:05:13.835000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Rivera"
+      },
+      "text": "Alright, thanks all, have a good one.",
+      "start_time": "2026-09-10T16:05:14.852000Z",
+      "end_time": "2026-09-10T16:05:17.544000Z"
     }
   ]
 }

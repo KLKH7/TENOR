@@ -7,7 +7,7 @@
     "email": "priya@northwind.dev"
   },
   "created_at": "2026-10-15T12:00:12Z",
-  "updated_at": "2026-10-15T12:37:00Z",
+  "updated_at": "2026-10-15T12:32:00Z",
   "deleted_at": null,
   "web_url": "https://notes.granola.ai/d/4e2baa9b-5bf8-a21f-c636-8124eb34293e",
   "calendar_event": {
@@ -32,7 +32,7 @@
       "email": "priya@northwind.dev"
     },
     {
-      "name": null,
+      "name": "Alex Kim",
       "email": "alex.k@northwind.dev"
     }
   ],
@@ -48,80 +48,80 @@
   "space_membership": [],
   "summary_text": "Team\nTomás covers eng manager duties during Alex's leave",
   "summary_markdown": "### Team\n- Tomás covers eng manager duties during Alex's leave",
-  "private_notes_text": "tomás covers eng manager duties during alex's leave",
-  "private_notes_markdown": "tomás covers eng manager duties during alex's leave",
+  "private_notes_text": null,
+  "private_notes_markdown": null,
   "transcript": [
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "How's everything at home? Let's not go down that rabbit hole right now. I've been thinking a a lot about where I want to grow. I'm not sure I mean, that's the right framing, honestly. Hold on, my laptop is about to die, let me grab a charger. Okay, so where did we land on that last time? I'd like more time for deep work if possible. Honestly- Honestly, it's been a busy couple of weeks. Yeah, I mean, I agree with that. That's fair. I hadn't thought about it that way. The- The team dynamic feels good you know, right now.",
+      "text": "How's everything at home? Let's not go down that rabbit hole right now. I've been thinking a a lot about where I want to grow. I'm not sure I mean, that's the right framing, honestly. Hold on, my laptop is about to die, let me grab a charger. Okay, so where did we land on that last time? I'd like more time for deep work if possible. Honestly- Honestly, it's been a busy couple of weeks.",
       "start_time": "2026-10-15T12:01:29.811000Z",
-      "end_time": "2026-10-15T12:02:15.949000Z"
+      "end_time": "2026-10-15T12:02:03.593000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Honestly, you know, it's been a busy couple of like, weeks.",
-      "start_time": "2026-10-15T12:02:17.087000Z",
-      "end_time": "2026-10-15T12:02:21.318000Z"
+      "text": "Yeah, I mean, I agree with that.",
+      "start_time": "2026-10-15T12:02:04.723000Z",
+      "end_time": "2026-10-15T12:02:07.415000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Let's make sure we write down um, goals for next quarter. I'm not not sure that's the right framing, honestly. Yeah, I I agree with that. Hold on, my laptop is about to die, um, let me grab a charger.",
-      "start_time": "2026-10-15T12:02:22.348000Z",
-      "end_time": "2026-10-15T12:02:38.834000Z"
+      "text": "That's fair. I hadn't thought about it that way.",
+      "start_time": "2026-10-15T12:02:08.198000Z",
+      "end_time": "2026-10-15T12:02:11.659000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "I've been thinking a lot about where I want grow.",
-      "start_time": "2026-10-15T12:02:39.377000Z",
+      "text": "The- The team dynamic feels good you know, right now. Honestly, you know, it's been a busy couple of like, weeks. Let's make sure we write down um, goals for next quarter. I'm not not sure that's the right framing, honestly. Yeah, I I agree with that.",
+      "start_time": "2026-10-15T12:02:12.102000Z",
+      "end_time": "2026-10-15T12:02:32.877000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Hold on, my laptop is about to die, um, let me grab a charger. I've been thinking a lot about where I want grow.",
+      "start_time": "2026-10-15T12:02:33.449000Z",
       "end_time": "2026-10-15T12:02:43.224000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Good- Good, my mom's moving in for a bit too help once the baby comes.",
+      "text": "Good- Good, my mom's moving in for a bit too help once the baby comes. Sorry, I was on mute. I was saying I agree. Sorry, can you say that again? You cut out for a second. Do we have any data on that or is it gut feel? I think like, that's mostly right, but there's a nuance there. How are you feeling about the workload generally?",
       "start_time": "2026-10-15T12:02:43.595000Z",
-      "end_time": "2026-10-15T12:02:49.364000Z"
+      "end_time": "2026-10-15T12:03:12.709000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Sorry, I was on mute. I was saying I agree. Sorry, can you say that again? You cut out for a second.",
-      "start_time": "2026-10-15T12:02:50.094000Z",
-      "end_time": "2026-10-15T12:02:59.471000Z"
+      "text": "Let's make sure we write uh, down like, goals for next quarter. I think the um, question is really about scope. Right, right. Keep going. Can you share your screen? Let me pull up the doc so we're all looking at the same thing. Yeah, that makes sense to me. That's good to hear. Can we park that and come back to it at like, the end? Anything I can do to unblock you? The- The team dynamic feels good right now. That's good to hear. Sorry, uh, can you say that again? You cut out for a second. I think I mean, that's mostly right, but there's a nuance there.",
+      "start_time": "2026-10-15T12:03:13.316000Z",
+      "end_time": "2026-10-15T12:04:03.948000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Do we have any data on that or is it gut feel? I think like, that's mostly right, but there's a nuance there. How are you feeling about the workload generally? Let's make sure we write uh, down like, goals for next quarter. I think the um, question is really about scope.",
-      "start_time": "2026-10-15T12:02:59.978000Z",
-      "end_time": "2026-10-15T12:03:21.730000Z"
+      "text": "Yeah, that makes sense to me. I'd like more time for deep work if um, possible. That's fair. I hadn't thought about it that way.",
+      "start_time": "2026-10-15T12:04:04.677000Z",
+      "end_time": "2026-10-15T12:04:16.119000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Right, right. Keep going. Can you share your screen? Let me pull up the doc so we're all looking at the same thing.",
-      "start_time": "2026-10-15T12:03:22.302000Z",
-      "end_time": "2026-10-15T12:03:32.274000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Yeah, that makes sense to me. That's good to hear. Can we park that and come back to it at like, the end? Anything I can do to unblock you? The- The team dynamic feels good right now. That's good to hear. Sorry, uh, can you say that again? You cut out for a second. I think I mean, that's mostly right, but there's a nuance there. Yeah, that makes sense to me. I'd like more time for deep work if um, possible. That's fair. I hadn't thought about it that way. For my leave, Tomás will cover eng manager duties, we you know, talked it through.",
-      "start_time": "2026-10-15T12:03:33.176000Z",
-      "end_time": "2026-10-15T12:04:22.801000Z"
+      "text": "For my leave, Tomás will cover eng manager duties, we talked it through.",
+      "start_time": "2026-10-15T12:04:17.032000Z",
+      "end_time": "2026-10-15T12:04:22.032000Z"
     }
   ]
 }

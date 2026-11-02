@@ -32,7 +32,8 @@ from concentrate.synth.roster import ALL_ORGS, ALL_PROJECTS, ORGS, PROJECTS, STA
 from concentrate.synth.scenario import build_world
 from concentrate.synth.world import World
 
-GENERATOR_VERSION = "northwind-1"
+# 1.1: artefact fixes (docs/FIDELITY.md a-e). XL v1 comes from git tag northwind-xl-v1.
+GENERATOR_VERSION = "northwind-1.1"
 
 
 class SynthResult(BaseModel):

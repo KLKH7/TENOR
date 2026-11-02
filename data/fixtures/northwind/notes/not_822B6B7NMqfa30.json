@@ -7,7 +7,7 @@
     "email": "priya@northwind.dev"
   },
   "created_at": "2026-09-17T12:03:12Z",
-  "updated_at": "2026-09-17T12:45:00Z",
+  "updated_at": "2026-09-17T12:42:00Z",
   "deleted_at": null,
   "web_url": "https://notes.granola.ai/d/a631ab6b-7015-5972-b1b1-b8352b926d52",
   "calendar_event": {
@@ -46,8 +46,8 @@
     }
   ],
   "space_membership": [],
-  "summary_text": "Team\nRuth to own release testing",
-  "summary_markdown": "### Team\n- Ruth to own release testing",
+  "summary_text": "Personal\nAlex is planning parental leave from Nov 16",
+  "summary_markdown": "### Personal\n- Alex is planning parental leave from Nov 16",
   "private_notes_text": null,
   "private_notes_markdown": null,
   "transcript": [
@@ -56,81 +56,81 @@
         "source": "microphone",
         "diarization_label": "Speaker A"
       },
-      "text": "Okay, what's going on with you? That's good to hear. I've you know, been thinking a lot about where I want to grow. Can we park that and come um, back to it at the end? Let's make sure we write down goals for next quarter. Can you share your screen? That's fair. I hadn't thought about it that way.",
+      "text": "Okay, what's going on with you?",
       "start_time": "2026-09-17T12:03:58.364000Z",
-      "end_time": "2026-09-17T12:04:24.374000Z"
+      "end_time": "2026-09-17T12:04:00.672000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "diarization_label": "Speaker A"
+      },
+      "text": "That's good to hear. I've you know, been thinking a lot about where I want to grow. Can we park that and come um, back to it at the end? Let's make sure we write down goals for next quarter. Can you share your screen? That's fair. I hadn't thought about it that way. Personal news, my partner's due in November, so I'm planning to take parental leave from November sixteenth.",
+      "start_time": "2026-09-17T12:04:01.105000Z",
+      "end_time": "2026-09-17T12:04:31.939000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker B"
       },
-      "text": "Personal news, my partner's due in November, so I'm planning to take parental leave from November sixteenth. Anything I can do to unblock you?",
-      "start_time": "2026-09-17T12:04:25.401000Z",
-      "end_time": "2026-09-17T12:04:35.056000Z"
+      "text": "Anything I can do to unblock you? I'm not sure that's the right framing, honestly.",
+      "start_time": "2026-09-17T12:04:32.850000Z",
+      "end_time": "2026-09-17T12:04:39.037000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker A"
       },
-      "text": "I'm not sure that's the right framing, honestly.",
-      "start_time": "2026-09-17T12:04:36.090000Z",
-      "end_time": "2026-09-17T12:04:39.167000Z"
+      "text": "like, I think that's mostly mostly right, but there's a I mean, nuance there.",
+      "start_time": "2026-09-17T12:04:39.835000Z",
+      "end_time": "2026-09-17T12:04:45.220000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker A"
       },
-      "text": "I think that's mostly right, but there's a nuance there.",
-      "start_time": "2026-09-17T12:04:39.388000Z",
-      "end_time": "2026-09-17T12:04:43.234000Z"
+      "text": "I think the question um, is really about scope.",
+      "start_time": "2026-09-17T12:04:46.302000Z",
+      "end_time": "2026-09-17T12:04:49.763000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker A"
       },
-      "text": "I think the question is um, really about scope. Let's not go down that rabbit hole right now. That's fair. I hadn't thought about it you know, that way. Yeah, I agree with that. Okay, so where did like, we land on that last time? Honestly, it's been a busy couple of weeks. Let me pull up the doc so we're all looking at the same thing. The team dynamic feels good right now. How are you feeling about the workload generally? Right- Right, right. Keep going. Hold on, my laptop laptop is about to die, um, let me um, grab a charger. Let me pull up the doc so we're all looking at the same thing. That's amazing, congratulations!",
-      "start_time": "2026-09-17T12:04:44.422000Z",
-      "end_time": "2026-09-17T12:05:37.986000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone",
-        "diarization_label": "Speaker A"
-      },
-      "text": "Do- Do we have any data on that or is it gut feel? Sorry, can you say that again? You cut out for a second. Hold on, my laptop is uh, about um, to die, let me grab a charger. Yeah, that makes sense to uh, me. Sorry, I was on mute. I was saying I I agree. Right, right. Keep going. um, I'd like more time for deep work if possible. uh, Sorry, I was on mute. I was saying I agree.",
-      "start_time": "2026-09-17T12:05:39.024000Z",
-      "end_time": "2026-09-17T12:06:15.669000Z"
+      "text": "Let's not go down that rabbit hole right now. That's fair. I hadn't thought about it it that way. Yeah, I agree with that. Okay, so where did we land on that last time? Honestly, it's been a busy couple of weeks. Let me pull up the doc so we're all looking at the same thing. The team dynamic feels good right now. How are you feeling about the workload generally? Right- Right, right. Keep going. Hold on, my laptop laptop is about to die, um, let me um, grab a charger. Let me pull up the doc so we're all looking at the same thing. That's amazing, congratulations! Do- Do we have any data on that or is it gut feel?",
+      "start_time": "2026-09-17T12:04:50.577000Z",
+      "end_time": "2026-09-17T12:05:45.852000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker B"
       },
-      "text": "I've been like, thinking a lot about where I want to grow. Let's make sure we I mean, write um, down goals for next quarter.",
-      "start_time": "2026-09-17T12:06:16.139000Z",
-      "end_time": "2026-09-17T12:06:26.474000Z"
+      "text": "Sorry, can you say that again? You cut out for a second. Hold on, my laptop is uh, about um, to die, let me grab a charger. Yeah, that makes sense to uh, me. Sorry, I was on mute. I was saying I I agree. Right, right. Keep going. um, I'd like more time for deep work if possible. uh, Sorry, I was on mute. I was saying I agree. I've been like, thinking a lot about where I want to grow.",
+      "start_time": "2026-09-17T12:05:46.224000Z",
+      "end_time": "2026-09-17T12:06:22.583000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker A"
       },
-      "text": "Yeah, that makes sense to me. The team dynamic feels good right now. I'd like more time for deep work if possible. Yeah, I agree with that. Can you share your screen?",
-      "start_time": "2026-09-17T12:06:27.260000Z",
-      "end_time": "2026-09-17T12:06:42.651000Z"
+      "text": "Let's make sure we I mean, write um, down goals for next quarter. Yeah, that makes sense to me. The team dynamic feels good right now.",
+      "start_time": "2026-09-17T12:06:23.302000Z",
+      "end_time": "2026-09-17T12:06:35.180000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker B"
       },
-      "text": "Work stuff, Ruth is ready to own release testing, I'd like to make that official.",
-      "start_time": "2026-09-17T12:06:43.463000Z",
-      "end_time": "2026-09-17T12:06:49.232000Z"
+      "text": "I'd like more time for deep work if possible. Yeah, I agree with that. Can you share your screen? Work stuff, Ruth is ready to own release testing, I'd like to make that official.",
+      "start_time": "2026-09-17T12:06:35.772000Z",
+      "end_time": "2026-09-17T12:06:51.060000Z"
     }
   ]
 }
