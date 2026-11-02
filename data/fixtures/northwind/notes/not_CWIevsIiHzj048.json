@@ -7,7 +7,7 @@
     "email": "priya@northwind.dev"
   },
   "created_at": "2026-09-03T15:00:12Z",
-  "updated_at": "2026-09-03T15:34:00Z",
+  "updated_at": "2026-09-03T15:40:00Z",
   "deleted_at": null,
   "web_url": "https://notes.granola.ai/d/164532df-8772-ed2c-cbcb-0d4e45f67934",
   "calendar_event": {
@@ -38,7 +38,7 @@
       "email": "priya@northwind.dev"
     },
     {
-      "name": null,
+      "name": "Alex Rivera",
       "email": "alex.r@northwind.dev"
     },
     {
@@ -67,743 +67,790 @@
     }
   ],
   "space_membership": [],
-  "summary_text": "Beacon Freight\nBeacon Freight requires SSO\nBeacon Freight decision date: Dec 1 (current contract ends)",
-  "summary_markdown": "### Beacon Freight\n- Beacon Freight requires SSO\n- Beacon Freight decision date: Dec 1 (current contract ends)",
-  "private_notes_text": "beacon freight decision date dec 1 (current contract",
-  "private_notes_markdown": "beacon freight decision date dec 1 (current contract",
+  "summary_text": "Beacon Freight\nBeacon Freight requires SSO\nBeacon Freight decision date: Dec 1 (current contract ends)\nEscalation path and dependencies and rollout plan\nEscalation path is mostly fine\nDependencies is a nice to have\nRollout plan is mostly cosmetic\nPreference to split it into two pieces rather than keep it behind a flag\nProcurement steps and reporting export and permissions model\nProcurement steps is a moving target\nReporting export is half done\nPermissions model is a known issue\nPreference to sanity check the assumptions rather than do it properly\nScope and original proposal and data residency question\nScope and slack thread seen as one underlying problem\nOriginal proposal is kind of a mystery\nData residency question is bigger than we scoped\nPreference to start with the boring version rather than get a second opinion\nTimeline and risks and support tickets\nTimeline is hard to reason about\nNo clear owner for timeline\nRisks is under control\nSupport tickets is the easy part\nSupport tickets is mostly fine\nSandbox account and notification settings and integration with their hr system\nSandbox account is good enough for now\nReal issue may be invoicing setup rather than notification settings\nIntegration with their hr system is taking longer than expected",
+  "summary_markdown": "### Beacon Freight\n- Beacon Freight requires SSO\n- Beacon Freight decision date: Dec 1 (current contract ends)\n\n### Escalation path and dependencies and rollout plan\n- Escalation path is mostly fine\n- Dependencies is a nice to have\n- Rollout plan is mostly cosmetic\n- Preference to split it into two pieces rather than keep it behind a flag\n\n### Procurement steps and reporting export and permissions model\n- Procurement steps is a moving target\n- Reporting export is half done\n- Permissions model is a known issue\n- Preference to sanity check the assumptions rather than do it properly\n\n### Scope and original proposal and data residency question\n- Scope and slack thread seen as one underlying problem\n- Original proposal is kind of a mystery\n- Data residency question is bigger than we scoped\n- Preference to start with the boring version rather than get a second opinion\n\n### Timeline and risks and support tickets\n- Timeline is hard to reason about\n  - No clear owner for timeline\n- Risks is under control\n- Support tickets is the easy part\n  - Support tickets is mostly fine\n\n### Sandbox account and notification settings and integration with their hr system\n- Sandbox account is good enough for now\n- Real issue may be invoicing setup rather than notification settings\n- Integration with their hr system is taking longer than expected",
+  "private_notes_text": null,
+  "private_notes_markdown": null,
   "transcript": [
     {
       "speaker": {
         "source": "speaker",
         "name": "Alex Rivera"
       },
-      "text": "Sorry, I was on another another call, give me one sec.",
+      "text": "Sorry, I was um",
       "start_time": "2026-09-03T15:00:43.655000Z",
-      "end_time": "2026-09-03T15:00:47.886000Z"
+      "end_time": "2026-09-03T15:00:44.988000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Rivera"
+      },
+      "text": "on another call, give me one sec.",
+      "start_time": "2026-09-03T15:00:45.016000Z",
+      "end_time": "2026-09-03T15:00:47.349000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Um.",
-      "start_time": "2026-09-03T15:00:49.029000Z",
-      "end_time": "2026-09-03T15:00:49.829000Z"
+      "text": "Cool.",
+      "start_time": "2026-09-03T15:00:47.385000Z",
+      "end_time": "2026-09-03T15:00:47.985000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Rivera"
+      },
+      "text": "I guess if we draw it on a whiteboard,",
+      "start_time": "2026-09-03T15:00:53.834000Z",
+      "end_time": "2026-09-03T15:00:56.834000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Rivera"
+      },
+      "text": "then the contract contract redlines gets a lot easier.",
+      "start_time": "2026-09-03T15:01:03.210000Z",
+      "end_time": "2026-09-03T15:01:06.210000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Rivera"
+      },
+      "text": "And then I keep coming back to the permissions model.",
+      "start_time": "2026-09-03T15:01:06.591000Z",
+      "end_time": "2026-09-03T15:01:09.925000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Owen Price"
+      },
+      "text": "Like",
+      "start_time": "2026-09-03T15:01:10.261000Z",
+      "end_time": "2026-09-03T15:01:10.861000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Owen Price"
+      },
+      "text": "the thing I'd push on is the backlog.",
+      "start_time": "2026-09-03T15:01:12.280000Z",
+      "end_time": "2026-09-03T15:01:14.947000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "But our solutions engineer mentioned the help center articles the other day",
+      "start_time": "2026-09-03T15:01:15.355000Z",
+      "end_time": "2026-09-03T15:01:19.355000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Owen Price"
+      },
+      "text": "so it's on people's radar",
+      "start_time": "2026-09-03T15:01:19.412000Z",
+      "end_time": "2026-09-03T15:01:21.078000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Owen Price"
+      },
+      "text": "Plus the escalation path is mostly fine, but the training sessions is way more complicated than it looks.",
+      "start_time": "2026-09-03T15:01:21.087000Z",
+      "end_time": "2026-09-03T15:01:27.087000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Owen Price"
+      },
+      "text": "Also, if we test it with a few users, then the feedback gets like a lot easier.",
+      "start_time": "2026-09-03T15:01:28.733000Z",
+      "end_time": "2026-09-03T15:01:34.400000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Owen Price"
+      },
+      "text": "How did the sandbox account go?",
+      "start_time": "2026-09-03T15:01:43.873000Z",
+      "end_time": "2026-09-03T15:01:45.873000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Owen Price"
+      },
+      "text": "Like, the thing I'd push on is the regional teams and stuff.",
+      "start_time": "2026-09-03T15:01:45.927000Z",
+      "end_time": "2026-09-03T15:01:49.927000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Yeah, I agree with that.",
-      "start_time": "2026-09-03T15:00:50.082000Z",
-      "end_time": "2026-09-03T15:00:52.005000Z"
+      "text": "Wait, really?",
+      "start_time": "2026-09-03T15:01:48.341000Z",
+      "end_time": "2026-09-03T15:01:48.941000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Owen Price"
+      },
+      "text": "I think the dependencies is a nice too have and the training sessions is overdue for a cleanup",
+      "start_time": "2026-09-03T15:01:49.970000Z",
+      "end_time": "2026-09-03T15:01:55.970000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Owen Price"
+      },
+      "text": "so maybe just ship the smaller version.",
+      "start_time": "2026-09-03T15:01:56.590000Z",
+      "end_time": "2026-09-03T15:01:58.923000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Owen Price"
+      },
+      "text": "Yeah, so the rollout plan is mostly cosmetic",
+      "start_time": "2026-09-03T15:01:59.598000Z",
+      "end_time": "2026-09-03T15:02:02.265000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Owen Price"
+      },
+      "text": "if that makes sense.",
+      "start_time": "2026-09-03T15:02:02.272000Z",
+      "end_time": "2026-09-03T15:02:03.606000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Owen Price"
+      },
+      "text": "Okay, it feels like the requirements and the Slack thread are kind of the same problem",
+      "start_time": "2026-09-03T15:02:08.107000Z",
+      "end_time": "2026-09-03T15:02:13.441000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Owen Price"
+      },
+      "text": "Anyway",
+      "start_time": "2026-09-03T15:02:13.572000Z",
+      "end_time": "2026-09-03T15:02:14.172000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "the design team keep asking about the reporting export, or whatever.",
+      "start_time": "2026-09-03T15:02:14.187000Z",
+      "end_time": "2026-09-03T15:02:17.853000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Yeah.",
+      "start_time": "2026-09-03T15:02:17.878000Z",
+      "end_time": "2026-09-03T15:02:18.478000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I guess the annoying thing about the change management piece is it's not where I'd want it.",
+      "start_time": "2026-09-03T15:02:19.554000Z",
+      "end_time": "2026-09-03T15:02:25.221000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "I mean.",
+      "start_time": "2026-09-03T15:02:26.053000Z",
+      "end_time": "2026-09-03T15:02:26.720000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Right, and it's funny, the regional teams looked in a weird spot after standup and and now their are a few loose ends. And then someone on sales keep asking about the feedback from their managers, for what it's worth. And that's basically what we saw with the success plan on Beacon Freight. Yeah, I think when I looked at the audit trail for Beacon Freight, it's been quiet. And I don't know if the risks is really the issue. Yeah no, I just want too make sure the change management piece doesn't fall through the cracks. like Also, my worry with the champion on their side is that nobody really owns it.",
+      "start_time": "2026-09-03T15:02:26.743000Z",
+      "end_time": "2026-09-03T15:03:04.410000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Okay yeah",
+      "start_time": "2026-09-03T15:03:04.416000Z",
+      "end_time": "2026-09-03T15:03:05.082000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "the scope came up over the weekend too, you know what I mean.",
+      "start_time": "2026-09-03T15:03:05.523000Z",
+      "end_time": "2026-09-03T15:03:09.857000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Yeah, totally.",
+      "start_time": "2026-09-03T15:03:08.982000Z",
+      "end_time": "2026-09-03T15:03:09.582000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Just to add, it's like, the procurement steps is a moving target and nobody wants to say it.",
+      "start_time": "2026-09-03T15:03:09.860000Z",
+      "end_time": "2026-09-03T15:03:15.860000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "The The support tickets took like three or four tries last time, more or less.",
+      "start_time": "2026-09-03T15:03:15.861000Z",
+      "end_time": "2026-09-03T15:03:20.861000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Plus we said we'd look at it with fresh eyes and like then the requirements happened.",
+      "start_time": "2026-09-03T15:03:21.385000Z",
+      "end_time": "2026-09-03T15:03:26.718000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "So I'm kind of torn about the edge cases, you know what I mean",
+      "start_time": "2026-09-03T15:03:27.250000Z",
+      "end_time": "2026-09-03T15:03:31.916000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Owen Price"
+      },
+      "text": "Yeah.",
+      "start_time": "2026-09-03T15:03:31.990000Z",
+      "end_time": "2026-09-03T15:03:32.590000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Owen Price"
+      },
+      "text": "Got it",
+      "start_time": "2026-09-03T15:03:33.121000Z",
+      "end_time": "2026-09-03T15:03:33.787000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Ha, yeah.",
+      "start_time": "2026-09-03T15:03:35.088000Z",
+      "end_time": "2026-09-03T15:03:35.754000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Owen Price"
+      },
+      "text": "Non-negotiable for us is SSO.",
+      "start_time": "2026-09-03T15:03:36.126000Z",
+      "end_time": "2026-09-03T15:03:37.793000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Owen Price"
+      },
+      "text": "Our IT policy doesn't allow separate passwords.",
+      "start_time": "2026-09-03T15:03:40.351000Z",
+      "end_time": "2026-09-03T15:03:42.684000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "But for Beacon Freight specifically, the reporting export is half done, anyway. Yeah, I'd love to get a second opinion, but the permissions model is a known issue. Actually, on Beacon Freight, it's mostly noise.",
+      "start_time": "2026-09-03T15:03:43.441000Z",
+      "end_time": "2026-09-03T15:03:55.107000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Yeah.",
+      "start_time": "2026-09-03T15:03:55.113000Z",
+      "end_time": "2026-09-03T15:03:55.713000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "But for Beacon Freight, I think the data residency question is the part that's the obvious next thing. Also, when I looked at the help center articles for Beacon Freight, I got kind of lost.",
+      "start_time": "2026-09-03T15:03:55.720000Z",
+      "end_time": "2026-09-03T15:04:07.387000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Yeah.",
+      "start_time": "2026-09-03T15:04:14.751000Z",
+      "end_time": "2026-09-03T15:04:15.351000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Funny enough,",
+      "start_time": "2026-09-03T15:04:15.403000Z",
+      "end_time": "2026-09-03T15:04:16.069000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "the renewal conversation came up before this call too.",
+      "start_time": "2026-09-03T15:04:18.547000Z",
+      "end_time": "2026-09-03T15:04:21.547000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Okay.",
+      "start_time": "2026-09-03T15:04:20.220000Z",
+      "end_time": "2026-09-03T15:04:20.820000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Does the uh, timeline actually matter for Beacon Freight?",
+      "start_time": "2026-09-03T15:04:27.950000Z",
+      "end_time": "2026-09-03T15:04:30.950000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Rivera"
+      },
+      "text": "The annoying",
+      "start_time": "2026-09-03T15:04:38.210000Z",
+      "end_time": "2026-09-03T15:04:38.877000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Rivera"
+      },
+      "text": "thing about the roadmap call is it's under control.",
+      "start_time": "2026-09-03T15:04:38.964000Z",
+      "end_time": "2026-09-03T15:04:41.964000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Rivera"
+      },
+      "text": "Um, what would it take to keep it behind a flag?",
+      "start_time": "2026-09-03T15:04:43.291000Z",
+      "end_time": "2026-09-03T15:04:46.958000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Rivera"
+      },
+      "text": "Oh, for Beacon Freight, I think the success plan is the part that's kind of a mystery.",
+      "start_time": "2026-09-03T15:04:46.970000Z",
+      "end_time": "2026-09-03T15:04:52.637000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Right.",
+      "start_time": "2026-09-03T15:04:50.614000Z",
+      "end_time": "2026-09-03T15:04:51.214000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Yeah.",
+      "start_time": "2026-09-03T15:04:52.726000Z",
+      "end_time": "2026-09-03T15:04:53.326000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Funny enough, I feel like the email digests is is fine for now, more like or less.",
+      "start_time": "2026-09-03T15:04:53.617000Z",
+      "end_time": "2026-09-03T15:04:59.284000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "And.",
+      "start_time": "2026-09-03T15:04:59.367000Z",
+      "end_time": "2026-09-03T15:04:59.967000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Yeah, I think it's less about the success plan and more about the change change management piece, more or less. I keep coming back to the tradeoffs, honestly. To be fair, part of me wants to timebox it, part of me thinks it's pretty solid. Okay yeah, it feels like the scope and the Slack thread are kind of the same problem. So I just want to make sure the action items doesn't fall through the cracks. Also, there's a world where we test it with a few users and the priority list just goes away.",
+      "start_time": "2026-09-03T15:05:08.961000Z",
+      "end_time": "2026-09-03T15:05:40.961000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Owen Price"
+      },
+      "text": "And.",
+      "start_time": "2026-09-03T15:05:44.707000Z",
+      "end_time": "2026-09-03T15:05:45.307000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Owen Price"
+      },
+      "text": "And our current contract with the other vendor is up on December 1, so that's our decision date.",
+      "start_time": "2026-09-03T15:05:46.170000Z",
+      "end_time": "2026-09-03T15:05:52.170000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Do we know who's looking at the handoff? But the original proposal is kind of a mystery, I think.",
+      "start_time": "2026-09-03T15:05:52.199000Z",
+      "end_time": "2026-09-03T15:05:58.532000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Well, part of me wants to sanity check the assumptions, part of me thinks it's a bit messy",
+      "start_time": "2026-09-03T15:05:59.766000Z",
+      "end_time": "2026-09-03T15:06:05.766000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Real quick, does the notification settings actually matter for Beacon Freight?",
+      "start_time": "2026-09-03T15:06:05.795000Z",
+      "end_time": "2026-09-03T15:06:09.461000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Okay, so if we draw it on a whiteboard, then the training sessions gets a lot easier. Anyway, the short version is the data residency question is bigger than we scoped, which is fine. Plus I spent three weeks on the open questions and nothing jumped out",
+      "start_time": "2026-09-03T15:06:09.561000Z",
+      "end_time": "2026-09-03T15:06:25.228000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Just to add, I'd rather split it into two pieces than keep it behind a flag, at least for now. So how did the follow ups go?",
+      "start_time": "2026-09-03T15:06:25.485000Z",
+      "end_time": "2026-09-03T15:06:34.485000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Owen Price"
+      },
+      "text": "Real quick, I'd rather like sanity check the assumptions than do it properly, like more or less. Oh, our solutions engineer mentioned the open questions earlier, so it's on people's radar. write, and I'd love to revisit it you know, next cycle, but the tradeoffs is a nice to have.",
+      "start_time": "2026-09-03T15:06:36.168000Z",
+      "end_time": "2026-09-03T15:06:52.834000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Rivera"
+      },
+      "text": "So.",
+      "start_time": "2026-09-03T15:06:54.971000Z",
+      "end_time": "2026-09-03T15:06:55.571000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Rivera"
+      },
+      "text": "And I spent half a day on the priority list and it kind of works.",
+      "start_time": "2026-09-03T15:06:55.804000Z",
+      "end_time": "2026-09-03T15:07:00.804000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Owen Price"
+      },
+      "text": "It's funny, the Slack thread looked not like urgent last week and now it's mostly noise...",
+      "start_time": "2026-09-03T15:07:00.858000Z",
+      "end_time": "2026-09-03T15:07:06.191000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Owen Price"
+      },
+      "text": "Yeah, I'd rather start with the boring version than get a second opinion, to be like honest.",
+      "start_time": "2026-09-03T15:07:06.219000Z",
+      "end_time": "2026-09-03T15:07:11.885000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Owen Price"
+      },
+      "text": "And",
+      "start_time": "2026-09-03T15:07:11.889000Z",
+      "end_time": "2026-09-03T15:07:12.489000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Owen Price"
+      },
+      "text": "And I spent most of the afternoon on the next steps and it's mostly what we talked about. Sorry, the annoying thing thing about the scope is it's unclear. I don't know if the spreadsheet is really the issue, or whatever.",
+      "start_time": "2026-09-03T15:07:12.598000Z",
+      "end_time": "2026-09-03T15:07:26.265000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "And there's a world where we do a proper write-up and the audit trail just goes away. Basically it's less about the training sessions and more about the invoicing setup, in my opinion.",
+      "start_time": "2026-09-03T15:07:27.452000Z",
+      "end_time": "2026-09-03T15:07:38.452000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
       "text": "So.",
-      "start_time": "2026-09-03T15:00:52.623000Z",
-      "end_time": "2026-09-03T15:00:53.423000Z"
+      "start_time": "2026-09-03T15:07:39.012000Z",
+      "end_time": "2026-09-03T15:07:39.612000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "like, Sorry, can you say that again? You cut out for a second.",
-      "start_time": "2026-09-03T15:00:54.567000Z",
-      "end_time": "2026-09-03T15:00:59.567000Z"
+      "text": "It's like, I mean, the timeline is hard to reason about and nobody wants to say it. Also, part of me wants to get more data, part of me thinks it's more of a people problem.",
+      "start_time": "2026-09-03T15:07:41.533000Z",
+      "end_time": "2026-09-03T15:07:53.533000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Owen Price"
+      },
+      "text": "Interesting.",
+      "start_time": "2026-09-03T15:07:49.167000Z",
+      "end_time": "2026-09-03T15:07:49.767000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Rivera"
+      },
+      "text": "So.",
+      "start_time": "2026-09-03T15:07:53.600000Z",
+      "end_time": "2026-09-03T15:07:54.200000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Rivera"
+      },
+      "text": "Like, I keep coming back to the regional teams, right. For what it's worth, I'm not convinced the risks is under control, so yeah. And we said we'd write it down and then the change management piece happened. Which, that's basically what we saw with the user provisioning on Beacon Freight. And the short version is the support tickets is the easy part, honestly. How did the original proposal go? It's like, the audit trail is the easy part and nobody wants to say it. So I talked to the new folks about the next steps like and they didn't love it.",
+      "start_time": "2026-09-03T15:07:54.273000Z",
+      "end_time": "2026-09-03T15:08:28.273000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "From my side, Beacon Freight is kind of the test case for the tradeoffs...",
+      "start_time": "2026-09-03T15:08:29.544000Z",
+      "end_time": "2026-09-03T15:08:34.210000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Got it. Our SSO is on the roadmap with the team plan.",
+      "start_time": "2026-09-03T15:08:34.291000Z",
+      "end_time": "2026-09-03T15:08:38.291000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Rivera"
+      },
+      "text": "From my side, the short version is the sandbox account is good enough for now, if that helps.",
+      "start_time": "2026-09-03T15:08:38.352000Z",
+      "end_time": "2026-09-03T15:08:44.352000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Hmm.",
+      "start_time": "2026-09-03T15:08:44.387000Z",
+      "end_time": "2026-09-03T15:08:44.987000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Rivera"
       },
       "text": "Right.",
-      "start_time": "2026-09-03T15:00:58.237000Z",
-      "end_time": "2026-09-03T15:00:58.837000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Owen Price"
-      },
-      "text": "Do we have any data on that that or is it gut feel?",
-      "start_time": "2026-09-03T15:01:00.607000Z",
-      "end_time": "2026-09-03T15:01:05.607000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Right.",
-      "start_time": "2026-09-03T15:01:06.691000Z",
-      "end_time": "2026-09-03T15:01:07.491000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "That's a common request from customers",
-      "start_time": "2026-09-03T15:01:08.366000Z",
-      "end_time": "2026-09-03T15:01:10.674000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "your size.",
-      "start_time": "2026-09-03T15:01:11.809000Z",
-      "end_time": "2026-09-03T15:01:12.609000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "We've had some internal changes on you know, our side, so bear with us.",
-      "start_time": "2026-09-03T15:01:13.626000Z",
-      "end_time": "2026-09-03T15:01:19.011000Z"
+      "start_time": "2026-09-03T15:08:45.041000Z",
+      "end_time": "2026-09-03T15:08:45.641000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Alex Rivera"
       },
-      "text": "Can we park that and come back to it at the end?",
-      "start_time": "2026-09-03T15:01:19.486000Z",
-      "end_time": "2026-09-03T15:01:24.101000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Okay, so where did we land on that last time?",
-      "start_time": "2026-09-03T15:01:24.984000Z",
-      "end_time": "2026-09-03T15:01:28.830000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Sorry- Sorry,",
-      "start_time": "2026-09-03T15:01:29.460000Z",
-      "end_time": "2026-09-03T15:01:30.260000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "can you say I mean, that again?",
-      "start_time": "2026-09-03T15:01:31.261000Z",
-      "end_time": "2026-09-03T15:01:33.954000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "You cut out for a second.",
-      "start_time": "2026-09-03T15:01:35.001000Z",
-      "end_time": "2026-09-03T15:01:37.309000Z"
+      "text": "Look, it's less about the champion on there side and more about the trial period, but yeah.",
+      "start_time": "2026-09-03T15:08:45.739000Z",
+      "end_time": "2026-09-03T15:08:51.406000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Let- Let me pull up the doc so we're all looking at the same thing.",
-      "start_time": "2026-09-03T15:01:37.984000Z",
-      "end_time": "2026-09-03T15:01:43.753000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Okay.",
-      "start_time": "2026-09-03T15:01:41.638000Z",
-      "end_time": "2026-09-03T15:01:42.238000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Right.",
-      "start_time": "2026-09-03T15:01:44.787000Z",
-      "end_time": "2026-09-03T15:01:45.587000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Owen Price"
-      },
-      "text": "Non-negotiable for uh, us is SSO. Our IT policy doesn't allow separate passwords.",
-      "start_time": "2026-09-03T15:01:46.451000Z",
-      "end_time": "2026-09-03T15:01:51.451000Z"
+      "text": "Right",
+      "start_time": "2026-09-03T15:08:51.759000Z",
+      "end_time": "2026-09-03T15:08:52.359000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Hold on, my laptop is about to you know, die, let me grab a charger.",
-      "start_time": "2026-09-03T15:01:52.239000Z",
-      "end_time": "2026-09-03T15:01:58.008000Z"
+      "text": "I just want to make sure the uh",
+      "start_time": "2026-09-03T15:08:52.455000Z",
+      "end_time": "2026-09-03T15:08:55.122000Z"
     },
     {
       "speaker": {
-        "source": "speaker"
+        "source": "microphone"
       },
-      "text": "Yeah, that makes sense to me.",
-      "start_time": "2026-09-03T15:01:58.666000Z",
-      "end_time": "2026-09-03T15:02:00.974000Z"
+      "text": "change management piece like doesn't fall through the cracks...",
+      "start_time": "2026-09-03T15:08:58.104000Z",
+      "end_time": "2026-09-03T15:09:01.104000Z"
     },
     {
       "speaker": {
-        "source": "speaker",
-        "name": "Owen Price"
+        "source": "microphone"
       },
-      "text": "Right, right. Keep going.",
-      "start_time": "2026-09-03T15:02:01.197000Z",
-      "end_time": "2026-09-03T15:02:02.735000Z"
+      "text": "And then it's funny",
+      "start_time": "2026-09-03T15:09:01.193000Z",
+      "end_time": "2026-09-03T15:09:02.527000Z"
     },
     {
       "speaker": {
-        "source": "speaker",
-        "name": "Owen Price"
+        "source": "microphone"
       },
-      "text": "That's really useful feedback,",
-      "start_time": "2026-09-03T15:02:03.557000Z",
-      "end_time": "2026-09-03T15:02:05.096000Z"
+      "text": "the rollout plan looked in good shape before this call and now we're doing it two different ways.",
+      "start_time": "2026-09-03T15:09:02.542000Z",
+      "end_time": "2026-09-03T15:09:08.542000Z"
     },
     {
       "speaker": {
-        "source": "speaker",
-        "name": "Owen Price"
+        "source": "microphone"
       },
-      "text": "I'm writing it down.",
-      "start_time": "2026-09-03T15:02:05.744000Z",
-      "end_time": "2026-09-03T15:02:07.283000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Can uh, you walk me through how that process works like,",
-      "start_time": "2026-09-03T15:02:08.389000Z",
-      "end_time": "2026-09-03T15:02:12.620000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "today?",
-      "start_time": "2026-09-03T15:02:13.493000Z",
-      "end_time": "2026-09-03T15:02:14.293000Z"
+      "text": "Uh-huh.",
+      "start_time": "2026-09-03T15:09:09.472000Z",
+      "end_time": "2026-09-03T15:09:10.072000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Owen Price"
       },
-      "text": "Thanks- Thanks for the context,",
-      "start_time": "2026-09-03T15:02:14.585000Z",
-      "end_time": "2026-09-03T15:02:16.508000Z"
+      "text": "To be fair, Beacon Freight is kind of the test case case for the procurement steps, or whatever. So yeah, it's less about the notification settings and more about the invoicing setup, at least for now.",
+      "start_time": "2026-09-03T15:09:21.425000Z",
+      "end_time": "2026-09-03T15:09:33.425000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "So yeah, for Beacon Freight specifically, the support tickets is mostly fine, but yeah. But honestly the rollout plan only needs ten minutes if we get a second opinion.",
+      "start_time": "2026-09-03T15:09:33.486000Z",
+      "end_time": "2026-09-03T15:09:43.153000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Owen Price"
       },
-      "text": "that's super helpful.",
-      "start_time": "2026-09-03T15:02:17.472000Z",
-      "end_time": "2026-09-03T15:02:18.626000Z"
+      "text": "To be fair, the integration with their HR system is taking longer than expected, but the Slack thread is fine in theory. I keep coming back to the doc.",
+      "start_time": "2026-09-03T15:09:46.285000Z",
+      "end_time": "2026-09-03T15:09:55.952000Z"
     },
     {
       "speaker": {
-        "source": "speaker",
-        "name": "Owen Price"
+        "source": "microphone"
       },
-      "text": "you know,",
-      "start_time": "2026-09-03T15:02:19.579000Z",
-      "end_time": "2026-09-03T15:02:20.379000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Owen Price"
-      },
-      "text": "That's really useful feedback, I'm writing it down.",
-      "start_time": "2026-09-03T15:02:20.812000Z",
-      "end_time": "2026-09-03T15:02:23.889000Z"
+      "text": "But nobody really owns the timeline right now.",
+      "start_time": "2026-09-03T15:09:56.043000Z",
+      "end_time": "2026-09-03T15:09:58.710000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Alex Rivera"
       },
-      "text": "That's fair. I hadn't thought about it that way.",
-      "start_time": "2026-09-03T15:02:25.047000Z",
-      "end_time": "2026-09-03T15:02:28.508000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Owen Price"
-      },
-      "text": "And our current contract with the other vendor is up on December first,",
-      "start_time": "2026-09-03T15:02:29.315000Z",
-      "end_time": "2026-09-03T15:02:34.315000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Owen Price"
-      },
-      "text": "so that's um,",
-      "start_time": "2026-09-03T15:02:35.081000Z",
-      "end_time": "2026-09-03T15:02:36.235000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Owen Price"
-      },
-      "text": "our decision date.",
-      "start_time": "2026-09-03T15:02:37.083000Z",
-      "end_time": "2026-09-03T15:02:38.237000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Can you share your your screen?",
-      "start_time": "2026-09-03T15:02:39.227000Z",
-      "end_time": "2026-09-03T15:02:41.535000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Our managers mostly live in email, if um, that helps.",
-      "start_time": "2026-09-03T15:02:42.260000Z",
-      "end_time": "2026-09-03T15:02:46.106000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Let me pull up the doc so we're all looking at the same",
-      "start_time": "2026-09-03T15:02:47.116000Z",
-      "end_time": "2026-09-03T15:02:52.116000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "thing.",
-      "start_time": "2026-09-03T15:02:53.166000Z",
-      "end_time": "2026-09-03T15:02:53.966000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Okay, so where did we land on that last time?",
-      "start_time": "2026-09-03T15:02:54.796000Z",
-      "end_time": "2026-09-03T15:02:58.642000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Alex Rivera"
-      },
-      "text": "That's fair. I hadn't thought about it you know, that way.",
-      "start_time": "2026-09-03T15:02:59.262000Z",
-      "end_time": "2026-09-03T15:03:03.493000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "I think that's mostly right, but there's a nuance there.",
-      "start_time": "2026-09-03T15:03:04.179000Z",
-      "end_time": "2026-09-03T15:03:08.025000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "I think the question is really about scope.",
-      "start_time": "2026-09-03T15:03:08.614000Z",
-      "end_time": "2026-09-03T15:03:11.691000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Okay.",
-      "start_time": "2026-09-03T15:03:11.154000Z",
-      "end_time": "2026-09-03T15:03:11.754000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Owen Price"
-      },
-      "text": "How- How are your teams uh, using it day to day right now?",
-      "start_time": "2026-09-03T15:03:12.161000Z",
-      "end_time": "2026-09-03T15:03:17.161000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Right.",
-      "start_time": "2026-09-03T15:03:14.888000Z",
-      "end_time": "2026-09-03T15:03:15.488000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Sorry- Sorry, I was on mute.",
-      "start_time": "2026-09-03T15:03:18.299000Z",
-      "end_time": "2026-09-03T15:03:20.607000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "I was saying I agree.",
-      "start_time": "2026-09-03T15:03:20.855000Z",
-      "end_time": "2026-09-03T15:03:22.778000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Um.",
-      "start_time": "2026-09-03T15:03:23.339000Z",
-      "end_time": "2026-09-03T15:03:24.139000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Can you walk me through how that process works today?",
-      "start_time": "2026-09-03T15:03:25.149000Z",
-      "end_time": "2026-09-03T15:03:28.995000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Can we park that and come you know, back to to it at the end?",
-      "start_time": "2026-09-03T15:03:29.915000Z",
-      "end_time": "2026-09-03T15:03:35.684000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Alex Rivera"
-      },
-      "text": "I mean,",
-      "start_time": "2026-09-03T15:03:36.541000Z",
-      "end_time": "2026-09-03T15:03:37.341000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Alex Rivera"
-      },
-      "text": "I think that's mostly right, but there's a nuance there.",
-      "start_time": "2026-09-03T15:03:38.249000Z",
-      "end_time": "2026-09-03T15:03:42.095000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Um.",
-      "start_time": "2026-09-03T15:03:42.466000Z",
-      "end_time": "2026-09-03T15:03:43.266000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Is there anyone else on your side we should loop in?",
-      "start_time": "2026-09-03T15:03:44.457000Z",
-      "end_time": "2026-09-03T15:03:48.687000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Sure.",
-      "start_time": "2026-09-03T15:03:47.528000Z",
-      "end_time": "2026-09-03T15:03:48.128000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Our procurement you know, process can be a bit slow, just so you know.",
-      "start_time": "2026-09-03T15:03:49.701000Z",
-      "end_time": "2026-09-03T15:03:55.086000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "We've had um, some internal changes on our side, uh, so bear with us.",
-      "start_time": "2026-09-03T15:03:56.068000Z",
-      "end_time": "2026-09-03T15:04:01.453000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Totally.",
-      "start_time": "2026-09-03T15:03:59.024000Z",
-      "end_time": "2026-09-03T15:03:59.624000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "uh, I'm not sure that's the right framing, honestly.",
-      "start_time": "2026-09-03T15:04:01.814000Z",
-      "end_time": "2026-09-03T15:04:05.275000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Right.",
-      "start_time": "2026-09-03T15:04:06.329000Z",
-      "end_time": "2026-09-03T15:04:07.129000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Got it.",
-      "start_time": "2026-09-03T15:04:07.399000Z",
-      "end_time": "2026-09-03T15:04:08.199000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Our SSO is on the roadmap with the team plan.",
-      "start_time": "2026-09-03T15:04:08.946000Z",
-      "end_time": "2026-09-03T15:04:12.792000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Right.",
-      "start_time": "2026-09-03T15:04:11.055000Z",
-      "end_time": "2026-09-03T15:04:11.655000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "I'm I mean, not sure that's the right framing, honestly.",
-      "start_time": "2026-09-03T15:04:13.809000Z",
-      "end_time": "2026-09-03T15:04:17.655000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Owen Price"
-      },
-      "text": "Thanks for the context, that's super helpful.",
-      "start_time": "2026-09-03T15:04:18.029000Z",
-      "end_time": "2026-09-03T15:04:20.721000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Honestly, the team likes it so far.",
-      "start_time": "2026-09-03T15:04:21.597000Z",
-      "end_time": "2026-09-03T15:04:24.289000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Owen Price"
-      },
-      "text": "um, Is there anyone else on your side like, we should loop in?",
-      "start_time": "2026-09-03T15:04:24.703000Z",
-      "end_time": "2026-09-03T15:04:29.703000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Owen Price"
-      },
-      "text": "Let's not",
-      "start_time": "2026-09-03T15:04:30.330000Z",
-      "end_time": "2026-09-03T15:04:31.130000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Owen Price"
-      },
-      "text": "go down that rabbit hole right now.",
-      "start_time": "2026-09-03T15:04:31.337000Z",
-      "end_time": "2026-09-03T15:04:34.030000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Our procurement process can be a bit slow, just so you know.",
-      "start_time": "2026-09-03T15:04:35.186000Z",
-      "end_time": "2026-09-03T15:04:39.802000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Yeah, you know, I agree with that.",
-      "start_time": "2026-09-03T15:04:40.720000Z",
-      "end_time": "2026-09-03T15:04:43.412000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Owen Price"
-      },
-      "text": "I think the question is really about scope.",
-      "start_time": "2026-09-03T15:04:44.219000Z",
-      "end_time": "2026-09-03T15:04:47.296000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Owen Price"
-      },
-      "text": "Can you share your screen?",
-      "start_time": "2026-09-03T15:04:48.047000Z",
-      "end_time": "2026-09-03T15:04:49.971000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "How are your teams using it day to day write now?",
-      "start_time": "2026-09-03T15:04:50.914000Z",
-      "end_time": "2026-09-03T15:04:55.145000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Sure.",
-      "start_time": "2026-09-03T15:04:54.057000Z",
-      "end_time": "2026-09-03T15:04:54.657000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Alex Rivera"
-      },
-      "text": "Sorry, I was on mute.",
-      "start_time": "2026-09-03T15:04:55.455000Z",
-      "end_time": "2026-09-03T15:04:57.378000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Alex Rivera"
-      },
-      "text": "I was saying I agree.",
-      "start_time": "2026-09-03T15:04:57.761000Z",
-      "end_time": "2026-09-03T15:04:59.684000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Um.",
-      "start_time": "2026-09-03T15:04:59.936000Z",
-      "end_time": "2026-09-03T15:05:00.736000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Our managers mostly live in email,",
-      "start_time": "2026-09-03T15:05:01.307000Z",
-      "end_time": "2026-09-03T15:05:03.615000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "if that helps.",
-      "start_time": "2026-09-03T15:05:04.549000Z",
-      "end_time": "2026-09-03T15:05:05.703000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Do we have any data on that that or is it gut feel?",
-      "start_time": "2026-09-03T15:05:06.214000Z",
-      "end_time": "2026-09-03T15:05:11.214000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Right, right.",
-      "start_time": "2026-09-03T15:05:11.534000Z",
-      "end_time": "2026-09-03T15:05:12.334000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Keep going.",
-      "start_time": "2026-09-03T15:05:12.668000Z",
-      "end_time": "2026-09-03T15:05:13.468000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Yeah, that makes sense too me.",
-      "start_time": "2026-09-03T15:05:14.236000Z",
-      "end_time": "2026-09-03T15:05:16.544000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Let's not go down that rabbit hole right now.",
-      "start_time": "2026-09-03T15:05:17.358000Z",
-      "end_time": "2026-09-03T15:05:20.820000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Alex Rivera"
-      },
-      "text": "Totally.",
-      "start_time": "2026-09-03T15:05:19.882000Z",
-      "end_time": "2026-09-03T15:05:20.482000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Hold on, my laptop is about to die, let me grab a charger.",
-      "start_time": "2026-09-03T15:05:21.908000Z",
-      "end_time": "2026-09-03T15:05:26.908000Z"
+      "text": "I think the permissions model came up the other day too, if that makes sense. Look, I don't know if the requirements is like really the issue, you know what I mean. Beacon Freight is kind of the test case for the sandbox account, so yeah. So we should probably make it someone's job before we touch the feedback...",
+      "start_time": "2026-09-03T15:10:01.456000Z",
+      "end_time": "2026-09-03T15:10:21.122000Z"
     },
     {
       "speaker": {
@@ -811,8 +858,8 @@
         "name": "Alex Rivera"
       },
       "text": "Okay, thanks everyone.",
-      "start_time": "2026-09-03T15:05:27.383000Z",
-      "end_time": "2026-09-03T15:05:28.536000Z"
+      "start_time": "2026-09-03T15:10:21.124000Z",
+      "end_time": "2026-09-03T15:10:22.124000Z"
     }
   ]
 }

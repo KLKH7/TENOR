@@ -24,6 +24,7 @@ from typing import Literal
 from pydantic import BaseModel
 
 from concentrate.core import granola
+from concentrate.core.spoken import written
 from concentrate.synth.render import BeatMap
 from concentrate.synth.roster import ORG_BY_ID, PEOPLE, PROJECT_BY_ID, person
 from concentrate.synth.world import Commitment, Evidence, Fact, World
@@ -759,8 +760,8 @@ def validate(questions: list[Question], notes: list[granola.Note]) -> Validation
             errors.append(f"{q.id}: unknown utterance ids {missing[:3]}")
             continue
         evidence = " ".join(text_by_id[u] for u in q.gold_utterance_ids).lower()
-        for key in q.evidence_keys:
-            if key.lower() not in evidence:
+        for key in q.evidence_keys:  # either spoken ("twenty dollars") or written ("$20")
+            if key.lower() not in evidence and written(key).lower() not in evidence:
                 errors.append(f"{q.id}: evidence key {key!r} not in gold utterances")
     return ValidationReport(
         total=len(questions),

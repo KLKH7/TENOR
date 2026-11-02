@@ -7,7 +7,7 @@
     "email": "priya@northwind.dev"
   },
   "created_at": "2026-10-15T12:00:12Z",
-  "updated_at": "2026-10-15T12:32:00Z",
+  "updated_at": "2026-10-15T12:38:00Z",
   "deleted_at": null,
   "web_url": "https://notes.granola.ai/d/4e2baa9b-5bf8-a21f-c636-8124eb34293e",
   "calendar_event": {
@@ -46,82 +46,266 @@
     }
   ],
   "space_membership": [],
-  "summary_text": "Team\nTomás covers eng manager duties during Alex's leave",
-  "summary_markdown": "### Team\n- Tomás covers eng manager duties during Alex's leave",
-  "private_notes_text": null,
-  "private_notes_markdown": null,
+  "summary_text": "Team\nTomás covers eng manager duties during Alex's leave\nOwnership question and backlog and risks\nSuggestion to write it down before touching ownership question\nOwnership question is the scary part\nBacklog is fine in theory\nBacklog is pretty solid\nBacklog is unclear\nRisks is kind of stuck\nConcern with risks: that we don't have enough signal yet\nRisks is fine in theory\nPreference to document the decision rather than test it with a few users\nScope and skip level and timeline\nScope is low risk\nSkip level and feedback from the last cycle seen as one underlying problem\nTimeline is weirdly controversial\nPreference to timebox it rather than look at it with fresh eyes\nTeam dynamic and dependencies and career ladder\nTeam dynamic is mostly fine\nFeedback on team dynamic from a few customers: they had some good ideas\nDependencies is the obvious next thing\nCareer ladder is under control\nSlack thread and deep work time and spreadsheet\nNo clear owner for slack thread\nDeep work time is in a weird spot\nReal issue may be deep work time rather than spreadsheet\nFeedback and requirements\nFeedback and growth plan seen as one underlying problem\nRequirements is not where i'd want it",
+  "summary_markdown": "### Team\n- Tomás covers eng manager duties during Alex's leave\n\n### Ownership question and backlog and risks\n- Suggestion to write it down before touching ownership question\n  - Ownership question is the scary part\n- Backlog is fine in theory\n  - Backlog is pretty solid\n  - Backlog is unclear\n- Risks is kind of stuck\n  - Concern with risks: that we don't have enough signal yet\n  - Risks is fine in theory\n- Preference to document the decision rather than test it with a few users\n\n### Scope and skip level and timeline\n- Scope is low risk\n- Skip level and feedback from the last cycle seen as one underlying problem\n- Timeline is weirdly controversial\n- Preference to timebox it rather than look at it with fresh eyes\n\n### Team dynamic and dependencies and career ladder\n- Team dynamic is mostly fine\n  - Feedback on team dynamic from a few customers: they had some good ideas\n- Dependencies is the obvious next thing\n- Career ladder is under control\n\n### Slack thread and deep work time and spreadsheet\n- No clear owner for slack thread\n- Deep work time is in a weird spot\n- Real issue may be deep work time rather than spreadsheet\n\n### Feedback and requirements\n- Feedback and growth plan seen as one underlying problem\n- Requirements is not where i'd want it",
+  "private_notes_text": "tomás covers eng manager duties during alex's leave",
+  "private_notes_markdown": "tomás covers eng manager duties during alex's leave",
   "transcript": [
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "How's everything at home? Let's not go down that rabbit hole right now. I've been thinking a a lot about where I want to grow. I'm not sure I mean, that's the right framing, honestly. Hold on, my laptop is about to die, let me grab a charger. Okay, so where did we land on that last time? I'd like more time for deep work if possible. Honestly- Honestly, it's been a busy couple of weeks.",
+      "text": "How's everything at home?",
       "start_time": "2026-10-15T12:01:29.811000Z",
-      "end_time": "2026-10-15T12:02:03.593000Z"
+      "end_time": "2026-10-15T12:01:31.144000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Yeah, I mean, I agree with that.",
-      "start_time": "2026-10-15T12:02:04.723000Z",
-      "end_time": "2026-10-15T12:02:07.415000Z"
+      "text": "I think we should probably write it like down before we touch the ownership question.",
+      "start_time": "2026-10-15T12:01:31.235000Z",
+      "end_time": "2026-10-15T12:01:36.235000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "That's fair. I hadn't thought about it that way.",
-      "start_time": "2026-10-15T12:02:08.198000Z",
-      "end_time": "2026-10-15T12:02:11.659000Z"
+      "text": "For this, I think the notes from last time is the part that's mostly cosmetic. I think if work life balance slips again, this is going to feel it. From my side, the short version is the backlog is fine in theory and stuff. Yeah no, I'm not convinced like the risks is kind of stuck, more or less.",
+      "start_time": "2026-10-15T12:01:38.908000Z",
+      "end_time": "2026-10-15T12:01:58.651000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "The- The team dynamic feels good you know, right now. Honestly, you know, it's been a busy couple of like, weeks. Let's make sure we write down um, goals for next quarter. I'm not not sure that's the right framing, honestly. Yeah, I I agree with that.",
-      "start_time": "2026-10-15T12:02:12.102000Z",
-      "end_time": "2026-10-15T12:02:32.877000Z"
+      "text": "Yeah no, I don't no if the onboarding buddy thing is really the issue, honestly. Anyway, if the meeting load slips again, this is going to feel it.",
+      "start_time": "2026-10-15T12:01:58.731000Z",
+      "end_time": "2026-10-15T12:02:08.064000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Hold on, my laptop is about to die, um, let me grab a charger. I've been thinking a lot about where I want grow.",
-      "start_time": "2026-10-15T12:02:33.449000Z",
-      "end_time": "2026-10-15T12:02:43.224000Z"
+      "text": "I feel like the thing I'd push on is like the onboarding buddy thing and stuff. Ha, yeah. From my side, I'd love too just ship the smaller version, like but work life balance is taking longer than expected. Look, that's basically what we saw like with the manager track on on this.",
+      "start_time": "2026-10-15T12:02:20.038000Z",
+      "end_time": "2026-10-15T12:02:38.005000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Good- Good, my mom's moving in for a bit too help once the baby comes. Sorry, I was on mute. I was saying I agree. Sorry, can you say that again? You cut out for a second. Do we have any data on that or is it gut feel? I think like, that's mostly right, but there's a nuance there. How are you feeling about the workload generally?",
-      "start_time": "2026-10-15T12:02:43.595000Z",
-      "end_time": "2026-10-15T12:03:12.709000Z"
+      "text": "write.",
+      "start_time": "2026-10-15T12:02:38.092000Z",
+      "end_time": "2026-10-15T12:02:38.692000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Let's make sure we write uh, down like, goals for next quarter. I think the um, question is really about scope. Right, right. Keep going. Can you share your screen? Let me pull up the doc so we're all looking at the same thing. Yeah, that makes sense to me. That's good to hear. Can we park that and come back to it at like, the end? Anything I can do to unblock you? The- The team dynamic feels good right now. That's good to hear. Sorry, uh, can you say that again? You cut out for a second. I think I mean, that's mostly right, but there's a nuance there.",
-      "start_time": "2026-10-15T12:03:13.316000Z",
-      "end_time": "2026-10-15T12:04:03.948000Z"
+      "text": "I'm cautiously optimistic about the feedback, for what it's worth. Like, it's less about the stretch project and more about the feedback, I don't know. So I think the risk is that it's a bigger change than it looks and stuff. But I'm not convinced the scope is low risk, to be honest. Actually, for this, I think the reading group is the part that's better than last week. Also, the backlog is pretty solid, um, but the next steps is the blocker. Yeah, yeah. Gotcha. So yeah, if the risks slips again, this is going to feel it. Okay. Oh, okay.",
+      "start_time": "2026-10-15T12:02:38.715000Z",
+      "end_time": "2026-10-15T12:03:17.480000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Yeah, that makes sense to me. I'd like more time for deep work if um, possible. That's fair. I hadn't thought about it that way.",
-      "start_time": "2026-10-15T12:04:04.677000Z",
-      "end_time": "2026-10-15T12:04:16.119000Z"
+      "text": "Actually, I feel like the ownership question is the scary part, so yeah. Okay, so I don't know if the communication plan is really the issue, if that makes sense.",
+      "start_time": "2026-10-15T12:03:19.425000Z",
+      "end_time": "2026-10-15T12:03:29.425000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I'll stop sharing.",
+      "start_time": "2026-10-15T12:03:29.507000Z",
+      "end_time": "2026-10-15T12:03:30.507000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "My worry with the risks is that we don't have enough signal yet. Right, so I spent half a day on the promo packet and there were way more edge cases than I expected. Which, it feels like the skip like level and the feedback from the last cycle are kind of the same problem. The way I see it, when I looked at the review process for this, the docs don't match reality. Also, do we know who's looking at the meeting load? Plus the risks is fine in theory, at least for now. From my side, the timeline is weirdly controversial, but the original proposal is surprisingly okay. So there's a world where we agree on what done means and the backlog just goes away.",
+      "start_time": "2026-10-15T12:03:30.581000Z",
+      "end_time": "2026-10-15T12:04:12.915000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Good, my mom's moving in for a bit to help once the baby comes. Okay yeah, the annoying thing about work life balance is it's the blocker. Right, so part of you know, me wants to do like a proper write-up, part of me thinks it's the scary part. I'm not convinced the backlog is unclear, to be honest. Which, I put some notes on the shadowing idea in the doc, but yeah.",
+      "start_time": "2026-10-15T12:04:20.533000Z",
+      "end_time": "2026-10-15T12:04:46.145000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Okay, so I think the risk is that we're overthinking it, kind of.",
+      "start_time": "2026-10-15T12:04:55.087000Z",
+      "end_time": "2026-10-15T12:04:59.421000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Sorry, there's a world where we split it into two pieces and the feedback just goes away. Yeah, I think that's basically what we saw with the timeline on this. For this, I think the process like is the part that's taking longer than expected. Funny enough, it's less about my focus areas and more about the ownership question, if that makes sense. Real quick, I feel like the team dynamic is mostly fine, for what it's worth. And then we've been saying we'd do a quick spike for a while, so yeah. So did anyone look at the retro format last week? Honestly the dependencies only needs a uh, dozen tickets if we make it someone's job.",
+      "start_time": "2026-10-15T12:04:59.476000Z",
+      "end_time": "2026-10-15T12:05:38.810000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Actually, I think the dependencies is the obvious next thing and deep work time is a bit messy, so maybe run it by support. Which, the thing I'd push on is the promo like packet.",
+      "start_time": "2026-10-15T12:05:38.883000Z",
+      "end_time": "2026-10-15T12:05:50.550000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Honestly, if we timebox it, then the edge cases gets a lot easier. And then we've been saying we'd get a second opinion for a while, to be honest.",
+      "start_time": "2026-10-15T12:05:50.597000Z",
+      "end_time": "2026-10-15T12:06:00.264000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Yeah, I think the risk is that it slips again, or whatever. And I keep coming back like to the tradeoffs. Sounds like good. Right, and the new folks mentioned mentioned the workload before this call, so it's on people's radar. Okay, so can we run it by support? The way I see it, I spent 90 minutes on the growth plan and I couldn't reproduce it. How did the spreadsheet go? Just to add, this is kind of the test case for the retro format, at least for now. I keep coming back to the skip level, in my opinion. But does the notes from last time actually matter for this?",
+      "start_time": "2026-10-15T12:06:00.877000Z",
+      "end_time": "2026-10-15T12:06:41.521000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "We've been saying we'd write it down for a while, like right.",
+      "start_time": "2026-10-15T12:06:41.558000Z",
+      "end_time": "2026-10-15T12:06:45.558000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I feel like the career ladder is under control.",
+      "start_time": "2026-10-15T12:06:45.569000Z",
+      "end_time": "2026-10-15T12:06:48.569000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Oh, on this, half of it is outdated and stuff. Yeah. it's like, work life balance is the scary part and nobody wants to say it.",
+      "start_time": "2026-10-15T12:06:48.618000Z",
+      "end_time": "2026-10-15T12:06:57.285000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "From my side, we lost 40 minutes on like the skip level last week.",
+      "start_time": "2026-10-15T12:06:57.289000Z",
+      "end_time": "2026-10-15T12:07:01.956000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I guess part of me wants to run it by support, part of me thinks it's fine for now. Look, it feels like the retro format and you know, the onboarding buddy thing uh, are kind of the same problem.",
+      "start_time": "2026-10-15T12:07:02.349000Z",
+      "end_time": "2026-10-15T12:07:15.683000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "So yeah, um, nobody really owns the feedback from the last cycle right now, kind of. But nobody really owns the Slack thread right now. Oh, for this specifically, work life balance is overdue for a cleanup, kind of. Anyway, we said we'd keep it behind a flag then the process happened.",
+      "start_time": "2026-10-15T12:07:16.218000Z",
+      "end_time": "2026-10-15T12:07:33.595000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Yeah, yeah, the annoying thing about the dependencies is it's taking longer than expected. Anyway, honestly the promo packet only needs 12 steps if we simplify it.",
+      "start_time": "2026-10-15T12:07:34.173000Z",
+      "end_time": "2026-10-15T12:07:43.173000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Makes sense. I'd love to get more data, but deep work time is in a weird spot. Sorry, the annoying thing about the requirements is it's the scary part. And people on the other team mentioned the priority list last night, so it's on people's radar.",
+      "start_time": "2026-10-15T12:07:54.313000Z",
+      "end_time": "2026-10-15T12:08:10.718000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "The annoying thing about the mentoring thing is it's a bit of a black box. Sorry, it's like, the feedback from the last cycle is fine for now and nobody wants too like say it. Yeah no, I wouldn't block on the dependencies. Which, it's less about the spreadsheet and more about deep work time, at least for now. Honestly the meeting load only needs 15 minutes if we do a proper write-up. This is kind I mean, the test case for the dependencies. So the new folks keep asking about the risks, kind of.",
+      "start_time": "2026-10-15T12:08:10.759000Z",
+      "end_time": "2026-10-15T12:08:42.426000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I talked to the finance side about the meeting load and they had some good ideas. Plus are we worried about the on-call load?",
+      "start_time": "2026-10-15T12:08:42.525000Z",
+      "end_time": "2026-10-15T12:08:50.525000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Actually, it's funny, the retro format looked a bit of a black box like the other day and now it's been quiet. Actually, did anyone like look at the priority list a while back?",
+      "start_time": "2026-10-15T12:08:50.792000Z",
+      "end_time": "2026-10-15T12:09:02.126000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Yeah, yeah, I'd rather document the decision than test it with a few users, if that makes sense. And then how did the feedback go? But I spent a dozen tickets on the tradeoffs it looked pretty reasonable. And then I wouldn't block on the conference talk. Right, and I was looking at the original proposal last night and like a couple like of things looked off, at like least for now. But the review process took like about thirty tickets last time, at least for now. So what would it take to cut the scope? I talked too a few customers about the team dynamic and they had some good ideas.",
+      "start_time": "2026-10-15T12:09:02.472000Z",
+      "end_time": "2026-10-15T12:09:39.805000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Okay, I'd rather timebox it than look at it with fresh eyes, anyway.",
+      "start_time": "2026-10-15T12:09:40.939000Z",
+      "end_time": "2026-10-15T12:09:45.272000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "To be fair, the team dynamic took like 40 minutes last time, for what it's worth. Also, we lost most of the afternoon on the process the other day, honestly.",
+      "start_time": "2026-10-15T12:09:45.316000Z",
+      "end_time": "2026-10-15T12:09:55.316000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Basically it feels like the feedback and the growth plan are kind of the same problem. Anyway, it's like, the requirements is not where I'd want it and nobody wants to say it.",
+      "start_time": "2026-10-15T12:09:55.400000Z",
+      "end_time": "2026-10-15T12:10:06.400000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
       "text": "For my leave, Tomás will cover eng manager duties, we talked it through.",
-      "start_time": "2026-10-15T12:04:17.032000Z",
-      "end_time": "2026-10-15T12:04:22.032000Z"
+      "start_time": "2026-10-15T12:10:06.452000Z",
+      "end_time": "2026-10-15T12:10:10.786000Z"
     }
   ]
 }

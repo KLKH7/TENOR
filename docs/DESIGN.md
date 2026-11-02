@@ -241,3 +241,17 @@ connection could block for up to 50 minutes. Full write-up: [`HARDENING.md`](HAR
 - The baseline gets top-24 chunks from earlier meetings, plus the previous series meeting's summary.
 
 **Result (XL test sample of 36):** memory finds 91% of open commitments vs 30% for top-k + Sonnet, and 58% vs 5% of "changes since last met". It is less precise on commitments (43% vs 90%), mostly because of owner attribution in in-person meetings and owner promises the world doesn't track.
+
+## Benchmark v2: realistic wording (generator `northwind-2`, 2026-11-02)
+
+Details and metrics are in `docs/FIDELITY_V2.md`.
+
+**Decisions.**
+- **Template-composed filler instead of an LLM rewrite.** Filler is composed from templates filled with meeting-specific vocabulary (`synth/filler.py`), so it costs $0 and the same seed gives byte-identical output. This brings exact ≥6-word duplicates from 78% down to 4.9% and TTR@2k from .11 to .21. The trade-off: the sentence frames still recur (54% of long passages share their first 6 words; real data: 0.6%). An LLM polish would fix that for an estimated ≈$28–55 and is left for the user to decide.
+- **Numbers written as digits at render time** (`core.spoken.written`, 75% of turns), not in the world model. Facts, gold values and questions are unchanged. The gold validator accepts a key in either its spoken or written form.
+- **Topic names in filler are protected spans.** They are realistic retrieval distractors, but ASR noise and passage cuts must not split "Beacon Freight". The enhancer's entity-trap test caught exactly this.
+- **XL v2 goes to a new directory.** v1 results and built memories stay valid on v1, and the CLI refuses to overwrite a different generator version's XL.
+- **Base set factor 0.35.** The committed fixture grows from 20k to 57k words rather than to the full ~150k, which keeps the repo and tests light. XL uses the real length.
+- **Fixture-length-dependent test expectations re-pinned.** These are the batch cache keys and the Graphiti episode counts.
+
+**Known gaps.** Template signatures, a short long tail (p90 26 vs 38), "like" density, and summaries at ~270 words vs ~420. See FIDELITY_V2 §4.

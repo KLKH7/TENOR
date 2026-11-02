@@ -7,7 +7,7 @@
     "email": "priya@northwind.dev"
   },
   "created_at": "2026-09-17T12:03:12Z",
-  "updated_at": "2026-09-17T12:42:00Z",
+  "updated_at": "2026-09-17T12:34:00Z",
   "deleted_at": null,
   "web_url": "https://notes.granola.ai/d/a631ab6b-7015-5972-b1b1-b8352b926d52",
   "calendar_event": {
@@ -46,10 +46,10 @@
     }
   ],
   "space_membership": [],
-  "summary_text": "Personal\nAlex is planning parental leave from Nov 16",
-  "summary_markdown": "### Personal\n- Alex is planning parental leave from Nov 16",
-  "private_notes_text": null,
-  "private_notes_markdown": null,
+  "summary_text": "Team\nRuth to own release testing\nManager track and interview loop and next steps\nManager track is weirdly controversial\nOpen question: what the plan is for manager track\nManager track is fine for now\nInterview loop is low risk\nConcern with interview loop: that we end up rebuilding it\nNext steps: the numbers looked roughly flat\nPreference to look at it with fresh eyes rather than keep it behind a flag\nReading group and dependencies and handoff\nReading group is fine for now\nReading group is surprisingly okay\nSuggestion to start with the boring version before touching reading group\nDependencies is better than last week\nFeedback on handoff from the new folks: they pushed back a bit\nPreference to do a proper write-up rather than get a second opinion\nMentoring thing and timeline and feedback from the last cycle\nMentoring thing is still pretty rough\nMentoring thing is on the critical path\nTimeline is kind of a mystery\nConcern with timeline: that customers notice before we do\nFeedback from the last cycle is way more complicated than it looks\nPromo packet and metrics and workload\nPromo packet is good enough for now\nPromo packet is not urgent\nMetrics is a bit messy\nWorkload is way overdue\nContext switching and risks\nContext switching and retro format seen as one underlying problem\nRisks is a little behind\nNotes on risks added to the doc",
+  "summary_markdown": "### Team\n- Ruth to own release testing\n\n### Manager track and interview loop and next steps\n- Manager track is weirdly controversial\n  - Open question: what the plan is for manager track\n  - Manager track is fine for now\n- Interview loop is low risk\n  - Concern with interview loop: that we end up rebuilding it\n- Next steps: the numbers looked roughly flat\n- Preference to look at it with fresh eyes rather than keep it behind a flag\n\n### Reading group and dependencies and handoff\n- Reading group is fine for now\n  - Reading group is surprisingly okay\n  - Suggestion to start with the boring version before touching reading group\n- Dependencies is better than last week\n- Feedback on handoff from the new folks: they pushed back a bit\n- Preference to do a proper write-up rather than get a second opinion\n\n### Mentoring thing and timeline and feedback from the last cycle\n- Mentoring thing is still pretty rough\n  - Mentoring thing is on the critical path\n- Timeline is kind of a mystery\n  - Concern with timeline: that customers notice before we do\n- Feedback from the last cycle is way more complicated than it looks\n\n### Promo packet and metrics and workload\n- Promo packet is good enough for now\n  - Promo packet is not urgent\n- Metrics is a bit messy\n- Workload is way overdue\n\n### Context switching and risks\n- Context switching and retro format seen as one underlying problem\n- Risks is a little behind\n  - Notes on risks added to the doc",
+  "private_notes_text": "ruth to own release testing",
+  "private_notes_markdown": "ruth to own release testing",
   "transcript": [
     {
       "speaker": {
@@ -58,79 +58,196 @@
       },
       "text": "Okay, what's going on with you?",
       "start_time": "2026-09-17T12:03:58.364000Z",
-      "end_time": "2026-09-17T12:04:00.672000Z"
+      "end_time": "2026-09-17T12:04:00.364000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker A"
       },
-      "text": "That's good to hear. I've you know, been thinking a lot about where I want to grow. Can we park that and come um, back to it at the end? Let's make sure we write down goals for next quarter. Can you share your screen? That's fair. I hadn't thought about it that way. Personal news, my partner's due in November, so I'm planning to take parental leave from November sixteenth.",
-      "start_time": "2026-09-17T12:04:01.105000Z",
-      "end_time": "2026-09-17T12:04:31.939000Z"
+      "text": "Real quick, I don't know if the Slack thread is really the issue, you no what I mean.",
+      "start_time": "2026-09-17T12:04:00.395000Z",
+      "end_time": "2026-09-17T12:04:06.395000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "diarization_label": "Speaker A"
+      },
+      "text": "Okay, honestly like the workload only needs 20 minutes if we keep it behind a flag. Anyway, I just want to make sure the action items doesn't fall through the cracks.",
+      "start_time": "2026-09-17T12:04:06.494000Z",
+      "end_time": "2026-09-17T12:04:16.828000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker B"
       },
-      "text": "Anything I can do to unblock you? I'm not sure that's the right framing, honestly.",
-      "start_time": "2026-09-17T12:04:32.850000Z",
-      "end_time": "2026-09-17T12:04:39.037000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone",
-        "diarization_label": "Speaker A"
-      },
-      "text": "like, I think that's mostly mostly right, but there's a I mean, nuance there.",
-      "start_time": "2026-09-17T12:04:39.835000Z",
-      "end_time": "2026-09-17T12:04:45.220000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone",
-        "diarization_label": "Speaker A"
-      },
-      "text": "I think the question um, is really about scope.",
-      "start_time": "2026-09-17T12:04:46.302000Z",
-      "end_time": "2026-09-17T12:04:49.763000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone",
-        "diarization_label": "Speaker A"
-      },
-      "text": "Let's not go down that rabbit hole right now. That's fair. I hadn't thought about it it that way. Yeah, I agree with that. Okay, so where did we land on that last time? Honestly, it's been a busy couple of weeks. Let me pull up the doc so we're all looking at the same thing. The team dynamic feels good right now. How are you feeling about the workload generally? Right- Right, right. Keep going. Hold on, my laptop laptop is about to die, um, let me um, grab a charger. Let me pull up the doc so we're all looking at the same thing. That's amazing, congratulations! Do- Do we have any data on that or is it gut feel?",
-      "start_time": "2026-09-17T12:04:50.577000Z",
-      "end_time": "2026-09-17T12:05:45.852000Z"
+      "text": "From my side, the thing I'd push on like is the scope. I feel like the feedback took like 40 minutes last time, I don't know. Which, I feel like the manager track is weirdly controversial. Anyway, I'd rather look at it with fresh eyes than keep it behind a flag, if that helps. The last time we touched the feedback it was the blocker, honestly. But what's the plan for the manager track?",
+      "start_time": "2026-09-17T12:04:16.833000Z",
+      "end_time": "2026-09-17T12:04:41.500000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker B"
       },
-      "text": "Sorry, can you say that again? You cut out for a second. Hold on, my laptop is uh, about um, to die, let me grab a charger. Yeah, that makes sense to uh, me. Sorry, I was on mute. I was saying I I agree. Right, right. Keep going. um, I'd like more time for deep work if possible. uh, Sorry, I was on mute. I was saying I agree. I've been like, thinking a lot about where I want to grow.",
-      "start_time": "2026-09-17T12:05:46.224000Z",
-      "end_time": "2026-09-17T12:06:22.583000Z"
+      "text": "write, so honestly the interview loop only needs a couple of hours if we make it someone's job. For this specifically, the interview loop is low risk, but yeah. Just to add, I was looking at the next steps before this call and the numbers looked roughly flat, to be honest. Wait, should we just make it someone's job?",
+      "start_time": "2026-09-17T12:04:41.539000Z",
+      "end_time": "2026-09-17T12:05:01.206000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker A"
       },
-      "text": "Let's make sure we I mean, write um, down goals for next quarter. Yeah, that makes sense to me. The team dynamic feels good right now.",
-      "start_time": "2026-09-17T12:06:23.302000Z",
-      "end_time": "2026-09-17T12:06:35.180000Z"
+      "text": "Sorry, like I just want to make sure the feedback doesn't fall through the cracks. Sorry, it's funny, like the career ladder looked low risk after standup and now it happened two or three times. Yeah, fair. True.",
+      "start_time": "2026-09-17T12:05:01.290000Z",
+      "end_time": "2026-09-17T12:05:14.842000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker B"
       },
-      "text": "I'd like more time for deep work if possible. Yeah, I agree with that. Can you share your screen? Work stuff, Ruth is ready to own release testing, I'd like to make that official.",
-      "start_time": "2026-09-17T12:06:35.772000Z",
-      "end_time": "2026-09-17T12:06:51.060000Z"
+      "text": "From my side, the stretch project took like three or four tries last time, I don't know. Which, it's less about the edge cases and more about the communication plan, at least for now. Anyway, the reading group is fine for now, but the mentoring thing is a bit messy. I keep coming back too the Slack thread. Plus the dependencies is better than last week, but the on-call load is unclear. So I talked to the new folks about the handoff and they pushed back a a bit.",
+      "start_time": "2026-09-17T12:05:15.971000Z",
+      "end_time": "2026-09-17T12:05:45.638000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "diarization_label": "Speaker A"
+      },
+      "text": "Yeah, I think the risk is it creates more support load, for what it's worth. Plus we said we'd cut the scope and then the growth plan happened.",
+      "start_time": "2026-09-17T12:05:45.643000Z",
+      "end_time": "2026-09-17T12:05:54.976000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "diarization_label": "Speaker A"
+      },
+      "text": "There's a world where we map out the edge cases and the edge cases just goes away. So should we just pair on it?",
+      "start_time": "2026-09-17T12:05:55.067000Z",
+      "end_time": "2026-09-17T12:06:03.067000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "diarization_label": "Speaker A"
+      },
+      "text": "Look, the short version is deep work time is not a big deal, in my opinion. Just to add, the last time we touched the side project it was a bit like of a black box and stuff.",
+      "start_time": "2026-09-17T12:06:03.089000Z",
+      "end_time": "2026-09-17T12:06:15.755000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "diarization_label": "Speaker B"
+      },
+      "text": "So is the reading group still bigger than like we scoped, or did that change? On this, it's honestly fine, kind of. But if we check with legal, then the onboarding buddy thing gets a lot easier. Yeah no, it's like, the mentoring thing is still pretty rough and nobody wants to say like it. Yeah no, the last time we touched the backlog it was hard to reason about, anyway. The design team mentioned the handoff last night, so it's on people's radar. Okay yeah, the platform team mentioned the the next steps on Friday, so it's on people's radar.",
+      "start_time": "2026-09-17T12:06:15.788000Z",
+      "end_time": "2026-09-17T12:06:49.455000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "diarization_label": "Speaker A"
+      },
+      "text": "The timeline is kind of a mystery, but the dependencies is the obvious next thing. Plus we you know, keep going back and forth on the feedback, if that helps.",
+      "start_time": "2026-09-17T12:06:49.520000Z",
+      "end_time": "2026-09-17T12:06:59.520000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "diarization_label": "Speaker A"
+      },
+      "text": "For what it's worth, the finance side keep asking about the requirements. Yeah, yeah, I just want to make sure the side project doesn't fall through the cracks. Wait, should we just split it into two pieces? Wait, I think you're on mute. Personal news, my partner's due in November, so I'm planning too take parental leave from November 16. I'd love to just ship the smaller version, but the manager track is fine for now.",
+      "start_time": "2026-09-17T12:07:00.140000Z",
+      "end_time": "2026-09-17T12:07:31.981000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "diarization_label": "Speaker A"
+      },
+      "text": "So where are we on the workload for this? So I think the reading group like is surprisingly okay and the open questions is half done, so maybe start with the boring version. Okay, the annoying thing about the promo packet is it's kind of stuck. Look, we said we'd set up a short sync and then the doc happened.",
+      "start_time": "2026-09-17T12:07:32.007000Z",
+      "end_time": "2026-09-17T12:07:52.334000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "diarization_label": "Speaker B"
+      },
+      "text": "Sorry, the feedback from the last cycle is way more complicated than it looks, but the promo packet is fine for now. I'd love to check with legal, but the shadowing idea is not urgent. Exactly. Okay, so where are we on the team dynamic for this? Also, I'm not convinced the the promo packet is good enough for now, if that makes sense. Sure, yeah. Mm. Yeah, yeah, it's like, the metrics is a bit messy and nobody wants to say it. Real quick, can we pair on it?",
+      "start_time": "2026-09-17T12:07:54.428000Z",
+      "end_time": "2026-09-17T12:08:28.360000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "diarization_label": "Speaker B"
+      },
+      "text": "Funny enough, when I looked at deep work time for this, a couple like of things looked off. I just want to make sure the career ladder doesn't fall through the cracks. Real quick, can we test it with a few users? Also, we said we'd start with the boring version and then the metrics happened. Makes sense.",
+      "start_time": "2026-09-17T12:08:28.469000Z",
+      "end_time": "2026-09-17T12:08:47.988000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "diarization_label": "Speaker A"
+      },
+      "text": "So I think the risk is that we bike-shed it, honestly. Anyway, I spent two sprints on the meeting load and nobody's really touched it in a while. That's basically what we saw with the career ladder on this. But when I looked at the onboarding buddy thing for this, half of it is outdated. Plus a few managers keep asking about the stretch project. Honestly, it's like, the workload is way overdue and nobody wants to say it. Which, I'd rather do a proper write-up than get a second opinion, but yeah.",
+      "start_time": "2026-09-17T12:08:50.230000Z",
+      "end_time": "2026-09-17T12:09:21.230000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "diarization_label": "Speaker A"
+      },
+      "text": "That's amazing, congratulations! I think it's less about the onboarding buddy thing and more about the meeting load. Yeah, yeah. So I wouldn't block on deep work time, which is fine. Yeah, I think the risk is that we're overthinking it, more or less. And we should probably start with the boring version before we touch the reading group. A couple of the engineers keep asking about my focus areas.",
+      "start_time": "2026-09-17T12:09:22.044000Z",
+      "end_time": "2026-09-17T12:09:56.625000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "diarization_label": "Speaker A"
+      },
+      "text": "Yeah. my worry with the interview loop is that we end up rebuilding it. I think it feels like context switching and the retro format are kind of the same problem. Real quick, what like would it take to get more data? But my worry with the onboarding buddy thing is that we're solving the wrong problem. Well, I feel like the edge cases is not a big deal. The risks is a little behind, which is fine. I think the promo packet is not urgent and the workload is kind of fragile honestly, so maybe document the decision. Let me pull up the doc.",
+      "start_time": "2026-09-17T12:09:57.947000Z",
+      "end_time": "2026-09-17T12:10:33.099000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "diarization_label": "Speaker A"
+      },
+      "text": "Okay yeah, you know, on this, nothing jumped like out, if that makes sense. The way I see it, the notes from last time took like 15 minutes last time, I think. Sorry, how did on-call load go? Plus the process came up before this call too, if that helps. Yeah, so I put some notes on the risks in the doc. Like, I like think the risk is that it breaks something downstream, like honestly. Honestly, the mentoring thing is on the you know, critical path, anyway.",
+      "start_time": "2026-09-17T12:10:33.419000Z",
+      "end_time": "2026-09-17T12:11:04.363000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "diarization_label": "Speaker A"
+      },
+      "text": "Right, so honestly the process only needs eight screens if we agree on what done means. And we keep going back and forth on my like focus areas. Quick question, are we worried about my focus areas?",
+      "start_time": "2026-09-17T12:11:04.847000Z",
+      "end_time": "2026-09-17T12:11:17.180000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "diarization_label": "Speaker A"
+      },
+      "text": "For this, I think the mentoring thing is the part that's kind of fragile honestly. Which, my worry with with the timeline is that customers notice before we do. Yeah, totally. Got it. Sorry, do we know who's looking at the mentoring thing? Sorry, the annoying thing about the spreadsheet is it's unclear. I spent like fifteen calls on context switching and it kind of of works. And then I keep coming back to the backlog, in my opinion. Sure, yeah. Work stuff, Ruth is ready to own release testing, I'd like to make that official.",
+      "start_time": "2026-09-17T12:11:18.390000Z",
+      "end_time": "2026-09-17T12:11:53.132000Z"
     }
   ]
 }

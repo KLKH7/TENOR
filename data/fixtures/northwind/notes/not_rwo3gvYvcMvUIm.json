@@ -7,7 +7,7 @@
     "email": "priya@northwind.dev"
   },
   "created_at": "2026-10-07T16:02:12Z",
-  "updated_at": "2026-10-07T16:38:00Z",
+  "updated_at": "2026-10-07T16:44:00Z",
   "deleted_at": null,
   "web_url": "https://notes.granola.ai/d/c88bf498-61e2-220e-78af-855e587f6fd7",
   "calendar_event": {
@@ -38,7 +38,7 @@
       "email": "priya@northwind.dev"
     },
     {
-      "name": null,
+      "name": "Marcus Chen",
       "email": "marcus@northwind.dev"
     },
     {
@@ -60,518 +60,853 @@
     }
   ],
   "space_membership": [],
-  "summary_text": "Company metrics\nARR: $348k\nRunway: 22 months",
-  "summary_markdown": "### Company metrics\n- ARR: $348k\n- Runway: 22 months",
-  "private_notes_text": "runway 22 months\narr $348k",
-  "private_notes_markdown": "runway 22 months\narr $348k",
+  "summary_text": "Company metrics\nRunway: 22 months\nEdge cases and org chart and risks\nEdge cases is pretty close\nNotes on org chart added to the doc\nRisks is the obvious next thing\nPreference to loop in the other team rather than simplify it\nPricing story and process and messaging\nFeedback on pricing story from the finance side: they were surprised\nNo clear owner for process\nMessaging: there are a few loose ends\nPreference to agree on what done means rather than set up a short sync\nQuarterly goals and next steps and brand refresh\nQuarterly goals is not where i'd want it\nNo clear owner for next steps\nFeedback on brand refresh from the finance side: they asked a bunch of questions\nNotes from last time and slack thread and feedback\nNotes from last time is half done\nReal issue may be process rather than notes from last time\nReal issue may be backlog rather than slack thread\nFeedback is mostly cosmetic\nCulture survey and roadmap tradeoffs\nReal issue may be requirements rather than culture survey\nRoadmap tradeoffs is the easy part",
+  "summary_markdown": "### Company metrics\n- Runway: 22 months\n\n### Edge cases and org chart and risks\n- Edge cases is pretty close\n- Notes on org chart added to the doc\n- Risks is the obvious next thing\n- Preference to loop in the other team rather than simplify it\n\n### Pricing story and process and messaging\n- Feedback on pricing story from the finance side: they were surprised\n- No clear owner for process\n- Messaging: there are a few loose ends\n- Preference to agree on what done means rather than set up a short sync\n\n### Quarterly goals and next steps and brand refresh\n- Quarterly goals is not where i'd want it\n- No clear owner for next steps\n- Feedback on brand refresh from the finance side: they asked a bunch of questions\n\n### Notes from last time and slack thread and feedback\n- Notes from last time is half done\n  - Real issue may be process rather than notes from last time\n- Real issue may be backlog rather than slack thread\n- Feedback is mostly cosmetic\n\n### Culture survey and roadmap tradeoffs\n- Real issue may be requirements rather than culture survey\n- Roadmap tradeoffs is the easy part",
+  "private_notes_text": null,
+  "private_notes_markdown": null,
   "transcript": [
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Can everyone everyone hear me okay?",
+      "start_time": "2026-10-07T16:02:51.595000Z",
+      "end_time": "2026-10-07T16:02:53.595000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Yeah, totally.",
+      "start_time": "2026-10-07T16:02:53.683000Z",
+      "end_time": "2026-10-07T16:02:54.349000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "To be fair, the thing I'd push on is the enterprise motion, I think.",
+      "start_time": "2026-10-07T16:03:01.830000Z",
+      "end_time": "2026-10-07T16:03:06.496000Z"
+    },
     {
       "speaker": {
         "source": "speaker",
         "name": "Marcus Chen"
       },
-      "text": "Can everyone hear hear me okay?",
-      "start_time": "2026-10-07T16:02:51.595000Z",
-      "end_time": "2026-10-07T16:02:53.902000Z"
+      "text": "Um...",
+      "start_time": "2026-10-07T16:03:07.421000Z",
+      "end_time": "2026-10-07T16:03:08.021000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Out of curiosity, can we document the decision? So can we draw it on a whiteboard?",
+      "start_time": "2026-10-07T16:03:08.043000Z",
+      "end_time": "2026-10-07T16:03:13.376000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "So the org chart took like 20 minutes last time, kind of.",
+      "start_time": "2026-10-07T16:03:14.707000Z",
+      "end_time": "2026-10-07T16:03:18.707000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Yeah. for this specifically, the um, edge cases is pretty close, which is fine.",
+      "start_time": "2026-10-07T16:03:19.401000Z",
+      "end_time": "2026-10-07T16:03:24.067000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
       "text": "Right.",
-      "start_time": "2026-10-07T16:02:54.695000Z",
-      "end_time": "2026-10-07T16:02:55.495000Z"
+      "start_time": "2026-10-07T16:03:24.105000Z",
+      "end_time": "2026-10-07T16:03:24.705000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "I'm not uh,",
-      "start_time": "2026-10-07T16:02:55.976000Z",
-      "end_time": "2026-10-07T16:02:57.130000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "sure that's the right framing, honestly.",
-      "start_time": "2026-10-07T16:02:58.134000Z",
-      "end_time": "2026-10-07T16:03:00.441000Z"
+      "text": "I guess the last time we touched the metrics it was a rabbit hole. Oh, I put some notes on the org chart in the you know, doc. And for this, I think the process is the part that's bigger than we scoped. But for this, I think the metrics is the part that's under control. Basically it's like, the risks is the obvious next thing and nobody wants to say it. But I just want to make sure the risks doesn't fall through the cracks.",
+      "start_time": "2026-10-07T16:03:24.753000Z",
+      "end_time": "2026-10-07T16:03:53.420000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "We- We need to be careful not too overcommit here.",
-      "start_time": "2026-10-07T16:03:01.159000Z",
-      "end_time": "2026-10-07T16:03:05.006000Z"
+      "text": "Yeah, fair.",
+      "start_time": "2026-10-07T16:03:42.199000Z",
+      "end_time": "2026-10-07T16:03:42.799000Z"
     },
     {
       "speaker": {
-        "source": "microphone"
+        "source": "speaker",
+        "name": "Simone Laurent"
       },
-      "text": "you know, I don't love you know, it, but I can I mean, live with it.",
-      "start_time": "2026-10-07T16:03:05.429000Z",
-      "end_time": "2026-10-07T16:03:11.583000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Okay.",
-      "start_time": "2026-10-07T16:03:12.285000Z",
-      "end_time": "2026-10-07T16:03:13.085000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "That's fair. I hadn't thought about it it that way.",
-      "start_time": "2026-10-07T16:03:13.491000Z",
-      "end_time": "2026-10-07T16:03:17.337000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Yeah.",
-      "start_time": "2026-10-07T16:03:17.775000Z",
-      "end_time": "2026-10-07T16:03:18.575000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Let me pull up the doc so we're all looking at the same thing.",
-      "start_time": "2026-10-07T16:03:19.205000Z",
-      "end_time": "2026-10-07T16:03:24.590000Z"
+      "text": "Okay, yeah.",
+      "start_time": "2026-10-07T16:03:53.875000Z",
+      "end_time": "2026-10-07T16:03:54.541000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
       "text": "Is it just me or is the office freezing today?",
-      "start_time": "2026-10-07T16:03:25.689000Z",
-      "end_time": "2026-10-07T16:03:29.535000Z"
+      "start_time": "2026-10-07T16:03:54.560000Z",
+      "end_time": "2026-10-07T16:03:57.894000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Simone Laurent"
+      },
+      "text": "Okay.",
+      "start_time": "2026-10-07T16:03:57.250000Z",
+      "end_time": "2026-10-07T16:03:57.850000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "I'm worried about how this lands with existing customers.",
-      "start_time": "2026-10-07T16:03:30.200000Z",
-      "end_time": "2026-10-07T16:03:33.662000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Simone Laurent"
-      },
-      "text": "Um.",
-      "start_time": "2026-10-07T16:03:34.165000Z",
-      "end_time": "2026-10-07T16:03:34.965000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Simone Laurent"
-      },
-      "text": "Sorry- Sorry, can you say that again? You cut out for a second.",
-      "start_time": "2026-10-07T16:03:35.223000Z",
-      "end_time": "2026-10-07T16:03:40.223000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Marcus Chen"
-      },
-      "text": "Can we park that and come back to it at the end?",
-      "start_time": "2026-10-07T16:03:40.644000Z",
-      "end_time": "2026-10-07T16:03:45.259000Z"
+      "text": "And.",
+      "start_time": "2026-10-07T16:03:57.921000Z",
+      "end_time": "2026-10-07T16:03:58.521000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "Yeah, I agree with that.",
-      "start_time": "2026-10-07T16:03:45.911000Z",
-      "end_time": "2026-10-07T16:03:47.834000Z"
+      "text": "The way I see it, that's basically what we saw with the messaging on this. And I feel like the spreadsheet is overdue for a cleanup, so yeah. So my worry with the enterprise motion is that we're overthinking it. I guess it's less about the sales pipeline and more about the partner channel, right. Okay yeah, I talked to the finance side about the pricing story and they were surprised. And then nobody really owns the process right now, if that helps. Honestly, there's a world where we just ship the the smaller version and the enterprise motion just goes away. I was looking at the messaging last night and there are a few loose like ends, for what it's worth.",
+      "start_time": "2026-10-07T16:03:59.315000Z",
+      "end_time": "2026-10-07T16:04:39.982000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "For what it's worth, I'm fine about the team structure, at least for now. Which, part of me wants to clean up the backlog, like part of me thinks it's the scary part. The communication plan is half done, or whatever.",
+      "start_time": "2026-10-07T16:04:40.031000Z",
+      "end_time": "2026-10-07T16:04:53.697000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "So.",
-      "start_time": "2026-10-07T16:03:48.143000Z",
-      "end_time": "2026-10-07T16:03:48.943000Z"
+      "text": "Actually, I'd rather loop in the other team than simplify it, to be honest.",
+      "start_time": "2026-10-07T16:04:54.055000Z",
+      "end_time": "2026-10-07T16:04:58.721000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "So the offsite agenda came up earlier too and stuff. Plus a couple of folks on support mentioned the timeline before this call, so it's on people's radar.",
+      "start_time": "2026-10-07T16:04:59.333000Z",
+      "end_time": "2026-10-07T16:05:08.666000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I feel like the budget is good enough for now, which is fine.",
+      "start_time": "2026-10-07T16:05:10.652000Z",
+      "end_time": "2026-10-07T16:05:14.985000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "ARR is three hundred forty eight k, and we I mean, have twenty two months of runway.",
-      "start_time": "2026-10-07T16:03:49.806000Z",
-      "end_time": "2026-10-07T16:03:56.345000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Simone Laurent"
-      },
-      "text": "Yeah, that makes sense too me.",
-      "start_time": "2026-10-07T16:03:57.011000Z",
-      "end_time": "2026-10-07T16:03:59.319000Z"
+      "text": "Wait, really?",
+      "start_time": "2026-10-07T16:05:13.580000Z",
+      "end_time": "2026-10-07T16:05:14.180000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "So.",
-      "start_time": "2026-10-07T16:04:00.258000Z",
-      "end_time": "2026-10-07T16:04:01.058000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "What do we need believe",
-      "start_time": "2026-10-07T16:04:01.615000Z",
-      "end_time": "2026-10-07T16:04:03.538000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "for this to work?",
-      "start_time": "2026-10-07T16:04:04.530000Z",
-      "end_time": "2026-10-07T16:04:06.068000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Marcus Chen"
-      },
-      "text": "What's the downside if we're wrong about this?",
-      "start_time": "2026-10-07T16:04:07.188000Z",
-      "end_time": "2026-10-07T16:04:10.265000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Simone Laurent"
-      },
-      "text": "Okay, so where did we land on that last time?",
-      "start_time": "2026-10-07T16:04:10.756000Z",
-      "end_time": "2026-10-07T16:04:14.602000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Marcus Chen"
-      },
-      "text": "Do",
-      "start_time": "2026-10-07T16:04:15.059000Z",
-      "end_time": "2026-10-07T16:04:15.859000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Marcus Chen"
-      },
-      "text": "we have any data on that or is it gut feel?",
-      "start_time": "2026-10-07T16:04:16.799000Z",
-      "end_time": "2026-10-07T16:04:21.030000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "We've- We've been going back and forth on this for a while.",
-      "start_time": "2026-10-07T16:04:21.256000Z",
-      "end_time": "2026-10-07T16:04:25.871000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Let's not uh, go down that rabbit hole right now.",
-      "start_time": "2026-10-07T16:04:26.171000Z",
-      "end_time": "2026-10-07T16:04:30.017000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Simone Laurent"
-      },
-      "text": "Good momentum. What's the risk on the launch?",
-      "start_time": "2026-10-07T16:04:30.513000Z",
-      "end_time": "2026-10-07T16:04:33.590000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Sorry, I was on mute. I was was saying I agree.",
-      "start_time": "2026-10-07T16:04:34.101000Z",
-      "end_time": "2026-10-07T16:04:38.332000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Let's not go down that rabbit hole right now.",
-      "start_time": "2026-10-07T16:04:39.008000Z",
-      "end_time": "2026-10-07T16:04:42.469000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Do we have any data on that or is it gut feel?",
-      "start_time": "2026-10-07T16:04:43.082000Z",
-      "end_time": "2026-10-07T16:04:47.698000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "The board will ask about this, so let's have a clear story.",
-      "start_time": "2026-10-07T16:04:47.959000Z",
-      "end_time": "2026-10-07T16:04:52.575000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "We've been going back and forth on this for a while.",
-      "start_time": "2026-10-07T16:04:52.796000Z",
-      "end_time": "2026-10-07T16:04:57.027000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Simone Laurent"
-      },
-      "text": "Yeah.",
-      "start_time": "2026-10-07T16:04:57.874000Z",
-      "end_time": "2026-10-07T16:04:58.674000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Simone Laurent"
-      },
-      "text": "I think that's mostly right, but there's a nuance there.",
-      "start_time": "2026-10-07T16:04:59.140000Z",
-      "end_time": "2026-10-07T16:05:02.987000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "I",
-      "start_time": "2026-10-07T16:05:03.308000Z",
-      "end_time": "2026-10-07T16:05:04.108000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "think the question is really about scope.",
-      "start_time": "2026-10-07T16:05:04.423000Z",
-      "end_time": "2026-10-07T16:05:07.115000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Right, um, right.",
-      "start_time": "2026-10-07T16:05:07.998000Z",
-      "end_time": "2026-10-07T16:05:09.152000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Keep going.",
-      "start_time": "2026-10-07T16:05:09.982000Z",
-      "end_time": "2026-10-07T16:05:10.782000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Simone Laurent"
-      },
-      "text": "Hold on, my laptop um, is about too die, let me grab a charger.",
-      "start_time": "2026-10-07T16:05:11.584000Z",
-      "end_time": "2026-10-07T16:05:16.969000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Let me pull up the doc so we're all looking at the same thing.",
-      "start_time": "2026-10-07T16:05:17.418000Z",
-      "end_time": "2026-10-07T16:05:22.803000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Sorry, I was on mute. I was saying I agree.",
-      "start_time": "2026-10-07T16:05:23.064000Z",
-      "end_time": "2026-10-07T16:05:26.911000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Marcus Chen"
-      },
-      "text": "I don't love it, but I can live with it.",
-      "start_time": "2026-10-07T16:05:27.803000Z",
-      "end_time": "2026-10-07T16:05:31.649000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Marcus Chen"
-      },
-      "text": "Payments migration. It's scheduled this week.",
-      "start_time": "2026-10-07T16:05:32.623000Z",
-      "end_time": "2026-10-07T16:05:34.930000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Simone Laurent"
-      },
-      "text": "So.",
-      "start_time": "2026-10-07T16:05:36.116000Z",
-      "end_time": "2026-10-07T16:05:36.916000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Simone Laurent"
-      },
-      "text": "Okay, so where uh, did we land on that last time?",
-      "start_time": "2026-10-07T16:05:37.795000Z",
-      "end_time": "2026-10-07T16:05:42.026000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "What's downside if we're wrong about this?",
-      "start_time": "2026-10-07T16:05:42.320000Z",
-      "end_time": "2026-10-07T16:05:45.012000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Marcus Chen"
-      },
-      "text": "Yeah, I agree with that.",
-      "start_time": "2026-10-07T16:05:45.432000Z",
-      "end_time": "2026-10-07T16:05:47.355000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Marcus Chen"
-      },
-      "text": "Can you share your screen?",
-      "start_time": "2026-10-07T16:05:47.790000Z",
-      "end_time": "2026-10-07T16:05:49.713000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Marcus Chen"
-      },
-      "text": "I'd rather make a call today than drag it out.",
-      "start_time": "2026-10-07T16:05:50.156000Z",
-      "end_time": "2026-10-07T16:05:54.002000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "That's fair.",
-      "start_time": "2026-10-07T16:05:54.685000Z",
-      "end_time": "2026-10-07T16:05:55.485000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "I hadn't you know,",
-      "start_time": "2026-10-07T16:05:56.252000Z",
-      "end_time": "2026-10-07T16:05:57.790000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "thought about it that way.",
-      "start_time": "2026-10-07T16:05:58.817000Z",
-      "end_time": "2026-10-07T16:06:00.740000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Let's make sure sales and marketing um, hear this at the same time.",
-      "start_time": "2026-10-07T16:06:01.826000Z",
-      "end_time": "2026-10-07T16:06:06.826000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Right.",
-      "start_time": "2026-10-07T16:06:07.086000Z",
-      "end_time": "2026-10-07T16:06:07.886000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Yeah, that makes sense to me.",
-      "start_time": "2026-10-07T16:06:08.383000Z",
-      "end_time": "2026-10-07T16:06:10.691000Z"
+      "text": "So should we just start with boring version?",
+      "start_time": "2026-10-07T16:05:15.060000Z",
+      "end_time": "2026-10-07T16:05:17.726000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
       "text": "Okay.",
-      "start_time": "2026-10-07T16:06:11.004000Z",
-      "end_time": "2026-10-07T16:06:11.804000Z"
+      "start_time": "2026-10-07T16:05:17.746000Z",
+      "end_time": "2026-10-07T16:05:18.346000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Can we park that and come back to it at the end?",
-      "start_time": "2026-10-07T16:06:12.644000Z",
-      "end_time": "2026-10-07T16:06:17.260000Z"
+      "text": "Look, for this specifically, the original proposal is kind of stuck.",
+      "start_time": "2026-10-07T16:05:18.392000Z",
+      "end_time": "2026-10-07T16:05:22.059000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "Hold on, my laptop is about about to die, let me grab a charger.",
-      "start_time": "2026-10-07T16:06:18.078000Z",
-      "end_time": "2026-10-07T16:06:23.463000Z"
+      "text": "Oh, really?",
+      "start_time": "2026-10-07T16:05:21.420000Z",
+      "end_time": "2026-10-07T16:05:22.020000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Can you share your screen?",
-      "start_time": "2026-10-07T16:06:23.962000Z",
-      "end_time": "2026-10-07T16:06:25.885000Z"
+      "text": "Right, so this is kind of the test case for the team structure, at least for now.",
+      "start_time": "2026-10-07T16:05:22.136000Z",
+      "end_time": "2026-10-07T16:05:27.803000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Okay yeah",
+      "start_time": "2026-10-07T16:05:28.563000Z",
+      "end_time": "2026-10-07T16:05:29.229000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "that's basically what we saw with the support load on this.",
+      "start_time": "2026-10-07T16:05:29.301000Z",
+      "end_time": "2026-10-07T16:05:32.968000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Sounds good.",
+      "start_time": "2026-10-07T16:05:32.251000Z",
+      "end_time": "2026-10-07T16:05:32.851000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "We lost about 30 tickets on the support load last week, or whatever.",
+      "start_time": "2026-10-07T16:05:32.977000Z",
+      "end_time": "2026-10-07T16:05:37.310000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Simone Laurent"
+      },
+      "text": "I mean.",
+      "start_time": "2026-10-07T16:05:37.340000Z",
+      "end_time": "2026-10-07T16:05:38.007000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Simone Laurent"
+      },
+      "text": "Yeah, fair.",
+      "start_time": "2026-10-07T16:05:38.586000Z",
+      "end_time": "2026-10-07T16:05:39.253000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "ARR is 348K, and we have 22 months of runway.",
+      "start_time": "2026-10-07T16:05:39.324000Z",
+      "end_time": "2026-10-07T16:05:42.657000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Yeah, I like wouldn't block on the spreadsheet.",
+      "start_time": "2026-10-07T16:05:52.079000Z",
+      "end_time": "2026-10-07T16:05:54.746000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Oh no.",
+      "start_time": "2026-10-07T16:05:54.773000Z",
+      "end_time": "2026-10-07T16:05:55.440000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "But I just want to make sure the competitive landscape doesn't fall through the cracks. Oh, for this specifically, the quarterly goals is not where I'd want it, at least for now. Yeah, I think nobody really owns the next steps right now. I think we've been saying we'd keep it behind a flag for a while, I don't know.",
+      "start_time": "2026-10-07T16:05:55.516000Z",
+      "end_time": "2026-10-07T16:06:15.516000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Right.",
+      "start_time": "2026-10-07T16:06:15.729000Z",
+      "end_time": "2026-10-07T16:06:16.329000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Like, we've been saying we'd pair like on it for a while, kind of.",
+      "start_time": "2026-10-07T16:06:16.422000Z",
+      "end_time": "2026-10-07T16:06:21.088000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "From my side, I talked to the finance side about the brand refresh and they asked a bunch of questions.",
+      "start_time": "2026-10-07T16:06:21.108000Z",
+      "end_time": "2026-10-07T16:06:27.774000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I feel like it's like, the churn uh, analysis is lower priority than we think and nobody wants to say it. My worry with the partner channel is that it breaks something downstream. Yeah, I'm not convinced the follow ups is basically done, more or less. And for this, I think the metrics is the part that's better than last week. like Anyway, part of me like wants to split it into two pieces, part of me thinks it's bigger than we scoped. Out of curiosity, how did the support load go? Should we just park it for now?",
+      "start_time": "2026-10-07T16:06:27.818000Z",
+      "end_time": "2026-10-07T16:07:00.818000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Okay yeah, I'd love to get more data, but the notes from last time is half done.",
+      "start_time": "2026-10-07T16:07:00.850000Z",
+      "end_time": "2026-10-07T16:07:06.516000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "To be fair, the doc took like a couple of hours last time and stuff.",
+      "start_time": "2026-10-07T16:07:07.196000Z",
+      "end_time": "2026-10-07T16:07:12.196000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Yeah, yeah, a couple of like folks on support mentioned the priority list a while back, so it's on people's radar.",
+      "start_time": "2026-10-07T16:07:12.265000Z",
+      "end_time": "2026-10-07T16:07:19.265000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I'd rather agree on",
+      "start_time": "2026-10-07T16:07:20.227000Z",
+      "end_time": "2026-10-07T16:07:21.561000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "what done means than set up a short sync and stuff.",
+      "start_time": "2026-10-07T16:07:21.589000Z",
+      "end_time": "2026-10-07T16:07:25.256000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Plus that's basically what we saw with the ownership like question on this.",
+      "start_time": "2026-10-07T16:07:25.273000Z",
+      "end_time": "2026-10-07T16:07:29.607000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Okay.",
+      "start_time": "2026-10-07T16:07:33.491000Z",
+      "end_time": "2026-10-07T16:07:34.091000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Okay yeah, it's less about the Slack thread and more about the backlog...",
+      "start_time": "2026-10-07T16:07:35.308000Z",
+      "end_time": "2026-10-07T16:07:39.641000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "The way I see it",
+      "start_time": "2026-10-07T16:07:40.196000Z",
+      "end_time": "2026-10-07T16:07:41.863000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I don't know if the edge cases is really the issue",
+      "start_time": "2026-10-07T16:07:44.985000Z",
+      "end_time": "2026-10-07T16:07:48.652000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "or whatever.",
+      "start_time": "2026-10-07T16:07:48.714000Z",
+      "end_time": "2026-10-07T16:07:49.381000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Okay yeah, the last time we touched the positioning it was the blocker, if that helps...",
+      "start_time": "2026-10-07T16:07:49.427000Z",
+      "end_time": "2026-10-07T16:07:54.760000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Honestly, I'm kind of on the fence about the doc, if that makes sense.",
+      "start_time": "2026-10-07T16:07:54.770000Z",
+      "end_time": "2026-10-07T16:07:59.437000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Simone Laurent"
+      },
+      "text": "Good momentum.",
+      "start_time": "2026-10-07T16:07:59.502000Z",
+      "end_time": "2026-10-07T16:08:00.169000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Simone Laurent"
+      },
+      "text": "What's the risk on like the launch?",
+      "start_time": "2026-10-07T16:08:00.207000Z",
+      "end_time": "2026-10-07T16:08:02.540000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "And.",
+      "start_time": "2026-10-07T16:08:02.598000Z",
+      "end_time": "2026-10-07T16:08:03.198000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Right",
+      "start_time": "2026-10-07T16:08:04.214000Z",
+      "end_time": "2026-10-07T16:08:04.814000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "and I'd love to get a second opinion, but the feedback is mostly cosmetic.",
+      "start_time": "2026-10-07T16:08:04.819000Z",
+      "end_time": "2026-10-07T16:08:09.486000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "And for this specifically, the doc is kind of fragile honestly, which is fine.",
+      "start_time": "2026-10-07T16:08:09.487000Z",
+      "end_time": "2026-10-07T16:08:14.153000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Okay, if we check with legal",
+      "start_time": "2026-10-07T16:08:14.209000Z",
+      "end_time": "2026-10-07T16:08:16.209000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "then the doc gets a lot easier.",
+      "start_time": "2026-10-07T16:08:16.425000Z",
+      "end_time": "2026-10-07T16:08:18.758000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Right, and it's like, the budget is fine in theory and nobody wants like to say it.",
+      "start_time": "2026-10-07T16:08:19.005000Z",
+      "end_time": "2026-10-07T16:08:24.672000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Yeah, fair.",
+      "start_time": "2026-10-07T16:08:22.738000Z",
+      "end_time": "2026-10-07T16:08:23.338000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "And the handoff is the blocker, for what it's worth.",
+      "start_time": "2026-10-07T16:08:25.688000Z",
+      "end_time": "2026-10-07T16:08:29.022000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Out of curiosity",
+      "start_time": "2026-10-07T16:08:29.049000Z",
+      "end_time": "2026-10-07T16:08:30.049000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "what would it take to simplify it?",
+      "start_time": "2026-10-07T16:08:30.122000Z",
+      "end_time": "2026-10-07T16:08:32.456000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Right",
+      "start_time": "2026-10-07T16:08:32.510000Z",
+      "end_time": "2026-10-07T16:08:33.110000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "and I wouldn't block on the follow ups, but yeah",
+      "start_time": "2026-10-07T16:08:33.146000Z",
+      "end_time": "2026-10-07T16:08:36.479000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I think this is kind of the test case for the original proposal",
+      "start_time": "2026-10-07T16:08:36.964000Z",
+      "end_time": "2026-10-07T16:08:41.298000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "for what it's worth.",
+      "start_time": "2026-10-07T16:08:45.763000Z",
+      "end_time": "2026-10-07T16:08:47.096000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I mean.",
+      "start_time": "2026-10-07T16:08:47.195000Z",
+      "end_time": "2026-10-07T16:08:47.862000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Funny enough, it's less about the dependencies and like more about the operating cadence, more or less. Anyway, we lost 10 minutes on the follow ups over the weekend.",
+      "start_time": "2026-10-07T16:08:47.867000Z",
+      "end_time": "2026-10-07T16:08:57.533000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Okay yeah, if the timeline slips again, this is going to feel it. But there's a world where we do a proper write-up and the original proposal just goes away.",
+      "start_time": "2026-10-07T16:08:57.603000Z",
+      "end_time": "2026-10-07T16:09:07.603000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "I'm cautiously optimistic about the messaging...",
+      "start_time": "2026-10-07T16:09:07.690000Z",
+      "end_time": "2026-10-07T16:09:09.690000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Um.",
+      "start_time": "2026-10-07T16:09:10.339000Z",
+      "end_time": "2026-10-07T16:09:10.939000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Wait, I think you're on mute.",
+      "start_time": "2026-10-07T16:09:18.382000Z",
+      "end_time": "2026-10-07T16:09:20.382000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Simone Laurent"
+      },
+      "text": "Okay yeah, I spent like 15 calls on the communication plan and it kind of works. And then where are we on the feedback for this?",
+      "start_time": "2026-10-07T16:09:27.995000Z",
+      "end_time": "2026-10-07T16:09:36.662000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Out of curiosity, can we make it someone's job?",
+      "start_time": "2026-10-07T16:09:36.821000Z",
+      "end_time": "2026-10-07T16:09:39.821000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Oh, nice.",
+      "start_time": "2026-10-07T16:09:39.358000Z",
+      "end_time": "2026-10-07T16:09:39.958000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Payments migration.",
+      "start_time": "2026-10-07T16:09:41.154000Z",
+      "end_time": "2026-10-07T16:09:41.820000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "It's scheduled this week.",
+      "start_time": "2026-10-07T16:09:41.907000Z",
+      "end_time": "2026-10-07T16:09:43.240000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Yeah.",
+      "start_time": "2026-10-07T16:09:43.245000Z",
+      "end_time": "2026-10-07T16:09:43.845000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "it's less about the culture survey and more about the requirements,",
+      "start_time": "2026-10-07T16:09:43.879000Z",
+      "end_time": "2026-10-07T16:09:47.546000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "at least for now.",
+      "start_time": "2026-10-07T16:09:47.644000Z",
+      "end_time": "2026-10-07T16:09:48.977000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Simone Laurent"
+      },
+      "text": "Okay, yeah.",
+      "start_time": "2026-10-07T16:09:58.062000Z",
+      "end_time": "2026-10-07T16:09:58.728000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Okay.",
+      "start_time": "2026-10-07T16:09:58.794000Z",
+      "end_time": "2026-10-07T16:09:59.394000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "So the last time we touched the feedback it was a bit of a black box, in my opinion. Funny enough, the last time we touched the dependencies it was a bit messy, in my opinion",
+      "start_time": "2026-10-07T16:09:59.419000Z",
+      "end_time": "2026-10-07T16:10:11.419000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Simone Laurent"
+      },
+      "text": "For what it's worth, there's a world where we document the decision and the planning doc just goes away.",
+      "start_time": "2026-10-07T16:10:11.558000Z",
+      "end_time": "2026-10-07T16:10:17.892000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Okay yeah, if the spreadsheet slips again, this is going to feel it.",
+      "start_time": "2026-10-07T16:10:17.966000Z",
+      "end_time": "2026-10-07T16:10:22.300000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Sorry, this is kind of the the test case for the risks, more or less. But the last time we touched the next steps it was bigger than we scoped, if that makes sense.",
+      "start_time": "2026-10-07T16:10:28.776000Z",
+      "end_time": "2026-10-07T16:10:40.109000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "From my side",
+      "start_time": "2026-10-07T16:10:40.472000Z",
+      "end_time": "2026-10-07T16:10:41.472000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "if the sales pipeline slips again",
+      "start_time": "2026-10-07T16:10:41.492000Z",
+      "end_time": "2026-10-07T16:10:43.492000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "like this is going to feel it",
+      "start_time": "2026-10-07T16:10:43.503000Z",
+      "end_time": "2026-10-07T16:10:45.836000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Love that.",
+      "start_time": "2026-10-07T16:10:45.141000Z",
+      "end_time": "2026-10-07T16:10:45.741000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Simone Laurent"
+      },
+      "text": "Yeah, I think the short version is the spreadsheet is hard to reason about...",
+      "start_time": "2026-10-07T16:10:45.931000Z",
+      "end_time": "2026-10-07T16:10:50.597000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Simone Laurent"
+      },
+      "text": "And what would it take too keep it behind a flag?",
+      "start_time": "2026-10-07T16:10:50.688000Z",
+      "end_time": "2026-10-07T16:10:54.355000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "So the roadmap tradeoffs is the easy part, I think.",
+      "start_time": "2026-10-07T16:10:55.305000Z",
+      "end_time": "2026-10-07T16:10:58.638000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "I feel like the scope took like 20 minutes last time, so yeah.",
+      "start_time": "2026-10-07T16:11:03.653000Z",
+      "end_time": "2026-10-07T16:11:07.986000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "I guess on this, I had more questions than answers, if that makes sense.",
+      "start_time": "2026-10-07T16:11:08.068000Z",
+      "end_time": "2026-10-07T16:11:12.735000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Wait, do we know who's looking at the like positioning?",
+      "start_time": "2026-10-07T16:11:12.777000Z",
+      "end_time": "2026-10-07T16:11:16.111000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "It's less about the the notes from last time and more about the process, you know what I mean. Wait, what would I mean, it take too revisit it next cycle?",
+      "start_time": "2026-10-07T16:11:16.881000Z",
+      "end_time": "2026-10-07T16:11:27.214000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Funny enough, on this, nothing jumped out, more or less.",
+      "start_time": "2026-10-07T16:11:27.215000Z",
+      "end_time": "2026-10-07T16:11:30.548000Z"
     },
     {
       "speaker": {
@@ -579,8 +914,8 @@
         "name": "Marcus Chen"
       },
       "text": "Great, that's it from me.",
-      "start_time": "2026-10-07T16:06:27.062000Z",
-      "end_time": "2026-10-07T16:06:28.985000Z"
+      "start_time": "2026-10-07T16:11:30.611000Z",
+      "end_time": "2026-10-07T16:11:32.278000Z"
     },
     {
       "speaker": {
@@ -588,8 +923,8 @@
         "name": "Marcus Chen"
       },
       "text": "Talk soon.",
-      "start_time": "2026-10-07T16:06:29.954000Z",
-      "end_time": "2026-10-07T16:06:30.754000Z"
+      "start_time": "2026-10-07T16:11:32.329000Z",
+      "end_time": "2026-10-07T16:11:32.995000Z"
     }
   ]
 }

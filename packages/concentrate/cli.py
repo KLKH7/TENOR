@@ -696,3 +696,22 @@ def brief_eval(
                 f"(shown {r['shown']}, gold {r['gold']})"
             )
     typer.echo(f"spent ${report['meta']['spent_usd']:.2f} · report {dest}")
+
+
+# -- fidelity (workstream G) -------------------------------------------------------------------
+
+
+@app.command()
+def fidelity(
+    target: Annotated[
+        str, typer.Argument(help="Fixture directory, or a NoteStore .db (e.g. data/real.db).")
+    ],
+) -> None:
+    """Aggregate style statistics of a corpus (docs/FIDELITY_V2.md). Prints no transcript text."""
+    import json
+
+    from concentrate.synth.fidelity import fixture_corpus, report, store_corpus
+
+    path = Path(target)
+    corpus = store_corpus(path) if path.suffix == ".db" else fixture_corpus(path)
+    typer.echo(json.dumps(report(corpus), indent=1))

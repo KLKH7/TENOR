@@ -152,3 +152,80 @@ def spoken_numbers(text: str) -> list[int]:
     if active:
         out.append(total + current)
     return out
+
+
+# -- written form (what ASR "smart formatting" emits) -----------------------------------------
+
+_MONTH_SET = {m.lower() for m in _MONTHS}
+_CARDINAL_WORDS = set(_WORD_VALUES) | {"hundred", "thousand"}
+_PIECE = re.compile(r"[A-Za-z]+|[^A-Za-z]+")
+_SUFFIX = {1: "st", 2: "nd", 3: "rd"}
+
+
+def _ordinal_suffix(n: int) -> str:
+    return "th" if 10 <= n % 100 <= 20 else _SUFFIX.get(n % 10, "th")
+
+
+def written(text: str) -> str:
+    """Rewrite spelled-out numbers the way ASR smart formatting writes them.
+
+    'twenty five dollars' -> '$25', 'forty percent' -> '40%', 'three hundred twelve k' ->
+    '312K', 'October fourteenth' -> 'October 14', 'the fourteenth' -> 'the 14th',
+    'PAY two twelve' -> 'PAY 212', 'twenty two months' -> '22 months'. Single words below ten
+    ('two or three', 'that one') and small standalone ordinals ('a second') stay words.
+    Idempotent, and :func:`spoken_numbers` reads both forms to the same values.
+    """
+    pieces = _PIECE.findall(text)
+    out: list[str] = []
+    i = 0
+    while i < len(pieces):
+        low = pieces[i].lower()
+        if not (low in _CARDINAL_WORDS or low in _ORDINAL_VALUES) or low in {"hundred", "thousand"}:
+            out.append(pieces[i])
+            i += 1
+            continue
+        # Extend the run over "<number word><space><number word>..."; stop after an ordinal.
+        j = i
+        while (
+            (low not in _ORDINAL_VALUES or low in _WORD_VALUES)
+            and j + 2 < len(pieces)
+            and pieces[j + 1] == " "
+        ):
+            nxt = pieces[j + 2].lower()
+            if nxt == "and" and low in {"hundred", "thousand"} and j + 4 < len(pieces):
+                nxt, step = pieces[j + 4].lower(), 4  # "one hundred and five"
+            else:
+                step = 2
+            if nxt not in _CARDINAL_WORDS and nxt not in _ORDINAL_VALUES:
+                break
+            j += step
+            low = nxt
+        run = pieces[i : j + 1]
+        words = [w.lower() for w in run[::2] if w.lower() != "and"]
+        values = spoken_numbers(" ".join(words))
+        prev = out[-2] if len(out) >= 2 and out[-1] == " " else ""
+        after = pieces[j + 2].lower() if j + 2 < len(pieces) and pieces[j + 1] == " " else ""
+        ordinal = words[-1] in _ORDINAL_VALUES and words[-1] not in _WORD_VALUES
+        unit = after in {"dollars", "dollar", "percent", "k"}
+        rep: str | None = None
+        if len(values) == 2 and prev.isupper() and len(prev) >= 2 and values[0] < 10:
+            rep = f"{values[0]}{values[1]:02d}"  # ticket code: PAY two twelve -> PAY 212
+        elif len(values) == 1:
+            v = values[0]
+            if ordinal:
+                if prev.lower() in _MONTH_SET:
+                    rep = str(v)
+                elif v >= 10 or len(words) > 1:
+                    rep = f"{v}{_ordinal_suffix(v)}"
+            elif v >= 10 or len(words) > 1 or unit:
+                rep = str(v)
+        if rep is None:
+            out.extend(run)
+            i = j + 1
+            continue
+        if unit:
+            rep = {"percent": f"{rep}%", "k": f"{rep}K"}.get(after, f"${rep}")
+            j += 2
+        out.append(rep)
+        i = j + 1
+    return "".join(out)
