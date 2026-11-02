@@ -174,3 +174,14 @@ The remote 38+ word monologue tail is a content limitation of scripted turns and
 - numbers on the transcript-retirement question they've said they're weighing.
 
 **Trade-off:** the work hardly changes, but polish moves to the benchmark: a card ([`BENCHMARK.md`](BENCHMARK.md)), one command per system, and a documented way to add a system. Its biggest weakness, being synthetic, is stated up front.
+
+## Transcript-retirement curve (workstream C, 2026-11-02)
+- **Decision:** retirement is applied identically to every system (`evals/retirement.is_retired`:
+  `day < as_of − N`). For b0, deleting a transcript removes its chunks from the index too (the
+  meeting is still findable through its summary or notes), so b0's N = 0 limit is b1.
+- **Decision:** "evidence in context" is split into gold line *text* shown vs gold line *ID*
+  referenced, since Concentrate keeps IDs as provenance pointers after retirement.
+- **Result (XL dev, $7.04):** Concentrate 89% at N = ∞ → 88% at N = 0, keeping ~5% of transcript
+  tokens; summaries-only b1 scores 64%. b0's retired accuracy was not run (≈ $29 at N = ∞). The
+  benchmark has no verbatim-quote questions, so the main expected loss is untested. See
+  `docs/RETIREMENT.md`.
