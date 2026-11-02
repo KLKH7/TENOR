@@ -128,3 +128,11 @@ The probe showed three differences between real transcripts and our fixtures, an
 3. **Attendees with no display name.**
 
 All three make attribution *easier* than our earlier Me/Them-only fixtures in some meetings, and harder in others (nameless attendees break name→email links, which is exactly the cross-meeting miss we saw live). Fixtures were regenerated, and all 230 gold answers still validate against the new utterance IDs.
+
+### Recalibration on real data (2026-11-02)
+Measured on the author's 4 MCP-synced meetings (aggregates only, recorded in `PROBE_2026-11-02.md` §6):
+- naming raised to match the real 0.82 named share;
+- remote turns are now often kept whole, with one-word lead-ins;
+- in-person meetings merge into long single-microphone blocks.
+
+The remote 38+ word monologue tail is a content limitation of scripted turns and is documented rather than faked.

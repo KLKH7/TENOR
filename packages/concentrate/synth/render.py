@@ -26,7 +26,7 @@ from datetime import UTC, datetime, timedelta
 
 from concentrate.core import granola
 from concentrate.core.models import utterance_id
-from concentrate.synth.noise import BACKCHANNELS, NoiseRates, fragment, noisify
+from concentrate.synth.noise import BACKCHANNELS, LEAD_INS, NoiseRates, fragment, noisify
 from concentrate.synth.roster import OWNER_ID, PEOPLE, person
 from concentrate.synth.story import granola_id
 from concentrate.synth.world import Meeting, World
@@ -38,9 +38,13 @@ FOLDERS: list[tuple[str, str | None]] = [
 ]  # fmt: skip
 DIARIZED = {"w3-1on1-alex"}  # recorded on iPhone: diarization labels available
 # Speaker identification and attendee naming, calibrated qualitatively on the live probe.
-NAMED_MEETING_RATE = 0.7  # remote meetings where Granola identifies some "Them" speakers
-IDENTIFIED_SPEAKER_RATE = 0.7  # per remote speaker, within such a meeting
-UNLABELED_PASSAGE_RATE = 0.25  # identified speakers still appear as bare "System audio"
+# Calibrated on the author's real meetings synced via the MCP (2026-11-02): 82% of "Them"
+# passages named; remote passages median 5 words (p25 1, p75 17, p90 38); in-person passages
+# median 25 words (p75 69). See docs/PROBE_2026-11-02.md.
+NAMED_MEETING_RATE = 0.95  # remote meetings where Granola identifies "Them" speakers
+IDENTIFIED_SPEAKER_RATE = 0.9  # per remote speaker, within such a meeting
+UNLABELED_PASSAGE_RATE = 0.1  # identified speakers still appear as bare "System audio"
+LEAD_IN_RATE = 0.2  # a turn opens with its own one-word passage ("So", "Yeah")
 NULL_NAME_RATE = 0.25  # attendees with no display name on the calendar invite
 LOSSY_SUMMARY_DROP = 0.2
 TYPED_NOTES_RATE = 0.4
@@ -147,6 +151,38 @@ def _typed_notes(points: list[tuple[str, str]], rng: random.Random) -> str | Non
     return "\n".join(lines)
 
 
+def _merge_in_person(
+    items: list[tuple[granola.TranscriptItem, int | None]],
+    evidence: dict[int, list[int]],
+    rng: random.Random,
+) -> tuple[list[tuple[granola.TranscriptItem, int | None]], dict[int, list[int]]]:
+    """One shared microphone transcribes in long runs that span speakers (median ~25 words).
+
+    Consecutive items merge until a block reaches a target length drawn log-uniformly from
+    5-140 words. Evidence is remapped to the block that now contains each beat's segment.
+    """
+    merged: list[tuple[granola.TranscriptItem, int | None]] = []
+    remap: dict[int, int] = {}
+    target, words = 0.0, 0
+    for k, (item, beat) in enumerate(items):
+        n = len(item.text.split())
+        if merged and words + n <= target:
+            prev, first_beat = merged[-1]
+            merged[-1] = (
+                prev.model_copy(
+                    update={"text": f"{prev.text} {item.text}", "end_time": item.end_time}
+                ),
+                first_beat if first_beat is not None else beat,
+            )
+            words += n
+        else:
+            merged.append((item, beat))
+            target, words = 5 * 28 ** rng.random(), n
+        remap[k] = len(merged) - 1
+    new_evidence = {b: sorted({remap[k] for k in ks}) for b, ks in evidence.items()}
+    return merged, new_evidence
+
+
 def render_meeting(
     meeting: Meeting,
     texts: list[str],
@@ -182,7 +218,10 @@ def render_meeting(
     for i, (beat, text) in enumerate(zip(meeting.beats, texts, strict=True)):
         protect = tuple(p for p in beat.protect if p in text)
         noisy = noisify(text, protect, rng, rates)
-        for seg in fragment(noisy, protect, rng):
+        segs = fragment(noisy, protect, rng) if meeting.mode == "remote" else [noisy]
+        if meeting.mode == "remote" and rng.random() < LEAD_IN_RATE:
+            segs = [rng.choice(LEAD_INS) + ".", *segs]
+        for seg in segs:
             dur = max(0.8, len(seg.split()) / 2.6)
             item = granola.TranscriptItem(
                 speaker=speaker_for(beat.speaker),
@@ -210,6 +249,8 @@ def render_meeting(
                     )
             t += timedelta(seconds=dur + rng.uniform(0.2, 1.2))
 
+    if meeting.mode == "in_person":
+        items, evidence_segments = _merge_in_person(items, evidence_segments, rng)
     order = sorted(range(len(items)), key=lambda k: (items[k][0].start_time, k))
     position = {k: n for n, k in enumerate(order)}
     beat_map: BeatMap = {

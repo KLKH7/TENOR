@@ -7,7 +7,7 @@
     "email": "priya@northwind.dev"
   },
   "created_at": "2026-10-02T10:00:12Z",
-  "updated_at": "2026-10-02T10:39:00Z",
+  "updated_at": "2026-10-02T10:42:00Z",
   "deleted_at": null,
   "web_url": "https://notes.granola.ai/d/e9f2258b-3199-d596-d0d4-7e1f170c3b35",
   "calendar_event": {
@@ -32,7 +32,7 @@
       "email": "priya@northwind.dev"
     },
     {
-      "name": null,
+      "name": "Alex Kim",
       "email": "alex.k@northwind.dev"
     }
   ],
@@ -46,10 +46,10 @@
     }
   ],
   "space_membership": [],
-  "summary_text": "Personal\nAlex raised compensation ($165k vs ~$180k market)\nHiring\nSecond backend engineer req approved",
-  "summary_markdown": "### Personal\n- Alex raised compensation ($165k vs ~$180k market)\n\n### Hiring\n- Second backend engineer req approved",
-  "private_notes_text": null,
-  "private_notes_markdown": null,
+  "summary_text": "Discussion\nGeneral discussion; no decisions recorded.",
+  "summary_markdown": "### Discussion\n- General discussion; no decisions recorded.",
+  "private_notes_text": "second backend engineer req approved\nalex raised compensation ($165k vs ~$180k market)",
+  "private_notes_markdown": "second backend engineer req approved\nalex raised compensation ($165k vs ~$180k market)",
   "transcript": [
     {
       "speaker": {
@@ -64,446 +64,386 @@
         "source": "speaker",
         "name": "Alex Kim"
       },
-      "text": "I've been thinking a lot about where I want I mean,",
-      "start_time": "2026-10-02T10:00:33.665000Z",
-      "end_time": "2026-10-02T10:00:37.895000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "to grow.",
-      "start_time": "2026-10-02T10:00:38.630000Z",
-      "end_time": "2026-10-02T10:00:39.430000Z"
+      "text": "I've been thinking a lot about where I want too grow.",
+      "start_time": "2026-10-02T10:00:33.579000Z",
+      "end_time": "2026-10-02T10:00:37.810000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Right, right.",
-      "start_time": "2026-10-02T10:00:40.041000Z",
-      "end_time": "2026-10-02T10:00:40.841000Z"
+      "text": "Right- Right, right.",
+      "start_time": "2026-10-02T10:00:38.197000Z",
+      "end_time": "2026-10-02T10:00:39.351000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "I mean, Keep going.",
-      "start_time": "2026-10-02T10:00:41.693000Z",
-      "end_time": "2026-10-02T10:00:43.231000Z"
+      "text": "Keep going.",
+      "start_time": "2026-10-02T10:00:39.790000Z",
+      "end_time": "2026-10-02T10:00:40.590000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Can we park that and um, come back to it at the end?",
-      "start_time": "2026-10-02T10:00:44.363000Z",
-      "end_time": "2026-10-02T10:00:49.363000Z"
+      "text": "Can we park that",
+      "start_time": "2026-10-02T10:00:40.925000Z",
+      "end_time": "2026-10-02T10:00:42.464000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "and come back to it at the end?",
+      "start_time": "2026-10-02T10:00:42.935000Z",
+      "end_time": "2026-10-02T10:00:46.011000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I'd- I'd like more time for deep work if possible.",
+      "start_time": "2026-10-02T10:00:46.986000Z",
+      "end_time": "2026-10-02T10:00:50.832000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Alex Kim"
       },
-      "text": "Yeah.",
-      "start_time": "2026-10-02T10:00:47.703000Z",
-      "end_time": "2026-10-02T10:00:48.303000Z"
+      "text": "Got it.",
+      "start_time": "2026-10-02T10:00:50.120000Z",
+      "end_time": "2026-10-02T10:00:50.720000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "I'd- I'd like more time for deep",
-      "start_time": "2026-10-02T10:00:50.337000Z",
-      "end_time": "2026-10-02T10:00:53.029000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "work if possible.",
-      "start_time": "2026-10-02T10:00:54Z",
-      "end_time": "2026-10-02T10:00:55.153000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Do- Do we uh,",
-      "start_time": "2026-10-02T10:00:55.539000Z",
-      "end_time": "2026-10-02T10:00:57.077000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "have any data on that or is it gut feel?",
-      "start_time": "2026-10-02T10:00:57.453000Z",
-      "end_time": "2026-10-02T10:01:01.299000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Alex Kim"
-      },
-      "text": "Okay.",
-      "start_time": "2026-10-02T10:00:59.982000Z",
-      "end_time": "2026-10-02T10:01:00.582000Z"
+      "text": "Do Do we have any data on that or is it I mean, gut feel?",
+      "start_time": "2026-10-02T10:00:51.094000Z",
+      "end_time": "2026-10-02T10:00:56.863000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
       "text": "I think that's mostly right, but there's a nuance there.",
-      "start_time": "2026-10-02T10:01:01.774000Z",
-      "end_time": "2026-10-02T10:01:05.620000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Alex Kim"
-      },
-      "text": "How are you feeling about um, the workload you know,",
-      "start_time": "2026-10-02T10:01:06.684000Z",
-      "end_time": "2026-10-02T10:01:10.530000Z"
+      "start_time": "2026-10-02T10:00:57.609000Z",
+      "end_time": "2026-10-02T10:01:01.455000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "generally?",
-      "start_time": "2026-10-02T10:01:10.810000Z",
-      "end_time": "2026-10-02T10:01:11.610000Z"
+      "text": "How are you feeling about the workload generally?",
+      "start_time": "2026-10-02T10:01:02.175000Z",
+      "end_time": "2026-10-02T10:01:05.252000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "I think think I mean,",
-      "start_time": "2026-10-02T10:01:12.149000Z",
-      "end_time": "2026-10-02T10:01:14.072000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "the question is really about scope.",
-      "start_time": "2026-10-02T10:01:14.448000Z",
-      "end_time": "2026-10-02T10:01:16.756000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Okay- Okay, so where did we land on that you know,",
-      "start_time": "2026-10-02T10:01:17.275000Z",
-      "end_time": "2026-10-02T10:01:21.505000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "last time?",
-      "start_time": "2026-10-02T10:01:22.017000Z",
-      "end_time": "2026-10-02T10:01:22.817000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Anything I can do to unblock you?",
-      "start_time": "2026-10-02T10:01:23.874000Z",
-      "end_time": "2026-10-02T10:01:26.566000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "uh, Let's not go down that rabbit hole right now.",
-      "start_time": "2026-10-02T10:01:27.612000Z",
-      "end_time": "2026-10-02T10:01:31.458000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "I've",
-      "start_time": "2026-10-02T10:01:32.132000Z",
-      "end_time": "2026-10-02T10:01:32.932000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "been thinking a lot about where I want to grow.",
-      "start_time": "2026-10-02T10:01:34.040000Z",
-      "end_time": "2026-10-02T10:01:37.886000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Alex Kim"
-      },
-      "text": "Yeah.",
-      "start_time": "2026-10-02T10:01:36.925000Z",
-      "end_time": "2026-10-02T10:01:37.525000Z"
+      "text": "I mean.",
+      "start_time": "2026-10-02T10:01:06.131000Z",
+      "end_time": "2026-10-02T10:01:06.931000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
       "text": "I think the question is really about scope.",
-      "start_time": "2026-10-02T10:01:38.859000Z",
-      "end_time": "2026-10-02T10:01:41.936000Z"
+      "start_time": "2026-10-02T10:01:07.874000Z",
+      "end_time": "2026-10-02T10:01:10.951000Z"
     },
     {
       "speaker": {
-        "source": "speaker"
+        "source": "microphone"
       },
-      "text": "Hold on, my laptop is about to die, let let me grab a charger.",
-      "start_time": "2026-10-02T10:01:42.202000Z",
-      "end_time": "2026-10-02T10:01:47.586000Z"
+      "text": "Okay- Okay, so where did we land on that last time?",
+      "start_time": "2026-10-02T10:01:11.847000Z",
+      "end_time": "2026-10-02T10:01:16.078000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Anything I can do to unblock you?",
+      "start_time": "2026-10-02T10:01:16.675000Z",
+      "end_time": "2026-10-02T10:01:19.367000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Alex Kim"
       },
-      "text": "um, I'm not sure that's the right framing, honestly.",
-      "start_time": "2026-10-02T10:01:48.693000Z",
-      "end_time": "2026-10-02T10:01:52.154000Z"
+      "text": "Let's not uh, go down that rabbit hole right now.",
+      "start_time": "2026-10-02T10:01:19.657000Z",
+      "end_time": "2026-10-02T10:01:23.503000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Right.",
-      "start_time": "2026-10-02T10:01:51.555000Z",
-      "end_time": "2026-10-02T10:01:52.155000Z"
+      "text": "I've been thinking a lot about where I want to grow.",
+      "start_time": "2026-10-02T10:01:23.873000Z",
+      "end_time": "2026-10-02T10:01:28.104000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Alex Kim"
       },
-      "text": "Awkward one.",
-      "start_time": "2026-10-02T10:01:53.140000Z",
-      "end_time": "2026-10-02T10:01:53.940000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "I'm at one hundred sixty five k,",
-      "start_time": "2026-10-02T10:01:54.198000Z",
-      "end_time": "2026-10-02T10:01:56.890000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "and the offers I'm seeing are around one eighty.",
-      "start_time": "2026-10-02T10:01:57.286000Z",
-      "end_time": "2026-10-02T10:02:00.748000Z"
+      "text": "Totally.",
+      "start_time": "2026-10-02T10:01:26.678000Z",
+      "end_time": "2026-10-02T10:01:27.278000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Can you share like, your screen?",
-      "start_time": "2026-10-02T10:02:01.933000Z",
-      "end_time": "2026-10-02T10:02:04.241000Z"
+      "text": "I think the question is really about scope.",
+      "start_time": "2026-10-02T10:01:29.075000Z",
+      "end_time": "2026-10-02T10:01:32.152000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Hold on, my laptop is about to die,",
+      "start_time": "2026-10-02T10:01:32.418000Z",
+      "end_time": "2026-10-02T10:01:35.495000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Kim"
+      },
+      "text": "let let me grab a charger.",
+      "start_time": "2026-10-02T10:01:36.570000Z",
+      "end_time": "2026-10-02T10:01:38.878000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Kim"
+      },
+      "text": "I'm not sure that's the right framing,",
+      "start_time": "2026-10-02T10:01:39.824000Z",
+      "end_time": "2026-10-02T10:01:42.517000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Sure.",
+      "start_time": "2026-10-02T10:01:41.884000Z",
+      "end_time": "2026-10-02T10:01:42.484000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Kim"
+      },
+      "text": "honestly.",
+      "start_time": "2026-10-02T10:01:43.714000Z",
+      "end_time": "2026-10-02T10:01:44.514000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Kim"
+      },
+      "text": "Awkward one. I'm at one hundred sixty five k, and the offers I'm I mean, seeing are around around one like, eighty.",
+      "start_time": "2026-10-02T10:01:45.295000Z",
+      "end_time": "2026-10-02T10:01:53.756000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Can you share your screen?",
+      "start_time": "2026-10-02T10:01:54.081000Z",
+      "end_time": "2026-10-02T10:01:56.004000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
       "text": "That's good to hear.",
-      "start_time": "2026-10-02T10:02:05.296000Z",
-      "end_time": "2026-10-02T10:02:06.834000Z"
+      "start_time": "2026-10-02T10:01:57.083000Z",
+      "end_time": "2026-10-02T10:01:58.621000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Let me pull up the doc so we're all you know, looking at the same thing.",
-      "start_time": "2026-10-02T10:02:07.658000Z",
-      "end_time": "2026-10-02T10:02:13.812000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Alex Kim"
-      },
-      "text": "Got it.",
-      "start_time": "2026-10-02T10:02:12.176000Z",
-      "end_time": "2026-10-02T10:02:12.776000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Alex Kim"
-      },
-      "text": "Anything I I mean, can you know, do to unblock you?",
-      "start_time": "2026-10-02T10:02:14.567000Z",
-      "end_time": "2026-10-02T10:02:18.798000Z"
+      "text": "Um.",
+      "start_time": "2026-10-02T10:01:58.991000Z",
+      "end_time": "2026-10-02T10:01:59.791000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Yeah.",
-      "start_time": "2026-10-02T10:02:16.730000Z",
-      "end_time": "2026-10-02T10:02:17.330000Z"
+      "text": "Let me pull up the doc so we're all looking at um, the same thing.",
+      "start_time": "2026-10-02T10:02:00.008000Z",
+      "end_time": "2026-10-02T10:02:05.778000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Kim"
+      },
+      "text": "you know, Anything I can do to unblock you?",
+      "start_time": "2026-10-02T10:02:06.030000Z",
+      "end_time": "2026-10-02T10:02:09.492000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Let's make sure we write down",
-      "start_time": "2026-10-02T10:02:19.804000Z",
-      "end_time": "2026-10-02T10:02:22.111000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "goals for next quarter.",
-      "start_time": "2026-10-02T10:02:23.061000Z",
-      "end_time": "2026-10-02T10:02:24.600000Z"
+      "text": "Let's make sure we write down goals for next quarter.",
+      "start_time": "2026-10-02T10:02:10.082000Z",
+      "end_time": "2026-10-02T10:02:13.928000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Alex Kim"
       },
-      "text": "Hold on, my laptop is about to uh, die, let me grab um, a charger.",
-      "start_time": "2026-10-02T10:02:25.473000Z",
-      "end_time": "2026-10-02T10:02:31.242000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Got it.",
-      "start_time": "2026-10-02T10:02:29.983000Z",
-      "end_time": "2026-10-02T10:02:30.583000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "I'd like more time",
-      "start_time": "2026-10-02T10:02:31.804000Z",
-      "end_time": "2026-10-02T10:02:33.342000Z"
+      "text": "Hold on, my laptop is about to die, let me uh,",
+      "start_time": "2026-10-02T10:02:14.813000Z",
+      "end_time": "2026-10-02T10:02:19.044000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Alex Kim"
       },
-      "text": "for deep work if possible.",
-      "start_time": "2026-10-02T10:02:34.385000Z",
-      "end_time": "2026-10-02T10:02:36.308000Z"
+      "text": "grab a charger.",
+      "start_time": "2026-10-02T10:02:20.061000Z",
+      "end_time": "2026-10-02T10:02:21.215000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Alex Kim"
       },
-      "text": "Let's make sure I mean, we write down goals goals for next quarter.",
-      "start_time": "2026-10-02T10:02:36.602000Z",
-      "end_time": "2026-10-02T10:02:41.602000Z"
+      "text": "like,",
+      "start_time": "2026-10-02T10:02:21.450000Z",
+      "end_time": "2026-10-02T10:02:22.250000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Alex Kim"
       },
-      "text": "That's fair.",
-      "start_time": "2026-10-02T10:02:42.552000Z",
-      "end_time": "2026-10-02T10:02:43.352000Z"
+      "text": "I'd like more time for deep work if possible.",
+      "start_time": "2026-10-02T10:02:22.815000Z",
+      "end_time": "2026-10-02T10:02:26.276000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Alex Kim"
       },
-      "text": "I hadn't thought about it that way.",
-      "start_time": "2026-10-02T10:02:44.537000Z",
-      "end_time": "2026-10-02T10:02:47.230000Z"
+      "text": "And.",
+      "start_time": "2026-10-02T10:02:26.791000Z",
+      "end_time": "2026-10-02T10:02:27.591000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Kim"
+      },
+      "text": "Let's make you know, sure we write down goals for next quarter.",
+      "start_time": "2026-10-02T10:02:28.352000Z",
+      "end_time": "2026-10-02T10:02:32.967000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Kim"
+      },
+      "text": "And.",
+      "start_time": "2026-10-02T10:02:33.529000Z",
+      "end_time": "2026-10-02T10:02:34.329000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Kim"
+      },
+      "text": "That's fair. I hadn't thought about it that way.",
+      "start_time": "2026-10-02T10:02:35.440000Z",
+      "end_time": "2026-10-02T10:02:38.902000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
       "text": "I hear you.",
-      "start_time": "2026-10-02T10:02:47.811000Z",
-      "end_time": "2026-10-02T10:02:48.965000Z"
+      "start_time": "2026-10-02T10:02:39.267000Z",
+      "end_time": "2026-10-02T10:02:40.421000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Let I mean, me take it to Marcus and come back next week.",
-      "start_time": "2026-10-02T10:02:49.611000Z",
-      "end_time": "2026-10-02T10:02:54.611000Z"
+      "text": "Let me take it to Marcus and come back back next week.",
+      "start_time": "2026-10-02T10:02:40.860000Z",
+      "end_time": "2026-10-02T10:02:45.476000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
       "text": "Okay,",
-      "start_time": "2026-10-02T10:02:55.793000Z",
-      "end_time": "2026-10-02T10:02:56.593000Z"
+      "start_time": "2026-10-02T10:02:45.682000Z",
+      "end_time": "2026-10-02T10:02:46.482000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
       "text": "so where did we land on that last time?",
-      "start_time": "2026-10-02T10:02:57.282000Z",
-      "end_time": "2026-10-02T10:03:00.744000Z"
+      "start_time": "2026-10-02T10:02:46.767000Z",
+      "end_time": "2026-10-02T10:02:50.229000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Alex Kim"
+      },
+      "text": "Right.",
+      "start_time": "2026-10-02T10:02:49.269000Z",
+      "end_time": "2026-10-02T10:02:49.869000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Yeah, I agree with that.",
-      "start_time": "2026-10-02T10:03:01.193000Z",
-      "end_time": "2026-10-02T10:03:03.116000Z"
+      "text": "Yeah- Yeah, I agree with with that.",
+      "start_time": "2026-10-02T10:02:50.762000Z",
+      "end_time": "2026-10-02T10:02:53.454000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "That's fair.",
-      "start_time": "2026-10-02T10:03:03.551000Z",
-      "end_time": "2026-10-02T10:03:04.351000Z"
+      "text": "That's fair. I hadn't thought about it that way.",
+      "start_time": "2026-10-02T10:02:53.808000Z",
+      "end_time": "2026-10-02T10:02:57.269000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "I hadn't thought about it that way.",
-      "start_time": "2026-10-02T10:03:05.197000Z",
-      "end_time": "2026-10-02T10:03:07.890000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Yeah, makes um,",
-      "start_time": "2026-10-02T10:03:08.687000Z",
-      "end_time": "2026-10-02T10:03:09.841000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "sense to I mean, me.",
-      "start_time": "2026-10-02T10:03:10.650000Z",
-      "end_time": "2026-10-02T10:03:12.573000Z"
+      "text": "Yeah, that makes sense to me.",
+      "start_time": "2026-10-02T10:02:57.554000Z",
+      "end_time": "2026-10-02T10:02:59.862000Z"
     },
     {
       "speaker": {
@@ -511,125 +451,100 @@
         "name": "Alex Kim"
       },
       "text": "Sorry, I was on mute.",
-      "start_time": "2026-10-02T10:03:13.564000Z",
-      "end_time": "2026-10-02T10:03:15.487000Z"
+      "start_time": "2026-10-02T10:03:00.767000Z",
+      "end_time": "2026-10-02T10:03:02.690000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Alex Kim"
       },
-      "text": "you know, I was saying I agree.",
-      "start_time": "2026-10-02T10:03:16.289000Z",
-      "end_time": "2026-10-02T10:03:18.981000Z"
+      "text": "I mean, I was saying I agree.",
+      "start_time": "2026-10-02T10:03:03.288000Z",
+      "end_time": "2026-10-02T10:03:05.980000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Sorry, can you say that again?",
-      "start_time": "2026-10-02T10:03:20.136000Z",
-      "end_time": "2026-10-02T10:03:22.444000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "You cut out for a second.",
-      "start_time": "2026-10-02T10:03:22.869000Z",
-      "end_time": "2026-10-02T10:03:25.176000Z"
+      "text": "Sorry, can you say that again? You cut out for a second.",
+      "start_time": "2026-10-02T10:03:06.489000Z",
+      "end_time": "2026-10-02T10:03:11.104000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Alex Kim"
       },
-      "text": "Honestly, it's been a busy like, couple of weeks.",
-      "start_time": "2026-10-02T10:03:26.190000Z",
-      "end_time": "2026-10-02T10:03:29.652000Z"
+      "text": "Honestly,",
+      "start_time": "2026-10-02T10:03:12.277000Z",
+      "end_time": "2026-10-02T10:03:13.077000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Alex Kim"
+      },
+      "text": "it's been a busy couple of weeks.",
+      "start_time": "2026-10-02T10:03:13.673000Z",
+      "end_time": "2026-10-02T10:03:16.365000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
       },
       "text": "The team dynamic feels good right now.",
-      "start_time": "2026-10-02T10:03:30.501000Z",
-      "end_time": "2026-10-02T10:03:33.194000Z"
+      "start_time": "2026-10-02T10:03:16.832000Z",
+      "end_time": "2026-10-02T10:03:19.525000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "I'm not sure I mean, that's the the right framing,",
-      "start_time": "2026-10-02T10:03:34.211000Z",
-      "end_time": "2026-10-02T10:03:38.057000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker",
-        "name": "Alex Kim"
-      },
-      "text": "Mm-hm.",
-      "start_time": "2026-10-02T10:03:37.590000Z",
-      "end_time": "2026-10-02T10:03:38.190000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "honestly.",
-      "start_time": "2026-10-02T10:03:38.459000Z",
-      "end_time": "2026-10-02T10:03:39.259000Z"
+      "text": "I'm not sure that's the right framing, honestly.",
+      "start_time": "2026-10-02T10:03:20.163000Z",
+      "end_time": "2026-10-02T10:03:23.240000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
       "text": "Let's not go down that rabbit hole right now.",
-      "start_time": "2026-10-02T10:03:40.360000Z",
-      "end_time": "2026-10-02T10:03:43.821000Z"
+      "start_time": "2026-10-02T10:03:23.866000Z",
+      "end_time": "2026-10-02T10:03:27.328000Z"
     },
     {
       "speaker": {
         "source": "speaker",
         "name": "Alex Kim"
       },
-      "text": "I think that's mostly right, but there's uh, a nuance there.",
-      "start_time": "2026-10-02T10:03:44.424000Z",
-      "end_time": "2026-10-02T10:03:48.655000Z"
+      "text": "I think that's mostly right, but there's a nuance there.",
+      "start_time": "2026-10-02T10:03:28.369000Z",
+      "end_time": "2026-10-02T10:03:32.215000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Honestly, it's been a you know,",
-      "start_time": "2026-10-02T10:03:49.792000Z",
-      "end_time": "2026-10-02T10:03:52.100000Z"
+      "text": "Honestly, it's been a uh, busy couple of uh, weeks.",
+      "start_time": "2026-10-02T10:03:33.383000Z",
+      "end_time": "2026-10-02T10:03:37.229000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "busy couple of weeks.",
-      "start_time": "2026-10-02T10:03:53.267000Z",
-      "end_time": "2026-10-02T10:03:54.805000Z"
+      "text": "Right.",
+      "start_time": "2026-10-02T10:03:38.192000Z",
+      "end_time": "2026-10-02T10:03:38.992000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Separately,",
-      "start_time": "2026-10-02T10:03:55.123000Z",
-      "end_time": "2026-10-02T10:03:55.923000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "the second backend engineer req is approved.",
-      "start_time": "2026-10-02T10:03:56.284000Z",
-      "end_time": "2026-10-02T10:03:58.977000Z"
+      "text": "Separately, the second backend engineer req is approved.",
+      "start_time": "2026-10-02T10:03:39.610000Z",
+      "end_time": "2026-10-02T10:03:42.687000Z"
     }
   ]
 }

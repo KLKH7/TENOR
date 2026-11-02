@@ -172,8 +172,9 @@ def test_polish_with_fake_llm_rejects_bad_rewrites_and_still_validates(tmp_path:
 
 
 def test_transcripts_match_live_granola_format(dataset: Path) -> None:
-    """Named system-audio speakers (partial), short passages, nameless attendees."""
-    named_meetings = remote = short = total = nameless = 0
+    """Calibrated on real MCP-synced meetings: ~82% of "Them" passages named, many very short
+    remote passages, long single-microphone in-person blocks, some nameless attendees."""
+    named_meetings = remote = short = total = nameless = them_total = them_named = mixed = 0
     for path in (dataset / "notes").glob("*.json"):
         note = granola.Note.model_validate_json(path.read_bytes())
         items = note.transcript or []
@@ -182,13 +183,16 @@ def test_transcripts_match_live_granola_format(dataset: Path) -> None:
         if them:
             remote += 1
             named_meetings += any(i.speaker.name for i in them)
-            if any(i.speaker.name for i in them):
-                assert not all(i.speaker.name for i in them), "naming must be partial"
+            them_total += len(them)
+            them_named += sum(1 for i in them if i.speaker.name)
+            mixed += any(i.speaker.name for i in them) and not all(i.speaker.name for i in them)
         short += sum(1 for i in items if len(i.text.split()) <= 5)
         total += len(items)
         nameless += sum(1 for a in note.attendees if a.name is None)
         if note.attendees:
             assert note.attendees[0].name is not None  # the owner is always named
-    assert 0 < named_meetings < remote
+    assert 0 < named_meetings <= remote
+    assert 0.65 <= them_named / them_total <= 0.95  # real: 0.82
+    assert mixed > 0  # identified speakers still appear as bare "System audio" sometimes
     assert short / total > 0.3
     assert nameless > 0

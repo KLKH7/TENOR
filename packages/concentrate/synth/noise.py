@@ -98,14 +98,22 @@ def split_sentences(text: str) -> list[str]:
 
 
 def fragment(
-    text: str, protect: tuple[str, ...], rng: random.Random, split_rate: float = 0.5
+    text: str,
+    protect: tuple[str, ...],
+    rng: random.Random,
+    split_rate: float = 0.35,
+    keep_whole_rate: float = 0.45,
 ) -> list[str]:
-    """Split a turn into short transcript passages, as Granola's live transcripts do.
+    """Split a turn into transcript passages shaped like Granola's live (remote) transcripts.
 
-    Sentences longer than 7 words are, with probability ``split_rate``, cut at one or two word
-    boundaries (preferring commas) into fragments like "But you guys might not." / "Have seen.".
-    Cuts never fall inside a protected span, so every fact phrase stays within one passage.
+    Real remote passages are bimodal (live probe, 2026-11-02): many are 1-5 words, but a long
+    tail are whole monologues (p75 ≈ 17, p90 ≈ 38 words). So a turn is kept whole with
+    probability ``keep_whole_rate``; otherwise it is split into sentences, and sentences longer
+    than 7 words are, with probability ``split_rate``, cut at one or two word boundaries
+    (preferring commas). Cuts never fall inside a protected span.
     """
+    if rng.random() < keep_whole_rate:
+        return [text.strip()] if text.strip() else []
     out: list[str] = []
     for sent in split_sentences(text):
         words = sent.split(" ")
@@ -130,4 +138,5 @@ def fragment(
     return out
 
 
+LEAD_INS = ["So", "Yeah", "Um", "Okay", "Right", "I mean", "And"]
 BACKCHANNELS = ["Yeah.", "Mm-hm.", "Right.", "Okay.", "Got it.", "Sure.", "Yep.", "Totally."]

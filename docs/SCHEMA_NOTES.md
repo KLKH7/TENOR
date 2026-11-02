@@ -133,8 +133,8 @@ These exist [spec summary]: `GET /v1/spaces`, `POST /v1/notes/search` (keywords,
 | Owner's turns are `microphone`; other call participants are `speaker`; in-person meetings are all `microphone` | ASSUMED from the product's capture model |
 | `attribution` omitted everywhere | VERIFIED as allowed ("omitted when unknown"); simplest faithful choice |
 | `diarization_label` only on one in-person meeting recorded on iOS | VERIFIED as iOS-only; which meetings get it is our choice |
-| `speaker.name` on *some* "Them" passages: ~70% of remote meetings identify ~70% of remote speakers, and identified speakers are still unlabeled on ~25% of passages; the owner's microphone is never named | Calibrated qualitatively on the live probe (2026-11-02), which showed `System audio (<Name>)` mixed with bare `System audio`. Exact rates are ASSUMED |
-| Transcript passages are short fragments (median ~6 words, ~45% ≤5 words), chronological, with overlapping backchannels | Shape VERIFIED live; rates ASSUMED |
+| `speaker.name` on most "Them" passages (95% of remote meetings identify 90% of speakers; 10% of their passages stay bare `System audio`); the owner's microphone is never named | Calibrated on real MCP-synced meetings: 0.82 named, synthetic 0.80 (`docs/PROBE_2026-11-02.md` §6). Small sample (4 meetings) |
+| Remote passages are bimodal: 45% of turns kept whole, the rest split into sentences and fragments, plus one-word lead-ins; in-person meetings merge into long single-microphone blocks (5-140 words) | Calibrated on real data (§6). The remote long tail is under-reproduced (known gap) |
 | `summary_markdown` uses `###` headings and `-` bullets, and omits some content | ASSUMED from the product UI, not the API docs |
 | `attendees` empty and `calendar_event` null for an ad-hoc meeting | ASSUMED (attendees come from the calendar) |
 | ~25% of non-owner attendees have `name: null` (invite without a display name) | Shape VERIFIED live: the MCP shows such people by email handle, e.g. `Az1234`. Rate ASSUMED |
