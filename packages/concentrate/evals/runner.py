@@ -60,7 +60,7 @@ from concentrate.sources.fixtures import FixtureSource
 from concentrate.sources.poller import sync
 from concentrate.synth.questions import UNANSWERABLE, Question
 
-SYSTEMS = ("b0", "b1", "b2", "b2o", "b3", "b4", "b5")
+SYSTEMS = ("b0", "b1", "b2", "b2o", "b3", "b4", "b5", "c")
 JUDGE_TOKENS_EST = (800, 80)  # per question (input, output); measured ~780 / ~60 in the pilot
 CONTEXT_LIMIT_TOKENS = 950_000  # 1M-token window minus room for instructions and the answer
 HEURISTIC_TO_EXACT = 1.93  # measured: chars/3.5 undercounts transcripts with line IDs ~1.9x
@@ -116,6 +116,7 @@ def build_systems(
     embedder: Embedder | None,
     k: int,
     backend: ToolBackend | None = None,
+    fixtures: Path | None = None,
 ) -> list[System]:
     retriever = MeetingRetriever(notes, embedder) if {"b0", "b1", "b2o"} & set(names) else None
     built: list[System] = []
@@ -147,6 +148,15 @@ def build_systems(
             except ImportError as exc:
                 raise ValueError(f"{n} is not available: {exc}") from exc
             built.append(getattr(mod, cls)(client))  # corpus arrives via ingest(notes)
+        elif n == "c":
+            from concentrate.agents.concentrate_system import ConcentrateSystem
+
+            directory = (fixtures or Path("data/fixtures/northwind")) / "directory.json"
+            built.append(
+                ConcentrateSystem(
+                    client, backend=backend, embedder=embedder, directory_path=directory
+                )
+            )
         else:
             raise ValueError(f"unknown system {n!r}; choose from {SYSTEMS}")
     return built

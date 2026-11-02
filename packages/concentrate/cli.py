@@ -190,9 +190,9 @@ def eval_cmd(
     budget = float(os.environ.get("CONCENTRATE_BUDGET_USD") or 25)
     notes = load_corpus(fixtures)
     questions = load_questions(fixtures, split, limit, tuple(category or ()))
-    needs_index = {"b0", "b1", "b2o"} & set(names)
+    needs_index = {"b0", "b1", "b2o", "c"} & set(names)
     embedder = SentenceTransformerEmbedder() if embeddings and needs_index else None
-    built = build_systems(names, client, notes, embedder, k)
+    built = build_systems(names, client, notes, embedder, k, fixtures=fixtures)
     ests = estimate(
         built,
         questions,
@@ -267,7 +267,7 @@ def ingest(
     client = LLMClient()
     notes = load_corpus(fixtures)
     names = tuple(s.strip() for s in systems.split(",") if s.strip())
-    built = build_systems(names, client, notes, None, 0)
+    built = build_systems(names, client, notes, None, 0, fixtures=fixtures)
     for e in estimate(built, [], client.model, notes=notes):
         typer.echo(f"{e.system}: ingest ≈ ${e.ingest_usd:.2f} for {len(notes)} meetings")
     if estimate_only:
