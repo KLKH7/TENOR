@@ -40,6 +40,7 @@ from concentrate.agents.baselines import (
     _user_prompt,
 )
 from concentrate.agents.mem0_system import corpus_hash
+from concentrate.agents.progress import read_progress
 from concentrate.agents.retrieval import Embedder
 from concentrate.core.models import MeetingNote
 from concentrate.llm.client import (
@@ -208,6 +209,7 @@ class ConcentrateSystem:
         )
         start = time.perf_counter()
         ordered = cv.by_date(notes)
+        read_progress(store_dir / PROGRESS_FILE)  # a log only, but repair a torn tail first
         with (store_dir / PROGRESS_FILE).open("a") as log:
             for i, m in enumerate(ordered):
                 if store.has_meeting(m.note_id):
