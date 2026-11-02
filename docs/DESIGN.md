@@ -210,3 +210,15 @@ connection could block for up to 50 minutes. Full write-up: [`HARDENING.md`](HAR
 - **Ingest amortised at a stated volume.** The frontier is shown at several volumes, along with break-even volumes, because write-time vs query-time is a volume question.
 - **Deterministic failure types first.** They come from ground truth: fact histories, the directory and gold lines. An optional Haiku classifier only refines the generic buckets, including a `judge_error` label. Trade-off: string matching misses paraphrases, so `stale_value` and `wrong_entity` are lower bounds.
 - **Pilot finding (10 dev questions).** No pairwise gap is reliable after correction, and a typical pair would need about a 62-point gap at n = 10. At the pilot's discordance, 120 test questions detect gaps of about 11 points and 206 detect about 9 (re-check on the XL report).
+
+## Concentrate as an MCP server (workstream D, 2026-11-02)
+
+`concentrate mcp-serve [--xl]` serves a built memory over stdio with six read-only tools (`ask_memory`, `get_facts`, `get_commitments`, `resolve_entity`, `get_meeting`, `get_transcript_lines`) and one resource (`concentrate://memory`). Details, client config and a demo script are in [`MCP_SERVER.md`](MCP_SERVER.md).
+
+- **Logic split from protocol.** `mcp_server/service.py` is plain Python over `MemoryStore`, `EntityDirectory` and `build_context`. `server.py` only registers tools (mcp 2.x `MCPServer`; FastMCP was renamed in v2). Tests drive the real protocol through the SDK's in-process client.
+- **Read-only twice over.** The tools carry `readOnlyHint` annotations, and `MemoryStore(read_only=True)` opens SQLite with `mode=ro`, so a write fails at the database. The read-only connection is shared across the SDK's worker threads (`check_same_thread=False`), which is safe because the sqlite3 module serializes access.
+- **Deterministic "now".** `as_of` defaults to the last meeting day in the memory, not the clock.
+- **Ambiguity is an error, not a guess.** A name that matches several entities ("Sam") returns the candidates and asks the agent to choose. Unresolved commitment owners stay unresolved.
+- **The agent answers by default.** `ask_memory` returns the context; Concentrate's own answer (`answer.v1`, the eval's answer model) costs one call and is opt-in via `answer: true`.
+- **Build selection.** The server picks the newest *complete* build for the corpus hash; partial builds need `--allow-partial`.
+- **Caveat:** Granola's MCP reads the user's real meetings, while this server serves synthetic Northwind, so "ask both" compares behaviour on a kind of question, not answers to the same fact. Serving a memory built from real notes is the open next step.

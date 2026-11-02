@@ -510,3 +510,51 @@ def analyze(
         volume=volume, gt_note=gt_note,
     )  # fmt: skip
     typer.echo("written: " + ", ".join(str(p) for p in paths.values()))
+# -- MCP server (workstream D) --------------------------------------------------------------------
+
+
+@app.command("mcp-serve")
+def mcp_serve(
+    xl: Annotated[bool, typer.Option("--xl", help="Serve the Northwind-XL memory.")] = False,
+    fixtures: Annotated[
+        Path | None, typer.Option(help="Fixture set the memory was built from.")
+    ] = None,
+    store: Annotated[
+        Path | None, typer.Option(help="A build directory (holds memory.sqlite); default: find it.")
+    ] = None,
+    allow_partial: Annotated[
+        bool, typer.Option(help="Serve an unfinished build if no finished one exists.")
+    ] = False,
+    embeddings: Annotated[
+        bool, typer.Option(help="Dense embeddings in retrieval, as in the eval (slower start).")
+    ] = True,
+) -> None:
+    """Serve a built Concentrate memory as a read-only MCP server over stdio.
+
+    stdout carries the MCP protocol, so this command prints nothing to it; errors go to stderr.
+    See docs/MCP_SERVER.md for the Claude Desktop / Claude Code config.
+    """
+    from concentrate.mcp_server.server import build_server
+    from concentrate.mcp_server.service import Answerer, open_memory
+
+    root = fixtures or (NORTHWIND_XL if xl else NORTHWIND)
+    embedder = None
+    if embeddings:
+        from concentrate.agents.retrieval import SentenceTransformerEmbedder
+
+        embedder = SentenceTransformerEmbedder()
+    try:
+        svc = open_memory(
+            root,
+            store_dir=store,
+            allow_partial=allow_partial,
+            embedder=embedder,
+            answerer=Answerer(LLMClient()),
+        )
+    except FileNotFoundError as exc:
+        typer.echo(str(exc), err=True)
+        raise typer.Exit(1) from exc
+    logging.getLogger(__name__).warning(
+        "concentrate MCP: serving %s (%d meetings)", svc.info["store"], len(svc.meetings)
+    )
+    build_server(svc).run("stdio")

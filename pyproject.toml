@@ -69,6 +69,7 @@ files = [
     "packages/concentrate/enhance",
     "packages/concentrate/cli.py",
     "packages/concentrate/watchdog.py",
+    "packages/concentrate/mcp_server",
 ]
 
 [[tool.mypy.overrides]]

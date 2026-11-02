@@ -134,12 +134,19 @@ class Commitment:
 class MemoryStore:
     """The consolidated memory. One SQLite file; each meeting is ingested in one transaction."""
 
-    def __init__(self, path: Path | str) -> None:
-        if str(path) != ":memory:":
-            Path(path).parent.mkdir(parents=True, exist_ok=True)
-        self.db = sqlite3.connect(str(path))
+    def __init__(self, path: Path | str, *, read_only: bool = False) -> None:
+        if read_only:
+            # Serving a built store (the MCP server): SQLite refuses any write, and reads may come
+            # from the server's worker threads (safe: the sqlite3 module serializes access).
+            uri = f"{Path(path).resolve().as_uri()}?mode=ro"
+            self.db = sqlite3.connect(uri, uri=True, check_same_thread=False)
+        else:
+            if str(path) != ":memory:":
+                Path(path).parent.mkdir(parents=True, exist_ok=True)
+            self.db = sqlite3.connect(str(path))
         self.db.row_factory = sqlite3.Row
-        self.db.executescript(_SCHEMA)
+        if not read_only:
+            self.db.executescript(_SCHEMA)
         self.counters = {"inserted": 0, "superseded": 0, "restated": 0, "contradictions": 0}
 
     def close(self) -> None:
