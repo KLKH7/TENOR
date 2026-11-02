@@ -60,7 +60,18 @@ def load_questions(
     qs = [q for q in qs if split == "all" or q.split == split]
     if categories:
         qs = [q for q in qs if q.category in categories]
-    return qs[:limit] if limit else qs
+    if not limit or limit >= len(qs):
+        return qs
+    # Round-robin across categories so small (pilot) runs cover every question type.
+    by_cat: dict[str, list[Question]] = {}
+    for q in qs:
+        by_cat.setdefault(q.category, []).append(q)
+    picked: list[Question] = []
+    while len(picked) < limit:
+        for bucket in by_cat.values():
+            if bucket and len(picked) < limit:
+                picked.append(bucket.pop(0))
+    return picked
 
 
 def build_systems(

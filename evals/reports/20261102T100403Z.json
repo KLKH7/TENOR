@@ -1,0 +1,306 @@
+{
+  "meta": {
+    "date": "20261102T100403Z",
+    "git": {
+      "sha": "e04f133",
+      "dirty": true
+    },
+    "model": "claude-opus-5-5",
+    "seed": 42,
+    "split": "dev",
+    "questions": 10,
+    "prompts": {
+      "b0_topk": [
+        "answer.v1"
+      ],
+      "b1_summaries": [
+        "answer.v1"
+      ],
+      "b2_full": [
+        "answer.v1"
+      ],
+      "b3_agentic": [
+        "agent.v1"
+      ],
+      "judge": [
+        "judge.v1"
+      ]
+    },
+    "budget_usd": 25.0,
+    "spent_usd": 5.2574536000000025,
+    "stopped_early": null,
+    "k": 20,
+    "embedder": "sentence-transformers/all-MiniLM-L6-v2"
+  },
+  "metrics": {
+    "b0_topk": {
+      "n": 10,
+      "accuracy": 0.9,
+      "accuracy_ci95": [
+        0.7,
+        1.0
+      ],
+      "exact_match": 0.875,
+      "abstain_precision": 1.0,
+      "abstain_recall": 1.0,
+      "cite_precision": 0.5935185185185186,
+      "cite_recall": 0.8240740740740741,
+      "input_tokens_per_q": 67927.2,
+      "output_tokens_per_q": 260.0,
+      "cost_per_q": 0.2769088,
+      "cost_total": 2.769088,
+      "latency_p50": 4.57075454108417,
+      "latency_p95": 8.748887332971208,
+      "tool_calls_per_q": 0.0,
+      "by_category": {
+        "aggregation": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "commitment_status": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "decision_change": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "entity_disambiguation": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "latest_state": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "multi_hop": {
+          "n": 1,
+          "accuracy": 0.0
+        },
+        "single_hop": {
+          "n": 2,
+          "accuracy": 1.0
+        },
+        "temporal": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "unanswerable": {
+          "n": 1,
+          "accuracy": 1.0
+        }
+      }
+    },
+    "b1_summaries": {
+      "n": 10,
+      "accuracy": 0.7,
+      "accuracy_ci95": [
+        0.4,
+        1.0
+      ],
+      "exact_match": 0.575,
+      "abstain_precision": 0.5,
+      "abstain_recall": 1.0,
+      "cite_precision": null,
+      "cite_recall": 0.0,
+      "input_tokens_per_q": 6730.8,
+      "output_tokens_per_q": 181.2,
+      "cost_per_q": 0.030547200000000004,
+      "cost_total": 0.305472,
+      "latency_p50": 2.6512556669767946,
+      "latency_p95": 4.785451959003694,
+      "tool_calls_per_q": 0.0,
+      "by_category": {
+        "aggregation": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "commitment_status": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "decision_change": {
+          "n": 1,
+          "accuracy": 0.0
+        },
+        "entity_disambiguation": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "latest_state": {
+          "n": 1,
+          "accuracy": 0.0
+        },
+        "multi_hop": {
+          "n": 1,
+          "accuracy": 0.0
+        },
+        "single_hop": {
+          "n": 2,
+          "accuracy": 1.0
+        },
+        "temporal": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "unanswerable": {
+          "n": 1,
+          "accuracy": 1.0
+        }
+      }
+    },
+    "b2_full": {
+      "n": 10,
+      "accuracy": 1.0,
+      "accuracy_ci95": [
+        1.0,
+        1.0
+      ],
+      "exact_match": 0.775,
+      "abstain_precision": 1.0,
+      "abstain_recall": 1.0,
+      "cite_precision": 0.6638888888888889,
+      "cite_recall": 0.8685185185185185,
+      "input_tokens_per_q": 128507.4,
+      "output_tokens_per_q": 245.3,
+      "cost_per_q": 0.09247496000000001,
+      "cost_total": 0.9247496000000002,
+      "latency_p50": 4.195711374981329,
+      "latency_p95": 15.74798099999316,
+      "tool_calls_per_q": 0.0,
+      "by_category": {
+        "aggregation": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "commitment_status": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "decision_change": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "entity_disambiguation": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "latest_state": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "multi_hop": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "single_hop": {
+          "n": 2,
+          "accuracy": 1.0
+        },
+        "temporal": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "unanswerable": {
+          "n": 1,
+          "accuracy": 1.0
+        }
+      }
+    },
+    "b3_agentic": {
+      "n": 10,
+      "accuracy": 0.9,
+      "accuracy_ci95": [
+        0.7,
+        1.0
+      ],
+      "exact_match": 0.75,
+      "abstain_precision": 1.0,
+      "abstain_recall": 1.0,
+      "cite_precision": 0.5481481481481482,
+      "cite_recall": 0.8,
+      "input_tokens_per_q": 22910.4,
+      "output_tokens_per_q": 842.8,
+      "cost_per_q": 0.1084976,
+      "cost_total": 1.084976,
+      "latency_p50": 11.450836166040972,
+      "latency_p95": 21.62031037500128,
+      "tool_calls_per_q": 5.0,
+      "by_category": {
+        "aggregation": {
+          "n": 1,
+          "accuracy": 0.0
+        },
+        "commitment_status": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "decision_change": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "entity_disambiguation": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "latest_state": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "multi_hop": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "single_hop": {
+          "n": 2,
+          "accuracy": 1.0
+        },
+        "temporal": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "unanswerable": {
+          "n": 1,
+          "accuracy": 1.0
+        }
+      }
+    }
+  },
+  "ledger_by_stage": {
+    "eval.b0_topk": {
+      "calls": 10,
+      "cached": 0,
+      "input_tokens": 679272,
+      "output_tokens": 2600,
+      "usd": 2.769088
+    },
+    "eval.judge": {
+      "calls": 40,
+      "cached": 0,
+      "input_tokens": 31202,
+      "output_tokens": 2418,
+      "usd": 0.17316800000000002
+    },
+    "eval.b1_summaries": {
+      "calls": 10,
+      "cached": 0,
+      "input_tokens": 67308,
+      "output_tokens": 1812,
+      "usd": 0.305472
+    },
+    "eval.b2_full": {
+      "calls": 10,
+      "cached": 0,
+      "input_tokens": 1285074,
+      "output_tokens": 2453,
+      "usd": 0.9247496000000002
+    },
+    "eval.b3_agentic": {
+      "calls": 45,
+      "cached": 0,
+      "input_tokens": 229104,
+      "output_tokens": 8428,
+      "usd": 1.084976
+    }
+  }
+}
