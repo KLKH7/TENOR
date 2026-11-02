@@ -57,7 +57,7 @@ from concentrate.memory.enhance_stub import Enhancer, real_enhancer
 from concentrate.memory.entities import EntityDirectory, load_directory
 from concentrate.memory.extract import EXTRACT_PROMPT
 from concentrate.memory.pipeline import BuildConfig, MemoryBuilder
-from concentrate.memory.query import MemoryIndex, build_context, parse_question
+from concentrate.memory.query import MemoryIndex, ParsedQuestion, build_context, parse_question
 from concentrate.memory.store import MemoryStore
 from concentrate.memory.verify import ENTAIL_PROMPT
 
@@ -111,7 +111,15 @@ class ConcentrateSystem:
         k_facts: int = 20,
         k_digests: int = 4,
         retire_after_days: int | None = None,
+        supersession: bool = True,
+        query_entities: bool = True,
+        name: str | None = None,
     ) -> None:
+        """``supersession`` / ``query_entities`` / ``k_digests=0`` are answer-time ablation
+        switches (docs/CONCENTRATE_TUNING.md); ``name`` labels a variant in reports."""
+        if name is not None:
+            self.name = name
+        self.supersession, self.query_entities = supersession, query_entities
         self.client, self.backend = client, backend
         self.ingest_backend = ingest_backend
         self.ingest_model = ingest_model or os.environ.get(INGEST_MODEL_ENV) or DEFAULT_INGEST_MODEL
@@ -320,6 +328,8 @@ class ConcentrateSystem:
         if self._index is None or self._directory is None:
             raise RuntimeError("ConcentrateSystem.run() before ingest(): call ingest(notes) first")
         pq = parse_question(q.question, q.as_of, self._directory)
+        if not self.query_entities:
+            pq = ParsedQuestion([], pq.intents, pq.as_of)
         ctx = build_context(
             self._index,
             q.question,
@@ -327,6 +337,7 @@ class ConcentrateSystem:
             k_facts=self.k_facts,
             k_digests=self.k_digests,
             retire_after_days=self.retire_after_days,
+            supersession=self.supersession,
         )
         return f"{ctx.text}\n\n{_user_prompt(q)}", ctx.meetings
 

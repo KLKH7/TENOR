@@ -405,3 +405,91 @@ def hand_check(
             f"{name:<20} vs human: {s['agreement']:.1%} agree on correct/not "
             f"(kappa {s['kappa']:.2f}, n={s['n']}) · 3-way {s['agreement_3way']:.1%}"
         )
+
+
+# -- tune-c: Concentrate variants and answer-time ablations on the XL dev split (workstream L) --
+
+TUNE_VARIANTS: dict[str, dict[str, object]] = {
+    "full": {},
+    "no_entities": {"query_entities": False},  # question parser resolves no entities
+    "no_supersession": {"supersession": False},  # append-only fact log, no validity/state
+    "no_digests": {"k_digests": 0},
+}
+
+
+@app.command("tune-c")
+def tune_c(
+    variants: Annotated[
+        str, typer.Option(help=f"Comma-separated: {', '.join(TUNE_VARIANTS)}.")
+    ] = "full",
+    split: Annotated[str, typer.Option(help="Tuning uses dev only.")] = "dev",
+    limit: Annotated[int, typer.Option(help="Max questions (0 = all in split).")] = 0,
+    seed: Annotated[int, typer.Option(help="Seed for bootstrap CIs.")] = 42,
+    out: Annotated[Path, typer.Option(help="Report directory.")] = Path("evals/reports"),
+    estimate_only: Annotated[
+        bool, typer.Option("--estimate", help="Estimate cost and exit.")
+    ] = False,
+    offline: Annotated[bool, typer.Option(help="Use cached LLM results only.")] = False,
+    yes: Annotated[bool, typer.Option("--yes", help="Skip the >$2 confirmation.")] = False,
+    batch: Annotated[bool, typer.Option("--batch/--no-batch")] = True,
+    latency_sample: Annotated[int, typer.Option()] = 10,
+) -> None:
+    """Run Concentrate variants (answer-time ablations) on the XL benchmark, same harness."""
+    from concentrate.agents.baselines import System
+    from concentrate.agents.concentrate_system import COMPLETE_MARKER, ConcentrateSystem
+    from concentrate.agents.retrieval import SentenceTransformerEmbedder
+    from concentrate.evals.runner import estimate, load_corpus, load_questions, run_eval
+
+    if split == "test":
+        raise typer.BadParameter("tune-c never runs on test; use `concentrate eval` for that")
+    names = [v.strip() for v in variants.split(",") if v.strip()]
+    unknown = [v for v in names if v not in TUNE_VARIANTS]
+    if unknown:
+        raise typer.BadParameter(f"unknown variants {unknown}; choose from {list(TUNE_VARIANTS)}")
+    client = LLMClient(offline=offline)
+    notes = load_corpus(NORTHWIND_XL)
+    questions = load_questions(NORTHWIND_XL, split, limit)
+    embedder = SentenceTransformerEmbedder()
+    built = [
+        ConcentrateSystem(
+            client,
+            embedder=embedder,
+            directory_path=NORTHWIND_XL / "directory.json",
+            name="concentrate" if v == "full" else f"c_{v}",
+            **TUNE_VARIANTS[v],  # type: ignore[arg-type]
+        )
+        for v in names
+    ]
+    for s in built:  # answer-time variants share the cached store; never build one here
+        if not (s.store_dir(notes) / COMPLETE_MARKER).exists():
+            raise typer.BadParameter(f"no finished store at {s.store_dir(notes)}; build it first")
+        s.ingest(notes)
+    systems: list[System] = list(built)
+    ests = estimate(
+        systems, questions, client.model, client=client, batch=batch, latency_sample=latency_sample
+    )
+    total = sum(e.usd for e in ests)
+    for e in ests:
+        typer.echo(f"  {e.system:<20} ≈ ${e.usd:6.2f} (incl. judge)")
+    typer.echo(f"{len(questions)} questions ({split}) · estimated total ≈ ${total:.2f}")
+    if estimate_only:
+        return
+    if total > BUDGET_CONFIRM_USD and not offline and not yes:
+        typer.confirm(
+            f"Estimated ${total:.2f} exceeds ${BUDGET_CONFIRM_USD:.0f}. Proceed?", abort=True
+        )
+    report = run_eval(
+        systems,
+        questions,
+        client,
+        seed=seed,
+        split=split,
+        budget_usd=float(os.environ.get("CONCENTRATE_BUDGET_USD") or 25),
+        out_dir=out,
+        notes=notes,
+        batch=batch,
+        latency_sample=latency_sample,
+        meta={"variants": names, "fixtures": str(NORTHWIND_XL)},
+    )
+    typer.echo((Path(report["paths"]["md"])).read_text())
+    typer.echo(f"spent ${report['meta']['spent_usd']:.2f} · report: {report['paths']['md']}")

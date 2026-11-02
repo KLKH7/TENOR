@@ -102,7 +102,15 @@ class MemoryIndex:
         return [("fact", i) if i < n else ("digest", i - n) for i in self.index.search(query, k)]
 
 
-def _fact_line(f: Fact, as_of: str, directory: EntityDirectory) -> str:
+def _fact_line(
+    f: Fact, as_of: str, directory: EntityDirectory, *, supersession: bool = True
+) -> str:
+    if not supersession:  # ablation: an append-only fact log (stated date, no validity/state)
+        reason = f" | reason: {f.reason}" if f.reason else ""
+        return (
+            f'- {directory.name(f.subject)} | {f.predicate} = "{f.value}" | stated '
+            f"{f.recorded_at[:10]}{reason} | lines [{', '.join(f.all_lines())}]"
+        )
     live = f.live_at(as_of, known_at=as_of)
     end = f.valid_to if (f.valid_to and (f.valid_to_recorded_at or "")[:10] <= as_of) else None
     state = "CURRENT" if live else ("superseded" if end else "not yet valid")
@@ -154,8 +162,13 @@ def build_context(
     k_facts: int = 20,
     k_digests: int = 4,
     retire_after_days: int | None = None,
+    supersession: bool = True,
 ) -> Context:
-    """Render the memory slice for one question (structured lookup + retrieval + lines)."""
+    """Render the memory slice for one question (structured lookup + retrieval + lines).
+
+    ``supersession=False`` (ablation) renders facts as an append-only log: each value with the
+    date it was stated, but no validity interval and no CURRENT/superseded state.
+    """
     store, directory = idx.store, idx.directory
     day = pq.as_of.isoformat()
     known = [f for f in idx.facts if f.recorded_at[:10] <= day]
@@ -191,10 +204,10 @@ def build_context(
         look.append(f"### {directory.name(subject)} ({subject})")
         for p in sorted(keep):
             for f in preds[p]:
-                look.append(_fact_line(f, day, directory))
+                look.append(_fact_line(f, day, directory, supersession=supersession))
                 shown[f.id] = f
         for f in related:
-            look.append(_fact_line(f, day, directory))
+            look.append(_fact_line(f, day, directory, supersession=supersession))
             shown[f.id] = f
     if look:
         sections.append(
@@ -230,7 +243,9 @@ def build_context(
     if extra_facts:
         sections.append(
             "## Related facts (search)\n"
-            + "\n".join(_fact_line(f, day, directory) for f in extra_facts)
+            + "\n".join(
+                _fact_line(f, day, directory, supersession=supersession) for f in extra_facts
+            )
         )
         shown.update({f.id: f for f in extra_facts})
     if digests:
