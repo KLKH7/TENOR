@@ -255,3 +255,17 @@ Details and metrics are in `docs/FIDELITY_V2.md`.
 - **Fixture-length-dependent test expectations re-pinned.** These are the batch cache keys and the Graphiti episode counts.
 
 **Known gaps.** Template signatures, a short long tail (p90 26 vs 38), "like" density, and summaries at ~270 words vs ~420. See FIDELITY_V2 §4.
+
+## Benchmark v2.1 extras (workstream P, generator `northwind-2.1`, 2026-11-02)
+
+Details: [BENCHMARK_V2_EXTRAS.md](BENCHMARK_V2_EXTRAS.md).
+- **Additive and opt-in.** `--extras` appends 10 hand-authored meetings about one new project (Halyard) and 26 questions in five new categories:
+  `room_attribution`, `identity_resolution`, `correction`, `commitment_tracking`, `long_horizon`.
+  - **Why opt-in:** every v2 note, question and split stays byte-identical, so v2 scores remain comparable and the committed fixture and pinned test values don't churn.
+  - **Trade-off:** extras live in one storyline with small n, so they are a diagnostic, not a leaderboard.
+- **New ground truth: `World.extras`.** It records which facts are retractions (never true), which commitments were implicit, which were resolved out of band, and which meetings had a shared room channel.
+  It is omitted from `world.json` when off, so v2 output is unchanged.
+- **Identity over time: `roster.identity_on(pid, date)`.** Invites and labels use the identity a person had on the meeting date. The directory holds only the current identity.
+- **Room labelling is ASSUMED** (SCHEMA_NOTES). The free probes (`synth/extras_checks.py`) confirm the intended difficulty:
+  - label-only attribution scores 0/6 on room questions, against 2/5 for v2 "who said";
+  - lexical retrieval still finds every room meeting.

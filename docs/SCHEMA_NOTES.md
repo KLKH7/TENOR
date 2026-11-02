@@ -142,6 +142,9 @@ These exist [spec summary]: `GET /v1/spaces`, `POST /v1/notes/search` (keywords,
 | ~25% of non-owner attendees have `name: null` (invite without a display name) | Shape VERIFIED live: the MCP shows such people by email handle, e.g. `Az1234`. Rate ASSUMED |
 | `organiser` is the note owner for internal meetings and the account owner for customer calls | ASSUMED |
 | `created_at` ≈ meeting start; `updated_at` = end + 1–15 min (summary generation) | ASSUMED |
+| v2.1 `--extras`, hybrid room: everyone in a conference room shares one system-audio channel; when Granola names it, the label is the room's name ("Room 4B"), never an in-room person. The room is a calendar resource among `invitees`, not in `attendees` | ASSUMED. Channel sharing follows from the capture model (one far-end audio stream). How Granola labels a room endpoint is unverified: it might stay bare `System audio` or take the name of one in-room invitee. Both alternatives keep attribution as hard or make it harder |
+| v2.1 display-name change: invites and speaker labels show the name and email the person had on the meeting date; the directory export shows only the current one | ASSUMED (calendar invites snapshot the attendee; HRIS exports hold current names) |
+| v2.1 contractor on a personal email address: no display name on invites, so Granola never names their passages; absent from the directory | ASSUMED (follows from naming coming from calendar display names) |
 
 ## Live MCP probe (2026-11-02): see `docs/PROBE_2026-11-02.md`
 

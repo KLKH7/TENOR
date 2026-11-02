@@ -98,33 +98,38 @@ def synth(
     ] = False,
     yes: Annotated[bool, typer.Option("--yes", help="Skip the >$2 cost confirmation.")] = False,
     scale: Annotated[str, typer.Option(help="base (40 meetings) or xl (~185 meetings).")] = "base",
+    extras: Annotated[
+        bool, typer.Option(help="v2.1: add hybrid rooms, identity mess, corrections, etc.")
+    ] = False,
 ) -> None:
     """Generate the synthetic Northwind Labs dataset and benchmark questions."""
     if scale == "xl" and out == NORTHWIND:
         out = NORTHWIND_XL
     from concentrate.synth.pipeline import (
-        GENERATOR_VERSION,
         build,
         estimate_polish_usd,
         generate_dataset,
+        generator_version,
     )
+
+    version = generator_version(extras)
 
     manifest = out / "manifest.json"
     if scale == "xl" and manifest.exists() and not estimate:
         import json as _json
 
         old = _json.loads(manifest.read_text()).get("generator")
-        if old != GENERATOR_VERSION:
+        if old != version:
             raise typer.BadParameter(
                 f"{out} holds a {old} corpus that memories and results may be built on; "
-                f"this generator is {GENERATOR_VERSION}. Write elsewhere with --out (e.g. "
+                f"this generator is {version}. Write elsewhere with --out (e.g. "
                 f"{out}-v2), or delete {out} first."
             )
 
     llm = None
     if polish or estimate:
         llm = LLMClient(offline=offline)
-        tin, tout, usd = estimate_polish_usd(build(seed, scale), llm.model)
+        tin, tout, usd = estimate_polish_usd(build(seed, scale, extras), llm.model)
         typer.echo(
             f"polish estimate ({llm.model}): ~{tin:,} input + ~{tout:,} output tokens "
             f"≈ ${usd:.2f} (uncached; heuristic counts incl. 30% thinking allowance)"
@@ -135,7 +140,7 @@ def synth(
             typer.confirm(
                 f"Estimated cost ${usd:.2f} exceeds ${BUDGET_CONFIRM_USD:.0f}. Proceed?", abort=True
             )
-    result = generate_dataset(seed, out, llm=llm, scale=scale)
+    result = generate_dataset(seed, out, llm=llm, scale=scale, extras=extras)
     v = result.validation
     typer.echo(
         f"wrote {result.meetings} notes, {result.utterances:,} utterances, "

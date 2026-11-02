@@ -19,6 +19,8 @@ from concentrate.synth.filler import GROUP, FillerContext, turn
 from concentrate.synth.roster import ORG_BY_ID, OWNER_ID, PROJECT_BY_ID
 from concentrate.synth.world import Beat, Evidence, Meeting, World
 
+EXTRAS_PREFIX = "v21-"  # == synth.extras.PREFIX (not imported: extras imports the renderer)
+
 # Slot-scaled length: real remote meetings run ~3,500 words in a 30-minute slot (FIDELITY.md).
 WORDS_PER_SLOT_MINUTE = 120
 
@@ -64,6 +66,9 @@ def pad_world(world: World, seed: int, factor: float = 1.0) -> World:
     world = world.model_copy(deep=True)
     remap: dict[str, dict[int, int]] = {}
     for meeting in world.meetings:
+        # v2.1 extras meetings draw from their own stream, so v2 meetings keep their filler.
+        own = meeting.key.startswith(EXTRAS_PREFIX)
+        r = random.Random(f"{seed}:pad:{meeting.key}") if own else rng
         target = round(meeting.minutes * WORDS_PER_SLOT_MINUTE * factor)
         words = sum(len(b.text.split()) for b in meeting.beats)
         locked = _locked_gaps(meeting, world)
@@ -73,9 +78,9 @@ def pad_world(world: World, seed: int, factor: float = 1.0) -> World:
         speakers = _speakers(meeting)
         inserts: dict[int, list[Beat]] = {}
         while words < target:
-            gap = rng.choice(gaps)
-            who = OWNER_ID if rng.random() < 0.3 else rng.choice(speakers)
-            text = turn(ctx, rng)
+            gap = r.choice(gaps)
+            who = OWNER_ID if r.random() < 0.3 else r.choice(speakers)
+            text = turn(ctx, r)
             words += len(text.split())
             # Names are protected so ASR noise and passage cuts never split "Beacon Freight".
             protect = tuple(t for t in ctx.topics if t in text)

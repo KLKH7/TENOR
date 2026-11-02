@@ -26,14 +26,14 @@ import hashlib
 import random
 import uuid
 from dataclasses import dataclass
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta
 
 from concentrate.core import granola
 from concentrate.core.models import utterance_id
 from concentrate.core.spoken import written
 from concentrate.synth.filler import SHORT, summary_points
 from concentrate.synth.noise import LEAD_INS, NoiseRates, end_style, fragment, noisify
-from concentrate.synth.roster import OWNER_ID, PEOPLE, person
+from concentrate.synth.roster import NO_DISPLAY_NAME, OWNER_ID, identity_on, person
 from concentrate.synth.story import granola_id
 from concentrate.synth.world import Meeting, World
 
@@ -114,11 +114,15 @@ def folders_output(seed: int, scale: str = "base") -> granola.ListFoldersOutput:
     return granola.ListFoldersOutput(folders=folders, hasMore=False, cursor=None)
 
 
-def _user(pid: str, rng: random.Random | None = None) -> granola.User:
-    """Owner and most attendees have display names; some invites only carry an email."""
-    p = person(pid)
+def _user(pid: str, on: date, rng: random.Random | None = None) -> granola.User:
+    """Owner and most attendees have display names; some invites only carry an email.
+
+    Names and emails are as of the meeting day (v2.1: display-name changes); a contractor on
+    a personal address never has a display name.
+    """
+    name, email = identity_on(pid, on)
     nameless = rng is not None and pid != OWNER_ID and rng.random() < NULL_NAME_RATE
-    return granola.User(name=None if nameless else p.name, email=p.email)
+    return granola.User(name=None if nameless or pid in NO_DISPLAY_NAME else name, email=email)
 
 
 # Granola-style summaries group points by topic, with progress and next steps at the end.
@@ -295,6 +299,10 @@ def render_meeting(
         for pid in sorted(meeting.attendees)
         if named and pid != owner and rng.random() < IDENTIFIED_SPEAKER_RATE
     }
+    # v2.1 hybrid room: everyone in the room shares one system-audio channel, which Granola
+    # can only label with the room's name (docs/BENCHMARK_V2_EXTRAS.md, ASSUMED).
+    room = world.extras.rooms.get(meeting.key) if world.extras else None
+    in_room = set(room.members) if room else set()
 
     def speaker_for(pid: str) -> granola.Speaker:
         mic = meeting.mode == "in_person" or pid == owner
@@ -302,8 +310,15 @@ def render_meeting(
         if meeting.key in DIARIZED:
             labels.setdefault(pid, f"Speaker {chr(ord('A') + len(labels))}")
             extra["diarization_label"] = labels[pid]
-        if pid in identified and rng.random() >= UNLABELED_PASSAGE_RATE:
-            extra["name"] = PEOPLE[pid].name
+        # Short-circuit order matters: only identified speakers draw from ``rng``.
+        if (
+            pid in identified
+            and pid not in NO_DISPLAY_NAME
+            and rng.random() >= UNLABELED_PASSAGE_RATE
+        ):
+            extra["name"] = (
+                room.name if room and pid in in_room else identity_on(pid, meeting.day)[0]
+            )
         return granola.Speaker(source="microphone" if mic else "speaker", **extra)
 
     evidence_segments: dict[int, list[int]] = {}
@@ -379,12 +394,18 @@ def render_meeting(
     event = None
     attendees: list[granola.User] = []
     if meeting.has_calendar_event:
-        attendees = [_user(a, rng) for a in meeting.attendees]
+        attendees = [_user(a, meeting.day, rng) for a in meeting.attendees]
         organiser = meeting.attendees[1] if meeting.kind == "customer" else owner
         event = granola.CalendarEvent(
             event_title=meeting.title,
-            invitees=[granola.CalendarInvitee(email=person(a).email) for a in meeting.attendees],
-            organiser=person(organiser).email,
+            invitees=[
+                *(
+                    granola.CalendarInvitee(email=identity_on(a, meeting.day)[1])
+                    for a in meeting.attendees
+                ),
+                *([granola.CalendarInvitee(email=room.email)] if room else []),
+            ],
+            organiser=identity_on(organiser, meeting.day)[1],
             calendar_event_id=(
                 hashlib.sha256(f"{seed}:{meeting.key}".encode()).hexdigest()[:26]
                 + meeting.start.astimezone(UTC).strftime("_%Y%m%dT%H%M%SZ")
@@ -404,7 +425,7 @@ def render_meeting(
         id=meeting.note_id,
         object="note",
         title=meeting.title,
-        owner=_user(owner),
+        owner=_user(owner, meeting.day),
         created_at=meeting.start.replace(second=0) + timedelta(seconds=12),
         updated_at=end + timedelta(minutes=rng.randint(1, 15)),
         deleted_at=None,

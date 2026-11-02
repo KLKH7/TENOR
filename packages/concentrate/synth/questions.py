@@ -32,6 +32,9 @@ from concentrate.synth.world import Commitment, Evidence, Fact, World
 Category = Literal[
     "single_hop", "multi_hop", "temporal", "latest_state", "entity_disambiguation",
     "commitment_status", "decision_change", "aggregation", "unanswerable",
+    # v2.1 extras (synth.extras, docs/BENCHMARK_V2_EXTRAS.md)
+    "room_attribution", "identity_resolution", "correction", "commitment_tracking",
+    "long_horizon",
 ]  # fmt: skip
 NOW = date(2026, 10, 24)  # the day after the last meeting: "today" for latest-state questions
 UNANSWERABLE = "UNANSWERABLE"
@@ -133,6 +136,7 @@ class _Gen:
         self.bm = beat_map
         self.rng = random.Random(f"{seed}:questions")
         self.qs: list[Question] = []
+        self.prefix = "q"
         self._texts: set[str] = set()
         self.meeting = {m.key: m for m in world.meetings}
 
@@ -162,7 +166,7 @@ class _Gen:
         self._texts.add(question)
         self.qs.append(
             Question(
-                id=f"q{len(self.qs) + 1:03d}",
+                id=f"{self.prefix}{len(self.qs) + 1:03d}",
                 category=category,
                 question=question,
                 answer=answer,
