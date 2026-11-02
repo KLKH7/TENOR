@@ -1,0 +1,591 @@
+{
+  "id": "not_rwo3gvYvcMvUIm",
+  "object": "note",
+  "title": "Harbor Ventures monthly update",
+  "owner": {
+    "name": "Priya Raman",
+    "email": "priya@northwind.dev"
+  },
+  "created_at": "2026-10-07T16:02:12Z",
+  "updated_at": "2026-10-07T16:35:00Z",
+  "deleted_at": null,
+  "web_url": "https://notes.granola.ai/d/c88bf498-61e2-220e-78af-855e587f6fd7",
+  "calendar_event": {
+    "event_title": "Harbor Ventures monthly update",
+    "invitees": [
+      {
+        "email": "priya@northwind.dev"
+      },
+      {
+        "email": "marcus@northwind.dev"
+      },
+      {
+        "email": "olivia@northwind.dev"
+      },
+      {
+        "email": "simone@harbor.vc"
+      }
+    ],
+    "organiser": "priya@northwind.dev",
+    "calendar_event_id": "dedcfe4e76fc8d291a57be474e_20261007T160200Z",
+    "scheduled_start_time": "2026-10-07T16:02:00Z",
+    "scheduled_end_time": "2026-10-07T16:32:00Z"
+  },
+  "attachments": [],
+  "attendees": [
+    {
+      "name": "Priya Raman",
+      "email": "priya@northwind.dev"
+    },
+    {
+      "name": "Marcus Chen",
+      "email": "marcus@northwind.dev"
+    },
+    {
+      "name": "Olivia Grant",
+      "email": "olivia@northwind.dev"
+    },
+    {
+      "name": "Simone Laurent",
+      "email": "simone@harbor.vc"
+    }
+  ],
+  "folder_membership": [
+    {
+      "id": "fol_UlesHjfsZhENws",
+      "object": "folder",
+      "name": "Leadership",
+      "parent_folder_id": null,
+      "space_id": null
+    }
+  ],
+  "space_membership": [],
+  "summary_text": "Company metrics\nARR: $348k",
+  "summary_markdown": "### Company metrics\n- ARR: $348k",
+  "private_notes_text": null,
+  "private_notes_markdown": null,
+  "transcript": [
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Can- Can everyone hear me okay?",
+      "start_time": "2026-10-07T16:02:51.595000Z",
+      "end_time": "2026-10-07T16:02:53.902000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "name": "Priya Raman"
+      },
+      "text": "I'm not sure that's the uh, right framing, honestly.",
+      "start_time": "2026-10-07T16:02:54.415000Z",
+      "end_time": "2026-10-07T16:02:57.876000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "We need to to be careful not to overcommit here.",
+      "start_time": "2026-10-07T16:02:58.373000Z",
+      "end_time": "2026-10-07T16:03:02.219000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "name": "Priya Raman"
+      },
+      "text": "I don't love it, but I can live with it.",
+      "start_time": "2026-10-07T16:03:03.347000Z",
+      "end_time": "2026-10-07T16:03:07.193000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "That's fair.",
+      "start_time": "2026-10-07T16:03:07.469000Z",
+      "end_time": "2026-10-07T16:03:08.269000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "I I hadn't thought about it that way.",
+      "start_time": "2026-10-07T16:03:08.986000Z",
+      "end_time": "2026-10-07T16:03:12.063000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "name": "Priya Raman"
+      },
+      "text": "Let me pull up the doc so we're all looking at the same thing.",
+      "start_time": "2026-10-07T16:03:13.187000Z",
+      "end_time": "2026-10-07T16:03:18.572000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "Yep.",
+      "start_time": "2026-10-07T16:03:17.168000Z",
+      "end_time": "2026-10-07T16:03:17.768000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "name": "Priya Raman"
+      },
+      "text": "Is it just me or is the office freezing today?",
+      "start_time": "2026-10-07T16:03:19.682000Z",
+      "end_time": "2026-10-07T16:03:23.528000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "I'm worried uh, about how this lands with existing customers.",
+      "start_time": "2026-10-07T16:03:23.922000Z",
+      "end_time": "2026-10-07T16:03:27.769000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Simone Laurent"
+      },
+      "text": "Sorry, can you say that again?",
+      "start_time": "2026-10-07T16:03:28.566000Z",
+      "end_time": "2026-10-07T16:03:30.873000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Simone Laurent"
+      },
+      "text": "You cut out for a second.",
+      "start_time": "2026-10-07T16:03:31.558000Z",
+      "end_time": "2026-10-07T16:03:33.866000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Can we park that and come back to it uh, at the end?",
+      "start_time": "2026-10-07T16:03:34.692000Z",
+      "end_time": "2026-10-07T16:03:39.692000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "name": "Priya Raman"
+      },
+      "text": "Mm-hm.",
+      "start_time": "2026-10-07T16:03:38.335000Z",
+      "end_time": "2026-10-07T16:03:38.935000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "Yeah, I agree with that.",
+      "start_time": "2026-10-07T16:03:40.059000Z",
+      "end_time": "2026-10-07T16:03:41.982000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "ARR is three hundred forty eight k, and we have twenty two months of runway.",
+      "start_time": "2026-10-07T16:03:42.787000Z",
+      "end_time": "2026-10-07T16:03:48.556000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Simone Laurent"
+      },
+      "text": "Yeah, that makes sense to me.",
+      "start_time": "2026-10-07T16:03:48.899000Z",
+      "end_time": "2026-10-07T16:03:51.206000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "name": "Priya Raman"
+      },
+      "text": "What do we need to believe for this I mean, to work?",
+      "start_time": "2026-10-07T16:03:51.803000Z",
+      "end_time": "2026-10-07T16:03:56.418000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Okay.",
+      "start_time": "2026-10-07T16:03:55.335000Z",
+      "end_time": "2026-10-07T16:03:55.935000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "What's the downside if like, we're wrong about this?",
+      "start_time": "2026-10-07T16:03:57.084000Z",
+      "end_time": "2026-10-07T16:04:00.546000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Simone Laurent"
+      },
+      "text": "Okay, I mean, so where did you know, we we land on that last time?",
+      "start_time": "2026-10-07T16:04:00.991000Z",
+      "end_time": "2026-10-07T16:04:06.760000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "like, Do we have any data on that or is it gut feel?",
+      "start_time": "2026-10-07T16:04:07.811000Z",
+      "end_time": "2026-10-07T16:04:12.811000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "We've been going back and forth on this for a while.",
+      "start_time": "2026-10-07T16:04:13.335000Z",
+      "end_time": "2026-10-07T16:04:17.566000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "name": "Priya Raman"
+      },
+      "text": "Let's not go down that rabbit hole right now.",
+      "start_time": "2026-10-07T16:04:18.023000Z",
+      "end_time": "2026-10-07T16:04:21.484000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Simone Laurent"
+      },
+      "text": "Good momentum.",
+      "start_time": "2026-10-07T16:04:22.210000Z",
+      "end_time": "2026-10-07T16:04:23.010000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Simone Laurent"
+      },
+      "text": "What's the risk risk on the launch?",
+      "start_time": "2026-10-07T16:04:23.634000Z",
+      "end_time": "2026-10-07T16:04:26.326000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "name": "Priya Raman"
+      },
+      "text": "Sorry, I was on mute.",
+      "start_time": "2026-10-07T16:04:26.904000Z",
+      "end_time": "2026-10-07T16:04:28.827000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "name": "Priya Raman"
+      },
+      "text": "I was saying I agree.",
+      "start_time": "2026-10-07T16:04:29.710000Z",
+      "end_time": "2026-10-07T16:04:31.633000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "name": "Priya Raman"
+      },
+      "text": "Let's not go you know, down uh, that rabbit hole right now.",
+      "start_time": "2026-10-07T16:04:32.201000Z",
+      "end_time": "2026-10-07T16:04:36.816000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "name": "Priya Raman"
+      },
+      "text": "Do we have any data on that or is it gut feel?",
+      "start_time": "2026-10-07T16:04:37.709000Z",
+      "end_time": "2026-10-07T16:04:42.325000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "name": "Priya Raman"
+      },
+      "text": "The board will ask about this, you know, so let's have a clear story.",
+      "start_time": "2026-10-07T16:04:43.310000Z",
+      "end_time": "2026-10-07T16:04:48.694000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "name": "Priya Raman"
+      },
+      "text": "We've been going back and forth on this for a while.",
+      "start_time": "2026-10-07T16:04:49.719000Z",
+      "end_time": "2026-10-07T16:04:53.949000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Simone Laurent"
+      },
+      "text": "um, I think that's mostly right, but there's a nuance there.",
+      "start_time": "2026-10-07T16:04:54.522000Z",
+      "end_time": "2026-10-07T16:04:58.753000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "I think the question is really about scope.",
+      "start_time": "2026-10-07T16:04:59.514000Z",
+      "end_time": "2026-10-07T16:05:02.591000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "name": "Priya Raman"
+      },
+      "text": "Right, right.",
+      "start_time": "2026-10-07T16:05:03.255000Z",
+      "end_time": "2026-10-07T16:05:04.055000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "name": "Priya Raman"
+      },
+      "text": "Keep going.",
+      "start_time": "2026-10-07T16:05:05.220000Z",
+      "end_time": "2026-10-07T16:05:06.020000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Simone Laurent"
+      },
+      "text": "Hold on, my uh, laptop is about to die, let me grab a charger.",
+      "start_time": "2026-10-07T16:05:07.125000Z",
+      "end_time": "2026-10-07T16:05:12.510000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "name": "Priya Raman"
+      },
+      "text": "Let you know, me pull up the doc uh, so we're all looking at the same thing.",
+      "start_time": "2026-10-07T16:05:13.641000Z",
+      "end_time": "2026-10-07T16:05:20.180000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "name": "Priya Raman"
+      },
+      "text": "Sorry, I was on mute.",
+      "start_time": "2026-10-07T16:05:20.720000Z",
+      "end_time": "2026-10-07T16:05:22.643000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "name": "Priya Raman"
+      },
+      "text": "I was saying I agree.",
+      "start_time": "2026-10-07T16:05:22.851000Z",
+      "end_time": "2026-10-07T16:05:24.774000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "I don't love it, but I can live with it.",
+      "start_time": "2026-10-07T16:05:25.604000Z",
+      "end_time": "2026-10-07T16:05:29.450000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Payments um, migration.",
+      "start_time": "2026-10-07T16:05:29.899000Z",
+      "end_time": "2026-10-07T16:05:31.053000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "It's scheduled this week.",
+      "start_time": "2026-10-07T16:05:31.974000Z",
+      "end_time": "2026-10-07T16:05:33.513000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Simone Laurent"
+      },
+      "text": "Okay, so where did we land on that last time?",
+      "start_time": "2026-10-07T16:05:34.201000Z",
+      "end_time": "2026-10-07T16:05:38.047000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "name": "Priya Raman"
+      },
+      "text": "What's the downside if we're wrong about this?",
+      "start_time": "2026-10-07T16:05:39.053000Z",
+      "end_time": "2026-10-07T16:05:42.130000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Yeah, I agree with that.",
+      "start_time": "2026-10-07T16:05:42.724000Z",
+      "end_time": "2026-10-07T16:05:44.647000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Can you share your screen?",
+      "start_time": "2026-10-07T16:05:44.986000Z",
+      "end_time": "2026-10-07T16:05:46.910000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "I'd rather make a call today than drag it out.",
+      "start_time": "2026-10-07T16:05:47.177000Z",
+      "end_time": "2026-10-07T16:05:51.023000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "name": "Priya Raman"
+      },
+      "text": "That's fair.",
+      "start_time": "2026-10-07T16:05:51.420000Z",
+      "end_time": "2026-10-07T16:05:52.220000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "name": "Priya Raman"
+      },
+      "text": "I hadn't thought about it that way.",
+      "start_time": "2026-10-07T16:05:53.293000Z",
+      "end_time": "2026-10-07T16:05:55.985000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "Let's make sure sales and marketing hear uh, this at the same time.",
+      "start_time": "2026-10-07T16:05:56.292000Z",
+      "end_time": "2026-10-07T16:06:01.292000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "name": "Priya Raman"
+      },
+      "text": "Yeah, that makes sense to I mean, me.",
+      "start_time": "2026-10-07T16:06:02.017000Z",
+      "end_time": "2026-10-07T16:06:05.094000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "name": "Priya Raman"
+      },
+      "text": "Can we park that and come back to it at the end?",
+      "start_time": "2026-10-07T16:06:05.842000Z",
+      "end_time": "2026-10-07T16:06:10.457000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Olivia Grant"
+      },
+      "text": "Hold on, my laptop is about to die, let me grab a charger.",
+      "start_time": "2026-10-07T16:06:10.874000Z",
+      "end_time": "2026-10-07T16:06:15.874000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "name": "Priya Raman"
+      },
+      "text": "Totally.",
+      "start_time": "2026-10-07T16:06:14.672000Z",
+      "end_time": "2026-10-07T16:06:15.272000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "name": "Priya Raman"
+      },
+      "text": "Can you I mean, share your you know, screen?",
+      "start_time": "2026-10-07T16:06:16.886000Z",
+      "end_time": "2026-10-07T16:06:20.347000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Great- Great, that's it from me.",
+      "start_time": "2026-10-07T16:06:21.029000Z",
+      "end_time": "2026-10-07T16:06:23.337000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Marcus Chen"
+      },
+      "text": "Talk soon.",
+      "start_time": "2026-10-07T16:06:24.297000Z",
+      "end_time": "2026-10-07T16:06:25.097000Z"
+    }
+  ]
+}

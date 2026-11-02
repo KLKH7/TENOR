@@ -1,0 +1,319 @@
+{
+  "people": [
+    {
+      "id": "priya",
+      "name": "Priya Raman",
+      "email": "priya@northwind.dev",
+      "role": "Head of Product",
+      "team": "product",
+      "org": "Northwind Labs"
+    },
+    {
+      "id": "marcus",
+      "name": "Marcus Chen",
+      "email": "marcus@northwind.dev",
+      "role": "CEO",
+      "team": "leadership",
+      "org": "Northwind Labs"
+    },
+    {
+      "id": "olivia",
+      "name": "Olivia Grant",
+      "email": "olivia@northwind.dev",
+      "role": "Head of Finance",
+      "team": "leadership",
+      "org": "Northwind Labs"
+    },
+    {
+      "id": "dev",
+      "name": "Dev Iyer",
+      "email": "dev@northwind.dev",
+      "role": "CTO",
+      "team": "leadership",
+      "org": "Northwind Labs"
+    },
+    {
+      "id": "alex_k",
+      "name": "Alex Kim",
+      "email": "alex.k@northwind.dev",
+      "role": "Engineering Manager",
+      "team": "engineering",
+      "org": "Northwind Labs"
+    },
+    {
+      "id": "sam_p",
+      "name": "Sam Patel",
+      "email": "sam.p@northwind.dev",
+      "role": "Backend Engineer",
+      "team": "engineering",
+      "org": "Northwind Labs"
+    },
+    {
+      "id": "megan",
+      "name": "Megan Liu",
+      "email": "megan.l@northwind.dev",
+      "role": "Frontend Engineer",
+      "team": "engineering",
+      "org": "Northwind Labs"
+    },
+    {
+      "id": "tomas",
+      "name": "Tomás Herrera",
+      "email": "tomas.h@northwind.dev",
+      "role": "Infrastructure Engineer",
+      "team": "engineering",
+      "org": "Northwind Labs"
+    },
+    {
+      "id": "ines",
+      "name": "Inês Duarte",
+      "email": "ines.d@northwind.dev",
+      "role": "Mobile Engineer",
+      "team": "engineering",
+      "org": "Northwind Labs"
+    },
+    {
+      "id": "kofi",
+      "name": "Kofi Mensah",
+      "email": "kofi.m@northwind.dev",
+      "role": "Data Engineer",
+      "team": "engineering",
+      "org": "Northwind Labs"
+    },
+    {
+      "id": "ruth",
+      "name": "Ruth Abebe",
+      "email": "ruth.a@northwind.dev",
+      "role": "QA Engineer",
+      "team": "engineering",
+      "org": "Northwind Labs"
+    },
+    {
+      "id": "yusuf",
+      "name": "Yusuf Demir",
+      "email": "yusuf.d@northwind.dev",
+      "role": "Security Engineer",
+      "team": "engineering",
+      "org": "Northwind Labs"
+    },
+    {
+      "id": "sam_o",
+      "name": "Sam Okafor",
+      "email": "sam.o@northwind.dev",
+      "role": "Product Designer",
+      "team": "design",
+      "org": "Northwind Labs"
+    },
+    {
+      "id": "lena",
+      "name": "Lena Fischer",
+      "email": "lena.f@northwind.dev",
+      "role": "Design Lead",
+      "team": "design",
+      "org": "Northwind Labs"
+    },
+    {
+      "id": "elena",
+      "name": "Elena Petrova",
+      "email": "elena.p@northwind.dev",
+      "role": "Product Manager",
+      "team": "product",
+      "org": "Northwind Labs"
+    },
+    {
+      "id": "alex_r",
+      "name": "Alex Rivera",
+      "email": "alex.r@northwind.dev",
+      "role": "Account Executive",
+      "team": "sales",
+      "org": "Northwind Labs"
+    },
+    {
+      "id": "jordan",
+      "name": "Jordan Blake",
+      "email": "jordan.b@northwind.dev",
+      "role": "Head of Sales",
+      "team": "sales",
+      "org": "Northwind Labs"
+    },
+    {
+      "id": "felix",
+      "name": "Felix Moreau",
+      "email": "felix.m@northwind.dev",
+      "role": "Sales Engineer",
+      "team": "sales",
+      "org": "Northwind Labs"
+    },
+    {
+      "id": "nadia",
+      "name": "Nadia Haddad",
+      "email": "nadia.h@northwind.dev",
+      "role": "Customer Success Manager",
+      "team": "customer success",
+      "org": "Northwind Labs"
+    },
+    {
+      "id": "carla",
+      "name": "Carla Nuñez",
+      "email": "carla.n@northwind.dev",
+      "role": "Support Lead",
+      "team": "customer success",
+      "org": "Northwind Labs"
+    },
+    {
+      "id": "hana",
+      "name": "Hana Sato",
+      "email": "hana.s@northwind.dev",
+      "role": "Marketing Lead",
+      "team": "marketing",
+      "org": "Northwind Labs"
+    },
+    {
+      "id": "theo",
+      "name": "Theo Walsh",
+      "email": "theo.w@northwind.dev",
+      "role": "Growth Lead",
+      "team": "marketing",
+      "org": "Northwind Labs"
+    },
+    {
+      "id": "grace",
+      "name": "Grace Lin",
+      "email": "grace.l@northwind.dev",
+      "role": "Data Scientist",
+      "team": "data",
+      "org": "Northwind Labs"
+    },
+    {
+      "id": "ben",
+      "name": "Ben Okoro",
+      "email": "ben.o@northwind.dev",
+      "role": "People & Ops Lead",
+      "team": "operations",
+      "org": "Northwind Labs"
+    },
+    {
+      "id": "felicia",
+      "name": "Felicia Norberg",
+      "email": "felicia.n@northwind.dev",
+      "role": "Office Manager",
+      "team": "operations",
+      "org": "Northwind Labs"
+    },
+    {
+      "id": "dana",
+      "name": "Dana Ortiz",
+      "email": "dana@acmeway.com",
+      "role": "VP Operations",
+      "team": "external",
+      "org": "Acmeway"
+    },
+    {
+      "id": "owen",
+      "name": "Owen Price",
+      "email": "owen.price@beaconfreight.com",
+      "role": "Head of IT",
+      "team": "external",
+      "org": "Beacon Freight"
+    },
+    {
+      "id": "mira",
+      "name": "Mira Shah",
+      "email": "mira.shah@corvidbank.com",
+      "role": "Compliance Director",
+      "team": "external",
+      "org": "Corvid Bank"
+    },
+    {
+      "id": "luis",
+      "name": "Luis Romero",
+      "email": "luis@driftwoodretail.com",
+      "role": "COO",
+      "team": "external",
+      "org": "Driftwood Retail"
+    },
+    {
+      "id": "simone",
+      "name": "Simone Laurent",
+      "email": "simone@harbor.vc",
+      "role": "Partner",
+      "team": "external",
+      "org": "Harbor Ventures"
+    }
+  ],
+  "orgs": [
+    {
+      "id": "acmeway",
+      "name": "Acmeway",
+      "kind": "customer",
+      "domain": "acmeway.com"
+    },
+    {
+      "id": "beacon_freight",
+      "name": "Beacon Freight",
+      "kind": "customer",
+      "domain": "beaconfreight.com"
+    },
+    {
+      "id": "corvid",
+      "name": "Corvid Bank",
+      "kind": "customer",
+      "domain": "corvidbank.com"
+    },
+    {
+      "id": "driftwood",
+      "name": "Driftwood Retail",
+      "kind": "customer",
+      "domain": "driftwoodretail.com"
+    },
+    {
+      "id": "harbor",
+      "name": "Harbor Ventures",
+      "kind": "investor",
+      "domain": "harbor.vc"
+    }
+  ],
+  "projects": [
+    {
+      "id": "falcon",
+      "name": "Falcon",
+      "aliases": [
+        "the payments migration",
+        "PAY-212"
+      ],
+      "description": "Migration of billing from the legacy processor to the new payments platform"
+    },
+    {
+      "id": "beacon",
+      "name": "Beacon",
+      "aliases": [
+        "the onboarding redesign"
+      ],
+      "description": "Redesign of the new-customer onboarding flow (not the customer Beacon Freight)"
+    },
+    {
+      "id": "otter",
+      "name": "Otter",
+      "aliases": [
+        "mobile v2"
+      ],
+      "description": "Version 2 of the mobile app"
+    },
+    {
+      "id": "lighthouse",
+      "name": "Lighthouse",
+      "aliases": [
+        "the analytics pipeline"
+      ],
+      "description": "Rebuild of the product analytics pipeline"
+    },
+    {
+      "id": "teams",
+      "name": "Northwind Teams",
+      "aliases": [
+        "the team plan"
+      ],
+      "description": "New per-seat team plan; the launch the company is working towards"
+    }
+  ]
+}

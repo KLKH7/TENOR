@@ -1,0 +1,635 @@
+{
+  "id": "not_i0kpeW6NCQ4Jpe",
+  "object": "note",
+  "title": "Pricing review: Teams v2",
+  "owner": {
+    "name": "Priya Raman",
+    "email": "priya@northwind.dev"
+  },
+  "created_at": "2026-09-29T13:03:12Z",
+  "updated_at": "2026-09-29T13:50:00Z",
+  "deleted_at": null,
+  "web_url": "https://notes.granola.ai/d/4d3a7312-c020-55a0-7efd-13890fc336c2",
+  "calendar_event": {
+    "event_title": "Pricing review: Teams v2",
+    "invitees": [
+      {
+        "email": "priya@northwind.dev"
+      },
+      {
+        "email": "marcus@northwind.dev"
+      },
+      {
+        "email": "olivia@northwind.dev"
+      },
+      {
+        "email": "jordan.b@northwind.dev"
+      },
+      {
+        "email": "elena.p@northwind.dev"
+      },
+      {
+        "email": "alex.r@northwind.dev"
+      }
+    ],
+    "organiser": "priya@northwind.dev",
+    "calendar_event_id": "c5760272eee16f348ca54e8baa_20260929T130300Z",
+    "scheduled_start_time": "2026-09-29T13:03:00Z",
+    "scheduled_end_time": "2026-09-29T13:48:00Z"
+  },
+  "attachments": [],
+  "attendees": [
+    {
+      "name": "Priya Raman",
+      "email": "priya@northwind.dev"
+    },
+    {
+      "name": "Marcus Chen",
+      "email": "marcus@northwind.dev"
+    },
+    {
+      "name": "Olivia Grant",
+      "email": "olivia@northwind.dev"
+    },
+    {
+      "name": "Jordan Blake",
+      "email": "jordan.b@northwind.dev"
+    },
+    {
+      "name": "Elena Petrova",
+      "email": "elena.p@northwind.dev"
+    },
+    {
+      "name": "Alex Rivera",
+      "email": "alex.r@northwind.dev"
+    }
+  ],
+  "folder_membership": [
+    {
+      "id": "fol_UlesHjfsZhENws",
+      "object": "folder",
+      "name": "Leadership",
+      "parent_folder_id": null,
+      "space_id": null
+    }
+  ],
+  "space_membership": [],
+  "summary_text": "Northwind Teams launch\nPrice raised to $25/seat/month; SSO + audit logs now included",
+  "summary_markdown": "### Northwind Teams launch\n- Price raised to $25/seat/month; SSO + audit logs now included",
+  "private_notes_text": "acmeway grandfathered at $20 for pilot year\nprice raised to $25/seat/month",
+  "private_notes_markdown": "acmeway grandfathered at $20 for pilot year\nprice raised to $25/seat/month",
+  "transcript": [
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Okay I think we're good to start.",
+      "start_time": "2026-09-29T13:03:33.852000Z",
+      "end_time": "2026-09-29T13:03:36.544000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Let me pull up doc so we're all looking at the same thing.",
+      "start_time": "2026-09-29T13:03:37.592000Z",
+      "end_time": "2026-09-29T13:03:42.592000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Yeah, I agree with that.",
+      "start_time": "2026-09-29T13:03:43.015000Z",
+      "end_time": "2026-09-29T13:03:44.938000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "That's fair.",
+      "start_time": "2026-09-29T13:03:45.955000Z",
+      "end_time": "2026-09-29T13:03:46.755000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "I hadn't um, thought like, about it that way.",
+      "start_time": "2026-09-29T13:03:47.576000Z",
+      "end_time": "2026-09-29T13:03:51.038000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "What do we need to believe for this to work?",
+      "start_time": "2026-09-29T13:03:51.977000Z",
+      "end_time": "2026-09-29T13:03:55.823000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I'm worried about how this lands with with existing customers.",
+      "start_time": "2026-09-29T13:03:56.637000Z",
+      "end_time": "2026-09-29T13:04:00.483000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Can we park that and come back to it at the end?",
+      "start_time": "2026-09-29T13:04:00.821000Z",
+      "end_time": "2026-09-29T13:04:05.436000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "We need to be careful not to overcommit here.",
+      "start_time": "2026-09-29T13:04:05.994000Z",
+      "end_time": "2026-09-29T13:04:09.455000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Hold on, my laptop is about to die, let me grab a uh, charger.",
+      "start_time": "2026-09-29T13:04:10.546000Z",
+      "end_time": "2026-09-29T13:04:15.931000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Let me pull up the doc so we're all looking at the same um, thing.",
+      "start_time": "2026-09-29T13:04:17.074000Z",
+      "end_time": "2026-09-29T13:04:22.843000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Mm-hm.",
+      "start_time": "2026-09-29T13:04:21.624000Z",
+      "end_time": "2026-09-29T13:04:22.224000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Can you share your screen?",
+      "start_time": "2026-09-29T13:04:23.751000Z",
+      "end_time": "2026-09-29T13:04:25.674000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Let's not go down that rabbit hole right now.",
+      "start_time": "2026-09-29T13:04:26.503000Z",
+      "end_time": "2026-09-29T13:04:29.965000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Sorry, I like, was on mute.",
+      "start_time": "2026-09-29T13:04:30.719000Z",
+      "end_time": "2026-09-29T13:04:33.027000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I was saying I um, agree.",
+      "start_time": "2026-09-29T13:04:33.458000Z",
+      "end_time": "2026-09-29T13:04:35.766000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "I- I think the question is really about scope.",
+      "start_time": "2026-09-29T13:04:36.625000Z",
+      "end_time": "2026-09-29T13:04:40.086000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "I'm I mean, not sure that's the right framing, honestly.",
+      "start_time": "2026-09-29T13:04:40.808000Z",
+      "end_time": "2026-09-29T13:04:44.654000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Is it just me or is the office freezing today?",
+      "start_time": "2026-09-29T13:04:45.181000Z",
+      "end_time": "2026-09-29T13:04:49.027000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I think the question is really about scope.",
+      "start_time": "2026-09-29T13:04:49.582000Z",
+      "end_time": "2026-09-29T13:04:52.659000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Yeah, like, that makes sense to me.",
+      "start_time": "2026-09-29T13:04:53.602000Z",
+      "end_time": "2026-09-29T13:04:56.294000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Do we have any data data on that or is it gut feel?",
+      "start_time": "2026-09-29T13:04:56.988000Z",
+      "end_time": "2026-09-29T13:05:01.988000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I think that's mostly right, but there's a nuance there.",
+      "start_time": "2026-09-29T13:05:02.404000Z",
+      "end_time": "2026-09-29T13:05:06.250000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "What do we need to believe for this to work?",
+      "start_time": "2026-09-29T13:05:07.279000Z",
+      "end_time": "2026-09-29T13:05:11.125000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "I don't love it, but I can live with I mean, it.",
+      "start_time": "2026-09-29T13:05:12.266000Z",
+      "end_time": "2026-09-29T13:05:16.881000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Right, right.",
+      "start_time": "2026-09-29T13:05:17.656000Z",
+      "end_time": "2026-09-29T13:05:18.456000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Keep going.",
+      "start_time": "2026-09-29T13:05:19.150000Z",
+      "end_time": "2026-09-29T13:05:19.950000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "um, Do we have any any data on that or is it uh, gut feel?",
+      "start_time": "2026-09-29T13:05:20.481000Z",
+      "end_time": "2026-09-29T13:05:26.250000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Totally.",
+      "start_time": "2026-09-29T13:05:23.366000Z",
+      "end_time": "2026-09-29T13:05:23.966000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Let's make sure sales and marketing hear this at the same time.",
+      "start_time": "2026-09-29T13:05:26.990000Z",
+      "end_time": "2026-09-29T13:05:31.606000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Corvid and Beacon you know, Freight both need SSO and audit logs, and that's real cost for you know, us.",
+      "start_time": "2026-09-29T13:05:32.631000Z",
+      "end_time": "2026-09-29T13:05:40.323000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "um, So we put SSO and audit logs in the uh, plan and go to twenty five dollars a seat.",
+      "start_time": "2026-09-29T13:05:41.237000Z",
+      "end_time": "2026-09-29T13:05:48.929000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Hold on, my laptop is about to die, let um, me grab a charger.",
+      "start_time": "2026-09-29T13:05:49.898000Z",
+      "end_time": "2026-09-29T13:05:55.283000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Sorry, I was like, on mute.",
+      "start_time": "2026-09-29T13:05:56.435000Z",
+      "end_time": "2026-09-29T13:05:58.742000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "I uh, was saying I agree.",
+      "start_time": "2026-09-29T13:05:59.855000Z",
+      "end_time": "2026-09-29T13:06:02.163000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "I don't love it, but I can live with it.",
+      "start_time": "2026-09-29T13:06:03.150000Z",
+      "end_time": "2026-09-29T13:06:06.996000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Let's not go down that rabbit hole right now.",
+      "start_time": "2026-09-29T13:06:07.616000Z",
+      "end_time": "2026-09-29T13:06:11.078000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "I'd rather make a call today than drag it it out.",
+      "start_time": "2026-09-29T13:06:11.707000Z",
+      "end_time": "2026-09-29T13:06:15.937000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Can you share your screen?",
+      "start_time": "2026-09-29T13:06:16.661000Z",
+      "end_time": "2026-09-29T13:06:18.584000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "The board uh, will ask about this, so um, let's have a clear story.",
+      "start_time": "2026-09-29T13:06:19.002000Z",
+      "end_time": "2026-09-29T13:06:24.387000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Got it.",
+      "start_time": "2026-09-29T13:06:22.779000Z",
+      "end_time": "2026-09-29T13:06:23.379000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "We've been going back and forth on this for a while.",
+      "start_time": "2026-09-29T13:06:24.638000Z",
+      "end_time": "2026-09-29T13:06:28.869000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "What's the downside uh, if we're wrong about this?",
+      "start_time": "2026-09-29T13:06:29.522000Z",
+      "end_time": "2026-09-29T13:06:32.984000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "I'm not sure that's the right framing, honestly.",
+      "start_time": "2026-09-29T13:06:33.455000Z",
+      "end_time": "2026-09-29T13:06:36.532000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Sorry, can you say that again?",
+      "start_time": "2026-09-29T13:06:36.975000Z",
+      "end_time": "2026-09-29T13:06:39.283000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "You cut out for a second.",
+      "start_time": "2026-09-29T13:06:40.307000Z",
+      "end_time": "2026-09-29T13:06:42.614000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Okay, so where did we land on like, that last time?",
+      "start_time": "2026-09-29T13:06:43.450000Z",
+      "end_time": "2026-09-29T13:06:47.681000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "We've been going back and forth on this for uh, a while.",
+      "start_time": "2026-09-29T13:06:48.628000Z",
+      "end_time": "2026-09-29T13:06:53.243000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "We need to be careful not to overcommit here.",
+      "start_time": "2026-09-29T13:06:54.129000Z",
+      "end_time": "2026-09-29T13:06:57.590000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "The board will ask about this, so let's have a clear story.",
+      "start_time": "2026-09-29T13:06:58.767000Z",
+      "end_time": "2026-09-29T13:07:03.383000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "What's the downside if we're wrong about this?",
+      "start_time": "2026-09-29T13:07:03.675000Z",
+      "end_time": "2026-09-29T13:07:06.752000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Sorry, can you say that again?",
+      "start_time": "2026-09-29T13:07:07.290000Z",
+      "end_time": "2026-09-29T13:07:09.598000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "You cut out for a second.",
+      "start_time": "2026-09-29T13:07:10.230000Z",
+      "end_time": "2026-09-29T13:07:12.537000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "I- I think that's mostly right, but like, there's a nuance there.",
+      "start_time": "2026-09-29T13:07:13.648000Z",
+      "end_time": "2026-09-29T13:07:18.263000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "What about Acmeway?",
+      "start_time": "2026-09-29T13:07:19.183000Z",
+      "end_time": "2026-09-29T13:07:20.337000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "They signed at twenty.",
+      "start_time": "2026-09-29T13:07:20.734000Z",
+      "end_time": "2026-09-29T13:07:22.272000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Acmeway keeps twenty for the pilot year.",
+      "start_time": "2026-09-29T13:07:22.668000Z",
+      "end_time": "2026-09-29T13:07:25.361000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "We honour it.",
+      "start_time": "2026-09-29T13:07:26.008000Z",
+      "end_time": "2026-09-29T13:07:27.162000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Right, right.",
+      "start_time": "2026-09-29T13:07:27.832000Z",
+      "end_time": "2026-09-29T13:07:28.632000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Keep going.",
+      "start_time": "2026-09-29T13:07:29.561000Z",
+      "end_time": "2026-09-29T13:07:30.361000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Let's make sure sales sales and marketing hear this at the same time.",
+      "start_time": "2026-09-29T13:07:30.767000Z",
+      "end_time": "2026-09-29T13:07:35.767000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "That's fair.",
+      "start_time": "2026-09-29T13:07:36.131000Z",
+      "end_time": "2026-09-29T13:07:36.931000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "I hadn't thought about it that way.",
+      "start_time": "2026-09-29T13:07:37.618000Z",
+      "end_time": "2026-09-29T13:07:40.311000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I'm worried like, about how this lands with existing customers.",
+      "start_time": "2026-09-29T13:07:40.720000Z",
+      "end_time": "2026-09-29T13:07:44.567000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "I'd rather make a call today than drag it out.",
+      "start_time": "2026-09-29T13:07:45.657000Z",
+      "end_time": "2026-09-29T13:07:49.504000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Yeah, that that makes sense to me.",
+      "start_time": "2026-09-29T13:07:50.505000Z",
+      "end_time": "2026-09-29T13:07:53.197000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Yeah, I agree with that.",
+      "start_time": "2026-09-29T13:07:53.702000Z",
+      "end_time": "2026-09-29T13:07:55.625000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Cool, I'll let you all go.",
+      "start_time": "2026-09-29T13:07:56.809000Z",
+      "end_time": "2026-09-29T13:07:59.117000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Thanks.",
+      "start_time": "2026-09-29T13:08:00.026000Z",
+      "end_time": "2026-09-29T13:08:00.826000Z"
+    }
+  ]
+}

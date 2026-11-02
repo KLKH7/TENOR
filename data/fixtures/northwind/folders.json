@@ -1,0 +1,76 @@
+{
+  "folders": [
+    {
+      "id": "fol_aDBqiIE3nREo2E",
+      "object": "folder",
+      "name": "1:1s",
+      "parent_folder_id": null,
+      "space_id": null
+    },
+    {
+      "id": "fol_vBPx7SWFAsg0i1",
+      "object": "folder",
+      "name": "Acmeway",
+      "parent_folder_id": "fol_L2GnChAjXfuSg9",
+      "space_id": null
+    },
+    {
+      "id": "fol_PXTSoZdfdtoCBa",
+      "object": "folder",
+      "name": "Beacon Freight",
+      "parent_folder_id": "fol_L2GnChAjXfuSg9",
+      "space_id": null
+    },
+    {
+      "id": "fol_TY1NX6Svy3loYk",
+      "object": "folder",
+      "name": "Company",
+      "parent_folder_id": null,
+      "space_id": null
+    },
+    {
+      "id": "fol_pzZB7bGdN8h8Vf",
+      "object": "folder",
+      "name": "Corvid Bank",
+      "parent_folder_id": "fol_L2GnChAjXfuSg9",
+      "space_id": null
+    },
+    {
+      "id": "fol_L2GnChAjXfuSg9",
+      "object": "folder",
+      "name": "Customers",
+      "parent_folder_id": null,
+      "space_id": null
+    },
+    {
+      "id": "fol_bKGcvvmzS6k9f2",
+      "object": "folder",
+      "name": "Design",
+      "parent_folder_id": null,
+      "space_id": null
+    },
+    {
+      "id": "fol_hLAE070Z1oi2Pl",
+      "object": "folder",
+      "name": "Driftwood Retail",
+      "parent_folder_id": "fol_L2GnChAjXfuSg9",
+      "space_id": null
+    },
+    {
+      "id": "fol_MtOdMuF5cUjGeS",
+      "object": "folder",
+      "name": "Engineering",
+      "parent_folder_id": null,
+      "space_id": null
+    },
+    {
+      "id": "fol_UlesHjfsZhENws",
+      "object": "folder",
+      "name": "Leadership",
+      "parent_folder_id": null,
+      "space_id": null
+    }
+  ],
+  "hasMore": false,
+  "cursor": null
+}

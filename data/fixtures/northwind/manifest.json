@@ -1,0 +1,45 @@
+{
+  "generator": "northwind-1",
+  "seed": 42,
+  "polish": {
+    "enabled": false,
+    "prompt": null,
+    "model": null,
+    "stats": null
+  },
+  "noise_rates": {
+    "filler_per_word": 0.04,
+    "repeat_per_word": 0.015,
+    "false_start_per_turn": 0.06,
+    "name_mishear": 0.5,
+    "homophone": 0.05,
+    "drop_short_word": 0.01
+  },
+  "counts": {
+    "meetings": 40,
+    "utterances": 2427,
+    "words": 19797,
+    "facts": 53,
+    "commitments": 32,
+    "questions": 230
+  },
+  "validation": {
+    "total": 230,
+    "by_category": {
+      "single_hop": 63,
+      "entity_disambiguation": 25,
+      "temporal": 46,
+      "latest_state": 17,
+      "decision_change": 10,
+      "commitment_status": 22,
+      "aggregation": 10,
+      "multi_hop": 12,
+      "unanswerable": 25
+    },
+    "by_split": {
+      "test": 159,
+      "dev": 71
+    },
+    "errors": []
+  }
+}

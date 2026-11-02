@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+/* Visual language matched to Granola's own screens on Mobbin (docs/UI_REFERENCES.md):
+   greige canvas, off-white note sheet, cream composer, green accent, low-contrast serif.
+   No Granola logo, name or wordmark is used. */
+@theme {
+  --color-canvas: #e6e5e0;
+  --color-sheet: #f1f0eb;
+  --color-card: #fafaf6;
+  --color-ink: #1f1f1d;
+  --color-muted: #73726d;
+  --color-faint: #a3a29c;
+  --color-line: #dedcd6;
+  --color-accent: #4f7f1a;
+  --color-accent-soft: #e4edd2;
+  --color-lime: #a8cf45;
+  --color-them: #e8833a;
+  --color-panel: #ffffff;
+  --color-hairline: #ebebe8;
+  --color-transcript: #8a8a86;
+  --color-speaker-a: #f2892a;
+  --color-speaker-b: #c63fd4;
+  --color-speaker-c: #3f7ee8;
+  --color-speaker-d: #2f9e6b;
+  --color-round: #dddcd6;
+  --color-date-red: #d4503f;
+  --color-tile-lime: #e3ecc8;
+  --color-tile-lime-ink: #5b7a1e;
+  --color-warn: #8a5a12;
+  --color-warn-soft: #f4e9d3;
+  --font-serif: var(--font-serif-face), Georgia, serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}

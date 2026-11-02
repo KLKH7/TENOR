@@ -1,0 +1,27 @@
+{
+  "folders": [
+    {
+      "id": "fol_Nw0CustAcme001",
+      "object": "folder",
+      "name": "Acmeway",
+      "parent_folder_id": "fol_Nw0Customers01",
+      "space_id": null
+    },
+    {
+      "id": "fol_Nw0Customers01",
+      "object": "folder",
+      "name": "Customers",
+      "parent_folder_id": null,
+      "space_id": null
+    },
+    {
+      "id": "fol_Nw0Engineering",
+      "object": "folder",
+      "name": "Engineering",
+      "parent_folder_id": null,
+      "space_id": null
+    }
+  ],
+  "hasMore": false,
+  "cursor": null
+}

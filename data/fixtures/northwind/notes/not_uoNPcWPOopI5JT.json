@@ -1,0 +1,521 @@
+{
+  "id": "not_uoNPcWPOopI5JT",
+  "object": "note",
+  "title": "Eng standup",
+  "owner": {
+    "name": "Priya Raman",
+    "email": "priya@northwind.dev"
+  },
+  "created_at": "2026-10-12T09:00:12Z",
+  "updated_at": "2026-10-12T09:24:00Z",
+  "deleted_at": null,
+  "web_url": "https://notes.granola.ai/d/0e97359f-216a-92e3-e33c-3bb093566340",
+  "calendar_event": {
+    "event_title": "Eng standup",
+    "invitees": [
+      {
+        "email": "priya@northwind.dev"
+      },
+      {
+        "email": "alex.k@northwind.dev"
+      },
+      {
+        "email": "sam.p@northwind.dev"
+      },
+      {
+        "email": "megan.l@northwind.dev"
+      },
+      {
+        "email": "tomas.h@northwind.dev"
+      },
+      {
+        "email": "ines.d@northwind.dev"
+      },
+      {
+        "email": "kofi.m@northwind.dev"
+      },
+      {
+        "email": "ruth.a@northwind.dev"
+      }
+    ],
+    "organiser": "priya@northwind.dev",
+    "calendar_event_id": "ec7cb13ef9affb08fc9ae40fe6_20261012T090000Z",
+    "scheduled_start_time": "2026-10-12T09:00:00Z",
+    "scheduled_end_time": "2026-10-12T09:20:00Z"
+  },
+  "attachments": [],
+  "attendees": [
+    {
+      "name": "Priya Raman",
+      "email": "priya@northwind.dev"
+    },
+    {
+      "name": "Alex Kim",
+      "email": "alex.k@northwind.dev"
+    },
+    {
+      "name": "Sam Patel",
+      "email": "sam.p@northwind.dev"
+    },
+    {
+      "name": "Megan Liu",
+      "email": "megan.l@northwind.dev"
+    },
+    {
+      "name": "Tomás Herrera",
+      "email": "tomas.h@northwind.dev"
+    },
+    {
+      "name": "Inês Duarte",
+      "email": "ines.d@northwind.dev"
+    },
+    {
+      "name": "Kofi Mensah",
+      "email": "kofi.m@northwind.dev"
+    },
+    {
+      "name": "Ruth Abebe",
+      "email": "ruth.a@northwind.dev"
+    }
+  ],
+  "folder_membership": [
+    {
+      "id": "fol_MtOdMuF5cUjGeS",
+      "object": "folder",
+      "name": "Engineering",
+      "parent_folder_id": null,
+      "space_id": null
+    }
+  ],
+  "space_membership": [],
+  "summary_text": "Falcon (payments migration)\nFalcon cutover completed Oct 8\nProgress updates\nDone: fix the double-charge retry bug (Sam)\nDone: set up the Falcon staging database (Tomás)\nReassigned: write the regression suite for checkout (Ruth → Kofi)\nNext steps\nRuth to triage the flaky end-to-end tests by Friday\nTomás to add alerting for failed charges by Wednesday\nMegan to clean up the settings page by Friday",
+  "summary_markdown": "### Falcon (payments migration)\n- Falcon cutover completed Oct 8\n\n### Progress updates\n- **Done:** fix the double-charge retry bug (Sam)\n- **Done:** set up the Falcon staging database (Tomás)\n- **Reassigned:** write the regression suite for checkout (Ruth → Kofi)\n\n### Next steps\n- Ruth to triage the flaky end-to-end tests by **Friday**\n- Tomás to add alerting for failed charges by **Wednesday**\n- Megan to clean up the settings page by **Friday**",
+  "private_notes_text": null,
+  "private_notes_markdown": null,
+  "transcript": [
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Can uh, everyone hear me okay?",
+      "start_time": "2026-10-12T09:01:27.764000Z",
+      "end_time": "2026-10-12T09:01:30.072000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "I paired on the migration stuff for a bit, it's gnarly but fine.",
+      "start_time": "2026-10-12T09:01:31.092000Z",
+      "end_time": "2026-10-12T09:01:36.092000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "There's a lot of tech debt in that area, for what it's worth.",
+      "start_time": "2026-10-12T09:01:37.254000Z",
+      "end_time": "2026-10-12T09:01:42.254000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Yeah.",
+      "start_time": "2026-10-12T09:01:39.996000Z",
+      "end_time": "2026-10-12T09:01:40.596000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Oh and the double charge retry bug is finally done, sorry that took um, a while.",
+      "start_time": "2026-10-12T09:01:42.524000Z",
+      "end_time": "2026-10-12T09:01:48.678000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "The logs are super noisy right now, it's hard to find anything.",
+      "start_time": "2026-10-12T09:01:49.313000Z",
+      "end_time": "2026-10-12T09:01:53.928000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Something keep an eye on, anyway.",
+      "start_time": "2026-10-12T09:01:54.408000Z",
+      "end_time": "2026-10-12T09:01:56.716000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I think that's mostly right, but there's a nuance there.",
+      "start_time": "2026-10-12T09:01:57.905000Z",
+      "end_time": "2026-10-12T09:02:01.751000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Thomas, anything to report?",
+      "start_time": "2026-10-12T09:02:02.929000Z",
+      "end_time": "2026-10-12T09:02:04.468000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Yeah, the Falcon staging database is done, that went out last week.",
+      "start_time": "2026-10-12T09:02:04.971000Z",
+      "end_time": "2026-10-12T09:02:09.587000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Okay, so where did we land on that last time?",
+      "start_time": "2026-10-12T09:02:10.003000Z",
+      "end_time": "2026-10-12T09:02:13.849000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "That's fair.",
+      "start_time": "2026-10-12T09:02:15.039000Z",
+      "end_time": "2026-10-12T09:02:15.839000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "I hadn't thought about it that way.",
+      "start_time": "2026-10-12T09:02:16.710000Z",
+      "end_time": "2026-10-12T09:02:19.402000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "I'm not sure that's the right framing, honestly.",
+      "start_time": "2026-10-12T09:02:20.122000Z",
+      "end_time": "2026-10-12T09:02:23.199000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Ruth is heads down on other things this week, so Kofi is going to take the regression suite for checkout instead.",
+      "start_time": "2026-10-12T09:02:23.561000Z",
+      "end_time": "2026-10-12T09:02:31.638000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "uh, Can we park that and come back to uh, it at the end?",
+      "start_time": "2026-10-12T09:02:32.719000Z",
+      "end_time": "2026-10-12T09:02:38.104000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "I spent most of yesterday in code review, there was a lot in the queue.",
+      "start_time": "2026-10-12T09:02:38.759000Z",
+      "end_time": "2026-10-12T09:02:44.528000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Do- Do we have any data on that or is it gut feel?",
+      "start_time": "2026-10-12T09:02:45.598000Z",
+      "end_time": "2026-10-12T09:02:50.598000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Megan, anything to report?",
+      "start_time": "2026-10-12T09:02:51.267000Z",
+      "end_time": "2026-10-12T09:02:52.806000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Yeah, the three step onboarding flow is done, that went out last week.",
+      "start_time": "2026-10-12T09:02:53.925000Z",
+      "end_time": "2026-10-12T09:02:58.925000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Falcon is done.",
+      "start_time": "2026-10-12T09:02:59.949000Z",
+      "end_time": "2026-10-12T09:03:01.103000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Cutover went through on October eighth, no failed charges.",
+      "start_time": "2026-10-12T09:03:01.822000Z",
+      "end_time": "2026-10-12T09:03:05.284000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "There's- There's a lot of tech debt in that area, for what it's worth.",
+      "start_time": "2026-10-12T09:03:05.827000Z",
+      "end_time": "2026-10-12T09:03:11.211000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Yep.",
+      "start_time": "2026-10-12T09:03:08.559000Z",
+      "end_time": "2026-10-12T09:03:09.159000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Ruth, what's on your plate?",
+      "start_time": "2026-10-12T09:03:11.466000Z",
+      "end_time": "2026-10-12T09:03:13.389000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "So my main thing is the flaky end to end tests, should be done by Friday.",
+      "start_time": "2026-10-12T09:03:13.990000Z",
+      "end_time": "2026-10-12T09:03:20.144000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Yeah, you know, I agree with that.",
+      "start_time": "2026-10-12T09:03:20.533000Z",
+      "end_time": "2026-10-12T09:03:23.225000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "I'm not sure that's the right framing, honestly.",
+      "start_time": "2026-10-12T09:03:23.888000Z",
+      "end_time": "2026-10-12T09:03:26.965000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "We should probably write that down somewhere so we don't forget.",
+      "start_time": "2026-10-12T09:03:28.064000Z",
+      "end_time": "2026-10-12T09:03:32.294000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "I looked at um, the error dashboard and nothing scary.",
+      "start_time": "2026-10-12T09:03:33.060000Z",
+      "end_time": "2026-10-12T09:03:36.906000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Yeah, that makes sense to me.",
+      "start_time": "2026-10-12T09:03:37.598000Z",
+      "end_time": "2026-10-12T09:03:39.906000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Let's not go down that rabbit hole right now.",
+      "start_time": "2026-10-12T09:03:40.781000Z",
+      "end_time": "2026-10-12T09:03:44.243000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Hold on, my laptop is I mean, about to die, let me grab a charger.",
+      "start_time": "2026-10-12T09:03:45.228000Z",
+      "end_time": "2026-10-12T09:03:50.997000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Okay Tomás, what about you?",
+      "start_time": "2026-10-12T09:03:51.574000Z",
+      "end_time": "2026-10-12T09:03:53.497000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "So my main thing is the alerting for failed charges, should be done by Wednesday.",
+      "start_time": "2026-10-12T09:03:53.732000Z",
+      "end_time": "2026-10-12T09:03:59.501000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Can you share your screen?",
+      "start_time": "2026-10-12T09:04:00.055000Z",
+      "end_time": "2026-10-12T09:04:01.978000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Right- Right, uh, right.",
+      "start_time": "2026-10-12T09:04:02.773000Z",
+      "end_time": "2026-10-12T09:04:04.311000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Keep going.",
+      "start_time": "2026-10-12T09:04:05.284000Z",
+      "end_time": "2026-10-12T09:04:06.084000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I think the question really about scope.",
+      "start_time": "2026-10-12T09:04:07.004000Z",
+      "end_time": "2026-10-12T09:04:09.697000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "The test suite has been pretty you know, flaky this week, just flagging it.",
+      "start_time": "2026-10-12T09:04:09.961000Z",
+      "end_time": "2026-10-12T09:04:15.346000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Megan, what's on your plate?",
+      "start_time": "2026-10-12T09:04:15.980000Z",
+      "end_time": "2026-10-12T09:04:17.903000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "I'm on the settings page, I'll have uh, it by Friday.",
+      "start_time": "2026-10-12T09:04:18.172000Z",
+      "end_time": "2026-10-12T09:04:22.402000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Hold on, my laptop is about to die, let me um, grab a charger.",
+      "start_time": "2026-10-12T09:04:23.273000Z",
+      "end_time": "2026-10-12T09:04:28.658000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Is the staging environment back up?",
+      "start_time": "2026-10-12T09:04:29.650000Z",
+      "end_time": "2026-10-12T09:04:31.957000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "It was down earlier.",
+      "start_time": "2026-10-12T09:04:32.280000Z",
+      "end_time": "2026-10-12T09:04:33.819000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Sorry, can you say that that again?",
+      "start_time": "2026-10-12T09:04:34.332000Z",
+      "end_time": "2026-10-12T09:04:37.025000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "You cut out for a second.",
+      "start_time": "2026-10-12T09:04:38.024000Z",
+      "end_time": "2026-10-12T09:04:40.332000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Let me pull up the doc so we're all looking at the the same thing.",
+      "start_time": "2026-10-12T09:04:40.663000Z",
+      "end_time": "2026-10-12T09:04:46.432000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Sorry, I was on mute.",
+      "start_time": "2026-10-12T09:04:47.417000Z",
+      "end_time": "2026-10-12T09:04:49.340000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "I was saying I agree.",
+      "start_time": "2026-10-12T09:04:49.901000Z",
+      "end_time": "2026-10-12T09:04:51.824000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I don't have any blockers really.",
+      "start_time": "2026-10-12T09:04:53.020000Z",
+      "end_time": "2026-10-12T09:04:55.328000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Let me I mean, pull up the like, doc so we're all looking at the same thing.",
+      "start_time": "2026-10-12T09:04:55.958000Z",
+      "end_time": "2026-10-12T09:05:02.496000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Okay, thanks everyone.",
+      "start_time": "2026-10-12T09:05:02.834000Z",
+      "end_time": "2026-10-12T09:05:03.988000Z"
+    }
+  ]
+}

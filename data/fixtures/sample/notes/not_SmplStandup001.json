@@ -1,0 +1,94 @@
+{
+  "id": "not_SmplStandup001",
+  "object": "note",
+  "title": "Eng standup",
+  "owner": {
+    "name": "Priya Raman",
+    "email": "priya@northwind.dev"
+  },
+  "created_at": "2026-09-07T09:00:12Z",
+  "updated_at": "2026-09-07T09:21:40Z",
+  "deleted_at": null,
+  "web_url": "https://notes.granola.ai/d/00000000-0000-4000-8000-000000000001",
+  "calendar_event": {
+    "event_title": "Eng standup",
+    "invitees": [
+      {
+        "email": "priya@northwind.dev"
+      },
+      {
+        "email": "sam.p@northwind.dev"
+      },
+      {
+        "email": "alex.k@northwind.dev"
+      }
+    ],
+    "organiser": "priya@northwind.dev",
+    "calendar_event_id": "nwstandup_20260907T090000Z",
+    "scheduled_start_time": "2026-09-07T09:00:00Z",
+    "scheduled_end_time": "2026-09-07T09:15:00Z"
+  },
+  "attachments": [],
+  "attendees": [
+    {
+      "name": "Priya Raman",
+      "email": "priya@northwind.dev"
+    },
+    {
+      "name": "Sam Patel",
+      "email": "sam.p@northwind.dev"
+    },
+    {
+      "name": "Alex Kim",
+      "email": "alex.k@northwind.dev"
+    }
+  ],
+  "folder_membership": [
+    {
+      "id": "fol_Nw0Engineering",
+      "object": "folder",
+      "name": "Engineering",
+      "parent_folder_id": null,
+      "space_id": null
+    }
+  ],
+  "space_membership": [],
+  "summary_text": "Falcon migration on track; Sam to finish PAY-212 cutover script by Thursday.",
+  "summary_markdown": "### Falcon (payments migration)\n- On track for cutover next week\n- Sam owns the PAY-212 cutover script, due **Thursday**\n\n### Blockers\n- None raised",
+  "private_notes_text": "falcon ok\nsam - script thurs",
+  "private_notes_markdown": "falcon ok\nsam - script thurs",
+  "transcript": [
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Okay um let's go round. Sam, how's Falcon looking?",
+      "start_time": "2026-09-07T09:00:30Z",
+      "end_time": "2026-09-07T09:00:34Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "Yeah so the uh the cutover script for PAY two twelve is like eighty percent done, I'll have it by Thursday.",
+      "start_time": "2026-09-07T09:00:35Z",
+      "end_time": "2026-09-07T09:00:43Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "I can review it Thursday afternoon.",
+      "start_time": "2026-09-07T09:00:44Z",
+      "end_time": "2026-09-07T09:00:46Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "Great. Any blockers? No? Cool, thanks all.",
+      "start_time": "2026-09-07T09:00:47Z",
+      "end_time": "2026-09-07T09:00:52Z"
+    }
+  ]
+}
