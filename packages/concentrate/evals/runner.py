@@ -131,7 +131,7 @@ def build_systems(
                 mod = importlib.import_module(f"concentrate.agents.{module}")
             except ImportError as exc:
                 raise ValueError(f"{n} is not available: {exc}") from exc
-            built.append(getattr(mod, cls)(client, notes))
+            built.append(getattr(mod, cls)(client))  # corpus arrives via ingest(notes)
         else:
             raise ValueError(f"unknown system {n!r}; choose from {SYSTEMS}")
     return built
@@ -188,8 +188,11 @@ def estimate(
         jin, jout = JUDGE_TOKENS_EST
         usd += cost_usd(model, jin * len(questions), jout * len(questions))
         ingest_usd = 0.0
+        priced = getattr(s, "estimate_ingest_usd", None)  # cache-aware, when a system has it
         estimate_ingest = getattr(s, "estimate_ingest", None)
-        if estimate_ingest is not None and notes is not None:
+        if priced is not None and notes is not None:
+            ingest_usd = float(priced(notes))
+        elif estimate_ingest is not None and notes is not None:
             iin, iout = estimate_ingest(notes)
             ingest_usd = cost_usd(ingest_model(), iin, iout)
         out.append(Estimate(s.name, len(questions), tin, tout, usd + ingest_usd, exact, ingest_usd))
