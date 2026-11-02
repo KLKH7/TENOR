@@ -9,8 +9,10 @@ Responsibilities:
   API calls and returns byte-identical outputs.
 * **Accounting.** Every call (cached or not) is recorded in a :class:`Ledger` with tokens, cost
   and latency, aggregated per pipeline stage.
-* **Robustness.** SDK retries for 429/5xx; server-side refusal fallback; refusals and truncation
-  raise typed errors instead of returning partial JSON.
+* **Robustness.** Explicit timeouts and our own logged retries with exponential backoff
+  (:mod:`concentrate.llm.resilience`); server-side refusal fallback; refusals and truncation
+  raise typed errors instead of returning partial JSON. A call that fails or times out writes
+  nothing to the cache and nothing to the ledger. Every reply beats the stall watchdog.
 * **Batch prefetch.** :func:`prefetch_turns` / :func:`prefetch_structured` send many requests
   through the Message Batches API (50% price) and write each result into the *same* cache file
   the interactive path would, so the normal code then replays it with no divergence. Batch
@@ -21,6 +23,7 @@ The backend is pluggable so tests run with a fake and never touch the network.
 
 from __future__ import annotations
 
+import functools
 import hashlib
 import json
 import os
@@ -32,7 +35,18 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any, Protocol, TypeVar
 
+import httpx2
 from pydantic import BaseModel
+
+from concentrate.llm.resilience import (
+    DEFAULT_POLICY,
+    MIN_READ_TIMEOUT_S,
+    RetryPolicy,
+    anthropic_client,
+    call_with_retries,
+    timeout_for,
+)
+from concentrate.watchdog import beat
 
 DEFAULT_MODEL = "claude-opus-5-5"
 
@@ -147,19 +161,35 @@ def structured_params(request: LLMRequest, model: str) -> dict[str, Any]:
 
 
 class AnthropicBackend:
-    """Calls the Claude Messages API with structured output and refusal fallback."""
+    """Calls the Claude Messages API with structured output and refusal fallback.
 
-    def __init__(self, max_retries: int = 4) -> None:
-        import anthropic  # local import: tests and offline runs never need the SDK configured
+    Each call gets a timeout scaled to its ``max_tokens`` and is retried under ``policy``
+    (SDK retries are off; see :mod:`concentrate.llm.resilience`).
+    """
 
-        self._client = anthropic.Anthropic(max_retries=max_retries)
+    def __init__(
+        self,
+        policy: RetryPolicy = DEFAULT_POLICY,
+        *,
+        sdk_client: Any | None = None,
+        sleep: Callable[[float], None] | None = None,
+    ) -> None:
+        # The SDK is imported lazily: tests and offline runs never need it configured.
+        self._client = sdk_client if sdk_client is not None else anthropic_client()
+        self._policy, self._sleep = policy, sleep
 
     def complete(self, request: LLMRequest, model: str) -> Completion:
         kwargs = structured_params(request, model)
         if model in _FALLBACK_MODELS:
             kwargs["betas"] = ["server-side-fallback-2026-07-01"]
             kwargs["fallbacks"] = "default"
-        response = self._client.beta.messages.create(**kwargs)
+        kwargs["timeout"] = timeout_for(request.max_tokens)
+        response = call_with_retries(
+            lambda: self._client.beta.messages.create(**kwargs),
+            what=f"{request.stage} ({request.prompt_id})",
+            policy=self._policy,
+            sleep=self._sleep,
+        )
         text = next((b.text for b in response.content if b.type == "text"), "")
         return Completion(
             text=text,
@@ -302,6 +332,7 @@ class LLMClient:
                 batch=completion.batch,
             )
         )
+        beat()
         return out_type.model_validate_json(completion.text)
 
 
@@ -395,14 +426,27 @@ def turn_completion(
     )
 
 
-def _anthropic_turn(client: Any, request: TurnRequest, model: str) -> TurnCompletion:
+def _anthropic_turn(
+    client: Any,
+    request: TurnRequest,
+    model: str,
+    policy: RetryPolicy = DEFAULT_POLICY,
+    sleep: Callable[[float], None] | None = None,
+) -> TurnCompletion:
     kwargs = turn_params(request, model)
     if model in _FALLBACK_MODELS:
         kwargs["betas"] = ["server-side-fallback-2026-07-01"]
         kwargs["fallbacks"] = "default"
-    start = time.perf_counter()
-    response = client.beta.messages.create(**kwargs)
-    latency = time.perf_counter() - start
+    kwargs["timeout"] = timeout_for(request.max_tokens)
+    holder: dict[str, float] = {}
+
+    def attempt() -> Any:
+        holder["start"] = time.perf_counter()  # latency of the attempt that succeeded
+        return client.beta.messages.create(**kwargs)
+
+    what = f"{request.stage} ({request.prompt_id})"
+    response = call_with_retries(attempt, what=what, policy=policy, sleep=sleep)
+    latency = time.perf_counter() - holder["start"]
     return turn_completion(response.model_dump(mode="json", exclude_none=True), latency_s=latency)
 
 
@@ -438,9 +482,7 @@ def run_turn(
         if client.offline:
             raise LLMError(f"cache miss in offline mode for {request.prompt_id} ({key[:12]})")
         if backend is None:
-            import anthropic
-
-            backend = _SdkToolBackend(anthropic.Anthropic(max_retries=4))
+            backend = _SdkToolBackend(anthropic_client())
         completion = backend.turn(request, client.model)
         if completion.stop_reason == "refusal":
             raise LLMRefusal(f"{request.prompt_id}: model declined the request")
@@ -462,6 +504,7 @@ def run_turn(
             batch=completion.batch,
         )
     )
+    beat()
     return completion
 
 
@@ -477,11 +520,16 @@ def _turn_cost(c: TurnCompletion) -> float:
 
 
 class _SdkToolBackend:
-    def __init__(self, sdk_client: Any) -> None:
-        self._client = sdk_client
+    def __init__(
+        self,
+        sdk_client: Any,
+        policy: RetryPolicy = DEFAULT_POLICY,
+        sleep: Callable[[float], None] | None = None,
+    ) -> None:
+        self._client, self._policy, self._sleep = sdk_client, policy, sleep
 
     def turn(self, request: TurnRequest, model: str) -> TurnCompletion:
-        return _anthropic_turn(self._client, request, model)
+        return _anthropic_turn(self._client, request, model, self._policy, self._sleep)
 
 
 def count_tokens(texts: list[str], model: str, cache_dir: Path) -> list[int]:
@@ -489,8 +537,6 @@ def count_tokens(texts: list[str], model: str, cache_dir: Path) -> list[int]:
 
     Counts include a few tokens of message framing per text, which is what a call would pay.
     """
-    import anthropic
-
     out: list[int] = []
     sdk: Any = None
     for text in texts:
@@ -500,9 +546,11 @@ def count_tokens(texts: list[str], model: str, cache_dir: Path) -> list[int]:
             out.append(int(path.read_text()))
             continue
         if sdk is None:
-            sdk = anthropic.Anthropic(max_retries=6)
-        result = sdk.messages.count_tokens(
-            model=model, messages=[{"role": "user", "content": text}]
+            sdk = anthropic_client(max_tokens=0)
+        messages: list[dict[str, Any]] = [{"role": "user", "content": text}]
+        result = call_with_retries(
+            functools.partial(sdk.messages.count_tokens, model=model, messages=messages),
+            what="count_tokens",
         )
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(str(result.input_tokens))
@@ -554,20 +602,42 @@ class AnthropicBatchBackend:
     interactive call (which does use ``fallbacks``).
     """
 
-    def __init__(self, max_retries: int = 4) -> None:
-        import anthropic
-
-        self._client = anthropic.Anthropic(max_retries=max_retries)
+    def __init__(self, policy: RetryPolicy = DEFAULT_POLICY, *, sdk_client: Any = None) -> None:
+        # Batch bodies can be ~200 MB: allow a long write; replies are small, so reads stay short.
+        self._client = sdk_client if sdk_client is not None else anthropic_client(max_tokens=0)
+        self._policy = policy
+        self._upload_timeout = httpx2.Timeout(MIN_READ_TIMEOUT_S, connect=10.0, write=600.0)
 
     def create(self, requests: list[dict[str, Any]]) -> str:
-        batch = self._client.messages.batches.create(requests=requests)  # type: ignore[arg-type]
+        # Not idempotent: a create whose reply is lost may have made a batch server-side. Retrying
+        # can then submit it twice (both billed); we accept that over hanging, and log it.
+        batch = call_with_retries(
+            lambda: self._client.messages.batches.create(
+                requests=requests,
+                timeout=self._upload_timeout,
+            ),
+            what=f"batches.create ({len(requests)} requests)",
+            policy=self._policy,
+        )
         return str(batch.id)
 
     def retrieve(self, batch_id: str) -> str:
-        return str(self._client.messages.batches.retrieve(batch_id).processing_status)
+        batch = call_with_retries(
+            lambda: self._client.messages.batches.retrieve(batch_id),
+            what=f"batches.retrieve {batch_id}",
+            policy=self._policy,
+        )
+        return str(batch.processing_status)
 
     def results(self, batch_id: str) -> Iterable[BatchItemResult]:
-        for item in self._client.messages.batches.results(batch_id):
+        # Opening the stream is retried; a drop mid-stream raises (rerunning the command resumes:
+        # items already written to the cache are skipped).
+        stream = call_with_retries(
+            lambda: self._client.messages.batches.results(batch_id),
+            what=f"batches.results {batch_id}",
+            policy=self._policy,
+        )
+        for item in stream:
             r = item.result
             if r.type == "succeeded":
                 message = r.message.model_dump(mode="json", exclude_none=True)
@@ -646,6 +716,7 @@ def _run_batch(
     interval = poll_s
     while pending:
         pending = [b for b in pending if backend.retrieve(b) != "ended"]
+        beat()  # a batch can legitimately take hours: polling is liveness
         if pending:
             sleep(interval)
             interval = min(max_poll_s, interval * 1.5)

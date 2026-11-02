@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 import os
-from contextlib import ExitStack
+from contextlib import AbstractContextManager, ExitStack
 from enum import StrEnum
 from pathlib import Path
 from typing import Annotated
@@ -23,6 +23,7 @@ from concentrate.sources.poller import sync as run_sync
 app = typer.Typer(no_args_is_help=True, add_completion=False)
 
 DEFAULT_FIXTURES = Path("data/fixtures/sample")
+STALL_MINUTES = 15.0  # > the longest silent wait one API call can have (~6 min; HARDENING.md)
 
 
 class SourceKind(StrEnum):
@@ -188,6 +189,10 @@ def eval_cmd(
         int,
         typer.Option(help="With --batch: first N questions run interactively to measure latency."),
     ] = 10,
+    stall_minutes: Annotated[
+        float,
+        typer.Option(help="Exit 75 if no progress for this many minutes (0 = never)."),
+    ] = STALL_MINUTES,
 ) -> None:
     """Run the baselines on the benchmark and write a report."""
     from concentrate.agents.retrieval import SentenceTransformerEmbedder
@@ -247,19 +252,20 @@ def eval_cmd(
         typer.confirm(
             f"Estimated ${total:.2f} exceeds ${BUDGET_CONFIRM_USD:.0f}. Proceed?", abort=True
         )
-    report = run_eval(
-        built,
-        questions,
-        client,
-        seed=seed,
-        split=split,
-        budget_usd=budget,
-        out_dir=out,
-        notes=notes,
-        batch=batch,
-        latency_sample=latency_sample,
-        meta={"k": k, "embedder": getattr(embedder, "name", None), "fixtures": str(fixtures)},
-    )
+    with _stall_guard(stall_minutes, "eval"):
+        report = run_eval(
+            built,
+            questions,
+            client,
+            seed=seed,
+            split=split,
+            budget_usd=budget,
+            out_dir=out,
+            notes=notes,
+            batch=batch,
+            latency_sample=latency_sample,
+            meta={"k": k, "embedder": getattr(embedder, "name", None), "fixtures": str(fixtures)},
+        )
     typer.echo((Path(report["paths"]["md"])).read_text())
     typer.echo(f"spent ${report['meta']['spent_usd']:.2f} · report: {report['paths']['md']}")
 
@@ -272,8 +278,16 @@ def ingest(
     estimate_only: Annotated[
         bool, typer.Option("--estimate", help="Estimate cost and exit.")
     ] = False,
+    stall_minutes: Annotated[
+        float,
+        typer.Option(help="Exit 75 if no progress for this many minutes (0 = never)."),
+    ] = STALL_MINUTES,
 ) -> None:
-    """Build write-time memories once (Mem0, Graphiti, ...). Resumable; reruns are free."""
+    """Build write-time memories once (Mem0, Graphiti, ...). Resumable; reruns are free.
+
+    A build that makes no progress for ``--stall-minutes`` exits with code 75; rerun it (e.g.
+    in a shell loop) and it resumes from ``progress.jsonl``. See docs/HARDENING.md.
+    """
     import json as _json
     from dataclasses import asdict
 
@@ -289,9 +303,10 @@ def ingest(
         typer.echo(f"{e.system}: ingest ≈ ${e.ingest_usd:.2f} for {len(notes)} meetings")
     if estimate_only:
         return
-    for s in built:
-        stats = s.ingest(notes)  # type: ignore[attr-defined]
-        typer.echo(f"{s.name}: " + _json.dumps(asdict(stats), default=str))
+    with _stall_guard(stall_minutes, f"ingest {systems}"):
+        for s in built:
+            stats = s.ingest(notes)  # type: ignore[attr-defined]
+            typer.echo(f"{s.name}: " + _json.dumps(asdict(stats), default=str))
 
 
 def _report_paths(report: Path) -> tuple[Path, Path]:
@@ -405,3 +420,15 @@ def hand_check(
             f"{name:<20} vs human: {s['agreement']:.1%} agree on correct/not "
             f"(kappa {s['kappa']:.2f}, n={s['n']}) · 3-way {s['agreement_3way']:.1%}"
         )
+
+
+# -- stall watchdog (workstream I) -------------------------------------------------------------
+
+
+def _stall_guard(minutes: float, what: str) -> AbstractContextManager[object]:
+    """A :class:`~concentrate.watchdog.Watchdog` for ``minutes`` (a no-op when 0)."""
+    from contextlib import nullcontext
+
+    from concentrate.watchdog import Watchdog
+
+    return Watchdog(minutes * 60, what=what) if minutes > 0 else nullcontext()

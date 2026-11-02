@@ -263,3 +263,31 @@ def test_estimate_ingest_is_offline_and_prices_cache(
     full_price = cost_usd(MODEL, tin, tout)
     assert 0 < system.estimate_ingest_usd(notes) < full_price
     assert not (tmp_path / "mem0").exists()  # no store created, nothing called
+
+
+def test_ingest_resumes_after_a_kill_with_a_torn_progress_line(
+    tmp_path: Path, notes: list[MeetingNote]
+) -> None:
+    class Killed(BaseException):
+        """Like SIGKILL/os._exit: not an Exception, so nothing downstream catches it."""
+
+    class DyingMemory(FakeMemory):
+        def add(self, messages: list[dict[str, str]], **kw: Any) -> dict[str, Any]:
+            if len(self.added) == 2:
+                raise Killed
+            return super().add(messages, **kw)
+
+    def dying(store: Path, meter: UsageMeter) -> MemoryBackend:
+        return DyingMemory(meter)
+
+    with pytest.raises(Killed):
+        _system(tmp_path, dying).ingest(notes)  # type: ignore[arg-type]
+    store = _system(tmp_path, Factory()).store_dir(notes)
+    with (store / PROGRESS_FILE).open("a") as fh:
+        fh.write('{"key": "torn')
+    factory = Factory()
+    stats = _system(tmp_path, factory).ingest(notes)
+    chunks = [c.key for m in notes for c in ingest_chunks(m)]
+    resumed = [a["metadata"]["chunk_id"] for a in factory.built[0].added]
+    assert resumed == chunks[2:]  # nothing re-added, nothing skipped
+    assert stats.llm_calls == len(chunks)

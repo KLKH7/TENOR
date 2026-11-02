@@ -174,3 +174,30 @@ The remote 38+ word monologue tail is a content limitation of scripted turns and
 - numbers on the transcript-retirement question they've said they're weighing.
 
 **Trade-off:** the work hardly changes, but polish moves to the benchmark: a card ([`BENCHMARK.md`](BENCHMARK.md)), one command per system, and a documented way to add a system. Its biggest weakness, being synthetic, is stated up front.
+
+## Hardening: timeouts, retries, stall watchdog, CI (2026-11-02)
+
+**Trigger:** three ingest builds froze for 30+ minutes at 0% CPU. With no timeout set, the SDK
+used its defaults (600 s read timeout), and our `max_retries=4` retried silently, so one dead
+connection could block for up to 50 minutes. Full write-up: [`HARDENING.md`](HARDENING.md).
+
+**Decisions:**
+- **Own the retry loop** (`concentrate.llm.resilience`) and turn SDK retries off.
+  - Why: one policy for sync and async, every SDK entry point, Mem0 and Graphiti; logged at
+    WARNING; testable with fake sleeps and clocks; and SDK and outer retries can never multiply.
+  - Trade-off: we re-implement `Retry-After` handling, which the SDK already had.
+- **Read timeout scales with `max_tokens`** (120–300 s), calibrated on measured latencies
+  (p99 12 s, max 32 s). Trade-off: a legitimately very long non-streaming reply (more than
+  ~9k tokens at the slowest rate seen) would time out. Streaming is the follow-up if that matters.
+- **Stall watchdog, not just timeouts.** `ingest` and `eval` exit 75 after 15 minutes without a
+  heartbeat and dump thread stacks; restarting is the recovery, because builds resume from
+  `progress.jsonl`. This catches hangs that timeouts can't (deadlocks, library bugs).
+- **Torn progress lines are repaired**, not fatal. Corruption in the middle of the file still
+  raises.
+- **CI** runs ruff, format, mypy and pytest with empty API keys. `*.md` is excluded from
+  `ruff format`, because docs code blocks are hand-aligned sketches.
+
+**Not fixed:**
+- abandoned attempts may still be billed, and the ledger can't see it;
+- `batches.create` can duplicate a batch on a lost reply;
+- Mem0 and Graphiti have a one-chunk double-write window on kill.

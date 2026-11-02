@@ -41,6 +41,7 @@ from concentrate.agents.baselines import (
     _result,
     _user_prompt,
 )
+from concentrate.agents.progress import read_progress
 from concentrate.agents.retrieval import DEFAULT_EMBEDDING_MODEL
 from concentrate.core.models import MeetingNote
 from concentrate.llm.client import (
@@ -54,6 +55,7 @@ from concentrate.llm.client import (
     load_prompt,
     run_turn,
 )
+from concentrate.llm.resilience import anthropic_client, call_with_retries, timeout_for
 
 logger = logging.getLogger(__name__)
 
@@ -231,7 +233,8 @@ class MeteredAnthropic:
     def create(self, **kwargs: Any) -> Any:
         request = self.prepare(kwargs)
         api = self._sdk.beta.messages if "betas" in request else self._sdk.messages
-        response = api.create(**request)
+        request["timeout"] = timeout_for(int(request["max_tokens"]))
+        response = call_with_retries(lambda: api.create(**request), what="mem0 extraction")
         usage = response.usage
         served = str(response.model)
         rec = self.meter.record(
@@ -281,7 +284,6 @@ def mem0_factory(
         # Keep Mem0 fully local: no PostHog telemetry / remote notices, no ~/.mem0 state.
         os.environ["MEM0_TELEMETRY"] = "False"
         os.environ.setdefault("MEM0_DIR", str(store.parent.parent / "_mem0_home"))
-        import anthropic
         from mem0 import Memory
 
         store.mkdir(parents=True, exist_ok=True)
@@ -313,7 +315,7 @@ def mem0_factory(
         if not hasattr(memory.llm, "client"):
             raise RuntimeError("mem0's Anthropic provider has no .client; update MeteredAnthropic")
         memory.llm.client = MeteredAnthropic(
-            anthropic.Anthropic(max_retries=4), meter, effort=effort, cache_system=cache_system
+            anthropic_client(INGEST_MAX_TOKENS), meter, effort=effort, cache_system=cache_system
         )
         backend: MemoryBackend = memory
         return backend
@@ -454,8 +456,7 @@ class Mem0System:
         progress_path = store / PROGRESS_FILE
         done: dict[str, dict[str, Any]] = {}
         if progress_path.exists():
-            for line in progress_path.read_text().splitlines():
-                row = json.loads(line)
+            for row in read_progress(progress_path):  # tolerates a kill mid-write
                 done[row["key"]] = row
         elif store.exists():  # leftovers without progress log: start clean
             shutil.rmtree(store)

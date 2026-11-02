@@ -70,6 +70,7 @@ from concentrate.agents.baselines import (
     _result,
     _user_prompt,
 )
+from concentrate.agents.progress import read_progress
 from concentrate.agents.retrieval import Embedder
 from concentrate.core.models import MeetingNote
 from concentrate.llm.client import (
@@ -82,6 +83,7 @@ from concentrate.llm.client import (
     load_prompt,
     run_turn,
 )
+from concentrate.llm.resilience import acall_with_retries, async_anthropic_client, timeout_for
 
 DEFAULT_INGEST_MODEL = "claude-sonnet-5-5"
 DEFAULT_CACHE_ROOT = Path("data/cache/graphiti")
@@ -238,7 +240,11 @@ class AccountedAnthropicClient(AnthropicClient):
             effective_model,
         )
         start = time.perf_counter()
-        result = await self.client.beta.messages.create(**kwargs)
+        kwargs["timeout"] = timeout_for(int(kwargs["max_tokens"]))
+        result = await acall_with_retries(
+            lambda: self.client.beta.messages.create(**kwargs),
+            what=f"graphiti {kwargs['model']}",
+        )
         inp, out, read, write, usd = price_call(effective_model, str(result.model), result.usage)
         self.ledger.add(
             IngestCall(
@@ -598,9 +604,7 @@ class GraphitiSystem:
     def _open(self, path: Path, fresh: bool) -> GraphBackend:
         sdk = self._sdk
         if sdk is None:
-            import anthropic
-
-            sdk = anthropic.AsyncAnthropic(max_retries=4)
+            sdk = async_anthropic_client()
         llm = AccountedAnthropicClient(
             self.ingest_model,
             sdk,
@@ -638,11 +642,7 @@ class GraphitiSystem:
                 cached=True,
                 detail=done["detail"],
             )
-        progress = (
-            [json.loads(x) for x in progress_path.read_text().splitlines()]
-            if progress_path.exists()
-            else []
-        )
+        progress = read_progress(progress_path)  # tolerates a kill mid-write
         if not progress and d.exists():  # a crash before the first episode finished: start clean
             shutil.rmtree(d)
         d.mkdir(parents=True, exist_ok=True)

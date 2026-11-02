@@ -279,3 +279,18 @@ def test_real_graphiti_on_embedded_kuzu_offline(notes: list[MeetingNote], tmp_pa
     facts, _ = s._run(s.graph.search("pricing", 5, 5))  # full-text indexes exist
     assert facts == []
     s.close()
+
+
+def test_resume_survives_a_kill_mid_progress_write(
+    notes: list[MeetingNote], tmp_path: Path, client: LLMClient
+) -> None:
+    corpus = _pricing(notes)
+    graphs: list[FakeGraph] = []
+    with pytest.raises(RuntimeError):
+        _system(tmp_path, client, graphs, fail_on=2).ingest(corpus)
+    progress = next((tmp_path / "graphiti").glob("*/progress.jsonl"))
+    with progress.open("a") as fh:  # the watchdog's os._exit landed mid-write
+        fh.write('{"key": "torn", "uuid": "x", "ref": {"note_id"')
+    resumed = _system(tmp_path, client, graphs).ingest(corpus)
+    assert len(graphs[-1].added) == 2 and resumed.llm_calls == 4
+    assert all(json.loads(line) for line in progress.read_text().splitlines())
