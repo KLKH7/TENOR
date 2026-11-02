@@ -53,7 +53,7 @@ known-first-party = ["concentrate", "tests"]
 python_version = "3.11"
 strict = true
 plugins = ["pydantic.mypy"]
-files = ["packages/concentrate/core", "packages/concentrate/sources", "packages/concentrate/llm", "packages/concentrate/synth", "packages/concentrate/agents", "packages/concentrate/evals", "packages/concentrate/memory", "packages/concentrate/cli.py"]
+files = ["packages/concentrate/core", "packages/concentrate/sources", "packages/concentrate/llm", "packages/concentrate/synth", "packages/concentrate/agents", "packages/concentrate/evals", "packages/concentrate/memory", "packages/concentrate/enhance", "packages/concentrate/cli.py"]
 
 [[tool.mypy.overrides]]
 module = ["rank_bm25", "sentence_transformers", "mem0", "mem0.*"]
