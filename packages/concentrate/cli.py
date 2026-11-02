@@ -405,3 +405,139 @@ def hand_check(
             f"{name:<20} vs human: {s['agreement']:.1%} agree on correct/not "
             f"(kappa {s['kappa']:.2f}, n={s['n']}) · 3-way {s['agreement_3way']:.1%}"
         )
+
+
+# -- pre-meeting brief (workstream H) --------------------------------------------------------
+
+BRIEF_STORE_ROOT = Path("data/cache/concentrate")
+
+
+def _brief_store(store: Path | None) -> Path:
+    """The given memory store, else the most recently finished one under data/cache."""
+    if store is not None:
+        return store
+    done = sorted(BRIEF_STORE_ROOT.glob("*/*/complete.json"), key=lambda p: p.stat().st_mtime)
+    if not done:
+        raise typer.BadParameter("no finished memory store found; build one or pass --store")
+    return done[-1].parent / "memory.sqlite"
+
+
+def _brief_world(fixtures: Path) -> tuple[object, object, dict[str, str], dict[str, str]]:
+    import json as _json
+
+    from concentrate.evals.brief import GoldBuilder, name_index
+    from concentrate.evals.runner import load_corpus
+    from concentrate.synth.world import World
+
+    world = World.model_validate_json((fixtures / "world.json").read_text())
+    notes = load_corpus(fixtures)
+    names, ids = name_index(_json.loads((fixtures / "directory.json").read_text()))
+    return GoldBuilder(world, notes), notes, names, ids
+
+
+@app.command()
+def brief(
+    note_id: Annotated[str, typer.Argument(help="The meeting to brief for (its note ID).")],
+    fixtures: Annotated[Path, typer.Option(help="Fixture set with world.json.")] = NORTHWIND_XL,
+    store: Annotated[Path | None, typer.Option(help="Memory store (memory.sqlite).")] = None,
+    as_json: Annotated[bool, typer.Option("--json", help="Print the structured brief.")] = False,
+) -> None:
+    """Print the pre-meeting brief for a meeting, from memory as of its start."""
+    from concentrate.evals.brief import GoldBuilder
+    from concentrate.memory.brief import build_brief, to_markdown
+    from concentrate.memory.store import MemoryStore
+
+    gold, _, names, _ = _brief_world(fixtures)
+    assert isinstance(gold, GoldBuilder)
+    meeting = next((m for m in gold.w.meetings if m.note_id == note_id), None)
+    if meeting is None:
+        raise typer.BadParameter(f"{note_id} is not a meeting in {fixtures}")
+    path = _brief_store(store)
+    b = build_brief(MemoryStore(path), gold.upcoming(meeting))
+    typer.echo(b.model_dump_json(indent=1) if as_json else to_markdown(b, names))
+
+
+@app.command("brief-eval")
+def brief_eval(
+    fixtures: Annotated[Path, typer.Option(help="Fixture set with world.json.")] = NORTHWIND_XL,
+    store: Annotated[Path | None, typer.Option(help="Memory store (memory.sqlite).")] = None,
+    split: Annotated[str, typer.Option(help="dev, test or all.")] = "dev",
+    limit: Annotated[int, typer.Option(help="Meetings to sample (0 = all).")] = 0,
+    baseline: Annotated[bool, typer.Option(help="Also run the top-k LLM baseline.")] = False,
+    model: Annotated[str, typer.Option(help="Baseline model.")] = "claude-sonnet-5-5",
+    k: Annotated[int, typer.Option(help="Chunks the baseline retrieves.")] = 24,
+    seed: Annotated[int, typer.Option(help="Seed for the dev/test split.")] = 42,
+    estimate: Annotated[bool, typer.Option(help="Print the baseline estimate and exit.")] = False,
+    offline: Annotated[bool, typer.Option(help="Baseline from the LLM cache only.")] = False,
+    yes: Annotated[bool, typer.Option("--yes", help="Skip the >$2 cost confirmation.")] = False,
+    out: Annotated[Path, typer.Option(help="Report directory.")] = Path("evals/reports"),
+) -> None:
+    """Score pre-meeting briefs against the world's ground truth (memory vs top-k baseline)."""
+    import hashlib
+    import subprocess
+    from datetime import UTC, datetime
+
+    from concentrate.agents.retrieval import SentenceTransformerEmbedder
+    from concentrate.evals.brief import (
+        BASELINE_PROMPT,
+        GoldBuilder,
+        TopKBriefBaseline,
+        dumps,
+        evaluate,
+        sample_targets,
+    )
+    from concentrate.llm.client import load_prompt
+    from concentrate.memory.store import MemoryStore
+
+    gold, notes, names, ids = _brief_world(fixtures)
+    assert isinstance(gold, GoldBuilder) and isinstance(notes, list)
+    gold.seed = seed
+    targets = sample_targets(gold, split, limit)
+    path = _brief_store(store)
+    typer.echo(f"store={path} split={split} meetings={len(targets)}")
+    base = None
+    client = None
+    if baseline:
+        client = LLMClient(model=model, offline=offline)
+        base = TopKBriefBaseline(client, notes, names, SentenceTransformerEmbedder(), k=k)
+        usd = sum(base.estimate_usd(gold.upcoming(m)) for m in targets)
+        typer.echo(f"baseline estimate: ${usd:.2f} ({model}, {len(targets)} calls, k={k})")
+        if estimate:
+            return
+        if usd > BUDGET_CONFIRM_USD and not offline and not yes:
+            typer.confirm(
+                f"Estimated cost ${usd:.2f} exceeds ${BUDGET_CONFIRM_USD:.0f}. Proceed?", abort=True
+            )
+    report = evaluate(MemoryStore(path), gold, targets, base, ids)
+    sha = subprocess.run(["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True)
+    prompt_hash = hashlib.sha256(load_prompt(BASELINE_PROMPT).encode()).hexdigest()[:8]
+    report["meta"] = {
+        "git_sha": sha.stdout.strip(),
+        "date": datetime.now(UTC).isoformat(timespec="seconds"),
+        "fixtures": str(fixtures),
+        "store": str(path),
+        "split": split,
+        "limit": limit,
+        "seed": seed,
+        "baseline": {"model": model, "prompt": BASELINE_PROMPT, "prompt_sha": prompt_hash, "k": k}
+        if baseline
+        else None,
+        "spent_usd": client.ledger.spent_usd() if client else 0.0,
+    }
+    out.mkdir(parents=True, exist_ok=True)
+    dest = out / f"brief-{split}-{datetime.now(UTC):%Y%m%dT%H%M%SZ}.json"
+    dest.write_text(dumps(report))
+    for system, agg in report["summary"].items():
+        typer.echo(f"{system}: last-meeting {agg['last_meeting_accuracy']:.0%}")
+        for sec in ("commitments", "commitments_any_owner", "changes", "requests"):
+            r = agg[sec]
+
+            def pct(x: float | None) -> str:
+                return "-" if x is None else f"{x:.0%}"
+
+            typer.echo(
+                f"  {sec:<22} P {pct(r['precision'])} R {pct(r['recall'])} "
+                f"stale {pct(r['staleness'])} cite {pct(r['citation_precision'])} "
+                f"(shown {r['shown']}, gold {r['gold']})"
+            )
+    typer.echo(f"spent ${report['meta']['spent_usd']:.2f} · report {dest}")

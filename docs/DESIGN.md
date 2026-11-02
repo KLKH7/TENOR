@@ -174,3 +174,14 @@ The remote 38+ word monologue tail is a content limitation of scripted turns and
 - numbers on the transcript-retirement question they've said they're weighing.
 
 **Trade-off:** the work hardly changes, but polish moves to the benchmark: a card ([`BENCHMARK.md`](BENCHMARK.md)), one command per system, and a documented way to add a system. Its biggest weakness, being synthetic, is stated up front.
+
+## Pre-meeting brief (workstream H, 2026-11-02)
+
+**Built:** `concentrate brief <note_id>` prints a cited brief for an upcoming meeting: open commitments, what changed since the series last met, open customer requests, and the last meeting's digest. `concentrate brief-eval` grades briefs against the generator's world. Details and results are in [`BRIEF.md`](BRIEF.md).
+
+**Decisions:**
+- The brief is a deterministic **as-of query**: it reads only rows recorded before the meeting starts, so a historical brief has no leakage and every meeting is a test case.
+- Gold lines come from protected spoken spans found in the fixture text, not from re-rendering, because the XL fixtures predate generator 1.1.
+- The baseline gets top-24 chunks from earlier meetings, plus the previous series meeting's summary.
+
+**Result (XL test sample of 36):** memory finds 91% of open commitments vs 30% for top-k + Sonnet, and 58% vs 5% of "changes since last met". It is less precise on commitments (43% vs 90%), mostly because of owner attribution in in-person meetings and owner promises the world doesn't track.
