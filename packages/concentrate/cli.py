@@ -405,3 +405,81 @@ def hand_check(
             f"{name:<20} vs human: {s['agreement']:.1%} agree on correct/not "
             f"(kappa {s['kappa']:.2f}, n={s['n']}) · 3-way {s['agreement_3way']:.1%}"
         )
+
+
+@app.command()
+def analyze(
+    report: Annotated[Path, typer.Argument(help="A report from `eval` (any of its files).")],
+    fixtures: Annotated[
+        Path | None,
+        typer.Option(help="Ground truth for the failure taxonomy (default: the report's own)."),
+    ] = None,
+    volume: Annotated[
+        int, typer.Option(help="Questions per corpus over which ingest cost is amortised.")
+    ] = 1_000,
+    seed: Annotated[int | None, typer.Option(help="Bootstrap seed (default: report's).")] = None,
+    llm: Annotated[
+        bool, typer.Option("--llm", help="Refine generic failure buckets with an LLM classifier.")
+    ] = False,
+    llm_model: Annotated[str, typer.Option(help="Model for --llm.")] = "claude-haiku-5-5",
+    estimate_only: Annotated[
+        bool, typer.Option("--estimate", help="With --llm: estimate its cost and exit.")
+    ] = False,
+    yes: Annotated[bool, typer.Option("--yes", help="Skip the >$2 confirmation.")] = False,
+) -> None:
+    """Report v2: paired significance, power, Pareto frontier and failure taxonomy. Free
+    unless --llm."""
+    import json as _json
+
+    from concentrate.evals.analyze import load_rows, write_analysis
+    from concentrate.evals.failures import (
+        GENERIC_TYPES,
+        GroundTruth,
+        LLMFailure,
+        failures,
+        llm_request,
+    )
+    from concentrate.llm.client import cost_usd, estimate_tokens
+
+    js, jl = _report_paths(report)
+    rep = _json.loads(js.read_text())
+    rows = load_rows(jl)
+    fx = fixtures or Path(rep["meta"].get("fixtures") or NORTHWIND)
+    gt = GroundTruth.load(fx) if (fx / "questions.jsonl").exists() else None
+    if gt is None:
+        gt_note = f"Ground truth: **not found** at `{fx}`; only report-row signals were used."
+    else:
+        qids = {r["qid"]: r["question"] for r in rows}
+        ok = sum(gt.questions.get(q) is not None and gt.questions[q].question == t
+                 for q, t in qids.items())  # fmt: skip
+        gt_note = f"Ground truth: `{fx}` ({ok}/{len(qids)} report questions matched)."
+        if ok < len(qids):
+            typer.echo(f"warning: {len(qids) - ok} questions don't match {fx}", err=True)
+    fails = failures(rows, gt)
+    if llm:
+        by_key = {(r["system"], r["qid"]): r for r in rows}
+        todo = [f for f in fails if f.primary in GENERIC_TYPES]
+        reqs = [llm_request(by_key[(f.system, f.qid)], f) for f in todo]
+        client = LLMClient(model=llm_model)
+        usd = sum(
+            cost_usd(llm_model, estimate_tokens(r.system) + estimate_tokens(r.user), 120)
+            for r in reqs
+            if not client.is_cached(r)
+        )
+        typer.echo(f"LLM classifier: {len(reqs)} answers · {llm_model} ≈ ${usd:.3f}")
+        if estimate_only:
+            return
+        if usd > BUDGET_CONFIRM_USD and not yes:
+            typer.confirm(
+                f"Estimated ${usd:.2f} exceeds ${BUDGET_CONFIRM_USD:.0f}. Proceed?", abort=True
+            )
+        for f, req in zip(todo, reqs, strict=True):
+            out = client.structured(req, LLMFailure)
+            f.llm_type, f.llm_reason = out.type, out.reason
+        typer.echo(f"LLM classifier spent ${client.ledger.spent_usd():.4f}")
+    stem = jl.with_suffix("")
+    paths = write_analysis(
+        rep, rows, fails, stem, seed=seed if seed is not None else int(rep["meta"].get("seed", 0)),
+        volume=volume, gt_note=gt_note,
+    )  # fmt: skip
+    typer.echo("written: " + ", ".join(str(p) for p in paths.values()))

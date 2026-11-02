@@ -174,3 +174,12 @@ The remote 38+ word monologue tail is a content limitation of scripted turns and
 - numbers on the transcript-retirement question they've said they're weighing.
 
 **Trade-off:** the work hardly changes, but polish moves to the benchmark: a card ([`BENCHMARK.md`](BENCHMARK.md)), one command per system, and a documented way to add a system. Its biggest weakness, being synthetic, is stated up front.
+
+## Report v2: paired significance, power, Pareto, failure taxonomy (2026-11-02)
+
+`concentrate analyze <report>` works post hoc on any saved report and costs nothing unless `--llm` is passed. Methods are in [`ANALYSIS.md`](ANALYSIS.md).
+- **Paired, not overlapping CIs.** Every system answers the same questions, so pairs are compared with McNemar's exact test and a paired bootstrap CI of the gap. Holm–Bonferroni corrects across all pairs; each category is its own family.
+- **Power from observed discordance.** Sample sizes use Connor's approximation with the observed share of questions on which two systems disagree. A Monte Carlo test confirms about 80% power. Trade-off: discordance from a small pilot is noisy, so the numbers are re-estimated on each report rather than fixed.
+- **Ingest amortised at a stated volume.** The frontier is shown at several volumes, along with break-even volumes, because write-time vs query-time is a volume question.
+- **Deterministic failure types first.** They come from ground truth: fact histories, the directory and gold lines. An optional Haiku classifier only refines the generic buckets, including a `judge_error` label. Trade-off: string matching misses paraphrases, so `stale_value` and `wrong_entity` are lower bounds.
+- **Pilot finding (10 dev questions).** No pairwise gap is reliable after correction, and a typical pair would need about a 62-point gap at n = 10. At the pilot's discordance, 120 test questions detect gaps of about 11 points and 206 detect about 9 (re-check on the XL report).
