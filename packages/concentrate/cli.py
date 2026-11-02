@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 import os
+from contextlib import ExitStack
 from enum import StrEnum
 from pathlib import Path
 from typing import Annotated
@@ -16,6 +17,7 @@ from concentrate.llm.client import LLMClient
 from concentrate.sources.base import Source
 from concentrate.sources.fixtures import FixtureSource
 from concentrate.sources.granola_api import GranolaAPISource
+from concentrate.sources.granola_mcp import GranolaMCPSource
 from concentrate.sources.poller import sync as run_sync
 
 app = typer.Typer(no_args_is_help=True, add_completion=False)
@@ -25,7 +27,8 @@ DEFAULT_FIXTURES = Path("data/fixtures/sample")
 
 class SourceKind(StrEnum):
     fixtures = "fixtures"
-    granola = "granola"
+    granola = "granola"  # public REST API (Business/Enterprise; GRANOLA_API_KEY)
+    granola_mcp = "granola-mcp"  # official MCP server (any plan; browser sign-in)
 
 
 def _db_path(db: Path | None) -> Path:
@@ -53,18 +56,23 @@ def sync(
     db: Annotated[Path | None, typer.Option(help="SQLite path (env CONCENTRATE_DB).")] = None,
     full: Annotated[bool, typer.Option(help="Ignore the watermark and re-list all notes.")] = False,
 ) -> None:
-    """Pull notes from Granola (or fixtures) and normalize them into SQLite."""
-    src: Source = (
-        FixtureSource(fixtures_dir) if source is SourceKind.fixtures else GranolaAPISource()
-    )
-    store = NoteStore(_db_path(db))
-    try:
+    """Pull notes from Granola (API, MCP) or fixtures and normalize them into SQLite."""
+    with ExitStack() as stack:
+        src: Source
+        if source is SourceKind.fixtures:
+            src = FixtureSource(fixtures_dir)
+        elif source is SourceKind.granola:
+            api = GranolaAPISource()
+            stack.callback(api.close)
+            src = api
+        else:
+            from concentrate.sources.mcp_transport import LiveMcpCaller
+
+            src = GranolaMCPSource(stack.enter_context(LiveMcpCaller()))
+        store = NoteStore(_db_path(db))
+        stack.callback(store.close)
         report = run_sync(src, store, full=full)
         counts = store.counts()
-    finally:
-        store.close()
-        if isinstance(src, GranolaAPISource):
-            src.close()
     typer.echo(
         f"listed={report.listed} fetched={report.fetched} unchanged={report.unchanged} "
         f"deleted={report.deleted} recovered={report.recovered} pending={len(report.pending)}"

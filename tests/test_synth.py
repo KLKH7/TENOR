@@ -169,3 +169,26 @@ def test_polish_with_fake_llm_rejects_bad_rewrites_and_still_validates(tmp_path:
     generate_dataset(42, tmp_path / "out2", llm=llm2)
     assert _files(tmp_path / "out") == _files(tmp_path / "out2")
     assert llm2.ledger.spent_usd() == 0
+
+
+def test_transcripts_match_live_granola_format(dataset: Path) -> None:
+    """Named system-audio speakers (partial), short passages, nameless attendees."""
+    named_meetings = remote = short = total = nameless = 0
+    for path in (dataset / "notes").glob("*.json"):
+        note = granola.Note.model_validate_json(path.read_bytes())
+        items = note.transcript or []
+        them = [i for i in items if i.speaker.source == "speaker"]
+        assert not any(i.speaker.name for i in items if i.speaker.source == "microphone")
+        if them:
+            remote += 1
+            named_meetings += any(i.speaker.name for i in them)
+            if any(i.speaker.name for i in them):
+                assert not all(i.speaker.name for i in them), "naming must be partial"
+        short += sum(1 for i in items if len(i.text.split()) <= 5)
+        total += len(items)
+        nameless += sum(1 for a in note.attendees if a.name is None)
+        if note.attendees:
+            assert note.attendees[0].name is not None  # the owner is always named
+    assert 0 < named_meetings < remote
+    assert short / total > 0.3
+    assert nameless > 0

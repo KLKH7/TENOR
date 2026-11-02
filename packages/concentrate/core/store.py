@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS notes (
     deleted_at TEXT,
     scheduled_start TEXT,
     calendar_event_id TEXT,
+    raw_format TEXT NOT NULL,  -- 'api' (public REST API / fixtures) or 'mcp' (Granola MCP)
     raw_json TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS utterances (
@@ -78,6 +79,11 @@ def from_db_time(s: str) -> datetime:
     return datetime.fromisoformat(s)
 
 
+def _load(raw_format: str, raw_json: str) -> granola.Note:
+    model = granola.McpNote if raw_format == "mcp" else granola.Note
+    return model.model_validate_json(raw_json)
+
+
 class NoteStore:
     """Persistence for normalized notes plus sync bookkeeping."""
 
@@ -105,7 +111,7 @@ class NoteStore:
         with self.conn:
             self.conn.execute("DELETE FROM notes WHERE note_id = ?", (m.note_id,))
             self.conn.execute(
-                "INSERT INTO notes VALUES (?,?,?,?,?,?,?,?,?)",
+                "INSERT INTO notes VALUES (?,?,?,?,?,?,?,?,?,?)",
                 (
                     m.note_id,
                     m.title,
@@ -115,6 +121,7 @@ class NoteStore:
                     to_db_time(m.deleted_at) if m.deleted_at else None,
                     to_db_time(m.scheduled_start) if m.scheduled_start else None,
                     m.calendar_event_id,
+                    "mcp" if isinstance(note, granola.McpNote) else "api",
                     note.model_dump_json(exclude_unset=True),
                 ),
             )
@@ -155,18 +162,18 @@ class NoteStore:
 
     def get_note(self, note_id: str) -> MeetingNote | None:
         row = self.conn.execute(
-            "SELECT raw_json FROM notes WHERE note_id = ?", (note_id,)
+            "SELECT raw_format, raw_json FROM notes WHERE note_id = ?", (note_id,)
         ).fetchone()
-        return normalize_note(granola.Note.model_validate_json(row[0])) if row else None
+        return normalize_note(_load(*row)) if row else None
 
     def iter_notes(self, *, include_deleted: bool = False) -> Iterator[MeetingNote]:
         """Yield notes ordered by meeting time (scheduled start, else creation)."""
         where = "" if include_deleted else "WHERE deleted_at IS NULL"
-        for (raw,) in self.conn.execute(
-            f"SELECT raw_json FROM notes {where} "
+        for raw_format, raw in self.conn.execute(
+            f"SELECT raw_format, raw_json FROM notes {where} "
             "ORDER BY COALESCE(scheduled_start, created_at), note_id"
         ):
-            yield normalize_note(granola.Note.model_validate_json(raw))
+            yield normalize_note(_load(raw_format, raw))
 
     def upsert_folders(self, folders: list[granola.Folder]) -> None:
         with self.conn:

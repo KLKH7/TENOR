@@ -97,4 +97,37 @@ def split_sentences(text: str) -> list[str]:
     return [p for p in parts if p]
 
 
+def fragment(
+    text: str, protect: tuple[str, ...], rng: random.Random, split_rate: float = 0.5
+) -> list[str]:
+    """Split a turn into short transcript passages, as Granola's live transcripts do.
+
+    Sentences longer than 7 words are, with probability ``split_rate``, cut at one or two word
+    boundaries (preferring commas) into fragments like "But you guys might not." / "Have seen.".
+    Cuts never fall inside a protected span, so every fact phrase stays within one passage.
+    """
+    out: list[str] = []
+    for sent in split_sentences(text):
+        words = sent.split(" ")
+        if len(words) < 8 or rng.random() >= split_rate:
+            out.append(sent)
+            continue
+        spans = [(sent.find(p), sent.find(p) + len(p)) for p in protect if p in sent]
+        bounds = [m.start() for m in re.finditer(" ", sent)]
+        ok = [b for b in bounds if not any(a <= b < e for a, e in spans)]
+        commas = [b for b in ok if sent[b - 1] == ","]
+        pool = commas or ok
+        if not pool:
+            out.append(sent)
+            continue
+        cuts = sorted(rng.sample(pool, min(1 if len(words) < 16 else 2, len(pool))))
+        start = 0
+        for c in [*cuts, len(sent)]:
+            piece = sent[start:c].strip()
+            if piece:
+                out.append(piece)
+            start = c
+    return out
+
+
 BACKCHANNELS = ["Yeah.", "Mm-hm.", "Right.", "Okay.", "Got it.", "Sure.", "Yep.", "Totally."]

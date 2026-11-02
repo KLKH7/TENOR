@@ -2,9 +2,13 @@
 
 Faithful to what Granola actually produces (docs/SCHEMA_NOTES.md):
 
-* utterances carry only the capture channel: ``microphone`` for the note owner (and for
-  everyone in an in-person meeting), ``speaker`` for everyone else on a call. No names, except
-  in investor meetings (see ``NAMED_KINDS``, an ASSUMED stand-in for "speaker identified");
+* utterances carry the capture channel: ``microphone`` for the note owner (and for everyone
+  in an in-person meeting), ``speaker`` (system audio) for everyone else on a call. As in live
+  transcripts (docs/PROBE_2026-11-02.md), Granola identifies *some* remote speakers by name:
+  in most remote meetings a subset of "Them" speakers carry ``name``, and even those are
+  unlabeled on a fraction of passages. The owner's microphone is never named;
+* turns are cut into short, fragmentary passages (often 1-6 words), never inside a fact phrase;
+* attendees without a calendar display name have ``name: null`` (the MCP shows their handle);
 * in-person meetings recorded on iOS get ``diarization_label`` ("Speaker A"...);
 * short backchannels from the other channel overlap long turns (crosstalk);
 * ``summary_markdown`` is a lossy AI summary (~20% of points omitted); typed notes are sparse.
@@ -22,7 +26,7 @@ from datetime import UTC, datetime, timedelta
 
 from concentrate.core import granola
 from concentrate.core.models import utterance_id
-from concentrate.synth.noise import BACKCHANNELS, NoiseRates, noisify, split_sentences
+from concentrate.synth.noise import BACKCHANNELS, NoiseRates, fragment, noisify
 from concentrate.synth.roster import OWNER_ID, PEOPLE, person
 from concentrate.synth.story import granola_id
 from concentrate.synth.world import Meeting, World
@@ -33,7 +37,11 @@ FOLDERS: list[tuple[str, str | None]] = [
     ("Leadership", None), ("Design", None), ("Company", None), ("1:1s", None),
 ]  # fmt: skip
 DIARIZED = {"w3-1on1-alex"}  # recorded on iPhone: diarization labels available
-NAMED_KINDS = {"investor"}  # ASSUMED: speakers identified by name in these meetings
+# Speaker identification and attendee naming, calibrated qualitatively on the live probe.
+NAMED_MEETING_RATE = 0.7  # remote meetings where Granola identifies some "Them" speakers
+IDENTIFIED_SPEAKER_RATE = 0.7  # per remote speaker, within such a meeting
+UNLABELED_PASSAGE_RATE = 0.25  # identified speakers still appear as bare "System audio"
+NULL_NAME_RATE = 0.25  # attendees with no display name on the calendar invite
 LOSSY_SUMMARY_DROP = 0.2
 TYPED_NOTES_RATE = 0.4
 
@@ -63,9 +71,11 @@ def folders_output(seed: int) -> granola.ListFoldersOutput:
     return granola.ListFoldersOutput(folders=folders, hasMore=False, cursor=None)
 
 
-def _user(pid: str) -> granola.User:
+def _user(pid: str, rng: random.Random | None = None) -> granola.User:
+    """Owner and most attendees have display names; some invites only carry an email."""
     p = person(pid)
-    return granola.User(name=p.name, email=p.email)
+    nameless = rng is not None and pid != OWNER_ID and rng.random() < NULL_NAME_RATE
+    return granola.User(name=None if nameless else p.name, email=p.email)
 
 
 # Granola-style summaries group points by topic, with progress and next steps at the end.
@@ -151,6 +161,12 @@ def render_meeting(
     labels: dict[str, str] = {}
     items: list[tuple[granola.TranscriptItem, int | None]] = []  # (item, beat index or None)
     t = meeting.start + timedelta(seconds=rng.uniform(20, 90))
+    named = meeting.mode == "remote" and rng.random() < NAMED_MEETING_RATE
+    identified = {
+        pid
+        for pid in sorted(meeting.attendees)
+        if named and pid != owner and rng.random() < IDENTIFIED_SPEAKER_RATE
+    }
 
     def speaker_for(pid: str) -> granola.Speaker:
         mic = meeting.mode == "in_person" or pid == owner
@@ -158,7 +174,7 @@ def render_meeting(
         if meeting.key in DIARIZED:
             labels.setdefault(pid, f"Speaker {chr(ord('A') + len(labels))}")
             extra["diarization_label"] = labels[pid]
-        if meeting.kind in NAMED_KINDS:
+        if pid in identified and rng.random() >= UNLABELED_PASSAGE_RATE:
             extra["name"] = PEOPLE[pid].name
         return granola.Speaker(source="microphone" if mic else "speaker", **extra)
 
@@ -166,7 +182,7 @@ def render_meeting(
     for i, (beat, text) in enumerate(zip(meeting.beats, texts, strict=True)):
         protect = tuple(p for p in beat.protect if p in text)
         noisy = noisify(text, protect, rng, rates)
-        for seg in split_sentences(noisy):
+        for seg in fragment(noisy, protect, rng):
             dur = max(0.8, len(seg.split()) / 2.6)
             item = granola.TranscriptItem(
                 speaker=speaker_for(beat.speaker),
@@ -177,7 +193,7 @@ def render_meeting(
             items.append((item, i))
             if not protect or any(p in seg for p in protect):
                 evidence_segments.setdefault(i, []).append(len(items) - 1)
-            if meeting.mode == "remote" and len(seg.split()) > 10 and rng.random() < 0.25:
+            if meeting.mode == "remote" and len(seg.split()) > 6 and rng.random() < 0.25:
                 other = rng.choice([a for a in meeting.attendees if a != beat.speaker])
                 if (other == owner) != (beat.speaker == owner):  # only the other channel
                     bt = t + timedelta(seconds=dur * rng.uniform(0.5, 0.9))
@@ -208,7 +224,7 @@ def render_meeting(
     event = None
     attendees: list[granola.User] = []
     if meeting.has_calendar_event:
-        attendees = [_user(a) for a in meeting.attendees]
+        attendees = [_user(a, rng) for a in meeting.attendees]
         organiser = meeting.attendees[1] if meeting.kind == "customer" else owner
         event = granola.CalendarEvent(
             event_title=meeting.title,

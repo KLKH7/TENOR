@@ -133,10 +133,11 @@ These exist [spec summary]: `GET /v1/spaces`, `POST /v1/notes/search` (keywords,
 | Owner's turns are `microphone`; other call participants are `speaker`; in-person meetings are all `microphone` | ASSUMED from the product's capture model |
 | `attribution` omitted everywhere | VERIFIED as allowed ("omitted when unknown"); simplest faithful choice |
 | `diarization_label` only on one in-person meeting recorded on iOS | VERIFIED as iOS-only; which meetings get it is our choice |
-| `speaker.name` present only in investor meetings | ASSUMED: the docs say "only present when the speaker was identified" but not when that happens |
-| Transcript segments are sentence-sized, chronological, with overlapping backchannels | ASSUMED |
+| `speaker.name` on *some* "Them" passages: ~70% of remote meetings identify ~70% of remote speakers, and identified speakers are still unlabeled on ~25% of passages; the owner's microphone is never named | Calibrated qualitatively on the live probe (2026-11-02), which showed `System audio (<Name>)` mixed with bare `System audio`. Exact rates are ASSUMED |
+| Transcript passages are short fragments (median ~6 words, ~45% ≤5 words), chronological, with overlapping backchannels | Shape VERIFIED live; rates ASSUMED |
 | `summary_markdown` uses `###` headings and `-` bullets, and omits some content | ASSUMED from the product UI, not the API docs |
 | `attendees` empty and `calendar_event` null for an ad-hoc meeting | ASSUMED (attendees come from the calendar) |
+| ~25% of non-owner attendees have `name: null` (invite without a display name) | Shape VERIFIED live: the MCP shows such people by email handle, e.g. `Az1234`. Rate ASSUMED |
 | `organiser` is the note owner for internal meetings and the account owner for customer calls | ASSUMED |
 | `created_at` ≈ meeting start; `updated_at` = end + 1–15 min (summary generation) | ASSUMED |
 
@@ -150,6 +151,26 @@ These exist [spec summary]: `GET /v1/spaces`, `POST /v1/notes/search` (keywords,
 | MCP write tools | `update_private_notes`, `create_folder`, `update_folder`, `add_note_to_folder`, `remove_note_from_folder`, `generate_summary`, `list_templates`, `give_feedback` | VERIFIED (tool list); **CORRECTS** "read-only" |
 | Account plan seen by the MCP | `mcp_plan: "plus"` | VERIFIED (live) |
 | Unofficial internal API (`api.granola.ai/v1/get-document-transcript`) | utterances have `source`, `start_timestamp`, `end_timestamp`, `confidence` | UNOFFICIAL: reverse-engineered, archived 2026-02-05; **not used** |
+
+## MCP source mapping (`concentrate.sources.granola_mcp`)
+
+How `GranolaMCPSource` turns MCP tool output into our wire models (`McpNote`/`McpNoteSummary`, which are the API models with UUID IDs):
+
+| Wire field | From the MCP | Status |
+|---|---|---|
+| `id` | meeting UUID (the MCP never returns `not_` IDs) | VERIFIED live; stored with `raw_format = 'mcp'` |
+| `title`, `web_url`, `updated_at` | `<meeting title url updated_at>`; `updated_at` is only present when `updated_after` is sent, so we always send it | VERIFIED live |
+| `created_at` | `get_meetings` `created_at`; list rows have none, so summaries use `meeting_at` | VERIFIED (get), ASSUMED (list) |
+| `owner` | participant marked `(note creator)`, else the connected account (`get_account_info`) | VERIFIED live |
+| `attendees` | `known_participants` lines `Name [(note creator)] [from Org] (email)` | VERIFIED live format; the parser is lenient |
+| `calendar_event` | synthesized when `meeting_at != created_at`: title, invitees = participants, start = `meeting_at`; `organiser`, `calendar_event_id`, end = null | ASSUMED (the MCP exposes no event object) |
+| `summary_markdown` / `summary_text` | `<summary>`, HTML entities unescaped; text = same markdown | VERIFIED live |
+| `private_notes_*` | `<private_notes>` content; `status="empty"` or `"not_included"` → null | VERIFIED live (empty case) |
+| `folder_membership` | `<folder id title>` elements in a meeting; `list_meeting_folders` JSON `folders[]` with `id`, `title`/`name`, `parent_folder_id` | ASSUMED: the account has no folders |
+| `transcript` | `get_meeting_transcript` read in batches of 10 `chunk_ids` with a pinned `transcript_version`; speaker `Microphone` → microphone, `System audio [(Name)]` → speaker (+name), other labels → microphone + `diarization_label` | VERIFIED live format |
+| transcript `end_time` | not provided: next passage's start, capped by a length estimate | ASSUMED |
+| `deleted_at` | always null (the MCP doesn't return deleted notes) | VERIFIED (documented behaviour) |
+| Rate limit | paced at 100 req/min, burst 10; `retry_after_seconds` honoured on rate-limit errors | VERIFIED (docs: ~100/min); error format ASSUMED |
 
 ## Fixture format
 

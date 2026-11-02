@@ -112,3 +112,19 @@ The brief requires ASR name misspellings (Megan → Meghan), but the first fixtu
 - the longest match wins, so "Beacon Freight" (customer) beats "Beacon" (project).
 
 It uses no context, so speaker attribution ("which Them said this?") is untouched. Phase 4 replaces it with the Python enhancer, and the UI will render that output instead.
+
+## Real data via Granola's MCP (2026-11-02)
+- **Why:** the public REST API requires Business/Enterprise; the author's account is on Plus. The MCP works on every plan, so `GranolaMCPSource` is the realistic route to running Concentrate on real notes. The live probe (`docs/PROBE_2026-11-02.md`) informed every mapping.
+- **Same protocol, different wire variant.** The MCP returns UUIDs, not `not_` IDs. `McpNote`/`McpNoteSummary`/`McpFolder` subclass the API models and override only ID constraints, so normalization and the store are shared. The store records `raw_format` (`api`|`mcp`) so raw JSON reloads with the right model. Existing local `.db` files predate the column; delete them and re-sync.
+- **Parsing agent-oriented text.** `list_meetings` and `get_meetings` return XML-like text meant for LLMs, not strict XML. The parser uses lenient regexes plus HTML unescaping, and is tested against fixtures copied from the live format with invented content.
+- **Transcripts by chunk, not by character page.** Chunk reads return structured passages (speaker label, start time). Full reads return paged text. We read 10 chunks per call, pin the `transcript_version`, and derive `end_time` from the next passage's start.
+- **Auth.** OAuth 2.0 with dynamic client registration via the official `mcp` SDK (v2.3): a browser sign-in once, a local callback on 127.0.0.1, and tokens in `~/.config/concentrate/granola-mcp.json` (mode 600, never logged). The live transport is a sync wrapper (anyio blocking portal) around one async session.
+- **Read-only by construction.** The source calls only `get_account_info`, `list_meetings`, `get_meetings`, `get_meeting_transcript` and `list_meeting_folders`, even though the MCP now has write tools.
+
+## Synthetic transcripts updated to the live format (2026-11-02)
+The probe showed three differences between real transcripts and our fixtures, and the generator now models them:
+1. **Partial speaker naming:** most remote meetings name some "Them" speakers, and named speakers are still unlabeled on some passages.
+2. **Short, fragmentary passages:** median 6 words, with cuts never inside a fact phrase.
+3. **Attendees with no display name.**
+
+All three make attribution *easier* than our earlier Me/Them-only fixtures in some meetings, and harder in others (nameless attendees break name→email links, which is exactly the cross-meeting miss we saw live). Fixtures were regenerated, and all 230 gold answers still validate against the new utterance IDs.

@@ -157,3 +157,26 @@ class GetTranscriptOutput(WireModel):
     transcript: list[TranscriptItem]
     hasMore: bool
     cursor: str | None
+
+
+# -- MCP variants -----------------------------------------------------------------------------
+# Granola's MCP identifies notes by UUID (it accepts `not_` IDs as input but never returns them),
+# and its folders carry their own IDs. These subclasses keep every other field and constraint of
+# the public-API models, so normalization and storage are shared. See docs/SCHEMA_NOTES.md.
+
+MCP_ID_PATTERN = r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+McpId = Annotated[str, Field(pattern=MCP_ID_PATTERN)]
+
+
+class McpFolder(Folder):
+    id: str  # MCP folder IDs are not `fol_` IDs
+    parent_folder_id: str | None
+
+
+class McpNoteSummary(NoteSummary):
+    id: McpId
+
+
+class McpNote(Note):
+    id: McpId
+    folder_membership: list[McpFolder]  # type: ignore[assignment]

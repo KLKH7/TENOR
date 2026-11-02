@@ -7,7 +7,7 @@
     "email": "priya@northwind.dev"
   },
   "created_at": "2026-09-17T12:03:12Z",
-  "updated_at": "2026-09-17T12:45:00Z",
+  "updated_at": "2026-09-17T12:38:00Z",
   "deleted_at": null,
   "web_url": "https://notes.granola.ai/d/a631ab6b-7015-5972-b1b1-b8352b926d52",
   "calendar_event": {
@@ -48,8 +48,8 @@
   "space_membership": [],
   "summary_text": "Personal\nAlex is planning parental leave from Nov 16\nTeam\nRuth to own release testing",
   "summary_markdown": "### Personal\n- Alex is planning parental leave from Nov 16\n\n### Team\n- Ruth to own release testing",
-  "private_notes_text": "ruth to own release testing\nalex is planning parental leave from nov 16",
-  "private_notes_markdown": "ruth to own release testing\nalex is planning parental leave from nov 16",
+  "private_notes_text": null,
+  "private_notes_markdown": null,
   "transcript": [
     {
       "speaker": {
@@ -74,18 +74,45 @@
         "source": "microphone",
         "diarization_label": "Speaker A"
       },
-      "text": "I've you know, been thinking a lot about where I want to grow.",
+      "text": "I've you know,",
       "start_time": "2026-09-17T12:04:03.348000Z",
-      "end_time": "2026-09-17T12:04:08.348000Z"
+      "end_time": "2026-09-17T12:04:04.502000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "diarization_label": "Speaker A"
+      },
+      "text": "been thinking a lot about where I want to grow.",
+      "start_time": "2026-09-17T12:04:05.033000Z",
+      "end_time": "2026-09-17T12:04:08.879000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker B"
       },
-      "text": "Can we park that and come um, back to it at the end?",
-      "start_time": "2026-09-17T12:04:08.732000Z",
-      "end_time": "2026-09-17T12:04:13.732000Z"
+      "text": "Can we park that and come",
+      "start_time": "2026-09-17T12:04:09.258000Z",
+      "end_time": "2026-09-17T12:04:11.565000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "diarization_label": "Speaker B"
+      },
+      "text": "back to it at the end?",
+      "start_time": "2026-09-17T12:04:11.934000Z",
+      "end_time": "2026-09-17T12:04:14.241000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "diarization_label": "Speaker A"
+      },
+      "text": "you know,",
+      "start_time": "2026-09-17T12:04:14.483000Z",
+      "end_time": "2026-09-17T12:04:15.283000Z"
     },
     {
       "speaker": {
@@ -93,8 +120,8 @@
         "diarization_label": "Speaker A"
       },
       "text": "Let's make sure we write down goals for next quarter.",
-      "start_time": "2026-09-17T12:04:14.037000Z",
-      "end_time": "2026-09-17T12:04:17.883000Z"
+      "start_time": "2026-09-17T12:04:16.047000Z",
+      "end_time": "2026-09-17T12:04:19.893000Z"
     },
     {
       "speaker": {
@@ -102,62 +129,116 @@
         "diarization_label": "Speaker A"
       },
       "text": "Can you share your screen?",
-      "start_time": "2026-09-17T12:04:18.423000Z",
-      "end_time": "2026-09-17T12:04:20.346000Z"
+      "start_time": "2026-09-17T12:04:21.021000Z",
+      "end_time": "2026-09-17T12:04:22.945000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker A"
       },
-      "text": "That's fair.",
-      "start_time": "2026-09-17T12:04:20.912000Z",
-      "end_time": "2026-09-17T12:04:21.712000Z"
+      "text": "like, That's fair.",
+      "start_time": "2026-09-17T12:04:23.653000Z",
+      "end_time": "2026-09-17T12:04:24.807000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker A"
       },
-      "text": "I hadn't thought about it that way.",
-      "start_time": "2026-09-17T12:04:22.739000Z",
-      "end_time": "2026-09-17T12:04:25.431000Z"
+      "text": "I hadn't I mean,",
+      "start_time": "2026-09-17T12:04:25.532000Z",
+      "end_time": "2026-09-17T12:04:27.071000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "diarization_label": "Speaker A"
+      },
+      "text": "thought about it that way.",
+      "start_time": "2026-09-17T12:04:27.425000Z",
+      "end_time": "2026-09-17T12:04:29.348000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker B"
       },
-      "text": "Personal news, my partner's due in November, so I'm planning to take parental leave from November sixteenth.",
-      "start_time": "2026-09-17T12:04:26.225000Z",
-      "end_time": "2026-09-17T12:04:32.764000Z"
+      "text": "Personal- Personal you know,",
+      "start_time": "2026-09-17T12:04:30.227000Z",
+      "end_time": "2026-09-17T12:04:31.765000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker B"
       },
-      "text": "Anything I can do to unblock you?",
-      "start_time": "2026-09-17T12:04:33.782000Z",
-      "end_time": "2026-09-17T12:04:36.474000Z"
+      "text": "news,",
+      "start_time": "2026-09-17T12:04:32.736000Z",
+      "end_time": "2026-09-17T12:04:33.536000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "diarization_label": "Speaker B"
+      },
+      "text": "my partner's due in November, so I'm planning to take parental leave from November sixteenth.",
+      "start_time": "2026-09-17T12:04:33.954000Z",
+      "end_time": "2026-09-17T12:04:39.723000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "diarization_label": "Speaker B"
+      },
+      "text": "Anything- Anything I can do to",
+      "start_time": "2026-09-17T12:04:40.758000Z",
+      "end_time": "2026-09-17T12:04:43.065000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "diarization_label": "Speaker B"
+      },
+      "text": "unblock you?",
+      "start_time": "2026-09-17T12:04:44.247000Z",
+      "end_time": "2026-09-17T12:04:45.047000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker A"
       },
-      "text": "I'm- I'm not sure that's the right framing, honestly.",
-      "start_time": "2026-09-17T12:04:37.033000Z",
-      "end_time": "2026-09-17T12:04:40.494000Z"
+      "text": "I'm not not sure that's the right framing,",
+      "start_time": "2026-09-17T12:04:46.031000Z",
+      "end_time": "2026-09-17T12:04:49.108000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker A"
       },
-      "text": "I think that's uh, mostly right, but there's I mean, a nuance there.",
-      "start_time": "2026-09-17T12:04:41.060000Z",
-      "end_time": "2026-09-17T12:04:46.060000Z"
+      "text": "honestly.",
+      "start_time": "2026-09-17T12:04:49.776000Z",
+      "end_time": "2026-09-17T12:04:50.576000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "diarization_label": "Speaker A"
+      },
+      "text": "I think that's mostly right,",
+      "start_time": "2026-09-17T12:04:51.658000Z",
+      "end_time": "2026-09-17T12:04:53.581000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "diarization_label": "Speaker A"
+      },
+      "text": "but there's a nuance there.",
+      "start_time": "2026-09-17T12:04:53.944000Z",
+      "end_time": "2026-09-17T12:04:55.867000Z"
     },
     {
       "speaker": {
@@ -165,17 +246,17 @@
         "diarization_label": "Speaker A"
       },
       "text": "I think the question is really about scope.",
-      "start_time": "2026-09-17T12:04:46.538000Z",
-      "end_time": "2026-09-17T12:04:49.615000Z"
+      "start_time": "2026-09-17T12:04:56.404000Z",
+      "end_time": "2026-09-17T12:04:59.481000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker A"
       },
-      "text": "Let's not go down that rabbit hole write now.",
-      "start_time": "2026-09-17T12:04:50.238000Z",
-      "end_time": "2026-09-17T12:04:53.699000Z"
+      "text": "Let's not go go down down that um, rabbit hole right now.",
+      "start_time": "2026-09-17T12:05:00.551000Z",
+      "end_time": "2026-09-17T12:05:05.166000Z"
     },
     {
       "speaker": {
@@ -183,26 +264,26 @@
         "diarization_label": "Speaker A"
       },
       "text": "That's fair.",
-      "start_time": "2026-09-17T12:04:54.300000Z",
-      "end_time": "2026-09-17T12:04:55.100000Z"
+      "start_time": "2026-09-17T12:05:05.666000Z",
+      "end_time": "2026-09-17T12:05:06.466000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker A"
       },
-      "text": "I hadn't thought about about it it that um, way.",
-      "start_time": "2026-09-17T12:04:55.504000Z",
-      "end_time": "2026-09-17T12:04:59.350000Z"
+      "text": "I hadn't thought about it that way.",
+      "start_time": "2026-09-17T12:05:06.888000Z",
+      "end_time": "2026-09-17T12:05:09.581000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker B"
       },
-      "text": "Yeah, I agree with that.",
-      "start_time": "2026-09-17T12:04:59.611000Z",
-      "end_time": "2026-09-17T12:05:01.535000Z"
+      "text": "Yeah, uh, I agree with that.",
+      "start_time": "2026-09-17T12:05:10.266000Z",
+      "end_time": "2026-09-17T12:05:12.574000Z"
     },
     {
       "speaker": {
@@ -210,8 +291,8 @@
         "diarization_label": "Speaker A"
       },
       "text": "Okay, so where did we land on that last time?",
-      "start_time": "2026-09-17T12:05:02.247000Z",
-      "end_time": "2026-09-17T12:05:06.093000Z"
+      "start_time": "2026-09-17T12:05:13.533000Z",
+      "end_time": "2026-09-17T12:05:17.379000Z"
     },
     {
       "speaker": {
@@ -219,8 +300,8 @@
         "diarization_label": "Speaker A"
       },
       "text": "Honestly, it's been a busy couple of weeks.",
-      "start_time": "2026-09-17T12:05:07.113000Z",
-      "end_time": "2026-09-17T12:05:10.190000Z"
+      "start_time": "2026-09-17T12:05:18.200000Z",
+      "end_time": "2026-09-17T12:05:21.277000Z"
     },
     {
       "speaker": {
@@ -228,8 +309,8 @@
         "diarization_label": "Speaker B"
       },
       "text": "Let me pull up the doc so we're all looking at the same thing.",
-      "start_time": "2026-09-17T12:05:10.412000Z",
-      "end_time": "2026-09-17T12:05:15.796000Z"
+      "start_time": "2026-09-17T12:05:21.929000Z",
+      "end_time": "2026-09-17T12:05:27.314000Z"
     },
     {
       "speaker": {
@@ -237,26 +318,26 @@
         "diarization_label": "Speaker A"
       },
       "text": "The team dynamic feels good right now.",
-      "start_time": "2026-09-17T12:05:16.485000Z",
-      "end_time": "2026-09-17T12:05:19.177000Z"
+      "start_time": "2026-09-17T12:05:27.901000Z",
+      "end_time": "2026-09-17T12:05:30.594000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker A"
       },
-      "text": "How are you feeling about the workload generally?",
-      "start_time": "2026-09-17T12:05:20.148000Z",
-      "end_time": "2026-09-17T12:05:23.225000Z"
+      "text": "How are you feeling about workload workload generally?",
+      "start_time": "2026-09-17T12:05:30.959000Z",
+      "end_time": "2026-09-17T12:05:34.036000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker A"
       },
-      "text": "Right, right.",
-      "start_time": "2026-09-17T12:05:23.971000Z",
-      "end_time": "2026-09-17T12:05:24.771000Z"
+      "text": "um, Right, right.",
+      "start_time": "2026-09-17T12:05:35.132000Z",
+      "end_time": "2026-09-17T12:05:36.286000Z"
     },
     {
       "speaker": {
@@ -264,26 +345,35 @@
         "diarization_label": "Speaker A"
       },
       "text": "Keep going.",
-      "start_time": "2026-09-17T12:05:25.764000Z",
-      "end_time": "2026-09-17T12:05:26.564000Z"
+      "start_time": "2026-09-17T12:05:36.741000Z",
+      "end_time": "2026-09-17T12:05:37.541000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker B"
       },
-      "text": "Hold on, uh, my laptop is um, about um, to die, let me grab a charger.",
-      "start_time": "2026-09-17T12:05:27.557000Z",
-      "end_time": "2026-09-17T12:05:33.711000Z"
+      "text": "Hold on, my laptop is about to die, let me grab a charger.",
+      "start_time": "2026-09-17T12:05:38.576000Z",
+      "end_time": "2026-09-17T12:05:43.576000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker B"
       },
-      "text": "Let me pull up the doc so we're all looking at the same thing.",
-      "start_time": "2026-09-17T12:05:34.301000Z",
-      "end_time": "2026-09-17T12:05:39.685000Z"
+      "text": "Let me pull",
+      "start_time": "2026-09-17T12:05:44.669000Z",
+      "end_time": "2026-09-17T12:05:45.823000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "diarization_label": "Speaker B"
+      },
+      "text": "up the doc so we're all looking at the same thing.",
+      "start_time": "2026-09-17T12:05:46.581000Z",
+      "end_time": "2026-09-17T12:05:50.812000Z"
     },
     {
       "speaker": {
@@ -291,26 +381,35 @@
         "diarization_label": "Speaker A"
       },
       "text": "That's amazing, congratulations!",
-      "start_time": "2026-09-17T12:05:40.256000Z",
-      "end_time": "2026-09-17T12:05:41.410000Z"
+      "start_time": "2026-09-17T12:05:51.473000Z",
+      "end_time": "2026-09-17T12:05:52.627000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker A"
       },
-      "text": "Do we have any data on that or is it gut feel?",
-      "start_time": "2026-09-17T12:05:42.295000Z",
-      "end_time": "2026-09-17T12:05:46.910000Z"
+      "text": "Do we have any data on",
+      "start_time": "2026-09-17T12:05:53.704000Z",
+      "end_time": "2026-09-17T12:05:56.012000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "diarization_label": "Speaker A"
+      },
+      "text": "that or is it gut feel?",
+      "start_time": "2026-09-17T12:05:56.628000Z",
+      "end_time": "2026-09-17T12:05:58.935000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker B"
       },
-      "text": "Sorry, can you uh, say that again?",
-      "start_time": "2026-09-17T12:05:47.277000Z",
-      "end_time": "2026-09-17T12:05:49.969000Z"
+      "text": "Sorry- Sorry, can you say that again?",
+      "start_time": "2026-09-17T12:05:59.170000Z",
+      "end_time": "2026-09-17T12:06:01.862000Z"
     },
     {
       "speaker": {
@@ -318,26 +417,26 @@
         "diarization_label": "Speaker B"
       },
       "text": "You cut out for a second.",
-      "start_time": "2026-09-17T12:05:50.408000Z",
-      "end_time": "2026-09-17T12:05:52.716000Z"
+      "start_time": "2026-09-17T12:06:02.521000Z",
+      "end_time": "2026-09-17T12:06:04.828000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker A"
       },
-      "text": "Hold on, my laptop is about to die, let me grab a charger.",
-      "start_time": "2026-09-17T12:05:53.361000Z",
-      "end_time": "2026-09-17T12:05:58.361000Z"
+      "text": "Hold on, my laptop is about to die, let me uh, grab charger.",
+      "start_time": "2026-09-17T12:06:05.266000Z",
+      "end_time": "2026-09-17T12:06:10.266000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker A"
       },
-      "text": "Yeah, that makes makes sense to me.",
-      "start_time": "2026-09-17T12:05:59.312000Z",
-      "end_time": "2026-09-17T12:06:02.004000Z"
+      "text": "Yeah, that makes sense too me.",
+      "start_time": "2026-09-17T12:06:10.631000Z",
+      "end_time": "2026-09-17T12:06:12.939000Z"
     },
     {
       "speaker": {
@@ -345,26 +444,26 @@
         "diarization_label": "Speaker A"
       },
       "text": "Sorry, I was on mute.",
-      "start_time": "2026-09-17T12:06:02.304000Z",
-      "end_time": "2026-09-17T12:06:04.227000Z"
+      "start_time": "2026-09-17T12:06:13.534000Z",
+      "end_time": "2026-09-17T12:06:15.457000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker A"
       },
-      "text": "I I was saying I agree.",
-      "start_time": "2026-09-17T12:06:05.019000Z",
-      "end_time": "2026-09-17T12:06:07.326000Z"
+      "text": "I was saying I you know, agree.",
+      "start_time": "2026-09-17T12:06:16.169000Z",
+      "end_time": "2026-09-17T12:06:18.862000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker A"
       },
-      "text": "Right, write.",
-      "start_time": "2026-09-17T12:06:07.703000Z",
-      "end_time": "2026-09-17T12:06:08.503000Z"
+      "text": "Right, right.",
+      "start_time": "2026-09-17T12:06:19.088000Z",
+      "end_time": "2026-09-17T12:06:19.888000Z"
     },
     {
       "speaker": {
@@ -372,35 +471,35 @@
         "diarization_label": "Speaker A"
       },
       "text": "Keep going.",
-      "start_time": "2026-09-17T12:06:09.203000Z",
-      "end_time": "2026-09-17T12:06:10.003000Z"
+      "start_time": "2026-09-17T12:06:20.456000Z",
+      "end_time": "2026-09-17T12:06:21.256000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker A"
       },
-      "text": "I'd like more time for deep uh, work if possible.",
-      "start_time": "2026-09-17T12:06:10.621000Z",
-      "end_time": "2026-09-17T12:06:14.467000Z"
+      "text": "I'd like more time for uh, deep work if possible.",
+      "start_time": "2026-09-17T12:06:21.987000Z",
+      "end_time": "2026-09-17T12:06:25.833000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker A"
       },
-      "text": "Sorry, I was on mute.",
-      "start_time": "2026-09-17T12:06:15.476000Z",
-      "end_time": "2026-09-17T12:06:17.399000Z"
+      "text": "Sorry- Sorry, I was on mute.",
+      "start_time": "2026-09-17T12:06:26.257000Z",
+      "end_time": "2026-09-17T12:06:28.565000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker A"
       },
-      "text": "I was saying I I agree.",
-      "start_time": "2026-09-17T12:06:18.012000Z",
-      "end_time": "2026-09-17T12:06:20.320000Z"
+      "text": "I was saying I agree.",
+      "start_time": "2026-09-17T12:06:29.479000Z",
+      "end_time": "2026-09-17T12:06:31.402000Z"
     },
     {
       "speaker": {
@@ -408,8 +507,8 @@
         "diarization_label": "Speaker B"
       },
       "text": "I've been thinking a lot about where I want to grow.",
-      "start_time": "2026-09-17T12:06:21.363000Z",
-      "end_time": "2026-09-17T12:06:25.594000Z"
+      "start_time": "2026-09-17T12:06:32.037000Z",
+      "end_time": "2026-09-17T12:06:36.268000Z"
     },
     {
       "speaker": {
@@ -417,8 +516,8 @@
         "diarization_label": "Speaker A"
       },
       "text": "Let's make sure we write down goals for next quarter.",
-      "start_time": "2026-09-17T12:06:26.684000Z",
-      "end_time": "2026-09-17T12:06:30.531000Z"
+      "start_time": "2026-09-17T12:06:37.095000Z",
+      "end_time": "2026-09-17T12:06:40.942000Z"
     },
     {
       "speaker": {
@@ -426,17 +525,17 @@
         "diarization_label": "Speaker A"
       },
       "text": "Yeah, that makes sense to me.",
-      "start_time": "2026-09-17T12:06:31.374000Z",
-      "end_time": "2026-09-17T12:06:33.682000Z"
+      "start_time": "2026-09-17T12:06:42.055000Z",
+      "end_time": "2026-09-17T12:06:44.363000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker A"
       },
-      "text": "The team dynamic feels good right now.",
-      "start_time": "2026-09-17T12:06:34.821000Z",
-      "end_time": "2026-09-17T12:06:37.513000Z"
+      "text": "The team dynamic feels good write now.",
+      "start_time": "2026-09-17T12:06:44.895000Z",
+      "end_time": "2026-09-17T12:06:47.587000Z"
     },
     {
       "speaker": {
@@ -444,17 +543,17 @@
         "diarization_label": "Speaker B"
       },
       "text": "I'd like more time for deep work if possible.",
-      "start_time": "2026-09-17T12:06:38.626000Z",
-      "end_time": "2026-09-17T12:06:42.088000Z"
+      "start_time": "2026-09-17T12:06:48.380000Z",
+      "end_time": "2026-09-17T12:06:51.841000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker A"
       },
-      "text": "Yeah, I agree with like, that.",
-      "start_time": "2026-09-17T12:06:42.750000Z",
-      "end_time": "2026-09-17T12:06:45.057000Z"
+      "text": "Yeah, I agree with that.",
+      "start_time": "2026-09-17T12:06:52.405000Z",
+      "end_time": "2026-09-17T12:06:54.328000Z"
     },
     {
       "speaker": {
@@ -462,17 +561,26 @@
         "diarization_label": "Speaker B"
       },
       "text": "Can you share your screen?",
-      "start_time": "2026-09-17T12:06:45.603000Z",
-      "end_time": "2026-09-17T12:06:47.526000Z"
+      "start_time": "2026-09-17T12:06:55.055000Z",
+      "end_time": "2026-09-17T12:06:56.978000Z"
     },
     {
       "speaker": {
         "source": "microphone",
         "diarization_label": "Speaker B"
       },
-      "text": "Work stuff, Ruth is ready to own release testing, I mean, I'd like to make that official.",
-      "start_time": "2026-09-17T12:06:48.476000Z",
-      "end_time": "2026-09-17T12:06:55.014000Z"
+      "text": "Work stuff,",
+      "start_time": "2026-09-17T12:06:57.338000Z",
+      "end_time": "2026-09-17T12:06:58.138000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone",
+        "diarization_label": "Speaker B"
+      },
+      "text": "Ruth is ready to own release testing, I'd like to make that official.",
+      "start_time": "2026-09-17T12:06:58.887000Z",
+      "end_time": "2026-09-17T12:07:03.887000Z"
     }
   ]
 }

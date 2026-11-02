@@ -7,7 +7,7 @@
     "email": "priya@northwind.dev"
   },
   "created_at": "2026-09-01T14:02:12Z",
-  "updated_at": "2026-09-01T15:01:00Z",
+  "updated_at": "2026-09-01T14:53:00Z",
   "deleted_at": null,
   "web_url": "https://notes.granola.ai/d/2643a0ca-c5b8-6bc1-f901-8ed470aafd1e",
   "calendar_event": {
@@ -46,7 +46,7 @@
       "email": "grace.l@northwind.dev"
     },
     {
-      "name": "Dev Iyer",
+      "name": null,
       "email": "dev@northwind.dev"
     }
   ],
@@ -62,528 +62,729 @@
   "space_membership": [],
   "summary_text": "Lighthouse\nLighthouse will move to the new warehouse; old cron jobs retired\nKofi owns Lighthouse\nTarget: dashboards migrated by Oct 30\nNext steps\nGrace to define the activation metric by Friday",
   "summary_markdown": "### Lighthouse\n- Lighthouse will move to the new warehouse; old cron jobs retired\n- Kofi owns Lighthouse\n- Target: dashboards migrated by Oct 30\n\n### Next steps\n- Grace to define the activation metric by **Friday**",
-  "private_notes_text": "kofi owns lighthouse",
-  "private_notes_markdown": "kofi owns lighthouse",
+  "private_notes_text": null,
+  "private_notes_markdown": null,
   "transcript": [
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "um, Okay I think we're good to start.",
+      "text": "Okay I think we're good I mean,",
       "start_time": "2026-09-01T14:02:58.393000Z",
-      "end_time": "2026-09-01T14:03:01.469000Z"
+      "end_time": "2026-09-01T14:03:01.085000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Let me pull up the doc you know, so we're all looking at the same thing.",
-      "start_time": "2026-09-01T14:03:02.471000Z",
-      "end_time": "2026-09-01T14:03:08.625000Z"
+      "text": "to start.",
+      "start_time": "2026-09-01T14:03:01.859000Z",
+      "end_time": "2026-09-01T14:03:02.659000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "I think that's mostly right, but there's a nuance there.",
-      "start_time": "2026-09-01T14:03:09.044000Z",
-      "end_time": "2026-09-01T14:03:12.890000Z"
+      "text": "Let me pull up the doc so we're all looking at the like, same thing.",
+      "start_time": "2026-09-01T14:03:03.577000Z",
+      "end_time": "2026-09-01T14:03:09.346000Z"
     },
     {
       "speaker": {
-        "source": "speaker"
+        "source": "microphone"
       },
-      "text": "I spent most of yesterday in code review, there was was a lot in the queue.",
-      "start_time": "2026-09-01T14:03:13.544000Z",
-      "end_time": "2026-09-01T14:03:19.698000Z"
+      "text": "I think that's mostly right,",
+      "start_time": "2026-09-01T14:03:10.436000Z",
+      "end_time": "2026-09-01T14:03:12.359000Z"
     },
     {
       "speaker": {
-        "source": "speaker"
+        "source": "microphone"
       },
-      "text": "I think the question is really about um, scope.",
-      "start_time": "2026-09-01T14:03:20.203000Z",
-      "end_time": "2026-09-01T14:03:23.665000Z"
+      "text": "but there's a nuance there.",
+      "start_time": "2026-09-01T14:03:13.039000Z",
+      "end_time": "2026-09-01T14:03:14.962000Z"
     },
     {
       "speaker": {
-        "source": "speaker"
+        "source": "speaker",
+        "name": "Dev Iyer"
+      },
+      "text": "I spent most of yesterday yesterday in code um, review, there was a like, lot in the queue.",
+      "start_time": "2026-09-01T14:03:15.277000Z",
+      "end_time": "2026-09-01T14:03:22.200000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Grace Lin"
+      },
+      "text": "I- I think think the question is really about scope.",
+      "start_time": "2026-09-01T14:03:23.397000Z",
+      "end_time": "2026-09-01T14:03:27.243000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Grace Lin"
       },
       "text": "That's fair.",
-      "start_time": "2026-09-01T14:03:24.758000Z",
-      "end_time": "2026-09-01T14:03:25.558000Z"
+      "start_time": "2026-09-01T14:03:28.125000Z",
+      "end_time": "2026-09-01T14:03:28.925000Z"
     },
     {
       "speaker": {
-        "source": "speaker"
+        "source": "speaker",
+        "name": "Grace Lin"
       },
-      "text": "I hadn't thought about it that way.",
-      "start_time": "2026-09-01T14:03:26.399000Z",
-      "end_time": "2026-09-01T14:03:29.091000Z"
+      "text": "I hadn't I mean,",
+      "start_time": "2026-09-01T14:03:29.230000Z",
+      "end_time": "2026-09-01T14:03:30.768000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Grace Lin"
+      },
+      "text": "thought about it that way.",
+      "start_time": "2026-09-01T14:03:31.665000Z",
+      "end_time": "2026-09-01T14:03:33.588000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
       "text": "Hold on, my laptop is about to die, let me grab a charger.",
-      "start_time": "2026-09-01T14:03:29.315000Z",
-      "end_time": "2026-09-01T14:03:34.315000Z"
+      "start_time": "2026-09-01T14:03:33.990000Z",
+      "end_time": "2026-09-01T14:03:38.990000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Do we have any data on that or is it gut feel?",
-      "start_time": "2026-09-01T14:03:35.345000Z",
-      "end_time": "2026-09-01T14:03:39.960000Z"
+      "text": "Do we have any data uh, on that or it gut feel?",
+      "start_time": "2026-09-01T14:03:39.602000Z",
+      "end_time": "2026-09-01T14:03:44.218000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
       "text": "Something to keep an eye on, anyway.",
-      "start_time": "2026-09-01T14:03:40.914000Z",
-      "end_time": "2026-09-01T14:03:43.607000Z"
+      "start_time": "2026-09-01T14:03:45.141000Z",
+      "end_time": "2026-09-01T14:03:47.834000Z"
     },
     {
       "speaker": {
-        "source": "speaker"
+        "source": "speaker",
+        "name": "Kofi Mensah"
       },
-      "text": "Sorry, can you say that again?",
-      "start_time": "2026-09-01T14:03:44.356000Z",
-      "end_time": "2026-09-01T14:03:46.663000Z"
+      "text": "Sorry, can I mean, you say that again?",
+      "start_time": "2026-09-01T14:03:48.067000Z",
+      "end_time": "2026-09-01T14:03:51.144000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
       "text": "You cut out for a second.",
-      "start_time": "2026-09-01T14:03:47.163000Z",
-      "end_time": "2026-09-01T14:03:49.471000Z"
+      "start_time": "2026-09-01T14:03:51.497000Z",
+      "end_time": "2026-09-01T14:03:53.805000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Do we have any data on that or is it gut feel?",
-      "start_time": "2026-09-01T14:03:50.590000Z",
-      "end_time": "2026-09-01T14:03:55.205000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Right.",
-      "start_time": "2026-09-01T14:03:54.467000Z",
-      "end_time": "2026-09-01T14:03:55.067000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Can Can we park like, that and come back to it at the end?",
-      "start_time": "2026-09-01T14:03:55.562000Z",
-      "end_time": "2026-09-01T14:04:00.947000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Did- Did anyone else's internet die this morning?",
-      "start_time": "2026-09-01T14:04:01.728000Z",
-      "end_time": "2026-09-01T14:04:04.804000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "I'm not sure that's the right framing, honestly.",
-      "start_time": "2026-09-01T14:04:05.067000Z",
-      "end_time": "2026-09-01T14:04:08.144000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "I- I looked at the error dashboard and nothing scary.",
-      "start_time": "2026-09-01T14:04:09.264000Z",
-      "end_time": "2026-09-01T14:04:13.110000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "There's a a lot lot of tech debt in that area, for what it's worth.",
-      "start_time": "2026-09-01T14:04:14.301000Z",
-      "end_time": "2026-09-01T14:04:20.070000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "The logs are super noisy right now, it's hard to find anything.",
-      "start_time": "2026-09-01T14:04:20.289000Z",
-      "end_time": "2026-09-01T14:04:24.905000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Mm-hm.",
-      "start_time": "2026-09-01T14:04:23.781000Z",
-      "end_time": "2026-09-01T14:04:24.381000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "I spent most of yesterday in code review, there was a lot in the queue.",
-      "start_time": "2026-09-01T14:04:25.547000Z",
-      "end_time": "2026-09-01T14:04:31.316000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "So the plan is we move Lighthouse onto the new warehouse and retire the old cron jobs.",
-      "start_time": "2026-09-01T14:04:31.782000Z",
-      "end_time": "2026-09-01T14:04:38.320000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Yeah, that makes sense to me.",
-      "start_time": "2026-09-01T14:04:38.995000Z",
-      "end_time": "2026-09-01T14:04:41.303000Z"
+      "text": "Do we like, have any data on that or is it gut feel?",
+      "start_time": "2026-09-01T14:03:54.188000Z",
+      "end_time": "2026-09-01T14:03:59.188000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
       "text": "Can we park that and come back to it at the end?",
-      "start_time": "2026-09-01T14:04:41.812000Z",
-      "end_time": "2026-09-01T14:04:46.427000Z"
+      "start_time": "2026-09-01T14:03:59.847000Z",
+      "end_time": "2026-09-01T14:04:04.463000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "Yep.",
-      "start_time": "2026-09-01T14:04:45.670000Z",
-      "end_time": "2026-09-01T14:04:46.270000Z"
+      "text": "Did anyone else's internet die this morning?",
+      "start_time": "2026-09-01T14:04:05.149000Z",
+      "end_time": "2026-09-01T14:04:07.841000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Dev Iyer"
+      },
+      "text": "you know, I'm not sure sure that's right framing, honestly.",
+      "start_time": "2026-09-01T14:04:09Z",
+      "end_time": "2026-09-01T14:04:12.846000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Kofi Mensah"
+      },
+      "text": "I",
+      "start_time": "2026-09-01T14:04:13.881000Z",
+      "end_time": "2026-09-01T14:04:14.681000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "looked at the error dashboard and nothing scary.",
+      "start_time": "2026-09-01T14:04:15.170000Z",
+      "end_time": "2026-09-01T14:04:18.247000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Kofi Mensah"
+      },
+      "text": "There's a lot of tech debt in that area, for what I mean,",
+      "start_time": "2026-09-01T14:04:19.106000Z",
+      "end_time": "2026-09-01T14:04:24.106000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "it's worth.",
+      "start_time": "2026-09-01T14:04:24.822000Z",
+      "end_time": "2026-09-01T14:04:25.622000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "The logs are super noisy right now, it's hard to find anything.",
+      "start_time": "2026-09-01T14:04:26.484000Z",
+      "end_time": "2026-09-01T14:04:31.099000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Dev Iyer"
+      },
+      "text": "I spent most of yesterday um,",
+      "start_time": "2026-09-01T14:04:32.206000Z",
+      "end_time": "2026-09-01T14:04:34.514000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Dev Iyer"
+      },
+      "text": "in code review,",
+      "start_time": "2026-09-01T14:04:35.448000Z",
+      "end_time": "2026-09-01T14:04:36.602000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Dev Iyer"
+      },
+      "text": "there was a lot in the queue.",
+      "start_time": "2026-09-01T14:04:37.401000Z",
+      "end_time": "2026-09-01T14:04:40.093000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Dev Iyer"
+      },
+      "text": "So the plan like, is we move Lighthouse onto the new warehouse and retire the old cron jobs.",
+      "start_time": "2026-09-01T14:04:40.871000Z",
+      "end_time": "2026-09-01T14:04:47.794000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Kofi Mensah"
+      },
+      "text": "Yeah, that makes sense to me.",
+      "start_time": "2026-09-01T14:04:48.496000Z",
+      "end_time": "2026-09-01T14:04:50.804000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Can you share your screen?",
-      "start_time": "2026-09-01T14:04:47.398000Z",
-      "end_time": "2026-09-01T14:04:49.321000Z"
+      "text": "Can- Can we park that and come back to it at you know,",
+      "start_time": "2026-09-01T14:04:51.012000Z",
+      "end_time": "2026-09-01T14:04:56.012000Z"
     },
     {
       "speaker": {
-        "source": "speaker"
+        "source": "speaker",
+        "name": "Dev Iyer"
       },
-      "text": "There's a lot of tech debt in like, that area, for what it's worth.",
-      "start_time": "2026-09-01T14:04:50.124000Z",
-      "end_time": "2026-09-01T14:04:55.508000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Okay, so where did we land on that last time?",
-      "start_time": "2026-09-01T14:04:56.624000Z",
-      "end_time": "2026-09-01T14:05:00.470000Z"
+      "text": "Right.",
+      "start_time": "2026-09-01T14:04:55.387000Z",
+      "end_time": "2026-09-01T14:04:55.987000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "I don't have any blockers really.",
-      "start_time": "2026-09-01T14:05:00.823000Z",
-      "end_time": "2026-09-01T14:05:03.131000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "The test suite has been pretty flaky um, this week, just flagging it.",
-      "start_time": "2026-09-01T14:05:03.453000Z",
-      "end_time": "2026-09-01T14:05:08.453000Z"
+      "text": "the end?",
+      "start_time": "2026-09-01T14:04:56.310000Z",
+      "end_time": "2026-09-01T14:04:57.110000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "I'm not sure that's the right framing, honestly.",
-      "start_time": "2026-09-01T14:05:09.571000Z",
-      "end_time": "2026-09-01T14:05:12.648000Z"
+      "text": "Can you share your I mean, screen?",
+      "start_time": "2026-09-01T14:04:58.201000Z",
+      "end_time": "2026-09-01T14:05:00.894000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker"
+      },
+      "text": "There's a lot of tech debt um, in that area, for what it's worth.",
+      "start_time": "2026-09-01T14:05:01.907000Z",
+      "end_time": "2026-09-01T14:05:07.291000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Grace Lin"
+      },
+      "text": "Okay,",
+      "start_time": "2026-09-01T14:05:08.342000Z",
+      "end_time": "2026-09-01T14:05:09.142000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Grace Lin"
+      },
+      "text": "so where did we land on that last time?",
+      "start_time": "2026-09-01T14:05:09.617000Z",
+      "end_time": "2026-09-01T14:05:13.078000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "I think the question is like, really about scope.",
-      "start_time": "2026-09-01T14:05:13.571000Z",
-      "end_time": "2026-09-01T14:05:17.033000Z"
+      "text": "I uh, don't have any I mean, blockers really.",
+      "start_time": "2026-09-01T14:05:13.679000Z",
+      "end_time": "2026-09-01T14:05:17.140000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Kofi Mensah"
+      },
+      "text": "The test suite has been pretty flaky this week,",
+      "start_time": "2026-09-01T14:05:18.082000Z",
+      "end_time": "2026-09-01T14:05:21.544000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Kofi Mensah"
+      },
+      "text": "just flagging it.",
+      "start_time": "2026-09-01T14:05:22.312000Z",
+      "end_time": "2026-09-01T14:05:23.466000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I'm not sure you know, that's the right framing,",
+      "start_time": "2026-09-01T14:05:24.167000Z",
+      "end_time": "2026-09-01T14:05:27.628000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "honestly.",
+      "start_time": "2026-09-01T14:05:28.154000Z",
+      "end_time": "2026-09-01T14:05:28.954000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "I think the question is I mean,",
+      "start_time": "2026-09-01T14:05:29.949000Z",
+      "end_time": "2026-09-01T14:05:32.641000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "I can own ituh, .",
-      "start_time": "2026-09-01T14:05:17.885000Z",
-      "end_time": "2026-09-01T14:05:19.808000Z"
+      "text": "Yeah.",
+      "start_time": "2026-09-01T14:05:31.483000Z",
+      "end_time": "2026-09-01T14:05:32.083000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "really about scope.",
+      "start_time": "2026-09-01T14:05:33.655000Z",
+      "end_time": "2026-09-01T14:05:34.809000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Kofi Mensah"
+      },
+      "text": "I can own it.",
+      "start_time": "2026-09-01T14:05:35.139000Z",
+      "end_time": "2026-09-01T14:05:36.678000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Kofi Mensah"
+      },
+      "text": "Realistically the dashboards are migrated",
+      "start_time": "2026-09-01T14:05:37.624000Z",
+      "end_time": "2026-09-01T14:05:39.547000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "Realistically the dashboards are migrated by October thirtieth.",
-      "start_time": "2026-09-01T14:05:20.770000Z",
-      "end_time": "2026-09-01T14:05:23.847000Z"
+      "text": "by October thirtieth.",
+      "start_time": "2026-09-01T14:05:40.381000Z",
+      "end_time": "2026-09-01T14:05:41.535000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
       "text": "The test suite has been pretty flaky this week, just flagging it.",
-      "start_time": "2026-09-01T14:05:24.740000Z",
-      "end_time": "2026-09-01T14:05:29.355000Z"
-    },
-    {
-      "speaker": {
-        "source": "microphone"
-      },
-      "text": "Yep.",
-      "start_time": "2026-09-01T14:05:28.502000Z",
-      "end_time": "2026-09-01T14:05:29.102000Z"
+      "start_time": "2026-09-01T14:05:42.378000Z",
+      "end_time": "2026-09-01T14:05:46.994000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
       "text": "The logs are super noisy right now, it's hard to find anything.",
-      "start_time": "2026-09-01T14:05:29.999000Z",
-      "end_time": "2026-09-01T14:05:34.614000Z"
+      "start_time": "2026-09-01T14:05:48.083000Z",
+      "end_time": "2026-09-01T14:05:52.698000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
       "text": "Is the staging environment back up?",
-      "start_time": "2026-09-01T14:05:35.085000Z",
-      "end_time": "2026-09-01T14:05:37.392000Z"
+      "start_time": "2026-09-01T14:05:53.466000Z",
+      "end_time": "2026-09-01T14:05:55.774000Z"
     },
     {
       "speaker": {
-        "source": "speaker"
+        "source": "speaker",
+        "name": "Grace Lin"
       },
-      "text": "It uh, was down uh, earlier.",
-      "start_time": "2026-09-01T14:05:38.178000Z",
-      "end_time": "2026-09-01T14:05:40.486000Z"
+      "text": "It It was down earlier.",
+      "start_time": "2026-09-01T14:05:56.222000Z",
+      "end_time": "2026-09-01T14:05:58.145000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "We- We should probably write that down somewhere so we don't forget.",
-      "start_time": "2026-09-01T14:05:41.360000Z",
-      "end_time": "2026-09-01T14:05:45.975000Z"
+      "text": "We should probably write",
+      "start_time": "2026-09-01T14:05:59.014000Z",
+      "end_time": "2026-09-01T14:06:00.552000Z"
     },
     {
       "speaker": {
-        "source": "speaker"
+        "source": "microphone"
       },
-      "text": "I think that's mostly right, but there's a nuance there.",
-      "start_time": "2026-09-01T14:05:47.174000Z",
-      "end_time": "2026-09-01T14:05:51.020000Z"
+      "text": "that down somewhere so we don't forget.",
+      "start_time": "2026-09-01T14:06:01.740000Z",
+      "end_time": "2026-09-01T14:06:04.433000Z"
     },
     {
       "speaker": {
-        "source": "speaker"
+        "source": "speaker",
+        "name": "Dev Iyer"
+      },
+      "text": "Got it.",
+      "start_time": "2026-09-01T14:06:03.738000Z",
+      "end_time": "2026-09-01T14:06:04.338000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Dev Iyer"
+      },
+      "text": "I think that's mostly right, but I mean, there's a nuance there.",
+      "start_time": "2026-09-01T14:06:05.040000Z",
+      "end_time": "2026-09-01T14:06:09.655000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Grace Lin"
       },
       "text": "Is the staging environment back up?",
-      "start_time": "2026-09-01T14:05:52.057000Z",
-      "end_time": "2026-09-01T14:05:54.365000Z"
+      "start_time": "2026-09-01T14:06:09.890000Z",
+      "end_time": "2026-09-01T14:06:12.197000Z"
     },
     {
       "speaker": {
-        "source": "speaker"
+        "source": "speaker",
+        "name": "Grace Lin"
       },
       "text": "It was down earlier.",
-      "start_time": "2026-09-01T14:05:54.671000Z",
-      "end_time": "2026-09-01T14:05:56.209000Z"
+      "start_time": "2026-09-01T14:06:13.202000Z",
+      "end_time": "2026-09-01T14:06:14.741000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Grace, can you pin down the activation metric definition?",
-      "start_time": "2026-09-01T14:05:56.556000Z",
-      "end_time": "2026-09-01T14:06:00.017000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "Sure, uh, I'll write up the activation metric by next Friday.",
-      "start_time": "2026-09-01T14:06:00.625000Z",
-      "end_time": "2026-09-01T14:06:04.855000Z"
+      "text": "Grace,",
+      "start_time": "2026-09-01T14:06:15.309000Z",
+      "end_time": "2026-09-01T14:06:16.109000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Mm-hm.",
-      "start_time": "2026-09-01T14:06:04.095000Z",
-      "end_time": "2026-09-01T14:06:04.695000Z"
+      "text": "can you pin down the activation metric definition?",
+      "start_time": "2026-09-01T14:06:16.375000Z",
+      "end_time": "2026-09-01T14:06:19.452000Z"
     },
     {
       "speaker": {
-        "source": "speaker"
+        "source": "speaker",
+        "name": "Grace Lin"
       },
-      "text": "write, right.",
-      "start_time": "2026-09-01T14:06:05.305000Z",
-      "end_time": "2026-09-01T14:06:06.105000Z"
+      "text": "Sure,",
+      "start_time": "2026-09-01T14:06:20.467000Z",
+      "end_time": "2026-09-01T14:06:21.267000Z"
     },
     {
       "speaker": {
-        "source": "speaker"
+        "source": "speaker",
+        "name": "Grace Lin"
       },
-      "text": "uh, Keep going.",
-      "start_time": "2026-09-01T14:06:07.280000Z",
-      "end_time": "2026-09-01T14:06:08.433000Z"
+      "text": "I'll write up the activation metric by next Friday.",
+      "start_time": "2026-09-01T14:06:22.198000Z",
+      "end_time": "2026-09-01T14:06:25.659000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Grace Lin"
+      },
+      "text": "Right, right.",
+      "start_time": "2026-09-01T14:06:26.850000Z",
+      "end_time": "2026-09-01T14:06:27.650000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Grace Lin"
+      },
+      "text": "Keep uh, going.",
+      "start_time": "2026-09-01T14:06:27.908000Z",
+      "end_time": "2026-09-01T14:06:29.062000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Sorry, can you say that again?",
-      "start_time": "2026-09-01T14:06:09.535000Z",
-      "end_time": "2026-09-01T14:06:11.843000Z"
+      "text": "Sorry, can you like, say that again?",
+      "start_time": "2026-09-01T14:06:29.395000Z",
+      "end_time": "2026-09-01T14:06:32.088000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Dev Iyer"
+      },
+      "text": "Yep.",
+      "start_time": "2026-09-01T14:06:31.105000Z",
+      "end_time": "2026-09-01T14:06:31.705000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
       "text": "You cut out for a second.",
-      "start_time": "2026-09-01T14:06:12.554000Z",
-      "end_time": "2026-09-01T14:06:14.862000Z"
+      "start_time": "2026-09-01T14:06:32.466000Z",
+      "end_time": "2026-09-01T14:06:34.774000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "like, Yeah, I agree with that.",
-      "start_time": "2026-09-01T14:06:15.321000Z",
-      "end_time": "2026-09-01T14:06:17.629000Z"
+      "text": "Yeah- Yeah, I agree with that.",
+      "start_time": "2026-09-01T14:06:35.023000Z",
+      "end_time": "2026-09-01T14:06:37.330000Z"
     },
     {
       "speaker": {
-        "source": "speaker"
+        "source": "speaker",
+        "name": "Grace Lin"
       },
-      "text": "I paired on the migration stuff for a bit, it's gnarly but fine.",
-      "start_time": "2026-09-01T14:06:17.863000Z",
-      "end_time": "2026-09-01T14:06:22.863000Z"
+      "text": "I paired on the migration stuff for a bit,",
+      "start_time": "2026-09-01T14:06:38.488000Z",
+      "end_time": "2026-09-01T14:06:41.950000Z"
     },
     {
       "speaker": {
-        "source": "speaker"
+        "source": "speaker",
+        "name": "Grace Lin"
       },
-      "text": "Sorry, like, I was on mute.",
-      "start_time": "2026-09-01T14:06:23.207000Z",
-      "end_time": "2026-09-01T14:06:25.514000Z"
+      "text": "I mean, it's gnarly but fine.",
+      "start_time": "2026-09-01T14:06:43.108000Z",
+      "end_time": "2026-09-01T14:06:45.416000Z"
     },
     {
       "speaker": {
-        "source": "speaker"
+        "source": "speaker",
+        "name": "Grace Lin"
+      },
+      "text": "Sorry, I was on mute.",
+      "start_time": "2026-09-01T14:06:46.091000Z",
+      "end_time": "2026-09-01T14:06:48.014000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Grace Lin"
       },
       "text": "I was saying I agree.",
-      "start_time": "2026-09-01T14:06:26.132000Z",
-      "end_time": "2026-09-01T14:06:28.055000Z"
+      "start_time": "2026-09-01T14:06:49.128000Z",
+      "end_time": "2026-09-01T14:06:51.051000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Dev Iyer"
+      },
+      "text": "Let's not go down",
+      "start_time": "2026-09-01T14:06:52.238000Z",
+      "end_time": "2026-09-01T14:06:53.777000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Dev Iyer"
+      },
+      "text": "that rabbit rabbit hole right now.",
+      "start_time": "2026-09-01T14:06:54.908000Z",
+      "end_time": "2026-09-01T14:06:57.216000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Dev Iyer"
+      },
+      "text": "Yeah, I you know, agree with that.",
+      "start_time": "2026-09-01T14:06:57.860000Z",
+      "end_time": "2026-09-01T14:07:00.552000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "Let's not go down that rabbit hole right now.",
-      "start_time": "2026-09-01T14:06:29.109000Z",
-      "end_time": "2026-09-01T14:06:32.570000Z"
+      "text": "I I looked at",
+      "start_time": "2026-09-01T14:07:01.006000Z",
+      "end_time": "2026-09-01T14:07:02.544000Z"
     },
     {
       "speaker": {
-        "source": "speaker"
+        "source": "speaker",
+        "name": "Kofi Mensah"
       },
-      "text": "Yeah, I agree with that.",
-      "start_time": "2026-09-01T14:06:32.905000Z",
-      "end_time": "2026-09-01T14:06:34.828000Z"
-    },
-    {
-      "speaker": {
-        "source": "speaker"
-      },
-      "text": "I looked at the the error dashboard and nothing scary.",
-      "start_time": "2026-09-01T14:06:35.851000Z",
-      "end_time": "2026-09-01T14:06:39.698000Z"
+      "text": "the error dashboard and nothing scary.",
+      "start_time": "2026-09-01T14:07:03.336000Z",
+      "end_time": "2026-09-01T14:07:05.643000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Okay, so where did we land on that last last time?",
-      "start_time": "2026-09-01T14:06:40.584000Z",
-      "end_time": "2026-09-01T14:06:44.815000Z"
+      "text": "Okay,",
+      "start_time": "2026-09-01T14:07:05.922000Z",
+      "end_time": "2026-09-01T14:07:06.722000Z"
+    },
+    {
+      "speaker": {
+        "source": "microphone"
+      },
+      "text": "so where did we land on that last time?",
+      "start_time": "2026-09-01T14:07:07.893000Z",
+      "end_time": "2026-09-01T14:07:11.355000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "I paired on the migration stuff for a bit, it's gnarly gnarly but fine.",
-      "start_time": "2026-09-01T14:06:45.338000Z",
-      "end_time": "2026-09-01T14:06:50.723000Z"
+      "text": "Mm-hm.",
+      "start_time": "2026-09-01T14:07:09.695000Z",
+      "end_time": "2026-09-01T14:07:10.295000Z"
     },
     {
       "speaker": {
-        "source": "speaker"
+        "source": "speaker",
+        "name": "Dev Iyer"
+      },
+      "text": "I paired on the migration stuff for a bit, it's gnarly but fine.",
+      "start_time": "2026-09-01T14:07:11.692000Z",
+      "end_time": "2026-09-01T14:07:16.692000Z"
+    },
+    {
+      "speaker": {
+        "source": "speaker",
+        "name": "Dev Iyer"
       },
       "text": "That's fair.",
-      "start_time": "2026-09-01T14:06:51.881000Z",
-      "end_time": "2026-09-01T14:06:52.681000Z"
+      "start_time": "2026-09-01T14:07:17.274000Z",
+      "end_time": "2026-09-01T14:07:18.074000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "I hadn't thought about it that way.",
-      "start_time": "2026-09-01T14:06:53.394000Z",
-      "end_time": "2026-09-01T14:06:56.086000Z"
+      "text": "I uh, hadn't thought about it that way.",
+      "start_time": "2026-09-01T14:07:18.794000Z",
+      "end_time": "2026-09-01T14:07:21.871000Z"
     },
     {
       "speaker": {
         "source": "speaker"
       },
-      "text": "Yeah, that makes sense to me.",
-      "start_time": "2026-09-01T14:06:56.990000Z",
-      "end_time": "2026-09-01T14:06:59.298000Z"
+      "text": "Yeah, that makes sense too me.",
+      "start_time": "2026-09-01T14:07:22.205000Z",
+      "end_time": "2026-09-01T14:07:24.513000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Great, that's you know, it from me.",
-      "start_time": "2026-09-01T14:07:00.190000Z",
-      "end_time": "2026-09-01T14:07:02.882000Z"
+      "text": "Great- Great, that's it from me.",
+      "start_time": "2026-09-01T14:07:24.828000Z",
+      "end_time": "2026-09-01T14:07:27.135000Z"
     },
     {
       "speaker": {
         "source": "microphone"
       },
-      "text": "Talk soon.",
-      "start_time": "2026-09-01T14:07:03.898000Z",
-      "end_time": "2026-09-01T14:07:04.698000Z"
+      "text": "Talk Talk soon.",
+      "start_time": "2026-09-01T14:07:27.486000Z",
+      "end_time": "2026-09-01T14:07:28.640000Z"
     }
   ]
 }

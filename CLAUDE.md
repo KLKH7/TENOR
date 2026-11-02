@@ -9,7 +9,8 @@ transcript retrieval". The audience is Granola's engineering team: rigour and ho
   `VERIFIED` or `ASSUMED` in `docs/SCHEMA_NOTES.md`. Never silently invent API behaviour; if you
   must assume, add a row there first.
 - **Source boundary.** All Granola I/O lives in `concentrate.sources` behind the `Source` protocol
-  (`GranolaAPISource`, `FixtureSource`). Downstream code never imports httpx or knows which source
+  (`GranolaAPISource` for the REST API, `GranolaMCPSource` for the official MCP, `FixtureSource`).
+  The MCP source is read-only by construction: never call MCP write tools. Downstream code never imports httpx or knows which source
   it is reading. Fixtures use the exact API response shape and are validated by the same Pydantic
   models (`tests/test_contract.py`).
 - **Transcripts are channel-attributed.** `speaker.source: "microphone"` = "Me" (note owner),
