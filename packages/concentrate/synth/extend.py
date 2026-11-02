@@ -24,7 +24,7 @@ from datetime import date
 from concentrate.core.spoken import say_date, say_int, say_money
 from concentrate.synth.roster import ORG_BY_ID, XL_ORGS, person
 from concentrate.synth.story import M, Story, day
-from concentrate.synth.world import Commitment, Fact, Outcome
+from concentrate.synth.world import Commitment, Fact, MeetingMode, Outcome
 
 MON, TUE, WED, THU, FRI = range(5)
 WEEKS = range(1, 9)
@@ -687,7 +687,7 @@ def _one_on_ones(s: Story) -> None:
             ],
         )
         for i, w in enumerate(weeks):
-            mode = "in_person" if s.rng.random() < 0.2 else "remote"
+            mode: MeetingMode = "in_person" if s.rng.random() < 0.2 else "remote"
             m = s.meeting(
                 f"x-1on1-{pid}-{i + 1}",
                 f"Priya / {s.first(pid)} 1:1",
