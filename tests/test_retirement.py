@@ -42,9 +42,11 @@ def test_retired_topk_deletes_old_transcripts(
     assert sum(not c for c in allgone._is_chunk) == len(notes)
 
 
-def test_gold_evidence() -> None:
-    ctx = "[not_a:0001] Me: hi\n[not_b:0002] Them: yo"
-    assert rt.gold_evidence(ctx, ["not_a:0001", "not_c:0003"]) == 0.5
+def test_gold_evidence_text_vs_pointers() -> None:
+    ctx = "- Falcon owner: Tomas | lines [not_c:0003]\n[not_a:0001] Me: hi\n[not_b:0002] Them: yo"
+    gold = ["not_a:0001", "not_c:0003"]
+    assert rt.gold_evidence(ctx, gold) == 0.5  # not_c is only a provenance pointer
+    assert rt.gold_evidence(ctx, gold, text=False) == 1.0
     assert rt.gold_evidence(ctx, []) is None
 
 

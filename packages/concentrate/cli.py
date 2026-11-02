@@ -428,6 +428,9 @@ def retire_curve(
     estimate_only: Annotated[
         bool, typer.Option("--estimate", help="Estimate cost and exit.")
     ] = False,
+    evidence_only: Annotated[
+        bool, typer.Option("--evidence-only", help="Gold-line coverage of contexts only ($0).")
+    ] = False,
     offline: Annotated[bool, typer.Option(help="Use cached LLM results only.")] = False,
     yes: Annotated[bool, typer.Option("--yes", help="Skip the >$2 confirmation.")] = False,
     latency_sample: Annotated[
@@ -450,7 +453,7 @@ def retire_curve(
     embedder = SentenceTransformerEmbedder()
     c_ns, b0_ns = rt.parse_settings(settings), rt.parse_settings(b0_settings)
 
-    systems: list[System] = []
+    concentrates: list[ConcentrateSystem] = []
     for n in c_ns:
         c = ConcentrateSystem(
             client,
@@ -459,14 +462,18 @@ def retire_curve(
             retire_after_days=n,
         )
         c.name = f"concentrate@{rt.label(n)}"
-        systems.append(c)
-    store_dir = systems[0].store_dir(notes) if systems else None  # type: ignore[attr-defined]
+        concentrates.append(c)
+    systems: list[System] = list(concentrates)
+    store_dir = concentrates[0].store_dir(notes) if concentrates else None
     complete = store_dir is None or (store_dir / COMPLETE_MARKER).exists()
     if not complete and not estimate_only:
         raise typer.BadParameter(
             f"Concentrate store {store_dir} is not complete; this command never builds memory "
             "(run `concentrate eval --systems c` or wait for the build)"
         )
+    if complete:  # a finished store is a free cache hit: load it so estimates are exact
+        for c in concentrates:
+            c.ingest(notes)
     retriever = MeetingRetriever(notes, embedder) if b0_ns or b1 else None
     for n in b0_ns:
         assert retriever is not None
@@ -488,14 +495,31 @@ def retire_curve(
         f"{fixtures}: {len(notes)} meetings · {len(questions)} questions ({split}) · "
         f"{len(systems)} systems · {client.model} · batch mode"
     )
+    usd = {e.system: e.usd - (e.ingest_usd if complete else 0.0) for e in ests}
     for e in ests:
         typer.echo(
             f"  {e.system:<18} ~{e.input_tokens / max(1, e.questions):>8,.0f} in-tok/q "
-            f"≈ ${e.usd:6.2f}  (incl. judge)"
+            f"≈ ${usd[e.system]:6.2f}  (incl. judge)"
         )
-    total = sum(e.usd for e in ests)
+    total = sum(usd.values())
     typer.echo(f"  estimated total ≈ ${total:.2f} (before cache reuse) · cap ${budget:.2f}")
     if estimate_only:
+        return
+    if evidence_only:  # free: build every context, count gold lines, no LLM calls
+        for text in (True, False):
+            typer.echo(
+                f"\nGold transcript lines {'shown as text' if text else 'referenced by ID'}:"
+            )
+            ev = rt.context_evidence(systems, questions, text=text)
+            typer.echo(rt.evidence_markdown(ev, questions))
+        return
+    if evidence_only:  # free: build every context, count gold lines, no LLM calls
+        for text in (True, False):
+            typer.echo(
+                f"\nGold transcript lines {'shown as text' if text else 'referenced by ID'}:"
+            )
+            ev = rt.context_evidence(systems, questions, text=text)
+            typer.echo(rt.evidence_markdown(ev, questions))
         return
     if not offline and not os.environ.get("ANTHROPIC_API_KEY"):
         raise typer.BadParameter("ANTHROPIC_API_KEY is not set (put it in .env)")
@@ -519,20 +543,11 @@ def retire_curve(
     )
 
     # Post-process: gold evidence in each context, tokens kept, retired share, curve.
-    by_name = {s.name: s for s in systems}
-    evidence: dict[tuple[str, str], float | None] = {}
-    for s in systems:
-        for q in questions:
-            if isinstance(s, ConcentrateSystem):
-                ctx = s._user(q)[0]
-            elif isinstance(s, rt.RetiredTopKSystem | SummariesOnlySystem):
-                ctx = s._context(q)[0]
-            else:
-                continue
-            evidence[(s.name, q.id)] = rt.gold_evidence(ctx, q.gold_utterance_ids)
+    evidence = rt.context_evidence(systems, questions)
+    pointers = rt.context_evidence(systems, questions, text=False)
     rows = rt.load_rows(Path(report["paths"]["jsonl"]))
     all_ns = list(dict.fromkeys([*c_ns, *b0_ns]))
-    store_meetings = by_name[systems[0].name].store.meetings()  # type: ignore[attr-defined]
+    store_meetings = concentrates[0].store.meetings() if concentrates else []
     as_ofs = [q.as_of for q in questions]
     result = {
         "meta": {
@@ -551,7 +566,7 @@ def retire_curve(
         "order": [rt.label(n) for n in sorted(all_ns, key=lambda n: -1 if n is None else -n)],
         "kept": {rt.label(n): rt.tokens_kept(store_meetings, as_ofs, n) for n in all_ns},
         "retired_share": {rt.label(n): rt.retired_share(notes, as_ofs, n) for n in all_ns},
-        "curve": rt.curve(rows, evidence, seed),
+        "curve": rt.curve(rows, evidence, seed, pointers),
     }
     stem = out / f"{report['meta']['date']}.curve"
     Path(f"{stem}.json").write_text(json.dumps(result, indent=2, default=str))

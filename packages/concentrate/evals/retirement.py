@@ -126,15 +126,21 @@ class RetiredTopKSystem(TopKSystem):
         ]
 
 
-def gold_evidence(context: str, gold_ids: Sequence[str]) -> float | None:
-    """Share of the question's gold transcript lines whose ``[line id]`` appears in ``context``.
+def gold_evidence(context: str, gold_ids: Sequence[str], *, text: bool = True) -> float | None:
+    """Share of the question's gold transcript lines present in ``context``.
 
-    Both Concentrate (source lines) and B0 (full transcripts) render lines as ``[<note>:<idx>]``,
-    so a substring test is exact. ``None`` when the question has no gold lines (unanswerable).
+    With ``text`` (the default) a line counts only if its text is shown: Concentrate's source
+    lines and B0's transcripts both render a line as ``[<note>:<idx>] <speaker>: ...`` at the
+    start of a row. With ``text=False`` any mention of the ID counts, including the provenance
+    pointers that Concentrate facts keep after retirement (``lines [<note>:<idx>, ...]``).
+    ``None`` when the question has no gold lines (unanswerable).
     """
     if not gold_ids:
         return None
-    return sum(f"[{g}]" in context for g in gold_ids) / len(gold_ids)
+    if text:
+        hay = "\n" + context
+        return sum(f"\n[{g}] " in hay for g in gold_ids) / len(gold_ids)
+    return sum(g in context for g in gold_ids) / len(gold_ids)
 
 
 def tokens_kept(
@@ -179,12 +185,16 @@ def retired_share(notes: list[MeetingNote], as_ofs: Sequence[date], n: int | Non
 
 
 def curve(
-    rows: list[dict[str, Any]], evidence: dict[tuple[str, str], float | None], seed: int
+    rows: list[dict[str, Any]],
+    evidence: dict[tuple[str, str], float | None],
+    seed: int,
+    pointers: dict[tuple[str, str], float | None] | None = None,
 ) -> dict[str, Any]:
     """Accuracy (overall and by category, with bootstrap CIs) and mean gold evidence per system.
 
     ``rows`` are the per-question JSONL rows of an eval report; ``evidence`` maps
-    ``(system, qid)`` to :func:`gold_evidence`.
+    ``(system, qid)`` to :func:`gold_evidence` (line text shown); ``pointers`` likewise for
+    ``text=False`` (line ID referenced).
     """
     out: dict[str, Any] = {}
     for s in dict.fromkeys(r["system"] for r in rows):
@@ -194,11 +204,13 @@ def curve(
             cats.setdefault(r["category"], []).append(float(r["correct"]))
         acc = [float(r["correct"]) for r in mine]
         ev = [e for r in mine if (e := evidence.get((s, r["qid"]))) is not None]
+        pt = [e for r in mine if (e := (pointers or {}).get((s, r["qid"]))) is not None]
         out[s] = {
             "n": len(mine),
             "accuracy": sum(acc) / max(1, len(acc)),
             "accuracy_ci95": bootstrap_ci(acc, seed),
             "gold_evidence": sum(ev) / len(ev) if ev else None,
+            "gold_pointers": sum(pt) / len(pt) if pt else None,
             "input_tokens_per_q": sum(r["input_tokens"] for r in mine) / max(1, len(mine)),
             "by_category": {
                 c: {
@@ -240,9 +252,10 @@ def to_markdown(result: dict[str, Any]) -> str:
         "question's as-of date. Tokens kept come from the Concentrate build's tier sizes "
         "(mean over questions, meetings held as of each question).",
         "",
-        "| System | N (days) | Accuracy [95% CI] | Gold lines in context | Meetings retired | "
-        "Transcript tok kept | Store tok kept | Input tok/q |",
-        "|---|---|---|---|---|---|---|---|",
+        "| System | N (days) | Accuracy [95% CI] | Gold line text in context | "
+        "Gold line IDs referenced | Meetings retired | Transcript tok kept | Store tok kept | "
+        "Input tok/q |",
+        "|---|---|---|---|---|---|---|---|---|",
     ]
     for s, v in cur.items():
         swept = s in result["settings"]
@@ -252,6 +265,7 @@ def to_markdown(result: dict[str, Any]) -> str:
         n_txt = ("∞" if lab == INF else lab) if lab is not None else "-"
         lines.append(
             f"| {s} | {n_txt} | {_ci(v)} | {_pct(v['gold_evidence'])} | "
+            f"{_pct(v.get('gold_pointers'))} | "
             f"{_pct(retired)} | {kept.get('transcript', 0):,.0f} | "
             f"{_pct(kept.get('share'))} | {v['input_tokens_per_q']:,.0f} |"
         )
@@ -349,3 +363,56 @@ def to_svg(result: dict[str, Any], categories: Sequence[str] = ()) -> str:
     )
     out.append("</svg>")
     return "\n".join(out)
+
+
+def answer_context(s: object, q: QuestionLike) -> str | None:
+    """The user message a system would send for ``q`` (no LLM call), if it is single-context."""
+    from concentrate.agents.concentrate_system import ConcentrateSystem
+
+    if isinstance(s, ConcentrateSystem):
+        return s._user(q)[0]
+    if isinstance(s, TopKSystem):  # b0, retired b0 and b1 (a TopKSystem subclass)
+        return s._context(q)[0]
+    return None
+
+
+def context_evidence(
+    systems: Sequence[object], questions: Sequence[Any], *, text: bool = True
+) -> dict[tuple[str, str], float | None]:
+    """:func:`gold_evidence` of every (system, question) context, computed offline."""
+    out: dict[tuple[str, str], float | None] = {}
+    for s in systems:
+        for q in questions:
+            ctx = answer_context(s, q)
+            if ctx is not None:
+                out[(getattr(s, "name", "?"), q.id)] = gold_evidence(
+                    ctx, q.gold_utterance_ids, text=text
+                )
+    return out
+
+
+def evidence_markdown(
+    evidence: dict[tuple[str, str], float | None], questions: Sequence[Any]
+) -> str:
+    """Mean share of gold transcript lines present in the context, per system and category."""
+    cat = {q.id: q.category for q in questions}
+    names = list(dict.fromkeys(s for s, _ in evidence))
+    cats = sorted(
+        {c for q, c in cat.items() if any(evidence.get((s, q)) is not None for s in names)}
+    )
+
+    def mean(s: str, c: str | None) -> str:
+        v = [
+            e
+            for (sys_, qid), e in evidence.items()
+            if sys_ == s and e is not None and (c is None or cat[qid] == c)
+        ]
+        return _pct(sum(v) / len(v)) if v else "-"
+
+    lines = [
+        "| Category | " + " | ".join(names) + " |",
+        "|---|" + "---|" * len(names),
+        "| **all answerable** | " + " | ".join(mean(s, None) for s in names) + " |",
+    ]
+    lines += [f"| {c} | " + " | ".join(mean(s, c) for s in names) + " |" for c in cats]
+    return "\n".join(lines)
