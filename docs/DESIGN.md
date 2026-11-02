@@ -255,3 +255,9 @@ Details and metrics are in `docs/FIDELITY_V2.md`.
 - **Fixture-length-dependent test expectations re-pinned.** These are the batch cache keys and the Graphiti episode counts.
 
 **Known gaps.** Template signatures, a short long tail (p90 26 vs 38), "like" density, and summaries at ~270 words vs ~420. See FIDELITY_V2 §4.
+
+## Enhance v2: in-person attribution (workstream O, opt-in)
+
+- `enhance-v2` adds two cues. **Task continuity**: an "I'll take X" or "X is done" line is credited to whoever said X on identified lines in other meetings. **Diarized owner prior**: the owner gets a stronger prior on the largest iOS diarization cluster. It is opt-in (`CONCENTRATE_ENHANCER`) so existing stores stay valid.
+- Turn-taking and an HMM over the microphone run were measured and rejected *for this corpus*. Synthetic filler speakers are drawn i.i.d., so there is no structure to learn. That's a fidelity gap to close, not a verdict on the idea.
+- With batch lookahead, v2 fixes 4 of the 8 owner-misattributed in-person commitments behind the brief's precision gap, adding no new errors. With history only (what the pipeline does today), it fixes none. Numbers: docs/concentrate/enhance_v2.md.

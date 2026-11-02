@@ -148,6 +148,14 @@ def test_real_enhancer_is_the_default(tmp_path: Path) -> None:
     assert system.enhancer.name == "enhance-v1"
 
 
+def test_enhancer_version_from_env(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("CONCENTRATE_ENHANCER", "enhance-v2")
+    client = LLMClient(model="claude-opus-5-5", cache_dir=tmp_path / "llm")
+    system = ConcentrateSystem(client, backend=ScriptedLLM({}), directory_path=DIRECTORY)
+    assert system.enhancer.name == "enhance-v2"
+    assert system.config()["enhancer"] == "enhance-v2"  # a v2 build gets its own store
+
+
 def _q(text: str, as_of: str) -> SimpleNamespace:
     return SimpleNamespace(id="q", question=text, as_of=date.fromisoformat(as_of))
 

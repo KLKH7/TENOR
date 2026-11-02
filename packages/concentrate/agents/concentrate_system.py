@@ -63,6 +63,7 @@ from concentrate.memory.store import MemoryStore
 from concentrate.memory.verify import ENTAIL_PROMPT
 
 INGEST_MODEL_ENV = "CONCENTRATE_INGEST_MODEL"
+ENHANCER_ENV = "CONCENTRATE_ENHANCER"  # "enhance-v1" (default) or "enhance-v2"
 DEFAULT_INGEST_MODEL = "claude-sonnet-5-5"
 DEFAULT_ENTAIL_MODEL = "claude-haiku-5-5"
 DEFAULT_CACHE_ROOT = Path("data/cache/concentrate")
@@ -117,7 +118,9 @@ class ConcentrateSystem:
         self.ingest_backend = ingest_backend
         self.ingest_model = ingest_model or os.environ.get(INGEST_MODEL_ENV) or DEFAULT_INGEST_MODEL
         self.entail_model = entail_model
-        self.enhancer = enhancer if enhancer is not None else real_enhancer()
+        if enhancer is None:
+            enhancer = real_enhancer(os.environ.get(ENHANCER_ENV) or "enhance-v1")
+        self.enhancer = enhancer
         self.directory_path = directory_path
         self.embedder, self.cache_root = embedder, cache_root
         self.build = build or BuildConfig()

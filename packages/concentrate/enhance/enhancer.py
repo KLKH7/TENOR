@@ -10,6 +10,9 @@ from concentrate.enhance.directory import Directory
 from concentrate.enhance.mentions import Gazetteer, MentionLinker, lowercase_vocabulary
 from concentrate.enhance.models import EnhancedNote, MentionLink
 from concentrate.enhance.speakers import MIN_CONFIDENCE, SpeakerResolver
+from concentrate.enhance.tasks import TaskIndex, add_line
+
+LOOKAHEAD_MIN_CONFIDENCE = 0.9  # unnamed system-audio lines trusted into the v2 task index
 
 _GAZETTEERS: dict[int, tuple[Directory, Gazetteer]] = {}
 
@@ -29,11 +32,15 @@ def enhance(
     *,
     priors: Priors | None = None,
     min_confidence: float = MIN_CONFIDENCE,
+    version: str = "enhance-v1",
+    tasks: TaskIndex | None = None,
 ) -> EnhancedNote:
     """Resolve the speaker of every utterance and link person/org/project mentions.
 
     ``history`` holds earlier notes (for co-attendance and talkativeness priors). Callers that
     process many notes in order can pass precomputed ``priors`` instead (see ``enhance_all``).
+    ``version`` picks the speaker model ("enhance-v1" default, "enhance-v2"); ``tasks`` overrides
+    the v2 task index (default: the one in ``priors``, i.e. earlier meetings only).
     """
     if priors is None:
         priors = Priors.from_history(history, directory)
@@ -46,8 +53,9 @@ def enhance(
         mentions += linker.link_utterance(u)
     title_people = _title_people(linker, note)
     resolver = SpeakerResolver(
-        note, directory, attendees, owner, priors, mentions, title_people, min_confidence
-    )
+        note, directory, attendees, owner, priors, mentions, title_people, min_confidence,
+        version=version, tasks=tasks,
+    )  # fmt: skip
     speakers = resolver.resolve()
     used = set(attendees)
     for r in speakers.values():
@@ -76,13 +84,48 @@ def _title_people(linker: MentionLinker, note: MeetingNote) -> list[str]:
     return out
 
 
-def enhance_all(notes: Iterable[MeetingNote], directory: Directory) -> dict[str, EnhancedNote]:
-    """Enhance notes in chronological order, each with the notes before it as history."""
+def enhance_all(
+    notes: Iterable[MeetingNote],
+    directory: Directory,
+    *,
+    version: str = "enhance-v1",
+    lookahead: bool = False,
+) -> dict[str, EnhancedNote]:
+    """Enhance notes in chronological order, each with the notes before it as history.
+
+    ``lookahead`` (v2 only) gives the task cue every meeting's identified lines, later ones
+    included: a batch second pass over the series. Without it, only earlier meetings count, as
+    in incremental ingestion.
+    """
     ordered = sorted(notes, key=lambda n: (n.scheduled_start or n.created_at, n.note_id))
+    tasks = Priors.from_history(ordered, directory).tasks if lookahead else None
+    out = _enhance_in_order(ordered, directory, version, tasks)
+    if lookahead and version == "enhance-v2":
+        assert tasks is not None
+        # Second pass: confidently attributed system-audio lines (not attributed via a task)
+        # join the index. Never in-person lines: their guesses are what we're trying to fix.
+        for note in ordered:
+            for u in note.utterances:
+                r = out[note.note_id].speakers[u.utterance_id]
+                if (
+                    u.channel is Channel.THEM
+                    and not u.speaker_name
+                    and r.person_id is not None
+                    and r.confidence >= LOOKAHEAD_MIN_CONFIDENCE
+                    and r.method != "task_continuity"
+                ):
+                    add_line(tasks, u.text, r.person_id)
+        out = _enhance_in_order(ordered, directory, version, tasks)
+    return out
+
+
+def _enhance_in_order(
+    ordered: Sequence[MeetingNote], directory: Directory, version: str, tasks: TaskIndex | None
+) -> dict[str, EnhancedNote]:
     priors = Priors()
     out: dict[str, EnhancedNote] = {}
     for note in ordered:
-        out[note.note_id] = enhance(note, directory, priors=priors)
+        out[note.note_id] = enhance(note, directory, priors=priors, version=version, tasks=tasks)
         priors.add(note, directory)
     return out
 
