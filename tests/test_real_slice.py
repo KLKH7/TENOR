@@ -224,3 +224,25 @@ def test_real_store_lookup_needs_a_complete_build(tmp_path: Path) -> None:
     notes = load_corpus(FIXTURES)[:2]
     with pytest.raises(FileNotFoundError):
         find_real_store(notes, cache_root=tmp_path)
+
+
+def test_spotcheck_lists_disagreements_first() -> None:
+    from concentrate.evals.real_slice import spotcheck_markdown
+
+    def row(s: str, qid: str, v: str) -> dict[str, Any]:
+        return {"system": s, "qid": qid, "category": "decision", "verdict": v,
+                "answer": {"answer": "x"}, "judge": {"reason": "r"}}  # fmt: skip
+
+    md = spotcheck_markdown(
+        [row("a", "real-001", "correct"), row("a", "real-002", "incorrect")],
+        [_q("real-001"), _q("real-002")],
+    )
+    assert "1 of 2 questions" in md and md.index("| real-002") < md.index("| real-001")
+    assert "## real-002" in md and "## real-001" not in md
+
+
+def test_interleave_round_robins_categories() -> None:
+    from concentrate.evals.real_slice import interleave
+
+    qs = [_q("a1"), _q("a2"), _q("t1", category="temporal"), _q("u1", category="unanswerable")]
+    assert [q.id for q in interleave(qs)] == ["a1", "t1", "u1", "a2"]

@@ -67,3 +67,13 @@ The same commitment was attributed differently in two answers. A precomputed sto
 2. **Relative-time questions** ("next meeting", "what's due next week") need the meeting date to resolve dates mentioned in past meetings. Granola's agent routed one to the calendar instead. Concentrate stores resolved dates on facts.
 3. **Latency:** an 8.5 s median per question vs one store lookup plus one LLM call. Workstream F prices this.
 4. **Don't overclaim on commitments.** Granola is already good here on a small corpus. Any Concentrate advantage must show up in the slice's scores, not be assumed.
+
+## 5. Follow-up: scored results on the same account
+
+The probe above is qualitative. The scored comparison is in [`REAL_SLICE.md`](REAL_SLICE.md):
+- 39 LLM-drafted questions, approved in bulk by the meeting owner with 0 edits;
+- Granola's agent **92%** [82, 100] vs Concentrate **59%** [44, 74], with b0 top-k at 77% on the same 39;
+- a second judge agrees 97% of the time;
+- unanswerable questions were not run for Granola or Concentrate.
+
+Concentrate's losses were mostly long-tail details its write-time memory never extracted. That fits §1.1 and §4: Granola's agent reads transcripts at question time.

@@ -1610,3 +1610,18 @@ def real_serve(
         len(svc.meetings),
     )
     build_server(svc).run("stdio")
+
+
+@real_kit.command("spotcheck")
+def real_spotcheck(
+    reports: Annotated[list[Path], typer.Argument(help="Report .jsonl files to combine.")],
+) -> None:
+    """Write data/real/reports/spotcheck.md: questions where any system disagrees with gold."""
+    import json as _json
+
+    from concentrate.evals.real_slice import REAL_DIR, load_questions, spotcheck_markdown
+
+    rows = [_json.loads(x) for p in reports for x in p.read_text().splitlines() if x]
+    out = REAL_DIR / "reports" / "spotcheck.md"
+    out.write_text(spotcheck_markdown(rows, load_questions()))
+    typer.echo(f"wrote {out} (private)")

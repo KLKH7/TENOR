@@ -397,6 +397,20 @@ def judge_real(client: LLMClient, q: RealQuestion, answer: str, abstained: bool)
     return client.structured(req, JudgeOutput)
 
 
+def interleave(questions: list[RealQuestion]) -> list[RealQuestion]:
+    """Round-robin by category, so a run stopped by its budget drops questions evenly across
+    categories instead of losing whole categories at the end of the file."""
+    buckets: dict[str, list[RealQuestion]] = {}
+    for q in questions:
+        buckets.setdefault(q.category, []).append(q)
+    out: list[RealQuestion] = []
+    while any(buckets.values()):
+        for b in buckets.values():
+            if b:
+                out.append(b.pop(0))
+    return out
+
+
 def run_slice(
     systems: list[System],
     questions: list[RealQuestion],
@@ -411,7 +425,7 @@ def run_slice(
     """Answer + judge every (system, verified question); write ``<stamp>.{json,jsonl,md}``."""
     from concentrate.evals.runner import _git, to_markdown
 
-    questions = [q for q in questions if q.status == "verified"]
+    questions = interleave([q for q in questions if q.status == "verified"])
     stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
     out_dir.mkdir(parents=True, exist_ok=True)
     total = spent or client.ledger.spent_usd
@@ -585,3 +599,50 @@ def open_real_memory(
         answerer=answerer,
         info=info,
     )
+
+
+def spotcheck_markdown(rows: list[dict[str, Any]], questions: list[RealQuestion]) -> str:
+    """Per question: each system's verdict vs the gold, listing first the questions where any
+    system disagrees with the gold (the ones worth re-checking: the gold may be what's wrong).
+    ``rows`` are report ``.jsonl`` lines. PRIVATE: contains questions and answers."""
+    by_q: dict[str, dict[str, dict[str, Any]]] = {}
+    for r in rows:
+        by_q.setdefault(r["qid"], {})[r["system"]] = r
+    systems = sorted({r["system"] for r in rows})
+    qmap = {q.id: q for q in questions}
+
+    def flagged(qid: str) -> bool:
+        return any(r["verdict"] != "correct" for r in by_q[qid].values())
+
+    order = sorted(by_q, key=lambda q: (not flagged(q), q))
+    lines = [
+        "# Spot-check: where systems disagree with the gold (PRIVATE, do not commit)",
+        "",
+        f"{sum(map(flagged, by_q))} of {len(by_q)} questions have at least one non-correct "
+        "verdict. For each, decide: is the system wrong, or is the gold wrong?",
+        "",
+        "| qid | category | " + " | ".join(systems) + " |",
+        "|---|---|" + "---|" * len(systems),
+    ]
+    short = {"correct": "✓", "partially_correct": "~", "incorrect": "✗"}
+    for qid in order:
+        cells = [short.get(by_q[qid].get(s, {}).get("verdict", ""), "-") for s in systems]
+        lines.append(
+            f"| {qid} | {by_q[qid][next(iter(by_q[qid]))]['category']} | "
+            + " | ".join(cells)
+            + " |"
+        )
+    for qid in [q for q in order if flagged(q)]:
+        q = qmap.get(qid)
+        lines += [
+            "",
+            f"## {qid}: {q.question if q else ''}",
+            f"**Gold:** {q.gold_answer if q else ''}",
+        ]
+        for s in systems:
+            hit = by_q[qid].get(s)
+            if hit:
+                ans = hit["answer"]["answer"].replace("\n", " ")
+                lines.append(f"- **{s}** ({hit['verdict']}): {ans[:600]}")
+                lines.append(f"  - judge: {hit.get('judge', {}).get('reason', '')}")
+    return "\n".join(lines) + "\n"
