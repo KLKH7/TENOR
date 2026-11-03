@@ -22,7 +22,6 @@ from __future__ import annotations
 import hashlib
 import json
 import os
-import re
 import shutil
 import time
 from dataclasses import asdict
@@ -64,6 +63,7 @@ from concentrate.memory.fallback import (
     FALLBACK_MODES,
     Passages,
     TranscriptFallback,
+    cited_line_ids,
     resolved_labels,
     says_not_covered,
 )
@@ -389,7 +389,7 @@ class ConcentrateSystem:
             q.as_of,
             budget_tokens=self.fallback_tokens,
             retire_after_days=self.retire_after_days,
-            skip_lines=set(re.findall(r"\[(not_[A-Za-z0-9]+:\d+)\]", ctx.text)),
+            skip_lines=cited_line_ids(ctx.text),
         )
 
     def _user(self, q: QuestionLike, with_passages: bool | None = None) -> tuple[str, list[str]]:

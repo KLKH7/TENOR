@@ -14,7 +14,12 @@ from concentrate.agents.concentrate_system import ConcentrateSystem
 from concentrate.core.models import MeetingNote
 from concentrate.llm.client import LLMClient, TurnCompletion, TurnRequest, estimate_tokens
 from concentrate.memory.enhance_stub import STUB_ENHANCER
-from concentrate.memory.fallback import TranscriptFallback, resolved_labels, says_not_covered
+from concentrate.memory.fallback import (
+    TranscriptFallback,
+    cited_line_ids,
+    resolved_labels,
+    says_not_covered,
+)
 from tests.memory_helpers import ScriptedLLM, completion
 from tests.test_concentrate_system import DIRECTORY, A, B, C, _notes, _q, _script
 
@@ -151,6 +156,12 @@ def test_raw_channel_labels_are_kept_next_to_enhance_guesses(notes: list[Meeting
     )
     assert lines[f"{A}:0000"].startswith(f"[{A}:0000] Them (Marcus Chen): Let's")  # no dup
     assert lines[f"{A}:0003"].startswith(f"[{A}:0003] Them: Maybe")  # unresolved: raw only
+
+
+def test_cited_line_ids_cover_api_and_mcp_ids() -> None:
+    uuid = "00000000-0000-4000-8000-0000000000aa"
+    text = f"lines [{A}:0001] and [{uuid}:0123]; meeting-level [{A}] is not a line"
+    assert cited_line_ids(text) == {f"{A}:0001", f"{uuid}:0123"}
 
 
 @pytest.mark.parametrize(

@@ -42,6 +42,16 @@ _NOT_COVERED = re.compile(
 )
 
 
+_LINE_ID = re.compile(
+    r"\[([A-Za-z0-9_-]+:\d{4})\]"
+)  # not_x:0012 (fixtures/API) or <uuid>:0012 (MCP)
+
+
+def cited_line_ids(text: str) -> set[str]:
+    """Bracketed utterance IDs in ``text`` (both REST/fixture ``not_`` IDs and MCP UUIDs)."""
+    return set(_LINE_ID.findall(text))
+
+
 def says_not_covered(answer: str, abstained: bool) -> bool:
     """True if a memory-only answer abstained or said the material doesn't contain the answer.
     "No record of a follow-up" is a real commitment-status answer (answer.v1 asks for it), not a
