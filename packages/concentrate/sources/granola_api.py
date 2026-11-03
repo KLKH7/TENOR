@@ -97,7 +97,7 @@ class GranolaAPISource:
     # -- request core -----------------------------------------------------------------------
 
     def _backoff(self, attempt: int) -> float:
-        """Full-jitter exponential backoff."""
+        """Exponential backoff with "equal jitter": a random wait in [ceiling/2, ceiling]."""
         ceiling = min(self._backoff_cap_s, self._backoff_base_s * 2**attempt)
         return self._rng.uniform(ceiling / 2, ceiling)
 

@@ -190,7 +190,8 @@ def name_similarity(token: str, name: str) -> float:
 
     Exact (diacritic-insensitive) match scores 1. Otherwise Jaro-Winkler on the folded strings,
     lifted when the two also sound alike, so "Coffee" ~ "Kofi" and "Thomas" ~ "Tomás" score
-    high, while look-alikes that sound different ("Dana" vs "Dan") stay lower.
+    high. Prefix look-alikes also score high ("Dana" vs "Dan" is ~0.97), so callers must not
+    treat a high score alone as identity: the candidate set and context decide.
     """
     a, b = fold(token), fold(name)
     if a == b:
