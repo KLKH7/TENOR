@@ -22,6 +22,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 import shutil
 import time
 from dataclasses import asdict
@@ -58,8 +59,22 @@ from concentrate.llm.client import (
 from concentrate.memory.enhance_stub import Enhancer, real_enhancer
 from concentrate.memory.entities import EntityDirectory, load_directory
 from concentrate.memory.extract import EXTRACT_PROMPT
+from concentrate.memory.fallback import (
+    DEFAULT_FALLBACK_TOKENS,
+    FALLBACK_MODES,
+    Passages,
+    TranscriptFallback,
+    resolved_labels,
+    says_not_covered,
+)
 from concentrate.memory.pipeline import BuildConfig, MemoryBuilder
-from concentrate.memory.query import MemoryIndex, ParsedQuestion, build_context, parse_question
+from concentrate.memory.query import (
+    Context,
+    MemoryIndex,
+    ParsedQuestion,
+    build_context,
+    parse_question,
+)
 from concentrate.memory.store import MemoryStore
 from concentrate.memory.verify import ENTAIL_PROMPT
 
@@ -90,6 +105,9 @@ CONTEXT_BASE, CONTEXT_PER_MEETING, CONTEXT_CAP = 400, 100, 3_400
 OUTPUT_BASE, OUTPUT_PER_LINE = 40, 9.5
 ENTAIL_USD_PER_MEETING = 0.0003  # Haiku 5.5 at low effort: measured $0.0010 for 4 calls
 ANSWER_OUTPUT_TOKENS_EST = 400
+# Share of questions whose memory-only answer abstains (real slice: 10/39 abstained, plus answers
+# that say the material doesn't cover it); used only to price ``fallback="on_abstain"``.
+FALLBACK_FIRE_RATE_EST = 0.35
 
 
 class ConcentrateSystem:
@@ -117,9 +135,19 @@ class ConcentrateSystem:
         supersession: bool = True,
         query_entities: bool = True,
         name: str | None = None,
+        fallback: str = "off",
+        fallback_tokens: int = DEFAULT_FALLBACK_TOKENS,
     ) -> None:
         """``supersession`` / ``query_entities`` / ``k_digests=0`` are answer-time ablation
-        switches (docs/CONCENTRATE_TUNING.md); ``name`` labels a variant in reports."""
+        switches (docs/CONCENTRATE_TUNING.md); ``name`` labels a variant in reports.
+
+        ``fallback`` adds raw transcript passages (docs/concentrate/fallback.md): ``"off"``
+        (memory only), ``"on_abstain"`` (re-answer with passages when the memory-only answer
+        abstains or says the material doesn't cover it) or ``"always"`` (every question gets
+        ``fallback_tokens`` of passages)."""
+        if fallback not in FALLBACK_MODES:
+            raise ValueError(f"fallback must be one of {FALLBACK_MODES}, not {fallback!r}")
+        self.fallback, self.fallback_tokens = fallback, fallback_tokens
         if name is not None:
             self.name = name
         self.supersession, self.query_entities = supersession, query_entities
@@ -140,6 +168,8 @@ class ConcentrateSystem:
         self._store: MemoryStore | None = None
         self._index: MemoryIndex | None = None
         self._directory: EntityDirectory | None = None
+        self._notes: list[MeetingNote] = []
+        self._fallback: TranscriptFallback | None = None
 
     # -- ingestion --
 
@@ -194,6 +224,7 @@ class ConcentrateSystem:
 
     def ingest(self, notes: list[MeetingNote]) -> IngestStats:
         """Build (or reuse, or resume) the memory for ``notes``."""
+        self._notes = notes
         store_dir = self.store_dir(notes)
         marker = store_dir / COMPLETE_MARKER
         if marker.exists():
@@ -280,6 +311,10 @@ class ConcentrateSystem:
     def _reindex(self) -> None:
         assert self._store is not None and self._directory is not None
         self._index = MemoryIndex(self._store, self._directory, self.embedder)
+        if self.fallback != "off":
+            self._fallback = TranscriptFallback(
+                self._notes, self.embedder, resolved_labels(self._store.all_line_texts())
+            )
 
     @property
     def store(self) -> MemoryStore:
@@ -331,13 +366,13 @@ class ConcentrateSystem:
 
     # -- answering --
 
-    def _user(self, q: QuestionLike) -> tuple[str, list[str]]:
+    def _context(self, q: QuestionLike) -> Context:
         if self._index is None or self._directory is None:
             raise RuntimeError("ConcentrateSystem.run() before ingest(): call ingest(notes) first")
         pq = parse_question(q.question, q.as_of, self._directory)
         if not self.query_entities:
             pq = ParsedQuestion([], pq.intents, pq.as_of)
-        ctx = build_context(
+        return build_context(
             self._index,
             q.question,
             pq,
@@ -346,6 +381,27 @@ class ConcentrateSystem:
             retire_after_days=self.retire_after_days,
             supersession=self.supersession,
         )
+
+    def _passages(self, q: QuestionLike, ctx: Context) -> Passages:
+        assert self._fallback is not None
+        return self._fallback.passages(
+            q.question,
+            q.as_of,
+            budget_tokens=self.fallback_tokens,
+            retire_after_days=self.retire_after_days,
+            skip_lines=set(re.findall(r"\[(not_[A-Za-z0-9]+:\d+)\]", ctx.text)),
+        )
+
+    def _user(self, q: QuestionLike, with_passages: bool | None = None) -> tuple[str, list[str]]:
+        """The answer prompt: memory context (+ transcript passages in ``always`` mode, or when
+        ``with_passages``)."""
+        ctx = self._context(q)
+        if with_passages is None:
+            with_passages = self.fallback == "always"
+        if with_passages:
+            p = self._passages(q, ctx)
+            meetings = list(dict.fromkeys([*ctx.meetings, *p.meetings]))
+            return f"{ctx.text}\n\n{p.text}\n\n{_user_prompt(q)}", meetings
         return f"{ctx.text}\n\n{_user_prompt(q)}", ctx.meetings
 
     def _request(self, user: str) -> TurnRequest:
@@ -359,7 +415,8 @@ class ConcentrateSystem:
         )
 
     def turn_request(self, q: QuestionLike) -> TurnRequest:
-        """The single Messages request ``run(q)`` sends (for batch prefetch)."""
+        """The first Messages request ``run(q)`` sends (for batch prefetch). In ``on_abstain``
+        mode a second, fallback request may follow; it runs interactively."""
         return self._request(self._user(q)[0])
 
     def run(self, q: QuestionLike) -> SystemResult:
@@ -367,19 +424,44 @@ class ConcentrateSystem:
         start = time.perf_counter()
         user, retrieved = self._user(q)
         completion = run_turn(self.client, self._request(user), self.backend)
-        return _result(
+        answer = Answer.model_validate_json(completion.text)
+        fired = self.fallback == "on_abstain" and says_not_covered(answer.answer, answer.abstain)
+        first = len(self.client.ledger.records)
+        if fired:
+            user, retrieved = self._user(q, with_passages=True)
+            completion = run_turn(self.client, self._request(user), self.backend)
+            answer = Answer.model_validate_json(completion.text)
+        result = _result(
             self.client,
             before,
             start,
-            Answer.model_validate_json(completion.text),
+            answer,
             retrieved,
             context=estimate_tokens(self.instructions) + estimate_tokens(user),
         )
+        if self.fallback != "off":
+            extra = self.client.ledger.records[first:]
+            result.extra = {
+                "fallback": self.fallback,
+                "fallback_fired": fired or self.fallback == "always",
+                "fallback_extra_input_tokens": sum(r.input_tokens for r in extra),
+                "fallback_extra_output_tokens": sum(r.output_tokens for r in extra),
+                "fallback_extra_cost_usd": sum(r.cost_usd for r in extra),
+            }
+        return result
 
     def estimate(self, q: QuestionLike) -> tuple[int, int]:
-        """Answer-call tokens: exact context when ingested, else a calibrated constant."""
-        if self._index is not None:
-            user, _ = self._user(q)
-        else:
-            user = "x" * round(3.5 * 4500)
-        return estimate_tokens(self.instructions) + estimate_tokens(user), ANSWER_OUTPUT_TOKENS_EST
+        """Answer-call tokens: exact context when ingested, else a calibrated constant. In
+        ``on_abstain`` mode the fallback call is priced at ``FALLBACK_FIRE_RATE_EST``."""
+        base = estimate_tokens(self.instructions)
+        if self._index is None:
+            return base + round(
+                4500 + (self.fallback_tokens if self.fallback == "always" else 0)
+            ), (ANSWER_OUTPUT_TOKENS_EST)
+        tin = base + estimate_tokens(self._user(q)[0])
+        tout = ANSWER_OUTPUT_TOKENS_EST
+        if self.fallback == "on_abstain":
+            more = base + estimate_tokens(self._user(q, with_passages=True)[0])
+            tin += round(FALLBACK_FIRE_RATE_EST * more)
+            tout += round(FALLBACK_FIRE_RATE_EST * ANSWER_OUTPUT_TOKENS_EST)
+        return tin, tout

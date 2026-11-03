@@ -514,6 +514,7 @@ def run_eval(
                 "verdict": verdict.model_dump(),
                 "retrieved": res.retrieved,
                 "batched": res.batched,
+                **res.extra,
             }
         )
     for key in ("systems", "judge"):

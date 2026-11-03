@@ -467,6 +467,7 @@ def run_slice(
                     "answer": res.answer.model_dump(),
                     "judge": verdict.model_dump(),
                     "retrieved": res.retrieved,
+                    **res.extra,
                 }
             )
         if stopped:

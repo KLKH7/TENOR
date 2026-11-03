@@ -429,6 +429,9 @@ class MemoryStore:
             "INSERT OR REPLACE INTO lines VALUES (?,?,?)", [(u, note_id, t) for u, t in lines]
         )
 
+    def all_line_texts(self) -> dict[str, str]:
+        return {r[0]: r[1] for r in self.db.execute("SELECT utterance_id, text FROM lines")}
+
     def line_texts(self, ids: list[str]) -> dict[str, str]:
         out: dict[str, str] = {}
         for i in range(0, len(ids), 500):

@@ -81,6 +81,7 @@ class SystemResult:
     context_tokens_est: int = 0
     retrieved: list[str] = field(default_factory=list)  # note IDs put in context / read
     batched: bool = False  # served by a Message Batches result: latency_s is not a measurement
+    extra: dict[str, Any] = field(default_factory=dict)  # system-specific (e.g. fallback fired)
 
 
 @dataclass
