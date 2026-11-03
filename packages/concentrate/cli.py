@@ -1456,6 +1456,10 @@ def real_slice_cmd(
         bool, typer.Option(help="Cached LLM results / recorded Granola only.")
     ] = False,
     yes: Annotated[bool, typer.Option("--yes")] = False,
+    qids_from: Annotated[
+        Path | None,
+        typer.Option(help="Only the questions answered in this earlier report (.jsonl)."),
+    ] = None,
 ) -> None:
     """Answer the verified real questions with every system and judge them (judge.v1)."""
     import json as _json
@@ -1476,6 +1480,9 @@ def real_slice_cmd(
     names = [s.strip() for s in systems.split(",") if s.strip()]
     notes = _real_notes(db)
     questions = [q for q in load_questions() if q.status == "verified"]
+    if qids_from is not None:  # e.g. re-run a variant on exactly the questions of a past run
+        keep = {_json.loads(line)["qid"] for line in qids_from.read_text().splitlines() if line}
+        questions = [q for q in questions if q.id in keep]
     if not questions:
         raise typer.BadParameter("no verified questions: run `concentrate real-kit review` first")
     directory = REAL_DIR / "directory.json"
