@@ -475,9 +475,11 @@ def test_probe_replays_a_healthy_wal_in_a_child(tmp_path: Path) -> None:
 def test_probe_reports_a_native_crash_instead_of_dying(tmp_path: Path) -> None:
     from concentrate.agents.kuzu_safety import probe_kuzu
 
-    bus_error = "import os, signal\nos.kill(os.getpid(), signal.SIGBUS)\n"
-    problem = probe_kuzu(tmp_path / "graph.kuzu", code=bus_error)
-    assert problem is not None and "SIGBUS" in problem
+    # Any fatal signal exercises the same path. SIGKILL is used instead of a real SIGBUS
+    # because macOS shows a "Python quit unexpectedly" dialog for SIGBUS/SIGSEGV crashes.
+    killed = "import os, signal\nos.kill(os.getpid(), signal.SIGKILL)\n"
+    problem = probe_kuzu(tmp_path / "graph.kuzu", code=killed)
+    assert problem is not None and "SIGKILL" in problem
     assert "exit 3" in (probe_kuzu(tmp_path, code="raise SystemExit(3)") or "")
 
 
