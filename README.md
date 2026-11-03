@@ -9,7 +9,34 @@ One of the seven is **Concentrate**, a cited, time-aware meeting memory built he
 ## Results
 
 <!-- RESULTS:START -->
-> **Pending (2026-11-02).** The final comparison on the held-out XL test split runs tonight. This section will hold the leaderboard (accuracy with 95% CI, $/question, p50 latency, ingest cost), accuracy by category, and the failure taxonomy, reported as they come out, good or bad. A pilot on the small 40-meeting set saturated (90–100% for every system), which is why the 184-meeting set exists.
+## Results (first comparison, 2026-11-02)
+
+The comparison used **120 held-out test questions** from Northwind-XL v1 (184 meetings). Every system has the same answer model (Opus 5.5) and the same judge. Report: [`evals/reports/20261103T002456Z.md`](evals/reports/20261103T002456Z.md). Significance and failure analysis: [`.analysis.md`](evals/reports/20261103T002456Z.analysis.md).
+
+| System | Accuracy [95% CI] | $ / question | p50 latency | One-off ingest |
+|---|---|---|---|---|
+| Oracle (reads only the gold meetings; a ceiling) | 95% [91, 98] | 0.046 | 4.5 s | — |
+| **Concentrate** (precomputed memory) | **92% [86, 96]** | **0.022** | 3.8 s ¹ | $5 |
+| Agent over search + transcripts (modelled on Granola's MCP) | 90% [84, 95] | 0.137 | 13.2 s | — |
+| Top-k hybrid retrieval (k = 10 meetings) | 88% [82, 94] | 0.177 | 6.4 s ¹ | — |
+| Mem0 | 81% [73, 88] | 0.017 | 3.3 s | $17 |
+| Graphiti | 72% [63, 79] | 0.029 | 4.1 s | $70 ² |
+| Summaries only | 71% [62, 78] | 0.009 | 4.7 s ¹ | — |
+
+**What the numbers support:**
+- **Concentrate, the agent and top-k are statistically tied.** Paired McNemar tests with Holm correction show no reliable difference; Concentrate and the agent disagreed on only 10 questions, splitting 6–4.
+- **Concentrate costs about a sixth as much per question as the agent.** Including ingest, the agent and top-k are dominated on cost vs accuracy.
+- **Concentrate beats Mem0 (+11 points), Graphiti (+20) and summaries (+21)**, and all three gaps are reliable.
+- **On the dev split, deleting every transcript older than the question barely moves Concentrate (89% → 88%), while summaries alone score 64%.** See [`docs/RETIREMENT.md`](docs/RETIREMENT.md). This benchmark version has no exact-quote questions, though, so it can't show what deletion loses. [`docs/BENCHMARK_V2_EXTRAS.md`](docs/BENCHMARK_V2_EXTRAS.md) adds them.
+
+**Reasons to be skeptical. Read these before quoting the table:**
+- **Concentrate has a home advantage.** The same author designed the question generator and Concentrate's extractor, and the facts it extracts match the question categories.
+- **Only Concentrate gets an org directory** (names, roles, emails), which it uses to resolve people. The other systems don't. Removing it (the directory ablation) hasn't been run yet.
+- **The effort was unequal.** Concentrate was tuned on the dev split. Mem0, Graphiti and the agent use our default wiring and untuned prompts. Graphiti's low score probably says more about our setup than about Graphiti.
+- **The benchmark saturates near the top.** Synthetic v1 wording is templated (see [`docs/FIDELITY.md`](docs/FIDELITY.md)). A harder v2 corpus exists ([`docs/FIDELITY_V2.md`](docs/FIDELITY_V2.md)), but nothing has been run on it yet.
+- **The agent is our re-implementation, not Granola's agent.** A comparison against Granola's real agent on real meetings is in progress ([`docs/REAL_SLICE.md`](docs/REAL_SLICE.md)).
+
+¹ Batched systems' latency comes from the 10 questions run interactively, not all 120. ² Includes $10.66 of work lost to a crashed embedded database and redone ([`docs/HARDENING.md`](docs/HARDENING.md)).
 <!-- RESULTS:END -->
 
 ## Why "Concentrate"?
