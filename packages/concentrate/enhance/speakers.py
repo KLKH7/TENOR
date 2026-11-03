@@ -20,6 +20,15 @@ Signals by meeting mode:
 * **In person** (everything on one microphone): the attendees are the candidates; a mild owner
   prior (it is the owner's device), addressing and self-reference cues, and, when iOS
   diarization labels exist, a joint assignment of clusters to people.
+
+``version="enhance-v2"`` adds two cues and leaves everything else as in v1 (docs/concentrate/
+enhance_v2.md):
+
+* **task continuity** (any unattributed line): a first-person take/status line about a task
+  ("I'll take the skills matrix", "the skills matrix is done") favours the attendees who talked
+  about the same task on hard-identified lines in other meetings (``concentrate.enhance.tasks``);
+* **diarized owner**: the owner prior on the largest diarization cluster is worth
+  ``W_DIARIZED_OWNER`` (it is the owner's phone), so a clean two-cluster 1:1 clears the threshold.
 """
 
 from __future__ import annotations
@@ -36,6 +45,7 @@ from concentrate.enhance.context import Priors, resolve_display_name, series_key
 from concentrate.enhance.directory import Directory
 from concentrate.enhance.mentions import is_vocative
 from concentrate.enhance.models import MentionLink, SpeakerResolution
+from concentrate.enhance.tasks import TaskIndex, task_phrases
 
 # Log-odds weights for cues (tuned on base only; see docs/concentrate/enhance.md).
 # Odds that two adjacent system-audio lines share a speaker, by how they join (measured on the
@@ -49,6 +59,9 @@ W_SELF_REFERENCE = 4.0  # "this is Owen", "Owen here"
 W_ADDRESSES_OTHER = -1.5  # a line that addresses X by name is unlikely to be X
 W_MENTIONS_OTHER = -0.5  # a line that names X in the third person is less likely to be X
 W_IN_PERSON_OWNER = 0.4  # owner prior on a shared microphone (it is the owner's device)
+W_TASK = 2.5  # v2: share of a task's identified speakers (0..1) times this
+W_DIARIZED_OWNER = 1.5  # v2: owner prior on the largest diarization cluster
+VERSIONS = ("enhance-v1", "enhance-v2")
 UNLABELED_RATE = 0.12  # assumed share of an identified speaker's lines left unnamed
 MIN_CONFIDENCE = 0.6
 ROUNDS = 4
@@ -117,7 +130,13 @@ class SpeakerResolver:
         mentions: Sequence[MentionLink],
         title_people: Sequence[str],
         min_confidence: float = MIN_CONFIDENCE,
+        version: str = "enhance-v1",
+        tasks: TaskIndex | None = None,
     ) -> None:
+        if version not in VERSIONS:
+            raise ValueError(f"unknown enhancer version {version!r}; expected one of {VERSIONS}")
+        self.version = version
+        self.tasks = priors.tasks if tasks is None else tasks
         self.note = note
         self.directory = directory
         self.attendees = list(attendees)
@@ -239,6 +258,19 @@ class SpeakerResolver:
                     if m.entity_id in cands and text[m.start : m.end] == name:
                         cue = ("self_reference", W_SELF_REFERENCE - W_MENTIONS_OTHER)
                         ln.cues.setdefault(m.entity_id, []).append(cue)
+            if self.version == "enhance-v2":
+                for pid, w in self._task_cues(text, cands):
+                    ln.cues.setdefault(pid, []).append(("task_continuity", w))
+
+    def _task_cues(self, text: str, cands: list[str]) -> list[tuple[str, float]]:
+        """v2: candidates who took on or reported on this line's tasks on identified lines."""
+        out: dict[str, float] = {}
+        for key in task_phrases(text):
+            said = {k: n for k, n in self.tasks.get(key, Counter()).items() if k in cands}
+            total = sum(said.values())
+            for pid, n in said.items():
+                out[pid] = max(out.get(pid, 0.0), W_TASK * n / total)
+        return sorted(out.items())
 
     def _addressees(self, i: int) -> list[str]:
         """People addressed by name in line ``i`` (excluding the line's own speaker)."""
@@ -443,6 +475,12 @@ class SpeakerResolver:
         names = sorted(clusters)
         assignment: dict[str, str] = {}
         margin = 0.0
+
+        def owner_w(pid: str) -> float:
+            if self.version == "enhance-v2" and pid == self.owner:
+                return W_DIARIZED_OWNER
+            return prior.get(pid, 0.0)
+
         for _ in range(ROUNDS):
             evidence: dict[str, dict[str, float]] = {}
             for c in names:
@@ -462,7 +500,7 @@ class SpeakerResolver:
             for perm in permutations(cands, len(names)):
                 total = 0.0
                 for c, pid in zip(names, perm, strict=True):
-                    total += evidence[c][pid] + (prior.get(pid, 0.0) if c == biggest else 0.0)
+                    total += evidence[c][pid] + (owner_w(pid) if c == biggest else 0.0)
                 ranked.append((total, perm))
             ranked.sort(key=lambda t: (-t[0], t[1]))
             new = dict(zip(names, ranked[0][1], strict=True))

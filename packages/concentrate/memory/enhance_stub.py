@@ -83,8 +83,19 @@ def _real_directory(path: Path | None) -> Any:
     return Directory.load(path or DEFAULT_DIRECTORY)
 
 
-def real_enhancer() -> Enhancer:
-    """The real Enhance stage: speaker attribution, mention linking, attendee resolution."""
-    from concentrate.enhance import enhancer as enh
+def real_enhancer(version: str = "enhance-v1") -> Enhancer:
+    """The real Enhance stage: speaker attribution, mention linking, attendee resolution.
 
-    return Enhancer("enhance-v1", enh.enhance, enh.enhanced_line, _real_directory)
+    ``version`` selects the speaker model ("enhance-v1", or "enhance-v2" with the cross-meeting
+    task cue and the diarized-owner prior; docs/concentrate/enhance_v2.md). The name is part of
+    the memory store's config, so switching versions never reuses a store built by the other.
+    """
+    from functools import partial
+
+    from concentrate.enhance import enhancer as enh
+    from concentrate.enhance.speakers import VERSIONS
+
+    if version not in VERSIONS:
+        raise ValueError(f"unknown enhancer version {version!r}; expected one of {VERSIONS}")
+    run = partial(enh.enhance, version=version)
+    return Enhancer(version, run, enh.enhanced_line, _real_directory)

@@ -14,6 +14,7 @@ from dataclasses import dataclass, field
 from concentrate.core.models import Channel, MeetingNote, Person
 from concentrate.enhance.directory import Directory
 from concentrate.enhance.strings import fold, name_similarity
+from concentrate.enhance.tasks import TaskIndex, add_line
 
 PLATFORM_NAME_MIN = 0.9  # fuzzy floor for a platform display name that isn't spelled exactly
 
@@ -76,6 +77,7 @@ class Priors:
     series: dict[str, Counter[str]] = field(default_factory=dict)  # series -> attendance
     lines: Counter[str] = field(default_factory=Counter)  # identified lines spoken
     spoke_in: Counter[str] = field(default_factory=Counter)  # meetings with identified lines
+    tasks: TaskIndex = field(default_factory=dict)  # task phrase -> identified speakers (v2 cue)
     total_meetings: int = 0
 
     @classmethod
@@ -107,6 +109,7 @@ class Priors:
             if pid is not None:
                 self.lines[pid] += 1
                 spoke.add(pid)
+                add_line(self.tasks, u.text, pid)
         for pid in spoke:
             self.spoke_in[pid] += 1
 

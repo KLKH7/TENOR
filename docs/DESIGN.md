@@ -326,3 +326,9 @@ Details and results: [`ECONOMICS.md`](ECONOMICS.md).
 - **Haiku for the curve.** Opus would cost ~$47, Sonnet ~$24 for the full design; Haiku ~$1.35.
   The curve measures a *trend* with model held constant; absolute accuracy is not comparable to
   the Opus headline numbers.
+
+## Enhance v2: in-person attribution (workstream O, opt-in)
+
+- `enhance-v2` adds two cues. **Task continuity**: an "I'll take X" or "X is done" line is credited to whoever said X on identified lines in other meetings. **Diarized owner prior**: the owner gets a stronger prior on the largest iOS diarization cluster. It is opt-in (`CONCENTRATE_ENHANCER`) so existing stores stay valid.
+- Turn-taking and an HMM over the microphone run were measured and rejected *for this corpus*. Synthetic filler speakers are drawn i.i.d., so there is no structure to learn. That's a fidelity gap to close, not a verdict on the idea.
+- With batch lookahead, v2 fixes 4 of the 8 owner-misattributed in-person commitments behind the brief's precision gap, adding no new errors. With history only (what the pipeline does today), it fixes none. Numbers: docs/concentrate/enhance_v2.md.

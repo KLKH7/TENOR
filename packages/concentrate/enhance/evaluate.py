@@ -6,7 +6,8 @@ The fixture's ``manifest.json`` gives the seed, scale and noise rates. We rebuil
 regenerated transcripts are checked to be identical to the fixture's, so gold and input can't
 drift apart. ``enhance`` itself only ever sees the fixture notes and ``directory.json``.
 
-Usage: ``uv run python -m concentrate.enhance.evaluate data/fixtures/northwind``.
+Usage: ``uv run python -m concentrate.enhance.evaluate [--version enhance-v2] [--lookahead]
+data/fixtures/northwind``.
 """
 
 from __future__ import annotations
@@ -377,10 +378,10 @@ def _score_entity_traps(g: Gold, enhanced: dict[str, EnhancedNote]) -> dict[str,
 # -- entry points ------------------------------------------------------------------------------
 
 
-def evaluate(fixture_dir: Path) -> Report:
+def evaluate(fixture_dir: Path, version: str = "enhance-v1", lookahead: bool = False) -> Report:
     """Enhance every fixture note (chronologically, with history) and score against gold."""
     g = load_gold(fixture_dir)
-    enhanced = enhance_all(g.notes, g.directory)
+    enhanced = enhance_all(g.notes, g.directory, version=version, lookahead=lookahead)
     sp = _score_speakers(g, enhanced)
     mn = _score_mentions(g, enhanced)
     return Report(
@@ -453,8 +454,17 @@ def format_report(r: Report) -> str:
 
 
 def main(argv: list[str]) -> None:
-    for arg in argv or ["data/fixtures/northwind"]:
-        report = evaluate(Path(arg))
+    version, lookahead, paths = "enhance-v1", False, []
+    args = iter(argv)
+    for arg in args:
+        if arg == "--version":
+            version = next(args)
+        elif arg == "--lookahead":
+            lookahead = True
+        else:
+            paths.append(arg)
+    for arg in paths or ["data/fixtures/northwind"]:
+        report = evaluate(Path(arg), version, lookahead)
         print(format_report(report))
         print()
 
