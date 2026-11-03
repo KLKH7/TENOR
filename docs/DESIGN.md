@@ -358,3 +358,17 @@ Details: [BENCHMARK_V2_EXTRAS.md](BENCHMARK_V2_EXTRAS.md).
 - **Same-data MCP comparison.** `real-kit serve` puts WS-D's read-only server in front of the real memory, so Granola's MCP and Concentrate's can be asked about the same meetings.
 - **Known gap found on real data:** Concentrate's real directory comes from attendee metadata only, so a person who is only mentioned isn't an entity.
 - **First real result (bad for Concentrate, reported as-is).** On 39 real questions, Granola's agent scored 92% [82, 100], b0 76% (k=1, n=37) and Concentrate 59% [44, 74]. Concentrate got 0 of 8 on "who said X", and 10 of its 16 misses were "not in the material". The cause: the write-time memory keeps ~43 facts for 4 meetings, and real questions target long-tail transcript details that our synthetic questions (generated from planted facts) never ask about. Concentrate led only on "what changed" (6/6). No tuning was done on this slice; the next step needs fresh real questions as a dev set. Full detail is in REAL_SLICE.md.
+
+## Transcript fallback for Concentrate (workstream L, 2026-11-03)
+Details: `docs/concentrate/fallback.md`. Everything below is **dev**.
+- **Decision:** a hybrid. Facts answer state and change questions; raw transcript passages fill the long tail.
+  - `ConcentrateSystem(fallback="off"|"on_abstain"|"always")`, default `off`.
+  - Passages use b0's chunking and the hybrid index, keep line IDs, respect as-of and retirement, and fit a fixed token budget.
+  - Each line shows its raw channel label, with Enhance's speaker name marked as a guess.
+- **Evidence (dev, partial, budget-capped):** real slice 12/22 → 20/22 with `on_abstain`, paired 8 wins / 0 losses (p = 0.008). On XL dev it fixed the one extraction miss it could reach (q248), with no visible harm. The fired XL answers are unjudged.
+- **Trade-offs:**
+  - Each fired question pays a second answer call (≈ $0.08 on real meetings).
+  - The trigger also fires on some correct answers.
+  - `on_abstain` can't catch confidently wrong answers (2 of 4 real who-said questions).
+  - Speaker attribution in passages is still partly a guess.
+- **Open:** confirm on fresh real test questions written after this design freeze.
