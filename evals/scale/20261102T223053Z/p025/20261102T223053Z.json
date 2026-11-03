@@ -1,0 +1,281 @@
+{
+  "meta": {
+    "date": "20261102T223053Z",
+    "git": {
+      "sha": "6498f3d",
+      "dirty": true
+    },
+    "model": "claude-haiku-5-5",
+    "seed": 42,
+    "split": "dev",
+    "questions": 21,
+    "prompts": {
+      "b0_topk": [
+        "answer.v1"
+      ],
+      "b3_agentic": [
+        "agent.v1"
+      ],
+      "concentrate": [
+        "answer.v1",
+        "extract.v2",
+        "entail.v2"
+      ],
+      "judge": [
+        "judge.v1"
+      ]
+    },
+    "budget_usd": 3.0,
+    "spent_usd": 0.21861965000000008,
+    "ingest": {
+      "concentrate": {
+        "llm_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0,
+        "seconds": 0.2640673329588026,
+        "cached": true,
+        "detail": {
+          "store": "data/cache/scale-curve/concentrate/f29bdcc7de52d52f/6b9c4de7",
+          "built": {
+            "rewound_from": "data/cache/concentrate/78a4767dabf454ae/6b9c4de7",
+            "meetings": 46,
+            "removed": {
+              "meetings": 138,
+              "facts": 212,
+              "evidence": 43,
+              "contradictions": 0,
+              "commitments": 84,
+              "commitment_events": 66,
+              "rejections": 12,
+              "lines": 24316,
+              "entities": 20
+            }
+          }
+        }
+      }
+    },
+    "stopped_early": null,
+    "batch": {
+      "enabled": true,
+      "latency_sample": 0,
+      "batched_systems": [
+        "b0_topk",
+        "concentrate"
+      ],
+      "systems": {
+        "requested": 42,
+        "already_cached": 0,
+        "submitted": 42,
+        "succeeded": 42,
+        "fallback": {},
+        "batch_ids": [
+          "msgbatch_0178R8qfDexGEQjAc5fQ7jhn"
+        ],
+        "seconds": 164.05584487493616,
+        "cost_usd": 0.17392545000000004,
+        "estimated_usd": 0.17526169999999996
+      },
+      "judge": {
+        "requested": 58,
+        "already_cached": 0,
+        "submitted": 58,
+        "succeeded": 58,
+        "fallback": {},
+        "batch_ids": [
+          "msgbatch_0158K9qZsjAehUFwtsLUHnVx"
+        ],
+        "seconds": 223.8325243749423,
+        "cost_usd": 0.0031637000000000006,
+        "estimated_usd": 0.0025014500000000005
+      },
+      "fallback_interactive": 0
+    },
+    "k": 20,
+    "fraction": 0.25,
+    "meetings": 46,
+    "concentrate_source": "data/cache/concentrate/78a4767dabf454ae/6b9c4de7"
+  },
+  "metrics": {
+    "b0_topk": {
+      "n": 21,
+      "accuracy": 0.8571428571428571,
+      "accuracy_ci95": [
+        0.7142857142857143,
+        1.0
+      ],
+      "exact_match": 0.888888888888889,
+      "abstain_precision": 1.0,
+      "abstain_recall": 1.0,
+      "cite_precision": 0.8269230769230769,
+      "cite_recall": 0.9615384615384616,
+      "input_tokens_per_q": 156908.0,
+      "output_tokens_per_q": 273.76190476190476,
+      "cost_per_q": 0.007913840476190478,
+      "cost_total": 0.16619065,
+      "latency_p50": NaN,
+      "latency_p95": NaN,
+      "latency_n": 0,
+      "tool_calls_per_q": 0.0,
+      "by_category": {
+        "decision_change": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "entity_disambiguation": {
+          "n": 3,
+          "accuracy": 0.3333333333333333
+        },
+        "single_hop": {
+          "n": 3,
+          "accuracy": 1.0
+        },
+        "temporal": {
+          "n": 6,
+          "accuracy": 0.8333333333333334
+        },
+        "unanswerable": {
+          "n": 8,
+          "accuracy": 1.0
+        }
+      }
+    },
+    "b3_agentic": {
+      "n": 21,
+      "accuracy": 0.9523809523809523,
+      "accuracy_ci95": [
+        0.8571428571428571,
+        1.0
+      ],
+      "exact_match": 0.8412698412698413,
+      "abstain_precision": 1.0,
+      "abstain_recall": 1.0,
+      "cite_precision": 0.5256410256410257,
+      "cite_recall": 0.7307692307692307,
+      "input_tokens_per_q": 15640.47619047619,
+      "output_tokens_per_q": 827.1904761904761,
+      "cost_per_q": 0.0019776428571428575,
+      "cost_total": 0.041530500000000005,
+      "latency_p50": 5.627688833978027,
+      "latency_p95": 12.172680707997642,
+      "latency_n": 21,
+      "tool_calls_per_q": 4.666666666666667,
+      "by_category": {
+        "decision_change": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "entity_disambiguation": {
+          "n": 3,
+          "accuracy": 0.6666666666666666
+        },
+        "single_hop": {
+          "n": 3,
+          "accuracy": 1.0
+        },
+        "temporal": {
+          "n": 6,
+          "accuracy": 1.0
+        },
+        "unanswerable": {
+          "n": 8,
+          "accuracy": 1.0
+        }
+      }
+    },
+    "concentrate": {
+      "n": 21,
+      "accuracy": 0.7142857142857143,
+      "accuracy_ci95": [
+        0.5238095238095238,
+        0.9047619047619048
+      ],
+      "exact_match": 0.634920634920635,
+      "abstain_precision": 0.6666666666666666,
+      "abstain_recall": 1.0,
+      "cite_precision": 0.8055555555555556,
+      "cite_recall": 0.6538461538461539,
+      "input_tokens_per_q": 6219.809523809524,
+      "output_tokens_per_q": 229.33333333333334,
+      "cost_per_q": 0.0003683238095238095,
+      "cost_total": 0.007734800000000001,
+      "latency_p50": NaN,
+      "latency_p95": NaN,
+      "latency_n": 0,
+      "tool_calls_per_q": 0.0,
+      "by_category": {
+        "decision_change": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "entity_disambiguation": {
+          "n": 3,
+          "accuracy": 0.3333333333333333
+        },
+        "single_hop": {
+          "n": 3,
+          "accuracy": 1.0
+        },
+        "temporal": {
+          "n": 6,
+          "accuracy": 0.5
+        },
+        "unanswerable": {
+          "n": 8,
+          "accuracy": 0.875
+        }
+      }
+    }
+  },
+  "ledger_by_stage": {
+    "eval.concentrate.batch": {
+      "calls": 21,
+      "cached": 0,
+      "input_tokens": 130616,
+      "output_tokens": 4816,
+      "usd": 0.0077348
+    },
+    "eval.b0_topk.batch": {
+      "calls": 21,
+      "cached": 0,
+      "input_tokens": 3295068,
+      "output_tokens": 5749,
+      "usd": 0.16619065
+    },
+    "eval.b0_topk": {
+      "calls": 21,
+      "cached": 21,
+      "input_tokens": 3295068,
+      "output_tokens": 5749,
+      "usd": 0.0
+    },
+    "eval.b3_agentic": {
+      "calls": 84,
+      "cached": 0,
+      "input_tokens": 328450,
+      "output_tokens": 17371,
+      "usd": 0.0415305
+    },
+    "eval.concentrate": {
+      "calls": 21,
+      "cached": 21,
+      "input_tokens": 130616,
+      "output_tokens": 4816,
+      "usd": 0.0
+    },
+    "eval.judge.batch": {
+      "calls": 58,
+      "cached": 0,
+      "input_tokens": 42184,
+      "output_tokens": 4218,
+      "usd": 0.0031637000000000006
+    },
+    "eval.judge": {
+      "calls": 63,
+      "cached": 63,
+      "input_tokens": 45417,
+      "output_tokens": 4489,
+      "usd": 0.0
+    }
+  }
+}

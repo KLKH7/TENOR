@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" font-family="system-ui, sans-serif" font-size="12">
+<rect width="720" height="420" fill="#ffffff"/>
+<text x="360.0" y="22" text-anchor="middle" font-size="15" font-weight="600">$ per question vs corpus size</text>
+<line x1="70" x2="550" y1="370.0" y2="370.0" stroke="#e5e7eb"/>
+<text x="64" y="374.0" text-anchor="end" fill="#374151">0</text>
+<line x1="70" x2="550" y1="292.7" y2="292.7" stroke="#e5e7eb"/>
+<text x="64" y="296.7" text-anchor="end" fill="#374151">0</text>
+<line x1="70" x2="550" y1="215.4" y2="215.4" stroke="#e5e7eb"/>
+<text x="64" y="219.4" text-anchor="end" fill="#374151">0</text>
+<line x1="70" x2="550" y1="138.0" y2="138.0" stroke="#e5e7eb"/>
+<text x="64" y="142.0" text-anchor="end" fill="#374151">0.01</text>
+<line x1="70" x2="550" y1="60.7" y2="60.7" stroke="#e5e7eb"/>
+<text x="64" y="64.7" text-anchor="end" fill="#374151">0.01</text>
+<text x="83.9" y="388" text-anchor="middle" fill="#374151">50</text>
+<text x="257.8" y="388" text-anchor="middle" fill="#374151">100</text>
+<text x="431.7" y="388" text-anchor="middle" fill="#374151">150</text>
+<rect x="70" y="40" width="480" height="330" fill="none" stroke="#9ca3af"/>
+<text x="310.0" y="410" text-anchor="middle">meetings in corpus</text>
+<text transform="translate(16,205.0) rotate(-90)" text-anchor="middle">$/question</text>
+<polyline points="70.0,64.0 230.0,58.6 550.0,55.7" fill="none" stroke="#2563eb" stroke-width="2"/>
+<circle cx="70.0" cy="64.0" r="3.5" fill="#2563eb"/>
+<circle cx="230.0" cy="58.6" r="3.5" fill="#2563eb"/>
+<circle cx="550.0" cy="55.7" r="3.5" fill="#2563eb"/>
+<line x1="562" x2="584" y1="50" y2="50" stroke="#2563eb" stroke-width="2"/>
+<text x="590" y="54">b0_topk</text>
+<polyline points="70.0,293.5 230.0,281.8 550.0,265.8" fill="none" stroke="#dc2626" stroke-width="2"/>
+<circle cx="70.0" cy="293.5" r="3.5" fill="#dc2626"/>
+<circle cx="230.0" cy="281.8" r="3.5" fill="#dc2626"/>
+<circle cx="550.0" cy="265.8" r="3.5" fill="#dc2626"/>
+<line x1="562" x2="584" y1="70" y2="70" stroke="#dc2626" stroke-width="2"/>
+<text x="590" y="74">b3_agentic</text>
+<polyline points="70.0,355.8 230.0,352.2 550.0,350.1" fill="none" stroke="#16a34a" stroke-width="2"/>
+<circle cx="70.0" cy="355.8" r="3.5" fill="#16a34a"/>
+<circle cx="230.0" cy="352.2" r="3.5" fill="#16a34a"/>
+<circle cx="550.0" cy="350.1" r="3.5" fill="#16a34a"/>
+<line x1="562" x2="584" y1="90" y2="90" stroke="#16a34a" stroke-width="2"/>
+<text x="590" y="94">concentrate</text>
+</svg>

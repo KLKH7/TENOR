@@ -1,0 +1,206 @@
+{
+  "meta": {
+    "model": "claude-haiku-5-5",
+    "k": 20,
+    "seed": 42,
+    "git": "6498f3d",
+    "date": "20261102T223053Z",
+    "anchor": 0.5,
+    "spent_usd": 1.1902964500000002,
+    "concentrate_source": "data/cache/concentrate/78a4767dabf454ae/6b9c4de7",
+    "reports": {
+      "0.25": "evals/scale/20261102T223053Z/p025/20261102T223053Z.json",
+      "0.5": "evals/scale/20261102T223053Z/p050/20261102T223957Z.json",
+      "1.0": "evals/scale/20261102T223053Z/p100/20261102T225030Z.json"
+    }
+  },
+  "sizes": [
+    0.25,
+    0.5,
+    1.0
+  ],
+  "common_questions": [
+    "q007",
+    "q050",
+    "q113",
+    "q238",
+    "q248",
+    "q317",
+    "q340",
+    "q388",
+    "q433",
+    "q439",
+    "q440",
+    "q657",
+    "q730",
+    "q850",
+    "q853",
+    "q854",
+    "q857",
+    "q862",
+    "q863",
+    "q865",
+    "q866"
+  ],
+  "systems": {
+    "b0_topk": {
+      "points": [
+        {
+          "fraction": 0.25,
+          "meetings": 46,
+          "n": 21,
+          "accuracy": 0.8571428571428571,
+          "n_common": 21,
+          "accuracy_common": 0.8571428571428571,
+          "cost_per_q": 0.007913840476190476,
+          "input_tokens_per_q": 156908.0,
+          "cite_recall": 0.9615384615384616
+        },
+        {
+          "fraction": 0.5,
+          "meetings": 92,
+          "n": 45,
+          "accuracy": 0.9111111111111111,
+          "n_common": 21,
+          "accuracy_common": 0.9047619047619048,
+          "cost_per_q": 0.008054445555555557,
+          "input_tokens_per_q": 158750.46666666667,
+          "cite_recall": 0.9207207207207209
+        },
+        {
+          "fraction": 1.0,
+          "meetings": 184,
+          "n": 45,
+          "accuracy": 0.8,
+          "n_common": 21,
+          "accuracy_common": 0.9047619047619048,
+          "cost_per_q": 0.008129235555555557,
+          "input_tokens_per_q": 160097.26666666666,
+          "cite_recall": 0.8734234234234235
+        }
+      ],
+      "flips": [
+        {
+          "from": 0.25,
+          "to": 0.5,
+          "shared": 21,
+          "lost": 1,
+          "gained": 2
+        },
+        {
+          "from": 0.5,
+          "to": 1.0,
+          "shared": 45,
+          "lost": 7,
+          "gained": 2
+        }
+      ]
+    },
+    "b3_agentic": {
+      "points": [
+        {
+          "fraction": 0.25,
+          "meetings": 46,
+          "n": 21,
+          "accuracy": 0.9523809523809523,
+          "n_common": 21,
+          "accuracy_common": 0.9523809523809523,
+          "cost_per_q": 0.0019776428571428575,
+          "input_tokens_per_q": 15640.47619047619,
+          "cite_recall": 0.7307692307692307
+        },
+        {
+          "fraction": 0.5,
+          "meetings": 92,
+          "n": 45,
+          "accuracy": 0.9111111111111111,
+          "n_common": 21,
+          "accuracy_common": 0.9523809523809523,
+          "cost_per_q": 0.0022806866666666664,
+          "input_tokens_per_q": 18007.088888888888,
+          "cite_recall": 0.6513513513513512
+        },
+        {
+          "fraction": 1.0,
+          "meetings": 184,
+          "n": 45,
+          "accuracy": 0.8222222222222222,
+          "n_common": 21,
+          "accuracy_common": 0.9523809523809523,
+          "cost_per_q": 0.0026948622222222225,
+          "input_tokens_per_q": 21515.51111111111,
+          "cite_recall": 0.554954954954955
+        }
+      ],
+      "flips": [
+        {
+          "from": 0.25,
+          "to": 0.5,
+          "shared": 21,
+          "lost": 0,
+          "gained": 0
+        },
+        {
+          "from": 0.5,
+          "to": 1.0,
+          "shared": 45,
+          "lost": 5,
+          "gained": 1
+        }
+      ]
+    },
+    "concentrate": {
+      "points": [
+        {
+          "fraction": 0.25,
+          "meetings": 46,
+          "n": 21,
+          "accuracy": 0.7142857142857143,
+          "n_common": 21,
+          "accuracy_common": 0.7142857142857143,
+          "cost_per_q": 0.0003683238095238096,
+          "input_tokens_per_q": 6219.809523809524,
+          "cite_recall": 0.6538461538461539
+        },
+        {
+          "fraction": 0.5,
+          "meetings": 92,
+          "n": 45,
+          "accuracy": 0.7555555555555555,
+          "n_common": 21,
+          "accuracy_common": 0.7619047619047619,
+          "cost_per_q": 0.00046106777777777785,
+          "input_tokens_per_q": 7625.688888888889,
+          "cite_recall": 0.772972972972973
+        },
+        {
+          "fraction": 1.0,
+          "meetings": 184,
+          "n": 45,
+          "accuracy": 0.7333333333333333,
+          "n_common": 21,
+          "accuracy_common": 0.8095238095238095,
+          "cost_per_q": 0.0005137277777777778,
+          "input_tokens_per_q": 8426.111111111111,
+          "cite_recall": 0.827027027027027
+        }
+      ],
+      "flips": [
+        {
+          "from": 0.25,
+          "to": 0.5,
+          "shared": 21,
+          "lost": 0,
+          "gained": 1
+        },
+        {
+          "from": 0.5,
+          "to": 1.0,
+          "shared": 45,
+          "lost": 4,
+          "gained": 3
+        }
+      ]
+    }
+  }
+}

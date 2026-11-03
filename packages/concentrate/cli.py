@@ -984,3 +984,266 @@ def retire_curve(
     Path(f"{stem}.svg").write_text(rt.to_svg(result, cats))
     typer.echo(rt.to_markdown(result))
     typer.echo(f"spent ${report['meta']['spent_usd']:.2f} · curve: {stem}.md / .svg")
+
+
+# -- workstream F: unit economics --------------------------------------------------------------
+
+
+def _latest_report() -> Path:
+    reports = sorted(Path("evals/reports").glob("*.jsonl"))
+    if not reports:
+        raise typer.BadParameter("no eval report in evals/reports; pass --report")
+    return reports[-1]
+
+
+@app.command("economics")
+def economics_cmd(
+    report: Annotated[
+        Path | None,
+        typer.Option(help="Eval report (.jsonl) for per-question costs; default latest."),
+    ] = None,
+    cache_root: Annotated[Path, typer.Option(help="Where memory builds live.")] = Path(
+        "data/cache"
+    ),
+    meetings: Annotated[float, typer.Option(help="Meetings per user per month (GUESS).")] = 40,
+    questions: Annotated[float, typer.Option(help="Questions per user per month (GUESS).")] = 30,
+    ingest_model: Annotated[
+        str | None, typer.Option(help="Re-price ingest on this model (default: as built).")
+    ] = None,
+    answer_model: Annotated[
+        str | None, typer.Option(help="Re-price answers on this model (default: the report's).")
+    ] = None,
+    batch_ingest: Annotated[bool, typer.Option("--batch-ingest/--no-batch-ingest")] = True,
+    batch_queries: Annotated[bool, typer.Option("--batch-queries/--no-batch-queries")] = False,
+    batch_discount: Annotated[
+        float, typer.Option(help="Batch API discount (0.5 = 50% off).")
+    ] = 0.5,
+    cache_hit: Annotated[
+        float | None, typer.Option(help="Prompt-cache hit rate 0-1 (default: as measured).")
+    ] = None,
+    q_max: Annotated[float, typer.Option(help="X range of the break-even chart.")] = 150,
+    out: Annotated[Path, typer.Option(help="Output directory.")] = Path("evals/economics"),
+) -> None:
+    """$/user/month per system and write-vs-query break-even, from measured runs. Free."""
+    import json
+    from dataclasses import asdict
+
+    from concentrate.evals import economics as ec
+    from concentrate.evals.svgchart import line_chart
+    from concentrate.llm.client import PRICING
+
+    for m in (ingest_model, answer_model):
+        if m is not None and m not in PRICING:
+            raise typer.BadParameter(f"unknown model {m!r}; known: {', '.join(PRICING)}")
+    report = report or _latest_report()
+    sc = ec.Scenario(
+        meetings,
+        questions,
+        ingest_model,
+        answer_model,
+        batch_ingest,
+        batch_queries,
+        batch_discount,
+        cache_hit,
+    )
+    builds = ec.pick_builds(ec.load_ingest(cache_root))
+    model, answers = ec.load_answers(report)
+    costs = ec.compute(builds, answers, model, sc)
+    sens = ec.sensitivity(builds, answers, model, sc)
+    out.mkdir(parents=True, exist_ok=True)
+    stem = report.stem
+    md = ec.to_markdown(costs, builds, sens, sc, str(report))
+    (out / f"{stem}.md").write_text(md)
+    (out / f"{stem}.json").write_text(
+        json.dumps(
+            {
+                "scenario": asdict(sc),
+                "report": str(report),
+                "costs": [asdict(c) for c in costs],
+                "sensitivity": sens,
+                "builds": {k: asdict(v) for k, v in builds.items()},
+            },
+            indent=2,
+            default=str,
+        )
+    )
+    chart = line_chart(
+        {
+            c.system: pts
+            for c, pts in zip(costs, ec.curve(costs, meetings, q_max).values(), strict=True)
+        },
+        title=f"$/user/month vs questions ({meetings:g} meetings/month)",
+        xlabel="questions per user per month",
+        ylabel="$ per user per month",
+        dashed=[c.system for c in costs if c.kind == "query-time"],
+    )
+    (out / f"{stem}.breakeven.svg").write_text(chart)
+    typer.echo(md)
+    typer.echo(f"written: {out / stem}.{{md,json,breakeven.svg}}")
+
+
+# -- workstream F: scale curve -----------------------------------------------------------------
+
+
+def _concentrate_source_build(full_dir: Path) -> Path:
+    """The current-config Concentrate build of the full corpus if complete, else the most
+    recently finished build of the same corpus (older prompts; reported in the meta)."""
+    if (full_dir / "complete.json").exists():
+        return full_dir
+    done = sorted(full_dir.parent.glob("*/complete.json"), key=lambda p: p.stat().st_mtime)
+    if not done:
+        raise typer.BadParameter(f"no complete Concentrate build under {full_dir.parent}")
+    return done[-1].parent
+
+
+@app.command("scale-curve")
+def scale_curve_cmd(
+    systems: Annotated[str, typer.Option(help="Comma-separated systems.")] = "b0,b3,c",
+    fractions: Annotated[str, typer.Option(help="Nested prefix sizes.")] = "0.25,0.5,1.0",
+    anchor: Annotated[float, typer.Option(help="Questions = dev Qs eligible at this size.")] = 0.5,
+    n: Annotated[int, typer.Option(help="Stratified sample size of the question set.")] = 40,
+    k: Annotated[int, typer.Option(help="Meetings retrieved by b0.")] = 20,
+    seed: Annotated[int, typer.Option(help="Sampling + bootstrap seed.")] = 42,
+    model: Annotated[
+        str | None, typer.Option(help="Answer + judge model (default CONCENTRATE_MODEL / Opus).")
+    ] = None,
+    concentrate_build: Annotated[
+        Path | None, typer.Option(help="Concentrate store dir to rewind (default: auto).")
+    ] = None,
+    out: Annotated[Path, typer.Option(help="Output root.")] = Path("evals/scale"),
+    estimate_only: Annotated[bool, typer.Option("--estimate", help="Estimate and exit.")] = False,
+    yes: Annotated[bool, typer.Option("--yes", help="Skip the >$2 confirmation.")] = False,
+    budget: Annotated[float, typer.Option(help="Hard cap for the whole curve, USD.")] = 12.0,
+) -> None:
+    """Accuracy and $/q vs corpus size on nested prefixes of Northwind-XL (batch mode)."""
+    import json
+    from datetime import UTC, datetime
+
+    from concentrate.agents.concentrate_system import ConcentrateSystem
+    from concentrate.agents.retrieval import SentenceTransformerEmbedder
+    from concentrate.evals import scale_curve as scv
+    from concentrate.evals.runner import (
+        _git,
+        build_systems,
+        estimate,
+        load_corpus,
+        load_questions,
+        run_eval,
+    )
+    from concentrate.evals.svgchart import line_chart
+
+    names = tuple(s.strip() for s in systems.split(",") if s.strip())
+    fixtures = NORTHWIND_XL
+    notes = load_corpus(fixtures)
+    plan = scv.plan(
+        notes,
+        load_questions(fixtures, "dev"),
+        [float(f) for f in fractions.split(",")],
+        anchor=anchor,
+        n=n,
+        seed=seed,
+    )
+    client = LLMClient(model=model)
+    embedder = SentenceTransformerEmbedder() if {"b0", "c"} & set(names) else None
+    source = None
+    if "c" in names:
+        probe = ConcentrateSystem(client, directory_path=fixtures / "directory.json")
+        source = concentrate_build or _concentrate_source_build(probe.store_dir(notes))
+    scratch = Path("data/cache/scale-curve/concentrate")
+    built_by_size = {}
+    total = 0.0
+    typer.echo(f"{client.model} · k={k} · Concentrate rewound from {source}")
+    for f, (sub, qs) in plan.items():
+        base = [s for s in names if s != "c"]
+        built = build_systems(tuple(base), client, sub, embedder, k, fixtures=fixtures)
+        if "c" in names and source is not None:
+            c = ConcentrateSystem(
+                client,
+                embedder=embedder,
+                cache_root=scratch,
+                directory_path=fixtures / "directory.json",
+            )
+            dst = c.store_dir(sub)
+            if not (dst / scv.COMPLETE_MARKER).exists():
+                scv.place_rewound(source, dst, {m.note_id for m in sub})
+            c.ingest(sub)
+            built.append(c)
+        built_by_size[f] = built
+        ests = estimate(built, qs, client.model, client=client, batch=True, latency_sample=0)
+        usd = sum(e.usd for e in ests)
+        total += usd
+        typer.echo(
+            f"  {f:>5.0%}: {len(sub):>3} meetings · {len(qs):>2} questions · "
+            + " · ".join(f"{e.system} ${e.usd:.2f}" for e in ests)
+            + f" = ${usd:.2f}"
+        )
+    typer.echo(f"  estimated total ≈ ${total:.2f} (before LLM-cache reuse) · cap ${budget:.2f}")
+    if estimate_only:
+        return
+    if total > budget:
+        raise typer.BadParameter(f"estimate ${total:.2f} is over --budget ${budget:.2f}")
+    if total > BUDGET_CONFIRM_USD and not yes:
+        typer.confirm(
+            f"Estimated ${total:.2f} exceeds ${BUDGET_CONFIRM_USD:.0f}. Proceed?", abort=True
+        )
+    stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
+    root = out / stamp
+    results = {}
+    spent = 0.0
+    for f, (sub, qs) in plan.items():
+        rep = run_eval(
+            built_by_size[f],
+            qs,
+            client,
+            seed=seed,
+            split="dev",
+            budget_usd=budget,
+            out_dir=root / f"p{round(f * 100):03d}",
+            notes=sub,
+            batch=True,
+            latency_sample=0,
+            meta={"k": k, "fraction": f, "meetings": len(sub), "concentrate_source": str(source)},
+        )
+        spent = rep["meta"]["spent_usd"]  # one client across sizes: its ledger is cumulative
+        rows = [json.loads(line) for line in Path(rep["paths"]["jsonl"]).read_text().splitlines()]
+        results[f] = {"meetings": len(sub), "rows": rows, "report": rep["paths"]["json"]}
+        typer.echo(f"  {f:.0%} done · spent so far ${spent:.2f}")
+    summary = scv.summarize_curve(results)
+    meta = {
+        "model": client.model,
+        "k": k,
+        "seed": seed,
+        "git": _git()["sha"],
+        "date": stamp,
+        "anchor": anchor,
+        "spent_usd": spent,
+        "concentrate_source": str(source),
+        "reports": {str(f): r["report"] for f, r in results.items()},
+    }
+    (root / "scale.json").write_text(json.dumps({"meta": meta, **summary}, indent=2))
+    md = scv.to_markdown(summary, meta)
+    (root / "scale.md").write_text(md)
+    for metric, label, key in (
+        ("accuracy", "accuracy on questions common to all sizes", "accuracy_common"),
+        ("cost", "$ per question", "cost_per_q"),
+    ):
+        series: dict[str, list[tuple[float, float]]] = {
+            s: [
+                (p["meetings"], p[key] * (100 if metric == "accuracy" else 1))
+                for p in d["points"]
+                if p[key] is not None
+            ]
+            for s, d in summary["systems"].items()
+        }
+        (root / f"scale_{metric}.svg").write_text(
+            line_chart(
+                series,
+                title=f"{label} vs corpus size",
+                xlabel="meetings in corpus",
+                ylabel="% correct" if metric == "accuracy" else "$/question",
+                markers=True,
+                y_max=100 if metric == "accuracy" else None,
+            )
+        )
+    typer.echo(md)
+    typer.echo(f"spent ${spent:.2f} · written: {root}")
