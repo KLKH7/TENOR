@@ -1,6 +1,6 @@
 # Deck outline (10 slides, ~10 minutes)
 
-Same claims as [MEMO.md](MEMO.md), and the same `{{TBD: source}}` convention. Every chart should be generated from a report file, never redrawn by hand. Footer on every slide: *synthetic benchmark · n shown · dev/test split*.
+Same claims as [MEMO.md](MEMO.md); sources in [FINDINGS_CHECKLIST.md](FINDINGS_CHECKLIST.md). Every chart should be generated from a report file, never redrawn by hand. Footer on every slide: *synthetic benchmark · n shown · dev/test split*.
 
 ## 1. Apple juice from concentrate?
 - Chris Pedregal ([Platformer](https://www.platformer.news/granola-chris-pedregal-interview/), Jul 2026): connected to Claude, the agent does "a relatively dumb job at extracting information"; Granola should send "apple juice from concentrate" instead. He framed it as a direction, not a shipped product.
@@ -23,29 +23,30 @@ Same claims as [MEMO.md](MEMO.md), and the same `{{TBD: source}}` convention. Ev
 - Paired McNemar + Holm, paired bootstrap CIs, a second judge (pilot: 97.5% agreement, κ 0.89).
 - **Chart:** the README pipeline diagram (sources → store → query-time / write-time → harness).
 
-## 4. Granola's live MCP: what it does well
-- Commitment tracking is strong and stable (owner, status, "no later evidence" vs "not done").
-- Honest abstention on single-microphone speech when asked broadly; explicit dates scoped correctly.
-- Retrieval tools ≈0.3–0.4 s with citable chunks.
-- Today's baseline is an *agent*, not naive top-k, so that's what this benchmark compares against.
-- **Chart:** table of tool latencies (PROBE_V2 §2), with the agent at 8.5 s median beside sub-second tools.
+## 4. Granola's live MCP: strong, with identity gaps (n = 4 meetings: behaviours, not rates)
+- Does well: commitment tracking (owner, status, "no later evidence" vs "not done"), stable across repeats; honest abstention on single-mic speech; explicit dates handled correctly.
+- Missed a display-name-only attendee, and the second of two people who share a first name.
+- The same in-person commitment got different owners depending on how the question was phrased.
+- The agent takes 8.5 s median; its retrieval tools take ≈0.3 s. Today's baseline is an agent, so that's what we compare against.
+- **Chart:** a tool-latency table (PROBE_V2 §2) beside three anonymised "question → what happened" cards.
 
-## 5. ...and where it slips (n = 4 meetings: behaviours, not rates)
-- Identity: missed a display-name-only attendee, and the second of two people who share a first name.
-- Attribution: the same in-person commitment was owned differently depending on how the question was phrased.
-- Summary-first answers: exact details cost extra transcript round trips.
-- **Chart:** none. Three short anonymised "question → what happened" cards (no meeting content).
+## 5. Headline: a three-way tie at the top, at very different costs
+- 120 test questions: Concentrate 92%, MCP-shaped agent 90%, top-k 88%. Statistically tied (Holm p = 1.00); Concentrate and the agent split their 10 disagreements 6–4.
+- At equal prices, Concentrate is ~3.5× cheaper per question than the agent ($0.040 vs $0.137) and faster (3.8 s vs 13.2 s p50).
+- Reliable gaps: Concentrate beats Mem0 (+11), Graphiti (+20) and summaries (+21). The oracle ceiling is 95%.
+- With 120 questions the test can only detect gaps of about 7 points among the top systems.
+- **Chart:** cost ($/q at equal prices, ingest amortised over 1k questions, log x) vs accuracy, with CI whiskers and the frontier line. Draw it from `evals/reports/20261103T002456Z.jsonl` tokens, not the raw `cost_usd` (which mixes Batch and full prices).
 
-## 6. Headline: accuracy, cost, latency
-- Overall accuracy with CIs: {{TBD: XL test report}}.
-- Reliable pairwise gaps after Holm: {{TBD: analysis.md}}; minimum detectable effect at n = 206: {{TBD}}.
-- Pareto frontier at 1k questions per corpus: {{TBD}}.
-- Read this slide the same way whoever wins: report ties as ties.
-- **Chart:** cost ($/q incl. amortised ingest, log x) vs accuracy scatter with CI whiskers and the frontier line (results explorer `/results`).
+## 6. Threats to validity (own slide, before anything else is claimed)
+- Home advantage: I wrote both the question generator and Concentrate's extractor.
+- Only Concentrate gets the org directory; the ablation isn't run yet.
+- Unequal tuning: Concentrate was tuned on dev, the others weren't. Graphiti's 72% likely reflects my wiring.
+- Saturation: the oracle gets 95% on templated v1 wording. And the agent is my re-implementation, not Granola's.
+- **Chart:** none. Five lines, big type.
 
 ## 7. Where each system breaks
-- Category heatmap: {{TBD: 2–3 standout cells}}.
-- Failure taxonomy: {{TBD: top failure type per system from failures.jsonl}}.
+- Aggregation separates systems most: Concentrate and the agent 83%; top-k and Mem0 42%; Graphiti and summaries 33% (n = 12, not significant after correction).
+- "Partial list" is the top failure type (48 of 134 wrong answers). Concentrate's 10 errors: 4 partial lists, 4 reasoning/reading, 1 stale, 1 wrong abstention.
 - One worked example per failure type, drilled down to its transcript lines.
 - **Chart:** systems × categories accuracy heatmap, plus a stacked bar of failure types per system.
 
@@ -53,7 +54,7 @@ Same claims as [MEMO.md](MEMO.md), and the same `{{TBD: source}}` convention. Ev
 - Dev (90 questions): Concentrate 89% keeping everything → 88% after deleting all earlier transcripts; summaries alone get 64%.
 - The memory is ~5% of the raw transcript tokens.
 - Top-k over deleted transcripts: only 32% of gold lines left in context at N = 14 days.
-- Not tested: verbatim quotes. Test split: {{TBD}}.
+- Not tested: verbatim quotes (v2.1 adds them) and the test split. Dev only.
 - **Chart:** `docs/retirement_curve.svg` (accuracy vs N days, Concentrate vs b1), with gold-line coverage on a second panel.
 
 ## 9. What memory unlocks: the pre-meeting brief
@@ -62,8 +63,8 @@ Same claims as [MEMO.md](MEMO.md), and the same `{{TBD: source}}` convention. Ev
 - ~6 ms, no LLM call, no leakage from later meetings (as-of reads).
 - **Chart:** grouped bars of precision/recall per brief section, memory vs baseline, with the n under each.
 
-## 10. Limits, and what I'd do next at Granola
-- Limits: synthetic data (v2 frames still repeat), b3 isn't Granola's agent, small n, a single answer model.
+## 10. What I'd run next, and do at Granola
+- Run next: the directory ablation; v2/v2.1 corpora (realistic wording, exact-quote questions); the real slice against Granola's actual agent (in progress).
 - Next 1: resolve identity at write time (attendee metadata ↔ mentions).
 - Next 2: ship the brief on a bitemporal commitment ledger keyed by recurring event.
 - Next 3: run the retirement curve on consented real data, with a verbatim-quote category, before deleting anything.
