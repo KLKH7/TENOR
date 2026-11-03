@@ -740,6 +740,8 @@ TUNE_VARIANTS: dict[str, dict[str, object]] = {
     "no_entities": {"query_entities": False},  # question parser resolves no entities
     "no_supersession": {"supersession": False},  # append-only fact log, no validity/state
     "no_digests": {"k_digests": 0},
+    "fallback_on_abstain": {"fallback": "on_abstain"},  # docs/concentrate/fallback.md
+    "fallback_always": {"fallback": "always"},
 }
 
 
@@ -1439,7 +1441,11 @@ def real_add() -> None:
 @app.command("real-slice")
 def real_slice_cmd(
     systems: Annotated[
-        str, typer.Option(help="granola (Granola's real agent), c, b0, b3; comma-separated.")
+        str,
+        typer.Option(
+            help="granola (Granola's real agent), c, c_on_abstain, c_always (Concentrate with "
+            "the transcript fallback), b0, b3; comma-separated."
+        ),
     ] = "granola,c,b0,b3",
     db: Annotated[Path, typer.Option()] = REAL_DB,
     k: Annotated[int, typer.Option(help="Meetings b0 retrieves.")] = 2,
@@ -1473,10 +1479,14 @@ def real_slice_cmd(
     if not questions:
         raise typer.BadParameter("no verified questions: run `concentrate real-kit review` first")
     directory = REAL_DIR / "directory.json"
-    if "c" in names and not directory.exists():
+    if any(n.startswith("c") for n in names) and not directory.exists():
         raise typer.BadParameter(f"{directory} missing: run `concentrate real-kit directory`")
     client = _real_client(offline)
-    embedder = SentenceTransformerEmbedder() if {"c", "b0"} & set(names) else None
+    embedder = (
+        SentenceTransformerEmbedder()
+        if {"c", "c_on_abstain", "c_always", "b0"} & set(names)
+        else None
+    )
     built: list[System] = []
     concentrate: ConcentrateSystem | None = None
     with ExitStack() as stack:
@@ -1488,14 +1498,18 @@ def real_slice_cmd(
 
                     caller = stack.enter_context(LiveMcpCaller())
                 built.append(GranolaAgentSystem(caller))  # type: ignore[arg-type]
-            elif n == "c":
-                concentrate = ConcentrateSystem(
+            elif n in ("c", "c_on_abstain", "c_always"):  # c_*: transcript fallback modes
+                mode = n.removeprefix("c_") if n != "c" else "off"
+                variant = ConcentrateSystem(
                     client,
                     embedder=embedder,
                     directory_path=directory,
                     cache_root=REAL_DIR / "cache" / "concentrate",
+                    fallback=mode,
+                    name=None if n == "c" else f"concentrate_{mode}",
                 )
-                built.append(concentrate)
+                concentrate = concentrate or variant
+                built.append(variant)
             elif n == "b0":
                 built.append(TopKSystem(client, MeetingRetriever(notes, embedder), k))
             elif n == "b3":
@@ -1519,6 +1533,9 @@ def real_slice_cmd(
         if concentrate is not None:
             stats = concentrate.ingest(notes)
             ingested["concentrate"] = {k2: v for k2, v in asdict(stats).items() if k2 != "detail"}
+            for s in built:  # fallback variants share the (now cached) store
+                if isinstance(s, ConcentrateSystem) and s is not concentrate:
+                    s.ingest(notes)
 
         def spent() -> float:
             extra = concentrate.ingest_ledger.spent_usd() if concentrate is not None else 0.0
