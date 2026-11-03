@@ -35,7 +35,25 @@ This file pairs every claim in [MEMO.md](MEMO.md) (and the deck and emails that 
 | Read-only MCP source | `CLAUDE.md`; `docs/DESIGN.md` "Real data via Granola's MCP"; ws-b's `ReadOnlyCaller` test | ✅ |
 | Deterministic: same seed, identical bytes | `docs/BENCHMARK.md`; byte-equality fixture test | ✅ |
 | Timeouts, stall watchdog, resumable builds | `docs/HARDENING.md` §2–3 | ✅ |
-| "an offline test suite run in CI" (no count claimed) | `.github/workflows/ci.yml`; `docs/HARDENING.md` §2 | ⚠️ On f040b3a, `uv run pytest` **fails to collect** (14 errors): `packages/concentrate/synth/roster.py:179` has an inline comment that swallows the rest of a `Person(...)` call (SyntaxError). Fix it before anyone clones the repo. Reported to the coordinator. |
+| "an offline test suite run in CI" (no count claimed) | `.github/workflows/ci.yml`; `docs/HARDENING.md` §2 | ✅ The roster.py SyntaxError at f040b3a was fixed in `aa6c3fd` (`docs/RED_TEAM.md` R8). |
+
+## Result 1: real meetings (the new headline)
+
+Source: `docs/REAL_SLICE.md` @ `claude/ws-b-real-slice-9332a8` (`c86807d`) "Results". On `feat/granola-mcp-source` (b8a5cf5) that section still reads "Pending", and the numbers are only in the README "Results" §1. Raw per-question data stays private in `data/real/`; only aggregates are public.
+
+| Claim | Source | Status |
+|---|---|---|
+| Granola 92% [82, 100], Concentrate 59% [44, 74], n = 39; CIs don't overlap | `docs/REAL_SLICE.md` @ `claude/ws-b-real-slice-9332a8` (`c86807d`) "Results" main table; README "Results" §1 | ⚠️ Re-check once B's final REAL_SLICE.md is merged. |
+| Paired 14–1 (sign test p ≈ 0.001) | `docs/REAL_SLICE.md` @ `claude/ws-b-real-slice-9332a8` (`c86807d`) "Results" "The gap is large" | ⚠️ same |
+| Top-k (k = 1) 77% [64, 90] on the same 39; 3.3 s latency from its 47-question run | `docs/REAL_SLICE.md` @ `claude/ws-b-real-slice-9332a8` (`c86807d`) "Results" table rows "b0 … (same 39)" and "(all 47)" | ⚠️ **The README says 76% [62, 89], n = 37** (the stopped first run). The final file says 77% on the same 39. I used 77%; the README needs aligning. |
+| Latencies 7.9 s / 4.2 s, not like for like | `docs/REAL_SLICE.md` @ `claude/ws-b-real-slice-9332a8` (`c86807d`) "Results" table and "Latency isn't like-for-like" | ✅ |
+| Who said 88% vs 0%; commitments 100 vs 75; which person 80 vs 40; what changed 83 vs 100 | `docs/REAL_SLICE.md` @ `claude/ws-b-real-slice-9332a8` (`c86807d`) "Results" "Accuracy by category" | ✅ (n = 4–8 per cell; quoted as anecdotes) |
+| 43 facts + 11 commitments; 10 of 16 misses were abstentions | `docs/REAL_SLICE.md` @ `claude/ws-b-real-slice-9332a8` (`c86807d`) "Results" Method (build) and "What this says" 2 | ✅ |
+| Ignored the named system-audio speaker labels | `docs/REAL_SLICE.md` @ `claude/ws-b-real-slice-9332a8` (`c86807d`) "Results" "What this says" 3 and 6 | ✅ |
+| Second judge 97%, κ 0.93, ranking unchanged | `docs/REAL_SLICE.md` @ `claude/ws-b-real-slice-9332a8` (`c86807d`) "Results" "Judges agree" | ✅ |
+| LLM-drafted, bulk-approved with 0 edits; at least one gold looks wrong; 6 unanswerable not run | `docs/REAL_SLICE.md` @ `claude/ws-b-real-slice-9332a8` (`c86807d`) "Results" "Gold quality", "Coverage" | ✅ |
+| Concentrate memory built from the same notes via the MCP | `docs/REAL_SLICE.md` @ `claude/ws-b-real-slice-9332a8` (`c86807d`) "Results" Method; `docs/DESIGN.md` "Real data via Granola's MCP" | ✅ |
+| Pedregal: "might want to still go back and chat with that meeting" | Platformer interview (coordinator's verified excerpt, 2026-11-03) | ✅ |
 
 ## Live MCP probes
 
@@ -52,26 +70,24 @@ This file pairs every claim in [MEMO.md](MEMO.md) (and the deck and emails that 
 | Answers are summary-first; details need transcript calls | `docs/PROBE_2026-11-02.md` §1 (the `transcript_note`) | ✅ |
 | No meeting content is quoted anywhere in the write-up | `docs/PROBE_V2.md` "Privacy" | ✅ Re-check the deck's slide 5 cards when they're drawn. |
 
-## Headline results
+## Result 2: synthetic benchmark
 
-Final report: `evals/reports/20261103T002456Z.md` (test split, 120 questions, Opus 5.5, seed 42, git `aeafca5` dirty, corpus `northwind-xl` = generator `northwind-1`, spent $3.73). Analysis: `evals/reports/20261103T002456Z.analysis.md`. README "Results" uses the same report.
+Report `evals/reports/20261103T002456Z.md` (test split, 120 questions, Opus 5.5, seed 42, git `aeafca5` dirty, `northwind-xl` = generator `northwind-1`). Analysis: `evals/reports/20261103T002456Z.analysis.md`. Corrections from the red-team audit, `docs/RED_TEAM.md`. The README "Results" §2 uses the same numbers.
 
 | Claim | Source | Status |
 |---|---|---|
-| Accuracy and CI per system (95/92/90/88/81/72/71) | `evals/reports/20261103T002456Z.md` main table | ✅ |
-| Concentrate vs agent and top-k tied (Holm p = 1.00); 10 disagreements split 6–4 | `evals/reports/20261103T002456Z.analysis.md` §1 rows `concentrate/b3_agentic` (6 / 4), `concentrate/b0_topk` | ✅ |
-| Concentrate beats Mem0 +11 (Holm 0.028), Graphiti +20, summaries +21 (both < 0.001) | `evals/reports/20261103T002456Z.analysis.md` §1 | ✅ |
-| Detectable gap ~7 points for the top pairs at n = 120 | `evals/reports/20261103T002456Z.analysis.md` §2 (`concentrate vs b3_agentic`: 7 pts @ 120) | ✅ |
-| Oracle 95% = saturation | `evals/reports/20261103T002456Z.md` | ✅ framing |
-| p50 latency 3.8 s (Concentrate, 10 rows) vs 13.2 s (agent, 120 rows) | `evals/reports/20261103T002456Z.md` latency column and its footnote | ✅ The Concentrate figure comes from only 10 interactive rows; the table footnote says so. |
-| **$/question at equal interactive prices**: Concentrate 0.040, agent 0.137, top-k 0.328, oracle 0.082, summaries 0.017, Mem0 0.017, Graphiti 0.029 | recomputed from `evals/reports/20261103T002456Z.jsonl`: Σ(input_tokens × $4/M + output_tokens × $20/M) ÷ 120 per system, using Opus 5.5 prices from `concentrate.llm.client.PRICING` | ⚠️ **The report's `cost_usd` mixes prices.** 110 of 120 rows for b0, b1, the oracle and Concentrate ran through the Batch API (50% off); the agent, Mem0 and Graphiti ran at full price. At the report's numbers Concentrate looks ~6× cheaper than the agent; at equal prices it's ~3.5×. The README's "about a sixth" and `docs/ECONOMICS.md` inherit the mixed prices. Reported to the coordinator. |
-| "~3.5× cheaper than the agent" | 0.1372 ÷ 0.0395 | ✅ (equal prices) |
-| Ingest $5 / $17 / $70 (incl. $10.66 redone) | README Results table; `evals/economics/20261103T002456Z.md` "Builds measured" (recorded $/mtg × meetings: 0.0269×184, 0.0925×184, 0.325×183) | ✅ |
-| Aggregation 83/83/42/42/33/33; multi-hop 77 vs 85; decision change 31% for summaries | `evals/reports/20261103T002456Z.md` category table | ✅ No per-category gap survives Holm (`evals/reports/20261103T002456Z.analysis.md` §1 per category). |
-| 134 wrong answers, 48 partial list; Concentrate 10 = 4 partial + 4 reasoning + 1 stale + 1 abstained wrongly | `evals/reports/20261103T002456Z.analysis.md` §1 summary, §4 table | ✅ |
-| Frontier: summaries, Mem0, Concentrate, oracle; agent and top-k dominated | `evals/reports/20261103T002456Z.analysis.md` §3 | ✅ At equal prices the frontier membership doesn't change (Concentrate 0.040 is still below the agent's 0.137 and the oracle's 0.082). |
-| Input tokens/question 8.8k vs 30k / 81k | `evals/reports/20261103T002456Z.md` | ✅ |
-| Test run once, tuning on dev only | `docs/CONCENTRATE_TUNING.md` (`tune-c` refuses `--split test`) | ✅ |
+| Accuracy and CI per system (95/92/90/88/81/72/71) | `evals/reports/20261103T002456Z.md` | ✅ |
+| Tied (Holm p = 1.0); 10 disagreements, 6–4 | `evals/reports/20261103T002456Z.analysis.md` §1; `docs/RED_TEAM.md` "What survives" | ✅ |
+| $/q at equal interactive prices: 0.082/0.040/0.137/0.328/0.017/0.029/0.017 | `docs/RED_TEAM.md` R1 table; README footnote ¹ | ✅ |
+| Agent ≈0.07–0.08 with prompt caching | `docs/RED_TEAM.md` R1 footnote ¹ | ✅ (an estimate, not measured; labelled as such) |
+| ~3.5× (≈2× vs a caching agent) | `docs/RED_TEAM.md` R1 "Like for like" | ✅ |
+| Ingest $5; break-even ~50 questions per corpus (51; ~140 against a caching agent) | `docs/RED_TEAM.md` R1 ingest table and "Break-even" | ✅ The $5 is interactive Sonnet ingest with caching ($4.96, `docs/RED_TEAM.md` R9). |
+| Mem0: 25 of 5,292 memories per question; Graphiti never given the summaries | `docs/RED_TEAM.md` R2 | ✅ |
+| Directory decided 1/120 questions; build effect unmeasured | `docs/RED_TEAM.md` R3 | ✅ |
+| Gold errors ("reported complete on None", q694, and others) | `docs/RED_TEAM.md` R5 | ✅ |
+| Second judge changed none of Concentrate's 120 verdicts | `docs/RED_TEAM.md` R4; `evals/reports/20261103T002456Z.judgecheck.claude-sonnet-5-5.md` | ✅ |
+| MDE ~7 points for the top pairs at n = 120 | `evals/reports/20261103T002456Z.analysis.md` §2 | ✅ |
+| Test run once; tuning on dev only | `docs/CONCENTRATE_TUNING.md`; `docs/RED_TEAM.md` "No test peeking" | ✅ |
 
 ## Threats to validity
 
@@ -79,9 +95,9 @@ Final report: `evals/reports/20261103T002456Z.md` (test split, 120 questions, Op
 |---|---|---|
 | Same author built the generator and the extractor | README "Reasons to be skeptical" | ✅ |
 | Only Concentrate gets the org directory; ablation not run | README "Reasons to be skeptical" | ✅ |
-| Unequal tuning; Graphiti's 72% likely our wiring | README; `docs/CONCENTRATE_TUNING.md`; `docs/baselines/graphiti.md` | ✅ |
+| Unequal tuning (concrete: query layer anchors on generator templates) | `docs/RED_TEAM.md` R6; `docs/CONCENTRATE_TUNING.md` | ✅ |
 | v1 wording templated; v2 and v2.1 not run | `docs/FIDELITY.md`, `docs/FIDELITY_V2.md`, `docs/BENCHMARK_V2_EXTRAS.md` | ✅ |
-| The second judge was checked on the pilot only | only `20261102T100403Z.judgecheck.*` exists in `evals/reports/` | ✅ |
+| Second judge run on the final report | `evals/reports/20261103T002456Z.judgecheck.claude-sonnet-5-5.md` | ✅ (replaces the earlier "pilot only" claim) |
 
 ## Retirement
 
@@ -99,16 +115,7 @@ Final report: `evals/reports/20261103T002456Z.md` (test split, 120 questions, Op
 
 ## Unit economics
 
-`uv run concentrate economics --report evals/reports/20261103T002456Z.jsonl` (free) wrote `evals/economics/20261103T002456Z.md`. Scenario: 40 meetings and 30 questions per user per month (**a guess**, `docs/ECONOMICS.md` assumptions), Sonnet ingest via Batch, Opus answers.
-
-| Claim | Source | Status |
-|---|---|---|
-| Ingest $/meeting 0.014 / 0.046 / 0.163 (Concentrate / Mem0 / Graphiti) | `evals/economics/20261103T002456Z.md` main table | ✅ The Graphiti build is 183/184 meetings. |
-| $/user/month: agent $4.12, Mem0 $2.36, Graphiti $7.36 | `evals/economics/20261103T002456Z.md` (these three answered at full price, so they're unaffected) | ✅ |
-| $/user/month: Concentrate $1.74, top-k $9.84 | recomputed: 40 × ingest + 30 × equal-price $/q (Concentrate 40×0.0139 + 30×0.0395; top-k 30×0.3281) | ⚠️ Corrected. `evals/economics/20261103T002456Z.md` prints $1.21 and $5.32 because it re-uses the report's Batch-discounted `cost_usd`, despite saying "answer batch: no". |
-| Break-even against the agent ~6 questions/month (~0.14 per meeting) | 0.556 ÷ (0.1372 − 0.0395) = 5.7 | ✅ (equal prices; `evals/economics/20261103T002456Z.md` prints 4.8 with mixed prices) |
-| ~1.2 / ~6 / ~17 LLM calls per meeting | `evals/economics/20261103T002456Z.md` "Builds measured" calls/mtg (1.2, 5.9, 16.8) | ✅ |
-| Haiku answers: query-time ~$0.10/user/month, write-time loses on cost | `evals/economics/20261103T002456Z.md` sensitivity grid (sonnet ingest × haiku answer: agent $0.10, Concentrate $0.57) | ✅ |
+The memo now uses only `docs/RED_TEAM.md` R1's per-question figures and the break-even per corpus (above). The earlier $/user/month table was dropped: it rested on a guessed usage (40 meetings, 30 questions) and on `evals/economics/20261103T002456Z.md`, which re-uses Batch-discounted `cost_usd` (flagged to the coordinator). Re-derive it before quoting.
 
 ## Pre-meeting brief
 
@@ -122,17 +129,17 @@ Final report: `evals/reports/20261103T002456Z.md` (test split, 120 questions, Op
 | Requests recall 78% vs 56%; stale 22% vs 38% | same, `requests` | ✅ (9 gold items) |
 | Precision loss mostly from in-person owner attribution | `docs/BRIEF.md` "Where the memory brief is weak" | ✅ (inspected on dev) |
 
-## Limitations and next steps
+## Limitations, transcript deletion and next steps
 
 | Claim | Source | Status |
 |---|---|---|
-| v1: 78% duplicated long passages; v2: 4.9%; frames still repeat (54% vs 0.6%) | `docs/FIDELITY_V2.md` §3 | ✅ |
 | b3 isn't Granola's agent | `README.md` "Honest limits" | ✅ |
-| Real slice "in progress" | `docs/REAL_SLICE.md` Results ("Pending: the author is verifying the questions") | ✅ |
-| Primary judge = answer model | `docs/BENCHMARK.md` Metrics | ✅ |
-| Next step 1 (write-time identity) targets the probe misses | `docs/PROBE_V2.md` §4.1; `docs/MCP_SERVER.md` `resolve_entity` | ✅ |
-| Next step 2 (`recurring_event_id`, attribution lever) | `docs/BRIEF.md` "Decisions" and "Open questions" | ✅ |
-| Next step 3 (verbatim-quote category, line-ID pointers) | `docs/RETIREMENT.md` caveat; `docs/PHASE4_DESIGN.md` compression tiers | ✅ |
+| "Evidence against deleting transcripts, for a hybrid" | inference from Result 1 (fact-only memory: 0% on who said; 10 of 16 misses were missing details) plus the retirement caveat (no exact-wording questions in synthetic dev) | ✅ framed as my reading of the evidence, not a measurement of deletion on real data |
+| Hybrid next step (transcript fallback, speaker labels, needs fresh questions) | `docs/REAL_SLICE.md` @ `c86807d` "What this says" 6 | ✅ |
+| v2.1 adds exact-quote and speaker-attribution questions, not run | `docs/BENCHMARK_V2_EXTRAS.md` intro | ✅ |
+| Directory ablation (~$5 ingest + $2.60 answers) | `docs/RED_TEAM.md` R3 "Fix" | ✅ |
+| Fix Mem0/Graphiti wiring and gold errors, re-score | `docs/RED_TEAM.md` R2, R5 | ✅ |
+| Identity at write time targets the probe misses | `docs/PROBE_V2.md` §1.1, §4.1; `docs/MCP_SERVER.md` `resolve_entity` | ✅ |
 
 ## Outreach-only claims
 
@@ -142,3 +149,5 @@ Final report: `evals/reports/20261103T002456Z.md` (test split, 120 questions, Op
 | Pilot saturated at 90–100% | `README.md` status box | ✅ |
 | Builds hung; traced to SDK timeout defaults | `docs/HARDENING.md` §1 (the cause is *inferred*, with no stack trace) | ✅ Keep "traced to", not "proved". |
 | The emails say "Chris" (Pedregal) | Platformer interview, verified | ✅ |
+| "tested my own system against Granola's and reported it lost" | `docs/REAL_SLICE.md` @ `claude/ws-b-real-slice-9332a8` (`c86807d`) "Results"; this memo | ✅ |
+| "red team cut the cost claim from ~6× to ~3.5×" | `docs/RED_TEAM.md` R1 (the "as reported" vs "full price" columns: 0.137 ÷ 0.022 ≈ 6.2; ÷ 0.0395 ≈ 3.5) | ✅ |
