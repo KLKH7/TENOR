@@ -27,6 +27,7 @@ One of the seven is **Concentrate**, a cited, time-aware meeting memory built he
 - By category, Concentrate scores **0% on "who said X"** (Granola 88%) but **leads on "what changed"** (100% vs 83%).
 - n is small and the data comes from one person, but the gap is far outside the error bars. Paired by question, Granola's agent was right where Concentrate was wrong 14 times, and the reverse once (sign test p ≈ 0.001).
 - ¹ Top-k also ran on all 47 questions: 81% [68, 91], including 6 of 6 unanswerable.
+- **Follow-up: a transcript fallback (dev result, not a claim).** When Concentrate's facts can't answer, it now retrieves transcript passages and answers again. On the 22 real questions it reached before hitting the budget cap, it rose from 12/22 to 20/22, fixing 8 and breaking none (p = 0.008). On the same questions Granola's agent scored 19/22. These questions motivated the design, so this is a dev result. The real test needs fresh questions written after the design freeze ([`docs/concentrate/fallback.md`](docs/concentrate/fallback.md)). It's off by default.
 
 ### 2. Synthetic benchmark: 120 held-out test questions, 7 systems
 
