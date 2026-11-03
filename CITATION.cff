@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this benchmark or software, please cite it as below."
+title: "Hindsight: an open benchmark for agent memory over meeting notes"
+type: software
+authors:
+  - family-names: Lakhani
+    given-names: Kian
+version: 0.1.0
+date-released: 2026-11-02
+license: MIT
+abstract: >-
+  An open benchmark and harness comparing agent memory systems over Granola-style
+  meeting notes for accuracy, cost and latency. Includes Northwind, a synthetic
+  184-meeting, 296-question benchmark with verified, line-cited answers, and
+  Concentrate, a cited, time-aware meeting memory. Independent research prototype,
+  not affiliated with Granola.
+keywords:
+  - agent memory
+  - benchmark
+  - meeting transcripts
+  - retrieval
+  - temporal knowledge
