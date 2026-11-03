@@ -9,34 +9,49 @@ One of the seven is **Concentrate**, a cited, time-aware meeting memory built he
 ## Results
 
 <!-- RESULTS:START -->
-## Results (first comparison, 2026-11-02)
+## Results (2026-11-02)
 
-The comparison used **120 held-out test questions** from Northwind-XL v1 (184 meetings). Every system has the same answer model (Opus 5.5) and the same judge. Report: [`evals/reports/20261103T002456Z.md`](evals/reports/20261103T002456Z.md). Significance and failure analysis: [`.analysis.md`](evals/reports/20261103T002456Z.analysis.md).
+**In one paragraph:** on the synthetic benchmark, Concentrate (a precomputed, fact-extraction memory) **ties** agentic retrieval over transcripts, at roughly 2–3.5× lower cost per question. On **the author's real meetings, with open-ended questions, Granola's own agent wins clearly (92% vs 59%)**. Compressing meetings into facts throws away the long tail of details that real questions ask about. Our synthetic questions are generated from the same kind of facts the extractor targets, so they couldn't show this. The evidence favours a **hybrid**: facts for state and change, transcripts kept for everything else. It argues against deleting transcripts.
 
-| System | Accuracy [95% CI] | $ / question ³ | p50 latency | One-off ingest |
+### 1. Real meetings: Granola's agent vs Concentrate ([`docs/REAL_SLICE.md`](docs/REAL_SLICE.md))
+
+| System | Accuracy [95% CI] | n | Median latency |
+|---|---|---|---|
+| **Granola's agent** (`query_granola_meetings`, live) | **92% [82, 100]** | 39 | 7.9 s |
+| Top-k retrieval (k = 1 of 4 meetings) | 76% [62, 89] | 37 | 3.4 s |
+| **Concentrate** | **59% [44, 74]** | 39 | 4.2 s |
+
+- The questions are about the author's 4 real meetings. They were LLM-drafted and the owner approved the gold answers in bulk, with 0 edits.
+- A second judge agreed on 97% of verdicts.
+- 8 of the 47 questions weren't run because of budget: all 6 unanswerable and 2 temporal.
+- By category, Concentrate scores **0% on "who said X"** (Granola 88%) but **leads on "what changed"** (100% vs 83%).
+- n is small and the data comes from one person, but the gap is far outside the error bars.
+
+### 2. Synthetic benchmark: 120 held-out test questions, 7 systems
+
+Northwind-XL v1, 184 meetings, same answer model (Opus 5.5) and judge for all. Sources: [`report`](evals/reports/20261103T002456Z.md) · [`significance`](evals/reports/20261103T002456Z.analysis.md) · [`red-team audit`](docs/RED_TEAM.md).
+
+| System | Accuracy [95% CI] | $ / question ¹ | p50 latency | One-off ingest |
 |---|---|---|---|---|
 | Oracle (reads only the gold meetings; a ceiling) | 95% [91, 98] | 0.082 | 4.5 s | — |
-| **Concentrate** (precomputed memory) | **92% [86, 96]** | **0.040** | 3.8 s ¹ | $5 |
-| Agent over search + transcripts (modelled on Granola's MCP) | 90% [84, 95] | 0.137 | 13.2 s | — |
-| Top-k hybrid retrieval (k = 10 meetings) | 88% [82, 94] | 0.328 | 6.4 s ¹ | — |
-| Mem0 | 81% [73, 88] | 0.017 | 3.3 s | $17 |
-| Graphiti | 72% [63, 79] | 0.029 | 4.1 s | $70 ² |
-| Summaries only | 71% [62, 78] | 0.017 | 4.7 s ¹ | — |
+| **Concentrate** | **92% [86, 96]** | **0.040** | 3.8 s ² | $5 |
+| Agent over search + transcripts (our re-implementation) | 90% [84, 95] | 0.137 (≈0.07–0.08 with prompt caching ³) | 13.2 s | — |
+| Top-k hybrid retrieval (k = 10 meetings) | 88% [82, 94] | 0.328 | 6.4 s ² | — |
+| Mem0 (our default wiring) | 81% [73, 88] | 0.017 | 3.3 s | $17 |
+| Graphiti (our default wiring) | 72% [63, 79] | 0.029 | 4.1 s | $70 ⁴ |
+| Summaries only | 71% [62, 78] | 0.017 | 4.7 s ² | — |
 
-**What the numbers support:**
-- **Concentrate, the agent and top-k are statistically tied.** Paired McNemar tests with Holm correction show no reliable difference; Concentrate and the agent disagreed on only 10 questions, splitting 6–4.
-- **Concentrate costs about 3.5× less per question than the agent** ($0.040 vs $0.137 at equal prices), but more than Mem0 and Graphiti. It sits on the cost/accuracy frontier because it's more accurate than both, not because it's cheapest. The agent and top-k are dominated.
-- **Concentrate beats Mem0 (+11 points), Graphiti (+20) and summaries (+21)**, and all three gaps are reliable.
-- **On the dev split, deleting every transcript older than the question barely moves Concentrate (89% → 88%), while summaries alone score 64%.** See [`docs/RETIREMENT.md`](docs/RETIREMENT.md). This benchmark version has no exact-quote questions, though, so it can't show what deletion loses. [`docs/BENCHMARK_V2_EXTRAS.md`](docs/BENCHMARK_V2_EXTRAS.md) adds them.
+**What survives the [red-team audit](docs/RED_TEAM.md):**
+- **Concentrate, the agent and top-k are statistically tied.** McNemar's test with Holm correction finds no reliable gap. Concentrate and the agent disagree on 10 questions, splitting 6–4, and two of those verdicts are coin-flips. A second judge changed none of Concentrate's 120 verdicts.
+- **The cost advantage is real but smaller than first reported.** Concentrate is about 3.5× cheaper per question than the agent at equal prices, and about 2× cheaper against an agent with prompt caching. Counting ingest, it only comes out cheaper once a set of meetings gets more than **about 50 questions**.
+- **Beating summaries (+21 points) is solid.**
+- **Beating Mem0 (+11) and Graphiti (+20) is about our wiring, not those libraries.** Mem0 saw only 25 of its 5,292 memories per question. Graphiti was never given the meeting summaries. Fixed, they'd likely score 87–92% and 82–88%.
+- **The org directory only Concentrate gets** decided 1 of 120 questions outright. Its effect on the memory build is unmeasured, so the directory ablation is still to run.
+- **On the dev split, deleting old transcripts barely moves Concentrate (89% → 88%).** But no question there needs exact wording or who-said-what. The real-meeting result above shows what goes missing when those questions are asked.
 
-**Reasons to be skeptical. Read these before quoting the table:**
-- **Concentrate has a home advantage.** The same author designed the question generator and Concentrate's extractor, and the facts it extracts match the question categories.
-- **Only Concentrate gets an org directory** (names, roles, emails), which it uses to resolve people. The other systems don't. Removing it (the directory ablation) hasn't been run yet.
-- **The effort was unequal.** Concentrate was tuned on the dev split. Mem0, Graphiti and the agent use our default wiring and untuned prompts. Graphiti's low score probably says more about our setup than about Graphiti.
-- **The benchmark saturates near the top.** Synthetic v1 wording is templated (see [`docs/FIDELITY.md`](docs/FIDELITY.md)). A harder v2 corpus exists ([`docs/FIDELITY_V2.md`](docs/FIDELITY_V2.md)), but nothing has been run on it yet.
-- **The agent is our re-implementation, not Granola's agent.** A comparison against Granola's real agent on real meetings is in progress ([`docs/REAL_SLICE.md`](docs/REAL_SLICE.md)).
+**Why the two results differ:** the synthetic questions come from the facts the generator planted, the kind of fact Concentrate's extractor is built to keep (the same author designed both). Real questions don't respect that boundary. The [v2.1 extras](docs/BENCHMARK_V2_EXTRAS.md) add exact-quote and speaker-attribution questions so the synthetic benchmark can show this too.
 
-¹ Batched systems' latency comes from the 10 questions run interactively, not all 120. ³ All re-priced from token counts at the same interactive Opus 5.5 price ($4/M in, $20/M out). The raw report mixes Batch API (50% off) and full-price rows, which made the batched systems look up to 2× cheaper. Thanks to the write-up audit for catching it. ² Includes $10.66 of work lost to a crashed embedded database and redone ([`docs/HARDENING.md`](docs/HARDENING.md)).
+¹ Re-priced from token counts at the same interactive Opus 5.5 price ($4/M input, $20/M output). The raw report mixes Batch API (50% off) and full-price rows. ² Batched systems' latency comes from the 10 questions run interactively, not all 120. ³ Red-team estimate, not measured. ⁴ Includes $10.66 of work lost to a crashed embedded database and redone ([`docs/HARDENING.md`](docs/HARDENING.md)).
 <!-- RESULTS:END -->
 
 ## Why "Concentrate"?
