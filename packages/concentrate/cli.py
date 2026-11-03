@@ -1252,3 +1252,361 @@ def scale_curve_cmd(
         )
     typer.echo(md)
     typer.echo(f"spent ${spent:.2f} · written: {root}")
+
+
+# -- real-data slice (workstream B) -------------------------------------------------------------
+# Everything these commands read or write about the user's meetings stays under data/real/
+# (gitignored). Granola is reached only through the read-only allowlist in evals.real_slice.
+
+real_kit = typer.Typer(no_args_is_help=True, help="Write and verify questions about real meetings.")
+app.add_typer(real_kit, name="real-kit")
+REAL_DB = Path("data/real.db")
+
+
+def _real_notes(db: Path) -> list:  # type: ignore[type-arg]
+    if not db.exists():
+        raise typer.BadParameter(f"{db} not found: run `concentrate sync --source granola-mcp`")
+    store = NoteStore(db)
+    try:
+        return list(store.iter_notes())
+    finally:
+        store.close()
+
+
+def _real_client(offline: bool = False, model: str | None = None) -> LLMClient:
+    from concentrate.evals.real_slice import REAL_DIR
+
+    return LLMClient(model=model, cache_dir=REAL_DIR / "cache" / "llm", offline=offline)
+
+
+@real_kit.command("status")
+def real_status() -> None:
+    """Questions per category: drafted, verified, rejected vs the ~30-question target."""
+    from concentrate.evals.real_slice import coverage, load_questions
+
+    qs = load_questions()
+    typer.echo(f"{'category':<18} draft verified rejected target")
+    for c, v in coverage(qs).items():
+        typer.echo(
+            f"{c:<18} {v['draft']:>5} {v['verified']:>8} {v['rejected']:>8} {v['target']:>6}"
+        )
+    typer.echo(f"verified: {sum(q.status == 'verified' for q in qs)} of {len(qs)}")
+
+
+@real_kit.command("directory")
+def real_directory_cmd(db: Annotated[Path, typer.Option()] = REAL_DB) -> None:
+    """Write data/real/directory.json (people from attendee metadata) for Concentrate."""
+    import json as _json
+
+    from concentrate.evals.real_slice import REAL_DIR, real_directory
+
+    out = REAL_DIR / "directory.json"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(_json.dumps(real_directory(_real_notes(db)), indent=1))
+    typer.echo(f"wrote {out} (private; edit names freely)")
+
+
+@real_kit.command("draft")
+def real_draft(
+    db: Annotated[Path, typer.Option()] = REAL_DB,
+    extra: Annotated[float, typer.Option(help="Draft this many x the gap (for rejections).")] = 1.5,
+    estimate_only: Annotated[bool, typer.Option("--estimate")] = False,
+    yes: Annotated[bool, typer.Option("--yes")] = False,
+) -> None:
+    """LLM-draft candidate questions for categories still short of their target."""
+    import math
+    from datetime import date as _date
+
+    from concentrate.evals.real_slice import (
+        DraftOutput,
+        coverage,
+        draft_request,
+        drafts_to_questions,
+        load_questions,
+        save_questions,
+    )
+    from concentrate.llm.client import cost_usd, estimate_tokens
+
+    notes = _real_notes(db)
+    qs = load_questions()
+    wanted = {
+        c: max(0, math.ceil((v["target"] - v["verified"] - v["draft"]) * extra))
+        for c, v in coverage(qs).items()
+    }
+    if not any(wanted.values()):
+        typer.echo("every category has enough drafts or verified questions")
+        return
+    today = _date.today()
+    client = _real_client()
+    req = draft_request(notes, wanted, today)
+    usd = cost_usd(
+        client.model, estimate_tokens(req.system) + estimate_tokens(req.user), req.max_tokens // 2
+    )
+    typer.echo(f"{len(notes)} meetings · drafting {sum(wanted.values())} questions ≈ ${usd:.2f}")
+    if estimate_only:
+        return
+    if usd > BUDGET_CONFIRM_USD and not yes:
+        typer.confirm(
+            f"Estimated ${usd:.2f} exceeds ${BUDGET_CONFIRM_USD:.0f}. Proceed?", abort=True
+        )
+    new = drafts_to_questions(client.structured(req, DraftOutput), qs, today)
+    save_questions([*qs, *new])
+    typer.echo(f"added {len(new)} drafts · spent ${client.ledger.spent_usd():.2f}")
+    typer.echo("next: `uv run concentrate real-kit review` (you verify every gold answer)")
+
+
+@real_kit.command("review")
+def real_review(
+    show_evidence: Annotated[bool, typer.Option("--evidence/--no-evidence")] = True,
+) -> None:
+    """Walk through drafts: [a]ccept, [e]dit, [r]eject, [s]kip, [q]uit. Saves after each."""
+    from concentrate.evals.real_slice import load_questions, save_questions
+
+    qs = load_questions()
+    todo = [i for i, q in enumerate(qs) if q.status == "draft"]
+    typer.echo(f"{len(todo)} drafts to review. Check each gold answer against your memory/notes.")
+    for n, i in enumerate(todo, 1):
+        q = qs[i]
+        typer.echo(f"\n[{n}/{len(todo)}] {q.id} · {q.category}")
+        typer.echo(f"  Q: {q.question}")
+        typer.echo(f"  Gold: {q.gold_answer}")
+        typer.echo(f"  Key terms: {', '.join(q.key_terms) or '-'}")
+        if show_evidence and q.evidence:
+            typer.echo(f"  Evidence: {q.evidence}")
+        choice = typer.prompt("  [a]ccept/[e]dit/[r]eject/[s]kip/[q]uit", default="s").lower()
+        if choice.startswith("q"):
+            break
+        if choice.startswith("a"):
+            qs[i] = q.model_copy(update={"status": "verified"})
+        elif choice.startswith("r"):
+            note = typer.prompt("  why (optional)", default="")
+            qs[i] = q.model_copy(update={"status": "rejected", "reviewer_note": note})
+        elif choice.startswith("e"):
+            question = typer.prompt("  question", default=q.question)
+            gold = typer.prompt("  gold answer (UNANSWERABLE if none)", default=q.gold_answer)
+            terms = typer.prompt(
+                "  key terms, comma-separated", default=", ".join(q.key_terms) or "-"
+            )
+            key_terms = [] if terms.strip() == "-" else [t.strip() for t in terms.split(",")]
+            qs[i] = q.model_copy(
+                update={
+                    "question": question,
+                    "gold_answer": gold,
+                    "key_terms": [t for t in key_terms if t],
+                    "status": "verified",
+                    "reviewer_note": "edited",
+                }
+            )
+        save_questions(qs)
+    typer.echo(f"\nverified: {sum(q.status == 'verified' for q in qs)} of {len(qs)}")
+
+
+@real_kit.command("add")
+def real_add() -> None:
+    """Write your own question (counts as verified: you are the source of the gold answer)."""
+    from datetime import date as _date
+
+    from concentrate.evals.real_slice import (
+        CATEGORIES,
+        RealQuestion,
+        load_questions,
+        save_questions,
+    )
+
+    qs = load_questions()
+    category = typer.prompt(f"category ({' | '.join(CATEGORIES)})")
+    if category not in CATEGORIES:
+        raise typer.BadParameter(f"unknown category {category!r}")
+    question = typer.prompt("question")
+    gold = "UNANSWERABLE" if category == "unanswerable" else typer.prompt("gold answer")
+    terms = (
+        "" if category == "unanswerable" else typer.prompt("key terms, comma-separated", default="")
+    )
+    q = RealQuestion(
+        id=f"real-{len(qs) + 1:03d}",
+        category=category,
+        question=question,
+        gold_answer=gold,
+        key_terms=[t.strip() for t in terms.split(",") if t.strip()],
+        as_of=_date.today(),
+        status="verified",
+        origin="user",
+    )
+    save_questions([*qs, q])
+    typer.echo(f"added {q.id}")
+
+
+@app.command("real-slice")
+def real_slice_cmd(
+    systems: Annotated[
+        str, typer.Option(help="granola (Granola's real agent), c, b0, b3; comma-separated.")
+    ] = "granola,c,b0,b3",
+    db: Annotated[Path, typer.Option()] = REAL_DB,
+    k: Annotated[int, typer.Option(help="Meetings b0 retrieves.")] = 2,
+    seed: Annotated[int, typer.Option()] = 42,
+    budget: Annotated[float, typer.Option(help="Hard cap on API spend (USD).")] = 5.0,
+    estimate_only: Annotated[bool, typer.Option("--estimate")] = False,
+    offline: Annotated[
+        bool, typer.Option(help="Cached LLM results / recorded Granola only.")
+    ] = False,
+    yes: Annotated[bool, typer.Option("--yes")] = False,
+) -> None:
+    """Answer the verified real questions with every system and judge them (judge.v1)."""
+    import json as _json
+    from dataclasses import asdict
+
+    from concentrate.agents.baselines import AgenticSystem, MeetingRetriever, System, TopKSystem
+    from concentrate.agents.concentrate_system import ConcentrateSystem
+    from concentrate.agents.retrieval import SentenceTransformerEmbedder
+    from concentrate.evals.real_slice import (
+        REAL_DIR,
+        GranolaAgentSystem,
+        aggregate_only,
+        load_questions,
+        run_slice,
+    )
+    from concentrate.evals.runner import estimate
+
+    names = [s.strip() for s in systems.split(",") if s.strip()]
+    notes = _real_notes(db)
+    questions = [q for q in load_questions() if q.status == "verified"]
+    if not questions:
+        raise typer.BadParameter("no verified questions: run `concentrate real-kit review` first")
+    directory = REAL_DIR / "directory.json"
+    if "c" in names and not directory.exists():
+        raise typer.BadParameter(f"{directory} missing: run `concentrate real-kit directory`")
+    client = _real_client(offline)
+    embedder = SentenceTransformerEmbedder() if {"c", "b0"} & set(names) else None
+    built: list[System] = []
+    concentrate: ConcentrateSystem | None = None
+    with ExitStack() as stack:
+        for n in names:
+            if n == "granola":
+                caller = None
+                if not offline and not estimate_only:
+                    from concentrate.sources.mcp_transport import LiveMcpCaller
+
+                    caller = stack.enter_context(LiveMcpCaller())
+                built.append(GranolaAgentSystem(caller))  # type: ignore[arg-type]
+            elif n == "c":
+                concentrate = ConcentrateSystem(
+                    client,
+                    embedder=embedder,
+                    directory_path=directory,
+                    cache_root=REAL_DIR / "cache" / "concentrate",
+                )
+                built.append(concentrate)
+            elif n == "b0":
+                built.append(TopKSystem(client, MeetingRetriever(notes, embedder), k))
+            elif n == "b3":
+                built.append(AgenticSystem(client, notes))
+            else:
+                raise typer.BadParameter(f"unknown system {n!r}")
+        ests = estimate(built, questions, client.model, notes=notes)  # type: ignore[arg-type]
+        typer.echo(f"{len(notes)} meetings · {len(questions)} verified questions · {client.model}")
+        for e in ests:
+            ingest = f", ingest ${e.ingest_usd:.2f}" if e.ingest_usd else ""
+            typer.echo(f"  {e.system:<14} ≈ ${e.usd:5.2f} (incl. judge{ingest})")
+        total = sum(e.usd for e in ests)
+        typer.echo(f"  estimated total ≈ ${total:.2f} (before cache reuse) · cap ${budget:.2f}")
+        if estimate_only:
+            return
+        if total > BUDGET_CONFIRM_USD and not offline and not yes:
+            typer.confirm(
+                f"Estimated ${total:.2f} exceeds ${BUDGET_CONFIRM_USD:.0f}. Proceed?", abort=True
+            )
+        ingested: dict[str, object] = {}
+        if concentrate is not None:
+            stats = concentrate.ingest(notes)
+            ingested["concentrate"] = {k2: v for k2, v in asdict(stats).items() if k2 != "detail"}
+
+        def spent() -> float:
+            extra = concentrate.ingest_ledger.spent_usd() if concentrate is not None else 0.0
+            return client.ledger.spent_usd() + extra
+
+        cats: dict[str, int] = {}
+        for q in questions:
+            cats[q.category] = cats.get(q.category, 0) + 1
+        report = run_slice(
+            built,
+            questions,
+            client,
+            seed=seed,
+            budget_usd=budget,
+            out_dir=REAL_DIR / "reports",
+            spent=spent,
+            meta={
+                "meetings": len(notes),
+                "k": k,
+                "category_counts": cats,
+                "ingest": ingested,
+                "embedder": getattr(embedder, "name", None),
+            },
+        )
+    agg = REAL_DIR / "reports" / f"{report['meta']['date']}.aggregate.json"
+    agg.write_text(_json.dumps(aggregate_only(report), indent=2, default=str))
+    typer.echo(Path(report["paths"]["md"]).read_text())
+    typer.echo(f"spent ${spent():.2f} · report: {report['paths']['md']} · aggregate: {agg}")
+
+
+@real_kit.command("probe")
+def real_probe(
+    probes: Annotated[Path, typer.Argument(help="JSON list of probes (keep it in data/real/).")],
+) -> None:
+    """Run a read-only probe of Granola's MCP; raw output -> data/real/probe/<stamp>.jsonl."""
+    import json as _json
+    import statistics
+    from datetime import UTC, datetime
+
+    from concentrate.evals.real_slice import REAL_DIR, run_probes
+    from concentrate.sources.mcp_transport import LiveMcpCaller
+
+    spec = _json.loads(probes.read_text())
+    out = REAL_DIR / "probe" / f"{datetime.now(UTC):%Y%m%dT%H%M%SZ}.jsonl"
+    with LiveMcpCaller() as live:
+        res = run_probes(live, spec, out)
+    by_tool: dict[str, list[float]] = {}
+    for r in res:
+        if not r["error"]:
+            by_tool.setdefault(r["tool"], []).append(r["latency_s"])
+    for tool, xs in sorted(by_tool.items()):
+        typer.echo(
+            f"{tool:<24} n={len(xs):>2} median {statistics.median(xs):5.1f}s  max {max(xs):5.1f}s"
+        )
+    typer.echo(f"errors: {sum(bool(r['error']) for r in res)} · raw: {out}")
+
+
+@real_kit.command("serve")
+def real_serve(
+    db: Annotated[Path, typer.Option()] = REAL_DB,
+    store: Annotated[Path | None, typer.Option(help="Build dir; default: newest complete.")] = None,
+    embeddings: Annotated[bool, typer.Option(help="Dense embeddings, as in the eval.")] = True,
+) -> None:
+    """Serve Concentrate's memory of the REAL meetings over MCP stdio (WS-D's read-only server).
+
+    Same tools as `mcp-serve`; ask_memory(answer=true) caches under data/real/ (private).
+    """
+    from concentrate.evals.real_slice import open_real_memory
+    from concentrate.mcp_server.server import build_server
+    from concentrate.mcp_server.service import Answerer
+
+    embedder = None
+    if embeddings:
+        from concentrate.agents.retrieval import SentenceTransformerEmbedder
+
+        embedder = SentenceTransformerEmbedder()
+    try:
+        svc = open_real_memory(
+            _real_notes(db), store_dir=store, embedder=embedder, answerer=Answerer(_real_client())
+        )
+    except FileNotFoundError as exc:
+        typer.echo(
+            f"{exc}\nBuild it first: `concentrate real-slice --systems c` (or ingest).", err=True
+        )
+        raise typer.Exit(1) from exc
+    logging.getLogger(__name__).warning(
+        "concentrate MCP: serving real memory %s (%d meetings)",
+        svc.info["store"],
+        len(svc.meetings),
+    )
+    build_server(svc).run("stdio")

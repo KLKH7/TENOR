@@ -85,7 +85,8 @@ def email_allowed(addr: bytes, domain: bytes, author: bytes) -> bool:
     d = domain.decode("ascii", "ignore").lower().rstrip(".")
     if addr.lower() == author.lower() or addr.lower() in ALLOWED_EMAILS:
         return True
-    if d in SYNTHETIC_DOMAINS or d in RESERVED_DOMAINS or d.endswith(RESERVED_SUFFIXES):
+    synthetic = d in SYNTHETIC_DOMAINS or any(d.endswith("." + s) for s in SYNTHETIC_DOMAINS)
+    if synthetic or d in RESERVED_DOMAINS or d.endswith(RESERVED_SUFFIXES):
         return True
     # Anything ending in an image/file extension is a false positive like `logo@2x.png`.
     return d.rsplit(".", 1)[-1] in {"png", "jpg", "jpeg", "svg", "gif", "webp", "js", "css"}

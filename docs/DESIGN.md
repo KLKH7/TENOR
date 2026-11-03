@@ -347,3 +347,13 @@ Details: [BENCHMARK_V2_EXTRAS.md](BENCHMARK_V2_EXTRAS.md).
 - **Room labelling is ASSUMED** (SCHEMA_NOTES). The free probes (`synth/extras_checks.py`) confirm the intended difficulty:
   - label-only attribution scores 0/6 on room questions, against 2/5 for v2 "who said";
   - lexical retrieval still finds every room meeting.
+
+## Workstream B: the real-data slice (2026-11-02)
+
+- **Granola's real agent is called from Python** (`LiveMcpCaller`), not by hand from a chat session, so latencies are wall-clock times of single calls. Every call goes through `ReadOnlyCaller`, an allowlist of 7 read tools; a test checks that every write, folder, feedback and sign-out tool is refused. Answers are recorded once (`data/real/granola/`) and replayed, which makes the slice reproducible without re-querying Granola.
+- **Same judge, different gold.** `judge.v1` grades every system against the user's hand-verified gold answer. Citations are scored at the meeting level (real data has no gold lines). The report `.jsonl` keeps the runner's shape, so `judge-check` works unchanged.
+- **LLM-drafted, human-verified questions.** Drafting makes 30 questions feasible in ~20 minutes of the user's time. The risk is a bias toward questions an LLM reading transcripts finds easy. Mitigation: the user can edit or reject each draft and write their own; rejected drafts are kept for audit.
+- **Privacy by path.** Everything content-bearing lives in `data/real/` (gitignored), including a separate LLM cache and memory store. Only `*.aggregate.json` numbers are copied into docs. The data physically lives in the main checkout (worktrees symlink to it) so it survives worktree cleanup.
+- **b0 uses k=2** on the 4-meeting corpus (k=20 would be full context). **b3 was not run** (user's call, to stay under $5): the real agent replaces the re-implementation as the reference.
+- **Same-data MCP comparison.** `real-kit serve` puts WS-D's read-only server in front of the real memory, so Granola's MCP and Concentrate's can be asked about the same meetings.
+- **Known gap found on real data:** Concentrate's real directory comes from attendee metadata only, so a person who is only mentioned isn't an entity.

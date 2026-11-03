@@ -99,7 +99,7 @@ def test_rename_shows_old_identity_before_and_new_after(extras_set: Path) -> Non
 
 def test_contractor_and_namesakes(extras_set: Path) -> None:
     people = json.loads((extras_set / "directory.json").read_text())["people"]
-    assert not any(p["id"] == "jamie" or "gmail" in p["email"] for p in people)
+    assert not any(p["id"] == "jamie" or "personal-mail" in p["email"] for p in people)
     chos = [p for p in people if p["name"] == "Daniel Cho"]
     assert {p["org"] for p in chos} == {"Corvid Bank"} and len(chos) == 2
     for n in _notes(extras_set):

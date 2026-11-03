@@ -25,3 +25,6 @@ web/*.tsbuildinfo
 
 # Claude Code local state (subagent worktrees, settings)
 .claude/
+
+# Real-data slice: the user's meetings, questions, answers (private, never commit)
+data/real
