@@ -232,11 +232,12 @@ def _close(s: Story, m: M, who: str) -> None:
     m.say(who, s.pick(CLOSERS))
 
 
-def build_world(seed: int, scale: str = "base") -> World:
+def build_world(seed: int, scale: str = "base", extras: bool = False) -> World:
     """Construct the ground-truth world for ``seed``.
 
     ``scale="xl"`` adds the procedural Northwind-XL meetings (``synth.extend``) on top of the
-    hand-authored plot, which is identical at both scales.
+    hand-authored plot, which is identical at both scales. ``extras=True`` appends the v2.1
+    phenomena (``synth.extras``) after everything else, so the rest of the world is unchanged.
     """
     s = Story(seed)
     eng = _StandupEngine(s)
@@ -1816,6 +1817,11 @@ def build_world(seed: int, scale: str = "base") -> World:
         from concentrate.synth.extend import extend_story
 
         extend_story(s)
+    truth = None
+    if extras:
+        from concentrate.synth.extras import add_extras
+
+        truth = add_extras(s)
     return World(
         seed=seed,
         owner="priya",
@@ -1823,4 +1829,5 @@ def build_world(seed: int, scale: str = "base") -> World:
         meetings=sorted((h.m for h in s.meetings), key=lambda mt: mt.start),
         facts=s.facts,
         commitments=s.commitments,
+        extras=truth,
     )

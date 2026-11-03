@@ -109,6 +109,23 @@ class Meeting(BaseModel):
         return self.start.date()
 
 
+class Room(BaseModel):
+    """A conference room on a call: one system-audio channel carrying several in-room voices."""
+
+    name: str  # how Granola labels the channel, e.g. "Room 4B"
+    email: str  # the calendar resource invited to the meeting
+    members: list[str]  # person ids physically in the room (ground truth only)
+
+
+class ExtrasTruth(BaseModel):
+    """Ground truth for the v2.1 phenomena (docs/BENCHMARK_V2_EXTRAS.md); None in v2."""
+
+    rooms: dict[str, Room] = Field(default_factory=dict)  # meeting key -> room on that call
+    retracted: list[str] = Field(default_factory=list)  # fact ids that were misstatements
+    implicit: list[str] = Field(default_factory=list)  # commitments made without "I'll ... by"
+    out_of_band: list[str] = Field(default_factory=list)  # resolved outside any meeting
+
+
 class World(BaseModel):
     seed: int
     owner: str
@@ -116,6 +133,7 @@ class World(BaseModel):
     meetings: list[Meeting]
     facts: list[Fact]
     commitments: list[Commitment]
+    extras: ExtrasTruth | None = None
 
     def meeting(self, key: str) -> Meeting:
         return next(m for m in self.meetings if m.key == key)

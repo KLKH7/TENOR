@@ -332,3 +332,18 @@ Details and results: [`ECONOMICS.md`](ECONOMICS.md).
 - `enhance-v2` adds two cues. **Task continuity**: an "I'll take X" or "X is done" line is credited to whoever said X on identified lines in other meetings. **Diarized owner prior**: the owner gets a stronger prior on the largest iOS diarization cluster. It is opt-in (`CONCENTRATE_ENHANCER`) so existing stores stay valid.
 - Turn-taking and an HMM over the microphone run were measured and rejected *for this corpus*. Synthetic filler speakers are drawn i.i.d., so there is no structure to learn. That's a fidelity gap to close, not a verdict on the idea.
 - With batch lookahead, v2 fixes 4 of the 8 owner-misattributed in-person commitments behind the brief's precision gap, adding no new errors. With history only (what the pipeline does today), it fixes none. Numbers: docs/concentrate/enhance_v2.md.
+
+## Benchmark v2.1 extras (workstream P, generator `northwind-2.1`, 2026-11-02)
+
+Details: [BENCHMARK_V2_EXTRAS.md](BENCHMARK_V2_EXTRAS.md).
+- **Additive and opt-in.** `--extras` appends 10 hand-authored meetings about one new project (Halyard) and 51 questions in seven new categories:
+  `room_attribution`, `identity_resolution`, `correction`, `commitment_tracking`, `long_horizon`, and the transcript-only `exact_quote` and `speaker_attribution`.
+  `questions.NEEDS_TRANSCRIPT` marks the categories the retirement curve should report separately.
+  - **Why opt-in:** every v2 note, question and split stays byte-identical, so v2 scores remain comparable and the committed fixture and pinned test values don't churn.
+  - **Trade-off:** extras live in one storyline with small n, so they are a diagnostic, not a leaderboard.
+- **New ground truth: `World.extras`.** It records which facts are retractions (never true), which commitments were implicit, which were resolved out of band, and which meetings had a shared room channel.
+  It is omitted from `world.json` when off, so v2 output is unchanged.
+- **Identity over time: `roster.identity_on(pid, date)`.** Invites and labels use the identity a person had on the meeting date. The directory holds only the current identity.
+- **Room labelling is ASSUMED** (SCHEMA_NOTES). The free probes (`synth/extras_checks.py`) confirm the intended difficulty:
+  - label-only attribution scores 0/6 on room questions, against 2/5 for v2 "who said";
+  - lexical retrieval still finds every room meeting.

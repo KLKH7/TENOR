@@ -32,7 +32,15 @@ from concentrate.synth.world import Commitment, Evidence, Fact, World
 Category = Literal[
     "single_hop", "multi_hop", "temporal", "latest_state", "entity_disambiguation",
     "commitment_status", "decision_change", "aggregation", "unanswerable",
+    # v2.1 extras (synth.extras, docs/BENCHMARK_V2_EXTRAS.md)
+    "room_attribution", "identity_resolution", "correction", "commitment_tracking",
+    "long_horizon", "exact_quote", "speaker_attribution",
 ]  # fmt: skip
+# Categories whose answer lives only in the transcript (verbatim wording, who spoke): a fact
+# store or summary cannot answer them. The transcript-retirement curve reports them separately.
+NEEDS_TRANSCRIPT: frozenset[str] = frozenset(
+    {"exact_quote", "speaker_attribution", "room_attribution"}
+)
 NOW = date(2026, 10, 24)  # the day after the last meeting: "today" for latest-state questions
 UNANSWERABLE = "UNANSWERABLE"
 DEV_FRACTION = 0.3
@@ -133,6 +141,7 @@ class _Gen:
         self.bm = beat_map
         self.rng = random.Random(f"{seed}:questions")
         self.qs: list[Question] = []
+        self.prefix = "q"
         self._texts: set[str] = set()
         self.meeting = {m.key: m for m in world.meetings}
 
@@ -162,7 +171,7 @@ class _Gen:
         self._texts.add(question)
         self.qs.append(
             Question(
-                id=f"q{len(self.qs) + 1:03d}",
+                id=f"{self.prefix}{len(self.qs) + 1:03d}",
                 category=category,
                 question=question,
                 answer=answer,

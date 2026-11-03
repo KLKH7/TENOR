@@ -12,6 +12,7 @@ All names are invented. Ambiguity is deliberate and is what the benchmark measur
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from datetime import date
 
 DOMAIN = "northwind.dev"
 
@@ -161,12 +162,55 @@ XL_PROJECTS: tuple[Project, ...] = (
 ALL_ORGS = ORGS + XL_ORGS
 ALL_PROJECTS = PROJECTS + XL_PROJECTS
 
-PEOPLE: dict[str, Person] = {p.id: p for p in STAFF} | {
-    c.id: c for o in ALL_ORGS for c in o.contacts
+# -- Benchmark v2.1 extras (``--extras``; docs/BENCHMARK_V2_EXTRAS.md) -------------------------
+# Real-world identity mess. Never referenced unless extras are on, so v2 output is unchanged.
+EXTRA_STAFF: tuple[Person, ...] = (
+    # Changes surname (and email) on RENAMES["rosa"].on; the directory shows the current name.
+    _p("rosa", "Rosa Whitfield", "rosa.w", "Solutions Architect", "solutions"),
+)
+# Two people with the same full name at one customer (both appear on calls as "Daniel Cho").
+EXTRA_CONTACTS: tuple[Person, ...] = (
+    _ext("daniel_cm", "Daniel Cho", "daniel.cho@corvidbank.com", "Compliance Analyst",
+         "Corvid Bank"),
+    _ext("daniel_cp", "Daniel Cho", "d.cho@corvidbank.com", "Procurement Manager", "Corvid Bank"),
+)  # fmt: skip
+# A contractor on a personal address: in no directory, and invites carry no display name.
+CONTRACTORS: tuple[Person, ...] = (
+    Person("jamie", "Jamie Okonkwo", "jamie.okonkwo.art@personal-mail.example", "Freelance illustrator",
+           team="contractor", org="(contractor)"),
+)  # fmt: skip
+NO_DISPLAY_NAME = frozenset({"jamie"})
+
+
+@dataclass(frozen=True)
+class Rename:
+    """A display-name change: before ``on`` the person appeared as ``old_name``/``old_email``."""
+
+    on: date
+    old_name: str
+    old_email: str
+
+
+RENAMES: dict[str, Rename] = {
+    "rosa": Rename(date(2026, 9, 28), "Rosa Delgado", f"rosa.d@{DOMAIN}"),
 }
+
+PEOPLE: dict[str, Person] = (
+    {p.id: p for p in STAFF}
+    | {c.id: c for o in ALL_ORGS for c in o.contacts}
+    | {p.id: p for p in (*EXTRA_STAFF, *EXTRA_CONTACTS, *CONTRACTORS)}
+)
 ORG_BY_ID: dict[str, Org] = {o.id: o for o in ALL_ORGS}
 PROJECT_BY_ID: dict[str, Project] = {p.id: p for p in ALL_PROJECTS}
 
 
 def person(pid: str) -> Person:
     return PEOPLE[pid]
+
+
+def identity_on(pid: str, d: date) -> tuple[str, str]:
+    """(display name, email) a calendar invite or speaker label showed for ``pid`` on ``d``."""
+    p, r = PEOPLE[pid], RENAMES.get(pid)
+    if r is not None and d < r.on:
+        return r.old_name, r.old_email
+    return p.name, p.email
