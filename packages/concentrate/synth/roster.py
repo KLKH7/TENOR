@@ -176,8 +176,9 @@ EXTRA_CONTACTS: tuple[Person, ...] = (
 )  # fmt: skip
 # A contractor on a personal address: in no directory, and invites carry no display name.
 CONTRACTORS: tuple[Person, ...] = (
-    Person("jamie", "Jamie Okonkwo", "jamie.okonkwo.art@personal-mail.example"  # reserved TLD: never a real inbox, "Freelance illustrator",
-           team="contractor", org="(contractor)"),
+    # reserved TLD: never a real inbox
+    Person("jamie", "Jamie Okonkwo", "jamie.okonkwo.art@personal-mail.example",
+           "Freelance illustrator", team="contractor", org="(contractor)"),
 )  # fmt: skip
 NO_DISPLAY_NAME = frozenset({"jamie"})
 
