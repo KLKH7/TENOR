@@ -18,14 +18,15 @@ One of the seven is **Concentrate**, a cited, time-aware meeting memory built he
 | System | Accuracy [95% CI] | n | Median latency |
 |---|---|---|---|
 | **Granola's agent** (`query_granola_meetings`, live) | **92% [82, 100]** | 39 | 7.9 s |
-| Top-k retrieval (k = 1 of 4 meetings) | 76% [62, 89] | 37 | 3.4 s |
+| Top-k retrieval (k = 1 of 4 meetings) | 77% [64, 90] | 39 ¹ | 3.3 s |
 | **Concentrate** | **59% [44, 74]** | 39 | 4.2 s |
 
 - The questions are about the author's 4 real meetings. They were LLM-drafted and the owner approved the gold answers in bulk, with 0 edits.
 - A second judge agreed on 97% of verdicts.
 - 8 of the 47 questions weren't run because of budget: all 6 unanswerable and 2 temporal.
 - By category, Concentrate scores **0% on "who said X"** (Granola 88%) but **leads on "what changed"** (100% vs 83%).
-- n is small and the data comes from one person, but the gap is far outside the error bars.
+- n is small and the data comes from one person, but the gap is far outside the error bars. Paired by question, Granola's agent was right where Concentrate was wrong 14 times, and the reverse once (sign test p ≈ 0.001).
+- ¹ Top-k also ran on all 47 questions: 81% [68, 91], including 6 of 6 unanswerable.
 
 ### 2. Synthetic benchmark: 120 held-out test questions, 7 systems
 
