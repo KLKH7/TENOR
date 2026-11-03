@@ -1,7 +1,13 @@
 import Link from "next/link";
 
 import { Card, categoryLabel, systemLabel, VerdictDot } from "@/components/results/ui";
-import { applyFilters, type Filters, filterQuery, type QuestionItem } from "@/lib/explore";
+import {
+  applyFilters,
+  failureLabel,
+  type Filters,
+  filterQuery,
+  type QuestionItem,
+} from "@/lib/explore";
 
 function Pill({ href, active, children }: { href: string; active: boolean; children: React.ReactNode }) {
   return (
@@ -26,12 +32,15 @@ export function QuestionList({
   systems,
   categories,
   base,
+  failureTypes = [],
 }: {
   items: QuestionItem[];
   filters: Filters;
   systems: string[];
   categories: string[];
   base: string;
+  /** Primary failure types from `concentrate analyze`; empty when the report has none. */
+  failureTypes?: string[];
 }) {
   const shown = applyFilters(items, filters, systems);
   const cols = filters.systems.length ? filters.systems : systems;
@@ -75,7 +84,22 @@ export function QuestionList({
           <Pill href={link({ wrong: !filters.wrong })} active={filters.wrong}>
             Everyone wrong
           </Pill>
-          <span className="ml-2 text-[12.5px] text-muted">
+        </div>
+        {failureTypes.length > 0 && (
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className="w-20 text-[12px] text-muted">Failure</span>
+            <Pill href={link({ failure: null })} active={!filters.failure}>
+              Any
+            </Pill>
+            {failureTypes.map((t) => (
+              <Pill key={t} href={link({ failure: t })} active={filters.failure === t}>
+                {failureLabel(t)}
+              </Pill>
+            ))}
+          </div>
+        )}
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="text-[12.5px] text-muted">
             {shown.length} of {items.length} questions
           </span>
         </div>
@@ -115,7 +139,14 @@ export function QuestionList({
                   const r = item.bySystem.get(s);
                   return (
                     <td key={s} className="px-1 py-2.5 text-center">
-                      <VerdictDot verdict={r?.verdict} title={r ? `${systemLabel(s)}: ${r.verdict}` : undefined} />
+                      <VerdictDot
+                        verdict={r?.verdict}
+                        title={
+                          r
+                            ? `${systemLabel(s)}: ${r.verdict}${r.failure ? ` (${failureLabel(r.failure.primary).toLowerCase()})` : ""}`
+                            : undefined
+                        }
+                      />
                     </td>
                   );
                 })}

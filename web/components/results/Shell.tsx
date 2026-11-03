@@ -1,5 +1,4 @@
-import Link from "next/link";
-
+import { AppNav } from "@/components/AppNav";
 import { ReportPicker } from "@/components/results/ReportPicker";
 import { Chip } from "@/components/results/ui";
 import { stampLabel, usd } from "@/lib/explore";
@@ -26,14 +25,7 @@ export function ResultsShell({
       <article className="min-w-0 flex-1 rounded-[32px] bg-sheet shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
         <div className="mx-auto w-full max-w-[72rem] px-10 pb-20 pt-10 max-sm:px-5">
           <nav className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-4 text-[13px] text-muted">
-              <Link href={`/results/${loaded.stamp}`} className="font-medium text-ink">
-                Results explorer
-              </Link>
-              <Link href="/" className="hover:text-ink">
-                Notes
-              </Link>
-            </div>
+            <AppNav current="results" />
             <ReportPicker reports={reports} current={loaded.stamp} />
           </nav>
           <div className="mt-4 flex flex-wrap items-center gap-1.5">

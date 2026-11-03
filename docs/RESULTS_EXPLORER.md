@@ -18,6 +18,7 @@ npm test                                 # unit tests for the pure explorer logi
 | **Category matrix** | same page | accuracy by category × system as a heatmap with `correct/n` in each cell. Click a cell to filter the question list to that category and system |
 | **Question list + filters** | `#questions` | category, systems (multi-select), *systems disagree*, *everyone wrong*. Filters live in the URL, so a filtered view is a shareable link |
 | **Question drill-down** | `/results/<stamp>/q/<qid>` | question, gold answer, exact-match keys, as-of date, the gold evidence lines (quoted), then every system's answer side by side with verdict, cost, tokens in/out, latency, tool calls, EM, cite P/R and "gold meeting seen" (was the meeting holding the evidence in what the system retrieved?). Prev/next walks the current filter |
+| **Failure types + significance** | report page, drill-down | when `concentrate analyze` has run: the failure type on every wrong answer, a *Failure* filter (`?fail=`), and an "Is the ranking real?" panel (paired tests, Pareto). See [WEB_DEMO.md](WEB_DEMO.md) |
 | **Transcript panel** | `?cite=<line id>&sys_panel=<system>` | clicking a citation opens the meeting's transcript scrolled to that line. Lines are marked for the chosen system: **green** = cited and gold, **amber** = cited but not gold, **red dashed** = gold but not cited. "Gold only" shows just the evidence. Tabs switch system without losing your place |
 
 ## Design choices

@@ -3,8 +3,9 @@ import { notFound } from "next/navigation";
 import { CategoryMatrix, CostScatter, Leaderboard } from "@/components/results/Overview";
 import { QuestionList } from "@/components/results/QuestionList";
 import { ResultsShell } from "@/components/results/Shell";
+import { Significance } from "@/components/results/Significance";
 import { Card, Section } from "@/components/results/ui";
-import { parseFilters, type QuestionItem, sortCategories } from "@/lib/explore";
+import { failureTypes, parseFilters, type QuestionItem, sortCategories } from "@/lib/explore";
 import { loadReport, rowsByQuestion, systemsOf } from "@/lib/results";
 
 export const dynamic = "force-dynamic";
@@ -71,10 +72,25 @@ export default async function ReportPage({
         <CategoryMatrix metrics={metrics} categories={categories} base={base} />
       </Section>
 
+      {loaded.analysis && (
+        <Section
+          id="significance"
+          title="Is the ranking real?"
+          hint={
+            <>
+              From <code>concentrate analyze</code> ({stamp}.analysis.json): paired tests, power and the
+              cost–accuracy frontier. See docs/ANALYSIS.md.
+            </>
+          }
+        >
+          <Significance analysis={loaded.analysis} />
+        </Section>
+      )}
+
       <Section
         id="questions"
         title="Questions"
-        hint="Dots are verdicts: green correct, orange partial, red wrong. Open a question to compare answers and follow citations into the transcript."
+        hint="Dots are verdicts: green correct, orange partial, red wrong. Open a question to compare answers and follow citations into the transcript. Failure types come from concentrate analyze."
       >
         <QuestionList
           items={items}
@@ -82,6 +98,7 @@ export default async function ReportPage({
           systems={systems}
           categories={categories}
           base={base}
+          failureTypes={failureTypes(loaded.rows)}
         />
       </Section>
 
