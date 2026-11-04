@@ -389,3 +389,32 @@ Details: `docs/benchmark/BLACKBOX.md`.
   It refuses *before* writing. The check is a deny-list plus run-specific text, so it catches mistakes, not a determined leak (e.g. a short gold answer under 12 characters isn't matched).
 - **Trade-off:** a product's answer is recorded once and replayed. That makes results reproducible, but freezes them at `asked_at`, so a product that improves needs a fresh recording directory to be re-measured.
 
+## Figures pipeline (P1-F, 2026-11-03)
+
+`concentrate figures <stamp>` (`evals/figures.py`, style in `evals/figstyle.py`) renders the
+eleven PLAN section-5 figures into `docs/figures/` as SVG; `docs/results/INDEX.md` lists them.
+
+- **Determinism.** Agg backend, fixed `svg.hashsalt`, no `Date` metadata, constant `Creator`,
+  text kept as `<text>` (`svg.fonttype = none`, no glyph outlines), mathtext off (so "$4/M" is a
+  price). Same inputs on the same platform give byte-identical files (tested). CI runs
+  `--check`, which compares numbers in the SVG with a 0.05 tolerance: across platforms the last
+  digit of a coordinate can differ. *Untested risk:* CI's Linux has not been run yet; if its
+  font metrics differ from macOS, the check will fail and we regenerate on Linux.
+- **Real data never reaches CI.** Real-slice figures read `docs/figures/data/real_slice.json`, a
+  content-free snapshot (accuracy, bootstrap CI, paired win/loss counts). `--refresh-real`
+  rebuilds it from `data/real/reports/*.jsonl`, reading only `qid`, `system`, `category`,
+  `correct`, `verdict` (a test checks that question/answer text never leaks). Every number in
+  it was already public in REAL_SLICE.md and fallback.md.
+- **Equal prices.** Dollar figures are re-priced from token counts at $4/M input and $20/M
+  output for every system and every token, ingest included, with no cache or batch discounts.
+  So top-k looks dearer than its billed cost (its 81k-token prompts were mostly cache reads).
+  Chosen to compare token *use*, not deals. Ingest uses the original build's tokens.
+- **Honesty choices.** Every figure carries its split (TEST/DEV), n and CI method on the image.
+  The oracle is never on the cost frontier (it is told the right meetings). The hero's left
+  panel uses b3 (our re-implementation) because the real Granola agent can only run on real
+  data; the footnote says so. The real panel is labelled DEV (seen questions, bulk-approved
+  gold). Real-slice top-k is restricted to the 39 questions the other two answered, so the
+  comparison is paired. Scale-curve CIs are Wilson (only aggregates are saved for it).
+- **Trade-offs.** The judge-agreement figure parses the judge-check Markdown (there is no JSON
+  output yet); a format change there breaks it loudly in the test, not silently. The
+  reliability diagram waits for X5 (no confidence field yet).

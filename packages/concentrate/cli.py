@@ -1833,3 +1833,57 @@ def real_run(
     typer.echo(Path(report["paths"]["md"]).read_text())
     typer.echo(f"spent ${client.ledger.spent_usd():.2f} · report: {report['paths']['md']}")
     typer.echo(f"aggregate (safe to commit): {commit_to or agg}")
+# -- figures (P1-F) ----------------------------------------------------------------------------
+
+_REAL_REPORTS = Path("data/real/reports")
+
+
+@app.command("figures")
+def figures_cmd(
+    stamp: Annotated[str, typer.Argument(help="Synthetic report stamp, e.g. 20261103T002456Z.")],
+    out: Annotated[Path, typer.Option(help="Output directory.")] = Path("docs/figures"),
+    check: Annotated[
+        bool, typer.Option("--check", help="Don't write; fail if committed figures differ.")
+    ] = False,
+    refresh_real: Annotated[
+        bool,
+        typer.Option(
+            "--refresh-real",
+            help="Rebuild docs/figures/data/real_slice.json from the private data/real reports.",
+        ),
+    ] = False,
+    real_main: Annotated[Path, typer.Option(help="Real run: Granola agent + Concentrate.")] = (
+        _REAL_REPORTS / "20261103T004019Z.jsonl"
+    ),
+    real_topk: Annotated[Path, typer.Option(help="Real run: b0 top-k on all questions.")] = (
+        _REAL_REPORTS / "20261103T013240Z.jsonl"
+    ),
+    real_fallback: Annotated[Path, typer.Option(help="Real fallback replay (DEV).")] = (
+        _REAL_REPORTS / "fallback_dev_replay.jsonl"
+    ),
+) -> None:
+    """Render every results figure as deterministic SVG into docs/figures/ (PLAN.md section 5)."""
+    import json as _json
+
+    from concentrate.evals import figures as F
+
+    if refresh_real:
+        snap = F.snapshot_real(real_main, real_topk, real_fallback)
+        F.REAL_SNAPSHOT.parent.mkdir(parents=True, exist_ok=True)
+        F.REAL_SNAPSHOT.write_text(_json.dumps(snap, indent=2, sort_keys=True) + "\n")
+        typer.echo(f"wrote {F.REAL_SNAPSHOT} (aggregates only)")
+    rendered, skipped = F.render(F.load_inputs(stamp))
+    for note in skipped:
+        typer.echo(f"skipped {note}", err=True)
+    if check:
+        bad = F.check(rendered, out)
+        if bad:
+            typer.echo(
+                "figures out of date: " + ", ".join(bad) + f"\nrun `concentrate figures {stamp}`",
+                err=True,
+            )
+            raise typer.Exit(1)
+        typer.echo(f"figures: {len(rendered)} files match {out}")
+        return
+    for p in F.write(rendered, out):
+        typer.echo(f"wrote {p}")
