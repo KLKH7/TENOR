@@ -457,3 +457,14 @@ Write-up: [`docs/results/NOTES_VS_TRANSCRIPT.md`](../results/NOTES_VS_TRANSCRIPT
   - Caveats: the 0% is partly definitional; n is small; the transcript-needed share is a generator parameter.
 - **Finding: real notes hold far less than synthetic ones.** 18 of 41 real answerable questions are transcript-needed by the (strict) rule, against 13% synthetic. Only counts per category are committed; real tags stay in memory.
 - **Open:** a real notes-only run and a v2.1 run would give larger n and a direct real deletion measurement (both cost money).
+
+## P2-D: the deletion simulation, built not run (2026-11-03)
+Design: [`docs/benchmark/DELETION_SIM.md`](../benchmark/DELETION_SIM.md). Code: `evals/deletion_sim.py`, `concentrate deletion-sim`.
+- **Decision: a ladder of four conditions, each adding one layer.** A Granola's agent (black box) → B Granola's notes only → C + Concentrate facts/digests with every transcript deleted → D + the on-abstain transcript fallback. B, C and D share the answer model, prompt and judges, so C − B and D − C are clean; A − B also mixes in Granola's own model and prompt, and the doc says so.
+- **Decision: B shows all notes, not a retrieval.** With 4 meetings (~4k tokens of notes) retrieval is moot, so B is an upper bound for a notes-only agent. It approximates Granola's degraded chat; it is not Granola's post-deletion behaviour, which we can't observe.
+- **Decision: notes come from the synced `data/real.db`** (the same public-MCP `get_meetings` data), so the run makes no extra live Granola calls beyond `query_granola_meetings` for unrecorded A answers.
+- **Decision: deletion is `retire_after_days = -1`.** `0` keeps the transcript of a meeting held on the as-of day; `-1` deletes every held meeting's. The retirement notice in the context is reworded to "are deleted" (no "older than -1 days").
+- **Decision: D's passages ignore the deletion** (cold copy read on demand), unlike `c_on_abstain` with retirement. D's first call is byte-identical to C's, so it is free once C has run, and the quote counts it once.
+- **Decision: confident error = judged incorrect and not hedged** (`says_not_covered`, which also reads Granola's prose). The fallback can't fire on a confident error by construction; the run reports that rate per condition so the blind spot is visible.
+- **Decision: the quote counts inputs exactly** (`count_tokens` + the structured-output overhead measured on 36 cached answer and 146 cached judge calls: +255 / +246 tokens per call), prices cached requests at $0, and gives outputs as a range (recorded mean vs p90). Dev: $6.27 expected / $8.71 high; 30 test questions: $4.17 / $5.74.
+- **Trade-offs / open:** the second judge runs after the primary pass (not interleaved), so a budget stop can skip it entirely (recorded as `judge2_skipped`). The tag format is a guess at P2-T's (JSON map or JSONL); P2-T may define the canonical confident-error metric, in which case this one should defer to it.

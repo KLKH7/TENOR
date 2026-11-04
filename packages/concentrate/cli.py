@@ -1933,3 +1933,246 @@ def notes_vs_transcript_cmd(
 
     for p in N.write(seed, real=real):
         typer.echo(f"wrote {p}")
+# -- deletion simulation (P2-D) ----------------------------------------------------------------
+
+
+@app.command("deletion-sim")
+def deletion_sim_cmd(
+    systems: Annotated[
+        str,
+        typer.Option(
+            help="granola (A), notes_only (B), notes_facts (C), notes_facts_fallback (D); "
+            "comma-separated. See docs/benchmark/DELETION_SIM.md."
+        ),
+    ] = "granola,notes_only,notes_facts,notes_facts_fallback",
+    split: SplitOpt = SplitName.dev,
+    tags: Annotated[
+        Path | None, typer.Option(help="P2-T's question tag file (JSON or JSONL); optional.")
+    ] = None,
+    judge2: Annotated[
+        str, typer.Option(help="Second judge model (same judge.v1 prompt), or 'none'.")
+    ] = "claude-sonnet-5-5",
+    db: Annotated[Path, typer.Option()] = REAL_DB,
+    seed: Annotated[int, typer.Option()] = 42,
+    budget: Annotated[float, typer.Option(help="Hard cap on API spend (USD).")] = 5.0,
+    quote_only: Annotated[
+        bool,
+        typer.Option(
+            "--quote",
+            help="Exact cost quote (free token counting, cached LLM results only), no spend.",
+        ),
+    ] = False,
+    test_n: Annotated[
+        int, typer.Option(help="--quote: test questions to price when none are imported yet.")
+    ] = 30,
+    offline: Annotated[
+        bool, typer.Option(help="Cached LLM results / recorded Granola only.")
+    ] = False,
+    yes: Annotated[bool, typer.Option("--yes")] = False,
+    commit_to: Annotated[
+        Path | None,
+        typer.Option(help="Also write the aggregate here (checked: no per-question content)."),
+    ] = None,
+) -> None:
+    """Simulate transcript deletion on the real questions: Granola vs notes-only vs notes+facts
+    vs notes+facts+fallback, same answer model and judge. Nothing paid runs without --yes or a
+    confirmation; start with --quote."""
+    import functools
+    import json as _json
+    import statistics
+
+    from concentrate.agents.baselines import Answer, MeetingRetriever, System, TopKSystem
+    from concentrate.agents.concentrate_system import COMPLETE_MARKER, ConcentrateSystem
+    from concentrate.agents.retrieval import SentenceTransformerEmbedder
+    from concentrate.blackbox.kit import write_committable
+    from concentrate.evals import deletion_sim as D
+    from concentrate.evals.real_slice import (
+        REAL_DIR,
+        GranolaAgentSystem,
+        load_split,
+    )
+    from concentrate.llm.client import count_tokens
+    from concentrate.memory.fallback import says_not_covered
+
+    names = [s.strip() for s in systems.split(",") if s.strip()]
+    unknown = [n for n in names if n not in D.CONDITIONS]
+    if unknown:
+        raise typer.BadParameter(f"unknown conditions {unknown}; choose from {D.CONDITIONS}")
+    notes = _real_notes(db)
+    questions = [q for q in load_split(split.value) if q.status == "verified"]
+    if not questions and not (quote_only and split is SplitName.test):
+        raise typer.BadParameter(
+            f"no verified {split.value} questions"
+            + (": `concentrate real-kit import-test data/real/test_questions.md`" if split else "")
+        )
+    directory = REAL_DIR / "directory.json"
+    client = _real_client(offline or quote_only)
+    j2 = (
+        None
+        if judge2 == "none"
+        else LLMClient(
+            model=judge2, cache_dir=REAL_DIR / "cache" / "llm", offline=offline or quote_only
+        )
+    )
+    if j2 is not None and j2.model == client.model:
+        raise typer.BadParameter(f"the second judge must differ from the primary ({client.model})")
+    needs_memory = {"notes_facts", "notes_facts_fallback"} & set(names)
+    embedder = SentenceTransformerEmbedder() if needs_memory or quote_only else None
+    tag_map = D.load_tags(tags)
+    with ExitStack() as stack:
+        built: list[System] = []
+        for n in names:
+            if n == "granola":
+                caller = None
+                if not offline and not quote_only:
+                    from concentrate.sources.mcp_transport import LiveMcpCaller
+
+                    caller = stack.enter_context(LiveMcpCaller())
+                built.append(GranolaAgentSystem(caller))
+            elif n == "notes_only":
+                built.append(D.NotesOnlySystem(client, notes))
+            else:
+                cls = D.NotesFactsSystem if n == "notes_facts" else D.NotesFactsFallbackSystem
+                s = cls(
+                    client,
+                    embedder=embedder,
+                    directory_path=directory,
+                    cache_root=REAL_DIR / "cache" / "concentrate",
+                )
+                if not (s.store_dir(notes) / COMPLETE_MARKER).exists():
+                    raise typer.BadParameter(
+                        "no complete Concentrate build of data/real.db (building it costs money): "
+                        "run `concentrate real-slice --systems c --estimate` and ask first"
+                    )
+                s.ingest(notes)  # cached build: free
+                built.append(s)
+
+        if quote_only:
+            counter = functools.partial(
+                count_tokens, model=client.model, cache_dir=client.cache_dir
+            )
+            dev = [q for q in load_split("dev") if q.status == "verified"]
+            # Calibrate on the real-slice calls already cached: Concentrate (c) and top-k (b0).
+            ref_c = ConcentrateSystem(
+                client,
+                embedder=embedder,
+                directory_path=directory,
+                cache_root=REAL_DIR / "cache" / "concentrate",
+            )
+            ref_c.ingest(notes)
+            ref_b0 = TopKSystem(client, MeetingRetriever(notes, embedder), 2)
+            pairs, texts, fired = [], [], []
+            for ref in (ref_c, ref_b0):
+                for q in dev:
+                    req = ref.turn_request(q)
+                    done = D.cached_turn(client, req)
+                    if done is None:
+                        continue
+                    user = req.messages[0]["content"]
+                    pairs.append(
+                        (f"{req.system}\n\n{user}", done.total_input_tokens, done.output_tokens)
+                    )
+                    ans = Answer.model_validate_json(done.text)
+                    texts.append(ans.answer)
+                    if ref is ref_c:
+                        fired.append(says_not_covered(ans.answer, ans.abstain))
+            cal = D.calibrate(
+                pairs,
+                D.judge_cache_pairs(client.cache_dir, client.model),
+                texts,
+                counter,
+                fire_rate=statistics.fmean(fired) if fired else 0.5,
+            )
+            granola = next((s for s in built if isinstance(s, GranolaAgentSystem)), None)
+
+            def recorded(q: object) -> tuple[str, bool] | None:
+                if granola is None or not granola.recorded([q]):
+                    return None
+                a = granola.answer(q)
+                return a.text, bool(a.abstained)
+
+            lines = []
+            shared: set[Path] = set()  # identical requests across conditions are paid once
+            by_cond = dict(zip(names, built, strict=True))
+            for n in names:
+                if questions:
+                    lines.append(
+                        D.quote_condition(
+                            by_cond[n],
+                            n,
+                            questions,
+                            client,
+                            j2,
+                            counter,
+                            cal,
+                            split=split.value,
+                            granola_answer=recorded,
+                            shared=shared,
+                        )
+                    )
+                else:  # test split not imported yet: price per dev question, scaled
+                    base = D.quote_condition(
+                        by_cond[n],
+                        n,
+                        dev,
+                        client,
+                        j2,
+                        counter,
+                        cal,
+                        split="dev",
+                        granola_answer=None,
+                        shared=shared,
+                    )
+                    lines.append(D.scale_line(base, test_n, "test"))
+                if n == "granola":
+                    missing = len(questions) - granola.recorded(questions) if granola else 0
+                    lines[-1].note = (
+                        f"Granola answers $0 to us (hosted); {missing} to ask live over MCP"
+                        if questions
+                        else f"Granola answers $0 to us; all {test_n} asked live over MCP"
+                    )
+            md = D.quote_markdown(lines, cal, client.model, j2.model if j2 else "none")
+            out = REAL_DIR / "reports" / f"deletion_quote.{split.value}.md"
+            out.parent.mkdir(parents=True, exist_ok=True)
+            out.write_text(md)
+            typer.echo(md)
+            typer.echo(f"quote written: {out} (no money spent: token counting is free)")
+            return
+
+        if not yes and not offline:
+            typer.confirm(
+                f"Run {len(built)} conditions on {len(questions)} {split.value} questions "
+                f"(cap ${budget:.2f}; see `--quote` first)?",
+                abort=True,
+            )
+        memory = next((s for s in built if isinstance(s, ConcentrateSystem)), None)
+
+        def spent() -> float:
+            extra = memory.ingest_ledger.spent_usd() if memory is not None else 0.0
+            more = j2.ledger.spent_usd() if j2 is not None else 0.0
+            return client.ledger.spent_usd() + extra + more
+
+        cats: dict[str, int] = {}
+        for q in questions:
+            cats[q.category] = cats.get(q.category, 0) + 1
+        report = D.run_deletion_sim(
+            built,
+            questions,
+            client,
+            judge2=j2,
+            tags=tag_map,
+            seed=seed,
+            budget_usd=budget,
+            out_dir=REAL_DIR / "reports",
+            split=split.value,
+            spent=spent,
+            meta={"meetings": len(notes), "category_counts": cats, "track": "deletion-sim"},
+        )
+    agg = {**report, "metrics": {"judge1": report["metrics"], "deletion": report["deletion"]}}
+    private = [t for q in questions for t in (q.question, q.gold_answer)]
+    path = REAL_DIR / "reports" / f"{report['meta']['date']}.deletion.aggregate.json"
+    write_committable(agg, path, private)
+    if commit_to is not None:
+        write_committable(agg, commit_to, private)
+    typer.echo(_json.dumps(report["deletion"]["paired"], indent=1))
+    typer.echo(f"spent ${spent():.2f} · report: {report['paths']['md']} · aggregate: {path}")
