@@ -1,8 +1,8 @@
 # Findings checklist
 
-This file pairs every claim in [MEMO.md](MEMO.md) (and the deck and emails that reuse it) with the file that backs it. Status:
+This file pairs every claim in [MEMO.md](MEMO.md) (and the deck, and the private outreach drafts in `data/private/OUTREACH.md` that reuse it) with the file that backs it. Status:
 - ✅ backed by a committed file on this branch;
-- (2026-11-03) every workstream branch is merged into `feat/granola-mcp-source` (f040b3a), so the earlier "unmerged branch" marks are gone, and the merged RETIREMENT and PROBE_V2 numbers were re-checked;
+- (2026-11-03) all sources are on `feat/granola-mcp-source` (rebased onto `origin/main`), including the final REAL_SLICE.md;
 - ⚠️ needs a manual check before sending.
 
 **Rule before sending:** every ⚠️ resolved or the claim removed.
@@ -15,7 +15,9 @@ This file pairs every claim in [MEMO.md](MEMO.md) (and the deck and emails that 
 | Granola is looking into "whether we should delete the transcript automatically", and researching compression | same interview | ✅ Stated directly by Pedregal. "Working memory" is Newton's intro wording, not his, so don't put it in quotation marks as his. |
 | Enhanced transcript "built for agents" (which Sam you mean) | same interview ("something we're playing around with") | ✅ |
 | Granola never stored audio; MCP is the "fastest-growing chart" | same interview | ✅ Not used in the memo; available if needed. |
-| "Granola is already researching these ideas; this is independent measurement, not invention" | follows from the three rows above | ✅ framing |
+| "Granola is already researching these ideas; this is independent measurement, not invention" | follows from the rows above | ✅ framing |
+| Granola already ships transcript auto-deletion: users choose 1 day–1 year, enterprise admins can enforce it; afterwards chat works from notes only; "Chat quality will be degraded" | [Granola help centre: Transcript auto-deletion](https://docs.granola.ai/help-center/consent-security-privacy/transcript-auto-deletion), verified at source by the private usefulness audit (2026-11-03) | ✅ Re-open the page before sending, as product docs change. |
+| Agent-design post (May 6, 2026): "breadth over fidelity"; reads many meetings at a high level (100 rather than 10 in full, "We chose 100"); transcripts ~10× the tokens of notes; goes deeper only when needed; avoids "wrong, but confident" | [How Granola thinks about designing agents](https://www.granola.ai/blog/how-granola-thinks-about-designing-agents), verified at source by the usefulness audit | ✅ The memo quotes only "breadth over fidelity" and "wrong, but confident". |
 
 ## What I built
 
@@ -39,20 +41,22 @@ This file pairs every claim in [MEMO.md](MEMO.md) (and the deck and emails that 
 
 ## Result 1: real meetings (the new headline)
 
-Source: `docs/results/REAL_SLICE.md` @ `claude/ws-b-real-slice-9332a8` (`c86807d`) "Results". On `feat/granola-mcp-source` (b8a5cf5) that section still reads "Pending", and the numbers are only in the README "Results" §1. Raw per-question data stays private in `data/real/`; only aggregates are public.
+Source: `docs/results/REAL_SLICE.md` "Results" (merged, final); README "Results" §1 agrees. Raw per-question data stays private in `data/real/`; only aggregates are public.
 
 | Claim | Source | Status |
 |---|---|---|
-| Granola 92% [82, 100], Concentrate 59% [44, 74], n = 39; CIs don't overlap | `docs/results/REAL_SLICE.md` @ `claude/ws-b-real-slice-9332a8` (`c86807d`) "Results" main table; README "Results" §1 | ⚠️ Re-check once B's final REAL_SLICE.md is merged. |
-| Paired 14–1 (sign test p ≈ 0.001) | `docs/results/REAL_SLICE.md` @ `claude/ws-b-real-slice-9332a8` (`c86807d`) "Results" "The gap is large" | ⚠️ same |
-| Top-k (k = 1) 77% [64, 90] on the same 39; 3.3 s latency from its 47-question run | `docs/results/REAL_SLICE.md` @ `claude/ws-b-real-slice-9332a8` (`c86807d`) "Results" table rows "b0 … (same 39)" and "(all 47)" | ⚠️ **The README says 76% [62, 89], n = 37** (the stopped first run). The final file says 77% on the same 39. I used 77%; the README needs aligning. |
-| Latencies 7.9 s / 4.2 s, not like for like | `docs/results/REAL_SLICE.md` @ `claude/ws-b-real-slice-9332a8` (`c86807d`) "Results" table and "Latency isn't like-for-like" | ✅ |
-| Who said 88% vs 0%; commitments 100 vs 75; which person 80 vs 40; what changed 83 vs 100 | `docs/results/REAL_SLICE.md` @ `claude/ws-b-real-slice-9332a8` (`c86807d`) "Results" "Accuracy by category" | ✅ (n = 4–8 per cell; quoted as anecdotes) |
-| 43 facts + 11 commitments; 10 of 16 misses were abstentions | `docs/results/REAL_SLICE.md` @ `claude/ws-b-real-slice-9332a8` (`c86807d`) "Results" Method (build) and "What this says" 2 | ✅ |
-| Ignored the named system-audio speaker labels | `docs/results/REAL_SLICE.md` @ `claude/ws-b-real-slice-9332a8` (`c86807d`) "Results" "What this says" 3 and 6 | ✅ |
-| Second judge 97%, κ 0.93, ranking unchanged | `docs/results/REAL_SLICE.md` @ `claude/ws-b-real-slice-9332a8` (`c86807d`) "Results" "Judges agree" | ✅ |
-| LLM-drafted, bulk-approved with 0 edits; at least one gold looks wrong; 6 unanswerable not run | `docs/results/REAL_SLICE.md` @ `claude/ws-b-real-slice-9332a8` (`c86807d`) "Results" "Gold quality", "Coverage" | ✅ |
-| Concentrate memory built from the same notes via the MCP | `docs/results/REAL_SLICE.md` @ `claude/ws-b-real-slice-9332a8` (`c86807d`) "Results" Method; `docs/engineering/DESIGN.md` "Real data via Granola's MCP" | ✅ |
+| Granola 92% [82, 100], Concentrate 59% [44, 74], n = 39; CIs don't overlap | `docs/results/REAL_SLICE.md` "Results" main table; README "Results" §1 | ✅ |
+| Paired 14–1 (sign test p ≈ 0.001) | `docs/results/REAL_SLICE.md` "Results" "The gap is large" | ✅ |
+| Top-k (k = 1) 77% [64, 90] on the same 39; 3.3 s latency from its 47-question run | `docs/results/REAL_SLICE.md` "Results" table rows "b0 … (same 39)" and "(all 47)" | ✅ The README now also says 77%, n = 39. |
+| Latencies 7.9 s / 4.2 s, not like for like | `docs/results/REAL_SLICE.md` "Results" table and "Latency isn't like-for-like" | ✅ |
+| Who said 88% vs 0%; commitments 100 vs 75; which person 80 vs 40; what changed 83 vs 100 | `docs/results/REAL_SLICE.md` "Results" "Accuracy by category" | ✅ (n = 4–8 per cell; quoted as anecdotes) |
+| 43 facts + 11 commitments; 10 of 16 misses were abstentions | `docs/results/REAL_SLICE.md` "Results" Method (build) and "What this says" 2 | ✅ |
+| Concentrate twice confidently named the wrong person on "who said" (the "wrong, but confident" link) | `docs/results/REAL_SLICE.md` "What this says" 3 ("twice named the wrong person") | ✅ The coordinator's brief said 3 times; the public file says twice, so the memo says twice. |
+| Granola "went deeper" on who-said questions (88%) | `docs/results/REAL_SLICE.md` category table; PROBE_V2 §1 notes that `query_granola_meetings` reads summaries, then transcripts | ✅ Inferred from its answers and tool design; we don't see its internal tool calls. |
+| Ignored the named system-audio speaker labels | `docs/results/REAL_SLICE.md` "Results" "What this says" 3 and 6 | ✅ |
+| Second judge 97%, κ 0.93, ranking unchanged | `docs/results/REAL_SLICE.md` "Results" "Judges agree" | ✅ |
+| LLM-drafted, bulk-approved with 0 edits; at least one gold looks wrong; 6 unanswerable not run | `docs/results/REAL_SLICE.md` "Results" "Gold quality", "Coverage" | ✅ |
+| Concentrate memory built from the same notes via the MCP | `docs/results/REAL_SLICE.md` "Results" Method; `docs/engineering/DESIGN.md` "Real data via Granola's MCP" | ✅ |
 | Pedregal: "might want to still go back and chat with that meeting" | Platformer interview (coordinator's verified excerpt, 2026-11-03) | ✅ |
 
 ## Live MCP probes
@@ -106,7 +110,10 @@ Report `evals/reports/20261103T002456Z.md` (test split, 120 questions, Opus 5.5,
 | Dev, 90 questions: Concentrate 89% at N = ∞ → 88% at N = 0 | `docs/results/RETIREMENT.md` Results; `evals/reports/retirement/20261102T224523Z.curve.md` | ✅ |
 | 4 of 90 verdicts change; 3 of them not monotonic in N | `docs/results/RETIREMENT.md` "Honest read" 1 | ✅ |
 | Memory ≈ 5% of raw transcript tokens (31k vs 624k) | `docs/results/RETIREMENT.md` Results | ✅ |
-| b1 summaries 64% | `docs/results/RETIREMENT.md` Results | ✅ |
+| b1 summaries 64% ("notes only ≈ Granola after auto-deletion") | `docs/results/RETIREMENT.md` Results; b1 = top-20 meetings' AI summary + typed notes | ✅ The ≈ is an analogy: b1 uses our synthetic summaries, not Granola's notes. |
+| Per type, notes only → notes + facts at N = 0: entity 30 → 60, aggregation 0 → 50, commitments 67 → 89, latest state 73 → 100 | `docs/results/RETIREMENT.md` "Accuracy by category" (b1 and 0 columns) | ✅ n = 8–11 per type |
+| "Recovers about 24 points" | 88 − 64, `docs/results/RETIREMENT.md` "Honest read" 4 | ✅ |
+| Real-data retirement curve not run | `docs/results/RETIREMENT.md` (XL dev only) | ✅ |
 | b0 not run for accuracy; 32% of gold line text at N = 14, 2% for entity questions | `docs/results/RETIREMENT.md` b0 contexts table | ✅ |
 | A speaker's role is the one plausible loss (q245) | `docs/results/RETIREMENT.md` "Honest read" 1 | ✅ |
 | No verbatim-quote category | ws-c hand-over note; benchmark category list in `docs/benchmark/DESIGN.md` | ✅ |
@@ -134,8 +141,9 @@ The memo now uses only `docs/results/RED_TEAM.md` R1's per-question figures and 
 | Claim | Source | Status |
 |---|---|---|
 | b3 isn't Granola's agent | `README.md` "Honest limits" | ✅ |
-| "Evidence against deleting transcripts, for a hybrid" | inference from Result 1 (fact-only memory: 0% on who said; 10 of 16 misses were missing details) plus the retirement caveat (no exact-wording questions in synthetic dev) | ✅ framed as my reading of the evidence, not a measurement of deletion on real data |
-| Hybrid next step (transcript fallback, speaker labels, needs fresh questions) | `docs/results/REAL_SLICE.md` @ `c86807d` "What this says" 6 | ✅ |
+| "Facts are worth storing before a transcript is deleted; they don't replace it" (who said what can't be recovered) | retirement (88% vs 64% on synthetic dev) plus Result 1 (0% on who said for fact-only memory) | ✅ framed as my reading; deletion wasn't measured on real data |
+| "Extract a fact layer before auto-deletion, and make the degraded warning specific" | recommendation, from the two rows above and the help-centre page | ✅ |
+| Hybrid next step (transcript fallback, speaker labels, needs fresh questions) | `docs/results/REAL_SLICE.md` "What this says" 6 | ✅ |
 | v2.1 adds exact-quote and speaker-attribution questions, not run | `docs/benchmark/V2_EXTRAS.md` intro | ✅ |
 | Directory ablation (~$5 ingest + $2.60 answers) | `docs/results/RED_TEAM.md` R3 "Fix" | ✅ |
 | Fix Mem0/Graphiti wiring and gold errors, re-score | `docs/results/RED_TEAM.md` R2, R5 | ✅ |
@@ -149,5 +157,5 @@ The memo now uses only `docs/results/RED_TEAM.md` R1's per-question figures and 
 | Pilot saturated at 90–100% | `README.md` status box | ✅ |
 | Builds hung; traced to SDK timeout defaults | `docs/engineering/HARDENING.md` §1 (the cause is *inferred*, with no stack trace) | ✅ Keep "traced to", not "proved". |
 | The emails say "Chris" (Pedregal) | Platformer interview, verified | ✅ |
-| "tested my own system against Granola's and reported it lost" | `docs/results/REAL_SLICE.md` @ `claude/ws-b-real-slice-9332a8` (`c86807d`) "Results"; this memo | ✅ |
+| "tested my own system against Granola's and reported it lost" | `docs/results/REAL_SLICE.md` "Results"; this memo | ✅ |
 | "red team cut the cost claim from ~6× to ~3.5×" | `docs/results/RED_TEAM.md` R1 (the "as reported" vs "full price" columns: 0.137 ÷ 0.022 ≈ 6.2; ÷ 0.0395 ≈ 3.5) | ✅ |
