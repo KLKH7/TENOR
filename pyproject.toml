@@ -65,6 +65,7 @@ files = [
     "packages/concentrate/synth",
     "packages/concentrate/agents",
     "packages/concentrate/evals",
+    "packages/concentrate/blackbox",
     "packages/concentrate/memory",
     "packages/concentrate/enhance",
     "packages/concentrate/cli.py",

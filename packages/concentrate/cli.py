@@ -1284,18 +1284,39 @@ def _real_client(offline: bool = False, model: str | None = None) -> LLMClient:
     return LLMClient(model=model, cache_dir=REAL_DIR / "cache" / "llm", offline=offline)
 
 
-@real_kit.command("status")
-def real_status() -> None:
-    """Questions per category: drafted, verified, rejected vs the ~30-question target."""
-    from concentrate.evals.real_slice import coverage, load_questions
+class SplitName(StrEnum):
+    dev = "dev"  # the questions already seen while building and tuning
+    test = "test"  # hand-written fresh questions, held out (import-test)
 
-    qs = load_questions()
+
+SplitOpt = Annotated[SplitName, typer.Option("--split", help="dev (seen) or test (held out).")]
+
+
+@real_kit.command("status")
+def real_status(
+    split: SplitOpt = SplitName.dev,
+    product: Annotated[
+        list[str] | None,
+        typer.Option("--product", help="Also count recorded answers from this product."),
+    ] = None,
+) -> None:
+    """Questions per category: drafted, verified, rejected vs the ~30-question target."""
+    from concentrate.blackbox.kit import ProductSystem
+    from concentrate.blackbox.products import product_name
+    from concentrate.evals.real_slice import coverage, load_split
+
+    qs = load_split(split.value)
+    typer.echo(f"split: {split.value}")
     typer.echo(f"{'category':<18} draft verified rejected target")
     for c, v in coverage(qs).items():
         typer.echo(
             f"{c:<18} {v['draft']:>5} {v['verified']:>8} {v['rejected']:>8} {v['target']:>6}"
         )
     typer.echo(f"verified: {sum(q.status == 'verified' for q in qs)} of {len(qs)}")
+    verified = [q for q in qs if q.status == "verified"]
+    for p in product or []:
+        name = product_name(p)
+        typer.echo(f"{name}: {ProductSystem(name, None).recorded(verified)} answers recorded")
 
 
 @real_kit.command("directory")
@@ -1318,7 +1339,8 @@ def real_draft(
     estimate_only: Annotated[bool, typer.Option("--estimate")] = False,
     yes: Annotated[bool, typer.Option("--yes")] = False,
 ) -> None:
-    """LLM-draft candidate questions for categories still short of their target."""
+    """LLM-draft candidate questions for categories still short of their target (dev split
+    only: the test split is hand-written, see `real-kit import-test`)."""
     import math
     from datetime import date as _date
 
@@ -1363,11 +1385,13 @@ def real_draft(
 @real_kit.command("review")
 def real_review(
     show_evidence: Annotated[bool, typer.Option("--evidence/--no-evidence")] = True,
+    split: SplitOpt = SplitName.dev,
 ) -> None:
     """Walk through drafts: [a]ccept, [e]dit, [r]eject, [s]kip, [q]uit. Saves after each."""
-    from concentrate.evals.real_slice import load_questions, save_questions
+    from concentrate.evals.real_slice import load_split, questions_file, save_questions
 
-    qs = load_questions()
+    qs = load_split(split.value)
+    path = questions_file(split.value)
     todo = [i for i, q in enumerate(qs) if q.status == "draft"]
     typer.echo(f"{len(todo)} drafts to review. Check each gold answer against your memory/notes.")
     for n, i in enumerate(todo, 1):
@@ -1402,23 +1426,24 @@ def real_review(
                     "reviewer_note": "edited",
                 }
             )
-        save_questions(qs)
+        save_questions(qs, path)
     typer.echo(f"\nverified: {sum(q.status == 'verified' for q in qs)} of {len(qs)}")
 
 
 @real_kit.command("add")
-def real_add() -> None:
+def real_add(split: SplitOpt = SplitName.dev) -> None:
     """Write your own question (counts as verified: you are the source of the gold answer)."""
     from datetime import date as _date
 
     from concentrate.evals.real_slice import (
         CATEGORIES,
         RealQuestion,
-        load_questions,
+        load_split,
+        questions_file,
         save_questions,
     )
 
-    qs = load_questions()
+    qs = load_split(split.value)
     category = typer.prompt(f"category ({' | '.join(CATEGORIES)})")
     if category not in CATEGORIES:
         raise typer.BadParameter(f"unknown category {category!r}")
@@ -1427,8 +1452,9 @@ def real_add() -> None:
     terms = (
         "" if category == "unanswerable" else typer.prompt("key terms, comma-separated", default="")
     )
+    prefix = "test" if split is SplitName.test else "real"
     q = RealQuestion(
-        id=f"real-{len(qs) + 1:03d}",
+        id=f"{prefix}-{len(qs) + 1:03d}",
         category=category,
         question=question,
         gold_answer=gold,
@@ -1436,8 +1462,9 @@ def real_add() -> None:
         as_of=_date.today(),
         status="verified",
         origin="user",
+        split=split.value,
     )
-    save_questions([*qs, q])
+    save_questions([*qs, q], questions_file(split.value))
     typer.echo(f"added {q.id}")
 
 
@@ -1463,6 +1490,7 @@ def real_slice_cmd(
         Path | None,
         typer.Option(help="Only the questions answered in this earlier report (.jsonl)."),
     ] = None,
+    split: SplitOpt = SplitName.dev,
 ) -> None:
     """Answer the verified real questions with every system and judge them (judge.v1)."""
     import json as _json
@@ -1475,14 +1503,14 @@ def real_slice_cmd(
         REAL_DIR,
         GranolaAgentSystem,
         aggregate_only,
-        load_questions,
+        load_split,
         run_slice,
     )
     from concentrate.evals.runner import estimate
 
     names = [s.strip() for s in systems.split(",") if s.strip()]
     notes = _real_notes(db)
-    questions = [q for q in load_questions() if q.status == "verified"]
+    questions = [q for q in load_split(split.value) if q.status == "verified"]
     if qids_from is not None:  # e.g. re-run a variant on exactly the questions of a past run
         keep = {_json.loads(line)["qid"] for line in qids_from.read_text().splitlines() if line}
         questions = [q for q in questions if q.id in keep]
@@ -1507,7 +1535,7 @@ def real_slice_cmd(
                     from concentrate.sources.mcp_transport import LiveMcpCaller
 
                     caller = stack.enter_context(LiveMcpCaller())
-                built.append(GranolaAgentSystem(caller))  # type: ignore[arg-type]
+                built.append(GranolaAgentSystem(caller))
             elif n in ("c", "c_on_abstain", "c_always"):  # c_*: transcript fallback modes
                 mode = n.removeprefix("c_") if n != "c" else "off"
                 variant = ConcentrateSystem(
@@ -1562,6 +1590,7 @@ def real_slice_cmd(
             budget_usd=budget,
             out_dir=REAL_DIR / "reports",
             spent=spent,
+            split=split.value,
             meta={
                 "meetings": len(notes),
                 "k": k,
@@ -1642,13 +1671,165 @@ def real_serve(
 @real_kit.command("spotcheck")
 def real_spotcheck(
     reports: Annotated[list[Path], typer.Argument(help="Report .jsonl files to combine.")],
+    split: SplitOpt = SplitName.dev,
+    product: Annotated[
+        list[str] | None,
+        typer.Option("--product", help="Only these products/systems (repeatable)."),
+    ] = None,
 ) -> None:
-    """Write data/real/reports/spotcheck.md: questions where any system disagrees with gold."""
+    """Write data/real/reports/spotcheck[.test].md: where any system disagrees with the gold."""
     import json as _json
 
-    from concentrate.evals.real_slice import REAL_DIR, load_questions, spotcheck_markdown
+    from concentrate.evals.real_slice import REAL_DIR, load_split, spotcheck_markdown
 
     rows = [_json.loads(x) for p in reports for x in p.read_text().splitlines() if x]
-    out = REAL_DIR / "reports" / "spotcheck.md"
-    out.write_text(spotcheck_markdown(rows, load_questions()))
+    if product:
+        rows = [
+            r
+            for r in rows
+            if any(r["system"] == p or r["system"].startswith(f"{p}_") for p in product)
+        ]
+    out = REAL_DIR / "reports" / ("spotcheck.md" if split is SplitName.dev else "spotcheck.test.md")
+    out.write_text(spotcheck_markdown(rows, load_split(split.value)))
     typer.echo(f"wrote {out} (private)")
+
+
+# -- black-box track (P1-B): any meeting-memory MCP, public interfaces only ----------------------
+# Products: `granola` (query_granola_meetings), `concentrate` (ask_memory over stdio), or a JSON
+# spec (docs/benchmark/product.example.json). Answers, questions and per-question reports stay
+# under data/real/; only the aggregate passes the committable-report check.
+
+
+@real_kit.command("import-test")
+def real_import_test(
+    md: Annotated[
+        Path, typer.Argument(help="The filled-in test template (keep it in data/real/).")
+    ],
+) -> None:
+    """Parse hand-written Q/A/KEY/KIND blocks into the held-out test split (re-runs skip dupes)."""
+    from datetime import date as _date
+
+    from concentrate.blackbox.kit import TemplateError, parse_test_markdown
+    from concentrate.evals.real_slice import (
+        CATEGORIES,
+        TEST_QUESTIONS_FILE,
+        RealQuestion,
+        load_split,
+        save_questions,
+    )
+
+    try:
+        parsed = parse_test_markdown(md.read_text(), CATEGORIES)
+    except TemplateError as exc:
+        raise typer.BadParameter(f"{md}: {exc}") from exc
+    qs = load_split("test")
+    seen = {q.question.strip().lower() for q in qs}
+    new: list[RealQuestion] = []
+    for p in parsed:
+        if p["question"].strip().lower() in seen:
+            continue
+        seen.add(p["question"].strip().lower())
+        new.append(
+            RealQuestion(
+                id=f"test-{len(qs) + len(new) + 1:03d}",
+                as_of=_date.today(),
+                status="verified",
+                origin="user",
+                split="test",
+                **p,
+            )
+        )
+    save_questions([*qs, *new], TEST_QUESTIONS_FILE)
+    cats: dict[str, int] = {}
+    for q in [*qs, *new]:
+        cats[q.category] = cats.get(q.category, 0) + 1
+    typer.echo(
+        f"{len(parsed)} blocks parsed · {len(new)} new · test split now {len(qs) + len(new)}"
+    )
+    typer.echo("  " + ", ".join(f"{c} {n}" for c, n in sorted(cats.items())))
+
+
+@real_kit.command("run")
+def real_run(
+    product: Annotated[
+        list[str],
+        typer.Option("--product", help="granola, concentrate, or a spec name/path (repeatable)."),
+    ],
+    split: SplitOpt = SplitName.dev,
+    seed: Annotated[int, typer.Option()] = 42,
+    budget: Annotated[float, typer.Option(help="Hard cap on judge spend (USD).")] = 2.0,
+    estimate_only: Annotated[bool, typer.Option("--estimate")] = False,
+    offline: Annotated[
+        bool, typer.Option(help="Recorded answers and cached judge verdicts only.")
+    ] = False,
+    yes: Annotated[bool, typer.Option("--yes")] = False,
+    commit_to: Annotated[
+        Path | None,
+        typer.Option(help="Also write the aggregate here (checked: no per-question content)."),
+    ] = None,
+) -> None:
+    """Ask every verified question of the split to each product over MCP, judge (judge.v1)."""
+    from concentrate.blackbox.kit import ProductSystem, write_committable
+    from concentrate.blackbox.products import open_product, product_name
+    from concentrate.evals.real_slice import REAL_DIR, load_split, run_slice
+    from concentrate.evals.runner import estimate
+
+    questions = [q for q in load_split(split.value) if q.status == "verified"]
+    if not questions:
+        raise typer.BadParameter(f"no verified {split.value} questions (status / import-test)")
+    client = _real_client(offline)
+    with ExitStack() as stack:
+        systems = []
+        for p in product:
+            name = product_name(p)
+            recorded = ProductSystem(name, None)
+            missing = len(questions) - recorded.recorded(questions)
+            live = open_product(p, stack) if missing and not (offline or estimate_only) else None
+            systems.append(ProductSystem(name, live))
+            typer.echo(f"  {name:<14} {missing} of {len(questions)} to ask live")
+        skipped = 0
+        if offline:  # score only what every product has a recorded answer for, and say so
+            kept = [q for q in questions if all(s.recorded([q]) for s in systems)]
+            skipped, questions = len(questions) - len(kept), kept
+            typer.echo(f"  offline: {skipped} questions skipped (no recorded answer)")
+            if not questions:
+                raise typer.BadParameter("nothing recorded yet: run once without --offline")
+        ests = estimate(systems, questions, client.model)  # type: ignore[arg-type]
+        total = sum(e.usd for e in ests)
+        typer.echo(
+            f"{len(questions)} {split.value} questions · judge {client.model} "
+            f"≈ ${total:.2f} before cache reuse · cap ${budget:.2f}"
+        )
+        if estimate_only:
+            return
+        if total > BUDGET_CONFIRM_USD and not offline and not yes:
+            typer.confirm(
+                f"Estimated ${total:.2f} exceeds ${BUDGET_CONFIRM_USD:.0f}. Proceed?", abort=True
+            )
+        cats: dict[str, int] = {}
+        for q in questions:
+            cats[q.category] = cats.get(q.category, 0) + 1
+        report = run_slice(
+            systems,  # type: ignore[arg-type]
+            questions,
+            client,
+            seed=seed,
+            budget_usd=budget,
+            out_dir=REAL_DIR / "reports",
+            split=split.value,
+            meta={
+                "products": [s.name for s in systems],
+                "category_counts": cats,
+                "skipped_unrecorded": skipped,
+            },
+        )
+    private = [t for q in questions for t in (q.question, q.gold_answer)]
+    private += [s.answer(q).text for s in systems for q in questions if s.recorded([q])]
+    agg = write_committable(
+        report, REAL_DIR / "reports" / f"{report['meta']['date']}.aggregate.json", private
+    )
+    if commit_to is not None:
+        write_committable(report, commit_to, private)
+    typer.echo(Path(report["paths"]["md"]).read_text())
+    typer.echo(f"spent ${client.ledger.spent_usd():.2f} · report: {report['paths']['md']}")
+    typer.echo(f"aggregate (safe to commit): {commit_to or agg}")

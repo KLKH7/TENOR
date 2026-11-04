@@ -1,0 +1,14 @@
+{
+  "name": "acme-notes",
+  "transport": "stdio",
+  "command": "npx",
+  "args": ["-y", "@acme/meetings-mcp"],
+  "env": ["ACME_API_KEY"],
+  "tool": "ask_meetings",
+  "question_arg": "question",
+  "extra_args": {},
+  "answer_path": null,
+  "citation_path": null,
+  "citation_regex": "app\\.acme\\.example/meetings/([A-Za-z0-9_-]+)",
+  "read_only_tools": ["ask_meetings"]
+}

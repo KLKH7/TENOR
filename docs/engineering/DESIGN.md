@@ -372,3 +372,20 @@ Details: `docs/systems/concentrate/fallback.md`. Everything below is **dev**.
   - `on_abstain` can't catch confidently wrong answers (2 of 4 real who-said questions).
   - Speaker attribution in passages is still partly a guess.
 - **Open:** confirm on fresh real test questions written after this design freeze.
+
+## Black-box track: any meeting MCP (P1-B, 2026-11-03)
+Details: `docs/benchmark/BLACKBOX.md`.
+- **One protocol, `Product.ask(question) -> ProductAnswer`** (text, cited IDs, latency, raw response, abstain flag if any). Adapters: Granola (`query_granola_meetings`), Concentrate's own server (`ask_memory`, over stdio), and a JSON spec for any other MCP. The kit (`real-kit run`) wraps a product in `ProductSystem`, so scoring reuses `run_slice` and `judge.v1` unchanged.
+- **Least privilege, by construction.** Each adapter allowlists exactly its one question tool (the old kit allowed 7 for Granola; probes keep that list). `AllowlistCaller` refuses everything else before sending. For servers we can list, a preflight also refuses a tool annotated as not read-only. Unannotated tools pass the preflight, so the human checklist in BLACKBOX.md stays the real guard.
+- **Questions are product-independent.** They are about the user's meetings, so `--product` appears where a product is involved (`status`, `run`, `spotcheck`), not on `draft`/`review`/`add`. Drafting from a product's own answers would bias the gold toward that product.
+- **A real dev/test split.** `RealQuestion.split`, with one file per split (`questions.jsonl` = the 47 seen dev questions, `questions.test.jsonl` = hand-written, held out). `load_split` refuses a file holding the other split's rows. `real-kit import-test` parses the Q/A/KEY/KIND template. It skips fenced examples and blank blocks, stops at the `---` above the "already used" list, and re-imports idempotently.
+- **Recordings are compatible.** Pre-black-box Granola recordings (`data/real/granola/`, raw only) replay through the new path. The offline smoke test reproduced the published Granola row exactly (n=39, 92%, p50 7.9 s, $0).
+- **Committable reports are checked, not trusted.** `write_committable` rejects:
+  - any per-question key;
+  - meeting IDs;
+  - strings over 120 characters;
+  - any question, gold answer or answer text from the run.
+
+  It refuses *before* writing. The check is a deny-list plus run-specific text, so it catches mistakes, not a determined leak (e.g. a short gold answer under 12 characters isn't matched).
+- **Trade-off:** a product's answer is recorded once and replayed. That makes results reproducible, but freezes them at `asked_at`, so a product that improves needs a fresh recording directory to be re-measured.
+
