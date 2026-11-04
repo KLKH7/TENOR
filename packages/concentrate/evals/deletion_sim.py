@@ -332,12 +332,17 @@ def _paired(va: dict[str, bool], vb: dict[str, bool], qs: list[str]) -> dict[str
 
 
 def second_judge(
-    client: LLMClient, rows: list[dict[str, Any]], questions: dict[str, Any]
+    client: LLMClient,
+    rows: list[dict[str, Any]],
+    questions: dict[str, Any],
+    over_budget: Callable[[], bool] = lambda: False,
 ) -> dict[tuple[str, str], str]:
-    """Re-judge every row with ``client`` (a different model), same ``judge.v1`` request."""
-
+    """Re-judge rows with ``client`` (a different model), same ``judge.v1`` request, stopping
+    (rows left unjudged) as soon as ``over_budget()``."""
     out: dict[tuple[str, str], str] = {}
     for r in rows:
+        if over_budget():
+            break
         q = questions[r["qid"]]
         req = judge_request_for(
             q.question, q.gold_answer, q.unanswerable, r["answer"]["answer"], r["abstained"]
@@ -382,12 +387,12 @@ def run_deletion_sim(
     rows = [json.loads(line) for line in jsonl.read_text().splitlines() if line]
     second: dict[tuple[str, str], str] = {}
     if judge2 is not None:
-        if total() + judge2.ledger.spent_usd() > budget_usd:
-            report["meta"]["judge2_skipped"] = "over budget"
-        else:
-            second = second_judge(judge2, rows, {q.id: q for q in questions})
-            report["meta"]["judge2_model"] = judge2.model
-            report["meta"]["judge2_spent_usd"] = judge2.ledger.spent_usd()
+        second = second_judge(
+            judge2, rows, {q.id: q for q in questions}, lambda: total() > budget_usd
+        )
+        report["meta"]["judge2_model"] = judge2.model
+        report["meta"]["judge2_spent_usd"] = judge2.ledger.spent_usd()
+        report["meta"]["judge2_judged"] = f"{len(second)}/{len(rows)}"
     annotated = annotate(rows, tags, second)
     report["meta"]["tagged_questions"] = len({r["qid"] for r in annotated if r["tags"]})
     report["deletion"] = summarize_deletion(annotated, seed)
