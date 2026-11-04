@@ -469,9 +469,23 @@ def analyze(
         bool, typer.Option("--estimate", help="With --llm: estimate its cost and exit.")
     ] = False,
     yes: Annotated[bool, typer.Option("--yes", help="Skip the >$2 confirmation.")] = False,
+    price_model: Annotated[
+        str, typer.Option(help="Re-price every answer at this model's interactive price.")
+    ] = "claude-opus-5-5",
+    real_questions: Annotated[
+        Path | None,
+        typer.Option(help="Real-slice questions.jsonl: gold meetings for a real-slice report."),
+    ] = None,
+    aggregate_only: Annotated[
+        bool,
+        typer.Option(help="Counts and rates only: no question IDs, signals or failures file."),
+    ] = False,
+    out: Annotated[
+        Path | None, typer.Option(help="Output stem (default: next to the report).")
+    ] = None,
 ) -> None:
-    """Report v2: paired significance, power, Pareto frontier and failure taxonomy. Free
-    unless --llm."""
+    """Report v2: paired significance, power, Pareto frontier, failure taxonomy and the $0
+    metrics (docs/benchmark/METRICS.md). Free unless --llm."""
     import json as _json
 
     from concentrate.evals.analyze import load_rows, write_analysis
@@ -482,14 +496,25 @@ def analyze(
         failures,
         llm_request,
     )
-    from concentrate.llm.client import cost_usd, estimate_tokens
+    from concentrate.evals.metrics import gold_from_questions, gold_from_real
+    from concentrate.llm.client import PRICING, cost_usd, estimate_tokens
 
+    if price_model not in PRICING:
+        raise typer.BadParameter(f"unknown model {price_model!r}; known: {', '.join(PRICING)}")
     js, jl = _report_paths(report)
     rep = _json.loads(js.read_text())
     rows = load_rows(jl)
     fx = fixtures or Path(rep["meta"].get("fixtures") or NORTHWIND)
-    gt = GroundTruth.load(fx) if (fx / "questions.jsonl").exists() else None
-    if gt is None:
+    gt = None
+    if real_questions is None:
+        gt = GroundTruth.load(fx) if (fx / "questions.jsonl").exists() else None
+    gold = gold_from_questions(gt.questions) if gt is not None else None
+    if real_questions is not None:
+        from concentrate.evals.real_slice import load_questions as load_real
+
+        gold = gold_from_real(load_real(real_questions))
+        gt_note = "Ground truth: real-slice questions (gold meetings only; no world model)."
+    elif gt is None:
         gt_note = f"Ground truth: **not found** at `{fx}`; only report-row signals were used."
     else:
         qids = {r["qid"]: r["question"] for r in rows}
@@ -517,13 +542,15 @@ def analyze(
                 f"Estimated ${usd:.2f} exceeds ${BUDGET_CONFIRM_USD:.0f}. Proceed?", abort=True
             )
         for f, req in zip(todo, reqs, strict=True):
-            out = client.structured(req, LLMFailure)
-            f.llm_type, f.llm_reason = out.type, out.reason
+            res = client.structured(req, LLMFailure)
+            f.llm_type, f.llm_reason = res.type, res.reason
         typer.echo(f"LLM classifier spent ${client.ledger.spent_usd():.4f}")
-    stem = jl.with_suffix("")
+    stem = out or jl.with_suffix("")
+    stem.parent.mkdir(parents=True, exist_ok=True)
     paths = write_analysis(
         rep, rows, fails, stem, seed=seed if seed is not None else int(rep["meta"].get("seed", 0)),
-        volume=volume, gt_note=gt_note,
+        volume=volume, gt_note=gt_note, gold=gold, price_model=price_model,
+        aggregate_only=aggregate_only,
     )  # fmt: skip
     typer.echo("written: " + ", ".join(str(p) for p in paths.values()))
 

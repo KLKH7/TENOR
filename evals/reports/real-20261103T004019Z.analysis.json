@@ -1,0 +1,365 @@
+{
+  "meta": {
+    "report": "20261103T004019Z",
+    "seed": 42,
+    "volume": 1000,
+    "alpha": 0.05,
+    "fixtures": null,
+    "price_model": "claude-opus-5-5",
+    "price_basis": "interactive (no Batch API, no prompt-cache credit), from tokens",
+    "aggregate_only": true
+  },
+  "accuracy": {
+    "granola_agent": 0.9230769230769231,
+    "concentrate": 0.5897435897435898
+  },
+  "pairs": {
+    "overall": [
+      {
+        "family": "overall",
+        "a": "granola_agent",
+        "b": "concentrate",
+        "n": 39,
+        "acc_a": 0.9230769230769231,
+        "acc_b": 0.5897435897435898,
+        "diff": 0.3333333333333333,
+        "ci_low": 0.15384615384615385,
+        "ci_high": 0.5128205128205128,
+        "a_only": 14,
+        "b_only": 1,
+        "p": 0.0009765625,
+        "p_holm": 0.0009765625,
+        "significant": true
+      }
+    ],
+    "change": [
+      {
+        "family": "change",
+        "a": "concentrate",
+        "b": "granola_agent",
+        "n": 6,
+        "acc_a": 1.0,
+        "acc_b": 0.8333333333333334,
+        "diff": 0.16666666666666666,
+        "ci_low": 0.0,
+        "ci_high": 0.5,
+        "a_only": 1,
+        "b_only": 0,
+        "p": 1.0,
+        "p_holm": 1.0,
+        "significant": false
+      }
+    ],
+    "commitment_status": [
+      {
+        "family": "commitment_status",
+        "a": "granola_agent",
+        "b": "concentrate",
+        "n": 8,
+        "acc_a": 1.0,
+        "acc_b": 0.75,
+        "diff": 0.25,
+        "ci_low": 0.0,
+        "ci_high": 0.5,
+        "a_only": 2,
+        "b_only": 0,
+        "p": 0.5,
+        "p_holm": 0.5,
+        "significant": false
+      }
+    ],
+    "decision": [
+      {
+        "family": "decision",
+        "a": "granola_agent",
+        "b": "concentrate",
+        "n": 8,
+        "acc_a": 1.0,
+        "acc_b": 0.875,
+        "diff": 0.125,
+        "ci_low": 0.0,
+        "ci_high": 0.375,
+        "a_only": 1,
+        "b_only": 0,
+        "p": 1.0,
+        "p_holm": 1.0,
+        "significant": false
+      }
+    ],
+    "disambiguation": [
+      {
+        "family": "disambiguation",
+        "a": "granola_agent",
+        "b": "concentrate",
+        "n": 5,
+        "acc_a": 0.8,
+        "acc_b": 0.4,
+        "diff": 0.4,
+        "ci_low": 0.0,
+        "ci_high": 0.8,
+        "a_only": 2,
+        "b_only": 0,
+        "p": 0.5,
+        "p_holm": 0.5,
+        "significant": false
+      }
+    ],
+    "temporal": [
+      {
+        "family": "temporal",
+        "a": "granola_agent",
+        "b": "concentrate",
+        "n": 4,
+        "acc_a": 1.0,
+        "acc_b": 0.5,
+        "diff": 0.5,
+        "ci_low": 0.0,
+        "ci_high": 1.0,
+        "a_only": 2,
+        "b_only": 0,
+        "p": 0.5,
+        "p_holm": 0.5,
+        "significant": false
+      }
+    ],
+    "who_said": [
+      {
+        "family": "who_said",
+        "a": "granola_agent",
+        "b": "concentrate",
+        "n": 8,
+        "acc_a": 0.875,
+        "acc_b": 0.0,
+        "diff": 0.875,
+        "ci_low": 0.625,
+        "ci_high": 1.0,
+        "a_only": 7,
+        "b_only": 0,
+        "p": 0.015625,
+        "p_holm": 0.015625,
+        "significant": true
+      }
+    ]
+  },
+  "power": {
+    "per_pair": [
+      {
+        "pair": "granola_agent vs concentrate",
+        "discordance": 0.38461538461538464,
+        "needed": {
+          "0.05": 1206,
+          "0.1": 300
+        },
+        "mde": {
+          "39": 0.2698884785959914,
+          "120": 0.15705533879885075,
+          "206": 0.1203637485122074
+        }
+      }
+    ],
+    "generic": {
+      "mean_accuracy": 0.7564102564102564,
+      "median_discordance": 0.38461538461538464,
+      "pairs": 1,
+      "rows": [
+        {
+          "delta": 0.05,
+          "paired_observed": 1206,
+          "paired_observed_bonferroni": 1206,
+          "paired_independent": 1159,
+          "unpaired": 1156
+        },
+        {
+          "delta": 0.1,
+          "paired_observed": 300,
+          "paired_observed_bonferroni": 300,
+          "paired_independent": 291,
+          "unpaired": 289
+        }
+      ]
+    },
+    "n_now": 39
+  },
+  "pareto": {
+    "100": [
+      {
+        "name": "concentrate",
+        "accuracy": 0.5897435897435898,
+        "usd_per_q": 0.056188820512820516,
+        "latency_p50": 4.1983995829941705,
+        "dominated_by": [],
+        "dominated_by_latency": [],
+        "on_frontier": true
+      }
+    ],
+    "1000": [
+      {
+        "name": "concentrate",
+        "accuracy": 0.5897435897435898,
+        "usd_per_q": 0.056188820512820516,
+        "latency_p50": 4.1983995829941705,
+        "dominated_by": [],
+        "dominated_by_latency": [],
+        "on_frontier": true
+      }
+    ],
+    "10000": [
+      {
+        "name": "concentrate",
+        "accuracy": 0.5897435897435898,
+        "usd_per_q": 0.056188820512820516,
+        "latency_p50": 4.1983995829941705,
+        "dominated_by": [],
+        "dominated_by_latency": [],
+        "on_frontier": true
+      }
+    ],
+    "100000": [
+      {
+        "name": "concentrate",
+        "accuracy": 0.5897435897435898,
+        "usd_per_q": 0.056188820512820516,
+        "latency_p50": 4.1983995829941705,
+        "dominated_by": [],
+        "dominated_by_latency": [],
+        "on_frontier": true
+      }
+    ]
+  },
+  "breakeven": [],
+  "metrics": {
+    "price_model": "claude-opus-5-5",
+    "batch_discount": 0.5,
+    "cost": [
+      {
+        "system": "concentrate",
+        "n": 39,
+        "price_model": "claude-opus-5-5",
+        "observable": true,
+        "input_tokens": 12668.74358974359,
+        "output_tokens": 275.6923076923077,
+        "usd_interactive": 0.056188820512820516,
+        "usd_batch": 0.028094410256410258,
+        "batch_saving": 0.028094410256410258,
+        "usd_recorded": 0.056188820512820516,
+        "batched_share": 0.0
+      },
+      {
+        "system": "granola_agent",
+        "n": 39,
+        "price_model": "claude-opus-5-5",
+        "observable": false,
+        "input_tokens": 0.0,
+        "output_tokens": 0.0,
+        "usd_interactive": 0.0,
+        "usd_batch": 0.0,
+        "batch_saving": 0.0,
+        "usd_recorded": 0.0,
+        "batched_share": 0.0
+      }
+    ],
+    "ingest_usd": {
+      "concentrate": 0.0,
+      "granola_agent": 0.0
+    },
+    "abstention": [
+      {
+        "system": "concentrate",
+        "flag": true,
+        "n": 39,
+        "unanswerable": 0,
+        "abstained": 10,
+        "precision": 0.0,
+        "recall": null,
+        "false_abstain": 0.2564102564102564,
+        "coverage": 0.7435897435897436,
+        "accuracy": 0.5897435897435898,
+        "accuracy_answered": 0.7931034482758621
+      },
+      {
+        "system": "granola_agent",
+        "flag": false,
+        "n": 39,
+        "unanswerable": 0,
+        "abstained": 0,
+        "precision": null,
+        "recall": null,
+        "false_abstain": null,
+        "coverage": null,
+        "accuracy": 0.9230769230769231,
+        "accuracy_answered": null
+      }
+    ],
+    "sources": [
+      {
+        "system": "concentrate",
+        "means": "source meetings of the facts and passages put in context",
+        "exposed": true,
+        "n": 39,
+        "recall_any": 1.0,
+        "recall_all": 1.0,
+        "pulled_mean": 4.0,
+        "pulled_median": 4.0,
+        "pulled_max": 4,
+        "line_citations": true
+      },
+      {
+        "system": "granola_agent",
+        "means": "meetings it cited; what it read is not observable from outside",
+        "exposed": true,
+        "n": 39,
+        "recall_any": 1.0,
+        "recall_all": 0.8717948717948718,
+        "pulled_mean": 1.1282051282051282,
+        "pulled_median": 1.0,
+        "pulled_max": 2,
+        "line_citations": false
+      }
+    ],
+    "lists": [
+      {
+        "system": "concentrate",
+        "n": 0,
+        "completeness": null,
+        "complete": null,
+        "judged_correct": null
+      },
+      {
+        "system": "granola_agent",
+        "n": 0,
+        "completeness": null,
+        "complete": null,
+        "judged_correct": null
+      }
+    ]
+  },
+  "failures": {
+    "table": {
+      "concentrate": {
+        "abstained_wrongly": {
+          "count": 10,
+          "examples": []
+        },
+        "reasoning_or_reading": {
+          "count": 3,
+          "examples": []
+        },
+        "partial_list": {
+          "count": 3,
+          "examples": []
+        }
+      },
+      "granola_agent": {
+        "reasoning_or_reading": {
+          "count": 1,
+          "examples": []
+        },
+        "partial_list": {
+          "count": 2,
+          "examples": []
+        }
+      }
+    },
+    "llm": {}
+  }
+}

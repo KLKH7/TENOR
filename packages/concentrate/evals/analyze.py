@@ -7,7 +7,13 @@ and adds what a skeptical reader needs to trust a comparison:
   the accuracy gap), Holm-corrected, overall and per category;
 * power: how many questions a 5- or 10-point gap needs, and the smallest gap this run can see;
 * the cost-accuracy(-latency) Pareto frontier, with ingest amortised at a question volume;
-* a failure taxonomy per system with example question IDs.
+* a failure taxonomy per system with example question IDs;
+* the $0 metrics of ``concentrate.evals.metrics`` (source recall, sources pulled, list
+  completeness, abstention, accuracy when answered vs coverage, equal-price cost).
+
+Every $/question here is re-priced from tokens at one interactive price list
+(``metrics.reprice``), never the recorded ``cost_usd``, which mixes Batch-priced and full-priced
+rows.
 
 Pure and deterministic given the report, the fixtures and the seed; costs nothing unless the
 optional LLM failure classifier is used (``concentrate.evals.failures.llm_request``).
@@ -24,7 +30,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
-from concentrate.evals import stats
+from concentrate.evals import metrics, stats
 from concentrate.evals.failures import FAILURE_TYPES, Failure, failure_table
 from concentrate.evals.pareto import SystemPoint, breakeven_volume, frontier
 
@@ -175,21 +181,32 @@ def generic_power(accuracies: list[float], overall: list[PairResult]) -> dict[st
 # -- cost / Pareto -------------------------------------------------------------------------------
 
 
-def system_points(report: dict[str, Any]) -> list[SystemPoint]:
-    ingest = report["meta"].get("ingest") or {}
+def system_points(
+    report: dict[str, Any],
+    rows: list[dict[str, Any]],
+    price_model: str = metrics.DEFAULT_PRICE_MODEL,
+) -> list[SystemPoint]:
+    """One point per system with observable tokens: answers at the interactive price of
+    ``price_model`` (equal prices for everyone), ingest as recorded when the store was built."""
+    costs = {c.system: c for c in metrics.cost_stats(rows, price_model) if c.observable}
     points = []
     for name, m in report["metrics"].items():
+        if name not in costs:
+            continue
         lat = m.get("latency_p50")
         points.append(
             SystemPoint(
                 name=name,
                 accuracy=m["accuracy"],
-                answer_usd_per_q=m["cost_per_q"],
-                ingest_usd=float((ingest.get(name) or {}).get("cost_usd") or 0.0),
+                answer_usd_per_q=costs[name].usd_interactive,
+                ingest_usd=metrics.ingest_usd(report, name),
                 latency_p50=lat if isinstance(lat, int | float) and lat == lat else None,
             )
         )
     return points
+
+
+NOT_DEPLOYABLE = frozenset({"b2o_oracle"})  # reads the gold meetings: a ceiling, not a rival
 
 
 # -- the analysis --------------------------------------------------------------------------------
@@ -203,11 +220,14 @@ def analyze(
     *,
     seed: int,
     volume: int,
+    gold: dict[str, metrics.Gold] | None = None,
+    price_model: str = metrics.DEFAULT_PRICE_MODEL,
 ) -> dict[str, Any]:
     """Everything the markdown shows, as JSON-serialisable data (``families``: ``pairwise``)."""
     overall = families.get("overall", [])
     n_now = max((r.n for r in overall), default=0)
-    points = system_points(report)
+    points = system_points(report, rows, price_model)
+    report_acc = {n: m["accuracy"] for n, m in report["metrics"].items()}
     return {
         "meta": {
             "report": report["meta"].get("date"),
@@ -215,15 +235,17 @@ def analyze(
             "volume": volume,
             "alpha": ALPHA,
             "fixtures": report["meta"].get("fixtures"),
+            "price_model": price_model,
+            "price_basis": "interactive (no Batch API, no prompt-cache credit), from tokens",
         },
-        "accuracy": {p.name: p.accuracy for p in points},
+        "accuracy": report_acc,
         "pairs": {
             f: [asdict(r) | {"significant": r.significant} for r in rs]
             for f, rs in families.items()
         },
         "power": {
             "per_pair": power_table(overall, n_now),
-            "generic": generic_power([p.accuracy for p in points], overall),
+            "generic": generic_power(list(report_acc.values()), overall),
             "n_now": n_now,
         },
         "pareto": {
@@ -231,12 +253,18 @@ def analyze(
             for v in sorted({volume, *VOLUMES})
         },
         "breakeven": [
-            {"write_time": w.name, "query_time": q.name, "volume": breakeven_volume(w, q)}
+            {
+                "write_time": w.name,
+                "query_time": q.name,
+                "ingest_usd": w.ingest_usd,
+                "volume": breakeven_volume(w, q),
+            }
             for w in points
             if w.ingest_usd
             for q in points
-            if not q.ingest_usd
+            if not q.ingest_usd and q.name not in NOT_DEPLOYABLE
         ],
+        "metrics": metrics.all_metrics(report, rows, gold, price_model=price_model),
         "failures": {
             "table": {
                 s: {t: {"count": c, "examples": ex} for t, (c, ex) in cells.items()}
@@ -320,20 +348,29 @@ def summary_paragraph(
             f"{PLANNED_N[0]} or {PLANNED_N[1]} questions, about {typical_mde(PLANNED_N[0]):.0f} "
             f"or {typical_mde(PLANNED_N[1]):.0f} points."
         )
-    vol = a["meta"]["volume"]
-    rows = a["pareto"][str(vol)]
-    on = [r["name"] for r in rows if r["on_frontier"]]
-    off = [r["name"] for r in rows if not r["on_frontier"]]
-    parts.append(
-        f"On cost vs accuracy (ingest spread over {vol:,} questions), the systems worth "
-        f"considering are {', '.join(on)}"
-        + (
-            f"; {', '.join(off)} {'is' if len(off) == 1 else 'are'} beaten on both by another "
-            "system."
-            if off
-            else "."
+    pm = a["meta"]["price_model"]
+    if a["breakeven"]:
+        # The cheapest query-time rival each write-time system must beat, and when it does.
+        bits = []
+        for w in sorted({b["write_time"] for b in a["breakeven"]}):
+            bs = [b for b in a["breakeven"] if b["write_time"] == w]
+            paid = sorted((b["volume"], b["query_time"]) for b in bs if b["volume"] is not None)
+            never = [b["query_time"] for b in bs if b["volume"] is None]
+            s = f"{w} (ingest ${bs[0]['ingest_usd']:.2f})"
+            if paid:
+                s += " pays back its ingest after " + ", ".join(
+                    f"{v:,} questions vs {q}" for v, q in paid
+                )
+            if never:
+                s += ("; " if paid else " ") + "never vs " + ", ".join(never)
+            bits.append(s)
+        parts.append(
+            f"On cost, with every answer at the interactive `{pm}` price: "
+            + "; ".join(bits)
+            + ". Below those question counts per corpus the query-time system is cheaper."
         )
-    )
+    else:
+        parts.append(f"Costs are compared at the interactive `{pm}` price.")
     if fails:
         top = Counter(f.primary for f in fails).most_common(2)
         desc = " and ".join(f"{t.replace('_', ' ')} ({c})" for t, c in top)
@@ -350,6 +387,7 @@ def to_markdown(
     fails: list[Failure],
     *,
     gt_note: str,
+    aggregate_only: bool = False,
 ) -> str:
     meta = report["meta"]
     git = meta.get("git") or {}
@@ -399,7 +437,8 @@ def to_markdown(
             lines.append(_category_row(c, families[c], rows_by_cat.get(c, {})))
     lines += _power_md(a)
     lines += _pareto_md(a)
-    lines += _failures_md(a, fails, gt_note)
+    lines += _failures_md(a, fails, gt_note, aggregate_only=aggregate_only)
+    lines += metrics.to_markdown(a["metrics"], section=5)
     lines += [
         "",
         "---",
@@ -491,7 +530,9 @@ def _pareto_md(a: dict[str, Any]) -> list[str]:
         "",
         "## 3. Cost vs accuracy (Pareto frontier)",
         "",
-        f"$/q = answer cost + one-off ingest ÷ {vol:,} questions (judge excluded). A system is "
+        f"$/q = answer cost at the **interactive `{a['meta']['price_model']}` price** (re-priced "
+        "from tokens, so batch-priced runs are not mixed in; batch savings are in §7) + one-off "
+        f"ingest as recorded at build time ÷ {vol:,} questions (judge excluded). A system is "
         "**dominated** if another is at least as accurate and at least as cheap (and, in the "
         "last column, at least as fast), and strictly better on one. Accuracy gaps here are "
         "point estimates; check §1 before calling a domination real.",
@@ -534,7 +575,12 @@ def _pareto_md(a: dict[str, Any]) -> list[str]:
             cells.append(f"{'✅' if r['on_frontier'] else ''} {_usd(r['usd_per_q'])}")
         lines.append(f"| {n} | " + " | ".join(cells) + " |")
     if a["breakeven"]:
-        lines += ["", "Break-even: write-time memory becomes cheaper per question than…", ""]
+        lines += [
+            "",
+            "**Break-even questions per corpus**: write-time memory becomes cheaper per question "
+            "than… (a frontier at one volume is a snapshot; this is the number to quote):",
+            "",
+        ]
         for b in a["breakeven"]:
             v = b["volume"]
             when = f"after {v:,} questions" if v is not None else "never (its answers cost more)"
@@ -542,7 +588,9 @@ def _pareto_md(a: dict[str, Any]) -> list[str]:
     return lines
 
 
-def _failures_md(a: dict[str, Any], fails: list[Failure], gt_note: str) -> list[str]:
+def _failures_md(
+    a: dict[str, Any], fails: list[Failure], gt_note: str, *, aggregate_only: bool = False
+) -> list[str]:
     table = a["failures"]["table"]
     types = [t for t in FAILURE_TYPES if any(t in cells for cells in table.values())]
     lines = [
@@ -564,10 +612,18 @@ def _failures_md(a: dict[str, Any], fails: list[Failure], gt_note: str) -> list[
         cells = table[s]
         total = sum(c["count"] for c in cells.values())
         vals = [
-            f"{cells[t]['count']} · {' '.join(cells[t]['examples'])}" if t in cells else ""
+            (
+                str(cells[t]["count"])
+                if aggregate_only
+                else f"{cells[t]['count']} · {' '.join(cells[t]['examples'])}"
+            )
+            if t in cells
+            else ""
             for t in types
         ]
         lines.append(f"| {s} | {total} | " + " | ".join(vals) + " |")
+    if aggregate_only:
+        return [*lines, "", "Cells: counts only (aggregate-only output)."]
     lines += ["", "Cells: count · up to 3 example question IDs.", ""]
     if fails:
         lines += ["<details><summary>Every wrong answer with its signals</summary>", ""]
@@ -607,16 +663,33 @@ def write_analysis(
     seed: int,
     volume: int,
     gt_note: str,
+    gold: dict[str, metrics.Gold] | None = None,
+    price_model: str = metrics.DEFAULT_PRICE_MODEL,
+    aggregate_only: bool = False,
 ) -> dict[str, Path]:
-    """Write ``<stem>.analysis.md``, ``<stem>.analysis.json`` and ``<stem>.failures.jsonl``."""
+    """Write ``<stem>.analysis.md``, ``<stem>.analysis.json`` and ``<stem>.failures.jsonl``.
+
+    ``aggregate_only`` (for private data such as the real slice): no failures file and no
+    per-question IDs or signals, only counts and rates."""
     families = pairwise(rows, seed)
-    a = analyze(report, rows, fails, families, seed=seed, volume=volume)
+    a = analyze(
+        report, rows, fails, families, seed=seed, volume=volume, gold=gold,
+        price_model=price_model,
+    )  # fmt: skip
+    if aggregate_only:
+        for cells in a["failures"]["table"].values():
+            for c in cells.values():
+                c["examples"] = []
+        a["meta"]["aggregate_only"] = True
     paths = {
         "md": out_stem.with_name(f"{out_stem.name}.analysis.md"),
         "json": out_stem.with_name(f"{out_stem.name}.analysis.json"),
-        "failures": out_stem.with_name(f"{out_stem.name}.failures.jsonl"),
     }
-    paths["md"].write_text(to_markdown(report, a, families, fails, gt_note=gt_note))
+    paths["md"].write_text(
+        to_markdown(report, a, families, fails, gt_note=gt_note, aggregate_only=aggregate_only)
+    )
     paths["json"].write_text(json.dumps(a, indent=2, default=str) + "\n")
-    paths["failures"].write_text("".join(json.dumps(f.to_json()) + "\n" for f in fails))
+    if not aggregate_only:
+        paths["failures"] = out_stem.with_name(f"{out_stem.name}.failures.jsonl")
+        paths["failures"].write_text("".join(json.dumps(f.to_json()) + "\n" for f in fails))
     return paths

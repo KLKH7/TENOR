@@ -15,14 +15,15 @@
       "system": "b1 summaries",
       "kind": "query-time",
       "ingest_per_meeting": 0.0,
-      "answer_per_question": 0.009171116666666663,
+      "answer_per_question": 0.016803766666666668,
       "accuracy": 0.7083333333333334,
       "latency_p50": 5.197496312437579,
       "answer_source": "evals/reports/20261103T002456Z.jsonl",
       "ingest_model": null,
       "answer_model": "claude-opus-5-5",
       "n": 120,
-      "monthly": 0.27513349999999986,
+      "answer_batch_saving": 0.008401883333333334,
+      "monthly": 0.504113,
       "ingest_share": 0.0,
       "breakeven": {}
     },
@@ -30,14 +31,15 @@
       "system": "b2o oracle",
       "kind": "query-time",
       "ingest_per_meeting": 0.0,
-      "answer_per_question": 0.04625669999999999,
+      "answer_per_question": 0.0815255,
       "accuracy": 0.95,
       "latency_p50": 5.148270666482858,
       "answer_source": "evals/reports/20261103T002456Z.jsonl",
       "ingest_model": null,
       "answer_model": "claude-opus-5-5",
       "n": 120,
-      "monthly": 1.3877009999999996,
+      "answer_batch_saving": 0.04076275,
+      "monthly": 2.445765,
       "ingest_share": 0.0,
       "breakeven": {}
     },
@@ -52,6 +54,7 @@
       "ingest_model": null,
       "answer_model": "claude-opus-5-5",
       "n": 120,
+      "answer_batch_saving": 0.06858966666666667,
       "monthly": 4.11538,
       "ingest_share": 0.0,
       "breakeven": {}
@@ -60,14 +63,15 @@
       "system": "b0 top-k",
       "kind": "query-time",
       "ingest_per_meeting": 0.0,
-      "answer_per_question": 0.17745863333333334,
+      "answer_per_question": 0.3281137333333333,
       "accuracy": 0.8833333333333333,
       "latency_p50": 7.095897958497517,
       "answer_source": "evals/reports/20261103T002456Z.jsonl",
       "ingest_model": null,
       "answer_model": "claude-opus-5-5",
       "n": 120,
-      "monthly": 5.323759,
+      "answer_batch_saving": 0.16405686666666666,
+      "monthly": 9.843411999999999,
       "ingest_share": 0.0,
       "breakeven": {}
     },
@@ -75,20 +79,21 @@
       "system": "concentrate",
       "kind": "write-time",
       "ingest_per_meeting": 0.013870011413043478,
-      "answer_per_question": 0.021745016666666655,
+      "answer_per_question": 0.03951046666666667,
       "accuracy": 0.9166666666666666,
       "latency_p50": 3.8924767914577387,
       "answer_source": "evals/reports/20261103T002456Z.jsonl",
       "ingest_model": "claude-sonnet-5-5",
       "answer_model": "claude-opus-5-5",
       "n": 120,
-      "monthly": 1.2071509565217386,
-      "ingest_share": 0.4595949276471026,
+      "answer_batch_saving": 0.019755233333333334,
+      "monthly": 1.7401144565217392,
+      "ingest_share": 0.3188298645772489,
       "breakeven": {
-        "b0 top-k": 3.5629540203243137,
+        "b0 top-k": 1.922363744976342,
         "b1 summaries": null,
-        "b2o oracle": 22.63412304153213,
-        "b3 agent": 4.806200379076231
+        "b2o oracle": 13.204808196155325,
+        "b3 agent": 5.680422794453152
       }
     },
     {
@@ -102,12 +107,13 @@
       "ingest_model": "claude-sonnet-5-5",
       "answer_model": "claude-opus-5-5",
       "n": 120,
+      "answer_batch_saving": 0.0085008,
       "monthly": 2.3599778695652174,
       "ingest_share": 0.7838759394409207,
       "breakeven": {
-        "b0 top-k": 11.529129207581537,
+        "b0 top-k": 5.9461836147134655,
         "b1 summaries": null,
-        "b2o oracle": 63.23444013403537,
+        "b2o oracle": 28.670459621399477,
         "b3 agent": 15.393283083764969
       }
     },
@@ -122,12 +128,13 @@
       "ingest_model": "claude-sonnet-5-5",
       "answer_model": "claude-opus-5-5",
       "n": 120,
+      "answer_batch_saving": 0.014373433333333333,
       "monthly": 7.363357475409835,
       "ingest_share": 0.8828786999843438,
       "breakeven": {
-        "b0 top-k": 43.715111595584354,
+        "b0 top-k": 21.715667962174287,
         "b1 summaries": null,
-        "b2o oracle": 371.27432064324836,
+        "b2o oracle": 123.17392597780733,
         "b3 agent": 59.953920400930045
       }
     }
@@ -137,11 +144,11 @@
       "ingest_model": "claude-sonnet-5-5",
       "answer_model": "claude-opus-5-5",
       "monthly": {
-        "b1 summaries": 0.27513349999999986,
-        "b2o oracle": 1.3877009999999996,
+        "b1 summaries": 0.504113,
+        "b2o oracle": 2.445765,
         "b3 agent": 4.11538,
-        "b0 top-k": 5.323759,
-        "concentrate": 1.2071509565217386,
+        "b0 top-k": 9.843411999999999,
+        "concentrate": 1.7401144565217392,
         "mem0": 2.3599778695652174,
         "graphiti": 7.363357475409835
       }
@@ -150,11 +157,11 @@
       "ingest_model": "claude-sonnet-5-5",
       "answer_model": "claude-sonnet-5-5",
       "monthly": {
-        "b1 summaries": 0.1435925263157894,
-        "b2o oracle": 0.7216942894736841,
+        "b1 summaries": 0.2520565,
+        "b2o oracle": 1.2228825,
         "b3 agent": 2.05769,
-        "b0 top-k": 2.7808177368421054,
-        "concentrate": 0.8950010617848969,
+        "b0 top-k": 4.9217059999999995,
+        "concentrate": 1.1474574565217392,
         "mem0": 2.1049538695652177,
         "graphiti": 6.932154475409835
       }
@@ -163,11 +170,11 @@
       "ingest_model": "claude-sonnet-5-5",
       "answer_model": "claude-haiku-5-5",
       "monthly": {
-        "b1 summaries": 0.0071796263157894715,
-        "b2o oracle": 0.036084714473684214,
+        "b1 summaries": 0.012602825000000002,
+        "b2o oracle": 0.061144125,
         "b3 agent": 0.10288450000000002,
-        "b0 top-k": 0.13904088684210528,
-        "concentrate": 0.571810486784897,
+        "b0 top-k": 0.24608529999999998,
+        "concentrate": 0.5844333065217392,
         "mem0": 1.8626810695652176,
         "graphiti": 6.522511625409835
       }
@@ -176,25 +183,25 @@
       "ingest_model": "claude-haiku-5-5",
       "answer_model": "claude-opus-5-5",
       "monthly": {
-        "b1 summaries": 0.27513349999999986,
-        "b2o oracle": 1.3877009999999996,
+        "b1 summaries": 0.504113,
+        "b2o oracle": 2.445765,
         "b3 agent": 4.11538,
-        "b0 top-k": 5.323759,
+        "b0 top-k": 9.843411999999999,
         "mem0": 0.6025444934782609,
-        "concentrate": 0.6800905228260866,
-        "graphiti": 1.1874535737704917
+        "graphiti": 1.1874535737704917,
+        "concentrate": 1.2130540228260869
       }
     },
     {
       "ingest_model": "claude-haiku-5-5",
       "answer_model": "claude-sonnet-5-5",
       "monthly": {
-        "b1 summaries": 0.1435925263157894,
-        "b2o oracle": 0.7216942894736841,
+        "b1 summaries": 0.2520565,
+        "b2o oracle": 1.2228825,
         "b3 agent": 2.05769,
-        "b0 top-k": 2.7808177368421054,
+        "b0 top-k": 4.9217059999999995,
         "mem0": 0.34752049347826086,
-        "concentrate": 0.3679406280892447,
+        "concentrate": 0.620397022826087,
         "graphiti": 0.7562505737704918
       }
     },
@@ -202,11 +209,11 @@
       "ingest_model": "claude-haiku-5-5",
       "answer_model": "claude-haiku-5-5",
       "monthly": {
-        "b1 summaries": 0.0071796263157894715,
-        "b2o oracle": 0.036084714473684214,
+        "b1 summaries": 0.012602825000000002,
+        "b2o oracle": 0.061144125,
         "b3 agent": 0.10288450000000002,
-        "b0 top-k": 0.13904088684210528,
-        "concentrate": 0.044750053089244846,
+        "b0 top-k": 0.24608529999999998,
+        "concentrate": 0.05737287282608697,
         "mem0": 0.10524769347826089,
         "graphiti": 0.34660772377049176
       }
