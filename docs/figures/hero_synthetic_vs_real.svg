@@ -488,8 +488,8 @@ L 558.72 193.536
     <text style="font-size: 9px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; text-anchor: start; fill: #222222" x="528.100538" y="173.193891" transform="rotate(-0 528.100538 173.193891)">77%</text>
    </g>
    <g id="text_25">
-    <text style="font-size: 8.5px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; fill: #222222" transform="translate(395.345455 240.762302)">A loss: only Granola right 14 times,</text>
-    <text style="font-size: 8.5px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; fill: #222222" transform="translate(395.345455 250.964626)">only Concentrate right 1 times (p=0.001, sign test).</text>
+    <text style="font-size: 8.5px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; fill: #222222" transform="translate(395.345455 240.762302)">A loss: Granola alone right 14 times,</text>
+    <text style="font-size: 8.5px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; fill: #222222" transform="translate(395.345455 250.964626)">Concentrate alone 1 (sign test p=0.001).</text>
    </g>
    <g id="text_26">
     <text style="font-weight: 700; font-size: 9.5px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif" transform="translate(395.345455 55.174145)">Real: author's 4 meetings</text>

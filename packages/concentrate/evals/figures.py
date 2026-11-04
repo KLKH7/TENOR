@@ -228,8 +228,8 @@ def fig_hero(inp: Inputs) -> Any:
     ax2.text(
         0.0,
         -0.33,
-        f"A loss: only Granola right {g['a_only']} times,\n"
-        f"only Concentrate right {g['b_only']} times (p={g['p']:.3f}, sign test).",
+        f"A loss: Granola alone right {g['a_only']} times,\n"
+        f"Concentrate alone {g['b_only']} (sign test p={g['p']:.3f}).",
         transform=ax2.transAxes,
         fontsize=8.5,
         color=fs.INK,
