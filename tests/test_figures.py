@@ -5,9 +5,11 @@ from __future__ import annotations
 import json
 import xml.etree.ElementTree as ET
 from pathlib import Path
+from typing import Any
 
 import pytest
 
+from concentrate.evals import figstyle as fs
 from concentrate.evals import figures as F
 
 STAMP = "20990101T000000Z"
@@ -117,7 +119,9 @@ def make_root(root: Path) -> Path:
 def test_renders_every_figure_as_valid_svg(tmp_path: Path) -> None:
     rendered, skipped = F.render(F.load_inputs(STAMP, make_root(tmp_path)))
     assert skipped == []
-    assert set(rendered) == {f"{s.name}.svg" for s in F.FIGURES} | {"README.md"}
+    names = {s.name for s in F.FIGURES}
+    expected = {f"{n}.svg" for n in names} | {f"data/{n}.values.json" for n in names}
+    assert set(rendered) == expected | {"README.md"}
     for name, data in rendered.items():
         if name.endswith(".svg"):
             ET.fromstring(data)  # well-formed XML
@@ -150,11 +154,51 @@ def test_check_flags_changed_figures(tmp_path: Path) -> None:
     assert F.check(rendered, out) == ["leaderboard.svg"]
 
 
-def test_svg_equivalent_tolerates_float_noise_only() -> None:
-    assert F.svg_equivalent(b'<path d="M 1.2345 2"/>', b'<path d="M 1.2346 2"/>')
-    assert not F.svg_equivalent(b'<path d="M 1.2 2"/>', b'<path d="M 1.5 2"/>')
-    assert not F.svg_equivalent(b"<text>92%</text>", b"<text>91%</text>")
-    assert not F.svg_equivalent(b"<a>x</a>", b"<a>y</a>")
+def test_check_fails_when_a_plotted_number_changes(tmp_path: Path) -> None:
+    root = make_root(tmp_path)
+    rendered, _ = F.render(F.load_inputs(STAMP, root))
+    out = tmp_path / "out"
+    F.write(rendered, out)
+    # One accuracy moves by one question (0.75 -> 0.5); nothing else changes.
+    report = root / "evals" / "reports" / f"{STAMP}.json"
+    data = json.loads(report.read_text())
+    data["metrics"]["concentrate"]["accuracy"] = 0.5
+    data["metrics"]["concentrate"]["accuracy_ci95"] = [0.4, 0.6]
+    report.write_text(json.dumps(data))
+    changed, _ = F.render(F.load_inputs(STAMP, root))
+    bad = F.check(changed, out)
+    assert "data/leaderboard.values.json" in bad
+    assert "data/cost_frontier.values.json" in bad
+    assert "data/by_category.values.json" not in bad  # per-category numbers didn't move
+
+
+def test_check_ignores_font_and_dpi_differences(tmp_path: Path, monkeypatch: Any) -> None:
+    """Another platform's text metrics change SVG bytes, not the check's verdict."""
+    inp = F.load_inputs(STAMP, make_root(tmp_path))
+    rendered, _ = F.render(inp)
+    out = tmp_path / "out"
+    F.write(rendered, out)
+    rc = {**fs.RC, "font.size": 13, "figure.dpi": 72, "font.sans-serif": ["Helvetica"]}
+    monkeypatch.setattr(fs, "RC", rc)
+    other, _ = F.render(inp)
+    assert any(other[n] != rendered[n] for n in rendered if n.endswith(".svg"))
+    assert F.check(other, out) == []
+
+
+def test_svg_signature_sees_text_and_elements_not_coordinates() -> None:
+    def svg(body: str) -> bytes:
+        return f'<svg xmlns="http://www.w3.org/2000/svg">{body}</svg>'.encode()
+
+    base = svg('<path d="M 1.2 2"/><text x="3">92% of</text><text x="9">questions</text>')
+    # Coordinates and line wrapping (font-dependent) don't count; words and elements do.
+    rewrapped = svg('<path d="M 1.7 2"/><text x="4">92%</text><text x="5">of questions</text>')
+    assert F.svg_signature(base) == F.svg_signature(rewrapped)
+    assert F.svg_signature(base) != F.svg_signature(
+        svg('<path d="M 1"/><text>91% of</text><text>questions</text>')
+    )
+    assert F.svg_signature(base) != F.svg_signature(
+        svg('<path d="M 1"/><path d="M 2"/><text>92% of</text><text>questions</text>')
+    )
 
 
 def test_equal_price_and_amortised_ingest(tmp_path: Path) -> None:

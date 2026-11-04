@@ -124,13 +124,19 @@ def footnote(fig: Figure, text: str) -> None:
     fig.text(0.01, 0.01, text, ha="left", va="bottom", fontsize=8, color=MUTED, wrap=True)
 
 
-def svg_bytes(fig: Figure) -> bytes:
-    """Render ``fig`` to deterministic SVG bytes and close it."""
+def svg_bytes(fig: Figure, close: bool = True) -> bytes:
+    """Render ``fig`` to deterministic SVG bytes (and close it unless ``close`` is False)."""
     buf = io.StringIO()
     with plt.rc_context(RC):
         fig.savefig(buf, format="svg", metadata={"Date": None, "Creator": CREATOR})
-    plt.close(fig)
+    if close:
+        plt.close(fig)
     return buf.getvalue().encode()
+
+
+def close(fig: Figure) -> None:
+    """Release a figure rendered with ``svg_bytes(fig, close=False)``."""
+    plt.close(fig)
 
 
 def save(fig: Figure, path: Path) -> Path:

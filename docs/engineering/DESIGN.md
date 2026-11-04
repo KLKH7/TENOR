@@ -396,10 +396,21 @@ eleven PLAN section-5 figures into `docs/figures/` as SVG; `docs/results/INDEX.m
 
 - **Determinism.** Agg backend, fixed `svg.hashsalt`, no `Date` metadata, constant `Creator`,
   text kept as `<text>` (`svg.fonttype = none`, no glyph outlines), mathtext off (so "$4/M" is a
-  price). Same inputs on the same platform give byte-identical files (tested). CI runs
-  `--check`, which compares numbers in the SVG with a 0.05 tolerance: across platforms the last
-  digit of a coordinate can differ. *Untested risk:* CI's Linux has not been run yet; if its
-  font metrics differ from macOS, the check will fail and we regenerate on Linux.
+  price). Same inputs on the same platform give byte-identical files (tested): that is the
+  local guarantee.
+- **The committed-figure check is platform-independent (revised 2026-11-03).** The first
+  version compared SVG numbers with a 0.05 tolerance. It failed on GitHub's Linux: different
+  text metrics move labels, legends and wrapped lines by more than noise. Now each figure has
+  a sidecar `docs/figures/data/<name>.values.json` holding every plotted number and string,
+  read back from the matplotlib objects in *data* coordinates (lines, error bars, points, bars,
+  heatmap cells, ticks, limits, titles, labels, notes). It contains no pixel positions, so it
+  doesn't depend on fonts, and `--check` compares it **exactly** (rounded to 10 significant
+  digits). The SVG is compared only structurally: element counts by tag, plus its words in
+  order with whitespace normalised (line wrapping depends on fonts). Tests show that a changed
+  plotted number fails the check, and that a different font, size and DPI (all SVGs
+  byte-different) still pass it. Trade-off: a purely cosmetic change, such as a moved label,
+  is not caught across platforms. That's intended: the check guards that the charts match the
+  data.
 - **Real data never reaches CI.** Real-slice figures read `docs/figures/data/real_slice.json`, a
   content-free snapshot (accuracy, bootstrap CI, paired win/loss counts). `--refresh-real`
   rebuilds it from `data/real/reports/*.jsonl`, reading only `qid`, `system`, `category`,

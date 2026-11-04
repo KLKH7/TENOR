@@ -1,0 +1,260 @@
+{
+ "axes": [
+  {
+   "collections": [
+    {
+     "points": [
+      [
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       100.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       66.66666667,
+       1.0
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       100.0,
+       1.0
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       100.0,
+       2.0
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       100.0,
+       2.0
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       50.0,
+       3.0
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       100.0,
+       3.0
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       100.0,
+       4.0
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       100.0,
+       4.0
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       0.0,
+       5.0
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       50.0,
+       5.0
+      ]
+     ]
+    },
+    {
+     "points": []
+    },
+    {
+     "points": []
+    }
+   ],
+   "images": [],
+   "legend": [
+    "memory only: 12/22",
+    "+ transcript fallback: 20/22"
+   ],
+   "lines": [
+    [
+     [
+      0.0,
+      0.0
+     ],
+     [
+      100.0,
+      0.0
+     ]
+    ],
+    [
+     [
+      66.66666667,
+      1.0
+     ],
+     [
+      100.0,
+      1.0
+     ]
+    ],
+    [
+     [
+      100.0,
+      2.0
+     ],
+     [
+      100.0,
+      2.0
+     ]
+    ],
+    [
+     [
+      50.0,
+      3.0
+     ],
+     [
+      100.0,
+      3.0
+     ]
+    ],
+    [
+     [
+      100.0,
+      4.0
+     ],
+     [
+      100.0,
+      4.0
+     ]
+    ],
+    [
+     [
+      0.0,
+      5.0
+     ],
+     [
+      50.0,
+      5.0
+     ]
+    ]
+   ],
+   "patches": [],
+   "texts": [
+    [
+     "0→3 of 3",
+     108.0,
+     0.0
+    ],
+    [
+     "2→3 of 3",
+     108.0,
+     1.0
+    ],
+    [
+     "4→4 of 4",
+     108.0,
+     2.0
+    ],
+    [
+     "2→4 of 4",
+     108.0,
+     3.0
+    ],
+    [
+     "4→4 of 4",
+     108.0,
+     4.0
+    ],
+    [
+     "0→2 of 4",
+     108.0,
+     5.0
+    ]
+   ],
+   "title": "",
+   "xlabel": "correct (%)",
+   "xlim": [
+    -5.0,
+    128.0
+   ],
+   "xscale": "linear",
+   "xticklabels": [
+    "0",
+    "25",
+    "50",
+    "75",
+    "100"
+   ],
+   "xticks": [
+    0.0,
+    25.0,
+    50.0,
+    75.0,
+    100.0
+   ],
+   "ylabel": "",
+   "ylim": [
+    -0.25,
+    5.25
+   ],
+   "yscale": "linear",
+   "yticklabels": [
+    "disambiguation",
+    "temporal",
+    "change",
+    "commitment status",
+    "decision",
+    "who said"
+   ],
+   "yticks": [
+    0.0,
+    1.0,
+    2.0,
+    3.0,
+    4.0,
+    5.0
+   ]
+  }
+ ],
+ "figure_legends": [],
+ "suptitle": "Did the transcript fallback help, and where?  [DEV]",
+ "texts": [
+  "Did the transcript fallback help, and where?  [DEV]",
+  "Real meetings, the same 22 questions both ways. Paired: fallback won 8, lost 0 (sign test p=0.008).",
+  "DEV, not a claim: these questions were seen while designing the fallback, and the run stopped at its budget cap (22 of 39). Needs fresh questions (X1)."
+ ]
+}
