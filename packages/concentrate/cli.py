@@ -1933,6 +1933,8 @@ def notes_vs_transcript_cmd(
 
     for p in N.write(seed, real=real):
         typer.echo(f"wrote {p}")
+
+
 # -- deletion simulation (P2-D) ----------------------------------------------------------------
 
 
