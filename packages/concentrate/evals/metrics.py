@@ -222,6 +222,19 @@ class AbstainStats:
     accuracy: float  # judged correct over all questions (an abstention is correct only on
     # an unanswerable question)
     accuracy_answered: float | None  # judged correct among the questions it answered
+    # Answered (did not abstain) and judged *incorrect*, over all questions: the "wrong, but
+    # confident" output. Partially correct answers are not counted. Answering an unanswerable
+    # question counts. Without an abstain flag every judged-incorrect answer counts, so it is
+    # an upper bound there (``flag`` False).
+    confident_error: float
+    abstained_answer_existed: int  # declined an answerable question (count; rate: false_abstain)
+
+
+def confident_error(rows: Iterable[dict[str, Any]]) -> float | None:
+    """Share of rows answered (not abstained) and judged incorrect; None for no rows."""
+    rs = list(rows)
+    wrong = sum(not r.get("abstained") and r.get("verdict") == "incorrect" for r in rs)
+    return _rate(wrong, len(rs))
 
 
 def abstain_stats(rows: Iterable[dict[str, Any]]) -> list[AbstainStats]:
@@ -251,6 +264,8 @@ def abstain_stats(rows: Iterable[dict[str, Any]]) -> list[AbstainStats]:
                     if flag
                     else None
                 ),
+                confident_error=confident_error(rs) or 0.0,
+                abstained_answer_existed=len(ab) - tp,
             )
         )
     return out
@@ -438,18 +453,21 @@ def to_markdown(m: dict[str, Any], *, section: int = 5) -> list[str]:
         "**false abstain** = share of answerable questions it declined. **Coverage** = share of "
         "all questions it answered; **accuracy when answered** is judged accuracy on those. A "
         "system that declines more can look better on the last column while helping less: read "
-        "it with coverage. n/a = the system has no abstain flag.",
+        "it with coverage. **Confident error** = share of all questions it answered *and* got "
+        'judged incorrect (partials excluded; answering an unanswerable counts): the "wrong, '
+        'but confident" output. n/a = the system has no abstain flag (≤: an upper bound).',
         "",
         "| System | n | Unanswerable | Abstained | Precision | Recall | False abstain | "
-        "Coverage | Accuracy (all) | Accuracy when answered |",
-        "|---|---|---|---|---|---|---|---|---|---|",
+        "Coverage | Accuracy (all) | Accuracy when answered | Confident error |",
+        "|---|---|---|---|---|---|---|---|---|---|---|",
     ]
     for a in m["abstention"]:
         lines.append(
             f"| {a['system']} | {a['n']} | {a['unanswerable']} | "
             f"{a['abstained'] if a['flag'] else 'n/a'} | {_pct(a['precision'])} | "
             f"{_pct(a['recall'])} | {_pct(a['false_abstain'])} | {_pct(a['coverage'])} | "
-            f"{_pct(a['accuracy'])} | {_pct(a['accuracy_answered'])} |"
+            f"{_pct(a['accuracy'])} | {_pct(a['accuracy_answered'])} | "
+            f"{'' if a['flag'] else '≤ '}{_pct(a['confident_error'])} |"
         )
     pm = m["price_model"]
     lines += [

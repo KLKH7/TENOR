@@ -1916,3 +1916,20 @@ def figures_cmd(
         return
     for p in F.write(rendered, out):
         typer.echo(f"wrote {p}")
+
+
+# -- notes-sufficient vs transcript-needed (Phase 2, $0) ---------------------------------------
+
+
+@app.command("notes-vs-transcript")
+def notes_vs_transcript_cmd(
+    seed: Annotated[int, typer.Option(help="Bootstrap seed.")] = 0,
+    real: Annotated[
+        bool, typer.Option(help="Recompute the real-slice aggregates (needs private data/real).")
+    ] = True,
+) -> None:
+    """Tag questions notes-sufficient / transcript-needed and re-analyse saved runs by tag ($0)."""
+    from concentrate.evals import notes_vs_transcript as N
+
+    for p in N.write(seed, real=real):
+        typer.echo(f"wrote {p}")

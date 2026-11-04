@@ -1,0 +1,4180 @@
+{
+ "definition": "docs/results/NOTES_VS_TRANSCRIPT.md",
+ "hand_check": {
+  "disagreements": [
+   {
+    "generator": "notes_sufficient",
+    "hand": "transcript_needed",
+    "note": "position is in the notes; gold also names Sam Patel, who is not",
+    "qid": "q023",
+    "rule": "notes_sufficient"
+   },
+   {
+    "generator": "transcript_needed",
+    "hand": "transcript_needed",
+    "note": "no Done line for the Android build",
+    "qid": "q693",
+    "rule": "notes_sufficient"
+   },
+   {
+    "generator": "transcript_needed",
+    "hand": "transcript_needed",
+    "note": "no Done line for the latency benchmark",
+    "qid": "q729",
+    "rule": "notes_sufficient"
+   },
+   {
+    "generator": "notes_sufficient",
+    "hand": "notes_sufficient",
+    "note": "target moved to Dec 04",
+    "qid": "q842",
+    "rule": "transcript_needed"
+   }
+  ],
+  "generator_agrees": 19,
+  "n": 20,
+  "rule_agrees": 16
+ },
+ "primary": "generator reference (synthetic); portable rule (real)",
+ "real": {
+  "counts": {
+   "all": {
+    "notes_sufficient": 23,
+    "transcript_needed": 18,
+    "unanswerable": 6
+   },
+   "change": {
+    "notes_sufficient": 5,
+    "transcript_needed": 1,
+    "unanswerable": 0
+   },
+   "commitment_status": {
+    "notes_sufficient": 4,
+    "transcript_needed": 4,
+    "unanswerable": 0
+   },
+   "decision": {
+    "notes_sufficient": 5,
+    "transcript_needed": 3,
+    "unanswerable": 0
+   },
+   "disambiguation": {
+    "notes_sufficient": 2,
+    "transcript_needed": 3,
+    "unanswerable": 0
+   },
+   "temporal": {
+    "notes_sufficient": 2,
+    "transcript_needed": 4,
+    "unanswerable": 0
+   },
+   "unanswerable": {
+    "notes_sufficient": 0,
+    "transcript_needed": 0,
+    "unanswerable": 6
+   },
+   "who_said": {
+    "notes_sufficient": 5,
+    "transcript_needed": 3,
+    "unanswerable": 0
+   }
+  },
+  "tagger": "portable rule (key terms)"
+ },
+ "synthetic": {
+  "northwind-xl": {
+   "agreement_rule_vs_generator": {
+    "dev": {
+     "agreement": 0.9390243902439024,
+     "confusion": {
+      "rule=notes_sufficient|generator=notes_sufficient": 64,
+      "rule=notes_sufficient|generator=transcript_needed": 2,
+      "rule=transcript_needed|generator=notes_sufficient": 3,
+      "rule=transcript_needed|generator=transcript_needed": 13
+     },
+     "generator_sufficient_share": 0.8170731707317073,
+     "kappa": 0.801163918525703,
+     "n": 82,
+     "rule_sufficient_share": 0.8048780487804879
+    },
+    "test": {
+     "agreement": 0.8994708994708994,
+     "confusion": {
+      "rule=notes_sufficient|generator=notes_sufficient": 149,
+      "rule=notes_sufficient|generator=transcript_needed": 4,
+      "rule=transcript_needed|generator=notes_sufficient": 15,
+      "rule=transcript_needed|generator=transcript_needed": 21
+     },
+     "generator_sufficient_share": 0.8677248677248677,
+     "kappa": 0.6308973172987973,
+     "n": 189,
+     "rule_sufficient_share": 0.8095238095238095
+    }
+   },
+   "counts": {
+    "aggregation": {
+     "notes_sufficient": 15,
+     "transcript_needed": 5,
+     "unanswerable": 0
+    },
+    "all": {
+     "notes_sufficient": 231,
+     "transcript_needed": 40,
+     "unanswerable": 25
+    },
+    "commitment_status": {
+     "notes_sufficient": 29,
+     "transcript_needed": 6,
+     "unanswerable": 0
+    },
+    "decision_change": {
+     "notes_sufficient": 23,
+     "transcript_needed": 7,
+     "unanswerable": 0
+    },
+    "entity_disambiguation": {
+     "notes_sufficient": 29,
+     "transcript_needed": 5,
+     "unanswerable": 0
+    },
+    "latest_state": {
+     "notes_sufficient": 34,
+     "transcript_needed": 6,
+     "unanswerable": 0
+    },
+    "multi_hop": {
+     "notes_sufficient": 19,
+     "transcript_needed": 3,
+     "unanswerable": 0
+    },
+    "single_hop": {
+     "notes_sufficient": 36,
+     "transcript_needed": 4,
+     "unanswerable": 0
+    },
+    "temporal": {
+     "notes_sufficient": 46,
+     "transcript_needed": 4,
+     "unanswerable": 0
+    },
+    "unanswerable": {
+     "notes_sufficient": 0,
+     "transcript_needed": 0,
+     "unanswerable": 25
+    }
+   },
+   "counts_by_split": {
+    "all": {
+     "notes_sufficient": 231,
+     "transcript_needed": 40,
+     "unanswerable": 25
+    },
+    "dev": {
+     "notes_sufficient": 67,
+     "transcript_needed": 15,
+     "unanswerable": 8
+    },
+    "test": {
+     "notes_sufficient": 164,
+     "transcript_needed": 25,
+     "unanswerable": 17
+    }
+   },
+   "tags": {
+    "q002": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q007": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q008": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q010": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q012": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q021": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q022": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q023": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q031": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q036": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q037": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q044": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q050": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q058": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q060": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q062": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q066": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q074": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q085": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q088": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q113": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q114": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q116": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q118": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q120": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q132": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q137": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q152": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q153": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q172": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q174": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q178": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q186": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q196": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q201": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q202": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q204": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q210": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q220": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q224": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q233": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q234": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q238": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q240": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q245": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q246": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q247": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q248": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q249": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q251": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q253": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q263": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q265": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q275": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q283": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q288": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q290": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q293": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q294": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q301": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q302": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q305": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q317": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q322": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q329": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q331": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q335": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q340": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q348": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q379": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q383": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q385": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q388": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q392": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q397": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q403": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q432": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q433": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q437": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q439": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q440": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q441": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q451": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q457": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q458": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q468": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q469": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q476": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q477": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q482": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q485": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q486": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q499": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q506": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q512": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q515": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q518": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q522": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q525": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q532": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q533": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q536": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q550": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q559": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q560": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q561": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q563": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q564": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q565": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q566": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q568": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q569": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q571": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q573": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q578": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q580": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q585": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q587": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q589": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q590": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q591": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q592": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q593": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q594": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q595": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q596": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q597": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q602": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q603": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q607": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q609": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q612": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q614": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q615": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q616": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q617": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q623": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q625": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q626": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q628": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q629": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q632": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q634": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q635": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q636": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q637": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q641": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q643": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q644": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q648": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q650": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q652": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q653": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q654": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q655": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q656": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q657": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q659": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q660": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q661": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q662": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q663": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q664": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q667": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q668": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q669": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q671": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q673": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q677": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q679": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q680": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q682": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q684": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q686": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q688": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q689": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q691": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q692": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q693": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "q694": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q695": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q697": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q698": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q699": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q700": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q704": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q705": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q707": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q711": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "q713": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q714": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q715": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q718": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q719": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q721": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q722": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q723": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q726": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q729": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "q730": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q731": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q734": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q735": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q739": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q740": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "q741": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q743": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q744": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q745": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q746": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q749": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q751": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q752": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q755": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q757": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q761": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q763": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q764": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q765": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q766": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q773": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q775": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q781": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q783": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q786": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q791": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q792": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q794": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q795": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q796": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q797": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q800": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q802": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q803": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q804": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q805": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q806": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q807": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q808": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q810": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q811": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q812": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q813": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q814": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q815": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q816": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q817": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q818": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q819": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q820": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q821": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q822": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q823": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q824": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q825": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q826": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q827": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q828": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q830": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q831": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q832": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q833": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "q834": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q835": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q836": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q837": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q838": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q839": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q840": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q841": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "q842": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q843": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q844": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q845": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q846": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q847": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q848": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q849": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q850": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q851": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q852": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q853": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q854": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q855": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q856": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q857": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q858": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q859": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q860": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q861": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q862": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q863": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q864": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q865": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q866": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q867": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    }
+   }
+  },
+  "northwind-xl-v2": {
+   "agreement_rule_vs_generator": {
+    "dev": {
+     "agreement": 0.9146341463414634,
+     "confusion": {
+      "rule=notes_sufficient|generator=notes_sufficient": 65,
+      "rule=notes_sufficient|generator=transcript_needed": 4,
+      "rule=transcript_needed|generator=notes_sufficient": 3,
+      "rule=transcript_needed|generator=transcript_needed": 10
+     },
+     "generator_sufficient_share": 0.8292682926829268,
+     "kappa": 0.6897297297297298,
+     "n": 82,
+     "rule_sufficient_share": 0.8414634146341463
+    },
+    "test": {
+     "agreement": 0.8465608465608465,
+     "confusion": {
+      "rule=notes_sufficient|generator=notes_sufficient": 141,
+      "rule=notes_sufficient|generator=transcript_needed": 7,
+      "rule=transcript_needed|generator=notes_sufficient": 22,
+      "rule=transcript_needed|generator=transcript_needed": 19
+     },
+     "generator_sufficient_share": 0.8624338624338624,
+     "kappa": 0.47953660621023636,
+     "n": 189,
+     "rule_sufficient_share": 0.783068783068783
+    }
+   },
+   "counts": {
+    "aggregation": {
+     "notes_sufficient": 12,
+     "transcript_needed": 8,
+     "unanswerable": 0
+    },
+    "all": {
+     "notes_sufficient": 231,
+     "transcript_needed": 40,
+     "unanswerable": 25
+    },
+    "commitment_status": {
+     "notes_sufficient": 32,
+     "transcript_needed": 3,
+     "unanswerable": 0
+    },
+    "decision_change": {
+     "notes_sufficient": 24,
+     "transcript_needed": 6,
+     "unanswerable": 0
+    },
+    "entity_disambiguation": {
+     "notes_sufficient": 29,
+     "transcript_needed": 5,
+     "unanswerable": 0
+    },
+    "latest_state": {
+     "notes_sufficient": 35,
+     "transcript_needed": 5,
+     "unanswerable": 0
+    },
+    "multi_hop": {
+     "notes_sufficient": 17,
+     "transcript_needed": 5,
+     "unanswerable": 0
+    },
+    "single_hop": {
+     "notes_sufficient": 38,
+     "transcript_needed": 2,
+     "unanswerable": 0
+    },
+    "temporal": {
+     "notes_sufficient": 44,
+     "transcript_needed": 6,
+     "unanswerable": 0
+    },
+    "unanswerable": {
+     "notes_sufficient": 0,
+     "transcript_needed": 0,
+     "unanswerable": 25
+    }
+   },
+   "counts_by_split": {
+    "all": {
+     "notes_sufficient": 231,
+     "transcript_needed": 40,
+     "unanswerable": 25
+    },
+    "dev": {
+     "notes_sufficient": 68,
+     "transcript_needed": 14,
+     "unanswerable": 8
+    },
+    "test": {
+     "notes_sufficient": 163,
+     "transcript_needed": 26,
+     "unanswerable": 17
+    }
+   },
+   "tags": {
+    "q002": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q007": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q008": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q010": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q012": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q021": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q022": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q023": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q031": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q036": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q037": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q044": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q050": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q058": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q060": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q062": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q066": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q074": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q085": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q088": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q113": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q114": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q116": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q118": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q120": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q132": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q137": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q152": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q153": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q172": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q174": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q178": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q186": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q196": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q201": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q202": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q204": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q210": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q220": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q224": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q233": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q234": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q238": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q240": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q245": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q246": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q247": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q248": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q249": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q251": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q253": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q263": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q265": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q275": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q283": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q288": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q290": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q293": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q294": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q301": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q302": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q305": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q317": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q322": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q329": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "q331": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q335": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q340": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q348": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q379": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q383": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q385": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q388": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q392": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q397": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q403": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q432": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q433": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q437": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q439": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q440": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q441": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q451": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q457": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q458": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q468": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q469": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q476": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q477": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q482": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q485": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q486": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q499": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q506": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q512": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q515": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q518": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q522": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q525": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q532": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q533": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q536": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q550": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q559": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q560": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q561": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q563": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q564": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q565": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q566": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q568": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q569": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q571": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q573": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q578": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q580": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q585": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q587": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q589": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q590": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q591": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q592": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q593": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q594": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q595": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q596": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q597": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q602": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q603": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q607": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q609": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q612": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q614": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q615": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q616": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q617": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q623": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q625": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q626": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q628": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q629": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q632": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q634": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q635": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q636": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q637": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q641": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "q643": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q644": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q648": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q650": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "q652": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q653": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q654": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q655": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q656": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q657": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q659": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q660": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q661": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q662": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q663": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q664": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q667": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q668": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q669": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q671": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q673": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q677": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q679": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q680": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q682": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "q684": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q686": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q688": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q689": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q691": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q692": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q693": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q694": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q695": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q697": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q698": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q699": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q700": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q704": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q705": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q707": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q711": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q713": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q714": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q715": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q718": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q719": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q721": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q722": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q723": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q726": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q729": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q730": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q731": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q734": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q735": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q739": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "q740": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q741": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q743": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q744": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q745": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q746": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q749": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q751": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q752": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q755": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q757": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q761": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q763": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q764": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q765": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q766": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q773": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q775": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q781": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q783": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q786": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q791": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q792": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q794": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q795": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q796": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q797": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q800": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q802": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q803": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q804": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "q805": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q806": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q807": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q808": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q810": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q811": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q812": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q813": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q814": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q815": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "q816": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q817": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q818": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q819": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q820": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q821": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "q822": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q823": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q824": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q825": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q826": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "q827": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q828": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q830": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "q831": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q832": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "q833": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q834": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q835": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q836": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q837": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q838": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q839": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q840": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q841": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q842": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q843": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q844": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q845": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q846": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q847": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q848": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q849": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q850": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q851": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q852": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q853": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q854": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q855": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q856": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q857": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q858": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q859": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q860": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q861": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q862": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q863": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q864": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q865": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q866": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q867": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    }
+   }
+  },
+  "northwind-xl-v2.1": {
+   "agreement_rule_vs_generator": {
+    "dev": {
+     "agreement": 0.8877551020408163,
+     "confusion": {
+      "rule=notes_sufficient|generator=notes_sufficient": 72,
+      "rule=notes_sufficient|generator=transcript_needed": 7,
+      "rule=transcript_needed|generator=notes_sufficient": 4,
+      "rule=transcript_needed|generator=transcript_needed": 15
+     },
+     "generator_sufficient_share": 0.7755102040816326,
+     "kappa": 0.6612193588937775,
+     "n": 98,
+     "rule_sufficient_share": 0.8061224489795918
+    },
+    "test": {
+     "agreement": 0.8571428571428571,
+     "confusion": {
+      "rule=notes_sufficient|generator=notes_sufficient": 159,
+      "rule=notes_sufficient|generator=transcript_needed": 8,
+      "rule=transcript_needed|generator=notes_sufficient": 24,
+      "rule=transcript_needed|generator=transcript_needed": 33
+     },
+     "generator_sufficient_share": 0.8169642857142857,
+     "kappa": 0.5851371686537793,
+     "n": 224,
+     "rule_sufficient_share": 0.7455357142857143
+    }
+   },
+   "counts": {
+    "aggregation": {
+     "notes_sufficient": 12,
+     "transcript_needed": 8,
+     "unanswerable": 0
+    },
+    "all": {
+     "notes_sufficient": 259,
+     "transcript_needed": 63,
+     "unanswerable": 25
+    },
+    "commitment_status": {
+     "notes_sufficient": 32,
+     "transcript_needed": 3,
+     "unanswerable": 0
+    },
+    "commitment_tracking": {
+     "notes_sufficient": 4,
+     "transcript_needed": 2,
+     "unanswerable": 0
+    },
+    "correction": {
+     "notes_sufficient": 3,
+     "transcript_needed": 1,
+     "unanswerable": 0
+    },
+    "decision_change": {
+     "notes_sufficient": 24,
+     "transcript_needed": 6,
+     "unanswerable": 0
+    },
+    "entity_disambiguation": {
+     "notes_sufficient": 29,
+     "transcript_needed": 5,
+     "unanswerable": 0
+    },
+    "exact_quote": {
+     "notes_sufficient": 8,
+     "transcript_needed": 4,
+     "unanswerable": 0
+    },
+    "identity_resolution": {
+     "notes_sufficient": 5,
+     "transcript_needed": 2,
+     "unanswerable": 0
+    },
+    "latest_state": {
+     "notes_sufficient": 35,
+     "transcript_needed": 5,
+     "unanswerable": 0
+    },
+    "long_horizon": {
+     "notes_sufficient": 2,
+     "transcript_needed": 1,
+     "unanswerable": 0
+    },
+    "multi_hop": {
+     "notes_sufficient": 17,
+     "transcript_needed": 5,
+     "unanswerable": 0
+    },
+    "room_attribution": {
+     "notes_sufficient": 1,
+     "transcript_needed": 5,
+     "unanswerable": 0
+    },
+    "single_hop": {
+     "notes_sufficient": 38,
+     "transcript_needed": 2,
+     "unanswerable": 0
+    },
+    "speaker_attribution": {
+     "notes_sufficient": 5,
+     "transcript_needed": 8,
+     "unanswerable": 0
+    },
+    "temporal": {
+     "notes_sufficient": 44,
+     "transcript_needed": 6,
+     "unanswerable": 0
+    },
+    "unanswerable": {
+     "notes_sufficient": 0,
+     "transcript_needed": 0,
+     "unanswerable": 25
+    }
+   },
+   "counts_by_split": {
+    "all": {
+     "notes_sufficient": 259,
+     "transcript_needed": 63,
+     "unanswerable": 25
+    },
+    "dev": {
+     "notes_sufficient": 76,
+     "transcript_needed": 22,
+     "unanswerable": 8
+    },
+    "test": {
+     "notes_sufficient": 183,
+     "transcript_needed": 41,
+     "unanswerable": 17
+    }
+   },
+   "tags": {
+    "q002": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q007": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q008": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q010": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q012": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q021": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q022": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q023": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q031": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q036": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q037": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q044": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q050": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q058": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q060": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q062": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q066": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q074": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q085": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q088": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q113": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q114": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q116": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q118": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q120": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q132": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q137": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q152": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q153": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q172": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q174": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q178": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q186": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q196": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q201": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q202": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q204": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q210": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q220": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q224": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q233": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q234": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q238": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q240": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q245": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q246": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q247": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q248": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q249": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q251": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q253": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q263": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q265": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q275": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q283": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q288": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q290": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q293": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q294": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q301": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q302": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q305": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q317": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q322": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q329": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "q331": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q335": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q340": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q348": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q379": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q383": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q385": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q388": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q392": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q397": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q403": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q432": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q433": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q437": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q439": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q440": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q441": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q451": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q457": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q458": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q468": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q469": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q476": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q477": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q482": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q485": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q486": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q499": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q506": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q512": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q515": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q518": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q522": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q525": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q532": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q533": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q536": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q550": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q559": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q560": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q561": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q563": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q564": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q565": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q566": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q568": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q569": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q571": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q573": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q578": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q580": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q585": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q587": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q589": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q590": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q591": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q592": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q593": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q594": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q595": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q596": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q597": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q602": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q603": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q607": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q609": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q612": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q614": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q615": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q616": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q617": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q623": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q625": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q626": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q628": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q629": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q632": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q634": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q635": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q636": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q637": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q641": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "q643": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q644": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q648": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q650": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "q652": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q653": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q654": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q655": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q656": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q657": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q659": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q660": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q661": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q662": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q663": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q664": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q667": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q668": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q669": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q671": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q673": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q677": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q679": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q680": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q682": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "q684": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q686": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q688": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q689": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q691": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q692": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q693": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q694": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q695": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q697": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q698": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q699": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q700": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q704": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q705": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q707": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q711": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q713": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q714": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q715": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q718": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q719": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q721": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q722": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q723": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q726": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q729": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q730": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q731": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q734": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q735": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q739": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "q740": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q741": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q743": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q744": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q745": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q746": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q749": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q751": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q752": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q755": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q757": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q761": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q763": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q764": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q765": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q766": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q773": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q775": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q781": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q783": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q786": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q791": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q792": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q794": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q795": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q796": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q797": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q800": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q802": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q803": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q804": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "q805": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q806": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q807": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q808": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q810": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q811": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q812": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q813": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q814": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q815": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "q816": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q817": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q818": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q819": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q820": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q821": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "q822": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q823": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q824": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q825": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q826": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "q827": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q828": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q830": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "q831": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q832": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "q833": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q834": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q835": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q836": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q837": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q838": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q839": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "q840": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q841": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "q842": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "q843": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q844": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q845": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q846": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q847": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q848": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q849": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q850": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q851": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q852": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q853": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q854": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q855": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q856": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q857": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q858": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q859": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q860": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q861": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q862": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q863": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q864": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q865": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q866": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "q867": {
+     "generator": "unanswerable",
+     "rule": "unanswerable"
+    },
+    "x001": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "x002": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "x003": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "x004": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "x005": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "x006": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "x007": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "x008": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "x009": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "x010": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "x011": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "x012": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "x013": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "x014": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "x015": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "x016": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "x017": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "x018": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "x019": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "x020": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "x021": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "x022": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "x023": {
+     "generator": "transcript_needed",
+     "rule": "notes_sufficient"
+    },
+    "x024": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "x025": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "x026": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "x027": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "x028": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "x029": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "x030": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "x031": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "x032": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "x033": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "x034": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "x035": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "x036": {
+     "generator": "notes_sufficient",
+     "rule": "transcript_needed"
+    },
+    "x037": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "x038": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "x039": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "x040": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "x041": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "x042": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "x043": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "x044": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "x045": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "x046": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "x047": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "x048": {
+     "generator": "notes_sufficient",
+     "rule": "notes_sufficient"
+    },
+    "x049": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "x050": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    },
+    "x051": {
+     "generator": "transcript_needed",
+     "rule": "transcript_needed"
+    }
+   }
+  }
+ }
+}

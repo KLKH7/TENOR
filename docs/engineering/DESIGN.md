@@ -443,3 +443,17 @@ Definitions: [`docs/benchmark/METRICS.md`](../benchmark/METRICS.md). Code: `eval
 - **Finding: on the real slice, Concentrate's loss is mostly declining.** 10 of its 16 wrong answers were abstentions on answerable questions (coverage 74%); when it answered it was right 79% of the time vs Granola's agent's 92% overall. Dev-quality data (n = 39).
 - **Privacy: `analyze --aggregate-only`** writes counts and rates only (no question IDs, failure signals or failures file). Used for `evals/reports/real-*.analysis.*`.
 - **Open:** partial credit uses an arbitrary 0.5 weight; latency for batched systems still rests on n = 10; calibration (X5) and faithfulness (X2) need runs.
+
+## P2-T: notes-sufficient vs transcript-needed tags, confident error (2026-11-03)
+Write-up: [`docs/results/NOTES_VS_TRANSCRIPT.md`](../results/NOTES_VS_TRANSCRIPT.md). Code: `evals/notes_tags.py`, `evals/by_tag.py`, `evals/notes_vs_transcript.py`; command `concentrate notes-vs-transcript` ($0).
+- **Decision: two deterministic taggers, not hand labels.**
+  - The *generator reference* (did the planted summary bullet survive?) is the primary synthetic tag: it is exact by construction.
+  - The *portable rule* (gold key values string-matched in the gold meetings' title, date, summary and typed notes) is the only option on real data. It is measured against the reference: v1 test 90%, κ 0.63.
+  - A 20-question hand check on held-out test questions: reference 19/20, rule 16/20.
+  - The rule was tuned on dev only. Its test-found misses (zero-padded dates such as "Dec 04"; "done" matching another item's Done line) are reported, not fixed.
+- **Decision: a notes-only reader sees title + date + summary + typed notes.** Granola's notes carry the meeting date, so a date answer that is only the meeting date counts as notes-sufficient.
+- **Decision: confident error = answered and judged *incorrect*.** Partials are excluded, and answering an unanswerable counts. It is a column of `analyze` (the 20261103T002456Z analysis was regenerated: only that column changed). It is an upper bound for flagless systems (Granola's agent).
+- **Finding: notes-only loses almost everything on transcript-needed questions, and half of it confidently.** On synthetic test (n = 17), summaries score 0%, with 7/17 confidently wrong. Transcript readers score 76–82%, and Concentrate after transcript deletion (dev retirement runs) keeps 80%.
+  - Caveats: the 0% is partly definitional; n is small; the transcript-needed share is a generator parameter.
+- **Finding: real notes hold far less than synthetic ones.** 18 of 41 real answerable questions are transcript-needed by the (strict) rule, against 13% synthetic. Only counts per category are committed; real tags stay in memory.
+- **Open:** a real notes-only run and a v2.1 run would give larger n and a direct real deletion measurement (both cost money).
