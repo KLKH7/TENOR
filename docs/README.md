@@ -2,6 +2,7 @@
 
 | Folder | What's in it | Start with |
 |---|---|---|
+| [`report/`](report/) | The technical report: question, method, results and limitations in about two pages | [`HINDSIGHT_REPORT.md`](report/HINDSIGHT_REPORT.md) |
 | [`benchmark/`](benchmark/) | What the benchmark is: datasets, how they're generated, how realistic they are | [`DESIGN.md`](benchmark/DESIGN.md), [`BLACKBOX.md`](benchmark/BLACKBOX.md) (bring your own meetings) |
 | [`systems/`](systems/) | The systems being compared: Concentrate (the reference memory), the Mem0 and Graphiti baselines, the MCP server | [`systems/concentrate/memory.md`](systems/concentrate/memory.md) |
 | [`results/`](results/) | Every experiment and what it found, including the red-team audit | [`REAL_SLICE.md`](results/REAL_SLICE.md), [`RED_TEAM.md`](results/RED_TEAM.md) |
