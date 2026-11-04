@@ -4,7 +4,9 @@
     "seed": 42,
     "volume": 1000,
     "alpha": 0.05,
-    "fixtures": null
+    "fixtures": null,
+    "price_model": "claude-opus-5-5",
+    "price_basis": "interactive (no Batch API, no prompt-cache credit), from tokens"
   },
   "accuracy": {
     "b0_topk": 0.9,
@@ -1110,26 +1112,13 @@
         "on_frontier": true
       },
       {
-        "name": "b2_full",
-        "accuracy": 1.0,
-        "usd_per_q": 0.09247496000000001,
-        "latency_p50": 4.195711374981329,
-        "dominated_by": [],
-        "dominated_by_latency": [],
-        "on_frontier": true
-      },
-      {
         "name": "b3_agentic",
         "accuracy": 0.9,
         "usd_per_q": 0.1084976,
         "latency_p50": 11.450836166040972,
-        "dominated_by": [
-          "b2_full"
-        ],
-        "dominated_by_latency": [
-          "b2_full"
-        ],
-        "on_frontier": false
+        "dominated_by": [],
+        "dominated_by_latency": [],
+        "on_frontier": true
       },
       {
         "name": "b0_topk",
@@ -1137,13 +1126,19 @@
         "usd_per_q": 0.2769088,
         "latency_p50": 4.57075454108417,
         "dominated_by": [
-          "b2_full",
           "b3_agentic"
         ],
-        "dominated_by_latency": [
-          "b2_full"
-        ],
+        "dominated_by_latency": [],
         "on_frontier": false
+      },
+      {
+        "name": "b2_full",
+        "accuracy": 1.0,
+        "usd_per_q": 0.5189356,
+        "latency_p50": 4.195711374981329,
+        "dominated_by": [],
+        "dominated_by_latency": [],
+        "on_frontier": true
       }
     ],
     "1000": [
@@ -1157,26 +1152,13 @@
         "on_frontier": true
       },
       {
-        "name": "b2_full",
-        "accuracy": 1.0,
-        "usd_per_q": 0.09247496000000001,
-        "latency_p50": 4.195711374981329,
-        "dominated_by": [],
-        "dominated_by_latency": [],
-        "on_frontier": true
-      },
-      {
         "name": "b3_agentic",
         "accuracy": 0.9,
         "usd_per_q": 0.1084976,
         "latency_p50": 11.450836166040972,
-        "dominated_by": [
-          "b2_full"
-        ],
-        "dominated_by_latency": [
-          "b2_full"
-        ],
-        "on_frontier": false
+        "dominated_by": [],
+        "dominated_by_latency": [],
+        "on_frontier": true
       },
       {
         "name": "b0_topk",
@@ -1184,13 +1166,19 @@
         "usd_per_q": 0.2769088,
         "latency_p50": 4.57075454108417,
         "dominated_by": [
-          "b2_full",
           "b3_agentic"
         ],
-        "dominated_by_latency": [
-          "b2_full"
-        ],
+        "dominated_by_latency": [],
         "on_frontier": false
+      },
+      {
+        "name": "b2_full",
+        "accuracy": 1.0,
+        "usd_per_q": 0.5189356,
+        "latency_p50": 4.195711374981329,
+        "dominated_by": [],
+        "dominated_by_latency": [],
+        "on_frontier": true
       }
     ],
     "10000": [
@@ -1204,26 +1192,13 @@
         "on_frontier": true
       },
       {
-        "name": "b2_full",
-        "accuracy": 1.0,
-        "usd_per_q": 0.09247496000000001,
-        "latency_p50": 4.195711374981329,
-        "dominated_by": [],
-        "dominated_by_latency": [],
-        "on_frontier": true
-      },
-      {
         "name": "b3_agentic",
         "accuracy": 0.9,
         "usd_per_q": 0.1084976,
         "latency_p50": 11.450836166040972,
-        "dominated_by": [
-          "b2_full"
-        ],
-        "dominated_by_latency": [
-          "b2_full"
-        ],
-        "on_frontier": false
+        "dominated_by": [],
+        "dominated_by_latency": [],
+        "on_frontier": true
       },
       {
         "name": "b0_topk",
@@ -1231,13 +1206,19 @@
         "usd_per_q": 0.2769088,
         "latency_p50": 4.57075454108417,
         "dominated_by": [
-          "b2_full",
           "b3_agentic"
         ],
-        "dominated_by_latency": [
-          "b2_full"
-        ],
+        "dominated_by_latency": [],
         "on_frontier": false
+      },
+      {
+        "name": "b2_full",
+        "accuracy": 1.0,
+        "usd_per_q": 0.5189356,
+        "latency_p50": 4.195711374981329,
+        "dominated_by": [],
+        "dominated_by_latency": [],
+        "on_frontier": true
       }
     ],
     "100000": [
@@ -1251,26 +1232,13 @@
         "on_frontier": true
       },
       {
-        "name": "b2_full",
-        "accuracy": 1.0,
-        "usd_per_q": 0.09247496000000001,
-        "latency_p50": 4.195711374981329,
-        "dominated_by": [],
-        "dominated_by_latency": [],
-        "on_frontier": true
-      },
-      {
         "name": "b3_agentic",
         "accuracy": 0.9,
         "usd_per_q": 0.1084976,
         "latency_p50": 11.450836166040972,
-        "dominated_by": [
-          "b2_full"
-        ],
-        "dominated_by_latency": [
-          "b2_full"
-        ],
-        "on_frontier": false
+        "dominated_by": [],
+        "dominated_by_latency": [],
+        "on_frontier": true
       },
       {
         "name": "b0_topk",
@@ -1278,17 +1246,255 @@
         "usd_per_q": 0.2769088,
         "latency_p50": 4.57075454108417,
         "dominated_by": [
-          "b2_full",
           "b3_agentic"
         ],
-        "dominated_by_latency": [
-          "b2_full"
-        ],
+        "dominated_by_latency": [],
         "on_frontier": false
+      },
+      {
+        "name": "b2_full",
+        "accuracy": 1.0,
+        "usd_per_q": 0.5189356,
+        "latency_p50": 4.195711374981329,
+        "dominated_by": [],
+        "dominated_by_latency": [],
+        "on_frontier": true
       }
     ]
   },
   "breakeven": [],
+  "metrics": {
+    "price_model": "claude-opus-5-5",
+    "batch_discount": 0.5,
+    "credit": [
+      {
+        "system": "b0_topk",
+        "n": 10,
+        "accuracy": 0.9,
+        "partial": 0.1,
+        "partial_credit": 0.95,
+        "exact_match": 0.875
+      },
+      {
+        "system": "b1_summaries",
+        "n": 10,
+        "accuracy": 0.7,
+        "partial": 0.1,
+        "partial_credit": 0.75,
+        "exact_match": 0.575
+      },
+      {
+        "system": "b2_full",
+        "n": 10,
+        "accuracy": 1.0,
+        "partial": 0.0,
+        "partial_credit": 1.0,
+        "exact_match": 0.775
+      },
+      {
+        "system": "b3_agentic",
+        "n": 10,
+        "accuracy": 0.9,
+        "partial": 0.1,
+        "partial_credit": 0.95,
+        "exact_match": 0.75
+      }
+    ],
+    "cost": [
+      {
+        "system": "b0_topk",
+        "n": 10,
+        "price_model": "claude-opus-5-5",
+        "observable": true,
+        "input_tokens": 67927.2,
+        "output_tokens": 260.0,
+        "usd_interactive": 0.2769088,
+        "usd_batch": 0.1384544,
+        "batch_saving": 0.1384544,
+        "usd_recorded": 0.2769088,
+        "batched_share": 0.0
+      },
+      {
+        "system": "b1_summaries",
+        "n": 10,
+        "price_model": "claude-opus-5-5",
+        "observable": true,
+        "input_tokens": 6730.8,
+        "output_tokens": 181.2,
+        "usd_interactive": 0.030547200000000004,
+        "usd_batch": 0.015273600000000002,
+        "batch_saving": 0.015273600000000002,
+        "usd_recorded": 0.030547200000000004,
+        "batched_share": 0.0
+      },
+      {
+        "system": "b2_full",
+        "n": 10,
+        "price_model": "claude-opus-5-5",
+        "observable": true,
+        "input_tokens": 128507.4,
+        "output_tokens": 245.3,
+        "usd_interactive": 0.5189356,
+        "usd_batch": 0.2594678,
+        "batch_saving": 0.2594678,
+        "usd_recorded": 0.09247496000000001,
+        "batched_share": 0.0
+      },
+      {
+        "system": "b3_agentic",
+        "n": 10,
+        "price_model": "claude-opus-5-5",
+        "observable": true,
+        "input_tokens": 22910.4,
+        "output_tokens": 842.8,
+        "usd_interactive": 0.1084976,
+        "usd_batch": 0.0542488,
+        "batch_saving": 0.0542488,
+        "usd_recorded": 0.1084976,
+        "batched_share": 0.0
+      }
+    ],
+    "ingest_usd": {
+      "b0_topk": 0.0,
+      "b1_summaries": 0.0,
+      "b2_full": 0.0,
+      "b3_agentic": 0.0
+    },
+    "abstention": [
+      {
+        "system": "b0_topk",
+        "flag": true,
+        "n": 10,
+        "unanswerable": 1,
+        "abstained": 1,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_abstain": 0.0,
+        "coverage": 0.9,
+        "accuracy": 0.9,
+        "accuracy_answered": 0.8888888888888888
+      },
+      {
+        "system": "b1_summaries",
+        "flag": true,
+        "n": 10,
+        "unanswerable": 1,
+        "abstained": 2,
+        "precision": 0.5,
+        "recall": 1.0,
+        "false_abstain": 0.1111111111111111,
+        "coverage": 0.8,
+        "accuracy": 0.7,
+        "accuracy_answered": 0.75
+      },
+      {
+        "system": "b2_full",
+        "flag": true,
+        "n": 10,
+        "unanswerable": 1,
+        "abstained": 1,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_abstain": 0.0,
+        "coverage": 0.9,
+        "accuracy": 1.0,
+        "accuracy_answered": 1.0
+      },
+      {
+        "system": "b3_agentic",
+        "flag": true,
+        "n": 10,
+        "unanswerable": 1,
+        "abstained": 1,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_abstain": 0.0,
+        "coverage": 0.9,
+        "accuracy": 0.9,
+        "accuracy_answered": 0.8888888888888888
+      }
+    ],
+    "sources": [
+      {
+        "system": "b0_topk",
+        "means": "meetings whose transcripts were put in context (top-k)",
+        "exposed": true,
+        "n": 9,
+        "recall_any": 1.0,
+        "recall_all": 0.8888888888888888,
+        "pulled_mean": 20.0,
+        "pulled_median": 20.0,
+        "pulled_max": 20,
+        "line_citations": true
+      },
+      {
+        "system": "b1_summaries",
+        "means": "meetings whose summaries were put in context (top-k)",
+        "exposed": true,
+        "n": 9,
+        "recall_any": 1.0,
+        "recall_all": 0.8888888888888888,
+        "pulled_mean": 20.0,
+        "pulled_median": 20.0,
+        "pulled_max": 20,
+        "line_citations": false
+      },
+      {
+        "system": "b2_full",
+        "means": "every meeting (the whole corpus is in context)",
+        "exposed": true,
+        "n": 9,
+        "recall_any": 1.0,
+        "recall_all": 1.0,
+        "pulled_mean": 40.0,
+        "pulled_median": 40.0,
+        "pulled_max": 40,
+        "line_citations": true
+      },
+      {
+        "system": "b3_agentic",
+        "means": "meetings opened with a get-meeting/transcript tool call (search hits excluded)",
+        "exposed": true,
+        "n": 9,
+        "recall_any": 1.0,
+        "recall_all": 0.8888888888888888,
+        "pulled_mean": 3.3,
+        "pulled_median": 2.0,
+        "pulled_max": 9,
+        "line_citations": true
+      }
+    ],
+    "lists": [
+      {
+        "system": "b0_topk",
+        "n": 2,
+        "completeness": 0.875,
+        "complete": 0.5,
+        "judged_correct": 1.0
+      },
+      {
+        "system": "b1_summaries",
+        "n": 2,
+        "completeness": 0.875,
+        "complete": 0.5,
+        "judged_correct": 0.5
+      },
+      {
+        "system": "b2_full",
+        "n": 2,
+        "completeness": 0.875,
+        "complete": 0.5,
+        "judged_correct": 1.0
+      },
+      {
+        "system": "b3_agentic",
+        "n": 2,
+        "completeness": 0.75,
+        "complete": 0.5,
+        "judged_correct": 0.5
+      }
+    ]
+  },
   "failures": {
     "table": {
       "b1_summaries": {

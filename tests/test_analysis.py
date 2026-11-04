@@ -244,13 +244,16 @@ def _synthetic_report(tmp_path: Path, n: int = 120) -> Path:
     rows, metrics = [], {}
     cats = ["single_hop", "temporal"]
     hard = [rng.random() for _ in range(n)]  # shared difficulty: errors are correlated
+    # $/q at the interactive Opus price ($4/Mtok in): strong 0.30, mid 0.05, weak 0.02
+    tokens = {"strong": 75_000, "mid": 12_500, "weak": 5_000}
     for s, p in acc.items():
         # 'mid' errs independently of the others, so its gap to 'strong' is mostly noise
         correct = [(rng.random() if s == "mid" else h) < p for h in hard]
         for i, c in enumerate(correct):
             rows.append(_row(f"q{i:03d}", "a", system=s, category=cats[i % 2], correct=c,
                              verdict="correct" if c else "incorrect", question=f"Q{i}?",
-                             gold="g", cost_usd=0.01))  # fmt: skip
+                             gold="g", cost_usd=0.01, input_tokens=tokens[s],
+                             output_tokens=0))  # fmt: skip
         metrics[s] = {
             "accuracy": sum(correct) / n,
             "cost_per_q": {"strong": 0.3, "mid": 0.05, "weak": 0.02}[s],
@@ -306,5 +309,5 @@ def test_cli_analyze(tmp_path: Path, gt: GroundTruth) -> None:
                                       "--fixtures", str(tmp_path), "--volume", "500"])  # fmt: skip
     assert result.exit_code == 0, result.output
     md = stem.with_name("T0.analysis.md").read_text()
-    assert "(ingest spread over 500 questions)" in md
+    assert "÷ 500 questions" in md and "mid (ingest $20.00) pays back" in md
     assert "0/120 report questions matched" in md  # fixture questions differ: noted, not trusted

@@ -277,8 +277,18 @@ def split_cache(u: Usage, model: str) -> Usage:
     return replace(u, input_tokens=u.input_tokens * (1 - h), cache_read_tokens=u.input_tokens * h)
 
 
+def unbatched_usd(row: dict[str, Any]) -> float:
+    """A row's recorded cost at the interactive price: Batch-priced rows (``batched``) paid
+    :data:`BATCH_DISCOUNT` of it. Averaging raw ``cost_usd`` mixes the two price bases, and
+    :func:`split_cache` would then read the batch discount as prompt-cache hits."""
+    usd = float(row.get("cost_usd") or 0.0)
+    return usd / BATCH_DISCOUNT if row.get("batched") else usd
+
+
 def load_answers(report_jsonl: Path) -> tuple[str, dict[str, AnswerProfile]]:
-    """(answer model, per-system profile) from a report's per-question rows."""
+    """(answer model, per-system profile) from a report's per-question rows. Every row is
+    brought to the interactive price basis first (:func:`unbatched_usd`); the Batch API is
+    then a :class:`Scenario` choice applied to all systems alike."""
     meta = json.loads(report_jsonl.with_suffix(".json").read_text())["meta"]
     rows: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for line in report_jsonl.read_text().splitlines():
@@ -298,7 +308,7 @@ def load_answers(report_jsonl: Path) -> tuple[str, dict[str, AnswerProfile]]:
                     calls=1 + sum(r.get("tool_calls", 0) for r in rs) / n,
                     input_tokens=sum(r["input_tokens"] for r in rs) / n,
                     output_tokens=sum(r["output_tokens"] for r in rs) / n,
-                    recorded_usd=sum(r["cost_usd"] for r in rs) / n,
+                    recorded_usd=sum(unbatched_usd(r) for r in rs) / n,
                 ),
                 str(meta["model"]),
             ),
@@ -348,6 +358,7 @@ class SystemCost:
     ingest_model: str | None
     answer_model: str
     n: int = 0
+    answer_batch_saving: float = 0.0  # $/question saved if answers went through the Batch API
     monthly: float = 0.0
     ingest_share: float = 0.0
     breakeven: dict[str, float | None] = field(default_factory=dict)  # vs query-time systems
@@ -385,6 +396,7 @@ def compute(
             batch=sc.batch_queries,
             batch_multiplier=mult,
         )
+        interactive_q = price(a.per_question, answer_model, cache_hit=sc.cache_hit)
         monthly = sc.meetings * per_meeting + sc.questions * per_q
         costs.append(
             SystemCost(
@@ -398,6 +410,7 @@ def compute(
                 ingest_model=model,
                 answer_model=answer_model,
                 n=a.n,
+                answer_batch_saving=interactive_q * (1.0 - mult),
                 monthly=monthly,
                 ingest_share=(sc.meetings * per_meeting / monthly) if monthly else 0.0,
             )
@@ -487,9 +500,14 @@ def to_markdown(
         f"{'yes' if sc.batch_queries else 'no'} · batch discount {sc.batch_discount:.0%} · "
         f"prompt-cache hit: {'as measured' if sc.cache_hit is None else f'{sc.cache_hit:.0%}'}",
         "",
-        "| system | kind | ingest model | $/meeting | answer model | $/question | $/user/month |"
-        " ingest share | accuracy (n) | p50 latency | answer cost from |",
-        "|---|---|---|---:|---|---:|---:|---:|---:|---:|---|",
+        "Every answer is priced from its tokens on one basis (interactive unless "
+        "`--batch-queries`); recorded costs from batch-priced report rows are converted back to "
+        "the interactive price first. **Batch saving** is what the Batch API would save per "
+        "question, reported separately and not included in $/question.",
+        "",
+        "| system | kind | ingest model | $/meeting | answer model | $/question | batch saving/q |"
+        " $/user/month | ingest share | accuracy (n) | p50 latency | answer cost from |",
+        "|---|---|---|---:|---|---:|---:|---:|---:|---:|---:|---|",
     ]
     for c in costs:
         acc = "—" if c.accuracy is None else f"{c.accuracy:.0%} ({c.n})"
@@ -497,6 +515,7 @@ def to_markdown(
         lines.append(
             f"| {c.system} | {c.kind} | {_short(c.ingest_model)} | {_usd(c.ingest_per_meeting, 4)}"
             f" | {_short(c.answer_model)} | {_usd(c.answer_per_question, 4)} | "
+            f"{_usd(c.answer_batch_saving, 4) if not sc.batch_queries else 'applied'} | "
             f"**{_usd(c.monthly, 2)}** | {c.ingest_share:.0%} | {acc} | {lat} | "
             f"{'ASSUMED estimate' if c.answer_source.startswith('planning') else 'measured'} |"
         )
