@@ -1,6 +1,6 @@
 # Deletion simulation: what auto-deleting transcripts costs, measured from outside
 
-Status: **built and tested, not run.** Nothing paid has run. The exact cost quote is below; a run needs approval.
+Status: **DEV run done** (47 seen questions, 2026-11-04, $6.42, approved cap $9). Results below. The test split has not run: no test questions exist yet.
 Code: [`evals/deletion_sim.py`](../../packages/concentrate/evals/deletion_sim.py), CLI `concentrate deletion-sim`.
 Tests: [`tests/test_deletion_sim.py`](../../tests/test_deletion_sim.py) (fakes only, no network).
 
@@ -84,6 +84,70 @@ How it is counted:
 
 - Per condition, the second judge is about $0.10 on dev.
 - C's answer calls are the largest item: about 11.5k input tokens per question, the notes plus the memory context.
+
+## DEV results (47 seen questions, real meetings)
+
+**DEV: these questions were seen while building Concentrate, and their gold answers were bulk-approved.** Treat the numbers as where to look, not as claims.
+
+- Run `20261104T012414Z` at git `6dc2cb6`, seed 42. Answer model and primary judge `claude-opus-5-5`; second judge `claude-sonnet-5-5` (188 of 188 answers re-judged).
+- Tags come from P2-T's portable rule (`notes_vs_transcript.real_tags` at `9acda8c`), recomputed privately: 23 notes-sufficient, 18 transcript-needed, 6 unanswerable.
+- Aggregate: [`evals/reports/real-deletion-sim-dev.aggregate.json`](../../evals/reports/real-deletion-sim-dev.aggregate.json). Per-question detail stays in `data/real/` only.
+- CIs: 95% bootstrap. Sign test: exact two-sided, on discordant pairs.
+
+### Per condition
+
+| Condition | n | Accuracy [95% CI] | Confident error [95% CI] | Hedged miss | Fallback fired | 2nd-judge accuracy | Judge agreement |
+|---|---|---|---|---|---|---|---|
+| A: Granola full | 47 | 89% [79–98] | 6% [0–15] | 4% | n/a | 85% | 96% |
+| B: notes only | 47 | 57% [43–70] | 0% | 43% | n/a | 60% | 96% |
+| C: notes + fact layer | 47 | 66% [51–79] | 0% | 34% | n/a | 64% | 98% |
+| D: + transcript fallback | 47 | 87% [77–96] | 0% | 13% | 60% (28/47) | 87% | 100% |
+
+Partial answers (neither correct nor counted as a miss above) were 4% / 9% / 4% / 6%.
+
+Granola's 6% confident error is the same under P2-T's flag-only definition (answered and judged incorrect).
+
+### By tag (accuracy; confident error)
+
+| Tag | n | A Granola | B notes only | C + facts | D + fallback |
+|---|---|---|---|---|---|
+| notes-sufficient | 23 | 91%; 0% | 57%; 0% | 65%; 0% | 83%; 0% |
+| transcript-needed | 18 | 94%; 6% | 44%; 0% | 56%; 0% | 89%; 0% |
+| unanswerable | 6 | 67%; 33% | 100%; 0% | 100%; 0% | 100%; 0% |
+
+### Paired comparisons (same questions)
+
+| Comparison | Slice | wins / losses | Δ accuracy | sign test p |
+|---|---|---|---|---|
+| **B vs A: what deletion costs** | all (47) | 2 / 17 | −32 pts | 0.001 |
+| | notes-sufficient (23) | 0 / 8 | −35 pts | 0.008 |
+| | transcript-needed (18) | 0 / 9 | −50 pts | 0.004 |
+| | unanswerable (6) | 2 / 0 | +33 pts | 0.50 |
+| **C vs B: what facts recover** | all (47) | 4 / 0 | +9 pts | 0.13 |
+| | notes-sufficient / transcript-needed | 2 / 0 each | +9 / +11 pts | 0.50 each |
+| **D vs C: what the fallback adds** | all (47) | 10 / 0 | +21 pts | 0.002 |
+| | notes-sufficient (23) | 4 / 0 | +17 pts | 0.13 |
+| | transcript-needed (18) | 6 / 0 | +33 pts | 0.031 |
+
+### Reading (DEV, n = 47; read with the caveats above)
+
+- **Deletion costs a lot, and more where the transcript is needed.** On transcript-needed questions, notes-only drops 50 points against Granola. The loss is significant even overall (17 losses to 2).
+  - Part of the A − B gap is our model and prompt, not deletion (see "What each condition can and can't tell us").
+- **Without transcripts, our answer model hedges; it doesn't bluff.** None of B's or C's incorrect answers was confident: each one abstained or said the material doesn't cover it.
+  - Granola, with transcripts, produced the only confident errors: 2 of its 6 unanswerable questions got a confident answer.
+  - So on these questions deletion turns right answers into *refusals*, not into confident errors. That is a property of `answer.v1` on this model. Granola's own degraded chat may behave differently, and we can't observe it.
+- **The fact layer alone recovers little.** C vs B: +9 points, 4–0, not significant at n = 47.
+- **The fallback recovers most of the loss.** D reaches 87% against Granola's 89%. Because C never bluffed, the fallback's blind spot (it can't fire on a confident error) didn't come up here.
+  - But D reads transcripts, so it is "keep a cold copy", not deletion.
+- **Bad for the tag rule:** notes-only scores only 57% on *notes-sufficient* questions.
+  - Either the string-matching rule over-calls notes-sufficient, or the answer model under-uses the notes. This run can't tell which.
+- **Unanswerable has n = 6.** Don't read anything into its row.
+
+### Spend vs the quote
+
+- **Actual: $6.42.** That is $6.13 for answers and the primary judge, plus $0.29 for the second judge. The quote was $6.27 expected, $8.71 high: 2% over expected.
+- **Input tokens matched the quote exactly** for B (248,707) and C (541,338).
+- The overshoot came from the fallback. It fired on 60% of answers, not the 47% assumed, and outputs ran a little long.
 
 ## Why outside-in
 

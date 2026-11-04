@@ -23,5 +23,6 @@ tokens), not anyone's bill.
 | Transcript retirement | What does deleting transcripts cost? | DEV, n=90 | <img src="../figures/retirement.svg" width="240" alt="retirement curve"> | [RETIREMENT.md](RETIREMENT.md) |
 | Notes vs transcript | What does a notes-only answer lose? | TEST, n=107 answerable (17 transcript-needed) | <img src="../figures/notes_vs_transcript.svg" width="240" alt="notes vs transcript"> | [NOTES_VS_TRANSCRIPT.md](NOTES_VS_TRANSCRIPT.md) |
 | Transcript fallback | Did the hybrid help, and where? | real DEV, n=22 | <img src="../figures/fallback_dev.svg" width="240" alt="fallback"> | [fallback.md](../systems/concentrate/fallback.md) |
+| Deletion simulation | What does Granola's auto-deletion cost, and what recovers it? | real DEV, n=47 | (no figure yet) | [DELETION_SIM.md](../benchmark/DELETION_SIM.md) |
 | Pre-meeting brief | Can memory write a useful brief? | DEV / TEST | (no figure yet) | [BRIEF.md](BRIEF.md) |
 | Red team | Does the headline survive attack? | all | (no figure) | [RED_TEAM.md](RED_TEAM.md) |

@@ -2169,7 +2169,12 @@ def deletion_sim_cmd(
             meta={"meetings": len(notes), "category_counts": cats, "track": "deletion-sim"},
         )
     agg = {**report, "metrics": {"judge1": report["metrics"], "deletion": report["deletion"]}}
-    private = [t for q in questions for t in (q.question, q.gold_answer)]
+    # "UNANSWERABLE" is a placeholder gold, not content (it would match the category name).
+    private = [q.question for q in questions] + [
+        q.gold_answer for q in questions if not q.unanswerable
+    ]
+    for line in Path(report["paths"]["jsonl"]).read_text().splitlines():
+        private.append(_json.loads(line)["answer"]["answer"])
     path = REAL_DIR / "reports" / f"{report['meta']['date']}.deletion.aggregate.json"
     write_committable(agg, path, private)
     if commit_to is not None:

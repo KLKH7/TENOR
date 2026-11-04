@@ -1,0 +1,1212 @@
+{
+  "meta": {
+    "date": "20261104T012414Z",
+    "git": {
+      "sha": "6dc2cb6",
+      "dirty": false
+    },
+    "model": "claude-opus-5-5",
+    "seed": 42,
+    "split": "dev",
+    "questions": 47,
+    "prompts": {
+      "granola_agent": [
+        "granola:query_granola_meetings"
+      ],
+      "notes_only": [
+        "answer.v1"
+      ],
+      "notes_facts": [
+        "answer.v1",
+        "extract.v2",
+        "entail.v2"
+      ],
+      "notes_facts_fallback": [
+        "answer.v1",
+        "extract.v2",
+        "entail.v2"
+      ],
+      "judge": [
+        "judge.v1"
+      ]
+    },
+    "spent_usd": 6.131555999999999,
+    "stopped_early": null,
+    "category_counts": {
+      "who_said": 8,
+      "decision": 8,
+      "change": 6,
+      "commitment_status": 8,
+      "disambiguation": 5,
+      "temporal": 6,
+      "unanswerable": 6
+    }
+  },
+  "metrics": {
+    "judge1": {
+      "granola_agent": {
+        "n": 47,
+        "accuracy": 0.8936170212765957,
+        "accuracy_ci95": [
+          0.7872340425531915,
+          0.9787234042553191
+        ],
+        "exact_match": 0.7446808510638298,
+        "abstain_precision": null,
+        "abstain_recall": 0.0,
+        "cite_precision": 0.9878048780487805,
+        "cite_recall": 0.9390243902439024,
+        "input_tokens_per_q": 0.0,
+        "output_tokens_per_q": 0.0,
+        "cost_per_q": 0.0,
+        "cost_total": 0.0,
+        "latency_p50": 8.05364316701889,
+        "latency_p95": 10.664228499983437,
+        "latency_n": 47,
+        "tool_calls_per_q": 1.0,
+        "by_category": {
+          "change": {
+            "n": 6,
+            "accuracy": 0.8333333333333334
+          },
+          "commitment_status": {
+            "n": 8,
+            "accuracy": 1.0
+          },
+          "decision": {
+            "n": 8,
+            "accuracy": 1.0
+          },
+          "disambiguation": {
+            "n": 5,
+            "accuracy": 0.8
+          },
+          "temporal": {
+            "n": 6,
+            "accuracy": 1.0
+          },
+          "unanswerable": {
+            "n": 6,
+            "accuracy": 0.6666666666666666
+          },
+          "who_said": {
+            "n": 8,
+            "accuracy": 0.875
+          }
+        }
+      },
+      "notes_only": {
+        "n": 47,
+        "accuracy": 0.574468085106383,
+        "accuracy_ci95": [
+          0.425531914893617,
+          0.7021276595744681
+        ],
+        "exact_match": 0.5567375886524822,
+        "abstain_precision": 0.2608695652173913,
+        "abstain_recall": 1.0,
+        "cite_precision": 1.0,
+        "cite_recall": 0.573170731707317,
+        "input_tokens_per_q": 5291.63829787234,
+        "output_tokens_per_q": 183.4255319148936,
+        "cost_per_q": 0.024835063829787236,
+        "cost_total": 1.1672480000000003,
+        "latency_p50": 2.7840222920058295,
+        "latency_p95": 6.046422416111454,
+        "latency_n": 47,
+        "tool_calls_per_q": 0.0,
+        "by_category": {
+          "change": {
+            "n": 6,
+            "accuracy": 0.5
+          },
+          "commitment_status": {
+            "n": 8,
+            "accuracy": 0.75
+          },
+          "decision": {
+            "n": 8,
+            "accuracy": 0.875
+          },
+          "disambiguation": {
+            "n": 5,
+            "accuracy": 0.2
+          },
+          "temporal": {
+            "n": 6,
+            "accuracy": 0.3333333333333333
+          },
+          "unanswerable": {
+            "n": 6,
+            "accuracy": 1.0
+          },
+          "who_said": {
+            "n": 8,
+            "accuracy": 0.25
+          }
+        }
+      },
+      "notes_facts": {
+        "n": 47,
+        "accuracy": 0.6595744680851063,
+        "accuracy_ci95": [
+          0.5106382978723404,
+          0.7872340425531915
+        ],
+        "exact_match": 0.6205673758865249,
+        "abstain_precision": 0.3,
+        "abstain_recall": 1.0,
+        "cite_precision": 1.0,
+        "cite_recall": 0.6341463414634146,
+        "input_tokens_per_q": 11517.829787234043,
+        "output_tokens_per_q": 226.0212765957447,
+        "cost_per_q": 0.050591744680851064,
+        "cost_total": 2.377812,
+        "latency_p50": 3.377206875011325,
+        "latency_p95": 7.184051707969047,
+        "latency_n": 47,
+        "tool_calls_per_q": 0.0,
+        "by_category": {
+          "change": {
+            "n": 6,
+            "accuracy": 0.8333333333333334
+          },
+          "commitment_status": {
+            "n": 8,
+            "accuracy": 0.875
+          },
+          "decision": {
+            "n": 8,
+            "accuracy": 0.875
+          },
+          "disambiguation": {
+            "n": 5,
+            "accuracy": 0.4
+          },
+          "temporal": {
+            "n": 6,
+            "accuracy": 0.3333333333333333
+          },
+          "unanswerable": {
+            "n": 6,
+            "accuracy": 1.0
+          },
+          "who_said": {
+            "n": 8,
+            "accuracy": 0.25
+          }
+        }
+      },
+      "notes_facts_fallback": {
+        "n": 47,
+        "accuracy": 0.8723404255319149,
+        "accuracy_ci95": [
+          0.7659574468085106,
+          0.9574468085106383
+        ],
+        "exact_match": 0.8546099290780141,
+        "abstain_precision": 0.6666666666666666,
+        "abstain_recall": 1.0,
+        "cite_precision": 1.0,
+        "cite_recall": 0.9024390243902439,
+        "input_tokens_per_q": 21573.106382978724,
+        "output_tokens_per_q": 376.74468085106383,
+        "cost_per_q": 0.09382731914893618,
+        "cost_total": 4.409883999999999,
+        "latency_p50": 3.3936503750737756,
+        "latency_p95": 9.322898417012766,
+        "latency_n": 47,
+        "tool_calls_per_q": 0.0,
+        "by_category": {
+          "change": {
+            "n": 6,
+            "accuracy": 0.8333333333333334
+          },
+          "commitment_status": {
+            "n": 8,
+            "accuracy": 0.875
+          },
+          "decision": {
+            "n": 8,
+            "accuracy": 0.875
+          },
+          "disambiguation": {
+            "n": 5,
+            "accuracy": 1.0
+          },
+          "temporal": {
+            "n": 6,
+            "accuracy": 0.6666666666666666
+          },
+          "unanswerable": {
+            "n": 6,
+            "accuracy": 1.0
+          },
+          "who_said": {
+            "n": 8,
+            "accuracy": 0.875
+          }
+        }
+      }
+    },
+    "deletion": {
+      "conditions": {
+        "granola_agent": {
+          "n": 47,
+          "accuracy": 0.8936170212765957,
+          "accuracy_ci": [
+            0.7872340425531915,
+            0.9787234042553191
+          ],
+          "partial": 0.0425531914893617,
+          "confident_error": 0.06382978723404255,
+          "confident_error_ci": [
+            0.0,
+            0.14893617021276595
+          ],
+          "confident_error_flag": 0.06382978723404255,
+          "hedged_miss": 0.0425531914893617,
+          "judge2_n": 47,
+          "judge2_accuracy": 0.851063829787234,
+          "judge_agreement": 0.9574468085106383,
+          "by_category": {
+            "change": {
+              "n": 6,
+              "accuracy": 0.8333333333333334,
+              "accuracy_ci": [
+                0.5,
+                1.0
+              ],
+              "partial": 0.16666666666666666,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.16666666666666666,
+              "judge2_n": 6,
+              "judge2_accuracy": 0.8333333333333334,
+              "judge_agreement": 1.0
+            },
+            "commitment_status": {
+              "n": 8,
+              "accuracy": 1.0,
+              "accuracy_ci": [
+                1.0,
+                1.0
+              ],
+              "partial": 0.0,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.0,
+              "judge2_n": 8,
+              "judge2_accuracy": 1.0,
+              "judge_agreement": 1.0
+            },
+            "decision": {
+              "n": 8,
+              "accuracy": 1.0,
+              "accuracy_ci": [
+                1.0,
+                1.0
+              ],
+              "partial": 0.0,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.0,
+              "judge2_n": 8,
+              "judge2_accuracy": 0.875,
+              "judge_agreement": 0.875
+            },
+            "disambiguation": {
+              "n": 5,
+              "accuracy": 0.8,
+              "accuracy_ci": [
+                0.4,
+                1.0
+              ],
+              "partial": 0.2,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.2,
+              "judge2_n": 5,
+              "judge2_accuracy": 0.8,
+              "judge_agreement": 1.0
+            },
+            "temporal": {
+              "n": 6,
+              "accuracy": 1.0,
+              "accuracy_ci": [
+                1.0,
+                1.0
+              ],
+              "partial": 0.0,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.0,
+              "judge2_n": 6,
+              "judge2_accuracy": 0.8333333333333334,
+              "judge_agreement": 0.8333333333333334
+            },
+            "unanswerable": {
+              "n": 6,
+              "accuracy": 0.6666666666666666,
+              "accuracy_ci": [
+                0.3333333333333333,
+                1.0
+              ],
+              "partial": 0.0,
+              "confident_error": 0.3333333333333333,
+              "confident_error_ci": [
+                0.0,
+                0.6666666666666666
+              ],
+              "confident_error_flag": 0.3333333333333333,
+              "hedged_miss": 0.0,
+              "judge2_n": 6,
+              "judge2_accuracy": 0.6666666666666666,
+              "judge_agreement": 1.0
+            },
+            "who_said": {
+              "n": 8,
+              "accuracy": 0.875,
+              "accuracy_ci": [
+                0.625,
+                1.0
+              ],
+              "partial": 0.0,
+              "confident_error": 0.125,
+              "confident_error_ci": [
+                0.0,
+                0.375
+              ],
+              "confident_error_flag": 0.125,
+              "hedged_miss": 0.0,
+              "judge2_n": 8,
+              "judge2_accuracy": 0.875,
+              "judge_agreement": 1.0
+            }
+          },
+          "by_tag": {
+            "notes_sufficient": {
+              "n": 23,
+              "accuracy": 0.9130434782608695,
+              "accuracy_ci": [
+                0.782608695652174,
+                1.0
+              ],
+              "partial": 0.08695652173913043,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.08695652173913043,
+              "judge2_n": 23,
+              "judge2_accuracy": 0.8695652173913043,
+              "judge_agreement": 0.9565217391304348
+            },
+            "transcript_needed": {
+              "n": 18,
+              "accuracy": 0.9444444444444444,
+              "accuracy_ci": [
+                0.8333333333333334,
+                1.0
+              ],
+              "partial": 0.0,
+              "confident_error": 0.05555555555555555,
+              "confident_error_ci": [
+                0.0,
+                0.16666666666666666
+              ],
+              "confident_error_flag": 0.05555555555555555,
+              "hedged_miss": 0.0,
+              "judge2_n": 18,
+              "judge2_accuracy": 0.8888888888888888,
+              "judge_agreement": 0.9444444444444444
+            },
+            "unanswerable": {
+              "n": 6,
+              "accuracy": 0.6666666666666666,
+              "accuracy_ci": [
+                0.3333333333333333,
+                1.0
+              ],
+              "partial": 0.0,
+              "confident_error": 0.3333333333333333,
+              "confident_error_ci": [
+                0.0,
+                0.6666666666666666
+              ],
+              "confident_error_flag": 0.3333333333333333,
+              "hedged_miss": 0.0,
+              "judge2_n": 6,
+              "judge2_accuracy": 0.6666666666666666,
+              "judge_agreement": 1.0
+            }
+          }
+        },
+        "notes_only": {
+          "n": 47,
+          "accuracy": 0.574468085106383,
+          "accuracy_ci": [
+            0.425531914893617,
+            0.7021276595744681
+          ],
+          "partial": 0.0851063829787234,
+          "confident_error": 0.0,
+          "confident_error_ci": [
+            0.0,
+            0.0
+          ],
+          "confident_error_flag": 0.0,
+          "hedged_miss": 0.425531914893617,
+          "judge2_n": 47,
+          "judge2_accuracy": 0.5957446808510638,
+          "judge_agreement": 0.9574468085106383,
+          "by_category": {
+            "change": {
+              "n": 6,
+              "accuracy": 0.5,
+              "accuracy_ci": [
+                0.16666666666666666,
+                0.8333333333333334
+              ],
+              "partial": 0.5,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.5,
+              "judge2_n": 6,
+              "judge2_accuracy": 0.5,
+              "judge_agreement": 0.8333333333333334
+            },
+            "commitment_status": {
+              "n": 8,
+              "accuracy": 0.75,
+              "accuracy_ci": [
+                0.375,
+                1.0
+              ],
+              "partial": 0.125,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.25,
+              "judge2_n": 8,
+              "judge2_accuracy": 0.875,
+              "judge_agreement": 0.875
+            },
+            "decision": {
+              "n": 8,
+              "accuracy": 0.875,
+              "accuracy_ci": [
+                0.625,
+                1.0
+              ],
+              "partial": 0.0,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.125,
+              "judge2_n": 8,
+              "judge2_accuracy": 0.875,
+              "judge_agreement": 1.0
+            },
+            "disambiguation": {
+              "n": 5,
+              "accuracy": 0.2,
+              "accuracy_ci": [
+                0.0,
+                0.6
+              ],
+              "partial": 0.0,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.8,
+              "judge2_n": 5,
+              "judge2_accuracy": 0.2,
+              "judge_agreement": 1.0
+            },
+            "temporal": {
+              "n": 6,
+              "accuracy": 0.3333333333333333,
+              "accuracy_ci": [
+                0.0,
+                0.6666666666666666
+              ],
+              "partial": 0.0,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.6666666666666666,
+              "judge2_n": 6,
+              "judge2_accuracy": 0.3333333333333333,
+              "judge_agreement": 1.0
+            },
+            "unanswerable": {
+              "n": 6,
+              "accuracy": 1.0,
+              "accuracy_ci": [
+                1.0,
+                1.0
+              ],
+              "partial": 0.0,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.0,
+              "judge2_n": 6,
+              "judge2_accuracy": 1.0,
+              "judge_agreement": 1.0
+            },
+            "who_said": {
+              "n": 8,
+              "accuracy": 0.25,
+              "accuracy_ci": [
+                0.0,
+                0.625
+              ],
+              "partial": 0.0,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.75,
+              "judge2_n": 8,
+              "judge2_accuracy": 0.25,
+              "judge_agreement": 1.0
+            }
+          },
+          "by_tag": {
+            "notes_sufficient": {
+              "n": 23,
+              "accuracy": 0.5652173913043478,
+              "accuracy_ci": [
+                0.391304347826087,
+                0.782608695652174
+              ],
+              "partial": 0.13043478260869565,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.43478260869565216,
+              "judge2_n": 23,
+              "judge2_accuracy": 0.6086956521739131,
+              "judge_agreement": 0.9130434782608695
+            },
+            "transcript_needed": {
+              "n": 18,
+              "accuracy": 0.4444444444444444,
+              "accuracy_ci": [
+                0.2222222222222222,
+                0.6666666666666666
+              ],
+              "partial": 0.05555555555555555,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.5555555555555556,
+              "judge2_n": 18,
+              "judge2_accuracy": 0.4444444444444444,
+              "judge_agreement": 1.0
+            },
+            "unanswerable": {
+              "n": 6,
+              "accuracy": 1.0,
+              "accuracy_ci": [
+                1.0,
+                1.0
+              ],
+              "partial": 0.0,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.0,
+              "judge2_n": 6,
+              "judge2_accuracy": 1.0,
+              "judge_agreement": 1.0
+            }
+          }
+        },
+        "notes_facts": {
+          "n": 47,
+          "accuracy": 0.6595744680851063,
+          "accuracy_ci": [
+            0.5106382978723404,
+            0.7872340425531915
+          ],
+          "partial": 0.0425531914893617,
+          "confident_error": 0.0,
+          "confident_error_ci": [
+            0.0,
+            0.0
+          ],
+          "confident_error_flag": 0.0,
+          "hedged_miss": 0.3404255319148936,
+          "judge2_n": 47,
+          "judge2_accuracy": 0.6382978723404256,
+          "judge_agreement": 0.9787234042553191,
+          "by_category": {
+            "change": {
+              "n": 6,
+              "accuracy": 0.8333333333333334,
+              "accuracy_ci": [
+                0.5,
+                1.0
+              ],
+              "partial": 0.16666666666666666,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.16666666666666666,
+              "judge2_n": 6,
+              "judge2_accuracy": 0.8333333333333334,
+              "judge_agreement": 1.0
+            },
+            "commitment_status": {
+              "n": 8,
+              "accuracy": 0.875,
+              "accuracy_ci": [
+                0.625,
+                1.0
+              ],
+              "partial": 0.125,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.125,
+              "judge2_n": 8,
+              "judge2_accuracy": 0.75,
+              "judge_agreement": 0.875
+            },
+            "decision": {
+              "n": 8,
+              "accuracy": 0.875,
+              "accuracy_ci": [
+                0.625,
+                1.0
+              ],
+              "partial": 0.0,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.125,
+              "judge2_n": 8,
+              "judge2_accuracy": 0.875,
+              "judge_agreement": 1.0
+            },
+            "disambiguation": {
+              "n": 5,
+              "accuracy": 0.4,
+              "accuracy_ci": [
+                0.0,
+                0.8
+              ],
+              "partial": 0.0,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.6,
+              "judge2_n": 5,
+              "judge2_accuracy": 0.4,
+              "judge_agreement": 1.0
+            },
+            "temporal": {
+              "n": 6,
+              "accuracy": 0.3333333333333333,
+              "accuracy_ci": [
+                0.0,
+                0.6666666666666666
+              ],
+              "partial": 0.0,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.6666666666666666,
+              "judge2_n": 6,
+              "judge2_accuracy": 0.3333333333333333,
+              "judge_agreement": 1.0
+            },
+            "unanswerable": {
+              "n": 6,
+              "accuracy": 1.0,
+              "accuracy_ci": [
+                1.0,
+                1.0
+              ],
+              "partial": 0.0,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.0,
+              "judge2_n": 6,
+              "judge2_accuracy": 1.0,
+              "judge_agreement": 1.0
+            },
+            "who_said": {
+              "n": 8,
+              "accuracy": 0.25,
+              "accuracy_ci": [
+                0.0,
+                0.625
+              ],
+              "partial": 0.0,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.75,
+              "judge2_n": 8,
+              "judge2_accuracy": 0.25,
+              "judge_agreement": 1.0
+            }
+          },
+          "by_tag": {
+            "notes_sufficient": {
+              "n": 23,
+              "accuracy": 0.6521739130434783,
+              "accuracy_ci": [
+                0.4782608695652174,
+                0.8260869565217391
+              ],
+              "partial": 0.08695652173913043,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.34782608695652173,
+              "judge2_n": 23,
+              "judge2_accuracy": 0.6521739130434783,
+              "judge_agreement": 1.0
+            },
+            "transcript_needed": {
+              "n": 18,
+              "accuracy": 0.5555555555555556,
+              "accuracy_ci": [
+                0.3333333333333333,
+                0.7777777777777778
+              ],
+              "partial": 0.0,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.4444444444444444,
+              "judge2_n": 18,
+              "judge2_accuracy": 0.5,
+              "judge_agreement": 0.9444444444444444
+            },
+            "unanswerable": {
+              "n": 6,
+              "accuracy": 1.0,
+              "accuracy_ci": [
+                1.0,
+                1.0
+              ],
+              "partial": 0.0,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.0,
+              "judge2_n": 6,
+              "judge2_accuracy": 1.0,
+              "judge_agreement": 1.0
+            }
+          }
+        },
+        "notes_facts_fallback": {
+          "n": 47,
+          "accuracy": 0.8723404255319149,
+          "accuracy_ci": [
+            0.7659574468085106,
+            0.9574468085106383
+          ],
+          "partial": 0.06382978723404255,
+          "confident_error": 0.0,
+          "confident_error_ci": [
+            0.0,
+            0.0
+          ],
+          "confident_error_flag": 0.0,
+          "hedged_miss": 0.1276595744680851,
+          "judge2_n": 47,
+          "judge2_accuracy": 0.8723404255319149,
+          "judge_agreement": 1.0,
+          "fallback_fired": 0.5957446808510638,
+          "by_category": {
+            "change": {
+              "n": 6,
+              "accuracy": 0.8333333333333334,
+              "accuracy_ci": [
+                0.5,
+                1.0
+              ],
+              "partial": 0.16666666666666666,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.16666666666666666,
+              "judge2_n": 6,
+              "judge2_accuracy": 0.8333333333333334,
+              "judge_agreement": 1.0,
+              "fallback_fired": 0.0
+            },
+            "commitment_status": {
+              "n": 8,
+              "accuracy": 0.875,
+              "accuracy_ci": [
+                0.625,
+                1.0
+              ],
+              "partial": 0.125,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.125,
+              "judge2_n": 8,
+              "judge2_accuracy": 0.875,
+              "judge_agreement": 1.0,
+              "fallback_fired": 0.625
+            },
+            "decision": {
+              "n": 8,
+              "accuracy": 0.875,
+              "accuracy_ci": [
+                0.625,
+                1.0
+              ],
+              "partial": 0.0,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.125,
+              "judge2_n": 8,
+              "judge2_accuracy": 0.875,
+              "judge_agreement": 1.0,
+              "fallback_fired": 0.125
+            },
+            "disambiguation": {
+              "n": 5,
+              "accuracy": 1.0,
+              "accuracy_ci": [
+                1.0,
+                1.0
+              ],
+              "partial": 0.0,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.0,
+              "judge2_n": 5,
+              "judge2_accuracy": 1.0,
+              "judge_agreement": 1.0,
+              "fallback_fired": 0.8
+            },
+            "temporal": {
+              "n": 6,
+              "accuracy": 0.6666666666666666,
+              "accuracy_ci": [
+                0.3333333333333333,
+                1.0
+              ],
+              "partial": 0.0,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.3333333333333333,
+              "judge2_n": 6,
+              "judge2_accuracy": 0.6666666666666666,
+              "judge_agreement": 1.0,
+              "fallback_fired": 0.8333333333333334
+            },
+            "unanswerable": {
+              "n": 6,
+              "accuracy": 1.0,
+              "accuracy_ci": [
+                1.0,
+                1.0
+              ],
+              "partial": 0.0,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.0,
+              "judge2_n": 6,
+              "judge2_accuracy": 1.0,
+              "judge_agreement": 1.0,
+              "fallback_fired": 1.0
+            },
+            "who_said": {
+              "n": 8,
+              "accuracy": 0.875,
+              "accuracy_ci": [
+                0.625,
+                1.0
+              ],
+              "partial": 0.125,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.125,
+              "judge2_n": 8,
+              "judge2_accuracy": 0.875,
+              "judge_agreement": 1.0,
+              "fallback_fired": 0.875
+            }
+          },
+          "by_tag": {
+            "notes_sufficient": {
+              "n": 23,
+              "accuracy": 0.8260869565217391,
+              "accuracy_ci": [
+                0.6521739130434783,
+                0.9565217391304348
+              ],
+              "partial": 0.08695652173913043,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.17391304347826086,
+              "judge2_n": 23,
+              "judge2_accuracy": 0.8260869565217391,
+              "judge_agreement": 1.0,
+              "fallback_fired": 0.391304347826087
+            },
+            "transcript_needed": {
+              "n": 18,
+              "accuracy": 0.8888888888888888,
+              "accuracy_ci": [
+                0.7222222222222222,
+                1.0
+              ],
+              "partial": 0.05555555555555555,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.1111111111111111,
+              "judge2_n": 18,
+              "judge2_accuracy": 0.8888888888888888,
+              "judge_agreement": 1.0,
+              "fallback_fired": 0.7222222222222222
+            },
+            "unanswerable": {
+              "n": 6,
+              "accuracy": 1.0,
+              "accuracy_ci": [
+                1.0,
+                1.0
+              ],
+              "partial": 0.0,
+              "confident_error": 0.0,
+              "confident_error_ci": [
+                0.0,
+                0.0
+              ],
+              "confident_error_flag": 0.0,
+              "hedged_miss": 0.0,
+              "judge2_n": 6,
+              "judge2_accuracy": 1.0,
+              "judge_agreement": 1.0,
+              "fallback_fired": 1.0
+            }
+          }
+        }
+      },
+      "paired": {
+        "notes_only vs granola": {
+          "n": 47,
+          "wins": 2,
+          "losses": 17,
+          "delta": -0.3191489361702128,
+          "sign_p": 0.000728607177734375,
+          "by_tag": {
+            "notes_sufficient": {
+              "n": 23,
+              "wins": 0,
+              "losses": 8,
+              "delta": -0.34782608695652173,
+              "sign_p": 0.0078125
+            },
+            "transcript_needed": {
+              "n": 18,
+              "wins": 0,
+              "losses": 9,
+              "delta": -0.5,
+              "sign_p": 0.00390625
+            },
+            "unanswerable": {
+              "n": 6,
+              "wins": 2,
+              "losses": 0,
+              "delta": 0.3333333333333333,
+              "sign_p": 0.5
+            }
+          }
+        },
+        "notes_facts vs notes_only": {
+          "n": 47,
+          "wins": 4,
+          "losses": 0,
+          "delta": 0.0851063829787234,
+          "sign_p": 0.125,
+          "by_tag": {
+            "notes_sufficient": {
+              "n": 23,
+              "wins": 2,
+              "losses": 0,
+              "delta": 0.08695652173913043,
+              "sign_p": 0.5
+            },
+            "transcript_needed": {
+              "n": 18,
+              "wins": 2,
+              "losses": 0,
+              "delta": 0.1111111111111111,
+              "sign_p": 0.5
+            },
+            "unanswerable": {
+              "n": 6,
+              "wins": 0,
+              "losses": 0,
+              "delta": 0.0,
+              "sign_p": 1.0
+            }
+          }
+        },
+        "notes_facts_fallback vs notes_facts": {
+          "n": 47,
+          "wins": 10,
+          "losses": 0,
+          "delta": 0.2127659574468085,
+          "sign_p": 0.001953125,
+          "by_tag": {
+            "notes_sufficient": {
+              "n": 23,
+              "wins": 4,
+              "losses": 0,
+              "delta": 0.17391304347826086,
+              "sign_p": 0.125
+            },
+            "transcript_needed": {
+              "n": 18,
+              "wins": 6,
+              "losses": 0,
+              "delta": 0.3333333333333333,
+              "sign_p": 0.03125
+            },
+            "unanswerable": {
+              "n": 6,
+              "wins": 0,
+              "losses": 0,
+              "delta": 0.0,
+              "sign_p": 1.0
+            }
+          }
+        }
+      }
+    }
+  }
+}
