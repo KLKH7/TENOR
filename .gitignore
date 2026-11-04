@@ -28,3 +28,6 @@ web/*.tsbuildinfo
 
 # Real-data slice: the user's meetings, questions, answers (private, never commit)
 data/real
+
+# Internal working notes (never published)
+data/private/
