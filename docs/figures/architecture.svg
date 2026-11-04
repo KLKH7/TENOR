@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 480" width="1000" height="480" role="img" aria-labelledby="t d">
+  <title id="t">Hindsight architecture</title>
+  <desc id="d">Meetings enter through public Granola interfaces or the synthetic Northwind generator, pass through one Source protocol into a note store, are answered by query-time and write-time systems, and are scored by one harness whose reports feed analysis, figures and the results explorer. Granola's own agent is tested only as a black box on real meetings.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#6b7280"/>
+    </marker>
+    <marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#b45309"/>
+    </marker>
+    <style>
+      text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: #111827; }
+      .h { font-size: 14px; font-weight: 600; }
+      .s { font-size: 12px; fill: #4b5563; }
+      .k { font-size: 11px; font-weight: 600; letter-spacing: .06em; fill: #6b7280; }
+      .m { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11.5px; fill: #374151; }
+      .bb { font-size: 12px; fill: #92400e; font-weight: 600; }
+      .ln { stroke: #6b7280; stroke-width: 1.6; fill: none; }
+    </style>
+  </defs>
+
+  <rect width="1000" height="480" fill="#ffffff"/>
+
+  <!-- column labels -->
+  <text class="k" x="20" y="92">INPUTS</text>
+  <text class="k" x="225" y="92">ONE DOOR</text>
+  <text class="k" x="575" y="92">SEVEN SYSTEMS</text>
+  <text class="k" x="805" y="92">SCORING</text>
+
+  <!-- black-box track (drawn first, underneath) -->
+  <path d="M190 206 L 200 206 Q 207 206, 207 196 L 207 52 Q 207 40, 219 40 L 820 40 Q 897 40, 897 128" stroke="#b45309" stroke-width="1.6" stroke-dasharray="6 5" fill="none" marker-end="url(#ab)"/>
+  <rect x="430" y="28" width="320" height="24" rx="12" fill="#fffbeb" stroke="#fcd34d"/>
+  <text class="bb" x="590" y="44" text-anchor="middle">Black-box track: Granola's own agent, real meetings</text>
+
+  <!-- inputs -->
+  <rect x="20" y="104" width="170" height="52" rx="8" fill="#f3f4f6" stroke="#d1d5db"/>
+  <text class="h" x="32" y="126">Granola REST API</text>
+  <text class="s" x="32" y="144">public, Business/Enterprise key</text>
+  <rect x="20" y="166" width="170" height="52" rx="8" fill="#f3f4f6" stroke="#d1d5db"/>
+  <text class="h" x="32" y="188">Granola MCP</text>
+  <text class="s" x="32" y="206">official, read-only</text>
+  <rect x="20" y="256" width="170" height="64" rx="8" fill="#ecfdf5" stroke="#a7f3d0"/>
+  <text class="h" x="32" y="278">Northwind generator</text>
+  <text class="s" x="32" y="296">synthetic, known answers</text>
+  <text class="s" x="32" y="312">same seed, same bytes</text>
+
+  <!-- source protocol -->
+  <rect x="225" y="104" width="160" height="216" rx="10" fill="#eef2ff" stroke="#c7d2fe"/>
+  <text class="h" x="239" y="128">Source protocol</text>
+  <text class="s" x="239" y="146">Granola's exact JSON shape</text>
+  <text class="m" x="239" y="186">GranolaAPISource</text>
+  <text class="m" x="239" y="210">GranolaMCPSource</text>
+  <text class="m" x="239" y="292">FixtureSource</text>
+  <path class="ln" d="M190 130 L 225 130" marker-end="url(#a)"/>
+  <path class="ln" d="M190 192 L 225 192" marker-end="url(#a)"/>
+  <path class="ln" d="M190 288 L 225 288" marker-end="url(#a)"/>
+
+  <!-- note store -->
+  <path d="M420 182 v 72 a 55 12 0 0 0 110 0 v -72" fill="#f9fafb" stroke="#9ca3af"/>
+  <ellipse cx="475" cy="182" rx="55" ry="12" fill="#f9fafb" stroke="#9ca3af"/>
+  <text class="h" x="475" y="222" text-anchor="middle">NoteStore</text>
+  <text class="s" x="475" y="240" text-anchor="middle">SQLite</text>
+  <path class="ln" d="M385 212 L 418 212" marker-end="url(#a)"/>
+
+  <!-- systems -->
+  <rect x="575" y="104" width="200" height="96" rx="10" fill="#f0f9ff" stroke="#bae6fd"/>
+  <text class="h" x="589" y="127">Query-time</text>
+  <text class="s" x="680" y="127">open book</text>
+  <text class="s" x="589" y="149">top-k retrieval · summaries</text>
+  <text class="s" x="589" y="167">full context / oracle ceiling</text>
+  <text class="s" x="589" y="185">agent with search tools</text>
+
+  <rect x="575" y="224" width="200" height="96" rx="10" fill="#fdf4ff" stroke="#f5d0fe"/>
+  <text class="h" x="589" y="247">Write-time</text>
+  <text class="s" x="680" y="247">notebook</text>
+  <text class="s" x="589" y="269">Mem0 · Graphiti</text>
+  <text class="s" x="589" y="287">Concentrate (reference system)</text>
+  <text class="s" x="589" y="305">built once per meeting</text>
+
+  <path class="ln" d="M530 205 C 552 205, 552 152, 573 152" marker-end="url(#a)"/>
+  <path class="ln" d="M530 230 C 552 230, 552 272, 573 272" marker-end="url(#a)"/>
+
+  <!-- harness -->
+  <rect x="805" y="130" width="185" height="168" rx="10" fill="#fff7ed" stroke="#fed7aa"/>
+  <text class="h" x="819" y="154">Eval harness</text>
+  <text class="s" x="819" y="176">same answer model</text>
+  <text class="s" x="819" y="194">LLM judge vs known answer</text>
+  <text class="s" x="819" y="212">2nd judge · hand check</text>
+  <text class="s" x="819" y="230">citations vs gold lines</text>
+  <text class="s" x="819" y="248">$ at equal prices · latency</text>
+  <text class="s" x="819" y="266">paired stats, Holm</text>
+  <text class="s" x="819" y="284">git SHA + data hash</text>
+  <path class="ln" d="M775 152 C 790 152, 790 190, 803 190" marker-end="url(#a)"/>
+  <path class="ln" d="M775 272 C 790 272, 790 240, 803 240" marker-end="url(#a)"/>
+
+  <!-- reports and outputs -->
+  <path class="ln" d="M897 298 L 897 352" marker-end="url(#a)"/>
+  <rect x="805" y="354" width="185" height="48" rx="8" fill="#f3f4f6" stroke="#d1d5db"/>
+  <text class="h" x="819" y="375">Reports</text>
+  <text class="m" x="819" y="392">evals/reports/</text>
+
+  <path class="ln" d="M805 378 L 777 378" marker-end="url(#a)"/>
+  <rect x="225" y="354" width="550" height="48" rx="8" fill="#ffffff" stroke="#d1d5db"/>
+  <text class="h" x="241" y="375">Analysis</text>
+  <text class="s" x="241" y="392">significance, failures</text>
+  <text class="h" x="425" y="375">Figures</text>
+  <text class="m" x="425" y="392">docs/figures/</text>
+  <text class="h" x="590" y="375">Results explorer</text>
+  <text class="m" x="590" y="392">web/</text>
+  <line x1="405" y1="362" x2="405" y2="394" stroke="#e5e7eb"/>
+  <line x1="572" y1="362" x2="572" y2="394" stroke="#e5e7eb"/>
+
+  <!-- footer -->
+  <text class="s" x="20" y="450">Every system gets the same questions, answer model and judge, so differences come from what each puts in front of the model.</text>
+  <text class="s" x="20" y="470">Granola is reached only through public interfaces. Not affiliated with Granola.</text>
+</svg>
