@@ -86,6 +86,39 @@ def _by_system(rows: Iterable[dict[str, Any]]) -> dict[str, list[dict[str, Any]]
     return dict(sorted(out.items()))
 
 
+# -- correctness: partial credit --------------------------------------------------------------
+
+
+@dataclass
+class CreditStats:
+    system: str
+    n: int
+    accuracy: float  # verdict "correct" only (the headline metric)
+    partial: float  # share judged "partially_correct" (counted wrong in accuracy)
+    partial_credit: float  # correct = 1, partially correct = 0.5, incorrect = 0
+    exact_match: float  # mean share of gold values found by the string matcher
+
+
+def credit_stats(rows: Iterable[dict[str, Any]]) -> list[CreditStats]:
+    """Accuracy with half credit for partially correct answers, beside the strict number."""
+    out = []
+    for system, rs in _by_system(rows).items():
+        n = len(rs)
+        part = sum(r.get("verdict") == "partially_correct" for r in rs)
+        corr = sum(bool(r["correct"]) for r in rs)
+        out.append(
+            CreditStats(
+                system=system,
+                n=n,
+                accuracy=corr / n,
+                partial=part / n,
+                partial_credit=(corr + 0.5 * part) / n,
+                exact_match=statistics.fmean(float(r.get("exact_match") or 0.0) for r in rs),
+            )
+        )
+    return out
+
+
 # -- grounding: sources ----------------------------------------------------------------------
 
 
@@ -304,6 +337,7 @@ def all_metrics(
     out: dict[str, Any] = {
         "price_model": price_model,
         "batch_discount": BATCH_DISCOUNT,
+        "credit": [asdict(c) for c in credit_stats(rows)],
         "cost": [asdict(c) for c in costs],
         "ingest_usd": ingest,
         "abstention": [asdict(a) for a in abstain_stats(rows)],
@@ -331,7 +365,24 @@ def _usd(x: float) -> str:
 
 def to_markdown(m: dict[str, Any], *, section: int = 5) -> list[str]:
     """The $0 metrics as markdown sections (appended to the analysis report)."""
-    lines: list[str] = []
+    lines: list[str] = [
+        "",
+        f"## {section}. Correctness beyond right/wrong",
+        "",
+        "**Accuracy** counts only answers judged *correct*. **Partial credit** gives half a "
+        "point to *partially correct* answers (usually an incomplete list). **Exact match** is "
+        "the deterministic cross-check: mean share of gold values the string matcher finds in "
+        "the answer (no LLM).",
+        "",
+        "| System | n | Accuracy | Partially correct | Partial credit | Exact match |",
+        "|---|---|---|---|---|---|",
+    ]
+    for c in m["credit"]:
+        lines.append(
+            f"| {c['system']} | {c['n']} | {_pct(c['accuracy'])} | {_pct(c['partial'])} | "
+            f"{_pct(c['partial_credit'])} | {_pct(c['exact_match'])} |"
+        )
+    section += 1
     if "sources" in m:
         lines += [
             "",

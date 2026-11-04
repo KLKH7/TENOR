@@ -372,3 +372,17 @@ Details: `docs/systems/concentrate/fallback.md`. Everything below is **dev**.
   - `on_abstain` can't catch confidently wrong answers (2 of 4 real who-said questions).
   - Speaker attribution in passages is still partly a guess.
 - **Open:** confirm on fresh real test questions written after this design freeze.
+
+## P1-M: the measurement framework and the $0 metrics (2026-11-03)
+Definitions: [`docs/benchmark/METRICS.md`](../benchmark/METRICS.md). Code: `evals/metrics.py`, wired into `concentrate analyze`.
+- **Decision: one price list for every $/question.** `analyze` and `economics` re-price each answer from its tokens at the interactive `--price-model` price (Opus 5.5 by default). The Batch API saving is a separate column, never mixed in.
+  - Fixes red-team R1: recorded `cost_usd` mixed 50%-off batched rows with full-price rows.
+  - `economics` additionally read that discount as ~50% prompt-cache hits.
+  - Concentrate moves from $0.022 to $0.040/q, top-k from $0.177 to $0.328/q; the agent stays at $0.137.
+- **Bug fixed: cached builds counted as free ingest.** A run that reuses a store records $0 ingest; `analyze` now uses the original build cost (`detail.built`). Concentrate ($4.96) and Mem0 ($17.02) were missing from the break-even table before.
+- **Decision: quote break-even questions per corpus, not "dominated at 1,000".** The summary now says, e.g., "Concentrate pays back its ingest after 51 questions vs the agent". The oracle is excluded as a rival.
+- **Decision: source recall is meeting-level and is printed with what `retrieved` means per system.** The agent counts meetings it opened (not search hits); Granola's agent counts meetings it cited. Mem0, Graphiti and summaries are marked as citing no lines; Granola's agent as having no abstain flag and unobservable tokens.
+- **Finding (bad for the metric): source recall barely separates systems on synthetic data** (93–100% for all) and is trivially 100% on the 4-meeting real slice. Kept, because it rules out meeting-level retrieval as the main failure; finer (fact-level) recall would need gold memory IDs, which only Concentrate exposes.
+- **Finding: on the real slice, Concentrate's loss is mostly declining.** 10 of its 16 wrong answers were abstentions on answerable questions (coverage 74%); when it answered it was right 79% of the time vs Granola's agent's 92% overall. Dev-quality data (n = 39).
+- **Privacy: `analyze --aggregate-only`** writes counts and rates only (no question IDs, failure signals or failures file). Used for `evals/reports/real-*.analysis.*`.
+- **Open:** partial credit uses an arbitrary 0.5 weight; latency for batched systems still rests on n = 10; calibration (X5) and faithfulness (X2) need runs.

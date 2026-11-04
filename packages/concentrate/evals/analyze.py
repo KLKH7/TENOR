@@ -531,7 +531,8 @@ def _pareto_md(a: dict[str, Any]) -> list[str]:
         "## 3. Cost vs accuracy (Pareto frontier)",
         "",
         f"$/q = answer cost at the **interactive `{a['meta']['price_model']}` price** (re-priced "
-        "from tokens, so batch-priced runs are not mixed in; batch savings are in §7) + one-off "
+        "from tokens, so batch-priced runs are not mixed in; batch savings are in the "
+        "equal-price cost section below) + one-off "
         f"ingest as recorded at build time ÷ {vol:,} questions (judge excluded). A system is "
         "**dominated** if another is at least as accurate and at least as cheap (and, in the "
         "last column, at least as fast), and strictly better on one. Accuracy gaps here are "

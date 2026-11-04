@@ -61,6 +61,17 @@ def test_gold_from_questions_takes_meetings_from_gold_lines() -> None:
     assert g["q8"].unanswerable and not g["q8"].meetings
 
 
+def test_partial_credit_is_half_a_point() -> None:
+    rows = [
+        _row("s", "q1"),
+        _row("s", "q2", correct=False, verdict="partially_correct", exact_match=0.5),
+        _row("s", "q3", correct=False, verdict="incorrect", exact_match=0.0),
+    ]
+    c = _by(mx.credit_stats(rows))["s"]
+    assert c.accuracy == pytest.approx(1 / 3) and c.partial == pytest.approx(1 / 3)
+    assert c.partial_credit == pytest.approx(1.5 / 3) and c.exact_match == pytest.approx(0.5)
+
+
 def test_source_recall_and_pulled() -> None:
     rows = [
         _row("s", "q1", retrieved=["m1", "m1", "m9"]),  # duplicates count once
