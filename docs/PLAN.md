@@ -156,7 +156,7 @@ docs/
   figures/              generated SVGs
   engineering/          HARDENING, SCHEMA_NOTES, RESULTS_EXPLORER, WEB_DEMO, DESIGN (decision log)
   guide/                TOUR, CONCEPTS, INTERVIEW_PREP, EXERCISES
-  writeup/              MEMO, DECK, OUTREACH, FINDINGS_CHECKLIST
+  writeup/              MEMO, DECK, FINDINGS_CHECKLIST
   archive/              SCOPE, PHASE4_DESIGN, PROBE_2026-11-02, PROBE_V2, UI_REFERENCES, CONCENTRATE_TUNING
 packages/concentrate/   delete the empty stubs api/, profile/, redact/, verify/ (0 lines each)
 evals/reports/          unchanged; add evals/reports/INDEX.md listing each run and what it was for

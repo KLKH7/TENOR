@@ -2,11 +2,11 @@
 
 *Kian Lakhani · 2026-11-03 · repo: github.com/<user>/hindsight · every number traces to a file in [FINDINGS_CHECKLIST.md](FINDINGS_CHECKLIST.md)*
 
-**Headline.** I asked open-ended questions about my own real meetings. **Granola's actual agent scored 92%; my precomputed memory, Concentrate, scored 59%** (n = 39; the 95% CIs don't overlap; paired 14–1). On "who said X" Concentrate got 0% to Granola's 88%. It led only on "what changed" (100% vs 83%, n = 6). On my synthetic benchmark the two **tie** (92% vs 90%), but only because those questions target exactly the facts my extractor keeps. **The lesson for Granola:** compressing meetings into facts loses the long tail that real questions ask about. That's evidence *against* deleting transcripts, and *for* a hybrid: facts for state and change, transcripts kept and searchable.
+**Headline.** I asked open-ended questions about my own real meetings. **Granola's actual agent scored 92%; my precomputed memory, Concentrate, scored 59%** (n = 39; the 95% CIs don't overlap; paired 14–1). On "who said X" Concentrate got 0% to Granola's 88%. It led only on "what changed" (100% vs 83%, n = 6). On my synthetic benchmark the two **tie** (92% vs 90%), but only because those questions target exactly the facts my extractor keeps. **The lesson for Granola:** Granola already lets users auto-delete transcripts, after which chat runs on notes alone. On synthetic questions, a fact-and-digest layer kept beside the notes recovered most of what notes alone lose (88% vs 64%). But real questions also ask who said what, and facts didn't keep that (0%). Facts are worth storing before a transcript is deleted; they don't replace it.
 
 ## The question
 
-In a [July 2026 Platformer interview](https://www.platformer.news/granola-chris-pedregal-interview/), Chris Pedregal said that an agent connected to Granola through Claude does "a relatively dumb job at extracting information". He said Granola should instead send agents "apple juice from concentrate". He also said Granola is looking into "whether we should delete the transcript automatically", while noting you "might want to still go back and chat with that meeting". Granola is already researching these ideas, so my contribution is an **independent measurement**: does memory compressed ahead of time answer agents' questions as well as retrieving at question time? And can the transcripts then go?
+In a [July 2026 Platformer interview](https://www.platformer.news/granola-chris-pedregal-interview/), Chris Pedregal said that an agent connected to Granola through Claude does "a relatively dumb job at extracting information". He said Granola should instead send agents "apple juice from concentrate". He also said you "might want to still go back and chat with that meeting". Granola has since done much of this. Users can already [auto-delete transcripts](https://docs.granola.ai/help-center/consent-security-privacy/transcript-auto-deletion) after anything from 1 day to 1 year (enterprise admins can enforce it), after which chat works from notes only and the docs warn "Chat quality will be degraded". Its [agent-design post](https://www.granola.ai/blog/how-granola-thinks-about-designing-agents) (May 2026) chooses "breadth over fidelity": the agent reads many meetings at a high level and goes deeper only when needed, and the failure it most wants to avoid is "wrong, but confident". So my contribution is an **independent measurement** of two questions. Does memory compressed ahead of time answer as well as retrieving at question time? And **when transcripts are deleted, how much do answers degrade, for which question types, and what beyond notes recovers it?**
 
 ## What I built
 
@@ -30,7 +30,8 @@ In a [July 2026 Platformer interview](https://www.platformer.news/granola-chris-
   - commitment status: 100% vs 75%;
   - which person: 80% vs 40%;
   - what changed: **Concentrate 100%**, Granola 83%.
-- **Why Concentrate loses.** It kept 43 facts and 11 commitments for 4 meetings, and it answers only from those. 10 of its 16 misses were "the material doesn't mention it". The detail was in the transcript; it just wasn't a fact the extractor had kept. On "who said", it also ignored Granola's named system-audio speaker labels. Simply reading the right meeting's transcript (top-k) beats reading my extracted notebook.
+- **Why Concentrate loses.** It kept 43 facts and 11 commitments for 4 meetings, and it answers only from those. 10 of its 16 misses were "the material doesn't mention it". The detail was in the transcript; it just wasn't a fact the extractor had kept. On "who said", it also ignored Granola's named system-audio speaker labels.
+- **Granola's design held up.** It goes deeper only when needed, and on "who said" questions that meant reading the transcript, which it did (88%). Concentrate couldn't, and twice it confidently named the wrong person: the "wrong, but confident" failure Granola designs against. Simply reading the right meeting's transcript (top-k) also beats reading my extracted notebook.
 - **Second judge:** agreed on 97% of verdicts (κ 0.93), and the ranking is unchanged.
 
 ## Result 2: synthetic benchmark, a tie that the setup makes easy
@@ -56,9 +57,19 @@ What survived the red team:
 
 **Why the two results disagree.** I wrote both the question generator and the extractor, so the synthetic questions ask about the kinds of facts the extractor keeps. Real questions don't respect that boundary. This is the external-validity gap the real slice was built to find, and it found it.
 
-## What this means for deleting transcripts
+## When transcripts are deleted: what degrades, and what recovers it
 
-On synthetic dev questions, deleting every old transcript barely moved Concentrate (89% → 88%; summaries alone 64%). But no question there needed exact wording or who said what, and the real slice shows those are exactly the questions people ask. **I'd read the evidence as: keep transcripts searchable, and add precomputed facts where they're demonstrably better.** That means state, change over time ("what changed": 100% vs 83% real; 58% vs 5% recall in the brief below), and open commitments. This matches Pedregal's own instinct that you might want to go back and chat with an old meeting. Compression can be a cheaper index over transcripts. On this evidence it can't replace them.
+Granola already lets users delete transcripts, so the useful question is what to keep alongside the notes. On synthetic dev questions (90; [retirement curve](../results/RETIREMENT.md)), I deleted every transcript older than each question:
+
+| Kept after deletion | Accuracy | Examples by type (n = 8–11 each) |
+|---|---|---|
+| Notes only (≈ Granola after auto-deletion) | 64% | entity 30%, aggregation 0%, commitments 67%, latest state 73% |
+| Notes + Concentrate's facts and digests (~5% of transcript tokens) | 88% | entity 60%, aggregation 50%, commitments 89%, latest state 100% |
+| Everything kept (for reference) | 89% | |
+
+- **What recovers it:** a fact layer extracted *before* deletion recovers about 24 points over notes alone, and costs ~5% of the transcript's size.
+- **What it doesn't recover:** the synthetic set has no "who said" or exact-wording questions. On real meetings those are exactly where facts fail (0% on who said), and only the transcript answers them. So for a user who has deletion turned on, those questions degrade whatever else is kept.
+- **Not yet measured:** the real-data version of this curve. That's the experiment I'd run first.
 
 ## What Granola does well, and where memory still helps
 
@@ -75,11 +86,11 @@ On synthetic dev questions, deleting every old transcript barely moved Concentra
 ## What I'd run next
 
 1. **A hybrid Concentrate on fresh real questions:** fall back to transcript retrieval when the facts don't cover a question, and use Granola's speaker labels. The test is whether it closes the 92% vs 59% gap without losing "what changed".
-2. **Benchmark v2.1**, which adds exact-quote and speaker-attribution questions, so the synthetic benchmark can show this loss too. Also the **directory ablation**.
+2. **The retirement curve on real data,** plus **benchmark v2.1**, which adds exact-quote and speaker-attribution questions so the synthetic curve can show the loss too. Also the **directory ablation**.
 3. **Fix the Mem0 and Graphiti wiring and the gold errors,** then re-score. That's cheap, and it removes the claims I can't currently defend.
 
 ## What I'd do at Granola
 
-1. **Keep transcripts, and treat compression as an index over them, not a replacement.** Measure any retention policy against open-ended questions (who said, exact wording) before deleting anything.
+1. **Extract a fact layer before auto-deletion runs,** and measure degradation per question type on real data, so the "Chat quality will be degraded" warning can say *which* questions degrade (who said, exact wording) and which don't (state, commitments).
 2. **Precompute what search does badly:** a bitemporal store of state changes and commitments, behind "what changed since we last met" and pre-meeting briefs.
 3. **Resolve identity at write time:** join attendee metadata (emails, display names) to mentions, which targets the identity misses above.
