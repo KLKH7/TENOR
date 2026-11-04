@@ -47,6 +47,7 @@ from concentrate.agents.concentrate_system import ConcentrateSystem
 from concentrate.core.models import MeetingNote
 from concentrate.evals.retirement import meeting_day
 from concentrate.evals.scoring import JudgeOutput, bootstrap_ci, judge_request_for
+from concentrate.evals.stats import binom_two_sided_p
 from concentrate.llm.client import (
     LLMClient,
     LLMRequest,
@@ -252,6 +253,14 @@ def _rates(rows: list[dict[str, Any]], seed: int) -> dict[str, Any]:
         "partial": sum(r["verdict"] == "partially_correct" for r in rows) / n if n else None,
         "confident_error": sum(ce) / n if n else None,
         "confident_error_ci": list(bootstrap_ci(ce, seed)) if n else None,
+        # P2-T's definition (metrics.confident_error): not abstained and judged incorrect, with
+        # no hedge detection. An upper bound for Granola, which has no abstain flag.
+        "confident_error_flag": sum(
+            not r.get("abstained") and r["verdict"] == "incorrect" for r in rows
+        )
+        / n
+        if n
+        else None,
         "hedged_miss": sum(r["verdict"] != "correct" and not r["confident_error"] for r in rows) / n
         if n
         else None,
@@ -293,13 +302,30 @@ def summarize_deletion(rows: list[dict[str, Any]], seed: int) -> dict[str, Any]:
             continue
         va = {r["qid"]: r["verdict"] == "correct" for r in a}
         vb = {r["qid"]: r["verdict"] == "correct" for r in b}
+        tags = {r["qid"]: r.get("tags") or ["(untagged)"] for r in a}
         both = sorted(set(va) & set(vb))
-        paired[f"{later} vs {earlier}"] = {
-            "n": len(both),
-            "wins": sum(va[q] and not vb[q] for q in both),
-            "losses": sum(vb[q] and not va[q] for q in both),
-        }
+        groups: dict[str, list[str]] = {"all": both}
+        for q in both:
+            for t in tags[q]:
+                groups.setdefault(t, []).append(q)
+        cell = {g: _paired(va, vb, qs) for g, qs in groups.items()}
+        paired[f"{later} vs {earlier}"] = {**cell.pop("all"), "by_tag": cell}
     return {"conditions": conditions, "paired": paired}
+
+
+def _paired(va: dict[str, bool], vb: dict[str, bool], qs: list[str]) -> dict[str, Any]:
+    """Wins/losses of the later condition on ``qs``, accuracy delta, exact two-sided sign test
+    on the discordant pairs (ties dropped)."""
+    wins = sum(va[q] and not vb[q] for q in qs)
+    losses = sum(vb[q] and not va[q] for q in qs)
+    n = len(qs)
+    return {
+        "n": n,
+        "wins": wins,
+        "losses": losses,
+        "delta": (sum(va[q] for q in qs) - sum(vb[q] for q in qs)) / n if n else None,
+        "sign_p": binom_two_sided_p(wins, wins + losses) if wins + losses else 1.0,
+    }
 
 
 # -- running ---------------------------------------------------------------------------------------

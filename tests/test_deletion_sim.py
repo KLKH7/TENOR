@@ -147,8 +147,12 @@ def test_summary_rates_tags_and_paired_ladder() -> None:
     assert b["judge2_n"] == 2 and b["judge_agreement"] == 0.5
     assert set(b["by_tag"]) == {"long_tail", "(untagged)"}
     assert b["by_tag"]["long_tail"]["confident_error"] == 1.0
-    assert s["paired"]["notes_only vs granola"] == {"n": 2, "wins": 0, "losses": 2}
-    assert s["paired"]["notes_facts vs notes_only"] == {"n": 2, "wins": 1, "losses": 0}
+    ba = s["paired"]["notes_only vs granola"]
+    assert (ba["n"], ba["wins"], ba["losses"], ba["delta"]) == (2, 0, 2, -1.0)
+    assert ba["sign_p"] == 0.5 and ba["by_tag"]["long_tail"]["losses"] == 1
+    cb = s["paired"]["notes_facts vs notes_only"]
+    assert (cb["wins"], cb["losses"], cb["sign_p"]) == (1, 0, 1.0)
+    assert b["confident_error_flag"] == 1.0  # P2-T's flag-only definition counts the hedge
     assert "notes_facts_fallback vs notes_facts" not in s["paired"]
 
 
