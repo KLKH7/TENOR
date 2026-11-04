@@ -1,5 +1,5 @@
 // Small presentational pieces shared by the results explorer, in the note view's visual
-// language (pill chips, soft cards, serif titles). See docs/RESULTS_EXPLORER.md.
+// language (pill chips, soft cards, serif titles). See docs/engineering/RESULTS_EXPLORER.md.
 
 import type { Verdict } from "@/lib/results";
 

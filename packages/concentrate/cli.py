@@ -293,7 +293,7 @@ def ingest(
     """Build write-time memories once (Mem0, Graphiti, ...). Resumable; reruns are free.
 
     A build that makes no progress for ``--stall-minutes`` exits with code 75; rerun it (e.g.
-    in a shell loop) and it resumes from ``progress.jsonl``. See docs/HARDENING.md.
+    in a shell loop) and it resumes from ``progress.jsonl``. See docs/engineering/HARDENING.md.
     """
     import json as _json
     from dataclasses import asdict
@@ -550,7 +550,7 @@ def mcp_serve(
     """Serve a built Concentrate memory as a read-only MCP server over stdio.
 
     stdout carries the MCP protocol, so this command prints nothing to it; errors go to stderr.
-    See docs/MCP_SERVER.md for the Claude Desktop / Claude Code config.
+    See docs/systems/MCP_SERVER.md for the Claude Desktop / Claude Code config.
     """
     from concentrate.mcp_server.server import build_server
     from concentrate.mcp_server.service import Answerer, open_memory
@@ -723,7 +723,10 @@ def fidelity(
         str, typer.Argument(help="Fixture directory, or a NoteStore .db (e.g. data/real.db).")
     ],
 ) -> None:
-    """Aggregate style statistics of a corpus (docs/FIDELITY_V2.md). Prints no transcript text."""
+    """Aggregate style statistics of a corpus (docs/benchmark/FIDELITY_V2.md).
+
+    Prints no transcript text.
+    """
     import json
 
     from concentrate.synth.fidelity import fixture_corpus, report, store_corpus
@@ -740,7 +743,7 @@ TUNE_VARIANTS: dict[str, dict[str, object]] = {
     "no_entities": {"query_entities": False},  # question parser resolves no entities
     "no_supersession": {"supersession": False},  # append-only fact log, no validity/state
     "no_digests": {"k_digests": 0},
-    "fallback_on_abstain": {"fallback": "on_abstain"},  # docs/concentrate/fallback.md
+    "fallback_on_abstain": {"fallback": "on_abstain"},  # docs/systems/concentrate/fallback.md
     "fallback_always": {"fallback": "always"},
 }
 

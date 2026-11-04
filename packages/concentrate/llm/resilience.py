@@ -3,7 +3,8 @@
 Why this exists: the SDK's defaults are a 600 s read timeout and 2 retries (we used to pass
 ``max_retries=4``), and its retries log only at INFO. A connection that dies silently (no FIN,
 no RST) could therefore block a call for up to 5 x 600 s = 50 minutes with nothing printed:
-the likely cause of three ingest builds freezing at 0% CPU on 2026-11-02. See ``docs/HARDENING.md``.
+the likely cause of three ingest builds freezing at 0% CPU on 2026-11-02. See
+``docs/engineering/HARDENING.md``.
 
 The policy here:
 

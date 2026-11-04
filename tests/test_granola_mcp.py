@@ -1,6 +1,7 @@
 """GranolaMCPSource against a fake MCP that mimics the live response formats (2026-11-02).
 
-Response shapes are copied from the live probe (docs/PROBE_2026-11-02.md); all content here is
+Response shapes are copied from the live probe (docs/archive/PROBE_2026-11-02.md); all content here
+is
 invented. No network.
 """
 

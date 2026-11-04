@@ -1,5 +1,5 @@
 // Shapes of the Granola public API (GET /v1/notes/{id}?include=transcript), as written to
-// data/fixtures by FixtureSource-compatible generators. See docs/SCHEMA_NOTES.md.
+// data/fixtures by FixtureSource-compatible generators. See docs/engineering/SCHEMA_NOTES.md.
 
 export interface GranolaUser {
   name: string | null;

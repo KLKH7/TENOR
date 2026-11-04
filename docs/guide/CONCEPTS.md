@@ -79,7 +79,7 @@ Paths are relative to `packages/concentrate/`.
   - Ingest is idempotent per meeting: `MemoryBuilder.ingest` returns early if `has_meeting`
     ([`memory/pipeline.py:196`](../../packages/concentrate/memory/pipeline.py#L196)).
   - `batches.create` is **not**: a lost reply plus a retry makes two batches (documented in
-    [`docs/HARDENING.md`](../HARDENING.md), not fixed).
+    [`docs/engineering/HARDENING.md`](../engineering/HARDENING.md), not fixed).
 - **Trade-off.** Making things idempotent usually means storing a key (here, the meeting ID or the
   request hash) and checking it first.
 - **Example.** Kill an ingest halfway and rerun it. Meetings already committed are skipped, and the
@@ -174,7 +174,7 @@ Paths are relative to `packages/concentrate/`.
     ([`evals/judge_check.py:82`](../../packages/concentrate/evals/judge_check.py#L82));
   - `hand-check` exports a blind sample for a person to label.
 - **Example.** On the 40 pilot answers, Opus and Sonnet agreed on 97.5% (κ = 0.89), and the ranking
-  didn't change ([`docs/BENCHMARK.md`](../BENCHMARK.md)). κ corrects for chance agreement:
+  didn't change ([`docs/benchmark/DESIGN.md`](../benchmark/DESIGN.md)). κ corrects for chance agreement:
   - two judges calling 8/10 and 7/10 "correct", agreeing on 9, give κ ≈ 0.74;
   - if they agreed on all 10, κ would be 1.
 
@@ -400,7 +400,7 @@ Paths are relative to `packages/concentrate/`.
   Low TTR means repetitive text.
 - **Here.** [`synth/fidelity.py:71`](../../packages/concentrate/synth/fidelity.py#L71) `ttr`, at 2k and 5k tokens; `concentrate fidelity`.
 - **Trade-off.** It's a crude proxy for "sounds like real people". Real speech is repetitive too.
-- **Example.** XL v1 TTR@2k was .11; v2 is .21 ([`docs/FIDELITY_V2.md`](../FIDELITY_V2.md)). On the base set, the `remote` section prints `ttr_2k` 0.224.
+- **Example.** XL v1 TTR@2k was .11; v2 is .21 ([`docs/benchmark/FIDELITY_V2.md`](../benchmark/FIDELITY_V2.md)). On the base set, the `remote` section prints `ttr_2k` 0.224.
 
 ### N-gram duplication
 - **Plain words.** How often passages repeat word-for-word (exact duplicates), or share the same

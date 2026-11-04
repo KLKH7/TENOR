@@ -32,7 +32,7 @@ from concentrate.synth.world import Commitment, Evidence, Fact, World
 Category = Literal[
     "single_hop", "multi_hop", "temporal", "latest_state", "entity_disambiguation",
     "commitment_status", "decision_change", "aggregation", "unanswerable",
-    # v2.1 extras (synth.extras, docs/BENCHMARK_V2_EXTRAS.md)
+    # v2.1 extras (synth.extras, docs/benchmark/V2_EXTRAS.md)
     "room_attribution", "identity_resolution", "correction", "commitment_tracking",
     "long_horizon", "exact_quote", "speaker_attribution",
 ]  # fmt: skip

@@ -90,7 +90,8 @@ DB_FILE = "memory.sqlite"
 STORE_FORMAT = 1
 
 # Ingestion cost model, calibrated on the 2026-11-02 smoke run (4 base Northwind meetings,
-# Sonnet 5.5, effort medium, whole meetings; docs/concentrate/memory.md). Per extraction call:
+# Sonnet 5.5, effort medium, whole meetings; docs/systems/concentrate/memory.md). Per extraction
+# call:
 #   cached prefix = extract.v1 + directory (count_tokens/estimate = 1.336) + structured-output
 #                   schema overhead (measured prefix 3,874 tokens - 2,540 counted = 1,334);
 #   uncached      = summary + transcript with local line IDs (measured/estimate = 1.65)
@@ -139,9 +140,9 @@ class ConcentrateSystem:
         fallback_tokens: int = DEFAULT_FALLBACK_TOKENS,
     ) -> None:
         """``supersession`` / ``query_entities`` / ``k_digests=0`` are answer-time ablation
-        switches (docs/CONCENTRATE_TUNING.md); ``name`` labels a variant in reports.
+        switches (docs/archive/CONCENTRATE_TUNING.md); ``name`` labels a variant in reports.
 
-        ``fallback`` adds raw transcript passages (docs/concentrate/fallback.md): ``"off"``
+        ``fallback`` adds raw transcript passages (docs/systems/concentrate/fallback.md): ``"off"``
         (memory only), ``"on_abstain"`` (re-answer with passages when the memory-only answer
         abstains or says the material doesn't cover it) or ``"always"`` (every question gets
         ``fallback_tokens`` of passages)."""

@@ -1,6 +1,6 @@
 """Incremental sync: poll a :class:`Source` with ``updated_after`` and normalize into SQLite.
 
-Design (docs/DESIGN.md, "Sync"):
+Design (docs/engineering/DESIGN.md, "Sync"):
 
 * The watermark is the max ``updated_at`` *observed from the server*, never our wall clock,
   so client/server clock skew can't make us skip notes.

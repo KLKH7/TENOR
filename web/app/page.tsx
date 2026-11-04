@@ -66,7 +66,7 @@ export default function Home() {
         </Tile>
       </div>
       <p className="mt-10 text-[12.5px] text-faint">
-        Research prototype. Methods and honest caveats: README.md, docs/DESIGN.md, docs/ANALYSIS.md, docs/WEB_DEMO.md.
+        Research prototype. Methods and honest caveats: README.md, docs/engineering/DESIGN.md, docs/results/ANALYSIS.md, docs/engineering/WEB_DEMO.md.
       </p>
     </PageShell>
   );

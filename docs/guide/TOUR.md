@@ -44,7 +44,7 @@ two ways in:
 - the **REST API**, which needs a Business/Enterprise plan;
 - the **official MCP server**, which works on any plan and returns agent-oriented text.
 
-Every field we rely on is tagged VERIFIED or ASSUMED in [`docs/SCHEMA_NOTES.md`](../SCHEMA_NOTES.md).
+Every field we rely on is tagged VERIFIED or ASSUMED in [`docs/engineering/SCHEMA_NOTES.md`](../engineering/SCHEMA_NOTES.md).
 
 **Why it matters:** the whole benchmark is shaped by what Granola *actually* gives you. There's no
 audio, no per-word confidence, and the speaker is often unknown. We model only that.
@@ -182,7 +182,7 @@ flowchart TB
 | b2 full | [`agents/baselines.py:292`](../../packages/concentrate/agents/baselines.py#L292) `FullContextSystem` | Every meeting in one **cached** system prompt. It's the "can the model just read everything?" ceiling, and fits only the small set. |
 | b3 agent | [`agents/baselines.py:523`](../../packages/concentrate/agents/baselines.py#L523) `AgenticSystem`, tools at [`:419`](../../packages/concentrate/agents/baselines.py#L419) `AgentTools` | A tool-using loop whose four tools mirror Granola's live MCP: `search_meetings` (titles/summaries/notes only), `get_meetings`, `search_transcripts` (240-char passages *without speakers*), `get_meeting_transcript`. It has a 12-turn budget (`AGENT_MAX_TURNS`), and running out counts as wrong. |
 
-**Why b3 matters most:** the live probe ([`docs/PROBE_2026-11-02.md`](../PROBE_2026-11-02.md)) showed
+**Why b3 matters most:** the live probe ([`docs/archive/PROBE_2026-11-02.md`](../archive/PROBE_2026-11-02.md)) showed
 Granola's MCP is now an agent, so "naive top-k" is no longer the baseline to beat. b3 is our
 *re-implementation of the shape*. It is not Granola's agent (see INTERVIEW_PREP Q4).
 
@@ -192,7 +192,7 @@ Granola's MCP is now an agent, so "naive top-k" is no longer the baseline to bea
 [`agents/graphiti_system.py:535`](../../packages/concentrate/agents/graphiti_system.py#L535) `GraphitiSystem`
 feed meetings into the real open-source libraries in chunks (40 utterances for Mem0, episodes for
 Graphiti), with every LLM call metered. Then they answer from what those memories return. They're
-the "off-the-shelf memory" comparison. Wiring details are in [`docs/baselines/`](../baselines/).
+the "off-the-shelf memory" comparison. Wiring details are in [`docs/baselines/`](../systems/baselines/).
 
 ## Stop 4c: Concentrate (system `c`): Enhance → Extract → Gate → Store
 
@@ -405,7 +405,7 @@ but not gold, red dashed = gold but not cited.
 **Why it re-checks fixtures:** line IDs are positional (Stop 2). Before colouring anything, the
 loader recomputes citation P/R against the fixtures *at the report's git SHA* and shows a
 "reproduces N/N" chip. Against today's regenerated fixtures, 18/36 pilot answers would not reproduce
-([`docs/RESULTS_EXPLORER.md`](../RESULTS_EXPLORER.md)).
+([`docs/engineering/RESULTS_EXPLORER.md`](../engineering/RESULTS_EXPLORER.md)).
 
 ---
 
@@ -414,14 +414,14 @@ loader recomputes citation P/R against the fixtures *at the report's git SHA* an
 - **MCP server** ([`mcp_server/server.py:59`](../../packages/concentrate/mcp_server/server.py#L59) `build_server`, logic in
   [`mcp_server/service.py:82`](../../packages/concentrate/mcp_server/service.py#L82) `MemoryService`). `concentrate mcp-serve` serves a
   built memory over stdio with six read-only tools and one resource, so you can put it next to
-  Granola's MCP in Claude. Doc: [`docs/MCP_SERVER.md`](../MCP_SERVER.md).
+  Granola's MCP in Claude. Doc: [`docs/systems/MCP_SERVER.md`](../systems/MCP_SERVER.md).
 - **Pre-meeting brief** ([`memory/brief.py:245`](../../packages/concentrate/memory/brief.py#L245) `build_brief`, eval in
   [`evals/brief.py`](../../packages/concentrate/evals/brief.py)). It's an as-of query that lists open commitments and
   changes since the series last met. Memory finds 91% of open commitments vs 30% for top-k, but with
-  43% precision ([`docs/BRIEF.md`](../BRIEF.md)).
+  43% precision ([`docs/results/BRIEF.md`](../results/BRIEF.md)).
 - **Hardening** ([`watchdog.py`](../../packages/concentrate/watchdog.py), [`agents/progress.py:21`](../../packages/concentrate/agents/progress.py#L21) `read_progress`,
   [`llm/resilience.py`](../../packages/concentrate/llm/resilience.py)). It adds timeouts, logged retries, a
-  stall watchdog that exits 75, and crash-safe resume. Doc: [`docs/HARDENING.md`](../HARDENING.md).
+  stall watchdog that exits 75, and crash-safe resume. Doc: [`docs/engineering/HARDENING.md`](../engineering/HARDENING.md).
 - **On other branches, not merged here at `50fefb4`:**
   - transcript-retirement curve (`claude/ws-c-retirement-…`, `concentrate retire-curve`);
   - real-data slice against Granola's real agent (`claude/ws-b-real-slice-…`).

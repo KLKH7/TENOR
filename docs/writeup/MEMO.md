@@ -13,7 +13,7 @@ In a [July 2026 Platformer interview](https://www.platformer.news/granola-chris-
 - **Northwind**, an open meeting-memory benchmark. The memory benchmarks I found are built on chat logs. Northwind has 184 synthetic meetings in Granola's exact API shape, calibrated on my real meetings, and 296 questions with verified answers and gold transcript lines.
 - **7 systems under one harness**, all with the same answer model (Opus 5.5) and judge: top-k, summaries only, an oracle, an agent modelled on Granola's MCP, Mem0, Graphiti, and **Concentrate** (entity resolution → line-cited facts → entailment gate → bitemporal store).
 - **A real-meeting slice.** Questions about my 4 real meetings, answered by Granola's live `query_granola_meetings` (read-only) and by Concentrate built from the same notes through the MCP.
-- **Rigour:** paired McNemar tests with Holm correction, bootstrap CIs, a second judge, and a red-team audit of my own headline ([RED_TEAM.md](../RED_TEAM.md)). The audit corrected several of my claims, and the numbers below are the corrected ones.
+- **Rigour:** paired McNemar tests with Holm correction, bootstrap CIs, a second judge, and a red-team audit of my own headline ([RED_TEAM.md](../results/RED_TEAM.md)). The audit corrected several of my claims, and the numbers below are the corrected ones.
 
 ## Result 1: real meetings, where Granola's agent wins
 

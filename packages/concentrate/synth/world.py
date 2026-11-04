@@ -118,7 +118,7 @@ class Room(BaseModel):
 
 
 class ExtrasTruth(BaseModel):
-    """Ground truth for the v2.1 phenomena (docs/BENCHMARK_V2_EXTRAS.md); None in v2."""
+    """Ground truth for the v2.1 phenomena (docs/benchmark/V2_EXTRAS.md); None in v2."""
 
     rooms: dict[str, Room] = Field(default_factory=dict)  # meeting key -> room on that call
     retracted: list[str] = Field(default_factory=list)  # fact ids that were misstatements

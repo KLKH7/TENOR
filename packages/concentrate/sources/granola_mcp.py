@@ -9,7 +9,7 @@ How: only read-only tools are called: ``list_meetings`` (with ``updated_after``,
 (paged by chunk, which yields structured passages with speaker labels and start times).
 Responses are agent-oriented text (XML-like for meetings, JSON for transcripts and folders), so
 parsing is deliberately lenient; every mapping we had to infer is tagged in
-docs/SCHEMA_NOTES.md ("MCP source mapping").
+docs/engineering/SCHEMA_NOTES.md ("MCP source mapping").
 
 Rate limit: Granola documents "around 100 requests per minute across all tools"; we pace at
 that rate with a small burst, and honour ``retry_after_seconds`` on rate-limit errors.

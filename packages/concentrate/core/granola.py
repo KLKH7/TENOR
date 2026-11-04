@@ -3,7 +3,8 @@
 These mirror the OpenAPI schemas published at https://docs.granola.ai/api-reference/openapi.json
 field-for-field, including nullability and camelCase pagination keys. They are used both to parse
 live API responses and to validate fixtures (see tests/test_contract.py), so a fixture that
-parses here is shaped exactly like the API. Provenance of every field: docs/SCHEMA_NOTES.md.
+parses here is shaped exactly like the API. Provenance of every field:
+docs/engineering/SCHEMA_NOTES.md.
 
 Unknown fields are ignored rather than rejected: the API evolves additively (v1.0 → v1.6 in
 2026) and a new field must not break sync. The contract test separately checks that fixtures
@@ -162,7 +163,8 @@ class GetTranscriptOutput(WireModel):
 # -- MCP variants -----------------------------------------------------------------------------
 # Granola's MCP identifies notes by UUID (it accepts `not_` IDs as input but never returns them),
 # and its folders carry their own IDs. These subclasses keep every other field and constraint of
-# the public-API models, so normalization and storage are shared. See docs/SCHEMA_NOTES.md.
+# the public-API models, so normalization and storage are shared.
+# See docs/engineering/SCHEMA_NOTES.md.
 
 MCP_ID_PATTERN = r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
 McpId = Annotated[str, Field(pattern=MCP_ID_PATTERN)]

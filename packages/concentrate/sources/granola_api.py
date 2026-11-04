@@ -1,6 +1,6 @@
 """``GranolaAPISource``: a polite, read-only client for the Granola public REST API.
 
-Behaviour (see docs/SCHEMA_NOTES.md for what is verified vs. assumed):
+Behaviour (see docs/engineering/SCHEMA_NOTES.md for what is verified vs. assumed):
 
 * every request passes through :class:`RateLimiter` (burst 25 / 5 s, sustained 5 req/s);
 * ``429`` → honour ``Retry-After`` if the server sends one (undocumented), else exponential

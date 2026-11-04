@@ -87,7 +87,8 @@ def real_enhancer(version: str = "enhance-v1") -> Enhancer:
     """The real Enhance stage: speaker attribution, mention linking, attendee resolution.
 
     ``version`` selects the speaker model ("enhance-v1", or "enhance-v2" with the cross-meeting
-    task cue and the diarized-owner prior; docs/concentrate/enhance_v2.md). The name is part of
+    task cue and the diarized-owner prior; docs/systems/concentrate/enhance_v2.md). The name is
+    part of
     the memory store's config, so switching versions never reuses a store built by the other.
     """
     from functools import partial

@@ -79,7 +79,7 @@ export default async function ReportPage({
           hint={
             <>
               From <code>concentrate analyze</code> ({stamp}.analysis.json): paired tests, power and the
-              cost–accuracy frontier. See docs/ANALYSIS.md.
+              cost–accuracy frontier. See docs/results/ANALYSIS.md.
             </>
           }
         >

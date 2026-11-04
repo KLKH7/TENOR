@@ -133,7 +133,7 @@ These exist [spec summary]: `GET /v1/spaces`, `POST /v1/notes/search` (keywords,
 | Owner's turns are `microphone`; other call participants are `speaker`; in-person meetings are all `microphone` | ASSUMED from the product's capture model |
 | `attribution` omitted everywhere | VERIFIED as allowed ("omitted when unknown"); simplest faithful choice |
 | `diarization_label` only on one in-person meeting recorded on iOS | VERIFIED as iOS-only; which meetings get it is our choice |
-| `speaker.name` on most "Them" passages (95% of remote meetings identify 90% of speakers; 10% of their passages stay bare `System audio`); the owner's microphone is never named | Calibrated on real MCP-synced meetings: 0.82 named, synthetic 0.80 (`docs/PROBE_2026-11-02.md` §6). Small sample (4 meetings) |
+| `speaker.name` on most "Them" passages (95% of remote meetings identify 90% of speakers; 10% of their passages stay bare `System audio`); the owner's microphone is never named | Calibrated on real MCP-synced meetings: 0.82 named, synthetic 0.80 (`docs/archive/PROBE_2026-11-02.md` §6). Small sample (4 meetings) |
 | Remote passages are bimodal: 45% of turns kept whole, the rest split into sentences and fragments, plus one-word lead-ins; in-person meetings merge into long single-microphone blocks (5-140 words) | Calibrated on real data (§6). The remote long tail is under-reproduced (known gap) |
 | `summary_markdown` uses `###` headings and `-` bullets, and omits some content | ASSUMED from the product UI, not the API docs |
 | `summary_markdown` (northwind-2) has 4-6 `###` sections with two-level `-` bullets (~25-30), lossy on facts, and writes numbers as digits/`$`/`%` | ASSUMED: structure calibrated on MCP-delivered summaries of real meetings (`#` headings there, 4.5 sections, 34 bullets, 15 nested) and one public shared note (6 × `###`, 30 + 41 nested bullets). That the REST API returns the same markdown as the MCP `<summary>` is unverified; the API doc example shows `##` and flat bullets |
@@ -146,7 +146,7 @@ These exist [spec summary]: `GET /v1/spaces`, `POST /v1/notes/search` (keywords,
 | v2.1 display-name change: invites and speaker labels show the name and email the person had on the meeting date; the directory export shows only the current one | ASSUMED (calendar invites snapshot the attendee; HRIS exports hold current names) |
 | v2.1 contractor on a personal email address: no display name on invites, so Granola never names their passages; absent from the directory | ASSUMED (follows from naming coming from calendar display names) |
 
-## Live MCP probe (2026-11-02): see `docs/PROBE_2026-11-02.md`
+## Live MCP probe (2026-11-02): see `docs/archive/PROBE_2026-11-02.md`
 
 | Item | Value | Status |
 |---|---|---|

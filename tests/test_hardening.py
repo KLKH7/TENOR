@@ -1,4 +1,5 @@
-"""Timeouts, retries, the stall watchdog and crash-safe resume (docs/HARDENING.md). No network:
+"""Timeouts, retries, the stall watchdog and crash-safe resume (docs/engineering/HARDENING.md). No
+network:
 the real anthropic SDK is driven through ``httpx2.MockTransport``."""
 
 from __future__ import annotations

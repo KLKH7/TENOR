@@ -175,7 +175,7 @@ The 95% oracle is therefore "ceiling minus gold errors", not a ceiling. This doe
 
 ## Judge audit (Sonnet second judge on all 840 answers)
 
-Report: [`evals/reports/20261103T002456Z.judgecheck.claude-sonnet-5-5.md`](../evals/reports/20261103T002456Z.judgecheck.claude-sonnet-5-5.md). Same `judge.v1` prompt, Batch API.
+Report: [`evals/reports/20261103T002456Z.judgecheck.claude-sonnet-5-5.md`](../../evals/reports/20261103T002456Z.judgecheck.claude-sonnet-5-5.md). Same `judge.v1` prompt, Batch API.
 
 - **Agreement:** 97.3% on correct / not correct (Cohen's κ 0.90); 96.2% on the 3-way verdict (κ 0.87).
 - **Does the second judge disagree more on Concentrate's "correct" verdicts? No. It disagrees on none.**

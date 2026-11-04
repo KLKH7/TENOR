@@ -7,7 +7,7 @@ Tests: `tests/test_fallback.py` (no network).
 ## Why
 
 On the author's real meetings, Granola's agent beat Concentrate 92% vs 59% (n = 39,
-[`REAL_SLICE.md`](../REAL_SLICE.md)):
+[`REAL_SLICE.md`](../../results/REAL_SLICE.md)):
 - Concentrate scored 0/8 on "who said X";
 - 10 of its 16 misses were "the material doesn't mention it".
 

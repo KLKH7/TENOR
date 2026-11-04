@@ -14,7 +14,7 @@ concurrency:
 jobs:
   check:
     runs-on: ubuntu-latest
-    timeout-minutes: 30  # a hung job fails loudly instead of burning hours (see docs/HARDENING.md)
+    timeout-minutes: 30  # a hung job fails loudly instead of burning hours (see docs/engineering/HARDENING.md)
     env:
       # Tests never touch the network or need secrets; make sure nothing can reach a real API.
       ANTHROPIC_API_KEY: ""
@@ -37,3 +37,5 @@ jobs:
         run: uv run mypy
       - name: Tests
         run: uv run pytest
+      - name: Docs links resolve
+        run: uv run python scripts/check_links.py

@@ -330,7 +330,7 @@ def test_resume_survives_a_kill_mid_progress_write(
     assert all(json.loads(line) for line in progress.read_text().splitlines())
 
 
-# -- safe stop, reconcile and open (docs/HARDENING.md) ------------------------------------------
+# -- safe stop, reconcile and open (docs/engineering/HARDENING.md) ------------------------------
 
 
 def _store(tmp_path: Path) -> Path:

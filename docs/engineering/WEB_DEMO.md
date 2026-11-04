@@ -28,7 +28,7 @@ the cited lines, highlighted and scrolled into view.
 
 ### Results: failure types and significance
 
-`concentrate analyze` ([ANALYSIS.md](ANALYSIS.md)) writes two files next to a report. The
+`concentrate analyze` ([ANALYSIS.md](../results/ANALYSIS.md)) writes two files next to a report. The
 explorer joins them in when they exist and says nothing when they don't:
 
 - `failures.jsonl` → each answer not judged correct gets a box with its primary failure type,

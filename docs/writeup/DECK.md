@@ -47,7 +47,7 @@ Same claims as [MEMO.md](MEMO.md); sources in [FINDINGS_CHECKLIST.md](FINDINGS_C
 - Real: those are the questions people ask, and fact-only memory scores 0% on "who said".
 - Precomputation wins on state and change: "what changed" 100% vs 83% (real); 58% vs 5% recall in the brief.
 - Proposal: facts as an index for state, change and commitments; transcripts kept and searchable for everything else.
-- **Chart:** `docs/retirement_curve.svg`, annotated "no exact-wording questions here", next to the real "who said" bar.
+- **Chart:** `docs/results/retirement_curve.svg`, annotated "no exact-wording questions here", next to the real "who said" bar.
 
 ## 8. What Granola does well, and where memory still helps
 - Live probes (4 meetings): strong, stable commitment tracking; honest abstention on single-mic speech; ~0.3 s retrieval tools.

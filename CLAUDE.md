@@ -6,7 +6,7 @@ transcript retrieval". The audience is Granola's engineering team: rigour and ho
 
 ## Non-negotiables
 - **Fidelity to Granola.** Model the real public API/MCP. Every field we rely on is tagged
-  `VERIFIED` or `ASSUMED` in `docs/SCHEMA_NOTES.md`. Never silently invent API behaviour; if you
+  `VERIFIED` or `ASSUMED` in `docs/engineering/SCHEMA_NOTES.md`. Never silently invent API behaviour; if you
   must assume, add a row there first.
 - **Source boundary.** All Granola I/O lives in `concentrate.sources` behind the `Source` protocol
   (`GranolaAPISource` for the REST API, `GranolaMCPSource` for the official MCP, `FixtureSource`).
@@ -20,7 +20,7 @@ transcript retrieval". The audience is Granola's engineering team: rigour and ho
 - **Secrets only from env** (`GRANOLA_API_KEY`, `ANTHROPIC_API_KEY`). Never log, print, repr or
   persist them. `.env.example` lists every variable.
 - **Honest evals.** Dev/test split of questions; never tune on test. Bad results get reported in
-  `docs/DESIGN.md` and the README, not hidden. Every eval result records git SHA, model, prompt
+  `docs/engineering/DESIGN.md` and the README, not hidden. Every eval result records git SHA, model, prompt
   versions, seed, date.
 - **Budget.** Before any eval run estimated > $2 of LLM spend, print the estimate and ask the user.
 
@@ -42,9 +42,9 @@ transcript retrieval". The audience is Granola's engineering team: rigour and ho
 - Questions have a dev/test split. Look only at dev when tuning anything.
 
 ## UI (Phase 6)
-- Replicate layouts and interactions from the Mobbin references in `docs/UI_REFERENCES.md` (Granola's own screens first). Use the Mobbin connector for any new view: search before designing. Match Granola's visual language closely (the user asked for this); never use Granola's logo, name, wordmark or fonts, and don't commit Mobbin screenshots (link to `mobbin_url` instead).
+- Replicate layouts and interactions from the Mobbin references in `docs/archive/UI_REFERENCES.md` (Granola's own screens first). Use the Mobbin connector for any new view: search before designing. Match Granola's visual language closely (the user asked for this); never use Granola's logo, name, wordmark or fonts, and don't commit Mobbin screenshots (link to `mobbin_url` instead).
 
 ## Workflow
 - Work proceeds in phases (see README "Roadmap"). After each phase: tests green, update
-  `docs/DESIGN.md` (decisions + trade-offs), summarise built / assumed / open questions, stop for
+  `docs/engineering/DESIGN.md` (decisions + trade-offs), summarise built / assumed / open questions, stop for
   review.

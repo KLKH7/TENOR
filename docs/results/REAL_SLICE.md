@@ -126,7 +126,7 @@ Granola's agent costs us nothing: it runs on Granola's side.
 
 ## Ask both MCPs the same question about the same real meetings
 
-`concentrate real-kit serve` serves Concentrate's memory of **your real meetings** through WS-D's read-only MCP server ([`MCP_SERVER.md`](MCP_SERVER.md)). It offers the same six tools as `mcp-serve`:
+`concentrate real-kit serve` serves Concentrate's memory of **your real meetings** through WS-D's read-only MCP server ([`MCP_SERVER.md`](../systems/MCP_SERVER.md)). It offers the same six tools as `mcp-serve`:
 - the store is opened SQLite `mode=ro`;
 - the corpus comes from `data/real.db` and the directory from `data/real/directory.json`;
 - `ask_memory(answer: true)` caches in `data/real/cache/llm`;
@@ -162,7 +162,7 @@ Restart Claude Desktop. Granola's MCP is the custom connector `https://mcp.grano
 claude mcp add --scope user concentrate-real -- /Users/kianlakhani/.local/bin/uv run --directory /Users/kianlakhani/Code/concentrate concentrate real-kit serve
 ```
 
-**Good same-data prompts** are the probe's misses ([`PROBE_V2.md`](PROBE_V2.md)):
+**Good same-data prompts** are the probe's misses ([`PROBE_V2.md`](../archive/PROBE_V2.md)):
 - "who is <full name of an attendee>, and which meetings were they in?";
 - "which meetings did <shared first name> appear in, and is it the same person?";
 - "when is the next <team> meeting?";

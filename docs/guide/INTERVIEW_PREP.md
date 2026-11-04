@@ -22,7 +22,7 @@ questions about months of meetings. They range from "search transcripts when ask
 MCP agent does) to "build a memory ahead of time" (Mem0, Graphiti, and my own pipeline, Concentrate).
 Every system gets the same answer model, prompt and judge. Only the context differs, and I measure
 accuracy, cost and latency.
-- *Evidence:* [README](../../README.md), [TOUR.md](TOUR.md), [`docs/BENCHMARK.md`](../BENCHMARK.md).
+- *Evidence:* [README](../../README.md), [TOUR.md](TOUR.md), [`docs/benchmark/DESIGN.md`](../benchmark/DESIGN.md).
 
 ### 2. "Why meetings? Aren't there memory benchmarks already?"
 LongMemEval, LoCoMo, BEAM and RealMem are chat logs. In my survey I found none on meeting
@@ -34,7 +34,7 @@ transcripts. Meetings break chat assumptions:
 
 The question categories map to those failure modes: `entity_disambiguation`, `temporal`,
 `commitment_status`, `latest_state`.
-- *Evidence:* [`docs/BENCHMARK.md`](../BENCHMARK.md) "Question categories".
+- *Evidence:* [`docs/benchmark/DESIGN.md`](../benchmark/DESIGN.md) "Question categories".
 
 ### 3. "What did you find?"
 Be precise about what's measured:
@@ -49,7 +49,7 @@ Be precise about what's measured:
 3. **The pre-meeting brief:** memory found 91% of open commitments vs 30% for top-k + Sonnet, but
    with lower precision (43% vs 90%).
 4. The headline XL numbers aren't in yet, and I committed in the README to publishing them good or bad.
-- *Evidence:* [`docs/PROBE_2026-11-02.md`](../PROBE_2026-11-02.md), `evals/reports/20261102T100403Z.analysis.md`, [`docs/BRIEF.md`](../BRIEF.md).
+- *Evidence:* [`docs/archive/PROBE_2026-11-02.md`](../archive/PROBE_2026-11-02.md), `evals/reports/20261102T100403Z.analysis.md`, [`docs/results/BRIEF.md`](../results/BRIEF.md).
 
 ---
 
@@ -88,7 +88,7 @@ It's the project's biggest weakness, and I lead with it. But "meaningless" is to
 
 So it can rank systems on *specific skills* (which Sam, as-of a date), but absolute accuracy on real
 meetings will differ. The real-data slice is the check.
-- *Evidence:* [`docs/FIDELITY.md`](../FIDELITY.md), [`docs/FIDELITY_V2.md`](../FIDELITY_V2.md), README "Honest limits".
+- *Evidence:* [`docs/benchmark/FIDELITY.md`](../benchmark/FIDELITY.md), [`docs/benchmark/FIDELITY_V2.md`](../benchmark/FIDELITY_V2.md), README "Honest limits".
 
 ### 6. "Why wouldn't we just do this ourselves?"
 You could, and probably better: you have audio, millions of meetings, and you've publicly described
@@ -115,7 +115,7 @@ List them crisply:
    (91% on the lines it's confident about).
 6. **Line IDs are positional,** so old reports only reproduce against fixtures at their git SHA.
 7. **Gate and failure taxonomy are string-based,** so `stale_value` and `wrong_entity` counts are lower bounds.
-- *Evidence:* `python -m concentrate.enhance.evaluate data/fixtures/northwind`, [`docs/ANALYSIS.md`](../ANALYSIS.md), [`docs/RESULTS_EXPLORER.md`](../RESULTS_EXPLORER.md).
+- *Evidence:* `python -m concentrate.enhance.evaluate data/fixtures/northwind`, [`docs/results/ANALYSIS.md`](../results/ANALYSIS.md), [`docs/engineering/RESULTS_EXPLORER.md`](../engineering/RESULTS_EXPLORER.md).
 
 ### 8. "A lot of this was written by AI agents. How much of it do you understand?"
 Be direct. I set the scope, the non-negotiables (CLAUDE.md: fidelity, source boundary, honest evals,
@@ -181,7 +181,7 @@ and measurable against ground truth, because the generator knows the true speake
 remote meetings Granola already names 82% of "Them" lines, so the work is the unnamed remainder and
 cross-meeting identity. The honest part: it's weak in person, and an LLM fallback for low-confidence
 lines is the obvious next step.
-- *Evidence:* [`enhance/speakers.py`](../../packages/concentrate/enhance/speakers.py), [`docs/concentrate/enhance.md`](../concentrate/enhance.md).
+- *Evidence:* [`enhance/speakers.py`](../../packages/concentrate/enhance/speakers.py), [`docs/systems/concentrate/enhance.md`](../systems/concentrate/enhance.md).
 
 ### 15. "How do you know a difference between systems is real?"
 Paired tests, because every system answers the same questions:
@@ -223,7 +223,7 @@ socket. Fixes:
 - crash-safe resume: torn progress lines are repaired, and each meeting is one transaction.
 
 Not fixed and documented: batch creation isn't idempotent, and abandoned attempts may be billed.
-- *Evidence:* [`docs/HARDENING.md`](../HARDENING.md).
+- *Evidence:* [`docs/engineering/HARDENING.md`](../engineering/HARDENING.md).
 
 ### 19. "How is it reproducible?"
 - Same seed gives byte-identical data (tested), and the committed fixture must equal a fresh `synth --seed 42`.
@@ -245,7 +245,7 @@ Three things, in order of how cheap they are to try:
    brief's 91% recall, once precision is fixed.
 3. **Evidence for transcript retirement:** keep verified facts and digests (~5% of tokens) and
    measure what's lost before deleting anything.
-- *Evidence:* [`docs/BRIEF.md`](../BRIEF.md), [`docs/PHASE4_DESIGN.md`](../PHASE4_DESIGN.md).
+- *Evidence:* [`docs/results/BRIEF.md`](../results/BRIEF.md), [`docs/archive/PHASE4_DESIGN.md`](../archive/PHASE4_DESIGN.md).
 
 ### 21. "Can we delete old transcripts?"
 My retirement workstream (branch `ws-c-retirement`, not yet merged) ran it on XL dev (90 questions):

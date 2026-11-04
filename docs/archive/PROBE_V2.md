@@ -70,7 +70,7 @@ The same commitment was attributed differently in two answers. A precomputed sto
 
 ## 5. Follow-up: scored results on the same account
 
-The probe above is qualitative. The scored comparison is in [`REAL_SLICE.md`](REAL_SLICE.md):
+The probe above is qualitative. The scored comparison is in [`REAL_SLICE.md`](../results/REAL_SLICE.md):
 - 39 LLM-drafted questions, approved in bulk by the meeting owner with 0 edits;
 - Granola's agent **92%** [82, 100] vs Concentrate **59%** [44, 74], with b0 top-k at 77% on the same 39;
 - a second judge agrees 97% of the time;

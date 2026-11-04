@@ -154,7 +154,7 @@ that sentence.
 - **Brief: false commitment items.** The store holds 8 commitments whose source is an
   in-person line. All 8 are owned by `priya`, and all 8 actually belong to the report. These
   are the "items attributed to the note owner" that repeat across the brief's false positives
-  (docs/BRIEF.md says ~10 distinct items).
+  (docs/results/BRIEF.md says ~10 distinct items).
   - v2 lookahead: 4/8 correct (Lena, Elena, Megan, Hana), 0 new errors; 4 still go to Priya
     (Theo, Tomás ×2, Nadia).
   - v2 online: 0/8, because each commitment is the first identified mention of its task.

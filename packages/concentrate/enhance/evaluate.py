@@ -399,7 +399,7 @@ def _pct(x: float) -> str:
 
 
 def format_report(r: Report) -> str:
-    """Markdown tables for docs/concentrate/enhance.md."""
+    """Markdown tables for docs/systems/concentrate/enhance.md."""
     lines = [f"### {r.fixture}: {r.meetings} meetings, {r.utterances} utterances", ""]
     lines += ["| Slice | Lines | Coverage | Precision (resolved) | Accuracy (all) |",
               "|---|---:|---:|---:|---:|"]  # fmt: skip

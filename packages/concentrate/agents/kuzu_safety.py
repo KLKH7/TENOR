@@ -13,7 +13,8 @@ the *next* process natively ("Fatal Python error: Bus error"), which no ``try`` 
 * :func:`reconcile` drops ``progress.jsonl`` rows whose episode is not in the graph (e.g. the
   WAL holding them was set aside), so a resume redoes exactly the missing episodes.
 
-Recovery steps (also in docs/HARDENING.md, "Recovering a Graphiti store"): stop the build; move
+Recovery steps (also in docs/engineering/HARDENING.md, "Recovering a Graphiti store"): stop the
+build; move
 ``graph.kuzu.wal`` aside (e.g. ``graph.kuzu.wal.broken``; never delete it); rerun the same
 command. The resume reconciles ``progress.jsonl`` against the episodes in the main file and
 rebuilds only the lost ones (their earlier spend is reported as ``orphaned_cost_usd``).
@@ -35,7 +36,7 @@ logger = logging.getLogger(__name__)
 
 FORCED_EXIT_MARKER = "FORCED_EXIT"
 ORPHANED_FILE = "progress.orphaned.jsonl"
-RECOVERY_DOC = "docs/HARDENING.md#recovering-a-graphiti-store"
+RECOVERY_DOC = "docs/engineering/HARDENING.md#recovering-a-graphiti-store"
 PROBE_TIMEOUT_S = 600.0
 
 # Opening replays the WAL; the count proves the replayed database answers queries.

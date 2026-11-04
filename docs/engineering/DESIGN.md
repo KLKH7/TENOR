@@ -114,7 +114,7 @@ The brief requires ASR name misspellings (Megan → Meghan), but the first fixtu
 It uses no context, so speaker attribution ("which Them said this?") is untouched. Phase 4 replaces it with the Python enhancer, and the UI will render that output instead.
 
 ## Real data via Granola's MCP (2026-11-02)
-- **Why:** the public REST API requires Business/Enterprise; the author's account is on Plus. The MCP works on every plan, so `GranolaMCPSource` is the realistic route to running Concentrate on real notes. The live probe (`docs/PROBE_2026-11-02.md`) informed every mapping.
+- **Why:** the public REST API requires Business/Enterprise; the author's account is on Plus. The MCP works on every plan, so `GranolaMCPSource` is the realistic route to running Concentrate on real notes. The live probe (`docs/archive/PROBE_2026-11-02.md`) informed every mapping.
 - **Same protocol, different wire variant.** The MCP returns UUIDs, not `not_` IDs. `McpNote`/`McpNoteSummary`/`McpFolder` subclass the API models and override only ID constraints, so normalization and the store are shared. The store records `raw_format` (`api`|`mcp`) so raw JSON reloads with the right model. Existing local `.db` files predate the column; delete them and re-sync.
 - **Parsing agent-oriented text.** `list_meetings` and `get_meetings` return XML-like text meant for LLMs, not strict XML. The parser uses lenient regexes plus HTML unescaping, and is tested against fixtures copied from the live format with invented content.
 - **Transcripts by chunk, not by character page.** Chunk reads return structured passages (speaker label, start time). Full reads return paged text. We read 10 chunks per call, pin the `transcript_version`, and derive `end_time` from the next passage's start.
@@ -173,7 +173,7 @@ The remote 38+ word monologue tail is a content limitation of scripted turns and
 - concrete live-probe findings;
 - numbers on the transcript-retirement question they've said they're weighing.
 
-**Trade-off:** the work hardly changes, but polish moves to the benchmark: a card ([`BENCHMARK.md`](BENCHMARK.md)), one command per system, and a documented way to add a system. Its biggest weakness, being synthetic, is stated up front.
+**Trade-off:** the work hardly changes, but polish moves to the benchmark: a card ([`BENCHMARK.md`](../benchmark/DESIGN.md)), one command per system, and a documented way to add a system. Its biggest weakness, being synthetic, is stated up front.
 
 ## Hardening: timeouts, retries, stall watchdog, CI (2026-11-02)
 
@@ -204,7 +204,7 @@ connection could block for up to 50 minutes. Full write-up: [`HARDENING.md`](HAR
 
 ## Report v2: paired significance, power, Pareto, failure taxonomy (2026-11-02)
 
-`concentrate analyze <report>` works post hoc on any saved report and costs nothing unless `--llm` is passed. Methods are in [`ANALYSIS.md`](ANALYSIS.md).
+`concentrate analyze <report>` works post hoc on any saved report and costs nothing unless `--llm` is passed. Methods are in [`ANALYSIS.md`](../results/ANALYSIS.md).
 - **Paired, not overlapping CIs.** Every system answers the same questions, so pairs are compared with McNemar's exact test and a paired bootstrap CI of the gap. Holm–Bonferroni corrects across all pairs; each category is its own family.
 - **Power from observed discordance.** Sample sizes use Connor's approximation with the observed share of questions on which two systems disagree. A Monte Carlo test confirms about 80% power. Trade-off: discordance from a small pilot is noisy, so the numbers are re-estimated on each report rather than fixed.
 - **Ingest amortised at a stated volume.** The frontier is shown at several volumes, along with break-even volumes, because write-time vs query-time is a volume question.
@@ -213,7 +213,7 @@ connection could block for up to 50 minutes. Full write-up: [`HARDENING.md`](HAR
 
 ## Concentrate as an MCP server (workstream D, 2026-11-02)
 
-`concentrate mcp-serve [--xl]` serves a built memory over stdio with six read-only tools (`ask_memory`, `get_facts`, `get_commitments`, `resolve_entity`, `get_meeting`, `get_transcript_lines`) and one resource (`concentrate://memory`). Details, client config and a demo script are in [`MCP_SERVER.md`](MCP_SERVER.md).
+`concentrate mcp-serve [--xl]` serves a built memory over stdio with six read-only tools (`ask_memory`, `get_facts`, `get_commitments`, `resolve_entity`, `get_meeting`, `get_transcript_lines`) and one resource (`concentrate://memory`). Details, client config and a demo script are in [`MCP_SERVER.md`](../systems/MCP_SERVER.md).
 
 - **Logic split from protocol.** `mcp_server/service.py` is plain Python over `MemoryStore`, `EntityDirectory` and `build_context`. `server.py` only registers tools (mcp 2.x `MCPServer`; FastMCP was renamed in v2). Tests drive the real protocol through the SDK's in-process client.
 - **Read-only twice over.** The tools carry `readOnlyHint` annotations, and `MemoryStore(read_only=True)` opens SQLite with `mode=ro`, so a write fails at the database. The read-only connection is shared across the SDK's worker threads (`check_same_thread=False`), which is safe because the sqlite3 module serializes access.
@@ -233,7 +233,7 @@ connection could block for up to 50 minutes. Full write-up: [`HARDENING.md`](HAR
 
 ## Pre-meeting brief (workstream H, 2026-11-02)
 
-**Built:** `concentrate brief <note_id>` prints a cited brief for an upcoming meeting: open commitments, what changed since the series last met, open customer requests, and the last meeting's digest. `concentrate brief-eval` grades briefs against the generator's world. Details and results are in [`BRIEF.md`](BRIEF.md).
+**Built:** `concentrate brief <note_id>` prints a cited brief for an upcoming meeting: open commitments, what changed since the series last met, open customer requests, and the last meeting's digest. `concentrate brief-eval` grades briefs against the generator's world. Details and results are in [`BRIEF.md`](../results/BRIEF.md).
 
 **Decisions:**
 - The brief is a deterministic **as-of query**: it reads only rows recorded before the meeting starts, so a historical brief has no leakage and every meeting is a test case.
@@ -244,7 +244,7 @@ connection could block for up to 50 minutes. Full write-up: [`HARDENING.md`](HAR
 
 ## Benchmark v2: realistic wording (generator `northwind-2`, 2026-11-02)
 
-Details and metrics are in `docs/FIDELITY_V2.md`.
+Details and metrics are in `docs/benchmark/FIDELITY_V2.md`.
 
 **Decisions.**
 - **Template-composed filler instead of an LLM rewrite.** Filler is composed from templates filled with meeting-specific vocabulary (`synth/filler.py`), so it costs $0 and the same seed gives byte-identical output. This brings exact ≥6-word duplicates from 78% down to 4.9% and TTR@2k from .11 to .21. The trade-off: the sentence frames still recur (54% of long passages share their first 6 words; real data: 0.6%). An LLM polish would fix that for an estimated ≈$28–55 and is left for the user to decide.
@@ -271,7 +271,7 @@ Trade-off: a stall now takes up to 15 + 6 minutes to end instead of 15, in excha
 closing the database cleanly whenever the main thread can still move.
 
 ## Concentrate tuning on XL dev (workstream L, 2026-11-02)
-Query-side only, dev only; details, error analysis and ablations in `docs/CONCENTRATE_TUNING.md`.
+Query-side only, dev only; details, error analysis and ablations in `docs/archive/CONCENTRATE_TUNING.md`.
 - **Decision:** fix lookup misses in `memory/query.py` (role-qualified names, named-meeting anchoring, list-wide commitment lookups) rather than re-extract. Dev accuracy 89% → 90% (within noise); gold lines in context 70% → 86%.
 - **Ablations:** removing supersession/validity state costs 6 pts on dev, the largest effect; removing query-time entity linking costs 1 pt.
 - **Trade-off:** the entail.v2 false rejects on commitment updates have a measured fix (owner-free update claims; 5 of 7 flip, Δ 0 on dev). It ships only with an explicit `entail.v3` rebuild, so the cached store and the code stay consistent.
@@ -285,7 +285,7 @@ Query-side only, dev only; details, error analysis and ablations in `docs/CONCEN
 - **Result (XL dev, $7.04):** Concentrate 89% at N = ∞ → 88% at N = 0, keeping ~5% of transcript
   tokens; summaries-only b1 scores 64%. b0's retired accuracy was not run (≈ $29 at N = ∞). The
   benchmark has no verbatim-quote questions, so the main expected loss is untested. See
-  `docs/RETIREMENT.md`.
+  `docs/results/RETIREMENT.md`.
 
 ## Report provenance: judge reasons, data version, per-system k (workstream R, 2026-11-02)
 
@@ -311,7 +311,7 @@ Query-side only, dev only; details, error analysis and ablations in `docs/CONCEN
 
 ## Unit economics and scale curve (workstream F, 2026-11-02)
 
-Details and results: [`ECONOMICS.md`](ECONOMICS.md).
+Details and results: [`ECONOMICS.md`](../results/ECONOMICS.md).
 
 - **Re-price measured tokens, don't estimate costs.** `concentrate economics` reads the builds'
   `progress.jsonl` and an eval report's per-question rows, infers each build's model by
@@ -331,11 +331,11 @@ Details and results: [`ECONOMICS.md`](ECONOMICS.md).
 
 - `enhance-v2` adds two cues. **Task continuity**: an "I'll take X" or "X is done" line is credited to whoever said X on identified lines in other meetings. **Diarized owner prior**: the owner gets a stronger prior on the largest iOS diarization cluster. It is opt-in (`CONCENTRATE_ENHANCER`) so existing stores stay valid.
 - Turn-taking and an HMM over the microphone run were measured and rejected *for this corpus*. Synthetic filler speakers are drawn i.i.d., so there is no structure to learn. That's a fidelity gap to close, not a verdict on the idea.
-- With batch lookahead, v2 fixes 4 of the 8 owner-misattributed in-person commitments behind the brief's precision gap, adding no new errors. With history only (what the pipeline does today), it fixes none. Numbers: docs/concentrate/enhance_v2.md.
+- With batch lookahead, v2 fixes 4 of the 8 owner-misattributed in-person commitments behind the brief's precision gap, adding no new errors. With history only (what the pipeline does today), it fixes none. Numbers: docs/systems/concentrate/enhance_v2.md.
 
 ## Benchmark v2.1 extras (workstream P, generator `northwind-2.1`, 2026-11-02)
 
-Details: [BENCHMARK_V2_EXTRAS.md](BENCHMARK_V2_EXTRAS.md).
+Details: [BENCHMARK_V2_EXTRAS.md](../benchmark/V2_EXTRAS.md).
 - **Additive and opt-in.** `--extras` appends 10 hand-authored meetings about one new project (Halyard) and 51 questions in seven new categories:
   `room_attribution`, `identity_resolution`, `correction`, `commitment_tracking`, `long_horizon`, and the transcript-only `exact_quote` and `speaker_attribution`.
   `questions.NEEDS_TRANSCRIPT` marks the categories the retirement curve should report separately.
@@ -360,7 +360,7 @@ Details: [BENCHMARK_V2_EXTRAS.md](BENCHMARK_V2_EXTRAS.md).
 - **First real result (bad for Concentrate, reported as-is).** On 39 real questions, Granola's agent scored 92% [82, 100], b0 76% (k=1, n=37) and Concentrate 59% [44, 74]. Concentrate got 0 of 8 on "who said X", and 10 of its 16 misses were "not in the material". The cause: the write-time memory keeps ~43 facts for 4 meetings, and real questions target long-tail transcript details that our synthetic questions (generated from planted facts) never ask about. Concentrate led only on "what changed" (6/6). No tuning was done on this slice; the next step needs fresh real questions as a dev set. Full detail is in REAL_SLICE.md.
 
 ## Transcript fallback for Concentrate (workstream L, 2026-11-03)
-Details: `docs/concentrate/fallback.md`. Everything below is **dev**.
+Details: `docs/systems/concentrate/fallback.md`. Everything below is **dev**.
 - **Decision:** a hybrid. Facts answer state and change questions; raw transcript passages fill the long tail.
   - `ConcentrateSystem(fallback="off"|"on_abstain"|"always")`, default `off`.
   - Passages use b0's chunking and the hybrid index, keep line IDs, respect as-of and retirement, and fit a fixed token budget.

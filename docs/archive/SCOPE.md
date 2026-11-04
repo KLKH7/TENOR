@@ -67,5 +67,5 @@ A team that has thought about this more than we have won't be impressed by techn
 
 - **Each workstream runs as a visible session you can open, read and talk to,** not a hidden subagent.
 - **Every brief ends with a teach-back:** a "what I built, the CS concept behind it, the decision I'd like from you" summary written for you.
-- **Decisions live in `docs/DESIGN.md`,** and anything over $2 still needs your yes.
+- **Decisions live in `docs/engineering/DESIGN.md`,** and anything over $2 still needs your yes.
 - **Checkpoints:** I'll pause to show you results and ask for direction at each one, rather than chaining decisions on your behalf.

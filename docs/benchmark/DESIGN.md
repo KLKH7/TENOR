@@ -35,7 +35,7 @@ Both are fully deterministic: `uv run concentrate synth --seed 42 [--scale xl]` 
 
 ## Fidelity to Granola
 
-Notes use the exact JSON shape of Granola's public API and are validated by the same Pydantic models as real data (`tests/test_contract.py`). Transcripts follow the format observed live through Granola's MCP on 2026-11-02 ([`PROBE_2026-11-02.md`](PROBE_2026-11-02.md)):
+Notes use the exact JSON shape of Granola's public API and are validated by the same Pydantic models as real data (`tests/test_contract.py`). Transcripts follow the format observed live through Granola's MCP on 2026-11-02 ([`PROBE_2026-11-02.md`](../archive/PROBE_2026-11-02.md)):
 - the owner is on `Microphone`; other speakers are on system audio, and only some of them are named;
 - in-person meetings are all `Microphone`;
 - utterances are short and fragmentary;

@@ -403,7 +403,8 @@ def to_markdown(
     lines += [
         "",
         "---",
-        "Methods: `docs/ANALYSIS.md`. Machine-readable: `<stamp>.analysis.json`, per-answer "
+        "Methods: `docs/results/ANALYSIS.md`. Machine-readable: `<stamp>.analysis.json`, "
+        "per-answer "
         "failure tags: `<stamp>.failures.jsonl`.",
         "",
     ]
@@ -550,7 +551,7 @@ def _failures_md(a: dict[str, Any], fails: list[Failure], gt_note: str) -> list[
         "",
         "Every answer not judged *correct* gets one **primary** failure type from cheap "
         "deterministic signals (priority order as in the columns; definitions in "
-        f"`docs/ANALYSIS.md`). {gt_note}",
+        f"`docs/results/ANALYSIS.md`). {gt_note}",
         "",
     ]
     if not fails:

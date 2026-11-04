@@ -73,7 +73,7 @@ COMPLETE_MARKER = "complete.json"
 PROGRESS_FILE = "progress.jsonl"
 
 # Per-call cost model for estimate_ingest, calibrated on the 2026-11-02 smoke test (2 Northwind
-# meetings, 6 calls, Sonnet 5.5; see docs/baselines/mem0.md). One Mem0 `add` = one LLM call:
+# meetings, 6 calls, Sonnet 5.5; see docs/systems/baselines/mem0.md). One Mem0 `add` = one LLM call:
 #   input  = Mem0 system prompt (cached prefix) + our per-meeting prompt + chunk
 #            + context Mem0 adds (last <=10 messages truncated to 300 chars, <=10 existing
 #              memories), which grew ~280 tokens/call from ~80 and is capped at ~1,900;

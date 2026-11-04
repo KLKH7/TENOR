@@ -133,7 +133,7 @@ export interface ParetoPoint {
   on_frontier: boolean;
 }
 
-/** The subset of <stamp>.analysis.json the explorer shows (see docs/ANALYSIS.md). */
+/** The subset of <stamp>.analysis.json the explorer shows (see docs/results/ANALYSIS.md). */
 export interface Analysis {
   meta: { report: string; seed: number; volume: number; alpha: number; fixtures: string | null };
   pairs: { overall: PairTest[] } & Record<string, PairTest[]>;

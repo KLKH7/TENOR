@@ -2,7 +2,8 @@
 
 Concentrate answers from extracted facts plus the lines they cite. On real meetings that loses the
 long tail ("who proposed X?", a passing date): the details were never extracted
-(docs/REAL_SLICE.md). The fallback retrieves transcript passages at question time, using b0's
+(docs/results/REAL_SLICE.md). The fallback retrieves transcript passages at question time, using
+b0's
 15-utterance chunks and the same BM25 + embedding ``HybridIndex``, and keeps every line ID so
 answers still cite lines.
 

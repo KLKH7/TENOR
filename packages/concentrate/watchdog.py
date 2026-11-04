@@ -192,7 +192,7 @@ class Watchdog:
         logger.critical("%s did not stop cleanly; forcing exit %d", self.what, STALL_EXIT_CODE)
         print(
             f"\n*** concentrate watchdog: {self.what} stalled for {idle:.0f}s and did not stop "
-            f"cleanly; forcing exit {STALL_EXIT_CODE} (see docs/HARDENING.md) ***",
+            f"cleanly; forcing exit {STALL_EXIT_CODE} (see docs/engineering/HARDENING.md) ***",
             file=sys.stderr,
             flush=True,
         )

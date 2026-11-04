@@ -1,10 +1,10 @@
 """Render world meetings into Granola API ``Note`` objects (transcript, summary, typed notes).
 
-Faithful to what Granola actually produces (docs/SCHEMA_NOTES.md):
+Faithful to what Granola actually produces (docs/engineering/SCHEMA_NOTES.md):
 
 * utterances carry the capture channel: ``microphone`` for the note owner (and for everyone
   in an in-person meeting), ``speaker`` (system audio) for everyone else on a call. As in live
-  transcripts (docs/PROBE_2026-11-02.md), Granola identifies *some* remote speakers by name:
+  transcripts (docs/archive/PROBE_2026-11-02.md), Granola identifies *some* remote speakers by name:
   in most remote meetings a subset of "Them" speakers carry ``name``, and even those are
   unlabeled on a fraction of passages. The owner's microphone is never named;
 * turns are cut into short, fragmentary passages (often 1-6 words), never inside a fact phrase;
@@ -46,14 +46,15 @@ DIARIZED = {"w3-1on1-alex"}  # recorded on iPhone: diarization labels available
 # Speaker identification and attendee naming, calibrated qualitatively on the live probe.
 # Calibrated on the author's real meetings synced via the MCP (2026-11-02): 82% of "Them"
 # passages named; remote passages median 5 words (p25 1, p75 17, p90 38); in-person passages
-# median 25 words (p75 69). See docs/PROBE_2026-11-02.md.
+# median 25 words (p75 69). See docs/archive/PROBE_2026-11-02.md.
 NAMED_MEETING_RATE = 0.95  # remote meetings where Granola identifies "Them" speakers
 IDENTIFIED_SPEAKER_RATE = 0.9  # per remote speaker, within such a meeting
 UNLABELED_PASSAGE_RATE = 0.1  # identified speakers still appear as bare "System audio"
 LEAD_IN_RATE = 0.2  # a turn opens with its own one-word passage ("So", "Yeah")
 NULL_NAME_RATE = 0.25  # attendees with no display name on the calendar invite
 LOSSY_SUMMARY_DROP = 0.2
-# v2 summaries (docs/FIDELITY_V2.md): real ones have 4-6 sections, ~30 two-level bullets and
+# v2 summaries (docs/benchmark/FIDELITY_V2.md): real ones have 4-6 sections, ~30 two-level bullets
+# and
 # ~400 words. Discussion sections are drawn from what the filler actually said.
 SUMMARY_SECTIONS = (4, 6)
 SUMMARY_BULLETS = 30
@@ -300,7 +301,7 @@ def render_meeting(
         if named and pid != owner and rng.random() < IDENTIFIED_SPEAKER_RATE
     }
     # v2.1 hybrid room: everyone in the room shares one system-audio channel, which Granola
-    # can only label with the room's name (docs/BENCHMARK_V2_EXTRAS.md, ASSUMED).
+    # can only label with the room's name (docs/benchmark/V2_EXTRAS.md, ASSUMED).
     room = world.extras.rooms.get(meeting.key) if world.extras else None
     in_room = set(room.members) if room else set()
 

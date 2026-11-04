@@ -44,7 +44,7 @@ npm test                                 # unit tests for the pure explorer logi
   affected answer card carries its own warning.
 - **Small-n warning.** When any system has n < 30, the overview says how many accuracy points
   one question is worth and that the CIs overlap.
-- **Visual language** follows the note view (docs/UI_REFERENCES.md "Eval dashboard"): Gumloop's
+- **Visual language** follows the note view (docs/archive/UI_REFERENCES.md "Eval dashboard"): Gumloop's
   tiles → charts → records table order, Adaline's per-question rows, Granola's pill chips, serif
   titles, greige canvas and white transcript sheet. No Granola logo, name or fonts.
 

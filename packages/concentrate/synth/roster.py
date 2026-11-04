@@ -162,7 +162,7 @@ XL_PROJECTS: tuple[Project, ...] = (
 ALL_ORGS = ORGS + XL_ORGS
 ALL_PROJECTS = PROJECTS + XL_PROJECTS
 
-# -- Benchmark v2.1 extras (``--extras``; docs/BENCHMARK_V2_EXTRAS.md) -------------------------
+# -- Benchmark v2.1 extras (``--extras``; docs/benchmark/V2_EXTRAS.md) -------------------------
 # Real-world identity mess. Never referenced unless extras are on, so v2 output is unchanged.
 EXTRA_STAFF: tuple[Person, ...] = (
     # Changes surname (and email) on RENAMES["rosa"].on; the directory shows the current name.

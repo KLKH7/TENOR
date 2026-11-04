@@ -89,7 +89,7 @@ Or as project config in `.mcp.json`:
 
 ## Demo script: ask both
 
-**Important caveat.** The two servers don't hold the same meetings. Granola's MCP reads **your real account**, and Concentrate serves the **synthetic Northwind** company. So this demo compares *how each one handles a kind of question*, not two answers to one fact. For each question, ask Concentrate the Northwind version and ask Granola the same *kind* of question about your own meetings. Questions 1 and 2 are the two failures we saw live in [`PROBE_2026-11-02.md`](PROBE_2026-11-02.md) §3. A true same-data comparison would need Concentrate to serve a memory built from your real meetings (see "Open question" below).
+**Important caveat.** The two servers don't hold the same meetings. Granola's MCP reads **your real account**, and Concentrate serves the **synthetic Northwind** company. So this demo compares *how each one handles a kind of question*, not two answers to one fact. For each question, ask Concentrate the Northwind version and ask Granola the same *kind* of question about your own meetings. Questions 1 and 2 are the two failures we saw live in [`PROBE_2026-11-02.md`](../archive/PROBE_2026-11-02.md) §3. A true same-data comparison would need Concentrate to serve a memory built from your real meetings (see "Open question" below).
 
 Prefix each prompt with "Use only the concentrate tools" or "Use only the granola tools", so the client doesn't mix the two.
 

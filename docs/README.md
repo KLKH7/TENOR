@@ -1,0 +1,13 @@
+# Docs map
+
+| Folder | What's in it | Start with |
+|---|---|---|
+| [`benchmark/`](benchmark/) | What the benchmark is: datasets, how they're generated, how realistic they are | [`DESIGN.md`](benchmark/DESIGN.md) |
+| [`systems/`](systems/) | The systems being compared: Concentrate (the reference memory), the Mem0 and Graphiti baselines, the MCP server | [`systems/concentrate/memory.md`](systems/concentrate/memory.md) |
+| [`results/`](results/) | Every experiment and what it found, including the red-team audit | [`REAL_SLICE.md`](results/REAL_SLICE.md), [`RED_TEAM.md`](results/RED_TEAM.md) |
+| [`engineering/`](engineering/) | How it's built: decision log, Granola field provenance, hardening, the web app | [`DESIGN.md`](engineering/DESIGN.md) |
+| [`guide/`](guide/) | Learning guide: tour, concepts, interview prep, exercises | [`TOUR.md`](guide/TOUR.md) |
+| [`writeup/`](writeup/) | The memo, deck and outreach drafts for Granola | [`MEMO.md`](writeup/MEMO.md) |
+| [`archive/`](archive/) | Earlier plans and probes, kept for the record | — |
+
+The current plan is [`PLAN.md`](PLAN.md).

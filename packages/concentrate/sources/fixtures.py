@@ -7,7 +7,7 @@ Directory layout::
 
 Filters reproduce the documented API semantics (``folder_id`` includes child folders). Where the
 docs are silent (inclusive vs. exclusive date bounds) we follow the choices recorded in
-docs/SCHEMA_NOTES.md so both sources behave the same.
+docs/engineering/SCHEMA_NOTES.md so both sources behave the same.
 """
 
 from __future__ import annotations

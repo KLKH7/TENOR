@@ -10,7 +10,7 @@ request before it is sent:
 The token bucket alone would allow ~50 requests in the first 5 s (25 burst + 25 refilled),
 which a strict server-side "25 per 5 s window" would reject. The sliding window alone already
 caps the long-run rate at 5 req/s. Combining them costs nothing and is safe under either
-reading of the docs. See docs/DESIGN.md ("Rate limiting").
+reading of the docs. See docs/engineering/DESIGN.md ("Rate limiting").
 
 Time is injected through :class:`Clock` so tests run on a simulated clock.
 """
