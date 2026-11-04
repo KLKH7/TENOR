@@ -1,18 +1,62 @@
-# Hindsight: an open benchmark for agent memory over meeting notes
+# Hindsight: an outside-in benchmark for agent memory over meeting notes
 
-**When an agent asks "what did we decide about pricing, and who owns the follow-up?", should it search transcripts on the spot or read a memory built ahead of time?**
-Hindsight measures seven ways of answering on the same 296 questions about 184 synthetic meetings, for accuracy, cost and latency, and reports where each one breaks.
-One of the seven is **Concentrate**, a cited, time-aware meeting memory built here; the benchmark, harness and data are open so you can add your own.
+**When an agent asks "what did we decide about pricing, and who owns the follow-up?", should it search transcripts on the spot, or read a memory built ahead of time?**
+Hindsight measures this from the outside, using only Granola's public note format, API and MCP: shareable synthetic meetings with known answers, plus a black-box kit for testing any meeting MCP on your own meetings.
 
-> **Not affiliated with Granola.** This is an independent research prototype. It reads and writes data in the formats of Granola's public REST API and official MCP server, and was calibrated on the author's own Granola meetings. The web UI is inspired by Granola's visual language but uses none of its name, logo or fonts.
+*Independent research prototype; [not affiliated with Granola](#not-affiliated-with-granola).*
+
+![Synthetic vs real: the memory system that tied on synthetic questions lost on real meetings](docs/figures/hero_synthetic_vs_real.svg)
+
+## What we found
+
+- **On real meetings, Granola's own agent clearly beat our memory system: 92% vs 59%.** These are 39 LLM-drafted, owner-approved questions over the author's 4 real meetings. n is small and it's one person's data, but paired by question the gap is 14 to 1 (sign test p ≈ 0.001). Concentrate scored 0% on "who said X" ([`REAL_SLICE`](docs/results/REAL_SLICE.md)).
+- **On the synthetic benchmark, it's a tie, at lower cost.** Concentrate (92%), an agent over search + transcripts (90%) and top-k retrieval (88%) are statistically tied on 120 held-out questions. Concentrate is about 3.5× cheaper per question than the agent at equal prices (about 2× against an agent with prompt caching), and only comes out ahead once a set of meetings gets more than about 50 questions, counting ingest. The synthetic questions follow the same kind of facts Concentrate's extractor keeps, so they couldn't show the real-meeting failure.
+- **A hybrid looks promising, but it's a dev result, not a claim.** Adding a transcript fallback (read transcript passages when the memory can't answer) took Concentrate from 12/22 to 20/22 on the real questions it reached before the budget cap, fixing 8 and breaking none (p = 0.008). Granola's agent scored 19/22 on the same questions. Those questions motivated the design; the real test needs fresh questions written after the design freeze ([`fallback`](docs/systems/concentrate/fallback.md)).
+- **So the evidence argues against deleting transcripts.** On synthetic dev questions, deleting old transcripts barely moved Concentrate (89% → 88%), but none of those questions needs exact wording or who-said-what. The real-meeting loss is exactly those long-tail details. Our reading: keep facts for state and change, and keep transcripts for everything else ([`RETIREMENT`](docs/results/RETIREMENT.md)).
+
+## Why an outside benchmark
+
+Everything here is built **only on public interfaces** and **data anyone can share**. That's the point: it gives Granola things its internal data can't.
+
+1. **Shareable ground truth.** Real customer meetings are private and have no known answers. Northwind's synthetic meetings are in Granola's exact format, privacy-free, and every answer is known by construction.
+2. **Comparability.** Any system can run on the same questions: other meeting tools, generic memory products (Mem0, Graphiti, Zep) and plain frontier models, not just Granola against Granola.
+3. **The outside-in view.** External agents (Claude, ChatGPT) reach Granola only through its MCP. A black-box test of the MCP measures what those agents actually experience: latency, answer quality and failure modes.
+4. **Independence.** Results from an outside party are more credible than a vendor's own claims.
+
+This is also why **Concentrate, the memory system built here, is a reference system, not a product pitch.** Granola can build a better one internally; it's here to show what a precomputed memory gains and loses. Our re-implementation of Granola's agent (b3) is just a generic agentic-retrieval baseline; the real Granola agent is only ever tested as a black box. We make no claims about Granola internals.
+
+## What we measure
+
+There is deliberately **no single score**: one number hides trade-offs, such as a system that is cheap and wrong. Every metric is defined, with a worked example, in [`docs/benchmark/METRICS.md`](docs/benchmark/METRICS.md).
+
+| | Dimension | Question it answers | Main metrics | Status |
+|---|---|---|---|---|
+| A | Correctness | Is the answer right? | accuracy with 95% bootstrap CI, exact-match cross-check | ✅ |
+| B | Judge reliability | Can we trust the grader? | second-judge agreement, Cohen's κ, human hand check | ◐ human check not done yet |
+| C | Grounding | Can it show its work? | citation precision/recall vs gold lines, hallucination rate, source recall | ◐ citations only |
+| D | Knowing what it doesn't know | Does it abstain, and know when it's likely wrong? | abstention on unanswerable questions, calibration | ◐ abstention only |
+| E | Efficiency | What does it cost, and how fast? | $/question at equal prices, ingest cost and break-even, latency p50/p95 | ✅ |
+| F | Robustness | Does it hold up when conditions change? | by question type, corpus size, transcript realism, transcript deletion, synthetic vs real | ◐ partial |
+
+Comparisons are paired (McNemar, paired bootstrap) with Holm correction, so a tie is never reported as a win.
+
+## Two tracks
+
+| | Public track (synthetic) | Black-box track (bring your own meetings) |
+|---|---|---|
+| **Who it's for** | any system that can ingest a corpus: Mem0, Graphiti, Concentrate, RAG, long-context models, any vendor willing to load it | products that can't load our corpus, such as Granola or any meeting tool with an MCP |
+| **Data** | *Northwind*: a synthetic company, 184 meetings, 296 questions (90 dev / 206 test), nine categories such as who-said-what without speaker labels, which of three Sams, a price *as of* a given week, and whether a commitment was kept | the user's own meetings and questions, through the product's public MCP; everything stays local |
+| **Answers known by** | construction: the world is generated first | the meeting owner approving each gold answer |
+| **Run with** | `concentrate synth`, `concentrate eval` | `concentrate real-kit`, `concentrate real-slice` |
+| **Docs** | [`benchmark/DESIGN.md`](docs/benchmark/DESIGN.md) | [`results/REAL_SLICE.md`](docs/results/REAL_SLICE.md) |
+
+Existing memory benchmarks (LongMemEval, LoCoMo, BEAM, RealMem) are chat logs; we found none built on meetings.
+
+**What a read-only probe of Granola's live MCP found (2026-11-02).** Granola's MCP is now an agent (`query_granola_meetings` searches, reads and cites), so the baseline to beat is per-query agentic retrieval, not naive top-k. On a handful of real meetings we still saw a cross-meeting identity miss (a teammate found in one meeting, missed in another where the invite showed only their email handle), commitments owned by "Unidentified speaker" when one microphone was shared in person, and summary-first answers that cost extra transcript round-trips for exact details. These are reproducible observations, not a measured error rate ([`PROBE_2026-11-02`](docs/archive/PROBE_2026-11-02.md)).
 
 ## Results
 
 <!-- RESULTS:START -->
-## Results (2026-11-02)
-
-**In one paragraph:** on the synthetic benchmark, Concentrate (a precomputed, fact-extraction memory) **ties** agentic retrieval over transcripts, at roughly 2–3.5× lower cost per question. On **the author's real meetings, with open-ended questions, Granola's own agent wins clearly (92% vs 59%)**. Compressing meetings into facts throws away the long tail of details that real questions ask about. Our synthetic questions are generated from the same kind of facts the extractor targets, so they couldn't show this. The evidence favours a **hybrid**: facts for state and change, transcripts kept for everything else. It argues against deleting transcripts.
-
 ### 1. Real meetings: Granola's agent vs Concentrate ([`docs/results/REAL_SLICE.md`](docs/results/REAL_SLICE.md))
 
 | System | Accuracy [95% CI] | n | Median latency |
@@ -29,7 +73,7 @@ One of the seven is **Concentrate**, a cited, time-aware meeting memory built he
 - ¹ Top-k also ran on all 47 questions: 81% [68, 91], including 6 of 6 unanswerable.
 - **Follow-up: a transcript fallback (dev result, not a claim).** When Concentrate's facts can't answer, it now retrieves transcript passages and answers again. On the 22 real questions it reached before hitting the budget cap, it rose from 12/22 to 20/22, fixing 8 and breaking none (p = 0.008). On the same questions Granola's agent scored 19/22. These questions motivated the design, so this is a dev result. The real test needs fresh questions written after the design freeze ([`docs/systems/concentrate/fallback.md`](docs/systems/concentrate/fallback.md)). It's off by default.
 
-### 2. Synthetic benchmark: 120 held-out test questions, 7 systems
+### 2. Synthetic benchmark: 120 held-out test questions, 7 systems (2026-11-02)
 
 Northwind-XL v1, 184 meetings, same answer model (Opus 5.5) and judge for all. Sources: [`report`](evals/reports/20261103T002456Z.md) · [`significance`](evals/reports/20261103T002456Z.analysis.md) · [`red-team audit`](docs/results/RED_TEAM.md).
 
@@ -56,32 +100,16 @@ Northwind-XL v1, 184 meetings, same answer model (Opus 5.5) and judge for all. S
 ¹ Re-priced from token counts at the same interactive Opus 5.5 price ($4/M input, $20/M output). The raw report mixes Batch API (50% off) and full-price rows. ² Batched systems' latency comes from the 10 questions run interactively, not all 120. ³ Red-team estimate, not measured. ⁴ Includes $10.66 of work lost to a crashed embedded database and redone ([`docs/engineering/HARDENING.md`](docs/engineering/HARDENING.md)).
 <!-- RESULTS:END -->
 
-## Why "Concentrate"?
+## Reasons to be skeptical
 
-In July 2026, Granola's CEO described agents reading the most relevant meetings at query time, and said Granola should instead hand agents a compressed, always-ready context: ["apple juice from concentrate"](https://www.platformer.news/granola-chris-pedregal-interview/). That line named the memory system and posed the question this repo tests: does precomputed memory beat per-query retrieval, and at what cost?
-
-## What's inside
-
-| | What | Where |
-|---|---|---|
-| **Benchmark** | *Northwind*: a synthetic company with 184 meetings and 296 questions (90 dev / 206 test), each with a verified answer and the gold transcript lines. The world is generated first, so every answer is known by construction. Nine categories, including who said what when the speaker isn't labelled, which of three Sams someone means, a price *as of* a given week, and whether a commitment was kept, slipped, reassigned or dropped. Existing memory benchmarks (LongMemEval, LoCoMo, BEAM, RealMem) are chat logs; we found none built on meetings. | [`docs/benchmark/DESIGN.md`](docs/benchmark/DESIGN.md) |
-| **7 systems** | *Query-time:* b0 top-k retrieval, b1 summaries only, b2/b2o full-context ceiling, b3 an agent shaped like Granola's MCP. *Write-time:* b4 Mem0, b5 Graphiti, c Concentrate. | [`docs/baselines/`](docs/systems/baselines/), [`docs/concentrate/`](docs/systems/concentrate/) |
-| **Harness** | Same answer model (Opus 5.5) and judge for every system. Accuracy with bootstrap CIs, exact match, abstention, citation precision/recall against gold lines, $/question, latency, one-off ingest cost. A second judge and a blind hand check audit the primary judge; `analyze` adds paired significance, a Pareto frontier and a failure taxonomy. | [`docs/benchmark/DESIGN.md`](docs/benchmark/DESIGN.md#metrics), [`docs/results/ANALYSIS.md`](docs/results/ANALYSIS.md) |
-| **Live probe** | A read-only probe of Granola's real MCP on real meetings (below). | [`docs/archive/PROBE_2026-11-02.md`](docs/archive/PROBE_2026-11-02.md) |
-| **MCP server** | Serve a built Concentrate memory to Claude Desktop or Claude Code next to Granola's MCP, and ask both the same question. Six read-only tools: facts with validity dates, commitments and their outcomes, entity resolution, cited transcript lines. | [`docs/systems/MCP_SERVER.md`](docs/systems/MCP_SERVER.md) |
-| **Explorer** | A Next.js app: a Granola-style note viewer with linked mentions, and a results explorer (leaderboard, cost vs accuracy, category heatmap, drill-down from any question to every system's answer and cited lines). | [`docs/engineering/RESULTS_EXPLORER.md`](docs/engineering/RESULTS_EXPLORER.md) |
-| **Brief** | A pre-meeting brief built from memory: open commitments, what changed since this group last met, open customer requests. Evaluated against ground truth. | [`docs/results/BRIEF.md`](docs/results/BRIEF.md) |
-
-**Concentrate** resolves speakers and entities, extracts atomic facts that cite their transcript lines, drops any fact its cited lines don't support, and stores facts with the dates they were true. It's here to show what a meeting-specific memory *can* achieve, not as a claim that the techniques are new: Graphiti, Mem0 and others already do time-aware facts. The meeting-specific parts are what's being tested ([`docs/archive/PHASE4_DESIGN.md`](docs/archive/PHASE4_DESIGN.md)).
-
-## What the live probe found
-
-Granola's MCP is now an agent: `query_granola_meetings` searches and reads notes and returns cited answers, and there's chunked transcript search. So the baseline to beat is **per-query agentic retrieval**, not naive top-k. The read-only probe on 2026-11-02 still found:
-- **A cross-meeting identity miss.** Asked about a teammate, it found them in one meeting and missed another where the invite showed only their email handle.
-- **In-person attribution.** One shared microphone means commitments came back owned by "Unidentified speaker".
-- **Summary-first answers.** Exact details cost extra transcript round-trips on every question.
-
-These are observations from a handful of real meetings, reported so they can be reproduced, not a measured error rate.
+- **The benchmark is synthetic.** That's its biggest weakness. Real meetings are messier, and calibration used a handful of real meetings, not thousands. In v1 (Northwind-XL), 78% of longer transcript passages were exact copies of 69 filler sentences, which made retrieval unrealistically easy. v2 (generator `northwind-2`) cuts that to 4.9%, but its sentence frames still repeat: 54% of long passages share their first six words with another, against 0.6% in real meetings ([FIDELITY_V2](docs/benchmark/FIDELITY_V2.md)). The synthetic results above are on v1.
+- **Synthetic answers share a blind spot with extraction.** The same author designed the generator and Concentrate's extractor, which is why the synthetic tie became a real-meeting loss.
+- **The real slice is tiny and one person's.** 4 meetings, 39 scored questions, gold answers LLM-drafted and approved in bulk rather than checked one by one. Synthetic wins may not transfer.
+- **The fallback result is dev only.** It was measured on questions that shaped its design.
+- **b3 re-implements the shape of Granola's agent; it isn't Granola's agent.** The real one only reads the connected user's account, so it can't run on synthetic data.
+- **One answer model, one primary judge.** The judge is also the answer model; a second judge and a hand check measure that bias rather than remove it. The blind human hand check is still to do.
+- **The Mem0 and Graphiti gaps are about our wiring**, not those libraries (see above).
+- **Granola has far more data and signal** (audio, millions of meetings) than this project. The aim is an independent, reproducible measurement, not a better product.
 
 ## Quick start
 
@@ -111,73 +139,41 @@ uv run concentrate mcp-serve --xl                                # serve a built
 cd web && npm install && npm run dev    # then open http://localhost:3100/results
 ```
 
-**Your own Granola notes** sync through the official MCP on any plan. It opens your browser once to sign in, keeps tokens in `~/.config/concentrate/`, and never calls write tools. With a Business/Enterprise API key (`GRANOLA_API_KEY` in `.env`) the REST API works too. Synced notes go to a local SQLite file and are never committed.
+**Your own Granola notes** sync through the official MCP on any plan. It opens your browser once to sign in, keeps tokens in `~/.config/concentrate/`, and never calls write tools. With a Business/Enterprise API key (`GRANOLA_API_KEY` in `.env`) the REST API works too. Synced notes go to a local SQLite file and are never committed. `concentrate real-kit --help` lists the black-box kit's commands.
 
 ```bash
 uv run concentrate sync --source granola-mcp   # or: --source granola
 ```
 
-## How a run works
+## Architecture
 
-```mermaid
-flowchart LR
-  subgraph sources [concentrate.sources: one Source protocol]
-    API[GranolaAPISource<br/>REST · Business/Enterprise]
-    MCP[GranolaMCPSource<br/>official MCP · any plan · read-only]
-    FX[FixtureSource<br/>Northwind, same JSON shape]
-  end
-  API --> STORE
-  MCP --> STORE
-  FX --> STORE
-  STORE[(SQLite NoteStore)] --> QT[query-time systems<br/>b0 top-k · b1 summaries · b2 full · b3 agent]
-  STORE --> WT[write-time systems<br/>b4 Mem0 · b5 Graphiti · c Concentrate]
-  WT --> MEM[(built memories<br/>data/cache)]
-  QT --> H[eval harness<br/>same answer model · LLM judge + exact match<br/>citations · $ · latency · bootstrap CIs]
-  MEM --> H
-  H --> R[reports<br/>evals/reports]
-  R --> A[analyze · judge-check<br/>hand-check]
-  R --> EX[results explorer<br/>web/]
-  MEM --> SRV[MCP server · brief]
-```
+![Hindsight architecture: public Granola interfaces and the synthetic generator feed one Source protocol, a note store, seven systems, one eval harness, and reports](docs/figures/architecture.svg)
 
-Every system uses the same answer model and the same judge, so differences come from what each system puts in front of the model. All Granola I/O lives behind the `Source` protocol, and fixtures use the exact API response shape, validated by the same Pydantic models as real data.
+Every system gets the same questions, answer model and judge, so differences come from what each puts in front of the model. All Granola I/O lives behind one `Source` protocol, and fixtures use the exact API response shape, validated by the same Pydantic models as real data. Five more diagrams (query-time vs write-time, the Concentrate pipeline, the evaluation pipeline, provenance) are in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
-## Honest limits
+**Concentrate**, the reference memory, resolves speakers and entities, extracts atomic facts that cite their transcript lines, drops any fact its cited lines don't support, and stores facts with the dates they were true. The techniques aren't new (Graphiti, Mem0 and others already do time-aware facts); the meeting-specific parts are what's being tested. The name comes from a July 2026 interview in which Granola's CEO contrasted agents reading meetings at query time with handing them a compressed, always-ready context, ["apple juice from concentrate"](https://www.platformer.news/granola-chris-pedregal-interview/).
 
-- **The benchmark is synthetic.** That's its biggest weakness. Real meetings are messier, and calibration used a handful of real meetings, not thousands. In v1 (Northwind-XL), 78% of longer transcript passages were exact copies of 69 filler sentences, which made retrieval unrealistically easy. v2 (generator `northwind-2`) cuts that to 4.9%, but its sentence frames still repeat: 54% of long passages share their first six words with another, against 0.6% in real meetings ([FIDELITY_V2](docs/benchmark/FIDELITY_V2.md)).
-- **On real meetings, Granola's real agent beat Concentrate**: 92% vs 59% on 39 LLM-drafted, owner-approved questions over the author's 4 meetings. Concentrate's extracted memory misses long-tail details that it never extracted ([REAL_SLICE](docs/results/REAL_SLICE.md)). Synthetic wins may not transfer.
-- **b3 re-implements the shape of Granola's agent; it isn't Granola's agent.** The real one only reads the connected user's account, so it can't run on synthetic data.
-- **One answer model, one primary judge.** The judge is also the answer model; a second judge and a hand check measure that bias rather than remove it.
-- **Granola has far more data and signal** (audio, millions of meetings) than this project. The aim is an independent, reproducible measurement, not a better product.
+## Docs map
 
-## Docs
+The full map is [`docs/README.md`](docs/README.md); the current plan is [`docs/PLAN.md`](docs/PLAN.md).
 
 | Doc | What it covers |
 |---|---|
-| [`docs/benchmark/DESIGN.md`](docs/benchmark/DESIGN.md) | Benchmark card: construction, categories, metrics, systems, limitations |
+| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Five diagrams with links to the code |
+| [`docs/benchmark/METRICS.md`](docs/benchmark/METRICS.md) | Every metric, how it's computed, and its weaknesses |
+| [`docs/benchmark/DESIGN.md`](docs/benchmark/DESIGN.md) | Benchmark card: construction, categories, systems, limitations |
 | [`data/README.md`](data/README.md) | Dataset card for Northwind (Hugging Face format) |
-| [`docs/archive/PROBE_2026-11-02.md`](docs/archive/PROBE_2026-11-02.md) | Live probe of Granola's MCP |
-| [`docs/benchmark/FIDELITY.md`](docs/benchmark/FIDELITY.md), [`docs/benchmark/FIDELITY_V2.md`](docs/benchmark/FIDELITY_V2.md) | How close the synthetic transcripts are to real ones |
-| [`docs/archive/PHASE4_DESIGN.md`](docs/archive/PHASE4_DESIGN.md), [`docs/concentrate/`](docs/systems/concentrate/) | Concentrate's design, memory and enhance stages |
-| [`docs/baselines/`](docs/systems/baselines/) | How the Mem0 and Graphiti baselines are wired |
-| [`docs/results/ANALYSIS.md`](docs/results/ANALYSIS.md) | Significance, power, Pareto frontier, failure taxonomy |
-| [`docs/systems/MCP_SERVER.md`](docs/systems/MCP_SERVER.md), [`docs/results/BRIEF.md`](docs/results/BRIEF.md), [`docs/engineering/RESULTS_EXPLORER.md`](docs/engineering/RESULTS_EXPLORER.md) | MCP server, pre-meeting brief, results explorer |
-| [`docs/engineering/SCHEMA_NOTES.md`](docs/engineering/SCHEMA_NOTES.md) | Every Granola field relied on, tagged VERIFIED / ASSUMED |
-| [`docs/engineering/HARDENING.md`](docs/engineering/HARDENING.md) | Timeouts, retries, stall watchdog, resumable builds, CI |
-| [`docs/engineering/DESIGN.md`](docs/engineering/DESIGN.md) | Decisions and trade-offs, including bad results |
-| [`docs/archive/SCOPE.md`](docs/archive/SCOPE.md), [`docs/archive/UI_REFERENCES.md`](docs/archive/UI_REFERENCES.md) | Project map; UI references |
+| [`docs/benchmark/FIDELITY.md`](docs/benchmark/FIDELITY.md), [`FIDELITY_V2.md`](docs/benchmark/FIDELITY_V2.md), [`V2_EXTRAS.md`](docs/benchmark/V2_EXTRAS.md) | How close the synthetic transcripts are to real ones; the v2.1 extras |
+| [`docs/results/`](docs/results/) | [Real slice](docs/results/REAL_SLICE.md), [red-team audit](docs/results/RED_TEAM.md), [analysis](docs/results/ANALYSIS.md), [retirement curve](docs/results/RETIREMENT.md), [economics](docs/results/ECONOMICS.md), [brief](docs/results/BRIEF.md) |
+| [`docs/systems/`](docs/systems/) | [Concentrate](docs/systems/concentrate/memory.md) and its [fallback](docs/systems/concentrate/fallback.md), the [Mem0 and Graphiti baselines](docs/systems/baselines/), the [MCP server](docs/systems/MCP_SERVER.md) |
+| [`docs/engineering/`](docs/engineering/) | [Decision log](docs/engineering/DESIGN.md) (including bad results), [Granola field provenance](docs/engineering/SCHEMA_NOTES.md) (VERIFIED / ASSUMED), [hardening](docs/engineering/HARDENING.md), [results explorer](docs/engineering/RESULTS_EXPLORER.md) |
+| [`docs/guide/TOUR.md`](docs/guide/TOUR.md) | A guided tour of the repo for a new reader |
+| [`docs/archive/`](docs/archive/) | Earlier plans and the [live MCP probe](docs/archive/PROBE_2026-11-02.md) |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md), [`SECURITY.md`](SECURITY.md) | Adding a system, running the benchmark; reporting a problem |
-<!-- Coordinator: add rows for docs merged from other workstreams (e.g. RETIREMENT.md, writeup/, guide/). -->
 
-## Roadmap
+## Not affiliated with Granola
 
-1. ✅ Source layer (REST API, MCP, fixtures) and sync
-2. ✅ Northwind benchmark, base and XL, calibrated on real transcripts; v2 wording
-3. ✅ Query-time baselines (b0–b3) and the eval harness; pilot on base (saturated)
-4. ✅ Write-time systems: Mem0, Graphiti and Concentrate
-5. 🛠 **Final comparison** on the XL test split: accuracy by category, cost, latency
-6. Transcript-retirement curve, ablations, failure analysis, write-up
-7. Later: hybrid-room meetings, an LLM-polished benchmark variant, a public leaderboard
+This is an independent research prototype. It reads and writes data in the formats of Granola's public REST API and official MCP server, and was calibrated on the author's own Granola meetings. It makes no claims about Granola internals; everything reported about Granola is observable through public interfaces. The web UI is inspired by Granola's visual language but uses none of its name, logo or fonts.
 
 ## Citation
 
