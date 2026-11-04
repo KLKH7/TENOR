@@ -1,0 +1,359 @@
+{
+ "axes": [
+  {
+   "collections": [],
+   "images": [
+    [
+     [
+      6.539585956,
+      2.564949357,
+      1.386294361
+     ],
+     [
+      2.197224577,
+      3.970291914,
+      2.302585093
+     ],
+     [
+      0.0,
+      0.0,
+      4.189654742
+     ]
+    ]
+   ],
+   "legend": [],
+   "lines": [],
+   "patches": [],
+   "texts": [
+    [
+     "691",
+     0.0,
+     0.0
+    ],
+    [
+     "12",
+     1.0,
+     0.0
+    ],
+    [
+     "3",
+     2.0,
+     0.0
+    ],
+    [
+     "8",
+     0.0,
+     1.0
+    ],
+    [
+     "52",
+     1.0,
+     1.0
+    ],
+    [
+     "9",
+     2.0,
+     1.0
+    ],
+    [
+     "0",
+     0.0,
+     2.0
+    ],
+    [
+     "0",
+     1.0,
+     2.0
+    ],
+    [
+     "65",
+     2.0,
+     2.0
+    ]
+   ],
+   "title": "κ = 0.90 (correct vs not)",
+   "xlabel": "second judge",
+   "xlim": [
+    -0.5,
+    2.5
+   ],
+   "xscale": "linear",
+   "xticklabels": [
+    "correct",
+    "partial",
+    "incorrect"
+   ],
+   "xticks": [
+    0.0,
+    1.0,
+    2.0
+   ],
+   "ylabel": "primary judge",
+   "ylim": [
+    2.5,
+    -0.5
+   ],
+   "yscale": "linear",
+   "yticklabels": [
+    "correct",
+    "partial",
+    "incorrect"
+   ],
+   "yticks": [
+    0.0,
+    1.0,
+    2.0
+   ]
+  },
+  {
+   "collections": [
+    {
+     "points": [
+      [
+       95.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       95.8,
+       0.0
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       91.7,
+       1.0
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       91.7,
+       1.0
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       90.0,
+       2.0
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       88.3,
+       2.0
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       88.3,
+       3.0
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       86.7,
+       3.0
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       80.8,
+       4.0
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       81.7,
+       4.0
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       71.7,
+       5.0
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       69.2,
+       5.0
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       70.8,
+       6.0
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       69.2,
+       6.0
+      ]
+     ]
+    }
+   ],
+   "images": [],
+   "legend": [],
+   "lines": [
+    [
+     [
+      95.0,
+      0.0
+     ],
+     [
+      95.8,
+      0.0
+     ]
+    ],
+    [
+     [
+      91.7,
+      1.0
+     ],
+     [
+      91.7,
+      1.0
+     ]
+    ],
+    [
+     [
+      90.0,
+      2.0
+     ],
+     [
+      88.3,
+      2.0
+     ]
+    ],
+    [
+     [
+      88.3,
+      3.0
+     ],
+     [
+      86.7,
+      3.0
+     ]
+    ],
+    [
+     [
+      80.8,
+      4.0
+     ],
+     [
+      81.7,
+      4.0
+     ]
+    ],
+    [
+     [
+      71.7,
+      5.0
+     ],
+     [
+      69.2,
+      5.0
+     ]
+    ],
+    [
+     [
+      70.8,
+      6.0
+     ],
+     [
+      69.2,
+      6.0
+     ]
+    ]
+   ],
+   "patches": [],
+   "texts": [],
+   "title": "Per-system accuracy, both judges",
+   "xlabel": "accuracy (%): dot = primary, ring = second",
+   "xlim": [
+    67.87,
+    97.13
+   ],
+   "xscale": "linear",
+   "xticklabels": [
+    "65",
+    "70",
+    "75",
+    "80",
+    "85",
+    "90",
+    "95",
+    "100"
+   ],
+   "xticks": [
+    65.0,
+    70.0,
+    75.0,
+    80.0,
+    85.0,
+    90.0,
+    95.0,
+    100.0
+   ],
+   "ylabel": "",
+   "ylim": [
+    -0.3,
+    6.3
+   ],
+   "yscale": "linear",
+   "yticklabels": [
+    "Oracle (b2o, ceiling)",
+    "Concentrate",
+    "Agent re-impl. (b3)",
+    "Top-k (b0)",
+    "Mem0 (b4)",
+    "Graphiti (b5)",
+    "Summaries (b1)"
+   ],
+   "yticks": [
+    0.0,
+    1.0,
+    2.0,
+    3.0,
+    4.0,
+    5.0,
+    6.0
+   ]
+  }
+ ],
+ "figure_legends": [],
+ "suptitle": "Can we trust the grader?",
+ "texts": [
+  "Can we trust the grader?",
+  "claude-opus-5-5 (primary) vs claude-sonnet-5-5 re-grading all 840 answers; TEST split, n=120. Agreement 97.3%.",
+  "Two LLM judges from one family can share blind spots; the blind human hand-check is not done yet. Close rankings (e.g. b1 vs b5) can swap by judge."
+ ]
+}

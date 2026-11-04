@@ -41,7 +41,8 @@ jobs:
         run: uv run python scripts/check_links.py
       # Every figure's inputs are committed: the synthetic reports under evals/, plus
       # docs/figures/data/real_slice.json, a content-free snapshot of the private real slice
-      # (refreshed locally with --refresh-real; CI never sees data/real). Numbers in the SVGs
-      # may differ by float noise across platforms; anything else fails.
+      # (refreshed locally with --refresh-real; CI never sees data/real). Plotted values
+      # (docs/figures/data/*.values.json) must match exactly; SVGs are compared structurally,
+      # since font metrics differ between macOS and Linux.
       - name: Figures match committed data
         run: uv run concentrate figures 20261103T002456Z --check
