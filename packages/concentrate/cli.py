@@ -1833,6 +1833,8 @@ def real_run(
     typer.echo(Path(report["paths"]["md"]).read_text())
     typer.echo(f"spent ${client.ledger.spent_usd():.2f} · report: {report['paths']['md']}")
     typer.echo(f"aggregate (safe to commit): {commit_to or agg}")
+
+
 # -- figures (P1-F) ----------------------------------------------------------------------------
 
 _REAL_REPORTS = Path("data/real/reports")
