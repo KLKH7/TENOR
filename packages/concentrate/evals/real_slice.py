@@ -22,7 +22,6 @@ Flow:
 
 from __future__ import annotations
 
-import hashlib
 import json
 import re
 import time
@@ -35,7 +34,11 @@ from typing import Any, Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 from concentrate.agents import corpus as cv
-from concentrate.agents.baselines import Answer, System, SystemResult
+from concentrate.agents.baselines import System
+from concentrate.blackbox.base import AllowlistCaller, ToolNotAllowed
+from concentrate.blackbox.kit import LEGACY_DIRS, ProductSystem
+from concentrate.blackbox.products import _GRANOLA_CITATION as _CITATION
+from concentrate.blackbox.products import parse_granola_answer as parse_granola_answer
 from concentrate.core.models import MeetingNote
 from concentrate.evals.scoring import (
     JUDGE_PROMPT,
@@ -48,7 +51,9 @@ from concentrate.llm.client import LLMClient, LLMRequest, load_prompt
 from concentrate.sources.granola_mcp import McpCaller
 
 REAL_DIR = Path("data/real")
-QUESTIONS_FILE = REAL_DIR / "questions.jsonl"
+QUESTIONS_FILE = REAL_DIR / "questions.jsonl"  # the dev split (the questions already seen)
+TEST_QUESTIONS_FILE = REAL_DIR / "questions.test.jsonl"  # hand-written, never tuned on
+Split = Literal["dev", "test"]
 DRAFT_PROMPT = "real_draft.v1"
 
 Category = Literal[
@@ -119,16 +124,31 @@ class RealQuestion(BaseModel):
     status: Literal["draft", "verified", "rejected"] = "draft"
     origin: Literal["llm_draft", "user"] = "llm_draft"
     reviewer_note: str = ""
+    split: Split = "dev"  # dev: seen while building/tuning; test: hand-written, held out
 
     @property
     def unanswerable(self) -> bool:
         return self.category == "unanswerable" or self.gold_answer.strip() == "UNANSWERABLE"
 
 
+def questions_file(split: Split) -> Path:
+    """Each split is its own file, so test questions can't leak into dev tooling by accident."""
+    return TEST_QUESTIONS_FILE if split == "test" else QUESTIONS_FILE
+
+
 def load_questions(path: Path = QUESTIONS_FILE) -> list[RealQuestion]:
     if not path.exists():
         return []
     return [RealQuestion.model_validate_json(x) for x in path.read_text().splitlines() if x]
+
+
+def load_split(split: Split, root: Path = REAL_DIR) -> list[RealQuestion]:
+    """The questions of one split; refuses a file holding the other split's questions."""
+    qs = load_questions(root / questions_file(split).name)
+    wrong = [q.id for q in qs if q.split != split]
+    if wrong:
+        raise ValueError(f"{split} file holds questions of another split: {wrong[:5]}")
+    return qs
 
 
 def save_questions(qs: Iterable[RealQuestion], path: Path = QUESTIONS_FILE) -> None:
@@ -149,96 +169,31 @@ def coverage(qs: list[RealQuestion]) -> dict[str, dict[str, int]]:
 # -- read-only Granola access -------------------------------------------------------------------
 
 
-class ToolNotAllowed(PermissionError):
-    pass
-
-
-class ReadOnlyCaller:
+class ReadOnlyCaller(AllowlistCaller):
     """Wraps an ``McpCaller`` and refuses any tool outside :data:`READ_ONLY_TOOLS`."""
 
     def __init__(self, inner: McpCaller) -> None:
-        self._inner = inner
-
-    def call(self, tool: str, arguments: dict[str, Any]) -> str:
-        if tool not in READ_ONLY_TOOLS:
-            raise ToolNotAllowed(f"{tool!r} is not a read-only Granola tool; refusing to call it")
-        return self._inner.call(tool, arguments)
+        super().__init__(inner, READ_ONLY_TOOLS, "Granola")
 
 
-_CITATION = re.compile(r"notes\.granola\.ai/d/([A-Za-z0-9_-]+)")
-_BOILERPLATE = re.compile(r"<transcript_note>.*?</transcript_note>", re.S)
-
-
-def parse_granola_answer(raw: str) -> tuple[str, list[str]]:
-    """(answer text without the standing transcript disclaimer, cited meeting IDs in order)."""
-    text = _BOILERPLATE.sub("", raw).strip()
-    cited: list[str] = []
-    for m in _CITATION.finditer(raw):
-        if m.group(1) not in cited:
-            cited.append(m.group(1))
-    return text, cited
-
-
-def _qhash(question: str) -> str:
-    return hashlib.sha256(question.encode()).hexdigest()[:10]
-
-
-class GranolaAgentSystem:
-    """Granola's own agent, via ``query_granola_meetings``. Each answer is recorded once under
-    ``record_dir`` (raw response, latency, timestamp); reruns replay the recording, so scores are
-    reproducible and Granola is not re-queried. Its cost to us is $0 (it runs on Granola's side),
-    so ``cost_usd`` and token counts are 0: they are not comparable to our systems' API spend."""
-
-    name = "granola_agent"
-    prompt_ids: tuple[str, ...] = ("granola:query_granola_meetings",)
+class GranolaAgentSystem(ProductSystem):
+    """Granola's own agent (``query_granola_meetings``) as the ``granola_agent`` system: the
+    black-box :class:`~concentrate.blackbox.products.GranolaProduct`, recorded once under
+    ``record_dir`` and replayed afterwards (see ``blackbox.kit.ProductSystem``)."""
 
     def __init__(
         self,
         caller: McpCaller | None,
-        record_dir: Path = REAL_DIR / "granola",
+        record_dir: Path = LEGACY_DIRS["granola"],
         clock: Callable[[], float] = time.perf_counter,
     ) -> None:
-        self.caller = ReadOnlyCaller(caller) if caller is not None else None
-        self.record_dir = record_dir
-        self.clock = clock
+        from concentrate.blackbox.products import GranolaProduct
 
-    def record_path(self, q: RealQuestion) -> Path:
-        return self.record_dir / f"{q.id}-{_qhash(q.question)}.json"
-
-    def _record(self, q: RealQuestion) -> dict[str, Any]:
-        path = self.record_path(q)
-        if path.exists():
-            return dict(json.loads(path.read_text()))
-        if self.caller is None:
-            raise RuntimeError(f"no recorded Granola answer for {q.id} and no MCP caller")
-        start = self.clock()
-        raw = self.caller.call("query_granola_meetings", {"query": q.question})
-        rec = {
-            "qid": q.id,
-            "question": q.question,
-            "raw": raw,
-            "latency_s": self.clock() - start,
-            "asked_at": datetime.now(UTC).isoformat(),
-        }
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps(rec, indent=1))
-        return rec
-
-    def run(self, q: RealQuestion) -> SystemResult:
-        rec = self._record(q)
-        text, cited = parse_granola_answer(rec["raw"])
-        # Granola returns prose with no abstain flag; the judge reads the text (the judge prompt
-        # already treats "the notes don't say" as declining). Abstain metrics are n/a for it.
-        return SystemResult(
-            answer=Answer(answer=text, abstain=False, citations=cited),
-            latency_s=float(rec["latency_s"]),
-            llm_calls=0,
-            tool_calls=1,
-            retrieved=cited,
+        live = GranolaProduct(caller) if caller is not None else None
+        super().__init__(
+            "granola", live, record_dir, system_name="granola_agent", legacy_dirs=[], clock=clock
         )
-
-    def estimate(self, q: RealQuestion) -> tuple[int, int]:
-        return 0, 0
+        self.prompt_ids = ("granola:query_granola_meetings",)
 
 
 # -- drafting -----------------------------------------------------------------------------------
@@ -421,6 +376,7 @@ def run_slice(
     out_dir: Path,
     meta: dict[str, Any] | None = None,
     spent: Callable[[], float] | None = None,
+    split: Split = "dev",
 ) -> dict[str, Any]:
     """Answer + judge every (system, verified question); write ``<stamp>.{json,jsonl,md}``."""
     from concentrate.evals.runner import _git, to_markdown
@@ -478,7 +434,8 @@ def run_slice(
             "git": _git(),
             "model": client.model,
             "seed": seed,
-            "split": "real",
+            "split": split,
+            "track": "real",
             "questions": len(questions),
             "prompts": {s.name: list(s.prompt_ids) for s in systems} | {"judge": [JUDGE_PROMPT]},
             "budget_usd": budget_usd,
@@ -504,7 +461,17 @@ def run_slice(
 
 def aggregate_only(report: dict[str, Any]) -> dict[str, Any]:
     """The part of a report that is safe to commit: metrics and run metadata, no content."""
-    keep = ("date", "git", "model", "seed", "questions", "prompts", "spent_usd", "stopped_early")
+    keep = (
+        "date",
+        "git",
+        "model",
+        "seed",
+        "split",
+        "questions",
+        "prompts",
+        "spent_usd",
+        "stopped_early",
+    )
     meta = {k: report["meta"].get(k) for k in keep} | {
         k: report["meta"][k]
         for k in ("meetings", "k", "embedder", "category_counts", "ingest")
