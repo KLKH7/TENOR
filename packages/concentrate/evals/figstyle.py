@@ -45,6 +45,10 @@ SYSTEM_COLOURS: dict[str, str] = {
     "b4_mem0": "#CC79A7",  # reddish purple
     "b5_graphiti": "#882255",  # wine (Tol)
     "granola_agent": "#000000",  # black: the only real product
+    # Real-meeting deletion simulation conditions (docs/benchmark/DELETION_SIM.md).
+    "notes_only": "#D55E00",  # vermillion: same family as summaries-only
+    "notes_facts": "#0072B2",  # blue: Concentrate's fact layer
+    "notes_facts_fallback": "#56B4E9",  # sky blue: + transcript fallback
 }
 
 SYSTEM_LABELS: dict[str, str] = {
@@ -57,6 +61,9 @@ SYSTEM_LABELS: dict[str, str] = {
     "b4_mem0": "Mem0 (b4)",
     "b5_graphiti": "Graphiti (b5)",
     "granola_agent": "Granola agent (real)",
+    "notes_only": "Notes only",
+    "notes_facts": "Notes + facts",
+    "notes_facts_fallback": "Notes + facts + fallback",
 }
 
 # Categorical palette for things that are *not* systems (failure types, cost parts), so a

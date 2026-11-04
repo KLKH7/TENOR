@@ -123,6 +123,23 @@ def make_root(root: Path) -> Path:
         reports / "notes_vs_transcript.json",
         {"test_report": {"report": STAMP, "primary": {"cells": cells, "gaps": []}}},
     )
+    tag_cell = {"n": 4, "accuracy": 0.5, "accuracy_ci": [0.25, 0.75]}
+    conditions = {
+        c: {"n": 8, "accuracy": 0.5, "accuracy_ci": [0.25, 0.75], "confident_error": 0.1,
+            "confident_error_ci": [0.0, 0.25],
+            "by_tag": {t: tag_cell for t in ("notes_sufficient", "transcript_needed")}}
+        for c in F.DELETION_CONDITIONS
+    }  # fmt: skip
+    pair = {"wins": 1, "losses": 3, "sign_p": 0.625}
+    _write(
+        reports / "real-deletion-sim-dev.aggregate.json",
+        {
+            "meta": {"questions": 8, "date": "20260101T000000Z"},
+            "metrics": {"deletion": {"conditions": conditions, "paired": {
+                k: pair for k in ("notes_only vs granola", "notes_facts vs notes_only",
+                                  "notes_facts_fallback vs notes_facts")}}},
+        },
+    )  # fmt: skip
     return root
 
 
@@ -138,6 +155,7 @@ def test_renders_every_figure_as_valid_svg(tmp_path: Path) -> None:
             assert b"<dc:date>" not in data  # no timestamp
     assert b"Why did a tie on synthetic data" in rendered["hero_synthetic_vs_real.svg"]
     assert b"DEV" in rendered["fallback_dev.svg"]
+    assert b"DEV" in rendered["deletion_sim.svg"]
 
 
 def test_same_inputs_give_byte_identical_output(tmp_path: Path) -> None:

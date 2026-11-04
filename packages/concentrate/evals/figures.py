@@ -75,6 +75,7 @@ class Inputs:
     real: dict[str, Any] | None
     root: Path = Path()
     by_tag: dict[str, Any] | None = None  # evals/reports/notes_vs_transcript.json
+    deletion: dict[str, Any] | None = None  # evals/reports/real-deletion-sim-dev.aggregate.json
     files: dict[str, list[Path]] = field(default_factory=dict)
 
 
@@ -98,6 +99,7 @@ def load_inputs(stamp: str, root: Path = Path()) -> Inputs:
     scale_path = _latest(list((root / "evals" / "scale").glob("*/scale.json")))
     real_path = root / REAL_SNAPSHOT
     tag_path = reports / "notes_vs_transcript.json"
+    del_path = reports / "real-deletion-sim-dev.aggregate.json"
     rows = [json.loads(x) for x in rows_path.read_text().splitlines() if x.strip()]
     core = [report_path, rows_path, analysis_path]
     return Inputs(
@@ -111,6 +113,7 @@ def load_inputs(stamp: str, root: Path = Path()) -> Inputs:
         real=_json(real_path) if real_path.exists() else None,
         root=root,
         by_tag=_json(tag_path) if tag_path.exists() else None,
+        deletion=_json(del_path) if del_path.exists() else None,
         files={
             "report": core,
             "judge": [judge_path] if judge_path else [],
@@ -118,6 +121,7 @@ def load_inputs(stamp: str, root: Path = Path()) -> Inputs:
             "scale": [scale_path] if scale_path else [],
             "real": [real_path] if real_path.exists() else [],
             "by_tag": [tag_path] if tag_path.exists() else [],
+            "deletion": [del_path] if del_path.exists() else [],
         },
     )
 
@@ -888,7 +892,73 @@ def fig_notes_vs_transcript(inp: Inputs) -> Any:
     return fig
 
 
+DELETION_CONDITIONS = ("granola_agent", "notes_only", "notes_facts", "notes_facts_fallback")
+DELETION_ROWS = (("all", "All questions"), ("transcript_needed", "Transcript-needed"),
+                 ("notes_sufficient", "Notes-sufficient"))  # fmt: skip
+
+
+def fig_deletion(inp: Inputs) -> Any:
+    """Real-meeting deletion simulation (DEV): accuracy by tag and confident error per condition."""
+    if inp.deletion is None:
+        return None
+    d = inp.deletion["metrics"]["deletion"]
+    cond = d["conditions"]
+    fig, (ax1, ax2) = fs.new_figure(4.6, ncols=2, sharey=True,
+                                    gridspec_kw={"width_ratios": [1.6, 1]})  # fmt: skip
+    ticks, labels = [], []
+    for g, (tag, name) in enumerate(DELETION_ROWS):
+        for i, s in enumerate(DELETION_CONDITIONS):
+            y = (len(DELETION_ROWS) - 1 - g) * (len(DELETION_CONDITIONS) + 1.2) + (
+                len(DELETION_CONDITIONS) - 1 - i
+            )
+            c = cond[s] if tag == "all" else cond[s]["by_tag"][tag]
+            _dot_ci(ax1, y, c["accuracy"], c["accuracy_ci"], s)
+            ticks.append(y)
+            labels.append(fs.label(s) + (f"  [{name}, n={c['n']}]" if i == 0 else ""))
+            if tag == "all":
+                _dot_ci(ax2, y, c["confident_error"], c["confident_error_ci"], s)
+    ax1.set_yticks(ticks, labels, fontsize=8)
+    ax1.set_xlim(-5, 115)
+    ax2.set_xlim(-3, 40)
+    ax1.set_xlabel("accuracy (%), 95% bootstrap CI")
+    ax2.set_xlabel("confident error (%), all questions")
+    for ax in (ax1, ax2):
+        ax.grid(axis="y", visible=False)
+    pr = d["paired"]
+
+    def _pair(key: str) -> str:
+        x = pr[key]
+        return f"{x['wins']}-{x['losses']}, p={x['sign_p']:.3f}"
+
+    meta = inp.deletion["meta"]
+    fs.title(
+        fig,
+        "What does deleting transcripts cost on real meetings?",
+        f"Author's 4 real meetings, {meta['questions']} questions, DEV (seen during development); "
+        f"run {meta['date']}.\nNotes only ≈ chat after auto-deletion, answered by our model over "
+        "Granola's own notes.",
+    )
+    fs.footnote(
+        fig,
+        "Paired, all questions: notes only vs Granola "
+        f"{_pair('notes_only vs granola')}; notes+facts vs notes only "
+        f"{_pair('notes_facts vs notes_only')}; +fallback vs notes+facts "
+        f"{_pair('notes_facts_fallback vs notes_facts')} (wins-losses, exact sign test). "
+        "The fallback reads transcripts, so it models 'keep a cold copy', not deletion. "
+        "LLM-drafted gold approved in bulk; n is small. Write-up: docs/benchmark/DELETION_SIM.md.",
+    )
+    fig.subplots_adjust(left=0.36, right=0.97, top=0.8, bottom=0.27, wspace=0.12)
+    return fig
+
+
 FIGURES: tuple[Spec, ...] = (
+    Spec(
+        "deletion_sim",
+        "What does deleting transcripts cost on real meetings?",
+        fig_deletion,
+        ("deletion",),
+        "benchmark/DELETION_SIM.md",
+    ),
     Spec(
         "hero_synthetic_vs_real",
         "Why did a tie on synthetic data become a loss on real meetings?",

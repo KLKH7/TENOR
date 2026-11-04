@@ -165,7 +165,8 @@ The full map is [`docs/README.md`](docs/README.md); the current plan is [`docs/P
 
 | Doc | What it covers |
 |---|---|
-| [`docs/report/HINDSIGHT_REPORT.md`](docs/report/HINDSIGHT_REPORT.md) | Technical report: the whole project in about two pages, paper style |
+| [`docs/report/HINDSIGHT_2PAGE.md`](docs/report/HINDSIGHT_2PAGE.md) | **Start here:** two-page summary, with figures and analysis |
+| [`docs/report/HINDSIGHT_REPORT.md`](docs/report/HINDSIGHT_REPORT.md) | Full technical report, paper style |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Five diagrams with links to the code |
 | [`docs/benchmark/METRICS.md`](docs/benchmark/METRICS.md) | Every metric, how it's computed, and its weaknesses |
 | [`docs/benchmark/DESIGN.md`](docs/benchmark/DESIGN.md) | Benchmark card: construction, categories, systems, limitations |

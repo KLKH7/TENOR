@@ -8,6 +8,7 @@ Prices for every dollar figure: $4/M input and $20/M output tokens, applied to e
 
 | Figure | Question | Inputs (sha256 prefix) |
 |---|---|---|
+| [deletion_sim.svg](deletion_sim.svg) | What does deleting transcripts cost on real meetings? | `evals/reports/real-deletion-sim-dev.aggregate.json` (6bc288f59ce8) |
 | [hero_synthetic_vs_real.svg](hero_synthetic_vs_real.svg) | Why did a tie on synthetic data become a loss on real meetings? | `evals/reports/20261103T002456Z.json` (6e5919e818fe), `evals/reports/20261103T002456Z.jsonl` (b8a38cd419b9), `evals/reports/20261103T002456Z.analysis.json` (6098c8d08e82), `docs/figures/data/real_slice.json` (1458a32d7155) |
 | [leaderboard.svg](leaderboard.svg) | Who's ahead, and is it real? | `evals/reports/20261103T002456Z.json` (6e5919e818fe), `evals/reports/20261103T002456Z.jsonl` (b8a38cd419b9), `evals/reports/20261103T002456Z.analysis.json` (6098c8d08e82) |
 | [cost_frontier.svg](cost_frontier.svg) | What's the best system for a given budget? | `evals/reports/20261103T002456Z.json` (6e5919e818fe), `evals/reports/20261103T002456Z.jsonl` (b8a38cd419b9), `evals/reports/20261103T002456Z.analysis.json` (6098c8d08e82) |
