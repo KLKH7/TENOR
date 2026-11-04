@@ -74,6 +74,7 @@ class Inputs:
     scale: dict[str, Any] | None
     real: dict[str, Any] | None
     root: Path = Path()
+    by_tag: dict[str, Any] | None = None  # evals/reports/notes_vs_transcript.json
     files: dict[str, list[Path]] = field(default_factory=dict)
 
 
@@ -96,6 +97,7 @@ def load_inputs(stamp: str, root: Path = Path()) -> Inputs:
     retire_path = _latest(list((reports / "retirement").glob("*.curve.json")))
     scale_path = _latest(list((root / "evals" / "scale").glob("*/scale.json")))
     real_path = root / REAL_SNAPSHOT
+    tag_path = reports / "notes_vs_transcript.json"
     rows = [json.loads(x) for x in rows_path.read_text().splitlines() if x.strip()]
     core = [report_path, rows_path, analysis_path]
     return Inputs(
@@ -108,12 +110,14 @@ def load_inputs(stamp: str, root: Path = Path()) -> Inputs:
         scale=_json(scale_path) if scale_path else None,
         real=_json(real_path) if real_path.exists() else None,
         root=root,
+        by_tag=_json(tag_path) if tag_path.exists() else None,
         files={
             "report": core,
             "judge": [judge_path] if judge_path else [],
             "retirement": [retire_path] if retire_path else [],
             "scale": [scale_path] if scale_path else [],
             "real": [real_path] if real_path.exists() else [],
+            "by_tag": [tag_path] if tag_path.exists() else [],
         },
     )
 
@@ -837,6 +841,53 @@ class Spec:
     page: str
 
 
+# -- notes-sufficient vs transcript-needed -----------------------------------------------------
+
+TAG_SYSTEMS = ("concentrate", "b3_agentic", "b0_topk", "b1_summaries")
+TAG_ROWS = (("notes_sufficient", "notes-sufficient"), ("transcript_needed", "transcript-needed"))
+
+
+def fig_notes_vs_transcript(inp: Inputs) -> Any:
+    """Accuracy and confident-error rate by tag (generator tags), synthetic test report."""
+    if inp.by_tag is None:
+        return None
+    t = inp.by_tag["test_report"]
+    cells = {(c["system"], c["tag"]): c for c in t["primary"]["cells"]}
+    systems = [s for s in TAG_SYSTEMS if (s, "all") in cells]
+    fig, (ax1, ax2) = fs.new_figure(4.4, ncols=2, sharey=True)
+    ticks, labels = [], []
+    for g, (tag, name) in enumerate(TAG_ROWS):
+        for i, s in enumerate(systems):
+            y = (len(TAG_ROWS) - 1 - g) * (len(systems) + 1.2) + (len(systems) - 1 - i)
+            c = cells[(s, tag)]
+            _dot_ci(ax1, y, c["accuracy"], c["acc_ci"], s)
+            _dot_ci(ax2, y, c["confident_error"], c["ce_ci"], s)
+            ticks.append(y)
+            labels.append(f"{fs.label(s)}" + (f"  [{name}, n={c['n']}]" if i == 0 else ""))
+    ax1.set_yticks(ticks, labels, fontsize=8)
+    ax1.set_xlim(-5, 112)
+    ax2.set_xlim(-5, 75)
+    ax1.set_xlabel("accuracy (%), 95% bootstrap CI")
+    ax2.set_xlabel("confident error (%): answered and wrong")
+    for ax in (ax1, ax2):
+        ax.grid(axis="y", visible=False)
+    fs.title(
+        fig,
+        "What does a notes-only answer lose?",
+        f"Synthetic test report {t['report']}, split by whether the gold meetings' notes hold "
+        "the answer.\nSummaries (b1) reads notes only: what chat has after transcript deletion.",
+    )
+    fs.footnote(
+        fig,
+        "Synthetic summaries drop ~20% of facts by a generator setting, so the transcript-needed "
+        "share and n (17) are small and set by design. Notes-only scoring 0% there is close to "
+        "true by construction; the measured parts are its confident-error rate and how much "
+        "transcript readers recover. Write-up: docs/results/NOTES_VS_TRANSCRIPT.md.",
+    )
+    fig.subplots_adjust(left=0.34, right=0.97, top=0.8, bottom=0.3, wspace=0.12)
+    return fig
+
+
 FIGURES: tuple[Spec, ...] = (
     Spec(
         "hero_synthetic_vs_real",
@@ -902,6 +953,13 @@ FIGURES: tuple[Spec, ...] = (
         fig_cost_breakdown,
         ("report",),
         "results/ECONOMICS.md",
+    ),
+    Spec(
+        "notes_vs_transcript",
+        "What does a notes-only answer lose?",
+        fig_notes_vs_transcript,
+        ("by_tag",),
+        "results/NOTES_VS_TRANSCRIPT.md",
     ),
 )
 

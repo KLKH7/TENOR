@@ -233,6 +233,19 @@ The [statistics](#statistics-used-everywhere) section explains how gaps between 
   - It needs every system to emit a confidence, and external products may not.
 - **Status.** needs runs (experiment X5, about $5–8: no current system reports a confidence).
 
+### D4. Confident error, and abstained when the answer existed
+
+- **Definition.**
+  - **Confident error:** the share of all questions the system answered (did not abstain on) *and* the judge marked **incorrect**. Partially correct answers are not counted: they are incomplete, not wrong. Answering an unanswerable question counts.
+  - **Abstained when the answer existed:** the count of answerable questions it declined (its rate is D1's false-abstain rate).
+- **Why it matters.** Granola's own worst output is the answer that is "wrong, but confident". A wrong answer that looks right costs the user more than "I don't see that in your notes". Accuracy alone can't tell the two apart.
+- **Computation.** `confident_error = #(not abstained and verdict == "incorrect") / n`. Code: [`metrics.py`](../../packages/concentrate/evals/metrics.py) `confident_error`, reported by `abstain_stats` and the D-section table of every `analyze` report. By tag: [`by_tag.py`](../../packages/concentrate/evals/by_tag.py) (bootstrap CI over questions).
+- **Worked example.** Summaries (b1) answered 98 of 120 test questions and 10 of those were judged incorrect: **8%**. Concentrate: 3 of 120, **2%**. On the 17 transcript-needed questions ([`NOTES_VS_TRANSCRIPT.md`](../results/NOTES_VS_TRANSCRIPT.md)), summaries' confident error rises to **41%** (7 of 17), against 0–6% for systems that read transcripts.
+- **Weaknesses.**
+  - It inherits the judge's errors, and the partial/incorrect boundary is where judges disagree most (B1).
+  - Granola's agent has no abstain flag: a polite "couldn't find it" that the judge marks incorrect counts too, so its value is an upper bound (shown as ≤).
+- **Status.** new (Phase 2, $0).
+
 ## E. Efficiency
 
 ### E1. Cost per answer at equal prices

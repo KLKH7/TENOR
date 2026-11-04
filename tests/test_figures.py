@@ -113,6 +113,16 @@ def make_root(root: Path) -> Path:
         },
     }
     _write(root / F.REAL_SNAPSHOT, real)
+    cells = [
+        {"system": s, "tag": t, "n": 4, "accuracy": 0.5, "acc_ci": [0.25, 0.75],
+         "confident_error": 0.25, "ce_ci": [0.0, 0.5]}
+        for s in SYSTEMS
+        for t in ("all", "notes_sufficient", "transcript_needed", "unanswerable")
+    ]  # fmt: skip
+    _write(
+        reports / "notes_vs_transcript.json",
+        {"test_report": {"report": STAMP, "primary": {"cells": cells, "gaps": []}}},
+    )
     return root
 
 

@@ -4252,7 +4252,9 @@
         "false_abstain": 0.018691588785046728,
         "coverage": 0.8916666666666667,
         "accuracy": 0.8833333333333333,
-        "accuracy_answered": 0.8878504672897196
+        "accuracy_answered": 0.8878504672897196,
+        "confident_error": 0.016666666666666666,
+        "abstained_answer_existed": 2
       },
       {
         "system": "b1_summaries",
@@ -4265,7 +4267,9 @@
         "false_abstain": 0.09345794392523364,
         "coverage": 0.8166666666666667,
         "accuracy": 0.7083333333333334,
-        "accuracy_answered": 0.7448979591836735
+        "accuracy_answered": 0.7448979591836735,
+        "confident_error": 0.08333333333333333,
+        "abstained_answer_existed": 10
       },
       {
         "system": "b2o_oracle",
@@ -4278,7 +4282,9 @@
         "false_abstain": 0.009345794392523364,
         "coverage": 0.9,
         "accuracy": 0.95,
-        "accuracy_answered": 0.9537037037037037
+        "accuracy_answered": 0.9537037037037037,
+        "confident_error": 0.008333333333333333,
+        "abstained_answer_existed": 1
       },
       {
         "system": "b3_agentic",
@@ -4291,7 +4297,9 @@
         "false_abstain": 0.0,
         "coverage": 0.9166666666666666,
         "accuracy": 0.9,
-        "accuracy_answered": 0.8909090909090909
+        "accuracy_answered": 0.8909090909090909,
+        "confident_error": 0.041666666666666664,
+        "abstained_answer_existed": 0
       },
       {
         "system": "b4_mem0",
@@ -4304,7 +4312,9 @@
         "false_abstain": 0.037383177570093455,
         "coverage": 0.8583333333333333,
         "accuracy": 0.8083333333333333,
-        "accuracy_answered": 0.8155339805825242
+        "accuracy_answered": 0.8155339805825242,
+        "confident_error": 0.041666666666666664,
+        "abstained_answer_existed": 4
       },
       {
         "system": "b5_graphiti",
@@ -4317,7 +4327,9 @@
         "false_abstain": 0.102803738317757,
         "coverage": 0.8166666666666667,
         "accuracy": 0.7166666666666667,
-        "accuracy_answered": 0.7653061224489796
+        "accuracy_answered": 0.7653061224489796,
+        "confident_error": 0.08333333333333333,
+        "abstained_answer_existed": 11
       },
       {
         "system": "concentrate",
@@ -4330,7 +4342,9 @@
         "false_abstain": 0.009345794392523364,
         "coverage": 0.9,
         "accuracy": 0.9166666666666666,
-        "accuracy_answered": 0.9166666666666666
+        "accuracy_answered": 0.9166666666666666,
+        "confident_error": 0.025,
+        "abstained_answer_existed": 1
       }
     ],
     "sources": [
