@@ -112,7 +112,10 @@ def test_score_and_order() -> None:
 
 def test_match_and_score(ami_zip: Path) -> None:
     note = make_note(
-        "n1", "2026-11-05", "AMI XX0001a", [("them", None, "Hello, 25 euros on the budget.")]
+        "n1",
+        "2026-11-05",
+        "AMI XX0001a",
+        [("them", None, "Hello, 25 euros on the budget."), ("me", None, "room chatter")],
     )
     other = make_note("n2", "2026-11-05", "Weekly sync", [("me", None, "hi")])
     assert ami_tag(note) == "XX0001a" and ami_tag(other) is None
@@ -122,5 +125,6 @@ def test_match_and_score(ami_zip: Path) -> None:
     assert r.score.ref_words == 5 and r.score.hyp_words == 7
     assert r.score.content_recall == 1.0
     assert (r.product_speakers, r.reference_speakers) == (0, 2)
+    assert r.mic_utterances == 1  # the microphone line is dropped, not scored
     with pytest.raises(ValueError):
         match_notes([note, note])

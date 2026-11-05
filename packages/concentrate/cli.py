@@ -2557,6 +2557,7 @@ def ami_wer(
             f"{r.meeting_id}  WER={s.wer:.1%}  content_recall={s.content_recall:.1%}  "
             f"words ref={s.ref_words} hyp={s.hyp_words}  speakers {r.product_speakers}"
             f"/{r.reference_speakers}"
+            + (f"  ⚠ {r.mic_utterances} mic turns dropped" if r.mic_utterances else "")
         )
     missing = [mid for mid in AMI_SET if mid not in notes]
     if missing:
