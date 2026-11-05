@@ -1,4 +1,4 @@
-"""Notes audit: claim splitting, the deterministic pre-check, verdict handling and aggregation.
+"""Notes faithfulness track: claim splitting, pre-check, bleed, verdicts and aggregation.
 
 All offline: synthetic notes, a scripted fake backend, no network.
 """
@@ -10,7 +10,7 @@ import json
 import pytest
 
 from concentrate.blackbox.kit import check_committable
-from concentrate.evals import notes_audit as A
+from concentrate.evals import faithfulness as A
 from concentrate.llm.client import Completion, LLMClient, LLMRequest, structured_params
 from tests.memory_helpers import make_note
 
@@ -79,6 +79,7 @@ TRANSCRIPT = (
         ("Target 5k users", (), ()),  # 5k = five thousand
         ("Target 5,000 users by June 3", (), ()),  # ordinal "third"
         ("Revisit in Q2 at 30%", (), ()),  # Q2 is a quarter, 30 is spoken as digits
+        ("Ship on June 3rd", (), ()),  # an ordinal suffix is still the number 3
         ("Price is $40 per seat", ("40",), ()),
         ("Check it on Friday", (), ("friday",)),
         ("Check it on Thursdays", (), ()),
@@ -152,8 +153,14 @@ def test_cache_flag_leaves_existing_cache_keys_unchanged(tmp_path: object) -> No
     assert client.cache_path(plain).stem == want
 
 
+def _system(*extra: A.MeetingNote) -> A.NotesSystem:
+    note = _note()
+    pool = ((note, NOTES), *((n, n.summary_markdown or "") for n in extra))
+    return A.NotesSystem("toy", "test system", False, ((note, NOTES),), pool)
+
+
 def _meeting() -> A.Meeting:
-    return A.prepare([_note()])[0]
+    return A.prepare(_system())[0]
 
 
 def _reply(*verdicts: tuple[str, str, str, list[int]]) -> A.AuditReply:
@@ -203,9 +210,9 @@ def test_requests_one_call_per_meeting_and_kind() -> None:
     assert [k for *_, k in reqs] == ["check", "recheck", "strict"]
     assert [len(rs) for _, _, rs, _ in reqs] == [8, 3, 8]
     assert {r.stage for _, r, _, _ in reqs} == {
-        "notes_audit.check",
-        "notes_audit.recheck",
-        "notes_audit.strict",
+        "faithfulness.check",
+        "faithfulness.recheck",
+        "faithfulness.strict",
     }
 
 
@@ -280,3 +287,52 @@ def test_end_to_end_with_fake_backend(tmp_path: object) -> None:
     agg = A.aggregate(m.records, {"M1": m.split})
     assert agg["overall"]["supported"]["rate"] == 1.0
     assert agg["reliability"]["check_vs_strict_all"]["agreement_4way"] == 1.0
+
+
+def test_cross_meeting_terms_names_numbers_and_rare_words() -> None:
+    own = "we will ship the beta on friday"
+    others = {
+        "P1": "Dana owns the migration plan, budget 4200",
+        "P2": "the migration is late",
+        "P3": "nothing relevant here",
+        "P4": "also nothing",
+    }
+    got = A.cross_meeting_terms("Ship the beta with Dana; budget 4200", own, others)
+    # "budget" is a rare word too: it appears in only one other meeting.
+    assert got == {"P1": ["number:4200", "word:budget", "name:dana"]}
+    # A long word counts only if rare: "migration" is in 2 of 4 others (cap is 1).
+    assert A.cross_meeting_terms("Plan the migration", own, others) == {}
+    assert A.cross_meeting_terms("Ship the beta on Friday", own, others) == {}  # all own
+
+
+def test_prepare_runs_bleed_against_the_pool_and_aggregates_it() -> None:
+    other = make_note("n2", "2026-03-03", "Other", [("them", None, "Zanzibar is the codename")])
+    other = other.model_copy(update={"summary_markdown": "- Codename Zanzibar chosen"})
+    note = _note().model_copy(
+        update={"summary_markdown": "- Launch under the Zanzibar codename\n- Move to Q3"}
+    )
+    system = A.NotesSystem(
+        "toy", "t", False, ((note, note.summary_markdown or ""),), ((note, ""), (other, ""))
+    )
+    m = A.prepare(system)[0]
+    first, second = m.records
+    assert (
+        first.cross_meeting == {"P2": ["word:codename", "name:zanzibar"]}
+        and second.cross_meeting == {}
+    )
+    first.label, second.label = "unsupported", "supported"
+    bleed = A.aggregate(m.records, {"M1": m.split})["cross_meeting_bleed"]
+    assert bleed["ungrounded_claims"]["k"] == 1 and bleed["ungrounded_claims_strong"]["k"] == 1
+    assert bleed["all_claims_baseline"]["n"] == 2
+
+
+def test_northwind_adapter_is_seeded_and_uses_summaries() -> None:
+    notes = [
+        make_note(f"n{i}", f"2026-03-{i + 1:02d}", f"T{i}", [("me", None, "hi")]) for i in range(6)
+    ]
+    a = A.northwind_system(notes, 3, seed=1)
+    assert len(a.entries) == 3 and len(a.pool) == 6 and not a.private
+    assert [n.note_id for n, _ in a.entries] == [
+        n.note_id for n, _ in A.northwind_system(notes, 3, seed=1).entries
+    ]
+    assert all(md == n.summary_markdown for n, md in a.entries)

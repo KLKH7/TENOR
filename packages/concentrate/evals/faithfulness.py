@@ -1,23 +1,29 @@
-"""``concentrate notes-audit``: are a note's AI-generated notes grounded in its own transcript?
+"""The **notes faithfulness** track: are a system's meeting notes grounded in the transcript?
 
-For each meeting, the AI notes (``summary_markdown``) are split into atomic claims (one per
-bullet or sentence; headings and lead-in labels dropped, but kept as context). A cheap model
-labels every claim against the meeting's full transcript in **one** call per meeting, with the
-transcript in a cached system prompt:
+Product-neutral. The input is a :class:`NotesSystem`: for each meeting, its transcript and
+calendar context (a :class:`MeetingNote`) plus *that system's* notes for the meeting, as
+markdown. Each entry comes in through a small adapter: :func:`granola_system` (Granola's AI
+notes, ``summary_markdown`` from the private real sync) or :func:`northwind_system` (the
+synthetic generator's summaries, a baseline). Any other notetaker, or our own summariser,
+needs only an adapter that returns ``(MeetingNote, notes markdown)`` pairs.
 
-* ``supported``: stated or directly implied (must cite transcript line numbers);
-* ``inferred``: a plausible reading not said outright (motive, sentiment, emphasis,
-  generalisation, or a named owner the channel labels cannot establish);
-* ``unsupported``: not in the transcript;
-* ``contradicted``: the transcript says otherwise.
+The output is per-claim labels and aggregate metrics:
 
-A deterministic pre-check flags numbers, dates and names in a claim that appear nowhere in the
-transcript (or, for names, the calendar context). A second, stronger model re-labels a seeded
-random 30% of claims; their agreement is Cohen's kappa.
+* notes are split into atomic claims (one per bullet or sentence; headings and lead-in labels
+  are dropped but kept as context);
+* a cheap model labels every claim against the meeting's full transcript, in **one** call per
+  meeting with the transcript in a cached system prompt:
+  ``supported`` (must cite lines), ``inferred`` (a plausible reading not said outright),
+  ``unsupported`` or ``contradicted``;
+* a stronger model re-labels a seeded 30% (agreement as Cohen's kappa) and, as the *strict*
+  pass, every claim;
+* a deterministic pre-check flags numbers, dates and names a claim has but its transcript lacks;
+* a deterministic **cross-meeting bleed** heuristic flags ungrounded claims whose distinctive
+  terms are missing from their own meeting but present in another of the same corpus's
+  meetings (needs human confirmation).
 
-Per-claim output (claims, labels, nearest transcript lines) goes only to ``data/real/``.
-Committed files hold aggregates: ``evals/reports/notes-audit.aggregate.json`` and the
-write-up ``docs/results/NOTES_AUDIT.md``.
+For a private system (real meetings) per-claim output goes only to ``data/real/``; committed
+files hold aggregates. Write-up: ``docs/benchmark/NOTES_FAITHFULNESS.md``.
 """
 
 from __future__ import annotations
@@ -28,11 +34,13 @@ import re
 from collections import Counter
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import asdict, dataclass, field
+from pathlib import Path
 from typing import Any, Literal
 
 from pydantic import BaseModel
 
 from concentrate.core.models import Channel, MeetingNote, Utterance
+from concentrate.core.store import NoteStore
 from concentrate.evals.judge_check import cohen_kappa
 from concentrate.llm.client import LLMRequest, load_prompt
 
@@ -206,7 +214,9 @@ MONTHS = [
 WEEKDAYS = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
 _MONTH_ABBR = {m[:3]: m for m in MONTHS} | {"sept": "september"}
 _WORD = re.compile(r"[A-Za-z][A-Za-z'\u2019\-]*")
-_NUMBER = re.compile(r"(?<![\w.])(\d{1,3}(?:,\d{3})+|\d+(?:\.\d+)?)\s*([kKmM%]|bn)?(?![\w])")
+_NUMBER = re.compile(
+    r"(?<![\w.])(\d{1,3}(?:,\d{3})+|\d+(?:\.\d+)?)\s*([kKmM%]|bn|st|nd|rd|th)?(?![\w])"
+)
 # Capitalised words that are not names when they appear mid-sentence.
 _NOT_NAMES = frozenset(
     [
@@ -446,7 +456,7 @@ def check_request(note: MeetingNote, claims: Sequence[Claim]) -> LLMRequest:
         where = " > ".join(p for p in (c.section, c.context) if p)
         rows.append(f"{c.claim_id} [{where or 'top'}]: {c.text}")
     return LLMRequest(
-        stage="notes_audit.check",
+        stage="faithfulness.check",
         prompt_id=PROMPT_ID,
         system=system,
         user="Claims:\n" + "\n".join(rows),
@@ -478,6 +488,17 @@ class ClaimRecord:
     strict_type: ClaimType | None = None
     strict_lines: list[int] = field(default_factory=list)
     strict_reason: str = ""
+    # Cross-meeting bleed heuristic: other meeting label -> distinctive terms of this claim
+    # found there but not in this claim's own meeting.
+    cross_meeting: dict[str, list[str]] = field(default_factory=dict)
+
+    @property
+    def ungrounded_by_any(self) -> bool:
+        """Some checker did not call it supported."""
+        return any(
+            x not in (None, "supported")
+            for x in (self.label, self.recheck_label, self.strict_label)
+        )
 
     def to_json(self) -> dict[str, Any]:
         d = asdict(self)
@@ -529,7 +550,7 @@ def wilson(k: int, n: int, z: float = 1.96) -> tuple[float, float]:
     d = 1 + z * z / n
     c = (p + z * z / (2 * n)) / d
     h = z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / d
-    return (round(c - h, 4), round(c + h, 4))
+    return (max(0.0, round(c - h, 4)), min(1.0, round(c + h, 4)))
 
 
 def rates(labels: Iterable[str]) -> dict[str, Any]:
@@ -613,6 +634,7 @@ def aggregate(records: Sequence[ClaimRecord], split_counts: Mapping[str, Split])
             {"type": t, "ungrounded_rate": rate, "n": n} for t, rate, n in ranked
         ],
         "precheck": pre,
+        "cross_meeting_bleed": bleed_aggregate(labelled),
         "reliability": reliability,
         "strict": {
             "n": len(strict),
@@ -737,7 +759,7 @@ def spotcheck_markdown(
 ) -> str:
     """Private hand-check list: every non-supported claim with the lines nearest to it."""
     out = [
-        "# Notes audit: spot-check list (PRIVATE: never commit)",
+        "# Notes faithfulness: spot-check list (PRIVATE: never commit)",
         "",
         "Every claim that any checker did not label `supported`, with the transcript lines "
         "the checkers cited and the lines sharing the most words with it. Mark each: agree / "
@@ -764,6 +786,7 @@ def spotcheck_markdown(
             f"- strict ({RECHECK_MODEL}): **{r.strict_label}**: {r.strict_reason}",
             f"- re-check: {r.recheck_label or 'not sampled'}",
             f"- pre-check: {flag_txt or 'nothing flagged'}",
+            f"- cross-meeting bleed (heuristic): {r.cross_meeting or 'none'}",
             f"- cited lines: check {r.lines or 'none'}; strict {r.strict_lines or 'none'}",
             "",
         ]
@@ -777,29 +800,183 @@ def spotcheck_markdown(
 # -- the run -------------------------------------------------------------------------------------
 
 
+@dataclass(frozen=True)
+class NotesSystem:
+    """One benchmark entry: a system's notes for a set of meetings.
+
+    ``entries`` are the audited meetings, as ``(meeting, notes markdown)``; ``pool`` is every
+    meeting of the same corpus/account (transcript + notes), which the cross-meeting bleed
+    heuristic searches. ``private`` systems write per-claim output only under data/real/.
+    """
+
+    name: str  # e.g. "granola" or "northwind-synth"
+    description: str
+    private: bool
+    entries: tuple[tuple[MeetingNote, str], ...]
+    pool: tuple[tuple[MeetingNote, str], ...]
+
+
+def granola_system(db: Path) -> NotesSystem:
+    """Granola's AI notes (``summary_markdown``) for every synced meeting with a transcript."""
+    notes = [n for n in NoteStore(db).iter_notes() if n.utterances]
+    pairs = tuple(
+        (n, n.summary_markdown or "") for n in notes if (n.summary_markdown or "").strip()
+    )
+    return NotesSystem(
+        "granola",
+        "Granola AI notes (summary_markdown) via Granola's official read-only MCP",
+        True,
+        pairs,
+        pairs,
+    )
+
+
+def northwind_system(notes: Sequence[MeetingNote], n: int, seed: int) -> NotesSystem:
+    """The synthetic generator's summaries for ``n`` seeded-random Northwind meetings.
+
+    A baseline, not a notetaker: the generator writes each summary bullet from a planted fact
+    that its transcript also states, so it should score near 100% supported. It tests the
+    checker (false "ungrounded" rate) more than the notes.
+    """
+    pool = tuple((m, m.summary_markdown or "") for m in notes if m.utterances)
+    picked = sorted(random.Random(seed).sample(range(len(pool)), min(n, len(pool))))
+    return NotesSystem(
+        "northwind-synth",
+        "Synthetic Northwind generator summaries (summary_markdown), data/fixtures/northwind",
+        False,
+        tuple(pool[i] for i in picked),
+        pool,
+    )
+
+
 @dataclass
 class Meeting:
     """One audited meeting under its anonymous label."""
 
-    label: str  # "M1".."M4", in meeting-time order
+    label: str  # "M1".."Mn", in entry order
     note: MeetingNote
+    notes_markdown: str
     split: Split
     records: list[ClaimRecord]
 
 
-def prepare(notes: Sequence[MeetingNote]) -> list[Meeting]:
-    """Split every note with AI notes and a transcript into claims and run the pre-check."""
+def prepare(system: NotesSystem) -> list[Meeting]:
+    """Split each entry's notes into claims; run the pre-check and the bleed heuristic."""
     out: list[Meeting] = []
-    for note in notes:
-        if not (note.summary_markdown or "").strip() or not note.utterances:
-            continue
+    for note, markdown in system.entries:
         label = f"M{len(out) + 1}"
-        sp = split_claims(note.summary_markdown or "")
+        sp = split_claims(markdown)
         spoken = " ".join(u.text for u in note.utterances)
         ctx = calendar_context(note)
-        recs = [ClaimRecord(label, c, precheck(c.text, spoken, ctx)) for c in sp.claims]
-        out.append(Meeting(label, note, sp, recs))
+        others = {
+            f"P{i + 1}": " ".join(u.text for u in other.utterances) + " " + md
+            for i, (other, md) in enumerate(system.pool)
+            if other.note_id != note.note_id
+        }
+        recs = []
+        for c in sp.claims:
+            r = ClaimRecord(label, c, precheck(c.text, spoken, ctx))
+            r.cross_meeting = cross_meeting_terms(c.text, f"{spoken} {ctx}", others)
+            recs.append(r)
+        out.append(Meeting(label, note, markdown, sp, recs))
     return out
+
+
+# -- cross-meeting bleed (deterministic heuristic) -------------------------------------------
+
+
+def _stem(word: str) -> str:
+    """A crude suffix strip so "decided" / "decides" / "decision" don't count as distinct."""
+    w = word.lower().strip("'\u2019")
+    for suf in ("ings", "ing", "ions", "ion", "ed", "es", "s", "ly"):
+        if len(w) > len(suf) + 3 and w.endswith(suf):
+            return w[: -len(suf)]
+    return w
+
+
+def _vocab(text: str) -> set[str]:
+    return {_stem(w) for w in _WORD.findall(text)} | {_fmt(v) for v in _number_values(text)}
+
+
+def distinctive_terms(claim: str) -> dict[str, str]:
+    """Candidate distinctive terms of a claim, term -> kind ("number", "name" or "word").
+
+    Numbers written in digits, capitalised mid-sentence words, and lower-case content words of
+    six letters or more (stemmed). Which of the words are actually *rare* is decided against
+    the corpus in :func:`cross_meeting_terms`.
+    """
+    out: dict[str, str] = {}
+    for w in _WORD.findall(claim):
+        low = w.lower()
+        if len(low) >= 6 and low not in _STOP and w[0].islower():
+            out[_stem(low)] = "word"
+    for n in _name_candidates(claim):
+        out[_stem(n)] = "name"
+    for v in _digit_values(claim):
+        out[_fmt(v)] = "number"
+    return out
+
+
+def cross_meeting_terms(
+    claim: str, own: str, others: Mapping[str, str], rare_share: float = 0.25
+) -> dict[str, list[str]]:
+    """Distinctive terms of ``claim`` absent from ``own`` but present in some ``others`` text.
+
+    ``own`` is the claim's meeting transcript and calendar context; ``others`` maps each
+    other meeting of the corpus to its transcript + notes. Names and numbers count wherever
+    they appear; a plain word counts only if it is rare: found in at most ``rare_share`` of
+    the other meetings (at least one). Returns ``{other label: [terms]}``; empty means no
+    sign of bleed. A heuristic: a word can be absent from its own meeting just because it was
+    paraphrased, and present elsewhere by coincidence.
+    """
+    own_vocab = _vocab(own)
+    vocabs = {k: _vocab(v) for k, v in others.items()}
+    cap = max(1, math.floor(rare_share * len(vocabs)))
+    found: dict[str, list[str]] = {}
+    for term, kind in sorted(distinctive_terms(claim).items()):
+        if term in own_vocab:
+            continue
+        where = [k for k, vocab in vocabs.items() if term in vocab]
+        if not where or (kind == "word" and len(where) > cap):
+            continue
+        for k in where:
+            found.setdefault(k, []).append(f"{kind}:{term}")
+    return found
+
+
+def bleed_aggregate(records: Sequence[ClaimRecord]) -> dict[str, Any]:
+    """Count claims flagged "possibly sourced from another meeting" (a heuristic).
+
+    *Strong* flags rest on a name or number found only in another meeting; the rest rest only
+    on a rare word, which in a small corpus is mostly paraphrase vocabulary.
+    """
+    ungrounded = [r for r in records if r.ungrounded_by_any]
+
+    def flagged(rs: Sequence[ClaimRecord], test: Any = None) -> dict[str, Any]:
+        k = sum(bool(r.cross_meeting) and (test is None or test(r)) for r in rs)
+        return {
+            "n": len(rs),
+            "k": k,
+            "rate": round(k / len(rs), 4) if rs else None,
+            "ci95": wilson(k, len(rs)),
+        }
+
+    def strong(r: ClaimRecord) -> bool:
+        return any(not t.startswith("word:") for v in r.cross_meeting.values() for t in v)
+
+    kinds = Counter(
+        t.split(":", 1)[0]
+        for r in ungrounded
+        for t in {t for v in r.cross_meeting.values() for t in v}
+    )
+    return {
+        "heuristic": "deterministic term match; needs human confirmation",
+        "ungrounded_claims": flagged(ungrounded),
+        "ungrounded_claims_strong": flagged(ungrounded, strong),
+        "all_claims_baseline": flagged(records),
+        "all_claims_baseline_strong": flagged(records, strong),
+        "term_kinds_in_flagged_ungrounded": dict(kinds),
+    }
 
 
 def requests(
@@ -815,7 +992,7 @@ def requests(
             picked = [r for r in m.records if kind != "recheck" or id(r) in sampled]
             if picked:
                 req = check_request(m.note, [r.claim for r in picked])
-                req = LLMRequest(**{**asdict(req), "stage": f"notes_audit.{kind}"})
+                req = LLMRequest(**{**asdict(req), "stage": f"faithfulness.{kind}"})
                 out.append((m, req, picked, kind))
     return out
 
@@ -828,4 +1005,5 @@ def private_texts(meetings: Sequence[Meeting]) -> list[str]:
         out += [r.claim.text for r in m.records] + [c for c in (n.title, n.event_title) if c]
         out += [p.name for p in (n.owner, *n.attendees) if p.name]
         out += [r.reason for r in m.records if r.reason]
+        out += [t for r in m.records for v in r.cross_meeting.values() for t in v]
     return out

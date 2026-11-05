@@ -2185,26 +2185,36 @@ def deletion_sim_cmd(
     typer.echo(f"spent ${spent():.2f} · report: {report['paths']['md']} · aggregate: {path}")
 
 
-# -- notes audit: are Granola's AI notes grounded in the transcript? --------------------------
+# -- notes faithfulness track: are a system's notes grounded in the transcript? -------------
 
 
-@app.command("notes-audit")
-def notes_audit_cmd(
-    seed: Annotated[int, typer.Option(help="Seed for the 30% re-check sample.")] = 0,
+class FaithSystem(StrEnum):
+    granola = "granola"
+    northwind_synth = "northwind-synth"
+
+
+@app.command("notes-faithfulness")
+def notes_faithfulness_cmd(
+    system: Annotated[FaithSystem, typer.Option(help="Which system's notes to score.")] = (
+        FaithSystem.granola
+    ),
+    meetings: Annotated[int, typer.Option(help="Synthetic only: meetings to sample.")] = 4,
+    seed: Annotated[int, typer.Option(help="Seed for the 30% re-check (and synthetic pick).")] = 0,
     quote: Annotated[bool, typer.Option(help="Count tokens and price the run; spend $0.")] = False,
     budget: Annotated[float, typer.Option(help="Refuse to run above this quote (USD).")] = 0.80,
     yes: Annotated[bool, typer.Option(help="Skip the confirmation prompt.")] = False,
-    db: Annotated[Path, typer.Option(help="Private store of the real sync.")] = Path(
+    db: Annotated[Path, typer.Option(help="Private store of the real sync (granola).")] = Path(
         "data/real.db"
     ),
-    commit_to: Annotated[Path, typer.Option(help="Committed aggregate.")] = Path(
-        "evals/reports/notes-audit.aggregate.json"
+    fixtures: Annotated[Path, typer.Option(help="Synthetic corpus.")] = Path(
+        "data/fixtures/northwind"
     ),
 ) -> None:
-    """Label every claim of each real note's AI notes against its own transcript.
+    """Score one system's meeting notes against their transcripts (notes faithfulness track).
 
-    Per-claim output and the hand spot-check list go to data/real/ only; the aggregate is
-    privacy-checked before it is written to ``commit_to``.
+    Private systems (granola) write per-claim output and the owner's spot-check list to
+    data/real/ only, and the aggregate is privacy-checked before it is committed. Synthetic
+    systems write per-claim output next to the aggregate.
     """
     import json as _json
     import re as _re
@@ -2212,19 +2222,23 @@ def notes_audit_cmd(
     from datetime import UTC, datetime
 
     from concentrate.blackbox.kit import check_committable
-    from concentrate.evals import notes_audit as A
+    from concentrate.evals import faithfulness as F
+    from concentrate.evals.runner import load_corpus
     from concentrate.llm.client import PRICING, count_tokens
 
-    store = NoteStore(db)
-    meetings = A.prepare(list(store.iter_notes()))
-    reqs = A.requests(meetings, seed)
+    if system is FaithSystem.granola:
+        entry = F.granola_system(db)
+    else:
+        entry = F.northwind_system(load_corpus(fixtures), meetings, seed)
+    ms = F.prepare(entry)
+    reqs = F.requests(ms, seed)
     # Output tokens per claim: ~65 observed for both models (reason + label + lines); x1.5 pad.
-    out_per_claim = {A.CHECK_MODEL: 100, A.RECHECK_MODEL: 100}
+    out_per_claim = {F.CHECK_MODEL: 100, F.RECHECK_MODEL: 100}
     cache = Path(os.environ.get("CONCENTRATE_CACHE", "data/cache/llm"))
     lines, total = [], 0.0
     tokens: dict[str, dict[str, int]] = {}
     for m, req, _, kind in reqs:
-        model = A.CHECK_MODEL if kind == "check" else A.RECHECK_MODEL
+        model = F.CHECK_MODEL if kind == "check" else F.RECHECK_MODEL
         sys_t, user_t = count_tokens([req.system, req.user], model, cache)
         n_claims = len(req.user.splitlines()) - 1
         p_in, p_out = PRICING[model]
@@ -2247,36 +2261,38 @@ def notes_audit_cmd(
     if total > budget:
         typer.echo(f"quote ${total:.2f} exceeds --budget ${budget:.2f}", err=True)
         raise typer.Exit(1)
-    if not yes:
+    if not yes and total > 0:
         typer.confirm(f"Spend about ${total:.2f}?", abort=True)
-    clients = {mod: LLMClient(model=mod) for mod in (A.CHECK_MODEL, A.RECHECK_MODEL)}
+    clients = {mod: LLMClient(model=mod) for mod in (F.CHECK_MODEL, F.RECHECK_MODEL)}
     missing: dict[str, int] = {}
     for m, req, sample, kind in reqs:
-        client = clients[A.CHECK_MODEL if kind == "check" else A.RECHECK_MODEL]
-        reply = client.structured(req, A.AuditReply)
-        left = A.apply_verdicts(sample, reply, len(m.note.utterances), kind)
+        client = clients[F.CHECK_MODEL if kind == "check" else F.RECHECK_MODEL]
+        reply = client.structured(req, F.AuditReply)
+        left = F.apply_verdicts(sample, reply, len(m.note.utterances), kind)
         if left:
             missing[f"{m.label}.{kind}"] = len(left)
-    records = [r for m in meetings for r in m.records]
-    agg = A.aggregate(records, {m.label: m.split for m in meetings})
+    records = [r for m in ms for r in m.records]
+    agg = F.aggregate(records, {m.label: m.split for m in ms})
     git = subprocess.run(["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True)
     spent = sum(c.ledger.spent_usd() for c in clients.values())
     # What every call cost when it was made (cache hits replay their original cost).
     cost = sum(r.cost_usd for c in clients.values() for r in c.ledger.records)
     report = {
         "meta": {
+            "track": "notes-faithfulness",
+            "system": entry.name,
+            "system_description": entry.description,
             "date": datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
             "git_sha": git.stdout.strip(),
-            "check_model": A.CHECK_MODEL,
+            "check_model": F.CHECK_MODEL,
             "check_effort": "low",
-            "recheck_model": A.RECHECK_MODEL,
-            "recheck_fraction": A.RECHECK_FRACTION,
-            "strict_pass": f"{A.RECHECK_MODEL} on every claim",
-            "prompt": A.PROMPT_ID,
+            "recheck_model": F.RECHECK_MODEL,
+            "recheck_fraction": F.RECHECK_FRACTION,
+            "strict_pass": f"{F.RECHECK_MODEL} on every claim",
+            "prompt": F.PROMPT_ID,
             "seed": seed,
-            "meetings": len(meetings),
-            "source": "Granola official MCP (read-only), synced to a private store",
-            "notes_field": "summary_markdown (Granola AI notes)",
+            "meetings": len(ms),
+            "pool_meetings": len(entry.pool),
             "quote_usd": round(total, 4),
             "cost_usd": round(cost, 4),
             "spent_this_invocation_usd": round(spent, 4),
@@ -2286,28 +2302,30 @@ def notes_audit_cmd(
         },
         **agg,
     }
-    private = A.private_texts(meetings)
-    check_committable(report, private)
-    blob = _json.dumps(report).lower()
-    names = {
-        w.lower()
-        for m in meetings
-        for p in (m.note.owner, *m.note.attendees)
-        for w in _re.findall(r"[A-Za-z]{3,}", p.name or "")
-    }
-    leaked = sorted(n for n in names if _re.search(rf"\b{_re.escape(n)}\b", blob))
-    if leaked:
-        typer.echo(f"refusing to write: aggregate has {len(leaked)} attendee name(s)", err=True)
-        raise typer.Exit(1)
-    real = Path("data/real")
-    real.mkdir(parents=True, exist_ok=True)
-    stamp = report["meta"]["date"].replace(":", "").replace("-", "")
-    with (real / f"notes_audit.{stamp}.claims.jsonl").open("w") as fh:
+    out_dir = Path("evals/reports/notes-faithfulness")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    claims_dir = Path("data/real/notes_faithfulness") if entry.private else out_dir
+    claims_dir.mkdir(parents=True, exist_ok=True)
+    if entry.private:
+        private = F.private_texts(ms)
+        check_committable(report, private)
+        blob = _json.dumps(report).lower()
+        names = {
+            w.lower()
+            for m in ms
+            for p in (m.note.owner, *m.note.attendees)
+            for w in _re.findall(r"[A-Za-z]{3,}", p.name or "")
+        }
+        leaked = sorted(n for n in names if _re.search(rf"\b{_re.escape(n)}\b", blob))
+        if leaked:
+            typer.echo(f"refusing to write: aggregate has {len(leaked)} attendee name(s)", err=True)
+            raise typer.Exit(1)
+        spot = F.spotcheck_markdown(records, {m.label: m.note for m in ms}, seed)
+        (claims_dir / f"{entry.name}.spotcheck.md").write_text(spot)
+    with (claims_dir / f"{entry.name}.claims.jsonl").open("w") as fh:
         for r in records:
             fh.write(_json.dumps(r.to_json(), ensure_ascii=False) + "\n")
-    spot = A.spotcheck_markdown(records, {m.label: m.note for m in meetings}, seed)
-    (real / "notes_audit_spotcheck.md").write_text(spot)
-    commit_to.parent.mkdir(parents=True, exist_ok=True)
-    commit_to.write_text(_json.dumps(report, indent=2) + "\n")
-    typer.echo(_json.dumps(agg["overall"], indent=1))
-    typer.echo(f"spent ${spent:.4f} · aggregate {commit_to} · private data/real/notes_audit_*")
+    agg_path = out_dir / f"{entry.name}.aggregate.json"
+    agg_path.write_text(_json.dumps(report, indent=2) + "\n")
+    typer.echo(_json.dumps(agg["overall"]["ungrounded"]))
+    typer.echo(f"spent ${spent:.4f} · aggregate {agg_path} · per-claim {claims_dir}")
