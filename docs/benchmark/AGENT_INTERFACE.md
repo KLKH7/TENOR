@@ -11,7 +11,7 @@ uv run concentrate agent-interface --live granola       # also records missing r
 
 ## Why this track
 
-Granola's own agent-design post names four answer types (useful and comprehensive; useful but incomplete; incomplete and clearly so; "wrong, but confident") and prizes transparency about coverage. An answer-accuracy score alone can't see the difference between the last two, and that difference is a property of the **interface**: whether the payload carries an abstain flag, a caveat or a pointer to evidence the agent can check. So the track measures the interface directly.
+Granola's own agent-design post names four answer types ("Useful and comprehensive", "Useful but incomplete", "Incomplete, and clearly so", "Wrong, but confident"; re-verified at source 2026-11-05) and prizes transparency about coverage. An answer-accuracy score alone can't see the difference between the last two, and that difference is a property of the **interface**: whether the payload carries an abstain flag, a caveat or a pointer to evidence the agent can check. So the track measures the interface directly.
 
 ## Metrics
 
