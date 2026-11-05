@@ -2183,3 +2183,131 @@ def deletion_sim_cmd(
         write_committable(agg, commit_to, private)
     typer.echo(_json.dumps(report["deletion"]["paired"], indent=1))
     typer.echo(f"spent ${spent():.2f} · report: {report['paths']['md']} · aggregate: {path}")
+
+
+# -- notes audit: are Granola's AI notes grounded in the transcript? --------------------------
+
+
+@app.command("notes-audit")
+def notes_audit_cmd(
+    seed: Annotated[int, typer.Option(help="Seed for the 30% re-check sample.")] = 0,
+    quote: Annotated[bool, typer.Option(help="Count tokens and price the run; spend $0.")] = False,
+    budget: Annotated[float, typer.Option(help="Refuse to run above this quote (USD).")] = 0.80,
+    yes: Annotated[bool, typer.Option(help="Skip the confirmation prompt.")] = False,
+    db: Annotated[Path, typer.Option(help="Private store of the real sync.")] = Path(
+        "data/real.db"
+    ),
+    commit_to: Annotated[Path, typer.Option(help="Committed aggregate.")] = Path(
+        "evals/reports/notes-audit.aggregate.json"
+    ),
+) -> None:
+    """Label every claim of each real note's AI notes against its own transcript.
+
+    Per-claim output and the hand spot-check list go to data/real/ only; the aggregate is
+    privacy-checked before it is written to ``commit_to``.
+    """
+    import json as _json
+    import re as _re
+    import subprocess
+    from datetime import UTC, datetime
+
+    from concentrate.blackbox.kit import check_committable
+    from concentrate.evals import notes_audit as A
+    from concentrate.llm.client import PRICING, count_tokens
+
+    store = NoteStore(db)
+    meetings = A.prepare(list(store.iter_notes()))
+    reqs = A.requests(meetings, seed)
+    # Output tokens per claim: ~65 observed for both models (reason + label + lines); x1.5 pad.
+    out_per_claim = {A.CHECK_MODEL: 100, A.RECHECK_MODEL: 100}
+    cache = Path(os.environ.get("CONCENTRATE_CACHE", "data/cache/llm"))
+    lines, total = [], 0.0
+    tokens: dict[str, dict[str, int]] = {}
+    for m, req, _, kind in reqs:
+        model = A.CHECK_MODEL if kind == "check" else A.RECHECK_MODEL
+        sys_t, user_t = count_tokens([req.system, req.user], model, cache)
+        n_claims = len(req.user.splitlines()) - 1
+        p_in, p_out = PRICING[model]
+        est_out = out_per_claim[model] * n_claims
+        usd = (sys_t * p_in * 1.25 + user_t * p_in + est_out * p_out) / 1e6
+        hit = LLMClient(model=model).is_cached(req)
+        total += 0.0 if hit else usd
+        t = tokens.setdefault(model, {"system_cached": 0, "user": 0, "est_output": 0})
+        t["system_cached"] += sys_t
+        t["user"] += user_t
+        t["est_output"] += est_out
+        lines.append(
+            f"{m.label} {kind:<7} {model:<18} claims={n_claims:>3} system={sys_t:>6} "
+            f"user={user_t:>5} est_out={est_out:>5} ${usd:.4f}{' (cached: $0)' if hit else ''}"
+        )
+    typer.echo("\n".join(lines))
+    typer.echo(f"quote: ${total:.4f} new spend (input exact via count_tokens; output estimated)")
+    if quote:
+        return
+    if total > budget:
+        typer.echo(f"quote ${total:.2f} exceeds --budget ${budget:.2f}", err=True)
+        raise typer.Exit(1)
+    if not yes:
+        typer.confirm(f"Spend about ${total:.2f}?", abort=True)
+    clients = {mod: LLMClient(model=mod) for mod in (A.CHECK_MODEL, A.RECHECK_MODEL)}
+    missing: dict[str, int] = {}
+    for m, req, sample, kind in reqs:
+        client = clients[A.CHECK_MODEL if kind == "check" else A.RECHECK_MODEL]
+        reply = client.structured(req, A.AuditReply)
+        left = A.apply_verdicts(sample, reply, len(m.note.utterances), kind)
+        if left:
+            missing[f"{m.label}.{kind}"] = len(left)
+    records = [r for m in meetings for r in m.records]
+    agg = A.aggregate(records, {m.label: m.split for m in meetings})
+    git = subprocess.run(["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True)
+    spent = sum(c.ledger.spent_usd() for c in clients.values())
+    # What every call cost when it was made (cache hits replay their original cost).
+    cost = sum(r.cost_usd for c in clients.values() for r in c.ledger.records)
+    report = {
+        "meta": {
+            "date": datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "git_sha": git.stdout.strip(),
+            "check_model": A.CHECK_MODEL,
+            "check_effort": "low",
+            "recheck_model": A.RECHECK_MODEL,
+            "recheck_fraction": A.RECHECK_FRACTION,
+            "strict_pass": f"{A.RECHECK_MODEL} on every claim",
+            "prompt": A.PROMPT_ID,
+            "seed": seed,
+            "meetings": len(meetings),
+            "source": "Granola official MCP (read-only), synced to a private store",
+            "notes_field": "summary_markdown (Granola AI notes)",
+            "quote_usd": round(total, 4),
+            "cost_usd": round(cost, 4),
+            "spent_this_invocation_usd": round(spent, 4),
+            "tokens_quoted": tokens,
+            "missing_verdicts": missing,
+            "by_stage": {k: v for c in clients.values() for k, v in c.ledger.by_stage().items()},
+        },
+        **agg,
+    }
+    private = A.private_texts(meetings)
+    check_committable(report, private)
+    blob = _json.dumps(report).lower()
+    names = {
+        w.lower()
+        for m in meetings
+        for p in (m.note.owner, *m.note.attendees)
+        for w in _re.findall(r"[A-Za-z]{3,}", p.name or "")
+    }
+    leaked = sorted(n for n in names if _re.search(rf"\b{_re.escape(n)}\b", blob))
+    if leaked:
+        typer.echo(f"refusing to write: aggregate has {len(leaked)} attendee name(s)", err=True)
+        raise typer.Exit(1)
+    real = Path("data/real")
+    real.mkdir(parents=True, exist_ok=True)
+    stamp = report["meta"]["date"].replace(":", "").replace("-", "")
+    with (real / f"notes_audit.{stamp}.claims.jsonl").open("w") as fh:
+        for r in records:
+            fh.write(_json.dumps(r.to_json(), ensure_ascii=False) + "\n")
+    spot = A.spotcheck_markdown(records, {m.label: m.note for m in meetings}, seed)
+    (real / "notes_audit_spotcheck.md").write_text(spot)
+    commit_to.parent.mkdir(parents=True, exist_ok=True)
+    commit_to.write_text(_json.dumps(report, indent=2) + "\n")
+    typer.echo(_json.dumps(agg["overall"], indent=1))
+    typer.echo(f"spent ${spent:.4f} · aggregate {commit_to} · private data/real/notes_audit_*")
