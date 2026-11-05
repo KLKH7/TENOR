@@ -1,0 +1,119 @@
+{
+ "contract_version": 1,
+ "tools": {
+  "get_meeting_transcript.chunks": {
+   "json": {
+    "chunks": [
+     {
+      "chunk_id": "number",
+      "next_chunk_id": "number",
+      "previous_chunk_id": "null",
+      "transcript": "text[[m:ss] Label: text]"
+     }
+    ],
+    "content_advisory": "str",
+    "created_at": "str",
+    "id": "str",
+    "meeting_at": "str",
+    "recording_context": {
+     "audio_sources": {
+      "Microphone": "str",
+      "System audio": "str"
+     },
+     "description": "str",
+     "microphone_sharing": "str",
+     "recorder": {
+      "name": "str"
+     }
+    },
+    "status": "str",
+    "title": "str",
+    "total_chunks": "number",
+    "transcript_version": "str"
+   }
+  },
+  "get_meeting_transcript.full": {
+   "json": {
+    "content_advisory": "str",
+    "created_at": "str",
+    "id": "str",
+    "include_timestamps": "bool",
+    "meeting_at": "str",
+    "next_offset": "number",
+    "offset": "number",
+    "recording_context": {
+     "audio_sources": {
+      "Microphone": "str",
+      "System audio": "str"
+     },
+     "description": "str",
+     "microphone_sharing": "str",
+     "recorder": {
+      "name": "str"
+     }
+    },
+    "title": "str",
+    "total_chars": "number",
+    "transcript": "text[Label: text]",
+    "truncated": "bool",
+    "truncation_notice": "str"
+   }
+  },
+  "get_meetings": {
+   "markup": {
+    "connected_user_email": [],
+    "folders": [],
+    "known_participants": [],
+    "meeting": [
+     "created_at",
+     "date",
+     "id",
+     "meeting_at",
+     "title",
+     "updated_at",
+     "url"
+    ],
+    "meetings_data": [
+     "count",
+     "from",
+     "to"
+    ],
+    "private_notes": [
+     "status"
+    ],
+    "summary": [
+     "status"
+    ]
+   }
+  },
+  "search_meetings": {
+   "markup": {
+    "known_participants": [
+     "omitted",
+     "total"
+    ],
+    "meeting": [
+     "date",
+     "id",
+     "meeting_at",
+     "title",
+     "url"
+    ],
+    "meetings_data": [
+     "count",
+     "from",
+     "to",
+     "workspace_name"
+    ],
+    "note_headers": [],
+    "pagination": [
+     "completion_status",
+     "has_more"
+    ]
+   }
+  },
+  "search_transcripts": {
+   "markup": {}
+  }
+ }
+}

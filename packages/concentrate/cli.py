@@ -2772,3 +2772,41 @@ def ami_wer(
     payload = {"meta": meta, "meetings": [r.model_dump() for r in rows]}
     out.write_text(json.dumps(payload, indent=1) + "\n")
     typer.echo(f"wrote {out}")
+
+
+# -- MCP contract check (packages/concentrate/sources/contract.py) -----------------------------
+
+CONTRACT_BASELINE = Path("evals/contracts/granola_mcp.json")
+
+
+@app.command("mcp-contract")
+def mcp_contract(
+    baseline: Annotated[Path, typer.Option(help="Committed shape baseline.")] = CONTRACT_BASELINE,
+    update: Annotated[bool, typer.Option(help="Write the current shapes as the baseline.")] = False,
+) -> None:
+    """Check Granola's MCP responses still have the shapes we rely on. Exit 1 on drift.
+
+    Calls read tools only (allowlisted), on the newest meeting with a transcript. Prints and
+    stores shapes (field names, types, line formats), never values.
+    """
+    import json
+
+    from concentrate.sources.allowlist import AllowlistCaller
+    from concentrate.sources.contract import READ_TOOLS, diff, run
+    from concentrate.sources.mcp_transport import LiveMcpCaller
+
+    with LiveMcpCaller() as live:
+        current = run(AllowlistCaller(live, READ_TOOLS, "Granola"))
+    if update or not baseline.exists():
+        baseline.parent.mkdir(parents=True, exist_ok=True)
+        baseline.write_text(json.dumps(current, indent=1, sort_keys=True) + "\n")
+        typer.echo(f"baseline written: {baseline}")
+        return
+    changes = diff(json.loads(baseline.read_text()), current)
+    if not changes:
+        typer.echo(f"no drift: {len(current['tools'])} probes match {baseline}")
+        return
+    typer.echo(f"DRIFT: {len(changes)} change(s) vs {baseline}")
+    for line in changes:
+        typer.echo(f"  {line}")
+    raise typer.Exit(1)
