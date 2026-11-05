@@ -1,0 +1,57 @@
+{
+  "corpus": "AMI Meeting Corpus",
+  "licence": "CC BY 4.0",
+  "attribution": "AMI Meeting Corpus, University of Edinburgh and partners (https://groups.inf.ed.ac.uk/ami/corpus/), CC BY 4.0",
+  "downloaded": "2026-11-04",
+  "files": [
+    {
+      "path": "EN2002b/EN2002b.Mix-Headset.wav",
+      "url": "https://groups.inf.ed.ac.uk/ami/AMICorpusMirror/amicorpus/EN2002b/audio/EN2002b.Mix-Headset.wav",
+      "bytes": 57179180,
+      "sha256": "50e2c8e4737850c4bf3cc24e7087c755e1c733cd91822106afd0df485ba64893",
+      "licence": "CC BY 4.0"
+    },
+    {
+      "path": "IB4003/IB4003.Mix-Headset.wav",
+      "url": "https://groups.inf.ed.ac.uk/ami/AMICorpusMirror/amicorpus/IB4003/audio/IB4003.Mix-Headset.wav",
+      "bytes": 64744152,
+      "sha256": "a28e876a8dc3ed076ce38a167d8de4cc1d3ff8c0b5142c57d4c194ece7752fc2",
+      "licence": "CC BY 4.0"
+    },
+    {
+      "path": "IS1008a/IS1008a.Mix-Headset.wav",
+      "url": "https://groups.inf.ed.ac.uk/ami/AMICorpusMirror/amicorpus/IS1008a/audio/IS1008a.Mix-Headset.wav",
+      "bytes": 30204093,
+      "sha256": "75ae8796ca2177fa0c77055de2fe2f95325b412dc7152a9b32c76c9884a3d382",
+      "licence": "CC BY 4.0"
+    },
+    {
+      "path": "IS1008b/IS1008b.Mix-Headset.wav",
+      "url": "https://groups.inf.ed.ac.uk/ami/AMICorpusMirror/amicorpus/IS1008b/audio/IS1008b.Mix-Headset.wav",
+      "bytes": 56593427,
+      "sha256": "0d992a210480c6e9652b317ed7f66261e80a1aa86f7e5c3dffd10e81b8e30de2",
+      "licence": "CC BY 4.0"
+    },
+    {
+      "path": "IS1008c/IS1008c.Mix-Headset.wav",
+      "url": "https://groups.inf.ed.ac.uk/ami/AMICorpusMirror/amicorpus/IS1008c/audio/IS1008c.Mix-Headset.wav",
+      "bytes": 49484093,
+      "sha256": "1965c56162efb29953d21a5e7f5659f7f78a41e8923b7c399d3b4bbf9ae4b0a9",
+      "licence": "CC BY 4.0"
+    },
+    {
+      "path": "IS1008d/IS1008d.Mix-Headset.wav",
+      "url": "https://groups.inf.ed.ac.uk/ami/AMICorpusMirror/amicorpus/IS1008d/audio/IS1008d.Mix-Headset.wav",
+      "bytes": 47388093,
+      "sha256": "22bc4c5ef7c033427426e84b168f71d162a42ed287ae4781aa2f6c06b67a6177",
+      "licence": "CC BY 4.0"
+    },
+    {
+      "path": "annotations/ami_public_manual_1.6.2.zip",
+      "url": "https://groups.inf.ed.ac.uk/ami/AMICorpusAnnotations/ami_public_manual_1.6.2.zip",
+      "bytes": 22887865,
+      "sha256": "b56e5babb2496b8795deeeda7e71178d7fbc9963f94276cf2a3f4b56ebbc9f9d",
+      "licence": "CC BY 4.0"
+    }
+  ]
+}

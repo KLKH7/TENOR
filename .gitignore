@@ -15,6 +15,9 @@ data/real*
 data/*.db
 data/cache/
 data/fixtures/large/
+# AMI corpus audio and annotations (CC BY 4.0, downloaded locally; only MANIFEST.json is committed)
+data/ami/*
+!data/ami/MANIFEST.json
 
 # Web build output
 web/node_modules/

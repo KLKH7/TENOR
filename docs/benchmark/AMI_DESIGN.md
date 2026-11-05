@@ -163,9 +163,9 @@ Questions are produced by a deterministic script (`concentrate ami-questions --s
 
 **Verdict:** AMI for v1, because its decision and action annotations make mechanical questions possible. ICSI is the better test of long-horizon memory over a real recurring team. Three consecutive Bed meetings (about 3 h) would be the natural v2, once we know which ICSI annotations carry decisions.
 
-## 8. Exact files to download (needs Kian's explicit permission)
+## 8. Exact files to download
 
-Nothing below has been downloaded. All files are CC BY 4.0 (AMI licence page). Sizes marked ≈ are computed from the verified lengths at 16 kHz, 16-bit mono (32 kB/s); they match the two listings checked (IB4003 62M, ES2008a 32M).
+**Downloaded 2026-11-04 with Kian's approval.** Checksums: [`data/ami/MANIFEST.json`](../../data/ami/MANIFEST.json). All 6 WAVs verified as 16 kHz, 16-bit mono PCM; the zip passes an integrity test. All files are CC BY 4.0 (AMI licence page). Sizes marked ≈ are computed from the verified lengths at 16 kHz, 16-bit mono (32 kB/s); they match the two listings checked (IB4003 62M, ES2008a 32M).
 
 Base: `https://groups.inf.ed.ac.uk/ami/AMICorpusMirror/amicorpus/`
 
@@ -186,10 +186,12 @@ Base: `https://groups.inf.ed.ac.uk/ami/AMICorpusMirror/amicorpus/`
 
 **Pages read for this doc** (all on `groups.inf.ed.ac.uk/ami/`, HTTP 200, 2026-11-04): `corpus/` (home), `license.shtml`, `download/`, `overview.shtml`, `signals.shtml`, `annotation.shtml`, `annotationpresent.shtml`, `meetingids.shtml`, `scenariomeetings.shtml`, `nonscenariomeetings.shtml`, `meetingrooms.shtml`, `datasets.shtml`, `dataproblems.shtml`, `ethicsandconsent.shtml`, the mirror listings for ES2008a, IB4003 and EN2002a, and `icsi/` (home, licence, download). Also the precedent's README, PROTOCOL, RESULTS and plans, and Wispr's Notetaker help pages.
 
-## 9. Open questions for Kian
+## 9. Decisions (Kian, 2026-11-04)
 
-1. **Go / no-go** on the 6-meeting set and about 3 h of playback, and permission to download the files in §8.
-2. **Consent form:** will you read the participants' consent form first?
-3. **Publishing product output:** may raw Granola and Wispr notes on AMI be committed (the precedent did), or only labels and aggregates?
-4. **Dedicated accounts:** can you create fresh Granola and Wispr accounts for AMI? Does a free plan cap the number of meetings or the history?
-5. **Wispr sign-in:** this still depends on the open OAuth question in [PRODUCTS.md](PRODUCTS.md).
+| Question | Decision |
+|---|---|
+| Go / no-go and download | **Go.** The 7 files in §8 are downloaded |
+| Dedicated accounts | **Yes:** fresh Granola and Wispr accounts holding only AMI meetings |
+| Publishing product output | **Scores only.** Raw Granola and Wispr notes on AMI stay local and are never committed; we publish labels and aggregates |
+
+**Still open:** reading the participants' consent form; free-plan limits on the fresh accounts; Wispr sign-in (see [PRODUCTS.md](PRODUCTS.md)).
