@@ -1,7 +1,10 @@
 {
   "meta": {
-    "date": "2026-11-05T01:57:02Z",
-    "git_sha": "16a6c8c",
+    "track": "notes-faithfulness",
+    "system": "granola",
+    "system_description": "Granola AI notes (summary_markdown) via Granola's official read-only MCP",
+    "date": "2026-11-05T02:07:45Z",
+    "git_sha": "6fe6d53",
     "check_model": "claude-haiku-5-5",
     "check_effort": "low",
     "recheck_model": "claude-sonnet-5-5",
@@ -10,8 +13,7 @@
     "prompt": "notes_audit.v1",
     "seed": 0,
     "meetings": 4,
-    "source": "Granola official MCP (read-only), synced to a private store",
-    "notes_field": "summary_markdown (Granola AI notes)",
+    "pool_meetings": 4,
     "quote_usd": 0.0,
     "cost_usd": 0.2606,
     "spent_this_invocation_usd": 0,
@@ -29,21 +31,21 @@
     },
     "missing_verdicts": {},
     "by_stage": {
-      "notes_audit.check": {
+      "faithfulness.check": {
         "calls": 4,
         "cached": 4,
         "input_tokens": 5837,
         "output_tokens": 8377,
         "usd": 0.0
       },
-      "notes_audit.recheck": {
+      "faithfulness.recheck": {
         "calls": 4,
         "cached": 4,
         "input_tokens": 1712,
         "output_tokens": 2643,
         "usd": 0.0
       },
-      "notes_audit.strict": {
+      "faithfulness.strict": {
         "calls": 4,
         "cached": 4,
         "input_tokens": 5837,
@@ -478,7 +480,7 @@
     }
   ],
   "precheck": {
-    "numbers_checked": 20,
+    "numbers_checked": 21,
     "date_words_checked": 6,
     "name_candidates_checked": 80,
     "claims_flagged": 0,
@@ -488,6 +490,48 @@
     "claims_with_calendar_only_names": 3,
     "llm_labels_of_flagged": {},
     "flagged_but_llm_supported": 0
+  },
+  "cross_meeting_bleed": {
+    "heuristic": "deterministic term match; needs human confirmation",
+    "ungrounded_claims": {
+      "n": 29,
+      "k": 11,
+      "rate": 0.3793,
+      "ci95": [
+        0.2269,
+        0.56
+      ]
+    },
+    "ungrounded_claims_strong": {
+      "n": 29,
+      "k": 0,
+      "rate": 0.0,
+      "ci95": [
+        0.0,
+        0.117
+      ]
+    },
+    "all_claims_baseline": {
+      "n": 132,
+      "k": 33,
+      "rate": 0.25,
+      "ci95": [
+        0.1839,
+        0.3302
+      ]
+    },
+    "all_claims_baseline_strong": {
+      "n": 132,
+      "k": 0,
+      "rate": 0.0,
+      "ci95": [
+        0.0,
+        0.0283
+      ]
+    },
+    "term_kinds_in_flagged_ungrounded": {
+      "word": 12
+    }
   },
   "reliability": {
     "check_vs_recheck_sample": {
@@ -523,7 +567,7 @@
           "k": 0,
           "rate": 0.0,
           "ci95": [
-            -0.0,
+            0.0,
             0.0876
           ]
         },
@@ -531,7 +575,7 @@
           "k": 0,
           "rate": 0.0,
           "ci95": [
-            -0.0,
+            0.0,
             0.0876
           ]
         },
@@ -566,7 +610,7 @@
           "k": 0,
           "rate": 0.0,
           "ci95": [
-            -0.0,
+            0.0,
             0.0876
           ]
         },
@@ -721,7 +765,7 @@
           "k": 0,
           "rate": 0.0,
           "ci95": [
-            -0.0,
+            0.0,
             0.0876
           ]
         },
@@ -764,7 +808,7 @@
           "k": 0,
           "rate": 0.0,
           "ci95": [
-            -0.0,
+            0.0,
             0.0876
           ]
         },
