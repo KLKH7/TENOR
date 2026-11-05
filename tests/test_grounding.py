@@ -218,6 +218,47 @@ def test_quote_prices_excerpt_and_worst_case() -> None:
     assert 0 < q.usd(escalate_share=0.0) < q.usd(escalate_share=1.0)
 
 
+def test_span_retrieval_scores_adjacent_lines_together() -> None:
+    """A point split over two short turns beats one line repeating a single query word."""
+    note = make_note(
+        "n2",
+        "2026-10-07",
+        "Remote",
+        [
+            ("them", None, "The remote case."),
+            ("them", None, "Weather is nice."),
+            ("them", None, "Make the case from wood."),
+            ("them", None, "With rubber buttons for grip."),
+            ("them", None, "Lunch now."),
+        ],
+    )
+    weights = G.term_weights(note.utterances)
+    query = "Case made of wood with rubber buttons"
+    assert G.nearest_spans(query, note.utterances, 1, 2, weights=weights) == [2, 3]
+    # span=1 is exactly the single-line retrieval used so far (cache keys unchanged)
+    one = G.nearest_spans(query, note.utterances, 2, 1, weights=weights)
+    assert one == G.nearest_lines(query, note.utterances, 2, weights=weights, stemmed=True)
+    # Next best: "rubber buttons" (3-4), then "case ... wood" (1-2); each run adds a new line
+    assert G.nearest_spans(query, note.utterances, 3, 2, weights=weights) == [1, 2, 3, 4]
+    p = G.plan(note, [Claim("c001", "", "", query)], k=1, window=0, span=2)  # type: ignore[arg-type]
+    assert p.candidates["c001"] == [2, 3] and p.excerpt == [2, 3]
+
+
+def test_labels_note_is_input_only_and_off_by_default() -> None:
+    note = _note()
+    claims = [Claim("c001", "", "", "Price raised to $25")]
+    plain = G.request(note, claims, None)  # type: ignore[arg-type]
+    assert "<speaker_labels>" not in plain.system
+    req = G.request(note, claims, None, labels_note="Labels are arbitrary.")  # type: ignore[arg-type]
+    assert "<speaker_labels>\nLabels are arbitrary.\n</speaker_labels>" in req.system
+    assert req.prompt_id == plain.prompt_id == "grounding.v1"
+    assert req.system.index("</calendar>") < req.system.index("<speaker_labels>")
+    assert req.system.index("</speaker_labels>") < req.system.index("<transcript>")
+    q0 = G.quote(note, claims)  # type: ignore[arg-type]
+    q1 = G.quote(note, claims, labels_note="Labels are arbitrary.")  # type: ignore[arg-type]
+    assert q1.full_input > q0.full_input
+
+
 # -- perturbations and scoring -------------------------------------------------------------------
 
 

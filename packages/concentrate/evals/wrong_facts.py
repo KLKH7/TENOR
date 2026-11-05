@@ -1,22 +1,28 @@
 """Stages 2 and 3 of "Anatomy of a wrong fact" (``docs/benchmark/WRONG_FACTS.md``).
 
 **Stage 2, note-writing.** Each claim in a product's notes on an AMI meeting is checked twice
-by the grounding checker (:mod:`concentrate.evals.grounding`, reused as is): against the
+by the grounding checker (:mod:`concentrate.evals.grounding`, prompt unchanged): against the
 product's *own* transcript, and against AMI's *human* transcript. The pair of verdicts says
-where a wrong claim came from:
+where a wrong claim came from (``bad`` = unsupported or contradicted):
 
 ==============  ==================  ======================================================
 own transcript  human transcript    class
 ==============  ==================  ======================================================
 supported       supported           ``ok``
-supported       anything else       ``transcript_propagated``: the note faithfully repeats a
+supported       bad                 ``transcript_propagated``: the note faithfully repeats a
                                     transcription error
-unsupported/    supported           ``human_only``: the meeting said it, the product's
-contradicted                        transcript lost it, the note has it anyway
-unsupported/    anything else       ``note_error``: the note-writer added it
-contradicted
-inferred        any                 ``inferred``: overreach, not a hard fact error
+supported       inferred            ``borderline``: one notch apart, mostly checker noise
+inferred        supported           ``borderline`` (the same, the other way round)
+bad             supported           ``human_only``: the meeting said it, the product's
+                                    transcript lost it, the note has it anyway
+bad             bad or inferred     ``note_error``: the note-writer added it
+inferred        bad or inferred     ``inferred``: overreach, not a hard fact error
 ==============  ==================  ======================================================
+
+Both checks see the same claims, rendered the same way (:data:`RENDER`): AMI's transcript
+labels each speaker by role plus the name they introduced themselves by
+(:func:`facts.spoken_names`), and both calls carry :data:`LABELS_NOTE`, which says the notes'
+speaker labels are arbitrary and must be matched by content.
 
 **Stage 3, answering.** Given product answers to the ``recorded`` AMI questions, the shared
 judge (``judge.v1``) grades each. For every wrong answer we ask whether the gold fact was
@@ -66,16 +72,33 @@ ASSUMED_ANSWER_TOKENS = 80
 JUDGE_OUT_TOKENS = 90
 
 Stage2Class = Literal[
-    "ok", "note_error", "transcript_propagated", "human_only", "inferred", "missing"
+    "ok", "note_error", "transcript_propagated", "human_only", "borderline", "inferred", "missing"
 ]
 STAGE2_CLASSES: tuple[Stage2Class, ...] = (
     "ok",
     "note_error",
     "transcript_propagated",
     "human_only",
+    "borderline",
     "inferred",
     "missing",
 )
+# How stage 2 renders the checker's input. v1: AMI speakers by role only, no labels note,
+# single-line retrieval (k=8, window=1). v2: role + self-introduced name, LABELS_NOTE, and
+# retrieval over runs of SPAN adjacent lines. Logged with every result.
+RENDER = "stage2-input.v2"
+LABELS_NOTE = (
+    "The claims come from one product's notes, which name people by that product's own labels: "
+    '"Speaker 2", or a first name it picked up. These labels are arbitrary and need not match '
+    "this transcript's labels (roles, letters, other numbers or names). Match people by what "
+    "they said, not by label: a claim is not contradicted just because its label differs. Check "
+    "who said something only when the claim's name also appears in this transcript's labels."
+)
+# Retrieval for the excerpt pass (docs/benchmark/WRONG_FACTS.md: chosen on DEV IS1008a).
+K = 16
+SPAN = 2
+WINDOW = 0
+CHECK: dict[str, Any] = {"k": K, "span": SPAN, "window": WINDOW, "labels_note": LABELS_NOTE}
 _BAD = ("unsupported", "contradicted")
 Stage = Literal["correct", "transcription", "notes_or_answering", "answering", "unknown"]
 
@@ -103,9 +126,15 @@ def own_transcript(note: MeetingNote, *, drop_mic: bool) -> MeetingNote:
 
 
 def classify(own: Label | None, human: Label | None) -> Stage2Class:
-    """Where a claim went wrong, from its verdicts against the two transcripts."""
+    """Where a claim went wrong, from its verdicts against the two transcripts.
+
+    A one-notch gap (supported on one side, inferred on the other) is ``borderline``: the
+    same claim judged against two renderings of the same speech, not evidence of an error.
+    """
     if own is None or human is None:
         return "missing"
+    if {own, human} == {"supported", "inferred"}:
+        return "borderline"
     if own == "supported":
         return "ok" if human == "supported" else "transcript_propagated"
     if own in _BAD:
@@ -152,7 +181,7 @@ def quote_stage2(jobs: Sequence[Stage2Job], model: str = CHECK_MODEL) -> dict[st
     """Offline price of checking every job against both transcripts ($0 to compute)."""
     rows: list[dict[str, Any]] = []
     for j in jobs:
-        own, hum = G.quote(j.own, j.claims), G.quote(j.human, j.claims)
+        own, hum = G.quote(j.own, j.claims, **CHECK), G.quote(j.human, j.claims, **CHECK)
         rows.append(
             {
                 "meeting": j.meeting_id,
@@ -166,6 +195,7 @@ def quote_stage2(jobs: Sequence[Stage2Job], model: str = CHECK_MODEL) -> dict[st
         )
     return {
         "model": model,
+        "render": RENDER,
         "jobs": len(rows),
         "claims": sum(r["claims"] for r in rows),
         "calls_max": 4 * len(rows),
@@ -188,16 +218,19 @@ class ClaimRow(BaseModel):
     own: Label | None
     human: Label | None
     cls: Stage2Class
-    own_lines: list[int]
+    own_lines: list[int]  # positions in the job's own transcript (banner/mic dropped, re-indexed)
     human_lines: list[int]
+    # The same lines as utterance IDs: unambiguous against the raw note (own_lines are not).
+    own_ids: list[str] = []
+    human_ids: list[str] = []
     own_precheck: dict[str, list[str]]  # numbers/dates/names the product transcript never says
     human_precheck: dict[str, list[str]]  # ... that AMI's manual transcript never says
 
 
 def run_stage2(job: Stage2Job, client: LLMClient) -> list[ClaimRow]:
     """Check one job's claims against both transcripts and classify each claim."""
-    own = G.ground_claims(job.own, job.claims, client)
-    hum = G.ground_claims(job.human, job.claims, client)
+    own = G.ground_claims(job.own, job.claims, client, **CHECK)
+    hum = G.ground_claims(job.human, job.claims, client, **CHECK)
     rows = []
     for c, o, h in zip(job.claims, own.claims, hum.claims, strict=True):
         rows.append(
@@ -212,11 +245,23 @@ def run_stage2(job: Stage2Job, client: LLMClient) -> list[ClaimRow]:
                 cls=classify(o.verdict, h.verdict),
                 own_lines=o.lines,
                 human_lines=h.lines,
+                own_ids=o.evidence,
+                human_ids=h.evidence,
                 own_precheck=o.precheck,
                 human_precheck=h.precheck,
             )
         )
     return rows
+
+
+def reclassify(rows: Iterable[ClaimRow]) -> list[ClaimRow]:
+    """``rows`` with ``cls`` recomputed from their stored verdicts by :func:`classify` ($0)."""
+    return [r.model_copy(update={"cls": classify(r.own, r.human)}) for r in rows]
+
+
+def load_claim_rows(path: Path) -> list[ClaimRow]:
+    """Read a ``stage2*.claims.jsonl`` (rows from before ``own_ids`` existed load too)."""
+    return [ClaimRow.model_validate_json(x) for x in path.read_text().splitlines() if x.strip()]
 
 
 def _share(k: int, n: int) -> dict[str, Any]:

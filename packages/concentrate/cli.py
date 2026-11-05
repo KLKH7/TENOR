@@ -2935,19 +2935,24 @@ def facts_stage2(
 ) -> None:
     """Stage 2: check each product note claim against its own and AMI's human transcript.
 
-    Deterministic given the LLM cache (no randomness, so no --seed).
+    Deterministic given the LLM cache (no randomness, so no --seed). The checker input is
+    rendered as ``wrong_facts.RENDER`` says; ``--quote`` prices a run with that rendering.
     """
     import json
 
     from concentrate.ami.corpus import load_meeting
-    from concentrate.ami.facts import human_note
+    from concentrate.ami.facts import human_note, spoken_names
+    from concentrate.ami.products import AMI_SET
     from concentrate.evals import grounding as G
     from concentrate.evals import wrong_facts as W
     from concentrate.llm.client import BudgetExceeded
 
     recs = _facts_recordings(granola_db, wispr_db, overrides, product)
     mids = sorted({m for by_mid in recs.values() for m in by_mid})
-    human = {m: human_note(load_meeting(m, zip_path)) for m in mids}
+    # Names come from self-introductions anywhere in the AMI set (IS1008a names IS1008b-d).
+    meetings = {m: load_meeting(m, zip_path) for m in sorted({*AMI_SET, *mids})}
+    names = spoken_names(meetings.values())
+    human = {m: human_note(meetings[m], names) for m in mids}
     jobs = W.stage2_jobs(recs, human)
     full = W.quote_stage2(jobs, model)
     run = W.pilot(jobs) if pilot else jobs
@@ -2955,7 +2960,7 @@ def facts_stage2(
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "stage2.quote.json").write_text(json.dumps(full, indent=1) + "\n")
     typer.echo(
-        f"full run: {full['jobs']} notes, {full['claims']} claims, {model} "
+        f"full run ({W.RENDER}): {full['jobs']} notes, {full['claims']} claims, {model} "
         f"${full['usd_no_escalation']:.4f} (no escalation) to ${full['usd_worst']:.4f} (worst)"
     )
     if pilot:
@@ -2978,8 +2983,11 @@ def facts_stage2(
         model=model,
         effort=G.EFFORT,
         prompt=G.PROMPT_ID,
-        k=G.K,
-        window=G.WINDOW,
+        render=W.RENDER,
+        k=W.K,
+        span=W.SPAN,
+        window=W.WINDOW,
+        spoken_names=len(names),
         drop_mic=W.DROP_MIC,
         max_usd=cap,
         stopped=stopped,
@@ -2995,6 +3003,37 @@ def facts_stage2(
         f"spent ${meta['spent_usd']:.4f}; full run projected ${meta['full_run_projected_usd']}"
         f" (x{W.SAFETY}) · {out_dir / stem}.json" + (f" · STOPPED: {stopped}" if stopped else "")
     )
+
+
+@facts_app.command("reclassify")
+def facts_reclassify(
+    claims: Annotated[Path, typer.Option(help="A stage-2 claims JSONL.")] = FACTS_OUT
+    / "stage2.claims.jsonl",
+    out_dir: OutDirOpt = FACTS_OUT,
+) -> None:
+    """Re-apply the current stage-2 class rules to stored verdicts ($0, no LLM calls).
+
+    Writes ``<stem>.reclassified.json`` (aggregate only) next to the results.
+    """
+    import json
+    from collections import Counter
+
+    from concentrate.evals import wrong_facts as W
+
+    old = W.load_claim_rows(claims)
+    new = W.reclassify(old)
+    moved = Counter(f"{a.cls}->{b.cls}" for a, b in zip(old, new, strict=True) if a.cls != b.cls)
+    meta = _provenance(track="wrong-facts.stage2.reclassify", source=str(claims), llm=None)
+    products = W.aggregate_stage2(new)
+    agg = {"meta": meta, "moved": dict(moved), "products": products}
+    stem = claims.name.removesuffix(".claims.jsonl")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    path = out_dir / f"{stem}.reclassified.json"
+    path.write_text(json.dumps(agg, indent=1) + "\n")
+    for name, a in products.items():
+        shares = "  ".join(f"{c}={v['k']}" for c, v in a["classes"].items() if v["k"])
+        typer.echo(f"{name}: {a['claims']} claims  {shares}")
+    typer.echo(f"moved: {dict(moved)} · {path}")
 
 
 @facts_app.command("stage3")

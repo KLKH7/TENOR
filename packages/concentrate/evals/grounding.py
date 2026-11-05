@@ -9,8 +9,9 @@ It is built to be cheap:
 
 1. **Claims** come from :func:`concentrate.evals.faithfulness.split_claims`.
 2. **Candidate lines** are retrieved deterministically, per claim: the ``k`` lines sharing the
-   most IDF-weighted, stemmed content words (:func:`faithfulness.nearest_lines`), each widened
-   by ``window`` neighbours. The pre-check (numbers, dates, names the transcript never says)
+   most IDF-weighted, stemmed content words (:func:`faithfulness.nearest_lines`), or with
+   ``span > 1`` the ``k`` best runs of ``span`` adjacent lines (:func:`nearest_spans`), each
+   widened by ``window`` neighbours. The pre-check (numbers, dates, names the transcript never says)
    runs here too, at $0.
 3. **One call per meeting** (excerpt pass) shows the model only the union of candidate lines.
 4. **Full-transcript fallback**: claims with no candidate lines, and (by default) every claim
@@ -27,7 +28,7 @@ from __future__ import annotations
 
 import math
 from collections import Counter
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any, Literal
 
@@ -51,8 +52,9 @@ from concentrate.llm.client import PRICING, LLMClient, LLMRequest, estimate_toke
 PROMPT_ID = "grounding.v1"
 MODEL = "claude-haiku-5-5"
 EFFORT = "low"
-K = 8  # candidate lines per claim, before widening
+K = 8  # candidate lines (or spans) per claim, before widening
 WINDOW = 1  # neighbours added on each side of a candidate line
+SPAN = 1  # adjacent lines scored together as one candidate (1 = single lines)
 QUOTE_WORDS = 25
 # Output tokens per claim (reason + label + a few line numbers), padded; used only for quotes.
 OUT_TOKENS_PER_CLAIM = 80
@@ -122,6 +124,7 @@ class GroundingResult(BaseModel):
     model: str
     k: int
     window: int
+    span: int = SPAN
     escalate: bool
     transcript_lines: int
     excerpt_lines: int
@@ -143,13 +146,52 @@ def term_weights(utterances: Sequence[Utterance]) -> dict[str, float]:
     return {t: math.log(1 + n / d) for t, d in df.items()}
 
 
+def nearest_spans(
+    query: str,
+    utterances: Sequence[Utterance],
+    k: int,
+    span: int,
+    *,
+    weights: Mapping[str, float],
+) -> list[int]:
+    """Line positions covered by the ``k`` best runs of ``span`` adjacent lines.
+
+    A run scores the IDF weight of the query's stemmed content terms found anywhere in it, so a
+    point made across several short turns (a fragmented transcript) can outrank one line that
+    repeats a single rare word. Runs adding no new line are skipped; ties go to the earlier run.
+    With ``span=1`` this is :func:`faithfulness.nearest_lines` with ``weights``.
+    """
+    if span <= 1:
+        return nearest_lines(query, utterances, k, weights=weights, stemmed=True)
+    want = content_terms(query, stemmed=True)
+    terms = [want & content_terms(u.text, stemmed=True) for u in utterances]
+    n = len(utterances)
+    scored: list[tuple[float, int]] = []
+    for s in range(max(1, n - span + 1)):
+        shared = set().union(*terms[s : s + span])
+        score = sum(weights.get(t, 0.0) for t in shared)
+        if score > 0:
+            scored.append((score, -s))
+    out: set[int] = set()
+    taken = 0
+    for _, neg in sorted(scored, reverse=True):
+        lines = set(range(-neg, min(n, -neg + span)))
+        if lines <= out:
+            continue
+        out |= lines
+        taken += 1
+        if taken == k:
+            break
+    return sorted(out)
+
+
 @dataclass(frozen=True)
 class Plan:
     """The $0 part of a check: claims, their candidate lines and pre-check flags."""
 
     note: MeetingNote
     claims: tuple[Claim, ...]
-    candidates: dict[str, list[int]]  # claim_id -> top-k lines, before widening
+    candidates: dict[str, list[int]]  # claim_id -> top-k lines (or span lines), before widening
     excerpt: list[int]  # union of widened candidates, sorted
     prechecks: dict[str, dict[str, list[str]]]
 
@@ -157,7 +199,14 @@ class Plan:
         return [c for c in self.claims if self.candidates[c.claim_id]]
 
 
-def plan(note: MeetingNote, claims: Sequence[Claim], *, k: int = K, window: int = WINDOW) -> Plan:
+def plan(
+    note: MeetingNote,
+    claims: Sequence[Claim],
+    *,
+    k: int = K,
+    window: int = WINDOW,
+    span: int = SPAN,
+) -> Plan:
     """Retrieve candidate lines and run the pre-check for every claim ($0, deterministic)."""
     weights = term_weights(note.utterances)
     n = len(note.utterances)
@@ -170,7 +219,7 @@ def plan(note: MeetingNote, claims: Sequence[Claim], *, k: int = K, window: int 
     pre: dict[str, dict[str, list[str]]] = {}
     for c in claims:
         query = f"{c.context} {c.text}".strip()
-        hits = nearest_lines(query, note.utterances, k, weights=weights, stemmed=True)
+        hits = nearest_spans(query, note.utterances, k, span, weights=weights)
         cands[c.claim_id] = hits
         for i in hits:
             shown.update(range(max(0, i - window), min(n, i + window + 1)))
@@ -203,13 +252,24 @@ def transcript_lines(note: MeetingNote, lines: Sequence[int] | None = None) -> s
 
 
 def request(
-    note: MeetingNote, claims: Sequence[Claim], lines: Sequence[int] | None, *, model: str = MODEL
+    note: MeetingNote,
+    claims: Sequence[Claim],
+    lines: Sequence[int] | None,
+    *,
+    model: str = MODEL,
+    labels_note: str | None = None,
 ) -> LLMRequest:
-    """One check call: an excerpt (``lines``) or the full transcript (``lines=None``)."""
+    """One check call: an excerpt (``lines``) or the full transcript (``lines=None``).
+
+    ``labels_note``, when given, is shown after the calendar context as ``<speaker_labels>``:
+    input about how the claims' speaker labels relate to the transcript's (the prompt is
+    unchanged).
+    """
     scope: Pass = "full" if lines is None else "excerpt"
+    labels = f"<speaker_labels>\n{labels_note}\n</speaker_labels>\n\n" if labels_note else ""
     system = (
         f"{load_prompt(PROMPT_ID)}\n\n<scope>{scope}</scope>\n\n"
-        f"<calendar>\n{calendar_context(note)}\n</calendar>\n\n"
+        f"<calendar>\n{calendar_context(note)}\n</calendar>\n\n{labels}"
         f"<transcript>\n{transcript_lines(note, lines)}\n</transcript>"
     )
     return LLMRequest(
@@ -266,15 +326,18 @@ def ground_claims(
     escalate: bool = True,
     k: int = K,
     window: int = WINDOW,
+    span: int = SPAN,
+    labels_note: str | None = None,
 ) -> GroundingResult:
     """Check ``claims`` against ``note``'s transcript: excerpt pass, then full-transcript pass."""
-    p = plan(note, claims, k=k, window=window)
+    p = plan(note, claims, k=k, window=window, span=span)
     n = len(note.utterances)
     calls = 0
     first: dict[str, _Verdict] = {}
     in_excerpt = p.excerpt_claims()
     if in_excerpt:
-        reply = client.structured(request(note, in_excerpt, p.excerpt), GroundReply)
+        req = request(note, in_excerpt, p.excerpt, labels_note=labels_note)
+        reply = client.structured(req, GroundReply)
         first = _read(reply, in_excerpt, set(p.excerpt))
         calls += 1
     retry = [
@@ -284,7 +347,7 @@ def ground_claims(
     ]
     final: dict[str, tuple[_Verdict, Pass]] = {cid: (v, "excerpt") for cid, v in first.items()}
     if retry and n:
-        reply = client.structured(request(note, retry, None), GroundReply)
+        reply = client.structured(request(note, retry, None, labels_note=labels_note), GroundReply)
         final |= {cid: (v, "full") for cid, v in _read(reply, retry, set(range(n))).items()}
         calls += 1
     results: list[ClaimResult] = []
@@ -319,6 +382,7 @@ def ground_claims(
         model=client.model,
         k=k,
         window=window,
+        span=span,
         escalate=escalate,
         transcript_lines=n,
         excerpt_lines=len(p.excerpt),
@@ -355,10 +419,25 @@ class Quote:
         return (tokens_in * p_in * 1.25 + out * p_out) / 1e6
 
 
-def quote(note: MeetingNote, claims: Sequence[Claim], *, k: int = K, window: int = WINDOW) -> Quote:
+def quote(
+    note: MeetingNote,
+    claims: Sequence[Claim],
+    *,
+    k: int = K,
+    window: int = WINDOW,
+    span: int = SPAN,
+    labels_note: str | None = None,
+) -> Quote:
     """Price a check without calling anything: excerpt pass plus a worst-case full pass."""
-    p = plan(note, claims, k=k, window=window)
+    p = plan(note, claims, k=k, window=window, span=span)
     ex = p.excerpt_claims()
-    ex_in = estimate_tokens(request(note, ex, p.excerpt).system + claims_message(ex)) if ex else 0
-    full_in = estimate_tokens(request(note, claims, None).system + claims_message(claims))
+    ln = labels_note
+    ex_in = (
+        estimate_tokens(request(note, ex, p.excerpt, labels_note=ln).system + claims_message(ex))
+        if ex
+        else 0
+    )
+    full_in = estimate_tokens(
+        request(note, claims, None, labels_note=ln).system + claims_message(claims)
+    )
     return Quote(ex_in, full_in, len(claims), len(p.excerpt), len(note.utterances))

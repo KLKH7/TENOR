@@ -136,6 +136,89 @@ def test_stage1_perfect_transcript_scores_clean(meeting) -> None:  # type: ignor
     assert r.name_insertions == 0
 
 
+def _intro_zip(
+    path: Path, mid: str, acts: list[tuple[str, str]], roles: dict[str, tuple[str, str]]
+) -> Path:
+    """A minimal NXT zip: one dialogue act per (agent, text); ``roles``: agent -> (role,
+    participant code)."""
+    words: dict[str, list[str]] = {a: [] for a in roles}
+    dacts: dict[str, list[str]] = {a: [] for a in roles}
+    t = 0.0
+    for n, (agent, sentence) in enumerate(acts):
+        first = len(words[agent])
+        for tok in re.findall(r"[\w'-]+|[.,?!]", sentence):
+            i = len(words[agent])
+            punc = ' punc="true"' if tok in ".,?!" else ""
+            words[agent].append(
+                f'<w nite:id="{mid}.{agent}.words{i}" starttime="{t}" endtime="{t + 0.9}"'
+                f"{punc}>{tok}</w>"
+            )
+            t += 1.0
+        last = len(words[agent]) - 1
+        dacts[agent].append(
+            f'<dact nite:id="{mid}.{agent}.da.{n}"><nite:child href="{mid}.{agent}.words.xml'
+            f'#id({mid}.{agent}.words{first})..id({mid}.{agent}.words{last})"/></dact>'
+        )
+    speakers = "".join(
+        f'<speaker nxt_agent="{a}" role="{r}" global_name="{p}" channel="{k}"/>'
+        for k, (a, (r, p)) in enumerate(roles.items())
+    )
+    meetings = (
+        f'<nite:root {NS}><meeting observation="{mid}" type="scenario" duration="60">'
+        f"{speakers}</meeting></nite:root>"
+    )
+    with zipfile.ZipFile(path, "w") as zf:
+        zf.writestr("corpusResources/meetings.xml", meetings)
+        for a in roles:
+            zf.writestr(
+                f"words/{mid}.{a}.words.xml", f"<nite:root {NS}>{''.join(words[a])}</nite:root>"
+            )
+            zf.writestr(
+                f"dialogueActs/{mid}.{a}.dialog-act.xml",
+                f"<nite:root {NS}>{''.join(dacts[a])}</nite:root>",
+            )
+    return path
+
+
+def test_spoken_names_label_ami_speakers_by_self_introduction(tmp_path: Path) -> None:
+    acts = [
+        ("A", "Okay, my name is uh Shrida Daseri, the project manager."),
+        ("B", "And I'm Agnes, I do the interface."),
+        ("C", "I'm from India and I'm not sure."),  # no name: "from", lower case
+        ("D", "I am the Marketing Expert."),  # a role, not a name
+        ("A", "Thanks Agnes, and Ed will do marketing for us."),  # names someone else
+    ]
+    roles = {"A": ("PM", "PA"), "B": ("UI", "PB"), "C": ("ID", "PC"), "D": ("ME", "PD")}
+    m = load_meeting("XX0002a", _intro_zip(tmp_path / "a.zip", "XX0002a", acts, roles))
+    names = F.spoken_names([m])
+    assert names == {"PA": "Shrida Daseri", "PB": "Agnes"}
+    labels = [u.speaker_name for u in F.human_note(m, names).utterances]
+    assert labels[:4] == [
+        "Project Manager, Shrida Daseri",
+        "User Interface Designer, Agnes",
+        "Industrial Designer",
+        "Marketing Expert",
+    ]
+    assert [u.speaker_name for u in F.human_note(m).utterances][1] == "User Interface Designer"
+    # Participant codes carry a name to a later meeting of the series, where the agent letters
+    # differ: there Agnes (PB) is agent C and the project manager (PA) is agent B.
+    later = [("C", "So the case is wood."), ("B", "Any thoughts?")]
+    swapped = {"B": ("PM", "PA"), "C": ("UI", "PB")}
+    m2 = load_meeting("XX0002b", _intro_zip(tmp_path / "b.zip", "XX0002b", later, swapped))
+    assert [u.speaker_name for u in F.human_note(m2, names).utterances] == [
+        "User Interface Designer, Agnes",
+        "Project Manager, Shrida Daseri",
+    ]
+
+
+def test_spoken_names_drop_a_participant_with_two_names(tmp_path: Path) -> None:
+    acts = [("A", "My name is Agnes."), ("A", "Sorry, I'm Christine, Agnes is not here.")]
+    m = load_meeting(
+        "XX0003a", _intro_zip(tmp_path / "c.zip", "XX0003a", acts, {"A": ("PM", "PA")})
+    )
+    assert F.spoken_names([m]) == {}
+
+
 def test_align_reports_substitution_span() -> None:
     ops = F.align(["a", "b", "x", "c"], ["z", "a", "b", "y", "y", "c", "q"])
     assert F.aligned_span(ops, 2, 3) == [3, 4]  # "x" -> "y y"
@@ -221,11 +304,56 @@ NOTES = """## Summary
 
 def test_classify_table() -> None:
     assert W.classify("supported", "supported") == "ok"
-    assert W.classify("supported", "inferred") == "transcript_propagated"
+    assert W.classify("supported", "contradicted") == "transcript_propagated"
+    assert W.classify("supported", "unsupported") == "transcript_propagated"
     assert W.classify("contradicted", "supported") == "human_only"
+    assert W.classify("unsupported", "supported") == "human_only"
     assert W.classify("unsupported", "unsupported") == "note_error"
-    assert W.classify("inferred", "supported") == "inferred"
+    assert W.classify("contradicted", "inferred") == "note_error"
+    assert W.classify("inferred", "contradicted") == "inferred"
+    assert W.classify("inferred", "inferred") == "inferred"
     assert W.classify(None, "supported") == "missing"
+
+
+def test_one_notch_gaps_are_borderline_not_errors() -> None:
+    """Supported on one side and inferred on the other is checker noise, either way round."""
+    assert W.classify("supported", "inferred") == "borderline"
+    assert W.classify("inferred", "supported") == "borderline"
+
+
+def test_reclassify_old_rows_offline(tmp_path: Path) -> None:
+    """Rows written before own_ids existed load, and get the current class rules ($0)."""
+    old = {
+        "meeting_id": MID,
+        "product": "wispr",
+        "section": "s",
+        "text": "t",
+        "own_lines": [1],
+        "human_lines": [2],
+        "own_precheck": {},
+        "human_precheck": {},
+    }
+    path = tmp_path / "stage2.claims.jsonl"
+    path.write_text(
+        "\n".join(
+            json.dumps(old | {"claim_id": f"c{i}", "own": o, "human": h, "cls": cls})
+            for i, (o, h, cls) in enumerate(
+                [
+                    ("supported", "inferred", "transcript_propagated"),
+                    ("inferred", "supported", "inferred"),
+                    ("supported", "contradicted", "transcript_propagated"),
+                ]
+            )
+        )
+        + "\n"
+    )
+    rows = W.load_claim_rows(path)
+    assert [r.cls for r in rows] == ["transcript_propagated", "inferred", "transcript_propagated"]
+    assert rows[0].own_ids == []
+    new = W.reclassify(rows)
+    assert [r.cls for r in new] == ["borderline", "borderline", "transcript_propagated"]
+    agg = W.aggregate_stage2(new)["wispr"]["classes"]
+    assert agg["borderline"]["k"] == 2 and agg["transcript_propagated"]["k"] == 1
 
 
 def test_stage2_separates_note_errors_from_propagated_ones(meeting, tmp_path: Path) -> None:  # type: ignore[no-untyped-def]
@@ -235,8 +363,14 @@ def test_stage2_separates_note_errors_from_propagated_ones(meeting, tmp_path: Pa
     assert all(u.channel.value == "them" for u in jobs[0].own.utterances)  # mic dropped
     q = W.quote_stage2(jobs)
     assert q["usd_worst"] > q["usd_no_escalation"] > 0 and q["calls_max"] == 4
-    rows = W.run_stage2(jobs[0], _client(tmp_path, _Fake()))
+    fake = _Fake()
+    rows = W.run_stage2(jobs[0], _client(tmp_path, fake))
     assert [r.cls for r in rows] == ["transcript_propagated", "note_error", "human_only", "ok"]
+    # Lines are positions in the banner- and mic-stripped transcript; the IDs say which
+    # utterance of the raw note they are (the banner and the mic turn were raw lines 0 and 1).
+    assert rows[3].own_lines == [2] and rows[3].own_ids == ["p1:0004"]
+    # Both checks carry the speaker-labels note.
+    assert fake.requests and all("<speaker_labels>" in r.system for r in fake.requests)
     agg = W.aggregate_stage2(rows)["granola"]
     assert agg["classes"]["note_error"]["k"] == 1 and agg["claims"] == 4
     assert agg["matrix"]["supported/unsupported"] == 1

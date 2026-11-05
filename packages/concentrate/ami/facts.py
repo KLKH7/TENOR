@@ -35,9 +35,10 @@ extraction or alignment changes.
 
 from __future__ import annotations
 
+import re
 from bisect import bisect_left, bisect_right
 from collections import Counter
-from collections.abc import Iterable, Sequence
+from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
 from datetime import timedelta
 
@@ -140,12 +141,16 @@ def stream(utterances: Iterable[str]) -> Stream:
 TURN_GAP_S = 1.0  # a pause this long starts a new word turn
 
 
-def human_note(m: AmiMeeting) -> MeetingNote:
+def human_note(m: AmiMeeting, names: Mapping[str, str] | None = None) -> MeetingNote:
     """AMI's manual transcript as a :class:`MeetingNote`: one utterance per dialogue act
     (:func:`corpus.meeting_note`), or, for a meeting without dialogue acts (EN2002b), one per
     word turn: a new turn at a change of speaker or a pause of :data:`TURN_GAP_S`. Turns keep
-    AMI's punctuation, so sentence starts stay visible to :func:`name_vocab`."""
-    note = meeting_note(m)
+    AMI's punctuation, so sentence starts stay visible to :func:`name_vocab`.
+
+    ``names`` (participant code -> spoken name, from :func:`spoken_names`) adds the name a
+    speaker introduced themselves by to their label: "User Interface Designer, Agnes".
+    """
+    note = _named(meeting_note(m), m, names)
     if note.utterances:
         return note
     turns: list[list[Word]] = []
@@ -166,13 +171,63 @@ def human_note(m: AmiMeeting) -> MeetingNote:
             note_id=m.meeting_id,
             index=i,
             channel=Channel.THEM,
-            speaker_name=f"Speaker {t[0].agent}",
+            speaker_name=_label(f"Speaker {t[0].agent}", t[0].agent, m, names),
             diarization_label=t[0].agent,
             text="".join(w.text if w.punc else f" {w.text}" for w in t).strip(),
             start_time=note.created_at + timedelta(seconds=t[0].start),
             end_time=note.created_at + timedelta(seconds=t[-1].end),
         )
         for i, t in enumerate(turns)
+    )
+    return note.model_copy(update={"utterances": utts})
+
+
+# "my name is (uh) Agnes", "I'm Jen.", "I am Christine": a speaker naming themselves. "This is
+# X" is left out: in AMI it is as often a slide or a third person ("This is Christine's").
+_SELF_INTRO = re.compile(
+    r"\b(?:[Mm]y name is|[Mm]y name's|I'm|I am)\s+(?:(?:uh|um|er|erm)\s+)*"
+    r"([A-Z][a-z]+)(?:\s+([A-Z][a-z]+))?"
+)
+
+
+def spoken_names(meetings: Iterable[AmiMeeting]) -> dict[str, str]:
+    """Participant code -> the name they introduced themselves by, from AMI's own words.
+
+    A speaker's own utterance "my name is X" / "I'm X" / "I am X" counts when X is a name in
+    that meeting (:func:`name_vocab`, so "I'm Not sure" can't). A second capitalised name word
+    is kept ("Shrida Daseri"). Participant codes are stable across a series' meetings, so a name
+    from IS1008a labels the same person in IS1008b-d. A participant who introduces themselves
+    by two different names gets none.
+    """
+    found: dict[str, set[str]] = {}
+    for m in meetings:
+        utts = human_note(m).utterances  # dialogue acts, or word turns where AMI has none
+        vocab = name_vocab(stream(u.text for u in utts))
+        who = {s.agent: s.participant for s in m.speakers}
+        for u in utts:
+            agent = u.diarization_label or ""
+            for first, second in _SELF_INTRO.findall(u.text):
+                if first.lower() not in vocab or agent not in who:
+                    continue
+                name = f"{first} {second}" if second and second.lower() in vocab else first
+                found.setdefault(who[agent], set()).add(name)
+    return {p: next(iter(ns)) for p, ns in sorted(found.items()) if len(ns) == 1}
+
+
+def _label(base: str, agent: str | None, m: AmiMeeting, names: Mapping[str, str] | None) -> str:
+    part = {s.agent: s.participant for s in m.speakers}.get(agent or "")
+    name = (names or {}).get(part or "")
+    return f"{base}, {name}" if name else base
+
+
+def _named(note: MeetingNote, m: AmiMeeting, names: Mapping[str, str] | None) -> MeetingNote:
+    if not names:
+        return note
+    utts = tuple(
+        u.model_copy(
+            update={"speaker_name": _label(u.speaker_name or "", u.diarization_label, m, names)}
+        )
+        for u in note.utterances
     )
     return note.model_copy(update={"utterances": utts})
 
