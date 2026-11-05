@@ -2451,6 +2451,189 @@ def notes_faithfulness_cmd(
     typer.echo(f"spent ${spent:.4f} · aggregate {agg_path} · per-claim {claims_dir}")
 
 
+# -- notes grounding checker (docs/benchmark/GROUNDING_CHECKER.md) -----------------------------
+
+
+def _provenance(**extra: object) -> dict[str, object]:
+    """Date, git SHA and whatever else identifies a result."""
+    import subprocess
+    from datetime import UTC, datetime
+
+    git = subprocess.run(["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True)
+    return {
+        "date": datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "git_sha": git.stdout.strip(),
+        **extra,
+    }
+
+
+@app.command("ground")
+def ground_cmd(
+    notes: Annotated[
+        Path | None, typer.Option(help="Notes markdown. Default: the meeting's summary_markdown.")
+    ] = None,
+    meeting: Annotated[Path | None, typer.Option(help="A MeetingNote as JSON.")] = None,
+    db: Annotated[Path | None, typer.Option(help="A NoteStore database (with --note-id).")] = None,
+    note_id: Annotated[str | None, typer.Option(help="Note to read from --db.")] = None,
+    ami: Annotated[
+        str | None, typer.Option(help="An AMI meeting id (manual transcript), e.g. IS1008a.")
+    ] = None,
+    out: Annotated[Path, typer.Option(help="Where to write the JSON result.")] = Path(
+        "grounding.json"
+    ),
+    model: Annotated[str, typer.Option(help="Checker model.")] = "claude-haiku-5-5",
+    escalate: Annotated[
+        bool, typer.Option(help="Re-check non-supported claims on the full transcript.")
+    ] = True,
+    k: Annotated[int, typer.Option(help="Candidate lines per claim.")] = 8,
+    window: Annotated[int, typer.Option(help="Neighbours added around each candidate.")] = 1,
+    quote: Annotated[bool, typer.Option(help="Estimate the cost; spend $0.")] = False,
+    budget: Annotated[float, typer.Option(help="Refuse to run above this estimate (USD).")] = 2.0,
+    yes: Annotated[bool, typer.Option(help="Skip the confirmation prompt.")] = False,
+) -> None:
+    """Check one meeting's notes against its transcript: a verdict and evidence per claim.
+
+    Give the meeting as --meeting (MeetingNote JSON), --db with --note-id, or --ami. The notes
+    are --notes (markdown), else the meeting's own summary_markdown.
+    """
+    import json as _json
+
+    from concentrate.ami.corpus import load_meeting, meeting_note
+    from concentrate.core.models import MeetingNote
+    from concentrate.evals import grounding as G
+    from concentrate.evals.faithfulness import split_claims
+
+    if sum(x is not None for x in (meeting, db, ami)) != 1:
+        raise typer.BadParameter("give exactly one of --meeting, --db (with --note-id), --ami")
+    if meeting is not None:
+        note = MeetingNote.model_validate_json(meeting.read_text())
+    elif db is not None:
+        found = NoteStore(db).get_note(note_id or "")
+        if found is None:
+            raise typer.BadParameter(f"note {note_id!r} not in {db}")
+        note = found
+    else:
+        note = meeting_note(load_meeting(ami or ""))
+    markdown = notes.read_text() if notes else (note.summary_markdown or "")
+    claims = split_claims(markdown).claims
+    if not claims:
+        raise typer.BadParameter("no claims in the notes")
+    q = G.quote(note, claims, k=k, window=window)
+    worst, best = q.usd(model, 1.0 if escalate else 0.0), q.usd(model, 0.0)
+    typer.echo(
+        f"{len(claims)} claims; excerpt {q.excerpt_lines}/{q.transcript_lines} lines; "
+        f"estimate ${best:.4f} (no escalation) to ${worst:.4f} (every claim escalates)"
+    )
+    if quote:
+        return
+    if worst > budget:
+        typer.echo(f"estimate ${worst:.2f} exceeds --budget ${budget:.2f}", err=True)
+        raise typer.Exit(1)
+    if not yes:
+        typer.confirm(f"Spend up to about ${worst:.2f}?", abort=True)
+    client = LLMClient(model=model)
+    result = G.ground_claims(note, claims, client, escalate=escalate, k=k, window=window)
+    meta = _provenance(
+        tool="grounding-checker",
+        model=model,
+        effort=G.EFFORT,
+        prompt=G.PROMPT_ID,
+        cost_usd=round(sum(r.cost_usd for r in client.ledger.records), 5),
+        spent_usd=round(client.ledger.spent_usd(), 5),
+    )
+    out.write_text(_json.dumps({"meta": meta, **result.model_dump()}, indent=2) + "\n")
+    typer.echo(f"{result.counts} · {result.calls} call(s) · {out}")
+
+
+@app.command("ground-ami")
+def ground_ami_cmd(
+    seed: Annotated[int, typer.Option(help="Seed for the perturbations.")] = 0,
+    quote: Annotated[bool, typer.Option(help="Write the $0 parts and the estimate only.")] = False,
+    budget: Annotated[float, typer.Option(help="Refuse to run above this estimate (USD).")] = 2.0,
+    yes: Annotated[bool, typer.Option(help="Skip the confirmation prompt.")] = False,
+    model: Annotated[str, typer.Option(help="Checker model.")] = "claude-haiku-5-5",
+    zip_path: Annotated[Path, typer.Option(help="AMI manual annotations zip.")] = Path(
+        "data/ami/annotations/ami_public_manual_1.6.2.zip"
+    ),
+    out_dir: Annotated[Path, typer.Option(help="Report directory.")] = Path(
+        "evals/reports/grounding"
+    ),
+) -> None:
+    """Validate the grounding checker on AMI's human summaries and seeded perturbations of them.
+
+    Always writes the $0 parts (perturbation counts, retrieval recall against AMI's summary
+    links, the pre-check baseline, the cost estimate). With a confirmed spend under --budget,
+    also runs the checker and scores it.
+    """
+    import json as _json
+
+    from concentrate.evals import grounding as G
+    from concentrate.evals import grounding_ami as V
+
+    corpus = V.load(zip_path)
+    items = V.items(corpus, seed)
+    est = V.quote(corpus, items, model)
+    zero = {
+        "meta": _provenance(
+            track="grounding-checker-ami", seed=seed, k=G.K, window=G.WINDOW, prompt=G.PROMPT_ID
+        ),
+        "meetings": list(V.MEETINGS),
+        "dev": list(V.DEV),
+        "items": V.kinds_count(items),
+        "retrieval_recall": V.retrieval_recall(corpus, items, G.K, G.WINDOW),
+        "precheck_baseline": V.precheck_baseline(corpus, items),
+        "estimate": est,
+    }
+    out_dir.mkdir(parents=True, exist_ok=True)
+    (out_dir / "ami-zero-cost.json").write_text(_json.dumps(zero, indent=2) + "\n")
+    typer.echo(
+        f"{len(items)} items; estimate {model}: ${est['usd_no_escalation']:.4f} (no escalation) "
+        f"to ${est['usd_worst']:.4f} (every claim escalates), up to {est['calls_max']} calls"
+    )
+    if quote:
+        return
+    if est["usd_worst"] > budget:
+        typer.echo(f"estimate ${est['usd_worst']:.2f} exceeds --budget ${budget:.2f}", err=True)
+        raise typer.Exit(1)
+    if not yes:
+        typer.confirm(f"Spend up to about ${est['usd_worst']:.2f}?", abort=True)
+    client = LLMClient(model=model)
+    scored: list[V.Scored] = []
+    calls = escalated = 0
+    for (mid, _kind), group in sorted(V.groups(items).items()):
+        res = G.ground_claims(corpus.notes[mid], V.claims_for(group), client)
+        calls, escalated = calls + res.calls, escalated + res.escalated
+        scored += [V.Scored(it, r) for it, r in zip(group, res.claims, strict=True)]
+    report = {
+        "meta": _provenance(
+            track="grounding-checker-ami",
+            model=model,
+            effort=G.EFFORT,
+            prompt=G.PROMPT_ID,
+            seed=seed,
+            k=G.K,
+            window=G.WINDOW,
+            calls=calls,
+            escalated_claims=escalated,
+            estimate_usd_worst=est["usd_worst"],
+            cost_usd=round(sum(r.cost_usd for r in client.ledger.records), 5),
+            spent_usd=round(client.ledger.spent_usd(), 5),
+            source="AMI Meeting Corpus manual annotations 1.6.2 (CC BY 4.0)",
+        ),
+        **V.score(scored, seed),
+    }
+    stem = f"ami-validation.{model}"
+    (out_dir / f"{stem}.json").write_text(_json.dumps(report, indent=2) + "\n")
+    with (out_dir / f"{stem}.items.jsonl").open("w") as fh:
+        for row in V.item_rows(scored):
+            fh.write(_json.dumps(row, ensure_ascii=False) + "\n")
+    test = report["test"]
+    typer.echo(_json.dumps(test["positives"]["labels"]["supported"]))
+    for kind, v in test["negatives"].items():
+        typer.echo(f"{kind}: recall {v['recall']['k']}/{v['recall']['n']}")
+    typer.echo(f"spent ${client.ledger.spent_usd():.4f} · {out_dir / stem}.json")
+
+
 # -- cross-product pairing (docs/benchmark/PRODUCTS.md) ----------------------------------------
 
 PAIR_OVERRIDES = Path("data/real/pairs.override.json")

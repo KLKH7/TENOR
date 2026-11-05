@@ -1,0 +1,438 @@
+{
+  "meta": {
+    "date": "2026-11-05T06:56:53Z",
+    "git_sha": "aceec87",
+    "track": "grounding-checker-ami",
+    "seed": 0,
+    "k": 8,
+    "window": 1,
+    "prompt": "grounding.v1"
+  },
+  "meetings": [
+    "IS1008a",
+    "IS1008b",
+    "IS1008c",
+    "IS1008d",
+    "IB4003"
+  ],
+  "dev": [
+    "IS1008a"
+  ],
+  "items": {
+    "original": {
+      "dev": 14,
+      "test": 78
+    },
+    "swap_role_or_person": {
+      "dev": 10,
+      "test": 31
+    },
+    "negate": {
+      "dev": 7,
+      "test": 37
+    },
+    "change_number": {
+      "dev": 1,
+      "test": 2
+    },
+    "inject_same_series": {
+      "dev": 5,
+      "test": 20
+    },
+    "inject_other_series": {
+      "dev": 5,
+      "test": 20
+    }
+  },
+  "retrieval_recall": {
+    "sentences_with_links": 65,
+    "top_k_hits_linked_act": {
+      "k": 46,
+      "n": 65,
+      "rate": 0.7077,
+      "ci95": [
+        0.588,
+        0.8042
+      ]
+    },
+    "widened_hits_linked_act": {
+      "k": 48,
+      "n": 65,
+      "rate": 0.7385,
+      "ci95": [
+        0.6205,
+        0.8298
+      ]
+    },
+    "top_k_within_2_acts": {
+      "k": 54,
+      "n": 65,
+      "rate": 0.8308,
+      "ci95": [
+        0.7218,
+        0.9028
+      ]
+    }
+  },
+  "precheck_baseline": {
+    "original": {
+      "k": 4,
+      "n": 92,
+      "rate": 0.0435,
+      "ci95": [
+        0.017,
+        0.1065
+      ]
+    },
+    "swap_role_or_person": {
+      "k": 1,
+      "n": 41,
+      "rate": 0.0244,
+      "ci95": [
+        0.0043,
+        0.126
+      ]
+    },
+    "change_number": {
+      "k": 0,
+      "n": 3,
+      "rate": 0.0,
+      "ci95": [
+        0.0,
+        0.5615
+      ]
+    },
+    "negate": {
+      "k": 2,
+      "n": 44,
+      "rate": 0.0455,
+      "ci95": [
+        0.0126,
+        0.1514
+      ]
+    },
+    "inject_same_series": {
+      "k": 2,
+      "n": 25,
+      "rate": 0.08,
+      "ci95": [
+        0.0222,
+        0.2497
+      ]
+    },
+    "inject_other_series": {
+      "k": 8,
+      "n": 25,
+      "rate": 0.32,
+      "ci95": [
+        0.172,
+        0.5159
+      ]
+    }
+  },
+  "estimate": {
+    "model": "claude-haiku-5-5",
+    "calls_max": 54,
+    "usd_worst": 0.0712,
+    "usd_no_escalation": 0.022,
+    "by_group": [
+      {
+        "meeting": "IB4003",
+        "kind": "change_number",
+        "claims": 2,
+        "excerpt_tokens": 1648,
+        "full_tokens": 15951,
+        "excerpt_lines": 46,
+        "transcript_lines": 833,
+        "usd_worst": 0.0024,
+        "usd_no_escalation": 0.0003
+      },
+      {
+        "meeting": "IB4003",
+        "kind": "inject_other_series",
+        "claims": 5,
+        "excerpt_tokens": 2816,
+        "full_tokens": 16137,
+        "excerpt_lines": 79,
+        "transcript_lines": 833,
+        "usd_worst": 0.0028,
+        "usd_no_escalation": 0.0006
+      },
+      {
+        "meeting": "IB4003",
+        "kind": "inject_same_series",
+        "claims": 5,
+        "excerpt_tokens": 3092,
+        "full_tokens": 16069,
+        "excerpt_lines": 95,
+        "transcript_lines": 833,
+        "usd_worst": 0.0028,
+        "usd_no_escalation": 0.0006
+      },
+      {
+        "meeting": "IB4003",
+        "kind": "negate",
+        "claims": 11,
+        "excerpt_tokens": 4625,
+        "full_tokens": 16248,
+        "excerpt_lines": 162,
+        "transcript_lines": 833,
+        "usd_worst": 0.0035,
+        "usd_no_escalation": 0.001
+      },
+      {
+        "meeting": "IB4003",
+        "kind": "original",
+        "claims": 27,
+        "excerpt_tokens": 7723,
+        "full_tokens": 16780,
+        "excerpt_lines": 278,
+        "transcript_lines": 833,
+        "usd_worst": 0.0052,
+        "usd_no_escalation": 0.002
+      },
+      {
+        "meeting": "IB4003",
+        "kind": "swap_role_or_person",
+        "claims": 5,
+        "excerpt_tokens": 3151,
+        "full_tokens": 16157,
+        "excerpt_lines": 92,
+        "transcript_lines": 833,
+        "usd_worst": 0.0028,
+        "usd_no_escalation": 0.0006
+      },
+      {
+        "meeting": "IS1008a",
+        "kind": "change_number",
+        "claims": 1,
+        "excerpt_tokens": 1324,
+        "full_tokens": 6607,
+        "excerpt_lines": 22,
+        "transcript_lines": 255,
+        "usd_worst": 0.0011,
+        "usd_no_escalation": 0.0002
+      },
+      {
+        "meeting": "IS1008a",
+        "kind": "inject_other_series",
+        "claims": 5,
+        "excerpt_tokens": 2400,
+        "full_tokens": 6754,
+        "excerpt_lines": 61,
+        "transcript_lines": 255,
+        "usd_worst": 0.0015,
+        "usd_no_escalation": 0.0005
+      },
+      {
+        "meeting": "IS1008a",
+        "kind": "inject_same_series",
+        "claims": 5,
+        "excerpt_tokens": 3117,
+        "full_tokens": 6805,
+        "excerpt_lines": 82,
+        "transcript_lines": 255,
+        "usd_worst": 0.0016,
+        "usd_no_escalation": 0.0006
+      },
+      {
+        "meeting": "IS1008a",
+        "kind": "negate",
+        "claims": 7,
+        "excerpt_tokens": 3471,
+        "full_tokens": 6817,
+        "excerpt_lines": 91,
+        "transcript_lines": 255,
+        "usd_worst": 0.0018,
+        "usd_no_escalation": 0.0007
+      },
+      {
+        "meeting": "IS1008a",
+        "kind": "original",
+        "claims": 14,
+        "excerpt_tokens": 4760,
+        "full_tokens": 7095,
+        "excerpt_lines": 136,
+        "transcript_lines": 255,
+        "usd_worst": 0.0026,
+        "usd_no_escalation": 0.0012
+      },
+      {
+        "meeting": "IS1008a",
+        "kind": "swap_role_or_person",
+        "claims": 10,
+        "excerpt_tokens": 4059,
+        "full_tokens": 6979,
+        "excerpt_lines": 112,
+        "transcript_lines": 255,
+        "usd_worst": 0.0022,
+        "usd_no_escalation": 0.0009
+      },
+      {
+        "meeting": "IS1008b",
+        "kind": "inject_other_series",
+        "claims": 5,
+        "excerpt_tokens": 2240,
+        "full_tokens": 12891,
+        "excerpt_lines": 62,
+        "transcript_lines": 606,
+        "usd_worst": 0.0023,
+        "usd_no_escalation": 0.0005
+      },
+      {
+        "meeting": "IS1008b",
+        "kind": "inject_same_series",
+        "claims": 5,
+        "excerpt_tokens": 3171,
+        "full_tokens": 12944,
+        "excerpt_lines": 98,
+        "transcript_lines": 606,
+        "usd_worst": 0.0024,
+        "usd_no_escalation": 0.0006
+      },
+      {
+        "meeting": "IS1008b",
+        "kind": "negate",
+        "claims": 8,
+        "excerpt_tokens": 3741,
+        "full_tokens": 13073,
+        "excerpt_lines": 113,
+        "transcript_lines": 606,
+        "usd_worst": 0.0027,
+        "usd_no_escalation": 0.0008
+      },
+      {
+        "meeting": "IS1008b",
+        "kind": "original",
+        "claims": 17,
+        "excerpt_tokens": 5517,
+        "full_tokens": 13467,
+        "excerpt_lines": 171,
+        "transcript_lines": 606,
+        "usd_worst": 0.0037,
+        "usd_no_escalation": 0.0014
+      },
+      {
+        "meeting": "IS1008b",
+        "kind": "swap_role_or_person",
+        "claims": 10,
+        "excerpt_tokens": 3697,
+        "full_tokens": 13153,
+        "excerpt_lines": 105,
+        "transcript_lines": 606,
+        "usd_worst": 0.0029,
+        "usd_no_escalation": 0.0009
+      },
+      {
+        "meeting": "IS1008c",
+        "kind": "inject_other_series",
+        "claims": 5,
+        "excerpt_tokens": 2396,
+        "full_tokens": 11306,
+        "excerpt_lines": 55,
+        "transcript_lines": 464,
+        "usd_worst": 0.0021,
+        "usd_no_escalation": 0.0005
+      },
+      {
+        "meeting": "IS1008c",
+        "kind": "inject_same_series",
+        "claims": 5,
+        "excerpt_tokens": 3308,
+        "full_tokens": 11247,
+        "excerpt_lines": 104,
+        "transcript_lines": 464,
+        "usd_worst": 0.0022,
+        "usd_no_escalation": 0.0006
+      },
+      {
+        "meeting": "IS1008c",
+        "kind": "negate",
+        "claims": 7,
+        "excerpt_tokens": 3784,
+        "full_tokens": 11450,
+        "excerpt_lines": 104,
+        "transcript_lines": 464,
+        "usd_worst": 0.0025,
+        "usd_no_escalation": 0.0008
+      },
+      {
+        "meeting": "IS1008c",
+        "kind": "original",
+        "claims": 15,
+        "excerpt_tokens": 5980,
+        "full_tokens": 11807,
+        "excerpt_lines": 175,
+        "transcript_lines": 464,
+        "usd_worst": 0.0034,
+        "usd_no_escalation": 0.0013
+      },
+      {
+        "meeting": "IS1008c",
+        "kind": "swap_role_or_person",
+        "claims": 7,
+        "excerpt_tokens": 3348,
+        "full_tokens": 11445,
+        "excerpt_lines": 94,
+        "transcript_lines": 464,
+        "usd_worst": 0.0024,
+        "usd_no_escalation": 0.0007
+      },
+      {
+        "meeting": "IS1008d",
+        "kind": "inject_other_series",
+        "claims": 5,
+        "excerpt_tokens": 2806,
+        "full_tokens": 12049,
+        "excerpt_lines": 84,
+        "transcript_lines": 544,
+        "usd_worst": 0.0023,
+        "usd_no_escalation": 0.0006
+      },
+      {
+        "meeting": "IS1008d",
+        "kind": "inject_same_series",
+        "claims": 5,
+        "excerpt_tokens": 3385,
+        "full_tokens": 12101,
+        "excerpt_lines": 104,
+        "transcript_lines": 544,
+        "usd_worst": 0.0023,
+        "usd_no_escalation": 0.0006
+      },
+      {
+        "meeting": "IS1008d",
+        "kind": "negate",
+        "claims": 11,
+        "excerpt_tokens": 4795,
+        "full_tokens": 12324,
+        "excerpt_lines": 148,
+        "transcript_lines": 544,
+        "usd_worst": 0.003,
+        "usd_no_escalation": 0.001
+      },
+      {
+        "meeting": "IS1008d",
+        "kind": "original",
+        "claims": 19,
+        "excerpt_tokens": 6556,
+        "full_tokens": 12689,
+        "excerpt_lines": 207,
+        "transcript_lines": 544,
+        "usd_worst": 0.0039,
+        "usd_no_escalation": 0.0016
+      },
+      {
+        "meeting": "IS1008d",
+        "kind": "swap_role_or_person",
+        "claims": 9,
+        "excerpt_tokens": 4023,
+        "full_tokens": 12275,
+        "excerpt_lines": 120,
+        "transcript_lines": 544,
+        "usd_worst": 0.0028,
+        "usd_no_escalation": 0.0009
+      }
+    ]
+  }
+}

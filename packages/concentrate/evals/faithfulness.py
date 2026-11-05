@@ -445,21 +445,26 @@ AUDIT_SCHEMA: dict[str, Any] = {
 }
 
 
+def claims_message(claims: Sequence[Claim]) -> str:
+    """The user message listing claims: ``<id> [<section > lead-in>]: <text>`` per line."""
+    rows = []
+    for c in claims:
+        where = " > ".join(p for p in (c.section, c.context) if p)
+        rows.append(f"{c.claim_id} [{where or 'top'}]: {c.text}")
+    return "Claims:\n" + "\n".join(rows)
+
+
 def check_request(note: MeetingNote, claims: Sequence[Claim]) -> LLMRequest:
     """One call per meeting: transcript in the (cached) system prompt, all claims in the user."""
     system = (
         f"{load_prompt(PROMPT_ID)}\n\n<calendar>\n{calendar_context(note)}\n</calendar>\n\n"
         f"<transcript>\n{transcript_block(note)}\n</transcript>"
     )
-    rows = []
-    for c in claims:
-        where = " > ".join(p for p in (c.section, c.context) if p)
-        rows.append(f"{c.claim_id} [{where or 'top'}]: {c.text}")
     return LLMRequest(
         stage="faithfulness.check",
         prompt_id=PROMPT_ID,
         system=system,
-        user="Claims:\n" + "\n".join(rows),
+        user=claims_message(claims),
         schema=AUDIT_SCHEMA,
         max_tokens=4000 + 250 * len(claims),
         effort="low",
@@ -738,18 +743,34 @@ _STOP = frozenset(
 )
 
 
-def _terms(text: str) -> set[str]:
-    return {w for w in (x.lower() for x in _WORD.findall(text)) if w not in _STOP and len(w) > 2}
+def content_terms(text: str, *, stemmed: bool = False) -> set[str]:
+    """Lower-cased words of three letters or more, minus stop words; optionally stemmed."""
+    words = {w for w in (x.lower() for x in _WORD.findall(text)) if w not in _STOP and len(w) > 2}
+    return {_stem(w) for w in words} if stemmed else words
 
 
-def nearest_lines(claim: str, utterances: Sequence[Utterance], k: int = 3) -> list[int]:
+def nearest_lines(
+    claim: str,
+    utterances: Sequence[Utterance],
+    k: int = 3,
+    *,
+    weights: Mapping[str, float] | None = None,
+    stemmed: bool = False,
+) -> list[int]:
     """Indices of the ``k`` transcript lines sharing the most content words with ``claim``.
 
+    Each shared term counts 1, or its entry in ``weights`` (e.g. an IDF) when given; terms
+    missing from ``weights`` count 0. ``stemmed`` compares crude stems ("decided" = "decide").
     Ties go to the earlier line, so the result is deterministic. Lines sharing nothing are
     never returned.
     """
-    want = _terms(claim)
-    scored = [(len(want & _terms(u.text)), -u.index) for u in utterances]
+    want = content_terms(claim, stemmed=stemmed)
+
+    def score(u: Utterance) -> float:
+        shared = want & content_terms(u.text, stemmed=stemmed)
+        return sum(weights.get(t, 0.0) for t in shared) if weights is not None else len(shared)
+
+    scored = [(score(u), -u.index) for u in utterances]
     best = sorted((s for s in scored if s[0] > 0), reverse=True)[:k]
     return sorted(-i for _, i in best)
 

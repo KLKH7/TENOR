@@ -1,0 +1,1624 @@
+{
+  "meta": {
+    "date": "2026-11-05T06:59:43Z",
+    "git_sha": "aceec87",
+    "track": "grounding-checker-ami",
+    "model": "claude-haiku-5-5",
+    "effort": "low",
+    "prompt": "grounding.v1",
+    "seed": 0,
+    "k": 8,
+    "window": 1,
+    "calls": 54,
+    "escalated_claims": 165,
+    "estimate_usd_worst": 0.0712,
+    "cost_usd": 0.04451,
+    "spent_usd": 0.04451,
+    "source": "AMI Meeting Corpus manual annotations 1.6.2 (CC BY 4.0)"
+  },
+  "all": {
+    "items": 230,
+    "positives": {
+      "labels": {
+        "n": 92,
+        "supported": {
+          "k": 72,
+          "rate": 0.7826,
+          "ci95": [
+            0.6879,
+            0.8546
+          ]
+        },
+        "inferred": {
+          "k": 5,
+          "rate": 0.0543,
+          "ci95": [
+            0.0234,
+            0.121
+          ]
+        },
+        "unsupported": {
+          "k": 4,
+          "rate": 0.0435,
+          "ci95": [
+            0.017,
+            0.1065
+          ]
+        },
+        "contradicted": {
+          "k": 11,
+          "rate": 0.1196,
+          "ci95": [
+            0.0681,
+            0.2015
+          ]
+        },
+        "ungrounded": {
+          "k": 20,
+          "rate": 0.2174,
+          "ci95": [
+            0.1454,
+            0.3121
+          ]
+        }
+      },
+      "flagged_unsupported_or_contradicted": {
+        "k": 15,
+        "n": 92,
+        "rate": 0.163,
+        "ci95": [
+          0.1014,
+          0.2517
+        ]
+      },
+      "by_section": {
+        "abstract": {
+          "n": 37,
+          "supported": {
+            "k": 33,
+            "rate": 0.8919,
+            "ci95": [
+              0.7529,
+              0.9571
+            ]
+          },
+          "inferred": {
+            "k": 2,
+            "rate": 0.0541,
+            "ci95": [
+              0.015,
+              0.177
+            ]
+          },
+          "unsupported": {
+            "k": 0,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.0941
+            ]
+          },
+          "contradicted": {
+            "k": 2,
+            "rate": 0.0541,
+            "ci95": [
+              0.015,
+              0.177
+            ]
+          },
+          "ungrounded": {
+            "k": 4,
+            "rate": 0.1081,
+            "ci95": [
+              0.0429,
+              0.2471
+            ]
+          }
+        },
+        "actions": {
+          "n": 22,
+          "supported": {
+            "k": 19,
+            "rate": 0.8636,
+            "ci95": [
+              0.6666,
+              0.9525
+            ]
+          },
+          "inferred": {
+            "k": 0,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1487
+            ]
+          },
+          "unsupported": {
+            "k": 2,
+            "rate": 0.0909,
+            "ci95": [
+              0.0253,
+              0.2782
+            ]
+          },
+          "contradicted": {
+            "k": 1,
+            "rate": 0.0455,
+            "ci95": [
+              0.0081,
+              0.218
+            ]
+          },
+          "ungrounded": {
+            "k": 3,
+            "rate": 0.1364,
+            "ci95": [
+              0.0475,
+              0.3334
+            ]
+          }
+        },
+        "decisions": {
+          "n": 16,
+          "supported": {
+            "k": 5,
+            "rate": 0.3125,
+            "ci95": [
+              0.1416,
+              0.556
+            ]
+          },
+          "inferred": {
+            "k": 2,
+            "rate": 0.125,
+            "ci95": [
+              0.035,
+              0.3602
+            ]
+          },
+          "unsupported": {
+            "k": 2,
+            "rate": 0.125,
+            "ci95": [
+              0.035,
+              0.3602
+            ]
+          },
+          "contradicted": {
+            "k": 7,
+            "rate": 0.4375,
+            "ci95": [
+              0.231,
+              0.6682
+            ]
+          },
+          "ungrounded": {
+            "k": 11,
+            "rate": 0.6875,
+            "ci95": [
+              0.444,
+              0.8584
+            ]
+          }
+        },
+        "problems": {
+          "n": 17,
+          "supported": {
+            "k": 15,
+            "rate": 0.8824,
+            "ci95": [
+              0.6566,
+              0.9671
+            ]
+          },
+          "inferred": {
+            "k": 1,
+            "rate": 0.0588,
+            "ci95": [
+              0.0105,
+              0.2698
+            ]
+          },
+          "unsupported": {
+            "k": 0,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1843
+            ]
+          },
+          "contradicted": {
+            "k": 1,
+            "rate": 0.0588,
+            "ci95": [
+              0.0105,
+              0.2698
+            ]
+          },
+          "ungrounded": {
+            "k": 2,
+            "rate": 0.1176,
+            "ci95": [
+              0.0329,
+              0.3434
+            ]
+          }
+        }
+      },
+      "evidence": {
+        "supported_with_links": 47,
+        "cited_overlaps_linked_act": {
+          "k": 43,
+          "n": 47,
+          "rate": 0.9149,
+          "ci95": [
+            0.8007,
+            0.9664
+          ]
+        },
+        "cited_within_2_acts_of_linked": {
+          "k": 43,
+          "n": 47,
+          "rate": 0.9149,
+          "ci95": [
+            0.8007,
+            0.9664
+          ]
+        },
+        "cited_lines_that_are_linked": {
+          "k": 105,
+          "n": 169,
+          "rate": 0.6213,
+          "ci95": [
+            0.5462,
+            0.691
+          ]
+        }
+      }
+    },
+    "negatives": {
+      "swap_role_or_person": {
+        "n": 41,
+        "labels": {
+          "supported": 4,
+          "contradicted": 33,
+          "inferred": 2,
+          "unsupported": 2
+        },
+        "recall": {
+          "k": 35,
+          "n": 41,
+          "rate": 0.8537,
+          "ci95": [
+            0.7156,
+            0.9312
+          ]
+        },
+        "precision_paired": {
+          "k": 35,
+          "n": 40,
+          "rate": 0.875,
+          "ci95": [
+            0.7389,
+            0.9454
+          ]
+        },
+        "recall_not_supported": {
+          "k": 37,
+          "n": 41,
+          "rate": 0.9024,
+          "ci95": [
+            0.7745,
+            0.9614
+          ]
+        },
+        "precision_not_supported_paired": {
+          "k": 37,
+          "n": 44,
+          "rate": 0.8409,
+          "ci95": [
+            0.7063,
+            0.9207
+          ]
+        },
+        "contradicted_cites_lines": {
+          "k": 33,
+          "n": 33,
+          "rate": 1.0,
+          "ci95": [
+            0.8957,
+            1.0
+          ]
+        }
+      },
+      "change_number": {
+        "n": 3,
+        "labels": {
+          "contradicted": 2,
+          "unsupported": 1
+        },
+        "recall": {
+          "k": 3,
+          "n": 3,
+          "rate": 1.0,
+          "ci95": [
+            0.4385,
+            1.0
+          ]
+        },
+        "precision_paired": {
+          "k": 3,
+          "n": 5,
+          "rate": 0.6,
+          "ci95": [
+            0.2307,
+            0.8824
+          ]
+        },
+        "recall_not_supported": {
+          "k": 3,
+          "n": 3,
+          "rate": 1.0,
+          "ci95": [
+            0.4385,
+            1.0
+          ]
+        },
+        "precision_not_supported_paired": {
+          "k": 3,
+          "n": 5,
+          "rate": 0.6,
+          "ci95": [
+            0.2307,
+            0.8824
+          ]
+        },
+        "contradicted_cites_lines": {
+          "k": 2,
+          "n": 2,
+          "rate": 1.0,
+          "ci95": [
+            0.3424,
+            1.0
+          ]
+        }
+      },
+      "negate": {
+        "n": 44,
+        "labels": {
+          "contradicted": 40,
+          "inferred": 1,
+          "supported": 2,
+          "unsupported": 1
+        },
+        "recall": {
+          "k": 41,
+          "n": 44,
+          "rate": 0.9318,
+          "ci95": [
+            0.8177,
+            0.9765
+          ]
+        },
+        "precision_paired": {
+          "k": 41,
+          "n": 55,
+          "rate": 0.7455,
+          "ci95": [
+            0.617,
+            0.8419
+          ]
+        },
+        "recall_not_supported": {
+          "k": 42,
+          "n": 44,
+          "rate": 0.9545,
+          "ci95": [
+            0.8486,
+            0.9874
+          ]
+        },
+        "precision_not_supported_paired": {
+          "k": 42,
+          "n": 58,
+          "rate": 0.7241,
+          "ci95": [
+            0.598,
+            0.8225
+          ]
+        },
+        "contradicted_cites_lines": {
+          "k": 40,
+          "n": 40,
+          "rate": 1.0,
+          "ci95": [
+            0.9124,
+            1.0
+          ]
+        }
+      },
+      "inject_same_series": {
+        "n": 25,
+        "labels": {
+          "contradicted": 8,
+          "supported": 2,
+          "unsupported": 14,
+          "inferred": 1
+        },
+        "recall": {
+          "k": 22,
+          "n": 25,
+          "rate": 0.88,
+          "ci95": [
+            0.7004,
+            0.9583
+          ]
+        },
+        "precision_paired": {
+          "k": 22,
+          "n": 26,
+          "rate": 0.8462,
+          "ci95": [
+            0.6647,
+            0.9385
+          ]
+        },
+        "recall_not_supported": {
+          "k": 23,
+          "n": 25,
+          "rate": 0.92,
+          "ci95": [
+            0.7503,
+            0.9778
+          ]
+        },
+        "precision_not_supported_paired": {
+          "k": 23,
+          "n": 29,
+          "rate": 0.7931,
+          "ci95": [
+            0.6161,
+            0.9015
+          ]
+        },
+        "contradicted_cites_lines": {
+          "k": 8,
+          "n": 8,
+          "rate": 1.0,
+          "ci95": [
+            0.6756,
+            1.0
+          ]
+        }
+      },
+      "inject_other_series": {
+        "n": 25,
+        "labels": {
+          "unsupported": 23,
+          "contradicted": 1,
+          "inferred": 1
+        },
+        "recall": {
+          "k": 24,
+          "n": 25,
+          "rate": 0.96,
+          "ci95": [
+            0.8046,
+            0.9929
+          ]
+        },
+        "precision_paired": {
+          "k": 24,
+          "n": 28,
+          "rate": 0.8571,
+          "ci95": [
+            0.6851,
+            0.943
+          ]
+        },
+        "recall_not_supported": {
+          "k": 25,
+          "n": 25,
+          "rate": 1.0,
+          "ci95": [
+            0.8668,
+            1.0
+          ]
+        },
+        "precision_not_supported_paired": {
+          "k": 25,
+          "n": 31,
+          "rate": 0.8065,
+          "ci95": [
+            0.6372,
+            0.9081
+          ]
+        },
+        "contradicted_cites_lines": {
+          "k": 0,
+          "n": 1,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.7935
+          ]
+        }
+      }
+    },
+    "escalated_share": {
+      "k": 165,
+      "n": 230,
+      "rate": 0.7174,
+      "ci95": [
+        0.656,
+        0.7716
+      ]
+    }
+  },
+  "dev": {
+    "items": 42,
+    "positives": {
+      "labels": {
+        "n": 14,
+        "supported": {
+          "k": 11,
+          "rate": 0.7857,
+          "ci95": [
+            0.5241,
+            0.9243
+          ]
+        },
+        "inferred": {
+          "k": 2,
+          "rate": 0.1429,
+          "ci95": [
+            0.0401,
+            0.3994
+          ]
+        },
+        "unsupported": {
+          "k": 1,
+          "rate": 0.0714,
+          "ci95": [
+            0.0127,
+            0.3147
+          ]
+        },
+        "contradicted": {
+          "k": 0,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.2153
+          ]
+        },
+        "ungrounded": {
+          "k": 3,
+          "rate": 0.2143,
+          "ci95": [
+            0.0757,
+            0.4759
+          ]
+        }
+      },
+      "flagged_unsupported_or_contradicted": {
+        "k": 1,
+        "n": 14,
+        "rate": 0.0714,
+        "ci95": [
+          0.0127,
+          0.3147
+        ]
+      },
+      "by_section": {
+        "abstract": {
+          "n": 7,
+          "supported": {
+            "k": 6,
+            "rate": 0.8571,
+            "ci95": [
+              0.4869,
+              0.9743
+            ]
+          },
+          "inferred": {
+            "k": 1,
+            "rate": 0.1429,
+            "ci95": [
+              0.0257,
+              0.5131
+            ]
+          },
+          "unsupported": {
+            "k": 0,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.3543
+            ]
+          },
+          "contradicted": {
+            "k": 0,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.3543
+            ]
+          },
+          "ungrounded": {
+            "k": 1,
+            "rate": 0.1429,
+            "ci95": [
+              0.0257,
+              0.5131
+            ]
+          }
+        },
+        "actions": {
+          "n": 4,
+          "supported": {
+            "k": 4,
+            "rate": 1.0,
+            "ci95": [
+              0.5101,
+              1.0
+            ]
+          },
+          "inferred": {
+            "k": 0,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.4899
+            ]
+          },
+          "unsupported": {
+            "k": 0,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.4899
+            ]
+          },
+          "contradicted": {
+            "k": 0,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.4899
+            ]
+          },
+          "ungrounded": {
+            "k": 0,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.4899
+            ]
+          }
+        },
+        "decisions": {
+          "n": 2,
+          "supported": {
+            "k": 1,
+            "rate": 0.5,
+            "ci95": [
+              0.0945,
+              0.9055
+            ]
+          },
+          "inferred": {
+            "k": 0,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.6576
+            ]
+          },
+          "unsupported": {
+            "k": 1,
+            "rate": 0.5,
+            "ci95": [
+              0.0945,
+              0.9055
+            ]
+          },
+          "contradicted": {
+            "k": 0,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.6576
+            ]
+          },
+          "ungrounded": {
+            "k": 1,
+            "rate": 0.5,
+            "ci95": [
+              0.0945,
+              0.9055
+            ]
+          }
+        },
+        "problems": {
+          "n": 1,
+          "supported": {
+            "k": 0,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.7935
+            ]
+          },
+          "inferred": {
+            "k": 1,
+            "rate": 1.0,
+            "ci95": [
+              0.2065,
+              1.0
+            ]
+          },
+          "unsupported": {
+            "k": 0,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.7935
+            ]
+          },
+          "contradicted": {
+            "k": 0,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.7935
+            ]
+          },
+          "ungrounded": {
+            "k": 1,
+            "rate": 1.0,
+            "ci95": [
+              0.2065,
+              1.0
+            ]
+          }
+        }
+      },
+      "evidence": {
+        "supported_with_links": 11,
+        "cited_overlaps_linked_act": {
+          "k": 10,
+          "n": 11,
+          "rate": 0.9091,
+          "ci95": [
+            0.6226,
+            0.9838
+          ]
+        },
+        "cited_within_2_acts_of_linked": {
+          "k": 10,
+          "n": 11,
+          "rate": 0.9091,
+          "ci95": [
+            0.6226,
+            0.9838
+          ]
+        },
+        "cited_lines_that_are_linked": {
+          "k": 22,
+          "n": 35,
+          "rate": 0.6286,
+          "ci95": [
+            0.4634,
+            0.7683
+          ]
+        }
+      }
+    },
+    "negatives": {
+      "swap_role_or_person": {
+        "n": 10,
+        "labels": {
+          "contradicted": 9,
+          "inferred": 1
+        },
+        "recall": {
+          "k": 9,
+          "n": 10,
+          "rate": 0.9,
+          "ci95": [
+            0.5958,
+            0.9821
+          ]
+        },
+        "precision_paired": {
+          "k": 9,
+          "n": 9,
+          "rate": 1.0,
+          "ci95": [
+            0.7008,
+            1.0
+          ]
+        },
+        "recall_not_supported": {
+          "k": 10,
+          "n": 10,
+          "rate": 1.0,
+          "ci95": [
+            0.7225,
+            1.0
+          ]
+        },
+        "precision_not_supported_paired": {
+          "k": 10,
+          "n": 11,
+          "rate": 0.9091,
+          "ci95": [
+            0.6226,
+            0.9838
+          ]
+        },
+        "contradicted_cites_lines": {
+          "k": 9,
+          "n": 9,
+          "rate": 1.0,
+          "ci95": [
+            0.7008,
+            1.0
+          ]
+        }
+      },
+      "change_number": {
+        "n": 1,
+        "labels": {
+          "unsupported": 1
+        },
+        "recall": {
+          "k": 1,
+          "n": 1,
+          "rate": 1.0,
+          "ci95": [
+            0.2065,
+            1.0
+          ]
+        },
+        "precision_paired": {
+          "k": 1,
+          "n": 2,
+          "rate": 0.5,
+          "ci95": [
+            0.0945,
+            0.9055
+          ]
+        },
+        "recall_not_supported": {
+          "k": 1,
+          "n": 1,
+          "rate": 1.0,
+          "ci95": [
+            0.2065,
+            1.0
+          ]
+        },
+        "precision_not_supported_paired": {
+          "k": 1,
+          "n": 2,
+          "rate": 0.5,
+          "ci95": [
+            0.0945,
+            0.9055
+          ]
+        },
+        "contradicted_cites_lines": {
+          "k": 0,
+          "n": 0,
+          "rate": null,
+          "ci95": [
+            NaN,
+            NaN
+          ]
+        }
+      },
+      "negate": {
+        "n": 7,
+        "labels": {
+          "contradicted": 7
+        },
+        "recall": {
+          "k": 7,
+          "n": 7,
+          "rate": 1.0,
+          "ci95": [
+            0.6457,
+            1.0
+          ]
+        },
+        "precision_paired": {
+          "k": 7,
+          "n": 8,
+          "rate": 0.875,
+          "ci95": [
+            0.5291,
+            0.9776
+          ]
+        },
+        "recall_not_supported": {
+          "k": 7,
+          "n": 7,
+          "rate": 1.0,
+          "ci95": [
+            0.6457,
+            1.0
+          ]
+        },
+        "precision_not_supported_paired": {
+          "k": 7,
+          "n": 8,
+          "rate": 0.875,
+          "ci95": [
+            0.5291,
+            0.9776
+          ]
+        },
+        "contradicted_cites_lines": {
+          "k": 7,
+          "n": 7,
+          "rate": 1.0,
+          "ci95": [
+            0.6457,
+            1.0
+          ]
+        }
+      },
+      "inject_same_series": {
+        "n": 5,
+        "labels": {
+          "unsupported": 5
+        },
+        "recall": {
+          "k": 5,
+          "n": 5,
+          "rate": 1.0,
+          "ci95": [
+            0.5655,
+            1.0
+          ]
+        },
+        "precision_paired": {
+          "k": 5,
+          "n": 5,
+          "rate": 1.0,
+          "ci95": [
+            0.5655,
+            1.0
+          ]
+        },
+        "recall_not_supported": {
+          "k": 5,
+          "n": 5,
+          "rate": 1.0,
+          "ci95": [
+            0.5655,
+            1.0
+          ]
+        },
+        "precision_not_supported_paired": {
+          "k": 5,
+          "n": 5,
+          "rate": 1.0,
+          "ci95": [
+            0.5655,
+            1.0
+          ]
+        },
+        "contradicted_cites_lines": {
+          "k": 0,
+          "n": 0,
+          "rate": null,
+          "ci95": [
+            NaN,
+            NaN
+          ]
+        }
+      },
+      "inject_other_series": {
+        "n": 5,
+        "labels": {
+          "unsupported": 5
+        },
+        "recall": {
+          "k": 5,
+          "n": 5,
+          "rate": 1.0,
+          "ci95": [
+            0.5655,
+            1.0
+          ]
+        },
+        "precision_paired": {
+          "k": 5,
+          "n": 6,
+          "rate": 0.8333,
+          "ci95": [
+            0.4365,
+            0.9699
+          ]
+        },
+        "recall_not_supported": {
+          "k": 5,
+          "n": 5,
+          "rate": 1.0,
+          "ci95": [
+            0.5655,
+            1.0
+          ]
+        },
+        "precision_not_supported_paired": {
+          "k": 5,
+          "n": 6,
+          "rate": 0.8333,
+          "ci95": [
+            0.4365,
+            0.9699
+          ]
+        },
+        "contradicted_cites_lines": {
+          "k": 0,
+          "n": 0,
+          "rate": null,
+          "ci95": [
+            NaN,
+            NaN
+          ]
+        }
+      }
+    },
+    "escalated_share": {
+      "k": 35,
+      "n": 42,
+      "rate": 0.8333,
+      "ci95": [
+        0.694,
+        0.9168
+      ]
+    }
+  },
+  "test": {
+    "items": 188,
+    "positives": {
+      "labels": {
+        "n": 78,
+        "supported": {
+          "k": 61,
+          "rate": 0.7821,
+          "ci95": [
+            0.6784,
+            0.8592
+          ]
+        },
+        "inferred": {
+          "k": 3,
+          "rate": 0.0385,
+          "ci95": [
+            0.0132,
+            0.1071
+          ]
+        },
+        "unsupported": {
+          "k": 3,
+          "rate": 0.0385,
+          "ci95": [
+            0.0132,
+            0.1071
+          ]
+        },
+        "contradicted": {
+          "k": 11,
+          "rate": 0.141,
+          "ci95": [
+            0.0806,
+            0.2351
+          ]
+        },
+        "ungrounded": {
+          "k": 17,
+          "rate": 0.2179,
+          "ci95": [
+            0.1408,
+            0.3216
+          ]
+        }
+      },
+      "flagged_unsupported_or_contradicted": {
+        "k": 14,
+        "n": 78,
+        "rate": 0.1795,
+        "ci95": [
+          0.11,
+          0.279
+        ]
+      },
+      "by_section": {
+        "abstract": {
+          "n": 30,
+          "supported": {
+            "k": 27,
+            "rate": 0.9,
+            "ci95": [
+              0.7438,
+              0.9654
+            ]
+          },
+          "inferred": {
+            "k": 1,
+            "rate": 0.0333,
+            "ci95": [
+              0.0059,
+              0.1667
+            ]
+          },
+          "unsupported": {
+            "k": 0,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1135
+            ]
+          },
+          "contradicted": {
+            "k": 2,
+            "rate": 0.0667,
+            "ci95": [
+              0.0185,
+              0.2132
+            ]
+          },
+          "ungrounded": {
+            "k": 3,
+            "rate": 0.1,
+            "ci95": [
+              0.0346,
+              0.2562
+            ]
+          }
+        },
+        "actions": {
+          "n": 18,
+          "supported": {
+            "k": 15,
+            "rate": 0.8333,
+            "ci95": [
+              0.6078,
+              0.9416
+            ]
+          },
+          "inferred": {
+            "k": 0,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1759
+            ]
+          },
+          "unsupported": {
+            "k": 2,
+            "rate": 0.1111,
+            "ci95": [
+              0.031,
+              0.328
+            ]
+          },
+          "contradicted": {
+            "k": 1,
+            "rate": 0.0556,
+            "ci95": [
+              0.0099,
+              0.2576
+            ]
+          },
+          "ungrounded": {
+            "k": 3,
+            "rate": 0.1667,
+            "ci95": [
+              0.0584,
+              0.3922
+            ]
+          }
+        },
+        "decisions": {
+          "n": 14,
+          "supported": {
+            "k": 4,
+            "rate": 0.2857,
+            "ci95": [
+              0.1172,
+              0.5465
+            ]
+          },
+          "inferred": {
+            "k": 2,
+            "rate": 0.1429,
+            "ci95": [
+              0.0401,
+              0.3994
+            ]
+          },
+          "unsupported": {
+            "k": 1,
+            "rate": 0.0714,
+            "ci95": [
+              0.0127,
+              0.3147
+            ]
+          },
+          "contradicted": {
+            "k": 7,
+            "rate": 0.5,
+            "ci95": [
+              0.268,
+              0.732
+            ]
+          },
+          "ungrounded": {
+            "k": 10,
+            "rate": 0.7143,
+            "ci95": [
+              0.4535,
+              0.8828
+            ]
+          }
+        },
+        "problems": {
+          "n": 16,
+          "supported": {
+            "k": 15,
+            "rate": 0.9375,
+            "ci95": [
+              0.7167,
+              0.9889
+            ]
+          },
+          "inferred": {
+            "k": 0,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1936
+            ]
+          },
+          "unsupported": {
+            "k": 0,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1936
+            ]
+          },
+          "contradicted": {
+            "k": 1,
+            "rate": 0.0625,
+            "ci95": [
+              0.0111,
+              0.2833
+            ]
+          },
+          "ungrounded": {
+            "k": 1,
+            "rate": 0.0625,
+            "ci95": [
+              0.0111,
+              0.2833
+            ]
+          }
+        }
+      },
+      "evidence": {
+        "supported_with_links": 36,
+        "cited_overlaps_linked_act": {
+          "k": 33,
+          "n": 36,
+          "rate": 0.9167,
+          "ci95": [
+            0.7817,
+            0.9713
+          ]
+        },
+        "cited_within_2_acts_of_linked": {
+          "k": 33,
+          "n": 36,
+          "rate": 0.9167,
+          "ci95": [
+            0.7817,
+            0.9713
+          ]
+        },
+        "cited_lines_that_are_linked": {
+          "k": 83,
+          "n": 134,
+          "rate": 0.6194,
+          "ci95": [
+            0.535,
+            0.6972
+          ]
+        }
+      }
+    },
+    "negatives": {
+      "swap_role_or_person": {
+        "n": 31,
+        "labels": {
+          "supported": 4,
+          "contradicted": 24,
+          "inferred": 1,
+          "unsupported": 2
+        },
+        "recall": {
+          "k": 26,
+          "n": 31,
+          "rate": 0.8387,
+          "ci95": [
+            0.6737,
+            0.9291
+          ]
+        },
+        "precision_paired": {
+          "k": 26,
+          "n": 31,
+          "rate": 0.8387,
+          "ci95": [
+            0.6737,
+            0.9291
+          ]
+        },
+        "recall_not_supported": {
+          "k": 27,
+          "n": 31,
+          "rate": 0.871,
+          "ci95": [
+            0.7115,
+            0.9487
+          ]
+        },
+        "precision_not_supported_paired": {
+          "k": 27,
+          "n": 33,
+          "rate": 0.8182,
+          "ci95": [
+            0.6561,
+            0.9139
+          ]
+        },
+        "contradicted_cites_lines": {
+          "k": 24,
+          "n": 24,
+          "rate": 1.0,
+          "ci95": [
+            0.862,
+            1.0
+          ]
+        }
+      },
+      "change_number": {
+        "n": 2,
+        "labels": {
+          "contradicted": 2
+        },
+        "recall": {
+          "k": 2,
+          "n": 2,
+          "rate": 1.0,
+          "ci95": [
+            0.3424,
+            1.0
+          ]
+        },
+        "precision_paired": {
+          "k": 2,
+          "n": 3,
+          "rate": 0.6667,
+          "ci95": [
+            0.2077,
+            0.9385
+          ]
+        },
+        "recall_not_supported": {
+          "k": 2,
+          "n": 2,
+          "rate": 1.0,
+          "ci95": [
+            0.3424,
+            1.0
+          ]
+        },
+        "precision_not_supported_paired": {
+          "k": 2,
+          "n": 3,
+          "rate": 0.6667,
+          "ci95": [
+            0.2077,
+            0.9385
+          ]
+        },
+        "contradicted_cites_lines": {
+          "k": 2,
+          "n": 2,
+          "rate": 1.0,
+          "ci95": [
+            0.3424,
+            1.0
+          ]
+        }
+      },
+      "negate": {
+        "n": 37,
+        "labels": {
+          "contradicted": 33,
+          "inferred": 1,
+          "supported": 2,
+          "unsupported": 1
+        },
+        "recall": {
+          "k": 34,
+          "n": 37,
+          "rate": 0.9189,
+          "ci95": [
+            0.787,
+            0.972
+          ]
+        },
+        "precision_paired": {
+          "k": 34,
+          "n": 47,
+          "rate": 0.7234,
+          "ci95": [
+            0.5824,
+            0.8306
+          ]
+        },
+        "recall_not_supported": {
+          "k": 35,
+          "n": 37,
+          "rate": 0.9459,
+          "ci95": [
+            0.823,
+            0.985
+          ]
+        },
+        "precision_not_supported_paired": {
+          "k": 35,
+          "n": 50,
+          "rate": 0.7,
+          "ci95": [
+            0.5625,
+            0.809
+          ]
+        },
+        "contradicted_cites_lines": {
+          "k": 33,
+          "n": 33,
+          "rate": 1.0,
+          "ci95": [
+            0.8957,
+            1.0
+          ]
+        }
+      },
+      "inject_same_series": {
+        "n": 20,
+        "labels": {
+          "contradicted": 8,
+          "supported": 2,
+          "unsupported": 9,
+          "inferred": 1
+        },
+        "recall": {
+          "k": 17,
+          "n": 20,
+          "rate": 0.85,
+          "ci95": [
+            0.6396,
+            0.9476
+          ]
+        },
+        "precision_paired": {
+          "k": 17,
+          "n": 21,
+          "rate": 0.8095,
+          "ci95": [
+            0.6,
+            0.9233
+          ]
+        },
+        "recall_not_supported": {
+          "k": 18,
+          "n": 20,
+          "rate": 0.9,
+          "ci95": [
+            0.699,
+            0.9721
+          ]
+        },
+        "precision_not_supported_paired": {
+          "k": 18,
+          "n": 24,
+          "rate": 0.75,
+          "ci95": [
+            0.551,
+            0.88
+          ]
+        },
+        "contradicted_cites_lines": {
+          "k": 8,
+          "n": 8,
+          "rate": 1.0,
+          "ci95": [
+            0.6756,
+            1.0
+          ]
+        }
+      },
+      "inject_other_series": {
+        "n": 20,
+        "labels": {
+          "unsupported": 18,
+          "contradicted": 1,
+          "inferred": 1
+        },
+        "recall": {
+          "k": 19,
+          "n": 20,
+          "rate": 0.95,
+          "ci95": [
+            0.7639,
+            0.9911
+          ]
+        },
+        "precision_paired": {
+          "k": 19,
+          "n": 22,
+          "rate": 0.8636,
+          "ci95": [
+            0.6666,
+            0.9525
+          ]
+        },
+        "recall_not_supported": {
+          "k": 20,
+          "n": 20,
+          "rate": 1.0,
+          "ci95": [
+            0.8389,
+            1.0
+          ]
+        },
+        "precision_not_supported_paired": {
+          "k": 20,
+          "n": 25,
+          "rate": 0.8,
+          "ci95": [
+            0.6087,
+            0.9114
+          ]
+        },
+        "contradicted_cites_lines": {
+          "k": 0,
+          "n": 1,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.7935
+          ]
+        }
+      }
+    },
+    "escalated_share": {
+      "k": 130,
+      "n": 188,
+      "rate": 0.6915,
+      "ci95": [
+        0.6222,
+        0.7531
+      ]
+    }
+  }
+}

@@ -484,6 +484,16 @@ Write-up: [`docs/benchmark/NOTES_FAITHFULNESS.md`](../benchmark/NOTES_FAITHFULNE
 - **Bugs fixed during the run:** the aggregate key `not_supported` matched the note-ID pattern (`not_…`) of the committable check (renamed `ungrounded`); the name pre-check flagged hyphenated compounds; ordinals ("14th") weren't read as numbers.
 - **Open:** the owner's hand verification of the 29-claim private spot-check list is the ground truth and has not happened yet.
 
+## Notes grounding checker, validated on AMI (2026-11-05)
+Write-up: [`docs/benchmark/GROUNDING_CHECKER.md`](../benchmark/GROUNDING_CHECKER.md). Code: `evals/grounding.py`, `evals/grounding_ami.py`, prompt `grounding.v1`, commands `concentrate ground` and `concentrate ground-ami` ($0.0445 spent).
+- **Decision: a tool, not a leaderboard.** Per claim: verdict, cited `utterance_id`s, a verbatim quote. It reuses the faithfulness track's `split_claims`, `precheck`, labels and `nearest_lines` (now with optional IDF weights and stemming; `claims_message` factored out of `check_request`).
+- **Decision: retrieval first, full transcript only on doubt.** Per claim, the top-8 IDF-weighted lines ±1 go to one excerpt call per meeting; claims with no candidates or not called `supported` go to one full-transcript call whose verdict is final. A retrieval miss costs a call, not a false flag.
+- **Decision: the quote is copied, not generated** (the cited line with most shared words, 25 words max).
+- **Decision: validate against AMI's human annotations, not a second judge.** Positives are AMI's summary sentences, with summary links as evidence gold; negatives are seeded rule-based edits (role/person swap, number, negation, same- and other-series injection), each checked in a call apart from its source sentence. IS1008a is DEV; the prompt and rules predate any verdict.
+- **Parser:** `ami.corpus` now reads dialogue acts (word-id ranges, which can end on non-word events) and `summlink.xml`; `meeting_note()` turns an AMI meeting into a `MeetingNote` (one utterance per dialogue act, channel `them`, role as speaker name). IB4003 has no summary links.
+- **Finding:** TEST edits flagged 89% [82, 94] (110); human sentences supported 78% (78), flagged 18%; evidence recall 92% (36). Decision sentences disagree most (9 of 16 flagged). On our unverified read, 5 of the 20 non-supported human sentences are fair flags (the summary is wrong), 6 judgement calls, 9 checker errors (names vs roles, strict "decided", lost pronoun context).
+- **Open:** run on Granola/Wispr notes for the same AMI meetings once synced; a Sonnet column ($0.44–1.43 est.); give the checker name-to-role hints and the previous sentence as context.
+
 ## Wispr Flow as the second product (2026-11-04)
 
 Built with fakes only; nothing has run live and no results exist. Write-up: [PRODUCTS.md](../benchmark/PRODUCTS.md).
