@@ -1,7 +1,9 @@
-# Hindsight: an outside-in benchmark for agent memory over meeting notes
+# Hindsight: an open benchmark for meeting memory in the age of AI agents
 
 **When an agent asks "what did we decide about pricing, and who owns the follow-up?", should it search transcripts on the spot, or read a memory built ahead of time?**
-Hindsight measures this from the outside, using only Granola's public note format, API and MCP: shareable synthetic meetings with known answers, plus a black-box kit for testing any meeting MCP on your own meetings.
+Hindsight is a suite of evaluations for how AI systems capture, keep, recall and hand off what was said in meetings. It's measured from the outside, using only public interfaces: shareable synthetic meetings with known answers, plus a black-box kit that tests any meeting product through its MCP on your own meetings.
+
+**Reference product: [Granola](https://www.granola.ai).** Hindsight is built around Granola's public note format, API and MCP, because Granola is a widely used meeting tool with an open MCP. Every track is defined so that any product or memory system can be scored; adding another meeting product takes one adapter.
 
 *Independent research prototype; [not affiliated with Granola](#not-affiliated-with-granola).*
 
@@ -46,15 +48,26 @@ There is deliberately **no single score**: one number hides trade-offs, such as 
 
 Comparisons are paired (McNemar, paired bootstrap) with Holm correction, so a tie is never reported as a win.
 
-## Two tracks
+## Five tracks
 
-| | Public track (synthetic) | Black-box track (bring your own meetings) |
+Each track is a task plus metrics that any system can be scored on. Granola is the reference entry, alongside open baselines.
+
+| Track | The task, for any system | Status |
 |---|---|---|
-| **Who it's for** | any system that can ingest a corpus: Mem0, Graphiti, Concentrate, RAG, long-context models, any vendor willing to load it | products that can't load our corpus, such as Granola or any meeting tool with an MCP |
-| **Data** | *Northwind*: a synthetic company, 184 meetings, 296 questions (90 dev / 206 test), nine categories such as who-said-what without speaker labels, which of three Sams, a price *as of* a given week, and whether a commitment was kept | the user's own meetings and questions, through the product's public MCP; everything stays local |
-| **Answers known by** | construction: the world is generated first | the meeting owner approving each gold answer |
-| **Run with** | `concentrate synth`, `concentrate eval` | `concentrate real-kit`, `concentrate real-slice` |
-| **Docs** | [`benchmark/DESIGN.md`](docs/benchmark/DESIGN.md) | [`results/REAL_SLICE.md`](docs/results/REAL_SLICE.md) |
+| **Question answering** | Answer questions across many meetings: who said what, decisions, what changed, commitments, which person | ✅ 7 systems on synthetic data; Granola, top-k and Concentrate on real meetings ([`REAL_SLICE`](docs/results/REAL_SLICE.md)) |
+| **Retention** | Answer after transcripts are deleted: what's lost per question type, and what recovers it | ✅ synthetic curve ([`RETIREMENT`](docs/results/RETIREMENT.md)); real-meeting ladder, DEV ([`DELETION_SIM`](docs/benchmark/DELETION_SIM.md)) |
+| **Notes faithfulness** | Write notes for a meeting: is every line backed by what was said? | 🛠 in progress |
+| **Agent interface quality** | An outside agent asks a meeting product a question: answer type (incl. "wrong, but confident"), evidence, stability, latency | 🛠 in progress |
+| **Contextual integrity** | Answer someone who can only see some meetings, without revealing the rest | 📐 designed ([`SHARING_LEAKS_DESIGN`](docs/benchmark/SHARING_LEAKS_DESIGN.md)) |
+
+Two kinds of data feed the tracks:
+
+| | Synthetic (public) | Your own meetings (black-box) |
+|---|---|---|
+| **Who it's for** | any system that can ingest a corpus: memory libraries, RAG, long-context models, any vendor willing to load it | products that can't load our corpus, such as Granola or any meeting tool with an MCP |
+| **Data** | *Northwind*: a synthetic company in Granola's exact format, 184 meetings, 296 questions (90 dev / 206 test) with known answers | the user's own meetings and questions, through the product's public MCP; everything stays local, only aggregates are shared |
+| **Answers known by** | construction: the world is generated first | the meeting owner |
+| **Docs** | [`benchmark/DESIGN.md`](docs/benchmark/DESIGN.md) | [`benchmark/BLACKBOX.md`](docs/benchmark/BLACKBOX.md) |
 
 Existing memory benchmarks (LongMemEval, LoCoMo, BEAM, RealMem) are chat logs; we found none built on meetings.
 
