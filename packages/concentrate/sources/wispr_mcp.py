@@ -1,6 +1,6 @@
 """``WisprMCPSource``: read Wispr Flow Notetaker meetings through Wispr's official MCP server.
 
-Why: Hindsight compares meeting-memory products on the *same* meetings. Wispr Flow is the
+Why: TENOR compares meeting-memory products on the *same* meetings. Wispr Flow is the
 second real product; this source reads it through the same ``Source`` protocol as Granola, so
 sync, storage and every track work unchanged.
 

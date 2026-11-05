@@ -974,7 +974,7 @@ def fig_deletion(inp: Inputs) -> Any:
 FIGURES: tuple[Spec, ...] = (
     Spec(
         "overview",
-        "How does Hindsight work?",
+        "How does TENOR work?",
         lambda inp: FD.fig_overview(),
         (),
         "engineering/ARCHITECTURE.md",

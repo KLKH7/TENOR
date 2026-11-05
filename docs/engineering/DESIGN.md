@@ -165,7 +165,7 @@ The remote 38+ word monologue tail is a content limitation of scripted turns and
 
 ## Framing: benchmark first (2026-11-02)
 
-**Decision (with the author):** the headline deliverable is the open meeting-memory benchmark and the head-to-head comparison. Concentrate is one entry in it, not the pitch.
+**Decision (with the author):** the headline deliverable is the open meeting-memory benchmark and the head-to-head comparison. Concentrate is one entry in it, not the focus.
 
 **Why:** Granola has publicly described prototyping agent-oriented "enhanced transcripts" (resolving which Sam, expanding project names), so Concentrate's techniques are unlikely to be new to them. What an outsider can add:
 - an independent, reproducible measurement;

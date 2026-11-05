@@ -96,7 +96,7 @@ dana   dan    jw=0.942 codes=('TN', 'TN')/('TN', 'TN') alike=True sim=0.974
 **Then:** read the `name_similarity` docstring (`packages/concentrate/enhance/strings.py:188`). It
 claims look-alikes that sound different, like "Dana" vs "Dan", "stay lower". The output says
 otherwise: they sound alike and score 0.974. That's a real (small) inaccuracy you found yourself,
-and a good interview story about checking claims against code. Also notice "thomas" has two codes
+and a reminder to check claims against code. Also notice "thomas" has two codes
 (`0MS` = "th" as in *think*, `TMS`), and the alternate code is what matches "tomas".
 
 ---

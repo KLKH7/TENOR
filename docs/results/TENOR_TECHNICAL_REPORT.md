@@ -1,12 +1,12 @@
-# Hindsight: What Does Breadth Over Fidelity Cost? An Outside-In Benchmark for Agent Memory over Meeting Notes
+# TENOR interim technical report: what does deleting meeting transcripts cost? An outside-in study on four private meetings
 
-**Kian Lakhani** · Technical report · 4 November 2026 · Independent research prototype, not affiliated with Granola
+**Kian Lakhani** · Interim technical report · 4 November 2026, revised 5 November 2026 · Independent research prototype, not affiliated with Granola or Wispr
 
-*What this is: the full technical report. It covers method, real-meeting results, synthetic diagnostics, limitations and how to reproduce every number.*
+*What this is: the interim technical report on TENOR's first study, run before the AMI replay (the project was then called Hindsight). It covers method, results on the author's 4 private meetings, synthetic diagnostics, limitations and how to reproduce every number. The retention result here is being replicated on public AMI meetings, with Granola and Wispr Flow side by side ([`tracks/RETENTION.md`](../tracks/RETENTION.md)); until that replication is done, treat these numbers as preliminary. The 5 November revision changed framing only: no number changed.*
 
 ## Abstract
 
-Granola trades fidelity for breadth: its agent reads many meetings' notes rather than a few transcripts, and users can auto-delete transcripts [2, 3]. We measure what that costs on **real meetings**, through public interfaces only. All results are DEV (questions seen during development) on the author's 4 Granola meetings.
+Meeting note-takers increasingly answer questions across many meetings, and some let users auto-delete transcripts and keep only notes. Granola, the product studied here, documents both: its agent reads many meetings' notes and goes to transcripts only when needed, and its auto-deletion setting limits chat to the notes [2, 3]. We measure what answering from notes alone costs on **real meetings**, through public interfaces only. All results are DEV (questions seen during development) on the author's 4 Granola meetings.
 
 - **Deletion is costly, and the cost falls on detail.** Granola's agent with transcripts: 89% of 47 questions. Our model over Granola's notes alone: 57% (paired 2–17, p = 0.001). On questions the notes can't answer: 94% → 44%.
 - **Reaching the transcript recovers the loss; a fact layer doesn't.** Notes + extracted facts: 66% (4–0, p = 0.13). Transcript passages only when needed: 87% (10–0, p = 0.002).
@@ -17,13 +17,12 @@ Granola trades fidelity for breadth: its agent reads many meetings' notes rather
 
 ## 1. Motivation
 
-External agents (Claude, ChatGPT) reach Granola only through its MCP, the protocol agents use to call its tools.
+External agents (Claude, ChatGPT) reach a meeting product only through its MCP, the protocol agents use to call its tools. Two published design choices make the cost of answering from notes a practical question:
 
-- **The CEO's framing [1].** An agent connected through Claude can "look at the 20 most relevant meetings" and does "a relatively dumb job at extracting information". He proposed sending agents "apple juice from concentrate", and said Granola was "looking into whether we should delete the transcript automatically". (Our probe found the MCP is now an agent that searches, reads and cites, so the 20-meeting description is out of date [11].)
-- **The design choice [3].** "Breadth over fidelity": read ~100 meetings at a high level rather than 10 in full. Transcripts cost ~10× the tokens of notes. Go deeper only when needed. The worst output is "wrong, but confident".
-- **The shipped feature [2].** After auto-deletion, chat is "limited to whatever is in your notes", and "Chat quality will be degraded".
+- **Breadth over fidelity [3].** "Breadth over fidelity": read ~100 meetings at a high level rather than 10 in full. Transcripts cost ~10× the tokens of notes. Go deeper only when needed. The worst output is "wrong, but confident".
+- **Transcript auto-deletion [2].** After auto-deletion, chat is "limited to whatever is in your notes", and "Chat quality will be degraded".
 
-Granola can measure this internally. An outside benchmark adds independence, comparability across products, and the view an external agent actually gets.
+A vendor can measure this internally. An outside benchmark adds independence, comparability across products, and the view an external agent actually gets. Only Granola was studied in this first round; Wispr Flow was added as a second reference product for the AMI replay. A read-only probe of the MCP is recorded in [11].
 
 **Related work** (table and lessons: [`RELATED_WORK.md`](../RELATED_WORK.md)).
 
@@ -159,7 +158,7 @@ Northwind is reported for completeness, and because it failed in an instructive 
 ## 7. Next steps
 
 1. **Fresh real test (X1, in progress):** hand-written held-out questions, written after the design freeze [22].
-2. **Paired Granola + Wispr Flow recordings** of the same meetings (in progress).
+2. **Paired Granola and Wispr Flow recordings** of the same meetings: done on 7 public AMI meetings after this report (see the [README](../../README.md#results)).
 3. **More meetings and contributors,** so results stop being one person's, and enough meetings to test search.
 4. **More products through the black-box kit;** any meeting MCP is one JSON spec.
 5. **Synthetic upkeep, as diagnostics:** v2/v2.1 runs [8], baseline wiring and directory fixes.
@@ -196,7 +195,7 @@ Everything about your meetings stays in the gitignored `data/real/`; only a cont
 
 Web sources were verified at source on 3 November 2026; repository files are at this branch.
 
-1. C. Newton, interview with Granola CEO Chris Pedregal, *Platformer*, 30 Jul 2026. https://www.platformer.news/granola-chris-pedregal-interview/ (accessed 2026-11-03)
+1. (Removed in the 5 November revision; numbering kept so that citations of the earlier version stay valid.)
 2. Granola Help Centre, "Transcript auto-deletion". https://docs.granola.ai/help-center/consent-security-privacy/transcript-auto-deletion (accessed 2026-11-03)
 3. Granola, "How Granola thinks about designing agents", 6 May 2026. https://www.granola.ai/blog/how-granola-thinks-about-designing-agents (accessed 2026-11-03)
 4. [`docs/tracks/RETENTION.md`](../tracks/RETENTION.md): deletion simulation design and DEV results.

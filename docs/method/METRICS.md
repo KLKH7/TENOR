@@ -1,6 +1,6 @@
-# How Hindsight measures
+# Metrics
 
-This page defines every number Hindsight reports. For each metric you get:
+This page defines the metrics and statistics TENOR reports; it was written for the earlier question-answering and retention tracks and still governs them. For each metric you get:
 - what it means in plain English;
 - why it matters to someone choosing a meeting-memory approach;
 - how it is computed (formula and code);
@@ -27,7 +27,7 @@ One number hides the trade-offs, and the trade-offs are the decision. A team cho
 - What does an answer cost, and how long does it take?
 - Does it still work on *our* meetings?
 
-A system can be cheap and wrong, or right and slow. Any weighting of the two is a product decision, not a measurement. So Hindsight reports six dimensions side by side, plus a cost/accuracy frontier, and leaves the weighting to the reader.
+A system can be cheap and wrong, or right and slow. Any weighting of the two is a product decision, not a measurement. So TENOR reports six dimensions side by side, plus a cost/accuracy frontier, and leaves the weighting to the reader.
 
 | | Dimension | Question it answers |
 |---|---|---|

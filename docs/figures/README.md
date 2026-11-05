@@ -12,7 +12,7 @@ Prices for every dollar figure: $4/M input and $20/M output tokens, applied to e
 
 | | |
 |---|---|
-| [<img src="overview.svg" width="400" alt="How does Hindsight work?">](overview.svg)<br>**How does Hindsight work?**<br>Belongs in [`engineering/ARCHITECTURE.md`](../engineering/ARCHITECTURE.md) | [<img src="tracks.svg" width="400" alt="What does each track test, and how far along is it?">](tracks.svg)<br>**What does each track test, and how far along is it?**<br>Belongs in [`tracks/README.md`](../tracks/README.md) |
+| [<img src="overview.svg" width="400" alt="How does TENOR work?">](overview.svg)<br>**How does TENOR work?**<br>Belongs in [`engineering/ARCHITECTURE.md`](../engineering/ARCHITECTURE.md) | [<img src="tracks.svg" width="400" alt="What does each track test, and how far along is it?">](tracks.svg)<br>**What does each track test, and how far along is it?**<br>Belongs in [`tracks/README.md`](../tracks/README.md) |
 | [<img src="harness_flow.svg" width="400" alt="How does the outside-in evaluation harness work?">](harness_flow.svg)<br>**How does the outside-in evaluation harness work?**<br>Belongs in [`method/CALIBRATED_JUDGING.md`](../method/CALIBRATED_JUDGING.md) |  |
 
 ## Real meetings: the evidence
@@ -38,7 +38,7 @@ Prices for every dollar figure: $4/M input and $20/M output tokens, applied to e
 
 | Figure | Question | Inputs (sha256 prefix) |
 |---|---|---|
-| [overview.svg](overview.svg) | How does Hindsight work? | none: a diagram |
+| [overview.svg](overview.svg) | How does TENOR work? | none: a diagram |
 | [tracks.svg](tracks.svg) | What does each track test, and how far along is it? | `docs/figures/data/real_slice.json` (1458a32d7155), `evals/reports/real-deletion-sim-dev.aggregate.json` (6bc288f59ce8) |
 | [retention_steps.svg](retention_steps.svg) | What does deleting transcripts cost, and what brings it back? | `evals/reports/real-deletion-sim-dev.aggregate.json` (6bc288f59ce8) |
 | [answer_types.svg](answer_types.svg) | When the answer isn't right, does it say so? | `evals/reports/real-deletion-sim-dev.aggregate.json` (6bc288f59ce8) |

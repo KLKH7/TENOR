@@ -188,7 +188,7 @@ def test_renders_every_figure_as_valid_svg(tmp_path: Path) -> None:
         assert b"DEV" in rendered[f"{name}.svg"]
         assert b"AMI, 3 meetings, 8 questions" in rendered[f"ami_{name}.svg"]
     assert b"Wispr" in rendered["ami_retention_steps.svg"]  # the notes-only product panel
-    assert b"How does Hindsight work?" in rendered["overview.svg"]
+    assert b"How does TENOR work?" in rendered["overview.svg"]
     assert b"2 meetings" in rendered["harness_flow.svg"]
     assert b"EN2002b" in rendered["capture_coverage.svg"]
 

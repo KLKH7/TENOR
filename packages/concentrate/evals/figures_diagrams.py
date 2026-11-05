@@ -1,4 +1,4 @@
-"""Explanatory figures: how Hindsight works, and one card per track.
+"""Explanatory figures: how TENOR works, and one card per track.
 
 Drawn with the same matplotlib style as the results figures, so they share the palette, the
 deterministic SVG and the values-sidecar check. The track cards' headline numbers are read
@@ -162,7 +162,7 @@ TRACKS: tuple[tuple[str, str, str, str, str, str], ...] = (
 
 
 def fig_overview() -> Any:
-    """'How Hindsight works': meetings -> products (via adapters) -> five tracks -> scores."""
+    """'How TENOR works': meetings -> products (via adapters) -> five tracks -> scores."""
     fig, ax = _canvas(5.0)
     top = 80.0
     heads = (
@@ -294,7 +294,7 @@ def fig_overview() -> Any:
         va="center",
     )
     ax.text(
-        2, 96, "How does Hindsight work?", fontsize=13, fontweight="bold", color=fs.INK, va="center"
+        2, 96, "How does TENOR work?", fontsize=13, fontweight="bold", color=fs.INK, va="center"
     )
     ax.text(
         2,

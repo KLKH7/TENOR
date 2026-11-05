@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this benchmark or software, please cite it as below."
-title: "Hindsight: an open benchmark for agent memory over meeting notes"
+title: "TENOR: an open benchmark for meeting note-takers (Transcripts, Evidence, Notes, Outcomes, Recall)"
 type: software
 authors:
   - family-names: Lakhani
@@ -9,14 +9,17 @@ version: 0.1.0
 date-released: 2026-11-02
 license: MIT
 abstract: >-
-  An open benchmark and harness comparing agent memory systems over Granola-style
-  meeting notes for accuracy, cost and latency. Includes Northwind, a synthetic
-  184-meeting, 296-question benchmark with verified, line-cited answers, and
-  Concentrate, a cited, time-aware meeting memory. Independent research prototype,
-  not affiliated with Granola.
+  TENOR is an open benchmark for meeting note-takers. It replays public meetings
+  (the AMI Meeting Corpus, CC BY 4.0) into real products and measures, from the
+  outside, whether the meeting was captured, whether the notes are faithful and
+  complete, whether answers about it are right, and what is lost when transcripts
+  are deleted. Granola and Wispr Flow are the reference products. Also includes
+  the archived Northwind synthetic benchmark and Concentrate reference memory.
+  Independent research prototype, not affiliated with Granola or Wispr.
 keywords:
-  - agent memory
+  - meeting note-takers
   - benchmark
+  - evaluation
   - meeting transcripts
-  - retrieval
-  - temporal knowledge
+  - AMI Meeting Corpus
+  - LLM-as-judge calibration

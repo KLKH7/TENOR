@@ -1,6 +1,6 @@
 # Style guide
 
-How every Hindsight doc and figure is written. One page; follow it for every new doc.
+How every TENOR doc and figure is written. One page; follow it for every new doc.
 
 ## Writing
 

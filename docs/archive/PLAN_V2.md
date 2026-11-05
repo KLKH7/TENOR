@@ -30,7 +30,7 @@
 4. **Independence.** Results from an outside party carry more credibility than a vendor's own claims, with users, with partners and in marketing.
 
 **What this rules out, or demotes:**
-- **Concentrate is a reference system, not the product pitch.** Granola can build a better one internally, so it's there to show what a memory approach gains and loses, not to be sold.
+- **Concentrate is a reference system, not a product.** It is there to show what a memory approach gains and loses.
 - **b3 (our imitation of Granola's agent) is demoted** to "a generic agentic-retrieval baseline". The real Granola agent is only ever tested as a black box.
 - **No claims about Granola internals.** We report only what's observable through public interfaces.
 

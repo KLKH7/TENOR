@@ -46,7 +46,7 @@ This page is TENOR's protocol for replaying public AMI Meeting Corpus recordings
 
 > Uses the AMI Meeting Corpus (University of Edinburgh and AMI consortium partners), licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), https://groups.inf.ed.ac.uk/ami/corpus/. Changes: the audio was played in real time into third-party meeting products, and questions were derived mechanically from the manual annotations. Citation: J. Carletta et al., "The AMI Meeting Corpus: A Pre-announcement", MLMI 2005, LNCS 3869, pp. 28–39.
 
-## 2. Why it fits Hindsight
+## 2. Why it fits TENOR
 
 | Need | What AMI gives |
 |---|---|

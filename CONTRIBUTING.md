@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for looking. Hindsight is a research benchmark, so the bar is **honesty and reproducibility over polish**: a new system that loses, reported carefully, is a welcome contribution.
+Thanks for looking. TENOR is a research benchmark, so the bar is **honesty and reproducibility over polish**: a new system that loses, reported carefully, is a welcome contribution.
 
 ## Setup
 

@@ -1,6 +1,6 @@
 # Architecture
 
-![How does Hindsight work? Meetings go into products (Granola, Wispr Flow, open baselines), five tracks test them, scores come out](../figures/overview.svg)
+![How does TENOR work? Meetings go into products (Granola, Wispr Flow, open baselines), five tracks test them, scores come out](../figures/overview.svg)
 
 Five diagrams, each with a short caption and links to the code it describes. They are in Mermaid, so GitHub renders them. The picture above is the ten-second version ([`figures/overview.svg`](../figures/overview.svg)); [`figures/tracks.svg`](../figures/tracks.svg) shows each track's task, metrics and status.
 
@@ -65,7 +65,7 @@ flowchart TB
   open ~~~ note
 ```
 
-**In plain English.** A query-time system is an open-book exam: it does all its work when the question arrives, searching and reading transcripts every time. A write-time system takes notes as each meeting arrives and later answers from its notebook. The notebook is cheaper and faster per question and can track how things changed, but it only holds what the note-taker chose to write down. That trade-off is the main thing Hindsight measures: on synthetic questions the two tied; on the author's real meetings the notebook missed the long-tail details that real questions ask about ([`results/REAL_SLICE.md`](../results/REAL_SLICE.md)).
+**In plain English.** A query-time system is an open-book exam: it does all its work when the question arrives, searching and reading transcripts every time. A write-time system takes notes as each meeting arrives and later answers from its notebook. The notebook is cheaper and faster per question and can track how things changed, but it only holds what the note-taker chose to write down. That trade-off was the main thing the project measured before the AMI replay (the project was then called Hindsight): on synthetic questions the two tied; on the author's real meetings the notebook missed the long-tail details that real questions ask about ([`results/REAL_SLICE.md`](../results/REAL_SLICE.md)).
 
 Code: query-time b0–b3 in [`agents/baselines.py`](../../packages/concentrate/agents/baselines.py) and [`retrieval.py`](../../packages/concentrate/agents/retrieval.py); write-time systems implement `WriteTimeSystem` in the same file. Systems overview: [`systems/`](../archive/concentrate/).
 

@@ -1,14 +1,14 @@
 # Related work
 
-What prior benchmarks test, how Hindsight differs, and what we take from them. For anyone placing Hindsight in the literature.
+What prior benchmarks test, how TENOR differs, and what we take from them. For anyone placing TENOR in the literature.
 Every source below was opened and checked at source on 4 November 2026 (title, authors, venue, ID). Sources we could not verify are not cited.
 
-## How Hindsight differs
+## How TENOR differs
 
-Hindsight's five differences, used in the last column:
+TENOR's five differences, used in the last column:
 **Products** (shipped products, through their agent interfaces) · **Many meetings** (memory across meetings, not one transcript) · **Retention** (what deleting transcripts costs) · **Same meetings** (one set of meetings across products) · **Integrity** (not revealing meetings the asker can't see).
 
-| Work | What it tests | Data | How Hindsight differs |
+| Work | What it tests | Data | How TENOR differs |
 |---|---|---|---|
 | **LongMemEval** [1] (ICLR 2025) | Chat-assistant memory: extraction, multi-session reasoning, time, updates, abstention | 500 questions in generated user–assistant chat histories | Meetings, not chat. Products, Retention |
 | **LoCoMo** [2] (ACL 2024) | Very long-term conversational memory: QA, event summaries | 50 generated, human-edited dialogues, up to 35 sessions | Meetings, not chat. Products, Retention |
@@ -26,19 +26,19 @@ Hindsight's five differences, used in the last column:
 | **FActScore** [14] (EMNLP 2023) | Factual precision of long text, claim by claim | Biographies against Wikipedia | Notes checked against their own meeting's transcript |
 | **MiniCheck** [15] (EMNLP 2024) | Is a claim grounded in a given document? Small, cheap checkers | LLM-AggreFact grounding benchmark | We apply the same question to product notes |
 | **AI note-taker test** [16] (repo, Oct 2026) | Notes quality of Otter, Fireflies, Granola, Scribbl | 5 AMI meetings, run by Scribbl (one of the tools tested) | Same meetings, but notes only: no agent interface, no QA, no Retention |
-| **AMI** [17], **ICSI** [18] corpora | Meeting recordings with transcripts and annotations | AMI 100 h (two-thirds role-played design meetings); ICSI ~70 h research meetings | Hindsight's headlines use the author's own Granola meetings; these corpora are public options for paired product runs |
+| **AMI** [17], **ICSI** [18] corpora | Meeting recordings with transcripts and annotations | AMI 100 h (two-thirds role-played design meetings); ICSI ~70 h research meetings | TENOR replays 7 AMI meetings into the reference products; ICSI's longer real series are a candidate for later |
 
-**Honest scope.** Hindsight's real data is 4 meetings that fit in context, so "Many meetings" is designed for, not yet measured. Integrity is designed, not run.
+**Honest scope.** TENOR's AMI set is 7 meetings, and the earlier private study used 4 meetings that fit in context, so "Many meetings" is designed for, not yet measured. Integrity is designed, not run.
 
 ## The gap
 
 **No benchmark we found tests shipped meeting products through the interface agents use.** Memory benchmarks [1–5] use chat or generated dialogue. Meeting benchmarks [6–13] give a model the transcript and grade the model.
 
-**Retention is untested.** Products let users delete transcripts; prior work assumes the transcript is there. Hindsight asks what an agent loses when only notes remain.
+**Retention is untested.** Products let users delete transcripts; prior work assumes the transcript is there. TENOR asks what an agent loses when only notes remain.
 
-**Cross-product comparison exists only for notes.** The note-taker test [16] ran four products on the same 5 AMI meetings. Hindsight adds questions through each product's agent interface (Granola now; Wispr Flow built, not yet run).
+**Cross-product comparison exists only for notes.** The note-taker test [16] ran four products on the same 5 AMI meetings. TENOR adds capture, transcription, notes and answer measures on the same AMI meetings for two products (Granola and Wispr Flow; preliminary), and questions through each product's agent interface.
 
-**Answer type matters as much as accuracy.** MeetingProbe [13] found failures were mostly discourse and pragmatics, not fact recall. Hindsight also counts *wrong but confident* separately from *declined*.
+**Answer type matters as much as accuracy.** MeetingProbe [13] found failures were mostly discourse and pragmatics, not fact recall. TENOR also counts *wrong but confident* separately from *declined*.
 
 ## Lessons we take
 
@@ -47,7 +47,7 @@ Hindsight's five differences, used in the last column:
 - **Write held-out questions to a published schema, with training and review.** QMSum's annotators first marked topics and text spans, then wrote queries from a fixed list of general and specific query types; they passed a pre-annotation stage and experts reviewed every annotation [6, §3.2]. Our fresh test (X1) should do the same, with the question schema fixed before, and independent of, any memory's extraction schema.
 - **Random questions undercount failures.** Adaptive search found 2.5× more failures than random probing (7.1% vs 2.9%) [13]. Our question sets are fixed, so failure rates are lower bounds.
 - **Split notes into claims, then check each against the source.** That is the shape of FActScore [14] and MiniCheck [15], and of our notes-faithfulness track. MiniCheck shows a small, trained checker can reach GPT-4 accuracy [15]; our cheap, untrained checker (Haiku) did not, and barely told good notes from bad ([`NOTES_FAITHFULNESS`](tracks/NOTES.md) §4).
-- **Publish inputs when you have a stake.** The note-taker test was run by a vendor and published every input and grader answer [16]. Hindsight can't publish real meetings, so it publishes the code and content-free aggregates.
+- **Publish inputs when you have a stake.** The note-taker test was run by a vendor and published every input and grader answer [16]. TENOR publishes its code, AMI-derived questions and scores; the earlier private meetings are not published, only content-free aggregates.
 
 ## References
 

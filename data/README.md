@@ -36,7 +36,7 @@ configs:
 
 Northwind is a synthetic benchmark for **agent memory over meeting notes**. A fictional startup, Northwind Labs, holds standups, 1:1s, customer calls, design reviews, all-hands and an investor update. Each meeting is a note in the JSON shape of Granola's public API (title, attendees, calendar event, AI summary, transcript). Questions ask what an agent would need to know about months of those meetings, and every answer is known by construction and cites the transcript lines that state it.
 
-Part of [Hindsight](../README.md). Full benchmark card, metrics and systems: [`docs/BENCHMARK.md`](../docs/BENCHMARK.md). Not affiliated with Granola: it uses Granola's public data formats only.
+Part of [TENOR](../README.md) (archived synthetic diagnostics). Benchmark card: [`docs/archive/northwind/DESIGN.md`](../docs/archive/northwind/DESIGN.md). Not affiliated with Granola: it uses Granola's public data formats only.
 
 ## Dataset structure
 

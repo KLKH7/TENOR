@@ -1,7 +1,7 @@
 [project]
 name = "concentrate"
 version = "0.1.0"
-description = "Hindsight: an open benchmark for agent memory over meeting notes, with the Concentrate memory system (research prototype)."
+description = "TENOR: an open benchmark for meeting note-takers, with the archived Concentrate memory system (research prototype)."
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }

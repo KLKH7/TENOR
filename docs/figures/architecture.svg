@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 480" width="1000" height="480" role="img" aria-labelledby="t d">
-  <title id="t">Hindsight architecture</title>
+  <title id="t">TENOR architecture</title>
   <desc id="d">Meetings enter through public Granola interfaces or the synthetic Northwind generator, pass through one Source protocol into a note store, are answered by query-time and write-time systems, and are scored by one harness whose reports feed analysis, figures and the results explorer. Granola's own agent is tested only as a black box on real meetings.</desc>
   <defs>
     <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
