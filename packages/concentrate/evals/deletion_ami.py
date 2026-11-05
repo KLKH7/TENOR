@@ -36,7 +36,7 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
-from concentrate.agents.baselines import Answer, SystemResult
+from concentrate.agents.baselines import Answer, QuestionLike, SystemResult, _user_prompt
 from concentrate.agents.concentrate_system import ConcentrateSystem
 from concentrate.ami.products import match_recordings, read_overrides
 from concentrate.ami.questions import AmiQuestion
@@ -79,6 +79,15 @@ PAIRS: tuple[D.Pair, ...] = (
     ("notes_facts_fallback vs notes_facts", "notes_facts_fallback", "notes_facts"),
 )
 
+# What each condition reads. "question": only the question's own meetings, as Granola Chat
+# (A) was asked (``document_ids`` = the question's notes; checked: 68 of 68). "all": every
+# recorded meeting, the original's upper bound, which adds distraction to A - B.
+SCOPES = ("question", "all")
+SCOPE_META = {
+    "question": "question meetings, matched to condition A",
+    "all": "all recorded meetings (upper bound, not matched to A)",
+}
+
 ORIGINAL_AGGREGATE = Path("evals/reports/real-deletion-sim-dev.aggregate.json")
 FALLBACK_READER = "claude-opus-5-5"  # only if the original's aggregate is missing
 JUDGE_MODEL = "claude-sonnet-5-5"  # stage 3's judge (data/ami/results/facts/stage3.json meta)
@@ -86,7 +95,7 @@ ANSWERS = Path("data/ami/results/facts/answers_granola.clean.jsonl")
 OUT_DIR = Path("data/ami/results/deletion")  # local, gitignored: rows hold product text
 AGGREGATE = Path("evals/reports/ami/deletion-sim.aggregate.json")  # committed, numbers only
 PILOT_N = 5
-PILOT_MAX_USD = 1.50
+PILOT_MAX_USD = 1.00
 INGEST_SAFETY = 1.5  # the fact-layer build is priced by a calibrated model, not counted
 
 # Calibration from the real DEV run (docs/benchmark/DELETION_SIM.md, "The exact cost quote" and
@@ -212,13 +221,30 @@ def pilot_questions(qs: Sequence[DeletionQuestion], n: int, seed: int) -> list[D
     return sorted(picked, key=lambda q: q.id)
 
 
-def pilot_corpus(
-    notes: Sequence[MeetingNote], questions: Iterable[DeletionQuestion]
-) -> list[MeetingNote]:
-    """The reader notes of the meetings ``questions`` cover: a pilot builds the fact layer
-    over these only, so it stays cheap."""
+def pilot_corpus(notes: Sequence[MeetingNote], questions: Iterable[Any]) -> list[MeetingNote]:
+    """The reader notes of the meetings ``questions`` cover (anything with ``.meetings``)."""
     wanted = {f"AMI {m}" for q in questions for m in q.meetings}
     return [n for n in notes if n.title in wanted]
+
+
+def corpus_key(q: Any, scope: str) -> tuple[str, ...]:
+    """Which notes a question reads: its own meetings (``question``) or every one (``all``)."""
+    if scope not in SCOPES:
+        raise ValueError(f"scope must be one of {SCOPES}, not {scope!r}")
+    return tuple(sorted(q.meetings)) if scope == "question" else ("*",)
+
+
+def corpora(
+    questions: Iterable[Any], notes: Sequence[MeetingNote], scope: str
+) -> dict[tuple[str, ...], list[MeetingNote]]:
+    """One corpus per distinct :func:`corpus_key` of ``questions``: under ``question`` scope a
+    fact layer is built per meeting set (5 single meetings and 3 pairs today)."""
+    out: dict[tuple[str, ...], list[MeetingNote]] = {}
+    for q in questions:
+        key = corpus_key(q, scope)
+        if key not in out:
+            out[key] = list(notes) if key == ("*",) else pilot_corpus(notes, [q])
+    return dict(sorted(out.items()))
 
 
 def question_tags(qs: Iterable[DeletionQuestion]) -> dict[str, list[str]]:
@@ -254,11 +280,34 @@ class RecordedChatSystem:
         return 0, 0
 
 
-def notes_only(client: LLMClient, notes: Sequence[MeetingNote], name: str, **kw: Any) -> Any:
-    """B / B': :class:`~concentrate.evals.deletion_sim.NotesOnlySystem` under its AMI name."""
-    s = D.NotesOnlySystem(client, notes, **kw)
-    s.name = name
-    return s
+class ScopedNotesOnly(D.NotesOnlySystem):
+    """B / B': :class:`~concentrate.evals.deletion_sim.NotesOnlySystem`, reading only the
+    question's own meetings' notes (``scope="question"``, matched to A) or all of them."""
+
+    def __init__(
+        self,
+        client: LLMClient,
+        notes: Sequence[MeetingNote],
+        name: str,
+        scope: str = "question",
+        **kw: Any,
+    ) -> None:
+        super().__init__(client, notes, **kw)
+        if scope not in SCOPES:
+            raise ValueError(f"scope must be one of {SCOPES}, not {scope!r}")
+        self.name, self.scope = name, scope
+
+    def _context(self, q: QuestionLike) -> tuple[str, list[str]]:
+        mine = self.notes if self.scope == "all" else pilot_corpus(self.notes, [q])
+        held = D.held_notes(mine, q.as_of)
+        return f"{D.notes_block(mine, q.as_of)}\n\n{_user_prompt(q)}", [m.note_id for m in held]
+
+
+def notes_only(
+    client: LLMClient, notes: Sequence[MeetingNote], name: str, scope: str = "question", **kw: Any
+) -> ScopedNotesOnly:
+    """B / B' under its AMI name and scope."""
+    return ScopedNotesOnly(client, notes, name, scope, **kw)
 
 
 class CappedBuild(ConcentrateSystem):
@@ -283,6 +332,42 @@ class AmiNotesFacts(CappedBuild, D.NotesFactsSystem):
 
 class AmiNotesFactsFallback(CappedBuild, D.NotesFactsFallbackSystem):
     """D on AMI: the original's D, with the build under the run's cap."""
+
+
+class ScopedMemory:
+    """C or D with one fact layer per corpus (:func:`corpora`): a question is answered by the
+    build over exactly its own meetings, so its notes block, facts and (for D) transcript
+    passages come from those meetings only, as for A. Delegates everything per question."""
+
+    def __init__(self, builds: Mapping[tuple[str, ...], CappedBuild], scope: str) -> None:
+        if not builds:
+            raise ValueError("ScopedMemory needs at least one build")
+        self.builds, self.scope = dict(builds), scope
+        first = next(iter(self.builds.values()))
+        self.name, self.prompt_ids = first.name, first.prompt_ids
+        self.ingest_model = first.ingest_model
+
+    def pick(self, q: Any) -> CappedBuild:
+        return self.builds[corpus_key(q, self.scope)]
+
+    def run(self, q: Any) -> SystemResult:
+        return self.pick(q).run(q)
+
+    def turn_request(self, q: Any) -> Any:
+        return self.pick(q).turn_request(q)
+
+    def prompt_texts(self, q: Any) -> tuple[str, str]:
+        s = self.pick(q)
+        assert isinstance(s, D.NotesFactsSystem)
+        return s.prompt_texts(q)
+
+    def fallback_texts(self, q: Any) -> tuple[str, str] | None:
+        s = self.pick(q)
+        assert isinstance(s, D.NotesFactsSystem)
+        return s.fallback_texts(q)
+
+    def estimate(self, q: Any) -> tuple[int, int]:
+        return self.pick(q).estimate(q)
 
 
 # -- the quote -------------------------------------------------------------------------------------
@@ -377,22 +462,41 @@ def quote_memory_unbuilt(
     return line
 
 
-def quote_build(memory: ConcentrateSystem, notes: list[MeetingNote], split: str) -> D.QuoteLine:
-    """The fact-layer build over ``notes`` (extraction + entailment), $0 if already built.
-    Priced by the build's calibrated cost model, not counted: high = expected x 1.5."""
+def quote_build(
+    probe: Callable[[], ConcentrateSystem],
+    corpora_: Mapping[tuple[str, ...], list[MeetingNote]],
+    split: str,
+) -> D.QuoteLine:
+    """The fact-layer builds (extraction + entailment) over every corpus not built yet.
+    Priced by the build's calibrated cost model, not counted: high = expected x 1.5. A
+    meeting set's first meeting is extracted with no earlier context, the same request as
+    its single-meeting build, so that call is not priced twice."""
     from concentrate.agents.concentrate_system import COMPLETE_MARKER
 
+    memory = probe()
     line = D.QuoteLine("fact_layer_build", split, 0, 0, 0, 0)
-    if (memory.store_dir(notes) / COMPLETE_MARKER).exists():
-        line.note = "already built: $0"
-        return line
-    tin, tout = memory.estimate_ingest(notes)
-    usd = memory.estimate_ingest_usd(notes)
-    line.answer_calls, line.answer_in = len(notes), tin
+    todo = {
+        k: v for k, v in corpora_.items() if not (memory.store_dir(v) / COMPLETE_MARKER).exists()
+    }
+    usd = 0.0
+    tin = tout = calls = 0
+    for key, notes in todo.items():
+        i, o = memory.estimate_ingest(notes)
+        u, c = memory.estimate_ingest_usd(notes), len(notes)
+        first = (key[0],)
+        if len(key) > 1 and first in corpora_:  # its first call is the single build's
+            fi, fo = memory.estimate_ingest(corpora_[first])
+            i, o, c = i - fi, o - fo, c - 1
+            u -= memory.estimate_ingest_usd(corpora_[first])
+        tin, tout, usd, calls = tin + i, tout + o, usd + u, calls + c
+    line.answer_calls, line.answer_cached, line.answer_in = calls, len(corpora_) - len(todo), tin
     line.usd_expected, line.usd_high = usd, usd * INGEST_SAFETY
     line.note = (
-        f"{len(notes)} transcripts, {memory.ingest_model} extraction (+ entailment); model "
-        f"estimate ~{tout:,} output tokens, high = x{INGEST_SAFETY}"
+        f"{len(todo)} of {len(corpora_)} meeting sets to build ({calls} extraction calls, "
+        f"{memory.ingest_model} + entailment); model estimate ~{tout:,} output tokens, "
+        f"high = x{INGEST_SAFETY}"
+        if todo
+        else "already built: $0"
     )
     return line
 
@@ -454,9 +558,11 @@ def quote_markdown(
     judge: str,
     judge2: str,
     how: str,
+    scope: str = "question",
 ) -> str:
     """The quote as tables, one per section (aggregates only)."""
     out = [
+        f"Scope: {SCOPE_META[scope]}. "
         f"Answer model `{reader}` (the original run's); judge `{judge}` (stage 3's), second "
         f"judge `{judge2}`. Input: {how}; + structured-output overhead (answer "
         f"+{cal.answer_overhead}, judge +{cal.judge_overhead} tokens/call). Output: mean "
@@ -509,17 +615,24 @@ class RunInfo:
     skipped: dict[str, int]
     recordings: dict[str, int]  # product -> recorded AMI meetings
     build: dict[str, Any] = field(default_factory=dict)  # fact-layer build stats (numbers)
+    scope: str = "question"
 
 
-def build_stats(memory: ConcentrateSystem, notes: list[MeetingNote]) -> dict[str, Any]:
-    """The numeric fields of the fact-layer build record (calls, tokens, cost, seconds)."""
+def build_stats(builds: Iterable[ConcentrateSystem]) -> dict[str, Any]:
+    """The numeric fields of the fact-layer build records (calls, tokens, cost, seconds),
+    summed over the builds, plus how many there are."""
     from concentrate.agents.concentrate_system import COMPLETE_MARKER
 
-    marker = memory.store_dir(notes) / COMPLETE_MARKER
-    if not marker.exists():
-        return {}
-    raw = json.loads(marker.read_text())
-    return {k: v for k, v in raw.items() if isinstance(v, int | float) and not isinstance(v, bool)}
+    out: dict[str, Any] = {"builds": 0}
+    for memory in builds:
+        marker = memory.store_dir(memory._notes) / COMPLETE_MARKER
+        if not marker.exists():
+            continue
+        out["builds"] += 1
+        for k, v in json.loads(marker.read_text()).items():
+            if isinstance(v, int | float) and not isinstance(v, bool):
+                out[k] = out.get(k, 0) + v
+    return out
 
 
 def aggregate(
@@ -536,6 +649,7 @@ def aggregate(
             "seed": meta.get("seed"),
             "split": meta.get("split"),
             "pilot": info.pilot,
+            "scope": SCOPE_META[info.scope],
             "questions": len(questions),
             "meetings": len(meetings),
             "meeting_ids": meetings,

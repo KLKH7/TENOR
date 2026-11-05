@@ -3238,9 +3238,16 @@ def ami_deletion_sim(
         bool, typer.Option(help="Sandbox: --pilot-n DEV questions x every condition, tiny cap.")
     ] = False,
     pilot_n: Annotated[int, typer.Option(help="--pilot: questions.")] = 5,
+    scope: Annotated[
+        str,
+        typer.Option(
+            help="question: each condition reads only the question's own meetings, as Granola "
+            "Chat (A) was asked (default). all: every recording's notes (upper bound)."
+        ),
+    ] = "question",
     max_usd: Annotated[
         float | None,
-        typer.Option(help="Hard spend cap (the approved amount); a pilot defaults to $1.50."),
+        typer.Option(help="Hard spend cap (the approved amount); a pilot defaults to $1.00."),
     ] = None,
     yes: Annotated[bool, typer.Option(help="Skip the confirmation prompt.")] = False,
     reader_model: Annotated[
@@ -3288,6 +3295,8 @@ def ami_deletion_sim(
     names = [c.strip() for c in conditions.split(",") if c.strip()]
     if unknown := [n for n in names if n not in DA.CONDITIONS]:
         raise typer.BadParameter(f"unknown conditions {unknown}; choose from {DA.CONDITIONS}")
+    if scope not in DA.SCOPES:
+        raise typer.BadParameter(f"--scope must be one of {DA.SCOPES}")
     if split not in ("all", "dev", "test"):
         raise typer.BadParameter("--split must be all, dev or test")
     if pilot and quote_only:
@@ -3308,7 +3317,8 @@ def ami_deletion_sim(
     typer.echo(
         f"{len(qs)} questions on {len({m for q in qs for m in q.meetings})} AMI meetings "
         f"(recordings: {', '.join(f'{p} {len(r)}' for p, r in recs.items())}); "
-        f"skipped {skipped or 'none'}; reader {reader}, judge {judge_model}"
+        f"skipped {skipped or 'none'}; reader {reader}, judge {judge_model}; "
+        f"scope: {DA.SCOPE_META[scope]}"
     )
     cap = max_usd if max_usd is not None else (DA.PILOT_MAX_USD if pilot else None)
     if cap is None and os.environ.get("CONCENTRATE_MAX_USD"):
@@ -3329,39 +3339,40 @@ def ami_deletion_sim(
     directory = out_dir / "directory.json"  # people from attendee metadata, as the original
     directory.write_text(_json.dumps(real_directory(notes.get("granola", [])), indent=1))
 
-    def memory_corpus(for_pilot: bool) -> list[Any]:
-        """The fact layer covers every recording; a pilot's only its questions' meetings."""
-        every = notes.get("granola", [])
-        return DA.pilot_corpus(every, pilot_qs) if for_pilot else every
-
     embedder: Any = None
 
-    def systems_for(for_pilot: bool, build: bool) -> tuple[dict[str, Any], Any, bool]:
-        """Systems by condition, the fact-layer system (for its build quote) and whether the
-        fact layer is built. ``build``: ingest it now (costs money unless cached)."""
+    def probe() -> Any:
+        return DA.AmiNotesFacts(reader_c, directory_path=directory)
+
+    def systems_for(for_qs: list[Any], build: bool) -> tuple[dict[str, Any], Any, bool]:
+        """Systems by condition, the fact-layer corpora (one per meeting set under question
+        scope) and whether every one is built. ``build``: ingest now (paid unless cached)."""
         nonlocal embedder
         from concentrate.agents.concentrate_system import COMPLETE_MARKER
 
         out: dict[str, Any] = {}
-        corpus = memory_corpus(for_pilot)
-        probe = DA.AmiNotesFacts(reader_c, directory_path=directory)
-        built = (probe.store_dir(corpus) / COMPLETE_MARKER).exists()
+        corp = DA.corpora(for_qs, notes.get("granola", []), scope)
+        p = probe()
+        built = all((p.store_dir(c) / COMPLETE_MARKER).exists() for c in corp.values())
         for n in names:
             if n == DA.GRANOLA_CHAT:
                 out[n] = DA.RecordedChatSystem(chat)
             elif n in ("notes_only", "notes_only_wispr"):
                 product = "wispr" if n.endswith("wispr") else "granola"
-                out[n] = DA.notes_only(reader_c, notes[product], n)
+                out[n] = DA.notes_only(reader_c, notes[product], n, scope)
             elif built or build:
                 if embedder is None:
                     from concentrate.agents.retrieval import SentenceTransformerEmbedder
 
                     embedder = SentenceTransformerEmbedder()
                 cls = DA.AmiNotesFacts if n == "notes_facts" else DA.AmiNotesFactsFallback
-                s = cls(reader_c, embedder=embedder, directory_path=directory)
-                s.ingest(corpus)  # free if built; otherwise the paid build, under the cap
-                out[n] = s
-        return out, probe, built
+                builds = {}
+                for key, corpus in corp.items():
+                    s = cls(reader_c, embedder=embedder, directory_path=directory)
+                    s.ingest(corpus)  # free if built; otherwise the paid build, under the cap
+                    builds[key] = s
+                out[n] = DA.ScopedMemory(builds, scope)
+        return out, corp, built
 
     counter: Any
     if exact:
@@ -3379,14 +3390,14 @@ def ami_deletion_sim(
         else counter
     )
     cal = DA.calibration(D.judge_cache_pairs(judge_c.cache_dir, judge_model), jcount)
-    b_granola = DA.notes_only(reader_c, notes.get("granola", []), "notes_only")
+    b_granola = DA.notes_only(reader_c, notes.get("granola", []), "notes_only", scope)
 
     def quote(for_pilot: bool) -> list[Any]:
-        systems, probe, built = systems_for(for_pilot, build=False)
         label, for_qs = ("pilot", pilot_qs) if for_pilot else (split, qs)
+        systems, corp, built = systems_for(for_qs, build=False)
         return DA.quote_lines(
             names, for_qs, systems, b_granola, reader_c, judge_c, j2, counter, cal,
-            split=label, built=built, build=DA.quote_build(probe, memory_corpus(for_pilot), label),
+            split=label, built=built, build=DA.quote_build(probe, corp, label),
         )  # fmt: skip
 
     full_lines = quote(False)
@@ -3401,6 +3412,7 @@ def ami_deletion_sim(
         judge=judge_model,
         judge2=judge2,
         how=how,
+        scope=scope,
     )
     (out_dir / "deletion_quote.md").write_text(md)
     fe, fh = DA.totals(full_lines)
@@ -3426,10 +3438,10 @@ def ami_deletion_sim(
         )
     stopped = None
     report: dict[str, Any] | None = None
-    build: DA.CappedBuild | None = None
+    memory: DA.ScopedMemory | None = None
     try:
-        systems, _probe, _ = systems_for(pilot, build=True)
-        build = next((s for s in systems.values() if isinstance(s, DA.CappedBuild)), None)
+        systems, _corp, _ = systems_for(run_qs, build=True)
+        memory = next((s for s in systems.values() if isinstance(s, DA.ScopedMemory)), None)
         report = D.run_deletion_sim(
             [systems[n] for n in names],
             run_qs,
@@ -3442,7 +3454,12 @@ def ami_deletion_sim(
             split=split,
             spent=ledger.spent_usd,
             pairs=DA.PAIRS,
-            meta={"track": "deletion-sim.ami", "reader_model": reader, "pilot": pilot},
+            meta={
+                "track": "deletion-sim.ami",
+                "reader_model": reader,
+                "pilot": pilot,
+                "scope": DA.SCOPE_META[scope],
+            },
         )
     except BudgetExceeded as e:
         stopped = str(e)
@@ -3454,11 +3471,12 @@ def ami_deletion_sim(
         reader_model=reader,
         judge_model=judge_model,
         judge2_model=j2.model if j2 else None,
-        ingest_model=build.ingest_model if build is not None else None,
+        ingest_model=memory.ingest_model if memory is not None else None,
         pilot=pilot,
         skipped=skipped,
         recordings={p: len(r) for p, r in recs.items()},
-        build=DA.build_stats(build, memory_corpus(pilot)) if build is not None else {},
+        build=DA.build_stats(memory.builds.values()) if memory is not None else {},
+        scope=scope,
     )
     agg = DA.aggregate(report, run_qs, info)
     rows = Path(report["paths"]["jsonl"])

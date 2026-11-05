@@ -178,6 +178,7 @@ def test_end_to_end_same_judge_for_every_condition_and_committable(tmp_path: Pat
     )
     assert judge.is_cached(stage3)
     info = DA.RunInfo("claude-opus-5-5", "claude-sonnet-5-5", None, None, False, {}, {"granola": 2})
+    assert DA.aggregate(report, qs, info)["meta"]["scope"] == DA.SCOPE_META["question"]
     agg = DA.aggregate(report, qs, info)
     assert agg["meta"]["meetings"] == 2 and agg["meta"]["questions"] == 2
     assert agg["meta"]["meeting_ids"] == ["IS1008a", "IS1008b"]
@@ -270,3 +271,59 @@ def test_cli_quote_needs_no_paid_call(tmp_path: Path, monkeypatch: pytest.Monkey
     md = (out / "deletion_quote.md").read_text()
     assert "Full run: 2 questions" in md and "Pilot: 1 DEV questions" in md
     assert not (tmp_path / "llm").exists() or not list((tmp_path / "llm").glob("*.json"))
+
+
+def test_scope_matches_condition_a_by_default(tmp_path: Path) -> None:
+    """Every condition reads only the question's own meetings, as Granola Chat was asked;
+    ``scope="all"`` restores the original's every-meeting upper bound."""
+    recs = _recordings(("IS1008a", "IS1008b", "IS1008c"))
+    notes = DA.reader_notes(recs["granola"], "granola")
+    as_of = DA.as_of_day(notes)
+    reader = LLMClient(FakeJudge(), model="claude-opus-5-5", cache_dir=tmp_path)
+    one = DA.adapt(_q("q1", ["IS1008b"]), as_of, _gold)
+    two = DA.adapt(_q("q2", ["IS1008a", "IS1008b"]), as_of, _gold)
+    scoped = DA.notes_only(reader, notes, "notes_only")
+    user = scoped.prompt_texts(one)[1]
+    assert "granola notes on IS1008b" in user
+    assert "IS1008a" not in user.split("Question:")[0] and "IS1008c" not in user
+    assert "granola notes on IS1008a" in scoped.prompt_texts(two)[1]
+    wide = DA.notes_only(reader, notes, "notes_only", scope="all")
+    assert all(f"granola notes on {m}" in wide.prompt_texts(one)[1] for m in recs["granola"])
+    with pytest.raises(ValueError):
+        DA.notes_only(reader, notes, "notes_only", scope="some")
+    corp = DA.corpora([one, two, one], notes, "question")
+    assert list(corp) == [("IS1008a", "IS1008b"), ("IS1008b",)]
+    assert [n.title for n in corp[("IS1008a", "IS1008b")]] == ["AMI IS1008a", "AMI IS1008b"]
+    assert list(DA.corpora([one, two], notes, "all")) == [("*",)]
+
+
+class _FakeBuild:
+    def __init__(self, tag: str) -> None:
+        self.tag, self.name, self.prompt_ids, self.ingest_model = tag, "notes_facts", (), "m"
+
+    def run(self, q: Any) -> Any:
+        return self.tag
+
+
+def test_scoped_memory_answers_each_question_from_its_own_build() -> None:
+    builds: Any = {("IS1008a",): _FakeBuild("a"), ("IS1008a", "IS1008b"): _FakeBuild("ab")}
+    m = DA.ScopedMemory(builds, "question")
+    assert m.run(_q("q", ["IS1008a"])) == "a" and m.run(_q("q", ["IS1008b", "IS1008a"])) == "ab"
+    assert m.name == "notes_facts"
+
+
+def test_build_quote_prices_a_shared_first_meeting_once(tmp_path: Path) -> None:
+    notes = DA.reader_notes(_recordings()["granola"], "granola")
+    reader = LLMClient(FakeJudge(), model="claude-opus-5-5", cache_dir=tmp_path)
+
+    def probe() -> Any:
+        return DA.AmiNotesFacts(reader, directory_path=None, cache_root=tmp_path / "c")
+
+    single = {("IS1008a",): notes[:1]}
+    both = single | {("IS1008a", "IS1008b"): notes}
+    a = DA.quote_build(probe, single, "x")
+    ab = DA.quote_build(probe, both, "x")
+    pair_alone = DA.quote_build(probe, {("IS1008a", "IS1008b"): notes}, "x")
+    assert (a.answer_calls, ab.answer_calls) == (1, 2)  # not 1 + 2
+    assert ab.usd_expected == pytest.approx(pair_alone.usd_expected)
+    assert ab.usd_high == pytest.approx(ab.usd_expected * DA.INGEST_SAFETY)

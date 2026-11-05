@@ -163,11 +163,14 @@ Same ladder, one product comparison added.
 | | Condition | What is answered from | Answered by |
 |---|---|---|---|
 | A | `granola_chat` | Granola's own Chat, transcripts kept (answers recorded once, replayed at $0) | Granola |
-| B | `notes_only` | Granola's notes for every recorded meeting | our model, `answer.v1` |
+| B | `notes_only` | Granola's notes for the question's own meetings | our model, `answer.v1` |
 | B′ | `notes_only_wispr` | the same, Wispr Flow's notes | our model, `answer.v1` |
 | C | `notes_facts` | B + Concentrate's fact layer, extracted from Granola's transcript, then every transcript deleted | our model, `answer.v1` |
 | D | `notes_facts_fallback` | C + Granola's transcript, read only when C hedges or abstains | our model, `answer.v1` |
 
+- **Scope matched to A.** Granola Chat was asked with `document_ids` = the question's own meeting(s) (checked: 68 of 68). So every condition reads exactly those meetings: B and B′ their notes, C a fact layer built over just those meetings, D their transcript. Results meta: `scope: "question meetings, matched to condition A"`.
+  - The original gave B all notes (an upper bound). Here that would mix "lost the transcript" with "distracted by other meetings" in A − B. `--scope all` keeps that variant, off by default.
+  - C is built once per meeting set: 5 single meetings and 3 pairs today.
 - **Same code as the original.** B, C and D are the original classes; only the inputs change.
 - **Same answer model:** read from the original's meta (`claude-opus-5-5`).
 - **One judge for all five,** A included: stage 3's `judge.v1` on `claude-sonnet-5-5`, gold + AMI speaker roster, product boilerplate stripped ([WRONG_FACTS.md](WRONG_FACTS.md)). A's judge requests are stage 3's, byte for byte, so they replay from cache.
@@ -179,17 +182,18 @@ Same ladder, one product comparison added.
 - **Questions:** any AMI question whose meetings both apps recorded and that Granola Chat answered. Today: 68 questions on 5 meetings (13 ES2006a questions wait for Chat answers).
 - **Figures:** `ami_retention_steps` (with a Granola vs Wispr notes-only panel), `ami_answer_types`, `ami_question_heatmap`. They read n from the aggregate (`evals/reports/ami/deletion-sim.aggregate.json`) and appear once it exists.
 
-### Quote (2026-11-05, $0 to compute)
+### Quote (2026-11-05, question scope, $0 to compute)
 
 `concentrate ami deletion-sim --quote`. Inputs counted with the free `count_tokens`; output and fallback rate from the real DEV run.
 
 | Run | Expected | High |
 |---|---|---|
-| Pilot: 5 DEV questions × 5 conditions, fact layer over 1 meeting | $0.97 | $1.23 |
-| Full: 68 questions × 5 conditions, fact layer over 7 recordings | $13.08 | $16.50 |
+| Pilot: 5 DEV questions × 5 conditions, fact layer over 1 meeting | $0.55 | $0.76 |
+| Full: 68 questions × 5 conditions, fact layer over 8 meeting sets | $7.79 | $10.66 |
 
-- **Largest items:** C ($4.25) and D ($3.17 expected, $5.48 if the fallback always fires). B and B′ are $2.56 each: every question reads all 7 meetings' notes (~7.5k tokens).
-- **ASSUMED until built:** C's memory context is priced at 6,226 tokens/question (C − B on the real run). The fact-layer build ($0.53, high $0.79) is a calibrated model estimate, not a count. After the pilot or build, re-run `--quote`: C and D become exact.
+- **Scoping cut the quote by 40%** (was $13.08 / $16.50 with every condition reading all 7 meetings).
+- **Largest items:** C ($2.76) and D ($2.28 expected, $3.99 if the fallback always fires). B and B′ are about $1.07 each (~2k tokens of notes per question).
+- **ASSUMED until built:** C's memory context is priced at 6,226 tokens/question (C − B on the real run, a 4-meeting memory). A 1–2 meeting memory is probably smaller, so C and D are likely overestimated. The build ($0.62, high $0.94; 8 extraction calls) is a calibrated model estimate, not a count. After the pilot or build, re-run `--quote`: C and D become exact.
 - **A costs $0:** answers are recorded and all 68 judge verdicts are cached from stage 3.
 - **No second judge by default** (`--judge2 claude-opus-5-5` adds one).
 
@@ -197,8 +201,8 @@ Same ladder, one product comparison added.
 
 ```bash
 uv run concentrate ami deletion-sim --quote
-uv run concentrate ami deletion-sim --pilot              # hard cap $1.50, asks first
-uv run concentrate ami deletion-sim --max-usd 17 --commit-to evals/reports/ami/deletion-sim.aggregate.json
+uv run concentrate ami deletion-sim --pilot              # hard cap $1.00, asks first
+uv run concentrate ami deletion-sim --max-usd 11 --commit-to evals/reports/ami/deletion-sim.aggregate.json
 ```
 
 Every client (answers, judge, fact-layer build) shares one ledger and one hard cap (`LLMClient(max_usd=...)`). A run refuses to start if the quote's high estimate exceeds the cap. Per-answer rows stay in `data/ami/results/deletion/` (gitignored); the aggregate is checked by `check_committable` (no question, gold or answer text).
@@ -211,7 +215,7 @@ Every client (answers, judge, fact-layer build) shares one ledger and one hard c
 - **One human verifier so far.** The calibrated judge was checked by one person (21 rows, `human_verification_v3`).
 - **Small n.** 68 questions, 13 DEV; most of the ladder steps will not reach p < 0.05.
 - **A − B still mixes model and deletion,** as in the original. B′ − B is clean: same model, same prompt, only the app's notes differ.
-- **B sees every meeting's notes** (an upper bound, as in the original). As meetings grow it becomes a long-context test; a retrieval variant may be needed past ~30 meetings.
+- **Scope is oracle, like A's.** Every condition is told which meetings to read. That removes retrieval as a failure mode, for Granola and for us alike; `--scope all` adds distraction back.
 - **The fact layer has no AMI people directory:** only attendee metadata (the account owner), the same method as the original.
 
 ## Why outside-in
