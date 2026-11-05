@@ -201,6 +201,9 @@ Base: `https://groups.inf.ed.ac.uk/ami/AMICorpusMirror/amicorpus/`
 
 ### Conditions and threats found in the pilot
 
+**Silent replay (no typed notes).** Nobody typed during the AMI playbacks, so Granola wrote notes from the transcript alone: its least favourable mode, since its notes blend the user's typing with the transcript ("note quality depends on your participation", a 2026 review). Every AMI notes result is a lower bound for an engaged user. Planned test: replay the same meeting silent vs. with a few typed anchor notes, and compare faithfulness and completeness.
+
+
 | Issue | What we saw | Mitigation |
 |---|---|---|
 | **Playback ≠ a real call** | AMI goes straight in as system audio: clean, uncompressed 16 kHz, but no calendar invite, attendee names or meeting-app context, and in-room crosstalk among mostly non-native speakers | Same input for both products, so the **comparison** is fair; **absolute** numbers describe this condition only, not typical calls. Report as a threat to validity |
