@@ -4,7 +4,7 @@
 
 The track is product-neutral: any notetaker, or our own summariser, can be scored the same way.
 
-**Why.** A note that adds things the meeting never said is worse than a shorter note: people act on it. Granola's prompting post (Dec 2025) states the rule we test: only claim what you can point to in the transcript. No notetaker publishes a grounding number, so the track measures one.
+**Why.** A note that adds things the meeting never said is worse than a shorter note: people act on it. Granola has written a version of this principle for a different feature: for its Crunched 2025 year-in-review prompts, "if you can point to it in the text, it's fair game" ([Jo Barrow, 17 Dec 2025](https://www.granola.ai/blog/how-we-wrote-the-prompts-behind-granolas-crunched-2025)). We apply the same test to meeting notes. No notetaker publishes a grounding number, so the track measures one.
 
 **First results.** Two systems so far.
 
