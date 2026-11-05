@@ -1,96 +1,98 @@
 # What Does Breadth over Fidelity Cost? An Outside-In Measurement of Meeting Memory for Agents
 
-**Kian Lakhani** · 4 November 2026 · Summary of the [full technical report](HINDSIGHT_REPORT.md) · Independent research; not affiliated with Granola
+**Kian Lakhani** · 4 November 2026 · Two-page summary of the [full technical report](HINDSIGHT_REPORT.md) · Independent research; not affiliated with Granola
+
+*What this is: a two-page summary of what transcript deletion and note-based memory cost an AI agent on real meetings, measured from outside Granola.*
 
 ---
 
 ### Summary
 
-Granola has chosen breadth over fidelity: its agent reads many meetings' notes rather than a few transcripts, and users may auto-delete transcripts. I measured the cost of that choice using only public interfaces. On synthetic data, a precomputed fact memory matches transcript reading at roughly 3.5× lower cost per question. On real meetings the tie becomes a loss: **Granola's agent 92% vs a fact memory 59%**. A deletion simulation on real meetings shows **notes alone lose about 32 points**; adding extracted facts recovers little, while **reading the transcript only when notes fall short recovers nearly all of it**. These real-meeting results are development-stage evidence from four meetings.
+- **Deleting transcripts costs a third of the answers.** Granola's agent with transcripts: 89%. Notes only: 57%.
+- **The loss is in the details.** Questions the notes can't answer: 94% → 44%.
+- **Reaching the transcript recovers it; extracted facts don't.** Facts: 66%. Transcript when needed: 87%.
+- **Reading real speech, Granola's agent beat a fact memory 92% to 59%.**
+- **Caveat:** 4 meetings, one person, questions seen during development (DEV).
 
 ---
 
 ## 1. Question
 
-Granola's agent reads about 100 meetings at a high level rather than 10 in full detail, goes "deeper only when needed", and treats "wrong, but confident" as the failure to avoid [3]. Transcript auto-deletion has shipped: afterwards, chat is "limited to whatever is in your notes", and Granola notes that "Chat quality will be degraded" [2]. The CEO has also described pre-compressing meeting context for agents ("apple juice from concentrate") [1].
+Granola's agent reads ~100 meetings at a high level rather than 10 in full. It goes "deeper only when needed" and avoids "wrong, but confident" answers [3].
 
-**Question:** what does each level of fidelity buy back, per question type, as experienced by an external agent?
+Users can auto-delete transcripts. Chat is then "limited to whatever is in your notes", and "Chat quality will be degraded" [2].
+
+Granola's CEO has floated pre-compressed context for agents: "apple juice from concentrate" [1].
+
+**Question:** on real meetings, what does each level of detail buy back, and how do answers fail without it?
 
 ## 2. Method
 
-- **Outside-in.** Only public interfaces are used: Granola's API note format and its official read-only MCP. No claims are made about Granola internals.
-- **Synthetic track.** *Northwind* is a generated company: 184 meetings in Granola's exact JSON schema, with 296 questions whose answers are known by construction. 120 held-out test questions were run.
-- **Black-box track.** The author's 4 real meetings and 47 questions, asked through each product's public MCP.
-- **Systems** (one shared answer model, Opus 5.5):
-    - query-time: top-k retrieval, summaries only, an agent over search and transcript tools;
-    - write-time: Mem0, Graphiti, and **Concentrate**, a reference fact memory that extracts cited, time-stamped facts;
-    - a gold-meeting oracle as a ceiling.
-- **Measurement.** Six dimensions: correctness, judge reliability, grounding, confident error (answered *and* wrong), equal-price cost, and robustness. Comparisons are paired (McNemar or exact sign test, Holm-corrected, 95% bootstrap CIs), and a second model re-grades every answer.
+- **Outside-in.** Only public interfaces: Granola's note format and its read-only MCP (the protocol agents use to query it).
+- **Data.** The author's 4 Granola meetings, 47 questions. An LLM drafted questions and answers; the owner approved them in bulk.
+- **Systems.** Granola's agent (black box); top-k retrieval (reads the best-matching meeting); **Concentrate**, our reference memory of extracted, cited, time-stamped facts.
+- **Answer types.** Correct, partial, declined ("not in the material"), or wrong but confident.
+- **Statistics.** Paired sign tests on questions where two conditions disagree; 95% bootstrap CIs; a second model re-grades every answer.
 
-## 3. Results
+## 3. Results (real meetings, DEV)
 
-### 3.1 Synthetic: a tie at lower cost
+### 3.1 Retention: what deletion costs, and what recovers it
 
-**Table 1.** Synthetic held-out test (n = 120). Cost is at equal interactive prices; ingest is one-off.
+Four conditions on the same 47 questions. Each adds one layer:
+**A** Granola's agent, transcripts kept · **B** notes only (≈ chat after deletion; our model) · **C** B + extracted facts · **D** C + transcript passages when C can't answer.
 
-| System | Accuracy [95% CI] | $ / question | Ingest |
-|---|---|---|---|
-| Oracle (ceiling) | 95% [91, 98] | 0.082 | — |
-| Concentrate (fact memory) | 92% [86, 96] | 0.040 | $5 |
-| Agent over search + transcripts | 90% [84, 95] | 0.137 | — |
-| Top-k retrieval | 88% [82, 94] | 0.328 | — |
-| Mem0 (default wiring) | 81% [73, 88] | 0.017 | $17 |
-| Summaries only | 71% [62, 78] | 0.017 | — |
+![Figure 1](../figures/deletion_sim.svg)
 
-- **Fact memory, agent and top-k are statistically indistinguishable.** Fact memory vs agent splits 6–4 on discordant questions (Holm p = 1.0).
-- **The cost advantage is real but conditional.** About 3.5× cheaper than the agent per question (about 2× against an agent with prompt caching), and cheaper overall only once a set of meetings receives more than about 50 questions ([cost frontier](../figures/cost_frontier.svg)).
+**Figure 1.** Accuracy by question type, and confident-error rate, per condition.
 
-### 3.2 Real meetings: the tie becomes a loss
+**Table 1.** Answer types (counts of 47) and paired change vs the row above (wins–losses, exact sign test).
 
-![Figure 1](../figures/hero_synthetic_vs_real.svg)
-
-**Figure 1.** The same comparison on synthetic data (left) and on the author's real meetings (right). Granola's agent 92% [82, 100] vs fact memory 59% [44, 74], n = 39. Paired: 14 questions only Granola answered correctly, 1 only the fact memory did (p ≈ 0.001).
-
-The fact memory had extracted 43 facts across the 4 meetings. Ten of its 16 misses were abstentions ("not in the material"), and it scored **0 of 8 on "who said X"** (Granola 7 of 8). It led only on "what changed" (6 of 6 vs 5 of 6), the category a time-stamped store is designed for.
-
-### 3.3 Deletion simulation on real meetings
-
-Four conditions on the same 47 questions, each adding one layer: **(A)** Granola's agent with transcripts; **(B)** notes only, answered by our model over Granola's own notes (≈ chat after auto-deletion); **(C)** B plus the extracted fact layer; **(D)** C plus reading the transcript only when the notes and facts don't cover the question.
-
-![Figure 2](../figures/deletion_sim.svg)
-
-**Figure 2.** Accuracy by question type, and confident-error rate, for each condition.
-
-**Table 2.** Paired effects of each layer (all 47 questions; wins–losses on discordant questions, exact sign test).
-
-| Step | Δ accuracy | Wins–losses | p | On transcript-needed questions (n = 18) |
+| Condition | Accuracy | Correct / partial / declined / wrong-confident | vs row above | Notes can't answer (n = 18) |
 |---|---|---|---|---|
-| Granola → notes only (deletion) | **−32 pts** | 2–17 | 0.001 | −50 pts (0–9, p = 0.004) |
-| Notes → + facts | +9 pts | 4–0 | 0.13 | +11 pts |
-| + facts → + transcript when needed | **+21 pts** | 10–0 | 0.002 | +33 pts (6–0, p = 0.03) |
+| A: Granola, transcripts | 89% | 42 / 2 / 0 / 3 | — | 94% |
+| B: notes only | 57% | 27 / 4 / 16 / 0 | 2–17, p = 0.001 | 44% |
+| C: + facts | 66% | 31 / 2 / 14 / 0 | 4–0, p = 0.13 | 56% |
+| D: + transcript when needed | 87% | 41 / 3 / 3 / 0 | 10–0, p = 0.002 | 89% |
+
+### 3.2 Question answering: reading real speech
+
+All 4 meetings fit in context, so this tests reading, not search (n = 39).
+
+| System | Accuracy [95% CI] |
+|---|---|
+| Granola's agent | **92%** [82, 100] |
+| Top-k retrieval | 77% [64, 90] |
+| Concentrate (fact memory) | **59%** [44, 74] |
+
+- **Paired: 14–1** for Granola's agent (p ≈ 0.001).
+- **Concentrate misses details it never extracted.** 0 of 8 on "who said X" (Granola 7 of 8). 10 of its 16 misses were declines.
+- **It leads only on "what changed"** (6 of 6 vs 5 of 6), what a time-stamped store is for.
+- **A transcript fallback lifted it from 12/22 to 20/22** (8–0, p = 0.008; Granola 19/22). DEV only: these questions shaped the design.
 
 ## 4. Analysis
 
-1. **The cost of deletion falls on detail questions, and it is large.** Notes alone answered 44% of transcript-needed questions against Granola's 94%. That's the quantitative version of "chat quality will be degraded".
-2. **Compression into facts does not substitute for the transcript on real questions.** The fact layer's +9 points isn't distinguishable from zero at this n. On synthetic data the same layer appeared to recover nearly everything (notes only 64% → with facts 88% on the dev set). The difference is the questions: synthetic questions target the facts a generator planted, which is exactly what an extractor keeps, while real questions target whatever was said.
-3. **Selective depth recovers the loss.** Reading the transcript only on demand restored 87% (vs 89% for Granola), with no confident errors. It fired on 60% of questions here, so on small corpora it isn't cheap. This is Granola's own "deeper only when needed" principle. **The implication is about retention, not retrieval: once transcripts are deleted, the deeper tier no longer exists.**
-4. **Confident error was rare but concentrated.** Granola's agent erred confidently on 3 of 47, two of them unanswerable questions. Our notes-only condition hedged instead. On synthetic data a notes-only reader answered 41% of transcript-needed questions confidently and wrongly, so this behaviour depends on the model and prompt and is worth measuring directly.
-5. **Robustness checks.** A second judge agreed on 96–100% of verdicts per condition and on 97% of synthetic verdicts (κ 0.90), with no change in ranking. A red-team audit corrected the cost comparison (originally overstated) and attributed the Mem0 and Graphiti gaps to our configuration. With n = 120, the minimum detectable gap between top systems is about 7 points; smaller differences are reported as ties.
+1. **Deletion's cost is large and falls on detail.** That is the measured version of "chat quality will be degraded".
+2. **Facts don't replace the transcript.** +9 points is not significant at this n.
+3. **Selective depth recovers the loss.** Reading the transcript on demand: 87% vs Granola's 89%. It fired on 60% of questions, so it isn't free. This is Granola's "deeper only when needed", applied to retention: **once transcripts are deleted, the deeper tier is gone.**
+4. **Deletion turned right answers into declines, not bluffs.** Our notes-only model declined 16 of 47 and never answered wrongly with confidence. Granola's 3 confident errors came with transcripts (2 on unanswerable questions).
+5. **Judges agree.** A second judge matched 96–100% of verdicts per condition; 97% in question answering (κ 0.93).
+
+**Synthetic data: a diagnostic, not evidence.** On Northwind, a synthetic company in Granola's format, the fact memory tied the transcript readers (92 / 90 / 88%) and facts recovered deletion (64% → 88%). Real meetings reversed both. The same author built the generator and the extractor, and its questions target planted facts.
 
 ## 5. Implications
 
-- **Retain a reachable detail tier.** Delete transcripts from hot storage if needed, but keep a cold copy that's read only when notes don't cover a question.
-- **Make degradation specific.** "Who said what", exact wording and passing details are what notes lose; users enabling deletion could be told so.
-- **Evaluate memory on real questions.** Synthetic benchmarks built from planted facts systematically favour extraction-based memory.
+- **Keep a reachable detail tier.** Delete the hot copy if needed; keep a cold copy read only when notes fall short.
+- **Make the warning specific.** Notes lose who said what, exact wording and passing details.
+- **Test memory on real questions.** Planted-fact benchmarks favour extraction.
 
 ## 6. Limitations
 
-1. **The real-meeting evidence is 4 meetings from one person,** with LLM-drafted gold answers approved in bulk, and questions seen during development. It is **DEV, not a held-out test.**
-2. **Condition B uses our answer model over Granola's notes,** not Granola's actual post-deletion chat, so A − B mixes deletion with a model change.
-3. **One synthetic company, and the same author built both the question generator and the fact extractor.**
-4. **Mem0 and Graphiti were under-configured.** The primary judge is an LLM; no human check has been done.
+1. **Small and DEV.** 4 meetings, one person, bulk-approved LLM-drafted gold, questions seen during development.
+2. **B is our model** over Granola's notes, not Granola's own post-deletion chat.
+3. **No search at scale.** 4 meetings fit in context.
+4. **LLM judge.** No human check yet.
 
-**In progress:** a held-out test on questions written by hand after the design freeze, more meetings and contributors, and other meeting products through the same black-box kit.
+**In progress:** hand-written held-out questions; paired Granola + Wispr Flow recordings; more meetings, contributors and products.
 
 **Code, data, figures and every number's source:** [github.com/KLKH7/hindsight](https://github.com/KLKH7/hindsight).
 
