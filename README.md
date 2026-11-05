@@ -179,7 +179,7 @@ uv run concentrate mcp-contract                                         # MCP dr
 
 **Product plans.** Reading Granola transcripts through its MCP requires a paid plan (a free trial covers it), and Granola accepts work accounts only. Wispr Flow needs its Notetaker, MCP access and cloud sync enabled; plan requirements beyond that have not been verified.
 
-**Products excluded for now.** Notion, tl;dv and products reached through Zoom's API have terms that require consent before comparative results are published, so they are not included. Granola's organisation Platform Terms contain a benchmarking clause; how it applies to this work is under review.
+**Products excluded for now.** Notion, tl;dv and products reached through Zoom's API have terms that require consent before comparative results are published, so they are not included.
 
 **Your own meetings.** The black-box kit runs the question tracks on your own account, locally, with only content-free scores leaving your machine: [`docs/method/BLACKBOX.md`](docs/method/BLACKBOX.md).
 

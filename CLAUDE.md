@@ -1,8 +1,8 @@
-# Concentrate — conventions for agents working in this repo
+# TENOR — conventions for agents working in this repo
 
-Concentrate is a research prototype: a structured, time-aware, source-cited, entity-linked
-memory built over Granola meeting notes, plus a benchmark comparing it to "agent + top-k
-transcript retrieval". The audience is Granola's engineering team: rigour and honesty beat polish.
+TENOR is an open, outside-in benchmark of meeting note-takers (reference products: Granola and
+Wispr Flow), built on the `concentrate` Python package, which also holds an earlier fact-memory
+prototype. The audience is researchers and engineers: rigour, neutrality and honesty beat polish.
 
 ## Non-negotiables
 - **Fidelity to Granola.** Model the real public API/MCP. Every field we rely on is tagged
@@ -47,7 +47,7 @@ transcript retrieval". The audience is Granola's engineering team: rigour and ho
 - Questions have a dev/test split. Look only at dev when tuning anything.
 
 ## UI (Phase 6)
-- Replicate layouts and interactions from the Mobbin references in `docs/archive/UI_REFERENCES.md` (Granola's own screens first). Use the Mobbin connector for any new view: search before designing. Match Granola's visual language closely (the user asked for this); never use Granola's logo, name, wordmark or fonts, and don't commit Mobbin screenshots (link to `mobbin_url` instead).
+- Replicate layouts and interactions from the Mobbin references in `docs/archive/UI_REFERENCES.md` (archived Concentrate-era viewer). Use the Mobbin connector for any new view: search before designing. Never use Granola's logo, name, wordmark or fonts, and don't commit Mobbin screenshots (link to `mobbin_url` instead).
 
 ## Workflow
 - Work proceeds in phases (see README "Roadmap"). After each phase: tests green, update
