@@ -193,6 +193,7 @@ Base: `https://groups.inf.ed.ac.uk/ami/AMICorpusMirror/amicorpus/`
 | Go / no-go and download | **Go.** The 7 files in §8 are downloaded |
 | Dedicated accounts | **Yes:** fresh Granola and Wispr accounts holding only AMI meetings |
 | Publishing product output | **Scores only.** Raw Granola and Wispr notes on AMI stay local and are never committed; we publish labels and aggregates |
+| Publishing product output (revised 2026-11-05) | **Short quoted examples allowed (option b):** up to a sentence of a product's AMI output per example, shown beside the AMI source (CC BY 4.0), for criticism and analysis. Full product outputs stay local |
 
 | Accounts (revised) | Granola only accepts work accounts, so both products use Kian's **main** accounts. Granola questions are scoped to the AMI notes with `document_ids`; our agent gets only AMI notes from Wispr. AMI notes are deleted after the run |
 | Personal vocabulary | **Off for scored runs.** The pilot showed Wispr writing the account holder's name for an AMI speaker. Back up and clear the personal dictionary (both products, where one exists) before recording; restore after. Voice profile and account name can't be removed: a stated threat to validity |
