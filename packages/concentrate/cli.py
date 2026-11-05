@@ -2303,6 +2303,8 @@ def agent_interface_cmd(
         ft = b["four_types"]["overall"]
         typer.echo(f"{n}: n={b['questions']} " + " ".join(f"{k}={v['k']}" for k, v in ft.items()))
     typer.echo(f"live calls: {calls} · aggregate: {out}")
+
+
 # -- notes faithfulness track: are a system's notes grounded in the transcript? -------------
 
 
@@ -2447,6 +2449,8 @@ def notes_faithfulness_cmd(
     agg_path.write_text(_json.dumps(report, indent=2) + "\n")
     typer.echo(_json.dumps(agg["overall"]["ungrounded"]))
     typer.echo(f"spent ${spent:.4f} · aggregate {agg_path} · per-claim {claims_dir}")
+
+
 # -- cross-product pairing (docs/benchmark/PRODUCTS.md) ----------------------------------------
 
 PAIR_OVERRIDES = Path("data/real/pairs.override.json")
