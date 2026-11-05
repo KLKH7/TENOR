@@ -198,6 +198,15 @@ Base: `https://groups.inf.ed.ac.uk/ami/AMICorpusMirror/amicorpus/`
 | Personal vocabulary | **Off for scored runs.** The pilot showed Wispr writing the account holder's name for an AMI speaker. Back up and clear the personal dictionary (both products, where one exists) before recording; restore after. Voice profile and account name can't be removed: a stated threat to validity |
 | Room isolation | Speakers muted: products capture system audio digitally, the room stays silent. Granola mic turns are dropped and counted; Wispr has no capture channel, so it needs a silent room |
 
+### Conditions and threats found in the pilot
+
+| Issue | What we saw | Mitigation |
+|---|---|---|
+| **Playback ≠ a real call** | AMI goes straight in as system audio: clean, uncompressed 16 kHz, but no calendar invite, attendee names or meeting-app context, and in-room crosstalk among mostly non-native speakers | Same input for both products, so the **comparison** is fair; **absolute** numbers describe this condition only, not typical calls. Report as a threat to validity |
+| **Mic auto-gain** | The Mac's input volume rises on its own now and then (another app's automatic gain control), so a "muted" mic stops being muted | Speakers stay muted, so the mic can only hear the room. Granola mic turns are dropped and counted (`mic_utterances`). Wispr has no capture channel, so log input volume during every playback and flag any recording where it rose above 0 while the room wasn't silent |
+
+**Call condition (planned, after the clean run).** A second condition closer to real use: start a Google Meet with the laptop (running both products) as one participant and a second device (e.g. a phone) as the other, playing the AMI file into the call. This adds call compression, packet loss, noise suppression and meeting-app context. Same 6 meetings, scored the same way; reported **alongside** the direct condition, never mixed. The gap between them measures what the call path costs or adds.
+
 **Pilot (2026-11-05):** IS1008a recorded once with personal settings on, to test the pipeline. Re-recorded under the clean protocol before scoring.
 
 **Still open:** reading the participants' consent form; free-plan limits on the fresh accounts; Wispr sign-in (see [PRODUCTS.md](PRODUCTS.md)).
