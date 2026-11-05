@@ -36,3 +36,21 @@ Granola evaluates with LLM judges too (Braintrust is mentioned on its blog). If 
 - **7 meetings**, 6 of them role-play; 1 real meeting. More AMI recordings are planned.
 - **Small verified sample** (23 items). Every rate above has a wide interval; none is a headline yet.
 - **The verification sheet shaped answers:** the first two versions lacked context and were rebuilt; only v3 labels are used.
+
+## Product angle: quiet features on one engine
+
+Design rule: **notepad first, user in control, calm.** A feature must feel natural in a paper notebook: no overlays, no interruptions by default.
+
+One engine: claims, decisions and promises extracted when notes are written, each with its source line and date. Four surfaces:
+
+| Feature | What the user sees | Evidence it addresses |
+|---|---|---|
+| **Said, not noted** | A collapsed line under enhanced notes: "3 things said that aren't in your notes"; tap to add | Completeness: ~35% of Granola Chat answers on AMI were partial |
+| **Inferred ink** | AI bullets that are inferences, not statements, in a slightly lighter shade; hover for why | Real meetings: 14% of Granola's note claims were inferred ([NOTES_FAITHFULNESS](NOTES_FAITHFULNESS.md)) |
+| **Margin notes** | An old note gains a small mark when a later meeting changes it: "updated 5 Nov → €30" | Cross-meeting answers were often partial; one merged two statements |
+| **Since last time** | A quiet line in the pre-meeting brief and in the notes: open promises, changed decisions | Cross-meeting follow-through |
+| *Live recall* | Opt-in setting, off by default: one card, only for a direct conflict with a past decision | Kept as an experiment; risks feeling intrusive |
+
+Each surface shows a line **only when confident**; the threshold is set and validated with the calibrated judge above (precision first). Each line carries its source quote.
+
+Why Granola might not want these: more surface area to design and support; false alarms erode the calm feel; some overlap with existing todos, briefs and citations. Each needs a measured precision before it's worth shipping.
