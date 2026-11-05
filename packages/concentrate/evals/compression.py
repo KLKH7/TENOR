@@ -436,6 +436,8 @@ def run_compression(
                 break
             flagged = a.abstain or any(text_flags(a.answer).values())
             cond = r.name
+            layer = getattr(r, "layer", cond)  # a breadth arm reads another condition's layers
+            shown = r.packed(q) if isinstance(r, BreadthReader) else list(q.meetings)
             rows.append(
                 {
                     "system": cond,
@@ -454,11 +456,15 @@ def run_compression(
                     "bucket": bucket(v.verdict, flagged, False),
                     "kept_pct": None
                     if cond == CLOSED
-                    else sum(layers[(cond, m)].kept_tokens for m in q.meetings)
-                    / sum(layers[(cond, m)].transcript_tokens for m in q.meetings),
+                    else sum(layers[(layer, m)].kept_tokens for m in q.meetings)
+                    / sum(layers[(layer, m)].transcript_tokens for m in q.meetings),
                     "evidence_recall": None
                     if cond == CLOSED
-                    else evidence_recall(q, layers, cond, materials),
+                    else evidence_recall(q, layers, layer, materials),
+                    "meetings_shown": None if cond == CLOSED else len(shown),
+                    "gold_meetings_shown": None
+                    if cond == CLOSED
+                    else all(m in shown for m in q.meetings),
                     "input_tokens": res.input_tokens,
                     "output_tokens": res.output_tokens,
                     "cost_usd": res.cost_usd,
@@ -999,3 +1005,218 @@ def extrapolate_markdown(
     out.append(f"| **total (required)** | | | **${total:.2f}** |")
     out.append(f"| total incl. optional | | | ${total + optional:.2f} |")
     return "\n".join(out) + "\n", total
+
+
+# -- breadth (H4): a fixed context budget across many meetings ------------------------------------
+
+BREADTH_BUDGETS = (8_000, 16_000, 32_000)  # estimated tokens (chars/3.5) of meeting material
+DETAIL_TYPES = ("who_said",)  # H4's detail questions until notes_can_answer is filled
+_MEETING_ID = re.compile(r"\b[A-Z]{2}\d{4}[a-z]?\b")
+
+
+def breadth_name(budget: int, layer: str) -> str:
+    return f"breadth{budget // 1000}k:{layer}"
+
+
+def parse_breadth(name: str) -> tuple[int, str] | None:
+    """(budget, layer condition) of a ``breadth<N>k:<layer>`` name, else None."""
+    hit = re.fullmatch(r"breadth(\d+)k:(\w+)", name)
+    return (int(hit[1]) * 1000, hit[2]) if hit else None
+
+
+class SharedRetriever:
+    """One ranking of every meeting per question, shared by all breadth arms, so arms differ
+    only in what they show per meeting. BM25 (no embeddings: $0, deterministic) over each
+    meeting's notes and its transcript in 15-line chunks, best chunk wins.
+
+    ``mask_ids`` (default on) removes meeting IDs from the query: every AMI question names its
+    meeting, and a retriever that sees the ID is an oracle (a product's retriever sees titles
+    and dates, not "IS1008b"). The reader still sees the full question and each meeting's ID."""
+
+    def __init__(self, materials: Mapping[str, Material], *, mask_ids: bool = True) -> None:
+        from concentrate.agents.retrieval import HybridIndex
+
+        self.mask_ids = mask_ids
+        self.meetings = sorted(materials)
+        docs: list[str] = []
+        self.owners: list[str] = []
+        for mid in self.meetings:
+            m = materials[mid]
+            docs.append(m.notes)
+            self.owners.append(mid)
+            for i in range(0, len(m.utterances), cv.CHUNK_UTTERANCES):
+                docs.append(" ".join(u.text for u in m.utterances[i : i + cv.CHUNK_UTTERANCES]))
+                self.owners.append(mid)
+        self.index = HybridIndex(docs, None)
+
+    def query(self, question: str) -> str:
+        return _MEETING_ID.sub(" ", question) if self.mask_ids else question
+
+    def rank(self, question: str) -> list[str]:
+        """Every meeting, best first; meetings with no matching word follow in ID order."""
+        ranked: list[str] = []
+        for doc in self.index.bm25_ranking(self.query(question)):
+            if self.owners[doc] not in ranked:
+                ranked.append(self.owners[doc])
+        return ranked + [m for m in self.meetings if m not in ranked]
+
+
+def pack(
+    ranking: Sequence[str],
+    layer: str,
+    materials: Mapping[str, Material],
+    layers: Layers,
+    budget: int,
+) -> list[str]:
+    """Meetings in ``ranking`` order whose block (notes + this layer) fits the budget; a block
+    that doesn't fit is skipped and later, smaller ones still fill the space (no truncation)."""
+    used, out = 0, []
+    for mid in ranking:
+        size = estimate_tokens(meeting_block(materials[mid], layers[(layer, mid)]))
+        if used + size <= budget:
+            out.append(mid)
+            used += size
+    return out
+
+
+class BreadthReader(LayerReader):
+    """H4's arms: the same reader and prompt, but the context is every meeting the shared
+    ranking fits into ``budget`` at ``layer`` (notes only = many meetings, full transcript = few,
+    a kept layer = in between), in rank order. The question's own meeting may be missing."""
+
+    def __init__(
+        self,
+        client: LLMClient,
+        budget: int,
+        layer: str,
+        materials: Mapping[str, Material],
+        layers: Layers,
+        retriever: SharedRetriever,
+        backend: ToolBackend | None = None,
+    ) -> None:
+        super().__init__(client, layer, materials, layers, backend)
+        self.name = breadth_name(budget, layer)
+        self.layer, self.budget, self.retriever = layer, budget, retriever
+
+    def packed(self, q: AmiQuestion) -> list[str]:
+        return pack(
+            self.retriever.rank(q.question), self.layer, self.materials, self.layers, self.budget
+        )
+
+    def _user(self, q: AmiQuestion) -> str:
+        blocks = [
+            meeting_block(self.materials[m], self.layers[(self.layer, m)]) for m in self.packed(q)
+        ]
+        return "<meetings>\n" + "\n\n".join(blocks) + f"\n</meetings>\n\n{_user_prompt(q)}"
+
+
+def breadth_coverage(
+    questions: Sequence[AmiQuestion],
+    retriever: SharedRetriever,
+    materials: Mapping[str, Material],
+    layers: Layers,
+    conditions: Sequence[str],
+    budgets: Sequence[int] = BREADTH_BUDGETS,
+) -> dict[str, dict[str, Any]]:
+    """$0, before any answer: per arm, mean meetings shown, the share of questions whose own
+    meeting(s) are all shown, and the share of gold evidence lines shown."""
+    ranks = {q.id: retriever.rank(q.question) for q in questions}
+    out: dict[str, dict[str, Any]] = {}
+    for budget in budgets:
+        for layer in conditions:
+            shown = {q.id: pack(ranks[q.id], layer, materials, layers, budget) for q in questions}
+            rec = []
+            for q in questions:
+                r = evidence_recall(q, layers, layer, materials)
+                if r is not None:
+                    rec.append(r if all(m in shown[q.id] for m in q.meetings) else 0.0)
+            out[breadth_name(budget, layer)] = {
+                "questions": len(questions),
+                "meetings_shown_mean": sum(len(v) for v in shown.values()) / len(questions),
+                "gold_meetings_shown": sum(
+                    all(m in shown[q.id] for m in q.meetings) for q in questions
+                )
+                / len(questions),
+                "evidence_shown_mean": sum(rec) / len(rec) if rec else None,
+            }
+    top1 = sum(ranks[q.id][0] in q.meetings for q in questions) / len(questions)
+    out["retrieval"] = {"top1_is_gold": top1, "mask_ids": retriever.mask_ids}
+    return out
+
+
+def quote_breadth(
+    questions: Sequence[AmiQuestion],
+    materials: Mapping[str, Material],
+    layers: Layers,
+    counter: Counter,
+    retriever: SharedRetriever,
+    a: QuoteAssumptions | None = None,
+    conditions: Sequence[str] | None = None,
+    budgets: Sequence[int] = BREADTH_BUDGETS,
+) -> list[QuoteRow]:
+    """Price H4's arms on the detail questions: each question's packed context (LLM methods
+    packed and sized as random lines at their budget) counted exactly per meeting block, plus
+    the Haiku judge and the 30% second judge on those answers."""
+    a = a or QuoteAssumptions()
+    conds = list(conditions or planned_conditions())
+    detail = [q for q in questions if q.type in DETAIL_TYPES]
+    if not detail:
+        return []
+    built = sorted({proxy_for(c) for c in conds})
+    keys = [(c, m) for c in built for m in sorted(materials)]
+    instr = load_prompt("answer.v1")
+    texts = [instr, *(meeting_block(materials[m], layers[k]) for k in keys for m in [k[1]])]
+    qparts = [_user_prompt(q) for q in detail]
+    jtexts = [
+        (lambda r: f"{r.system}\n\n{r.user}")(
+            judge_request_for(q.question, q.gold_answer, False, "", False)
+        )
+        for q in detail
+    ]
+    counts = counter([*texts, *qparts, *jtexts])
+    n_instr = counts[0]
+    block = dict(zip(keys, counts[1 : 1 + len(keys)], strict=True))
+    q_tok = counts[1 + len(keys) : 1 + len(keys) + len(detail)]
+    j_tok = counts[1 + len(keys) + len(detail) :]
+    ranks = [retriever.rank(q.question) for q in detail]
+    tokens = 0
+    for budget in budgets:
+        for c in conds:
+            p = proxy_for(c)
+            for rk, qt in zip(ranks, q_tok, strict=True):
+                shown = pack(rk, p, materials, layers, budget)
+                tokens += n_instr + a.answer_overhead + qt + sum(block[(p, m)] for m in shown)
+    n = len(detail) * len(budgets) * len(conds)
+    j_mean = sum(j_tok) / len(j_tok) + a.answer_text_tokens + a.judge_overhead
+    n2 = round(a.judge2_share * n)
+    sizes = ", ".join(f"{b // 1000}k" for b in budgets)
+    return [
+        QuoteRow(
+            "answers: breadth (H4)",
+            a.reader,
+            n,
+            tokens,
+            a.answer_out[0] * n,
+            a.answer_out[1] * n,
+            f"{len(detail)} detail q x {len(budgets)} budgets ({sizes}) x {len(conds)} layers; "
+            "packed contexts counted",
+        ),
+        QuoteRow(
+            "judge: breadth",
+            a.judge,
+            n,
+            round(j_mean * n),
+            a.judge_out[0] * n,
+            a.judge_out[1] * n,
+            "every breadth answer",
+        ),
+        QuoteRow(
+            f"second judge: breadth ({a.judge2_share:.0%})",
+            a.judge2,
+            n2,
+            round(j_mean * n2),
+            a.judge_out[0] * n2,
+            a.judge_out[1] * n2,
+            "seeded sample",
+        ),
+    ]

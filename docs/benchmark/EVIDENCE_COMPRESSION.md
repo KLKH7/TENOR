@@ -101,3 +101,15 @@ We can't see inside Granola. These are reasons a reasonable team might **not** s
 - **$0 sizes.** Random lines hit their budgets (5/10/20/40% → 5.0/10.0/20.0/40.0% mean) and keep 6/10/20/36% of gold evidence lines (n = 61 questions with evidence): as expected for random, a baseline, not a finding.
 
 **Reframe, 2026-11-05, before any answer was produced.** The framing moved from "keep memory after transcript deletion" to **breadth and fidelity**, after a research pass found no user complaints about chat after deletion and found compliance teams accept only summary-level memory once transcripts are deleted. Consequences: verbatim methods stay as **candidates** (transcripts still exist in the main use case), not just references; H1–H3 are unchanged; **H4 is added** with a breadth condition (fixed context budget across many meetings, retrieval included, not the oracle meeting). Deletion is reported as a secondary result, using only non-verbatim layers.
+
+**H4 harness built, 2026-11-05, $0, before any answer.** Arms `breadth<8|16|32>k:<layer>` (`concentrate compression --breadth`): the same reader gets every meeting the shared retriever's ranking fits into the budget at that layer, whole blocks in rank order, no truncation. The retriever is BM25 over each meeting's notes and transcript chunks, **meeting IDs masked** in the query, because every AMI question names its meeting and an ID-aware retriever is an oracle. Detail questions = `who_said` (84) until `notes_can_answer` is filled. $0 coverage (`--sizes`) on those 84:
+
+| Budget | Meetings shown: notes / 20% layer / full transcript | Own meeting shown: 20% layer / full transcript |
+|---|---|---|
+| 8k | 14.6 / 2.3 / 1.0 | 98% / 11% |
+| 16k | 29.4 / 4.2 / 1.2 | 100% / 43% |
+| 32k | 33.0 / 7.9 / 2.1 | 100% / 98% |
+
+- **H4 as built is a weak test of breadth.** Each who-said-it question quotes a transcript line word for word, so the retriever ranks the right meeting first for 98% of them (82 of 84). The arms then differ mainly in whether that one meeting's transcript fits, not in reading many meetings. A fair H4 needs detail questions that don't quote the transcript, or that span meetings.
+- **Budgets are estimated tokens (chars/3.5).** Packed contexts average about 1.4× that in exact tokens.
+- **Cost.** Full plan with H4: **$31.07 expected / $33.36 high** (Haiku reader; H4 adds $17.01: 84 q × 3 budgets × 19 layers). H4 on the $0 layers alone: **$5.16 / $5.42**.

@@ -8,7 +8,7 @@ from collections.abc import Iterator
 from contextlib import ExitStack, contextmanager
 from enum import StrEnum
 from pathlib import Path
-from typing import Annotated
+from typing import Annotated, Any
 
 import typer
 from dotenv import load_dotenv
@@ -2854,6 +2854,22 @@ def compression_cmd(
         ),
     ] = False,
     pilot_n: Annotated[int, typer.Option(help="--pilot: questions.")] = 3,
+    breadth: Annotated[
+        bool,
+        typer.Option(
+            "--breadth",
+            help="H4: breadth arms (8k/16k/32k x each layer in --conditions, default the $0 "
+            "ones) on the detail questions, meetings chosen by the shared retriever.",
+        ),
+    ] = False,
+    mask_ids: Annotated[
+        bool,
+        typer.Option(
+            "--mask-ids/--keep-ids",
+            help="Breadth retriever: drop meeting IDs from the query (default; with them it is "
+            "an oracle).",
+        ),
+    ] = True,
     exact: Annotated[
         bool,
         typer.Option(help="--quote: exact input counts via the free count_tokens endpoint."),
@@ -2880,8 +2896,15 @@ def compression_cmd(
     questions = load_questions(questions_file)
     materials = C.ami_materials(load_meeting(m) for m in load_selection().meetings)
     layers = C.build_layers(materials, C.zero_cost_compressors(seed))  # before any question
+    retriever = C.SharedRetriever(materials, mask_ids=mask_ids)
+    detail = [q for q in questions if q.type in C.DETAIL_TYPES]
     if sizes_only:
-        typer.echo(_json.dumps(C.sizes(layers, questions, materials), indent=1))
+        cover = C.breadth_coverage(detail, retriever, materials, layers, C.ZERO_COST_CONDITIONS)
+        typer.echo(
+            _json.dumps(
+                {"layers": C.sizes(layers, questions, materials), "breadth": cover}, indent=1
+            )
+        )
         return
     cache = Path(os.environ.get("CONCENTRATE_CACHE", "data/cache/llm"))
     a = C.QuoteAssumptions(reader=model, judge=judge_model)
@@ -2903,7 +2926,16 @@ def compression_cmd(
     else:
         how = f"offline chars/3.5 x {HEURISTIC_TO_EXACT} (measured undercount on transcripts)"
     if quote_only:
-        full = C.quote_markdown(C.quote(questions, materials, layers, counter, a), how)
+        breadth_rows = C.quote_breadth(questions, materials, layers, counter, retriever, a)
+        full = C.quote_markdown(
+            C.quote(questions, materials, layers, counter, a) + breadth_rows, how
+        )
+        breadth_now = C.quote_markdown(
+            C.quote_breadth(
+                questions, materials, layers, counter, retriever, a, C.ZERO_COST_CONDITIONS
+            ),
+            how,
+        )
         now = C.quote_markdown(
             C.quote(
                 questions,
@@ -2917,8 +2949,9 @@ def compression_cmd(
             how,
         )
         md = (
-            f"## Full plan (§5)\n\n{full}\n## Next step only: the $0 conditions + closed-book "
-            f"on all {len(questions)} AMI questions\n\n{now}"
+            f"## Full plan (§5, with H4 breadth)\n\n{full}\n## Next step only: the $0 "
+            f"conditions + closed-book on all {len(questions)} AMI questions\n\n{now}\n"
+            f"## H4 breadth only, $0 layers, {len(detail)} detail questions\n\n{breadth_now}"
         )
         path = out / "compression_quote.md"
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -2944,10 +2977,19 @@ def compression_cmd(
     reader = LLMClient(model=model, ledger=ledger, max_usd=cap)
     judge = LLMClient(model=judge_model, ledger=ledger, max_usd=cap)
     j2 = None if judge2 == "none" else LLMClient(model=judge2, ledger=ledger, max_usd=cap)
-    readers = [
-        C.ClosedBookReader(reader) if n == C.CLOSED else C.LayerReader(reader, n, materials, layers)
-        for n in names
-    ]
+    if breadth and not pilot:
+        layers_for = [c for c in conditions.split(",") if c] or list(C.ZERO_COST_CONDITIONS)
+        names = [C.breadth_name(b, c) for b in C.BREADTH_BUDGETS for c in layers_for]
+        picked = [q for q in picked if q.type in C.DETAIL_TYPES]
+
+    def make(n: str) -> Any:
+        if n == C.CLOSED:
+            return C.ClosedBookReader(reader)
+        if (bl := C.parse_breadth(n)) is not None:
+            return C.BreadthReader(reader, bl[0], bl[1], materials, layers, retriever)
+        return C.LayerReader(reader, n, materials, layers)
+
+    readers = [make(n) for n in names]
     what = "PILOT: " if pilot else ""
     if not yes:
         typer.confirm(
@@ -2991,7 +3033,9 @@ def compression_cmd(
         optional=False,
     )
     measured = C.measure(ledger.records, pq, j2.model if j2 else None)
-    plan = C.quote(questions, materials, layers, counter, a)
+    plan = C.quote(questions, materials, layers, counter, a) + C.quote_breadth(
+        questions, materials, layers, counter, retriever, a
+    )
     md, total = C.extrapolate_markdown(plan, measured)
     path = out / "compression_pilot.md"
     path.write_text(

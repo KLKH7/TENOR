@@ -463,3 +463,63 @@ def test_pilot_measures_and_extrapolates(tmp_path: Path) -> None:
     )
     assert total == pytest.approx(expected)
     assert "$/call real" in md and "**total (required)**" in md
+
+
+def test_shared_retriever_masks_ids_and_ranks_every_meeting() -> None:
+    mats = C.ami_materials([A, B])
+    r = C.SharedRetriever(mats)
+    assert r.query("In meeting IS1008b, who said x?") == "In meeting  , who said x?"
+    line = B.dialogue_acts[5].text
+    assert r.rank(f'In meeting IS1008a, who said: "{line}"?')[0] == "IS1008b"  # content, not ID
+    assert sorted(r.rank("nothing matches zzz")) == ["IS1008a", "IS1008b"]
+    assert C.SharedRetriever(mats, mask_ids=False).query("IS1008b") == "IS1008b"
+
+
+def test_pack_respects_budget_and_fills_with_smaller_blocks() -> None:
+    mats = C.ami_materials([A, B])
+    layers = C.build_layers(mats, C.zero_cost_compressors(seed=42))
+    size = {
+        (c, m): C.estimate_tokens(C.meeting_block(mats[m], layers[(c, m)]))
+        for c in (C.FLOOR, C.CEILING)
+        for m in mats
+    }
+    both = C.pack(["IS1008b", "IS1008a"], C.FLOOR, mats, layers, 10_000)
+    assert both == ["IS1008b", "IS1008a"]
+    budget = size[(C.CEILING, "IS1008b")] - 1  # the top meeting's transcript doesn't fit ...
+    assert C.pack(["IS1008b", "IS1008a"], C.CEILING, mats, layers, budget) == (
+        ["IS1008a"] if size[(C.CEILING, "IS1008a")] <= budget else []
+    )  # ... so a smaller later one fills the space
+    assert C.pack(["IS1008b"], C.CEILING, mats, layers, 10) == []
+
+
+def test_breadth_reader_coverage_quote_and_run(tmp_path: Path) -> None:
+    mats = C.ami_materials([A, B])
+    layers = C.build_layers(mats, C.zero_cost_compressors(seed=42))
+    retriever = C.SharedRetriever(mats)
+    qs = [q for q in build_questions([A, B], 42) if q.type in C.DETAIL_TYPES]
+    assert C.parse_breadth("breadth16k:random_20") == (16_000, "random_20")
+    assert C.parse_breadth("random_20") is None
+    fake = FakeReader()
+    client = LLMClient(model="claude-haiku-5-5", cache_dir=tmp_path / "r")
+    r = C.BreadthReader(client, 16_000, C.FLOOR, mats, layers, retriever, fake)
+    assert r.name == "breadth16k:notes_only"
+    user = r.prompt_texts(qs[0])[1]
+    assert all(f"# Meeting {m} [" in user for m in r.packed(qs[0]))
+    cover = C.breadth_coverage(qs, retriever, mats, layers, [C.FLOOR, C.CEILING], [16_000])
+    assert cover["breadth16k:notes_only"]["evidence_shown_mean"] == 0.0
+    assert 0 <= cover["retrieval"]["top1_is_gold"] <= 1
+
+    def counter(texts: list[str]) -> list[int]:
+        return [len(t.split()) for t in texts]
+
+    rows = C.quote_breadth(qs, mats, layers, counter, retriever, None, [C.FLOOR], [8_000])
+    assert [x.calls for x in rows][:2] == [len(qs), len(qs)]
+    judge = LLMClient(FakeJudge(), model="claude-haiku-5-5", cache_dir=tmp_path / "j")
+    report = C.run_compression(
+        [r], qs[:2], judge, layers=layers, materials=mats, seed=1, budget_usd=1.0,
+        out_dir=tmp_path / "out", spent=lambda: 0.0,
+    )  # fmt: skip
+    out = [json.loads(x) for x in next((tmp_path / "out").glob("*.jsonl")).read_text().splitlines()]
+    assert all(x["system"] == "breadth16k:notes_only" and x["gold_meetings_shown"] for x in out)
+    assert all(x["meetings_shown"] == 2 and x["kept_pct"] == 0 for x in out)
+    assert report["meta"]["notes_sources"]
