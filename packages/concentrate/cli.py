@@ -2774,6 +2774,335 @@ def ami_wer(
     typer.echo(f"wrote {out}")
 
 
+# -- anatomy of a wrong fact (docs/benchmark/WRONG_FACTS.md) ----------------------------------
+
+facts_app = typer.Typer(
+    no_args_is_help=True,
+    help="Anatomy of a wrong fact: transcription, note-writing or answering? (AMI)",
+)
+app.add_typer(facts_app, name="facts")
+FACTS_OUT = AMI_RESULTS / "facts"  # gitignored: may hold short product quotes
+FACTS_DBS = {"granola": Path("data/ami_granola.db"), "wispr": Path("data/ami_wispr.db")}
+FACTS_OVERRIDES = AMI_RESULTS / "recording_ids.txt"
+
+GranolaDbOpt = Annotated[Path, typer.Option(help="Synced Granola AMI account (read-only).")]
+WisprDbOpt = Annotated[Path, typer.Option(help="Synced Wispr AMI account (read-only).")]
+OverridesOpt = Annotated[
+    Path, typer.Option(help="Manual pins: lines like 'IB4003 wispr=<uuid> granola=<uuid>'.")
+]
+ProductOpt = Annotated[str, typer.Option(help="granola, wispr or all.")]
+ZipOpt = Annotated[Path, typer.Option(help="AMI manual annotations zip.")]
+OutDirOpt = Annotated[Path, typer.Option(help="Results folder (local, gitignored).")]
+DEFAULT_AMI_ZIP = Path("data/ami/annotations/ami_public_manual_1.6.2.zip")
+
+
+def _facts_recordings(
+    granola_db: Path, wispr_db: Path, overrides: Path, product: str
+) -> dict[str, dict[str, Any]]:
+    """Product -> AMI meeting ID -> MeetingNote, read-only, for the recorded AMI set."""
+    from concentrate.ami.products import AMI_SET, match_recordings, read_overrides
+    from concentrate.core.store import read_notes
+
+    if product not in ("all", *FACTS_DBS):
+        raise typer.BadParameter(f"--product must be all, {' or '.join(FACTS_DBS)}")
+    pins = read_overrides(overrides)
+    out: dict[str, dict[str, Any]] = {}
+    for name, db in (("granola", granola_db), ("wispr", wispr_db)):
+        if product not in ("all", name):
+            continue
+        if not db.is_file():
+            typer.echo(f"{name}: {db} not found, skipped (sync it first)", err=True)
+            continue
+        found = match_recordings(read_notes(db), pins.get(name))
+        out[name] = {mid: found[mid] for mid in AMI_SET if mid in found}
+        missing = [mid for mid in AMI_SET if mid not in found]
+        typer.echo(
+            f"{name}: {len(out[name])} recording(s)"
+            + (f"; not found: {' '.join(missing)}" if missing else "")
+        )
+    if not any(out.values()):
+        raise typer.BadParameter("no AMI recordings found in the given databases")
+    return out
+
+
+def _cap(max_usd: float | None, pilot: bool, worst: float, yes: bool) -> float:
+    """The hard spend cap for a paid run: --max-usd, or PILOT_USD for a pilot."""
+    from concentrate.evals.wrong_facts import PILOT_USD
+
+    cap = max_usd if max_usd is not None else (PILOT_USD if pilot else None)
+    if cap is None:
+        typer.echo("paid runs need --max-usd (the approved amount); pilot first", err=True)
+        raise typer.Exit(1)
+    if worst > cap:
+        typer.echo(f"worst-case estimate ${worst:.4f} exceeds the cap ${cap:.2f}", err=True)
+        raise typer.Exit(1)
+    if not yes:
+        typer.confirm(f"Spend up to ${cap:.2f} (worst-case estimate ${worst:.4f})?", abort=True)
+    return cap
+
+
+def _projection(client: LLMClient, run_worst: float, full_worst: float) -> dict[str, Any]:
+    """Measured spend vs the quote, and the full run re-priced from it with a 1.5x margin."""
+    from concentrate.evals.wrong_facts import SAFETY
+
+    measured = sum(r.cost_usd for r in client.ledger.records)
+    ratio = measured / run_worst if run_worst else None
+    return {
+        "measured_usd": round(measured, 5),
+        "spent_usd": round(client.ledger.spent_usd(), 5),
+        "quoted_worst_usd": round(run_worst, 5),
+        "measured_over_quoted": round(ratio, 4) if ratio is not None else None,
+        "full_run_projected_usd": round(full_worst * ratio * SAFETY, 4) if ratio else None,
+    }
+
+
+@facts_app.command("stage1")
+def facts_stage1(
+    granola_db: GranolaDbOpt = FACTS_DBS["granola"],
+    wispr_db: WisprDbOpt = FACTS_DBS["wispr"],
+    overrides: OverridesOpt = FACTS_OVERRIDES,
+    product: ProductOpt = "all",
+    zip_path: ZipOpt = DEFAULT_AMI_ZIP,
+    out_dir: OutDirOpt = FACTS_OUT,
+) -> None:
+    """Stage 1 ($0): fact-token recall, substitutions and name insertions per transcript.
+
+    Deterministic, no LLM and no randomness (so no --seed).
+    """
+    import json
+
+    from concentrate.ami import facts as F
+    from concentrate.ami.corpus import load_meeting
+    from concentrate.ami.wer import NORMALISER_VERSION
+    from concentrate.evals.wrong_facts import DROP_MIC, own_transcript
+
+    recs = _facts_recordings(granola_db, wispr_db, overrides, product)
+    results = []
+    for name, by_mid in recs.items():
+        drop = DROP_MIC[name]
+        for mid, note in by_mid.items():
+            own = own_transcript(note, drop_mic=drop)
+            r = F.score_transcript(
+                load_meeting(mid, zip_path),
+                [u.text for u in own.utterances],
+                name,
+                drop_mic=drop,
+                owner_name=note.owner.name,
+            )
+            results.append(r)
+            cells = "  ".join(
+                f"{k}={v.recall:.0%}({v.human}) sub={v.substitutions}"
+                for k, v in r.kinds.items()
+                if v.recall is not None
+            )
+            typer.echo(
+                f"{name:<8}{mid:<8} {cells}  name_ins={r.name_insertions}"
+                f" owner={r.owner_name_insertions}"
+            )
+    meta = _provenance(
+        track="wrong-facts.stage1",
+        facts_version=F.FACTS_VERSION,
+        normaliser_version=NORMALISER_VERSION,
+        drop_mic=DROP_MIC,
+        llm=None,
+        source="AMI Meeting Corpus manual annotations 1.6.2 (CC BY 4.0)",
+    )
+    out_dir.mkdir(parents=True, exist_ok=True)
+    path = out_dir / "stage1.json"
+    payload = {"meta": meta, "results": [r.model_dump() for r in results]}
+    path.write_text(json.dumps(payload, indent=1, ensure_ascii=False) + "\n")
+    typer.echo(f"wrote {path}")
+
+
+@facts_app.command("stage2")
+def facts_stage2(
+    granola_db: GranolaDbOpt = FACTS_DBS["granola"],
+    wispr_db: WisprDbOpt = FACTS_DBS["wispr"],
+    overrides: OverridesOpt = FACTS_OVERRIDES,
+    product: ProductOpt = "all",
+    quote: Annotated[bool, typer.Option(help="Price it and stop ($0).")] = False,
+    pilot: Annotated[
+        bool, typer.Option(help="Sandbox: the DEV meeting only, cap $0.05 by default.")
+    ] = False,
+    max_usd: Annotated[
+        float | None, typer.Option(help="Hard spend cap (the approved amount).")
+    ] = None,
+    yes: Annotated[bool, typer.Option(help="Skip the confirmation prompt.")] = False,
+    model: Annotated[str, typer.Option(help="Grounding-checker model.")] = "claude-haiku-5-5",
+    zip_path: ZipOpt = DEFAULT_AMI_ZIP,
+    out_dir: OutDirOpt = FACTS_OUT,
+) -> None:
+    """Stage 2: check each product note claim against its own and AMI's human transcript.
+
+    Deterministic given the LLM cache (no randomness, so no --seed).
+    """
+    import json
+
+    from concentrate.ami.corpus import load_meeting
+    from concentrate.ami.facts import human_note
+    from concentrate.evals import grounding as G
+    from concentrate.evals import wrong_facts as W
+    from concentrate.llm.client import BudgetExceeded
+
+    recs = _facts_recordings(granola_db, wispr_db, overrides, product)
+    mids = sorted({m for by_mid in recs.values() for m in by_mid})
+    human = {m: human_note(load_meeting(m, zip_path)) for m in mids}
+    jobs = W.stage2_jobs(recs, human)
+    full = W.quote_stage2(jobs, model)
+    run = W.pilot(jobs) if pilot else jobs
+    est = W.quote_stage2(run, model) if pilot else full
+    out_dir.mkdir(parents=True, exist_ok=True)
+    (out_dir / "stage2.quote.json").write_text(json.dumps(full, indent=1) + "\n")
+    typer.echo(
+        f"full run: {full['jobs']} notes, {full['claims']} claims, {model} "
+        f"${full['usd_no_escalation']:.4f} (no escalation) to ${full['usd_worst']:.4f} (worst)"
+    )
+    if pilot:
+        typer.echo(f"pilot: {len(run)} notes, worst ${est['usd_worst']:.4f}")
+    if quote:
+        return
+    cap = _cap(max_usd, pilot, est["usd_worst"], yes)
+    client = LLMClient(model=model, max_usd=cap)
+    rows: list[W.ClaimRow] = []
+    stopped = None
+    for job in run:
+        try:
+            rows += W.run_stage2(job, client)
+        except BudgetExceeded as e:
+            stopped = str(e)
+            break
+    stem = "stage2.pilot" if pilot else "stage2"
+    meta = _provenance(
+        track="wrong-facts.stage2",
+        model=model,
+        effort=G.EFFORT,
+        prompt=G.PROMPT_ID,
+        k=G.K,
+        window=G.WINDOW,
+        drop_mic=W.DROP_MIC,
+        max_usd=cap,
+        stopped=stopped,
+        **_projection(client, est["usd_worst"], full["usd_worst"]),
+    )
+    agg = {"meta": meta, "products": W.aggregate_stage2(rows)}
+    (out_dir / f"{stem}.json").write_text(json.dumps(agg, indent=1) + "\n")
+    W.write_jsonl(rows, out_dir / f"{stem}.claims.jsonl")
+    for name, a in agg["products"].items():
+        shares = "  ".join(f"{c}={v['k']}" for c, v in a["classes"].items() if v["k"])
+        typer.echo(f"{name}: {a['claims']} claims  {shares}")
+    typer.echo(
+        f"spent ${meta['spent_usd']:.4f}; full run projected ${meta['full_run_projected_usd']}"
+        f" (x{W.SAFETY}) · {out_dir / stem}.json" + (f" · STOPPED: {stopped}" if stopped else "")
+    )
+
+
+@facts_app.command("stage3")
+def facts_stage3(
+    answers: Annotated[
+        Path | None, typer.Option(help="JSONL of {question_id, product, answer}.")
+    ] = None,
+    granola_db: GranolaDbOpt = FACTS_DBS["granola"],
+    wispr_db: WisprDbOpt = FACTS_DBS["wispr"],
+    overrides: OverridesOpt = FACTS_OVERRIDES,
+    product: ProductOpt = "all",
+    quote: Annotated[
+        bool, typer.Option(help="Price it and stop ($0); without --answers, assumes lengths.")
+    ] = False,
+    pilot: Annotated[
+        bool, typer.Option(help="Sandbox: 3 seeded DEV answers, cap $0.05 by default.")
+    ] = False,
+    seed: Annotated[int, typer.Option(help="Seed for the pilot sample.")] = 0,
+    llm_notes: Annotated[
+        bool,
+        typer.Option(
+            "--llm-notes/--lexical-notes",
+            help="Check notes with the grounding checker, or only the $0 lexical recall.",
+        ),
+    ] = True,
+    max_usd: Annotated[
+        float | None, typer.Option(help="Hard spend cap (the approved amount).")
+    ] = None,
+    yes: Annotated[bool, typer.Option(help="Skip the confirmation prompt.")] = False,
+    judge_model: Annotated[str, typer.Option(help="Judge model.")] = "claude-haiku-5-5",
+    model: Annotated[str, typer.Option(help="Notes-check model.")] = "claude-haiku-5-5",
+    questions_file: Annotated[Path, typer.Option("--questions")] = Path(
+        "data/ami_questions/questions.jsonl"
+    ),
+    zip_path: ZipOpt = DEFAULT_AMI_ZIP,
+    out_dir: OutDirOpt = FACTS_OUT,
+) -> None:
+    """Stage 3: judge product answers; pin each wrong one on transcription, notes or answering."""
+    import json
+
+    from concentrate.ami.corpus import load_meeting
+    from concentrate.ami.questions import RECORDED, load_questions
+    from concentrate.evals import grounding as G
+    from concentrate.evals import wrong_facts as W
+    from concentrate.evals.scoring import JUDGE_PROMPT
+    from concentrate.llm.client import BudgetExceeded
+
+    qs = W.recorded(load_questions(questions_file))
+    recs = _facts_recordings(granola_db, wispr_db, overrides, product)
+    ev = W.Evidence({m: load_meeting(m, zip_path) for m in RECORDED}, recs)
+    if answers is not None:
+        rows_in = W.load_answers(answers)
+        W.check_answers(rows_in, qs)
+    elif quote:
+        rows_in = W.placeholder_answers(qs, sorted(recs))
+        typer.echo(f"no --answers: quoting {len(rows_in)} placeholder answers (ASSUMED lengths)")
+    else:
+        raise typer.BadParameter("--answers is required unless --quote")
+    run = W.pilot_answers(rows_in, qs, seed) if pilot else rows_in
+    full = W.quote_stage3(rows_in, qs, ev, judge_model=judge_model, check_model=model)
+    est = W.quote_stage3(run, qs, ev, judge_model=judge_model, check_model=model)
+    worst = est["usd_worst"] if llm_notes else est["judge_usd"]
+    out_dir.mkdir(parents=True, exist_ok=True)
+    (out_dir / "stage3.quote.json").write_text(json.dumps(full, indent=1) + "\n")
+    typer.echo(
+        f"full run: {full['answers']} answers; judge ${full['judge_usd']:.4f} + notes check "
+        f"${full['notes_check_usd_worst']:.4f} (worst: every answer wrong) = "
+        f"${full['usd_worst']:.4f}"
+    )
+    if pilot:
+        typer.echo(f"pilot: {len(run)} answers, worst ${worst:.4f}")
+    if quote:
+        return
+    cap = _cap(max_usd, pilot, worst, yes)
+    judge = LLMClient(model=judge_model, max_usd=cap)
+    checker = LLMClient(model=model, ledger=judge.ledger, max_usd=cap) if llm_notes else None
+    rows: list[W.AnswerRow] = []
+    stopped = None
+    for a in run:
+        try:
+            rows += W.run_stage3([a], qs, ev, judge, checker)
+        except BudgetExceeded as e:
+            stopped = str(e)
+            break
+    stem = "stage3.pilot" if pilot else "stage3"
+    meta = _provenance(
+        track="wrong-facts.stage3",
+        judge_model=judge_model,
+        check_model=model if llm_notes else None,
+        prompts={"judge": JUDGE_PROMPT, "notes_check": G.PROMPT_ID if llm_notes else None},
+        seed=seed,
+        pilot=pilot,
+        max_usd=cap,
+        stopped=stopped,
+        **_projection(judge, worst, full["usd_worst"] if llm_notes else full["judge_usd"]),
+    )
+    agg = {"meta": meta, "products": W.aggregate_stage3(rows)}
+    (out_dir / f"{stem}.json").write_text(json.dumps(agg, indent=1) + "\n")
+    W.write_jsonl(rows, out_dir / f"{stem}.rows.jsonl")
+    for name, a in agg["products"].items():
+        s = a["all"]
+        stages = "  ".join(f"{k}={v['k']}" for k, v in s["stage"].items() if v["k"])
+        typer.echo(f"{name}: {s['answers']} answers, {s['wrong']} wrong  {stages}")
+    typer.echo(
+        f"spent ${meta['spent_usd']:.4f}; full run projected ${meta['full_run_projected_usd']}"
+        f" (x{W.SAFETY}) · {out_dir / stem}.json" + (f" · STOPPED: {stopped}" if stopped else "")
+    )
+
+
 # -- MCP contract check (packages/concentrate/sources/contract.py) -----------------------------
 
 CONTRACT_BASELINE = Path("evals/contracts/granola_mcp.json")

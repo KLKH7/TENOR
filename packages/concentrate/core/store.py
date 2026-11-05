@@ -84,6 +84,30 @@ def _load(raw_format: str, raw_json: str) -> granola.Note:
     return model.model_validate_json(raw_json)
 
 
+def _iter_notes(conn: sqlite3.Connection, include_deleted: bool) -> Iterator[MeetingNote]:
+    where = "" if include_deleted else "WHERE deleted_at IS NULL"
+    for raw_format, raw in conn.execute(
+        f"SELECT raw_format, raw_json FROM notes {where} "
+        "ORDER BY COALESCE(scheduled_start, created_at), note_id"
+    ):
+        yield normalize_note(_load(raw_format, raw))
+
+
+def read_notes(path: Path) -> list[MeetingNote]:
+    """Every live note in a store database, opened read-only.
+
+    Unlike :class:`NoteStore`, this never creates the file, its folder or its tables, so it is
+    safe on a database another process is syncing.
+    """
+    if not path.is_file():
+        raise FileNotFoundError(path)
+    conn = sqlite3.connect(f"{path.resolve().as_uri()}?mode=ro", uri=True)
+    try:
+        return list(_iter_notes(conn, include_deleted=False))
+    finally:
+        conn.close()
+
+
 def _raw_format(note: granola.Note) -> str:
     if isinstance(note, granola.WisprNote):
         return "wispr"
@@ -174,12 +198,7 @@ class NoteStore:
 
     def iter_notes(self, *, include_deleted: bool = False) -> Iterator[MeetingNote]:
         """Yield notes ordered by meeting time (scheduled start, else creation)."""
-        where = "" if include_deleted else "WHERE deleted_at IS NULL"
-        for raw_format, raw in self.conn.execute(
-            f"SELECT raw_format, raw_json FROM notes {where} "
-            "ORDER BY COALESCE(scheduled_start, created_at), note_id"
-        ):
-            yield normalize_note(_load(raw_format, raw))
+        yield from _iter_notes(self.conn, include_deleted)
 
     def upsert_folders(self, folders: list[granola.Folder]) -> None:
         with self.conn:

@@ -20,6 +20,7 @@ local (Kian, 2026-11-04: publish scores only).
 
 from __future__ import annotations
 
+import logging
 import re
 from collections.abc import Iterable
 from pathlib import Path
@@ -29,6 +30,8 @@ from pydantic import BaseModel, ConfigDict
 from concentrate.ami.corpus import DEFAULT_ZIP, load_meeting
 from concentrate.ami.wer import WerScore, score
 from concentrate.core.models import Channel, MeetingNote
+
+log = logging.getLogger(__name__)
 
 AMI_SET = ("IS1008a", "IS1008b", "IS1008c", "IS1008d", "IB4003", "EN2002b")
 _TAG = re.compile(r"\bAMI[\s_-]+([A-Z]{2}\d{4}[a-z]?)\b")
@@ -65,6 +68,65 @@ def match_notes(notes: Iterable[MeetingNote]) -> dict[str, MeetingNote]:
         if mid in out:
             raise ValueError(f"{mid} matched two notes; delete or retitle one recording")
         out[mid] = note
+    return out
+
+
+_BARE_ID = re.compile(r"[A-Z]{2}\d{4}[a-z]?")
+
+
+_PIN = re.compile(r"([a-z][a-z_]*)=(\S+)")
+
+
+def read_overrides(path: Path) -> dict[str, dict[str, str]]:
+    """Read manual recording IDs: product -> AMI meeting ID -> note ID.
+
+    A pin line starts with a meeting ID followed by ``<product>=<note id>`` tokens, e.g.
+    ``IB4003 wispr=<uuid> granola=<uuid>``. Anything else is a human note and is ignored:
+    other words on a pin line ("(untitled)"), lines not starting with a bare meeting ID, and
+    text after ``#``. A missing file means no overrides.
+    """
+    out: dict[str, dict[str, str]] = {}
+    if not path.is_file():
+        return out
+    for raw in path.read_text().splitlines():
+        parts = raw.split("#", 1)[0].split()
+        if not parts or not _BARE_ID.fullmatch(parts[0]):
+            continue
+        for tok in parts[1:]:
+            pin = _PIN.fullmatch(tok)
+            if pin:
+                out.setdefault(pin[1], {})[parts[0]] = pin[2]
+    return out
+
+
+def match_recordings(
+    notes: Iterable[MeetingNote], overrides: dict[str, str] | None = None
+) -> dict[str, MeetingNote]:
+    """Map AMI meeting ID -> note, for one product's notes.
+
+    Like :func:`match_notes`, plus a note whose title is exactly a bare meeting ID
+    ("IB4003": Wispr titles can lack the "AMI " prefix), and ``overrides`` (meeting ID -> note
+    ID, from :func:`read_overrides`), which win over any title match. A pinned meeting whose
+    note isn't synced yet is left unmatched (with a warning). Raises if one meeting still
+    matches two notes.
+    """
+    pinned = overrides or {}
+    by_id: dict[str, MeetingNote] = {}
+    out: dict[str, MeetingNote] = {}
+    for note in notes:
+        by_id[note.note_id] = note
+        bare = (note.title or "").strip()
+        mid = ami_tag(note) or (bare if _BARE_ID.fullmatch(bare) else None)
+        if mid is None or mid in pinned:
+            continue
+        if mid in out:
+            raise ValueError(f"{mid} matched two notes; retitle one or pin it in the overrides")
+        out[mid] = note
+    for mid, note_id in pinned.items():
+        if note_id in by_id:
+            out[mid] = by_id[note_id]
+        else:
+            log.warning("override for %s names a note that isn't synced yet; skipped", mid)
     return out
 
 
