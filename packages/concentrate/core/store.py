@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS notes (
     deleted_at TEXT,
     scheduled_start TEXT,
     calendar_event_id TEXT,
-    raw_format TEXT NOT NULL,  -- 'api' (public REST API / fixtures) or 'mcp' (Granola MCP)
+    raw_format TEXT NOT NULL,  -- 'api' (REST API / fixtures), 'mcp' (Granola MCP), 'wispr'
     raw_json TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS utterances (
@@ -80,8 +80,14 @@ def from_db_time(s: str) -> datetime:
 
 
 def _load(raw_format: str, raw_json: str) -> granola.Note:
-    model = granola.McpNote if raw_format == "mcp" else granola.Note
+    model = {"mcp": granola.McpNote, "wispr": granola.WisprNote}.get(raw_format, granola.Note)
     return model.model_validate_json(raw_json)
+
+
+def _raw_format(note: granola.Note) -> str:
+    if isinstance(note, granola.WisprNote):
+        return "wispr"
+    return "mcp" if isinstance(note, granola.McpNote) else "api"
 
 
 class NoteStore:
@@ -121,7 +127,7 @@ class NoteStore:
                     to_db_time(m.deleted_at) if m.deleted_at else None,
                     to_db_time(m.scheduled_start) if m.scheduled_start else None,
                     m.calendar_event_id,
-                    "mcp" if isinstance(note, granola.McpNote) else "api",
+                    _raw_format(note),
                     note.model_dump_json(exclude_unset=True),
                 ),
             )
