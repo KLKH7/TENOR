@@ -3,7 +3,7 @@
 **What happens to an AI agent's answers when meeting transcripts are deleted, or squeezed into notes?**
 Hindsight measures it from the outside, through public interfaces only, on real meetings. [Granola](https://www.granola.ai) is the reference product.
 
-![What deleting transcripts costs on real meetings: Granola's agent 89%, notes only 57%, notes plus a fact layer 66%, plus reading the transcript when needed 87%](docs/figures/deletion_sim.svg)
+![Deleting transcripts cost 32 points on real meetings; our fact layer recovered 9; reading the transcript when notes fall short recovered most of it](docs/figures/retention_steps.svg)
 
 ## What we found
 
@@ -13,6 +13,8 @@ Real meetings, DEV results: 4 meetings, 39–47 questions, seen during developme
 - **The loss is in the details.** Questions the notes can't answer drop from 94% to 44%.
 - **Reaching the transcript recovers it; a fact layer doesn't.** Notes + extracted facts: 66% (not significant). Reading the transcript only when needed: 87%.
 - **Reading real speech, Granola's agent beat our fact memory 92% to 59%** (paired 14–1, p ≈ 0.001).
+- **Granola's notes invent nothing, but about 1 claim in 7 overreaches:** 84% supported, 0% made up, 14% go beyond what was said (132 claims, [`NOTES_FAITHFULNESS`](docs/benchmark/NOTES_FAITHFULNESS.md)).
+- **Through the MCP, Granola's wrong answers look like its right ones:** no line-level citations and no "unsure" flag (3 of 47 wrong but confident, [`AGENT_INTERFACE`](docs/results/AGENT_INTERFACE.md)).
 
 *Independent research prototype; [not affiliated with Granola](#not-affiliated-with-granola).*
 
@@ -37,6 +39,10 @@ Same 47 questions, four conditions; each adds one layer. Full write-up: [`DELETI
 
 ¹ Counts out of 47. *Declined* = abstained or said the material doesn't cover it. *Wrong but confident* = judged wrong with no hedge. ² Wins–losses on the same questions, exact sign test.
 
+![Granola's four answer types per condition: without transcripts our model hedged rather than bluffed](docs/figures/answer_types.svg)
+
+![Accuracy by tag and question type for each condition, n in every cell](docs/figures/question_heatmap.svg)
+
 ### Question answering: reading real speech
 
 All 4 meetings fit in a model's context, so this tests reading, not search. Write-up: [`REAL_SLICE`](docs/results/REAL_SLICE.md).
@@ -57,7 +63,11 @@ Northwind is a synthetic company in Granola's format: 184 meetings, 296 question
 On it, our fact memory tied the transcript readers (92 / 90 / 88%) and facts recovered deletion (64% → 88%). Real meetings reversed both.
 Why: the same author built the generator and the extractor, and the questions target planted facts. Details and all seven systems: [`SYNTHETIC_DIAGNOSTICS`](docs/results/SYNTHETIC_DIAGNOSTICS.md).
 
+![Same approaches on synthetic vs real meetings: memory-only fell 33 points, the fact layer 22, the agent over transcripts held](docs/figures/synthetic_vs_real.svg)
+
 ## How it works
+
+![How Hindsight works: meetings go into products through adapters, five tracks test them, scores come out](docs/figures/overview.svg)
 
 - **Outside-in.** Only public interfaces: Granola's API note format and its read-only MCP. No claims about Granola internals.
 - **Black-box kit.** Asks any meeting product's MCP your questions, on your meetings. Only content-free scores leave your machine ([`BLACKBOX`](docs/benchmark/BLACKBOX.md)).
@@ -68,8 +78,8 @@ Why: the same author built the generator and the extractor, and the questions ta
 |---|---|---|
 | Question answering | Answer across meetings: who said what, decisions, changes, commitments | ✅ real (DEV) |
 | Retention | Answer after transcripts are deleted | ✅ real (DEV) |
-| Notes faithfulness | Is every line of the notes backed by what was said? | 🛠 in progress |
-| Agent interface quality | Answer type, evidence, stability, latency through the MCP | 🛠 in progress |
+| Notes faithfulness | Is every line of the notes backed by what was said? | ✅ real (4 meetings) + baseline |
+| Agent interface quality | Answer type, evidence, stability, latency through the MCP | ✅ real (DEV) |
 | Contextual integrity | Answer without revealing meetings the asker can't see | 📐 [designed](docs/benchmark/SHARING_LEAKS_DESIGN.md) |
 
 ## Reasons to be skeptical
