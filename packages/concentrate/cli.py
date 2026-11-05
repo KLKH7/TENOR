@@ -2185,55 +2185,113 @@ def deletion_sim_cmd(
     typer.echo(f"spent ${spent():.2f} · report: {report['paths']['md']} · aggregate: {path}")
 
 
-# -- what Granola's MCP returns (payload audit) ------------------------------------------------
+# -- agent-interface quality track --------------------------------------------------------------
 
 
-@app.command("mcp-payload")
-def mcp_payload_cmd(
+@app.command("agent-interface")
+def agent_interface_cmd(
+    products: Annotated[
+        str,
+        typer.Option(
+            help="Comma-separated: granola, concentrate, or any product recorded by "
+            "`real-kit run --product <name>` (scored against --report)."
+        ),
+    ] = "granola,concentrate",
     report: Annotated[
-        Path, typer.Option(help="Deletion-sim report .jsonl holding the judged Granola answers.")
-    ] = Path("data/real/reports/20261104T012414Z.deletion.jsonl"),
+        Path | None,
+        typer.Option(help="Report .jsonl with verdicts, for products other than the built-ins."),
+    ] = None,
     tags: Annotated[Path, typer.Option(help="Question tag file.")] = Path(
         "data/real/tags.p2t.json"
     ),
     db: Annotated[Path, typer.Option()] = REAL_DB,
-    sample: Annotated[int, typer.Option(help="Questions to re-ask.")] = 12,
+    sample: Annotated[int, typer.Option(help="Questions to re-ask for stability.")] = 12,
     repeats: Annotated[int, typer.Option(help="Extra asks per sampled question.")] = 2,
     seed: Annotated[int, typer.Option()] = 42,
     live: Annotated[
-        bool, typer.Option(help="Re-ask missing repeats via query_granola_meetings (read-only).")
-    ] = False,
-    max_calls: Annotated[int, typer.Option(help="Hard cap on live MCP calls.")] = 24,
+        str | None,
+        typer.Option(
+            help="Record missing repeats for this one product through its read-only adapter. "
+            "Free for Granola; Concentrate's ask_memory(answer=true) costs an LLM call each."
+        ),
+    ] = None,
+    max_calls: Annotated[int, typer.Option(help="Hard cap on live calls.")] = 24,
     out: Annotated[Path, typer.Option(help="Committable aggregate.")] = Path(
-        "evals/reports/mcp-payload.aggregate.json"
+        "evals/reports/agent-interface.aggregate.json"
     ),
 ) -> None:
-    """Profile what Granola's MCP returns per question type, bucket answers into Granola's four
-    answer types, and measure repeat-ask stability. No LLM calls ($0); see
-    docs/results/MCP_PAYLOAD.md."""
+    """Score meeting products' MCP answers on the agent-interface track: four answer types,
+    evidence granularity, payload signals, stability, latency. No LLM calls unless --live names
+    a product that makes them; see docs/benchmark/AGENT_INTERFACE.md."""
     import json as _json
     import subprocess
     from contextlib import ExitStack
     from datetime import UTC, datetime
 
-    from concentrate.evals import mcp_payload as M
+    from concentrate.blackbox.kit import check_committable
+    from concentrate.evals import agent_interface as AI
+    from concentrate.evals.deletion_sim import load_tags
+    from concentrate.evals.real_slice import load_questions
 
+    names = [n.strip() for n in products.split(",") if n.strip()]
+    if live == "concentrate":
+        raise typer.BadParameter(
+            "Concentrate repeats cost LLM calls; price them first (budget rule)"
+        )
+    entries = []
+    for n in names:
+        if n == "granola":
+            entries.append(AI.granola_entry())
+        elif n == "concentrate":
+            entries.append(AI.concentrate_entry())
+        elif report is None:
+            raise typer.BadParameter(f"{n}: pass --report with its judged black-box report")
+        else:
+            entries.append(AI.recorded_entry(n, report))
+    questions = load_questions()
+    tag_map = load_tags(tags)
+    calls = 0
+    if live is not None:
+        from concentrate.blackbox.products import open_product
+
+        e = next((x for x in entries if x.product == AI.product_key(live)), None)
+        if e is None:
+            raise typer.BadParameter(f"--live {live}: not among --products")
+        rows = AI.build_rows(e, questions, tag_map, db)
+        with ExitStack() as stack:
+            prod = open_product(live, stack)
+            calls = AI.record_repeats(
+                prod, questions, AI.stratified_sample(rows, sample, seed), repeats, max_calls
+            )
+    results = {}
+    for e in entries:
+        rows, stab, _ = AI.score_entry(e, questions, tag_map, db, sample, repeats, seed)
+        results[e.product] = (e, rows, stab)
     sha = subprocess.run(["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True)
     meta = {
         "date": datetime.now(UTC).isoformat(timespec="seconds"),
         "git_sha": sha.stdout.strip(),
-        "source_report": report.name,
-        "judge": "judge.v1 (opus) primary, sonnet second judge",
+        "split": "real dev",
+        "seed": seed,
+        "sample": sample,
+        "repeats": repeats,
         "llm_calls": 0,
+        "live_calls_this_run": calls,
     }
-    with ExitStack() as stack:
-        product = None
-        if live:
-            from concentrate.blackbox.products import open_product
-
-            product = open_product("granola", stack)
-        agg, _ = M.run(report, tags, db, meta, sample, repeats, seed, product, max_calls)
+    pairs = []
+    if {"granola", "concentrate"} <= set(results):
+        # Same judge run for both: the real-slice report holds Granola's answers too.
+        g = AI.granola_entry(AI.CONCENTRATE_REPORT)
+        pairs.append(("granola", "concentrate", g, results["concentrate"][0]))
+    agg = AI.aggregate(results, meta, pairs, questions, tag_map, db)
+    private = [q.question for q in questions] + [
+        q.gold_answer for q in questions if not q.unanswerable
+    ]
+    private += [a.text for e, _, _ in results.values() for a in e.answers.values()]
+    check_committable(agg, private)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(_json.dumps(agg, indent=2) + "\n")
-    typer.echo(_json.dumps(agg["four_types"]["overall"], indent=1))
-    typer.echo(f"live calls: {agg['meta']['live_calls_this_run']} · aggregate: {out}")
+    for n, b in agg["products"].items():
+        ft = b["four_types"]["overall"]
+        typer.echo(f"{n}: n={b['questions']} " + " ".join(f"{k}={v['k']}" for k, v in ft.items()))
+    typer.echo(f"live calls: {calls} · aggregate: {out}")
