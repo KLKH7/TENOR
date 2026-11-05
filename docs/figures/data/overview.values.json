@@ -1,0 +1,505 @@
+{
+ "axes": [
+  {
+   "collections": [],
+   "images": [],
+   "legend": [],
+   "lines": [
+    [
+     [
+      11.0,
+      69.0
+     ],
+     [
+      26.0,
+      69.0
+     ]
+    ],
+    [
+     [
+      11.0,
+      64.8
+     ],
+     [
+      23.0,
+      64.8
+     ]
+    ],
+    [
+     [
+      11.0,
+      60.6
+     ],
+     [
+      26.0,
+      60.6
+     ]
+    ],
+    [
+     [
+      11.0,
+      56.4
+     ],
+     [
+      23.0,
+      56.4
+     ]
+    ],
+    [
+     [
+      4.0,
+      47.0
+     ],
+     [
+      22.0,
+      47.0
+     ]
+    ],
+    [
+     [
+      4.0,
+      43.4
+     ],
+     [
+      17.0,
+      43.4
+     ]
+    ],
+    [
+     [
+      80.92,
+      64.2
+     ],
+     [
+      83.08,
+      64.2
+     ]
+    ],
+    [
+     [
+      80.92,
+      63.0
+     ],
+     [
+      83.08,
+      63.0
+     ]
+    ],
+    [
+     [
+      80.92,
+      61.8
+     ],
+     [
+      83.08,
+      61.8
+     ]
+    ],
+    [
+     [
+      79.48,
+      60.36
+     ],
+     [
+      84.52,
+      65.64
+     ]
+    ],
+    [
+     [
+      80.92,
+      54.0
+     ],
+     [
+      81.76,
+      52.92
+     ],
+     [
+      83.2,
+      55.2
+     ]
+    ],
+    [
+     [
+      80.68,
+      36.36
+     ],
+     [
+      80.68,
+      36.0
+     ]
+    ],
+    [
+     [
+      83.32,
+      36.36
+     ],
+     [
+      83.32,
+      36.0
+     ]
+    ]
+   ],
+   "patches": [
+    [
+     [
+      80.8,
+      70.56
+     ],
+     [
+      79.84,
+      69.36
+     ],
+     [
+      81.76,
+      70.56
+     ],
+     [
+      80.8,
+      70.56
+     ]
+    ],
+    [
+     80.2,
+     60.6,
+     3.6,
+     4.8
+    ],
+    [
+     80.2,
+     51.6,
+     3.6,
+     4.8
+    ],
+    [
+     80.08,
+     33.6,
+     3.84,
+     2.76
+    ],
+    [
+     133.5,
+     71.0,
+     2.0,
+     2.0
+    ],
+    [
+     133.5,
+     65.4,
+     2.0,
+     2.0
+    ],
+    [
+     133.5,
+     59.8,
+     2.0,
+     2.0
+    ],
+    [
+     133.5,
+     54.2,
+     2.0,
+     2.0
+    ],
+    [
+     133.5,
+     48.6,
+     2.0,
+     2.0
+    ],
+    [
+     133.5,
+     43.0,
+     2.0,
+     2.0
+    ]
+   ],
+   "texts": [
+    [
+     "1  Meetings",
+     2.0,
+     80.0
+    ],
+    [
+     "2  Products answer",
+     35.0,
+     80.0
+    ],
+    [
+     "3  Five tracks test them",
+     78.0,
+     80.0
+    ],
+    [
+     "4  Scores out",
+     131.0,
+     80.0
+    ],
+    [
+     "transcript",
+     4.0,
+     73.5
+    ],
+    [
+     "Me",
+     4.0,
+     69.0
+    ],
+    [
+     "Them",
+     4.0,
+     64.8
+    ],
+    [
+     "Me",
+     4.0,
+     60.6
+    ],
+    [
+     "Them",
+     4.0,
+     56.4
+    ],
+    [
+     "notes",
+     4.0,
+     51.0
+    ],
+    [
+     "Granola",
+     37.0,
+     73.0
+    ],
+    [
+     "reference product",
+     37.0,
+     69.0
+    ],
+    [
+     "Wispr Flow",
+     37.0,
+     60.0
+    ],
+    [
+     "second product, adapter coming",
+     37.0,
+     56.0
+    ],
+    [
+     "Open baselines",
+     37.0,
+     47.0
+    ],
+    [
+     "top-k, agent, Mem0, Graphiti\nand Concentrate (ours)",
+     37.0,
+     41.5
+    ],
+    [
+     "each through one adapter\n(public API / MCP only)",
+     53.5,
+     34.5
+    ],
+    [
+     "",
+     29.5,
+     58.5
+    ],
+    [
+     "?",
+     82.0,
+     72.36
+    ],
+    [
+     "Question answering",
+     87.0,
+     73.6
+    ],
+    [
+     "recall across many meetings",
+     87.0,
+     69.7
+    ],
+    [
+     "Retention",
+     87.0,
+     64.6
+    ],
+    [
+     "answer after transcripts are deleted",
+     87.0,
+     60.7
+    ],
+    [
+     "Notes faithfulness",
+     87.0,
+     55.6
+    ],
+    [
+     "is each note backed by the meeting?",
+     87.0,
+     51.7
+    ],
+    [
+     "",
+     79.6,
+     45.96
+    ],
+    [
+     "",
+     84.4,
+     44.04
+    ],
+    [
+     "Agent interface quality",
+     87.0,
+     46.6
+    ],
+    [
+     "what an outside agent gets back",
+     87.0,
+     42.7
+    ],
+    [
+     "Contextual integrity",
+     87.0,
+     37.6
+    ],
+    [
+     "don't leak meetings you can't see",
+     87.0,
+     33.7
+    ],
+    [
+     "",
+     72.5,
+     58.5
+    ],
+    [
+     "accuracy",
+     137.5,
+     72.0
+    ],
+    [
+     "confident errors",
+     137.5,
+     66.4
+    ],
+    [
+     "deletion cost",
+     137.5,
+     60.8
+    ],
+    [
+     "faithfulness",
+     137.5,
+     55.2
+    ],
+    [
+     "leak rate",
+     137.5,
+     49.6
+    ],
+    [
+     "$ · latency",
+     137.5,
+     44.0
+    ],
+    [
+     "",
+     124.5,
+     58.5
+    ],
+    [
+     "no single score:\neach track has its own",
+     144.5,
+     37.5
+    ],
+    [
+     "Real meetings  =  evidence",
+     5.0,
+     15.5
+    ],
+    [
+     "your own account, through the product's public MCP;\neverything stays local, only aggregates are shared",
+     5.0,
+     9.0
+    ],
+    [
+     "Synthetic meetings  =  diagnostic",
+     85.0,
+     15.5
+    ],
+    [
+     "Northwind: 184 meetings in Granola's format, known answers;\nfor debugging systems, never for headline findings",
+     85.0,
+     9.0
+    ],
+    [
+     "How does Hindsight work?",
+     2.0,
+     96.0
+    ],
+    [
+     "An open benchmark for meeting memory: the same tasks for every product, measured from the outside.",
+     2.0,
+     90.5
+    ]
+   ],
+   "title": "",
+   "xlabel": "",
+   "xlim": [
+    0.0,
+    160.0
+   ],
+   "xscale": "linear",
+   "xticklabels": [
+    "0",
+    "20",
+    "40",
+    "60",
+    "80",
+    "100",
+    "120",
+    "140",
+    "160"
+   ],
+   "xticks": [
+    0.0,
+    20.0,
+    40.0,
+    60.0,
+    80.0,
+    100.0,
+    120.0,
+    140.0,
+    160.0
+   ],
+   "ylabel": "",
+   "ylim": [
+    0.0,
+    100.0
+   ],
+   "yscale": "linear",
+   "yticklabels": [
+    "0",
+    "20",
+    "40",
+    "60",
+    "80",
+    "100"
+   ],
+   "yticks": [
+    0.0,
+    20.0,
+    40.0,
+    60.0,
+    80.0,
+    100.0
+   ]
+  }
+ ],
+ "figure_legends": [],
+ "suptitle": "",
+ "texts": []
+}

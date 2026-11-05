@@ -1,0 +1,213 @@
+{
+ "axes": [
+  {
+   "collections": [],
+   "images": [],
+   "legend": [
+    "Useful & complete",
+    "Useful but incomplete",
+    "Incomplete & says so",
+    "Wrong but confident"
+   ],
+   "lines": [],
+   "patches": [
+    [
+     0.0,
+     2.69,
+     89.36170213,
+     0.62
+    ],
+    [
+     89.36170213,
+     2.69,
+     4.255319149,
+     0.62
+    ],
+    [
+     93.61702128,
+     2.69,
+     0.0,
+     0.62
+    ],
+    [
+     93.61702128,
+     2.69,
+     6.382978723,
+     0.62
+    ],
+    [
+     0.0,
+     1.69,
+     57.44680851,
+     0.62
+    ],
+    [
+     57.44680851,
+     1.69,
+     8.510638298,
+     0.62
+    ],
+    [
+     65.95744681,
+     1.69,
+     34.04255319,
+     0.62
+    ],
+    [
+     100.0,
+     1.69,
+     0.0,
+     0.62
+    ],
+    [
+     0.0,
+     0.69,
+     65.95744681,
+     0.62
+    ],
+    [
+     65.95744681,
+     0.69,
+     4.255319149,
+     0.62
+    ],
+    [
+     70.21276596,
+     0.69,
+     29.78723404,
+     0.62
+    ],
+    [
+     100.0,
+     0.69,
+     0.0,
+     0.62
+    ],
+    [
+     0.0,
+     -0.31,
+     87.23404255,
+     0.62
+    ],
+    [
+     87.23404255,
+     -0.31,
+     6.382978723,
+     0.62
+    ],
+    [
+     93.61702128,
+     -0.31,
+     6.382978723,
+     0.62
+    ],
+    [
+     100.0,
+     -0.31,
+     0.0,
+     0.62
+    ]
+   ],
+   "texts": [
+    [
+     "89%",
+     44.68085106,
+     3.0
+    ],
+    [
+     "6%",
+     96.80851064,
+     3.0
+    ],
+    [
+     "57%",
+     28.72340426,
+     2.0
+    ],
+    [
+     "9%",
+     61.70212766,
+     2.0
+    ],
+    [
+     "34%",
+     82.9787234,
+     2.0
+    ],
+    [
+     "66%",
+     32.9787234,
+     1.0
+    ],
+    [
+     "30%",
+     85.10638298,
+     1.0
+    ],
+    [
+     "87%",
+     43.61702128,
+     0.0
+    ],
+    [
+     "6%",
+     90.42553191,
+     0.0
+    ],
+    [
+     "6%",
+     96.80851064,
+     0.0
+    ]
+   ],
+   "title": "",
+   "xlabel": "share of answers (%)",
+   "xlim": [
+    0.0,
+    100.0
+   ],
+   "xscale": "linear",
+   "xticklabels": [
+    "0",
+    "20",
+    "40",
+    "60",
+    "80",
+    "100"
+   ],
+   "xticks": [
+    0.0,
+    20.0,
+    40.0,
+    60.0,
+    80.0,
+    100.0
+   ],
+   "ylabel": "",
+   "ylim": [
+    -0.491,
+    3.491
+   ],
+   "yscale": "linear",
+   "yticklabels": [
+    "Granola + transcripts  (n=47)",
+    "Notes only  (n=47)",
+    "Notes + facts  (n=47)",
+    "+ transcript when needed  (n=47)"
+   ],
+   "yticks": [
+    3.0,
+    2.0,
+    1.0,
+    0.0
+   ]
+  }
+ ],
+ "figure_legends": [],
+ "suptitle": "When the answer isn't right, does it say so?",
+ "texts": [
+  "When the answer isn't right, does it say so?",
+  "Author's 4 real meetings, 47 questions, DEV (seen during development); run 20261104T012414Z.\nGranola's four answer types, from the judge's verdict and whether the answer hedged.",
+  "Mapping: complete = judged correct; incomplete = judged partially correct; says so = judged incorrect but abstained or said the material doesn't cover it; wrong but confident = judged incorrect with no hedge. Granola's confident errors were 2 of 6 unanswerable questions."
+ ]
+}

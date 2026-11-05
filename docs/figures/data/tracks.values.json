@@ -1,0 +1,336 @@
+{
+ "axes": [
+  {
+   "collections": [],
+   "images": [],
+   "legend": [],
+   "lines": [
+    [
+     [
+      6.83,
+      64.3
+     ],
+     [
+      9.17,
+      64.3
+     ]
+    ],
+    [
+     [
+      6.83,
+      63.0
+     ],
+     [
+      9.17,
+      63.0
+     ]
+    ],
+    [
+     [
+      6.83,
+      61.7
+     ],
+     [
+      9.17,
+      61.7
+     ]
+    ],
+    [
+     [
+      5.27,
+      60.14
+     ],
+     [
+      10.73,
+      65.86
+     ]
+    ],
+    [
+     [
+      6.83,
+      46.0
+     ],
+     [
+      7.74,
+      44.83
+     ],
+     [
+      9.3,
+      47.3
+     ]
+    ],
+    [
+     [
+      6.57,
+      12.39
+     ],
+     [
+      6.57,
+      12.0
+     ]
+    ],
+    [
+     [
+      9.43,
+      12.39
+     ],
+     [
+      9.43,
+      12.0
+     ]
+    ]
+   ],
+   "patches": [
+    [
+     [
+      6.7,
+      78.44
+     ],
+     [
+      5.66,
+      77.14
+     ],
+     [
+      7.74,
+      78.44
+     ],
+     [
+      6.7,
+      78.44
+     ]
+    ],
+    [
+     6.05,
+     60.4,
+     3.9,
+     5.2
+    ],
+    [
+     6.05,
+     43.4,
+     3.9,
+     5.2
+    ],
+    [
+     5.92,
+     9.4,
+     4.16,
+     2.99
+    ]
+   ],
+   "texts": [
+    [
+     "What does each track test, and how far along is it?",
+     2.0,
+     104.0
+    ],
+    [
+     "Each track is a task plus metrics any product can be scored on; Granola is the reference entry.",
+     2.0,
+     98.5
+    ],
+    [
+     "Track",
+     14.0,
+     92.0
+    ],
+    [
+     "Task",
+     58.0,
+     92.0
+    ],
+    [
+     "Metrics",
+     102.0,
+     92.0
+    ],
+    [
+     "Status",
+     142.0,
+     92.0
+    ],
+    [
+     "?",
+     8.0,
+     80.39
+    ],
+    [
+     "Question answering",
+     14.0,
+     80.0
+    ],
+    [
+     "Answer questions across many\nmeetings",
+     58.0,
+     80.0
+    ],
+    [
+     "accuracy · confident error ·\ncitations · $ · latency",
+     102.0,
+     80.0
+    ],
+    [
+     "built",
+     149.25,
+     80.0
+    ],
+    [
+     "▸ Real (DEV, n=39): Granola's agent 92%, our memory system 59%",
+     14.0,
+     74.7
+    ],
+    [
+     "Retention",
+     14.0,
+     63.0
+    ],
+    [
+     "Answer after transcripts are\ndeleted",
+     58.0,
+     63.0
+    ],
+    [
+     "deletion cost by question type ·\nrecovery per layer",
+     102.0,
+     63.0
+    ],
+    [
+     "built",
+     149.25,
+     63.0
+    ],
+    [
+     "▸ Real (DEV, n=47): 89% with transcripts, 57% with notes only, 87% reading them when needed",
+     14.0,
+     57.7
+    ],
+    [
+     "Notes faithfulness",
+     14.0,
+     46.0
+    ],
+    [
+     "Is every line of the notes backed\nby what was said?",
+     58.0,
+     46.0
+    ],
+    [
+     "supported · inferred · unsupported\n· contradicted",
+     102.0,
+     46.0
+    ],
+    [
+     "in progress",
+     149.25,
+     46.0
+    ],
+    [
+     "",
+     5.4,
+     30.04
+    ],
+    [
+     "",
+     10.6,
+     27.96
+    ],
+    [
+     "Agent interface quality",
+     14.0,
+     29.0
+    ],
+    [
+     "An outside agent asks a product a\nquestion through its MCP",
+     58.0,
+     29.0
+    ],
+    [
+     "four answer types · evidence ·\nstability · latency",
+     102.0,
+     29.0
+    ],
+    [
+     "in progress",
+     149.25,
+     29.0
+    ],
+    [
+     "Contextual integrity",
+     14.0,
+     12.0
+    ],
+    [
+     "Answer someone who can see only\nsome meetings, without revealing\nthe rest",
+     58.0,
+     12.0
+    ],
+    [
+     "leak rate · over-restriction ·\ninference leaks",
+     102.0,
+     12.0
+    ],
+    [
+     "designed",
+     149.25,
+     12.0
+    ]
+   ],
+   "title": "",
+   "xlabel": "",
+   "xlim": [
+    0.0,
+    160.0
+   ],
+   "xscale": "linear",
+   "xticklabels": [
+    "0",
+    "20",
+    "40",
+    "60",
+    "80",
+    "100",
+    "120",
+    "140",
+    "160"
+   ],
+   "xticks": [
+    0.0,
+    20.0,
+    40.0,
+    60.0,
+    80.0,
+    100.0,
+    120.0,
+    140.0,
+    160.0
+   ],
+   "ylabel": "",
+   "ylim": [
+    0.0,
+    108.0
+   ],
+   "yscale": "linear",
+   "yticklabels": [
+    "0",
+    "20",
+    "40",
+    "60",
+    "80",
+    "100",
+    "120"
+   ],
+   "yticks": [
+    0.0,
+    20.0,
+    40.0,
+    60.0,
+    80.0,
+    100.0,
+    120.0
+   ]
+  }
+ ],
+ "figure_legends": [],
+ "suptitle": "",
+ "texts": []
+}

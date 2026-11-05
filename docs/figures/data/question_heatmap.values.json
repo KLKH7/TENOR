@@ -1,0 +1,364 @@
+{
+ "axes": [
+  {
+   "collections": [],
+   "images": [
+    [
+     [
+      91.30434783,
+      94.44444444,
+      66.66666667
+     ],
+     [
+      56.52173913,
+      44.44444444,
+      100.0
+     ],
+     [
+      65.2173913,
+      55.55555556,
+      100.0
+     ],
+     [
+      82.60869565,
+      88.88888889,
+      100.0
+     ]
+    ]
+   ],
+   "legend": [],
+   "lines": [],
+   "patches": [],
+   "texts": [
+    [
+     "91\nn=23",
+     0.0,
+     0.0
+    ],
+    [
+     "94\nn=18",
+     1.0,
+     0.0
+    ],
+    [
+     "67\nn=6",
+     2.0,
+     0.0
+    ],
+    [
+     "57\nn=23",
+     0.0,
+     1.0
+    ],
+    [
+     "44\nn=18",
+     1.0,
+     1.0
+    ],
+    [
+     "100\nn=6",
+     2.0,
+     1.0
+    ],
+    [
+     "65\nn=23",
+     0.0,
+     2.0
+    ],
+    [
+     "56\nn=18",
+     1.0,
+     2.0
+    ],
+    [
+     "100\nn=6",
+     2.0,
+     2.0
+    ],
+    [
+     "83\nn=23",
+     0.0,
+     3.0
+    ],
+    [
+     "89\nn=18",
+     1.0,
+     3.0
+    ],
+    [
+     "100\nn=6",
+     2.0,
+     3.0
+    ]
+   ],
+   "title": "",
+   "xlabel": "",
+   "xlim": [
+    -0.5,
+    2.5
+   ],
+   "xscale": "linear",
+   "xticklabels": [
+    "notes sufficient",
+    "transcript needed",
+    "unanswerable"
+   ],
+   "xticks": [
+    0.0,
+    1.0,
+    2.0
+   ],
+   "ylabel": "",
+   "ylim": [
+    3.5,
+    -0.5
+   ],
+   "yscale": "linear",
+   "yticklabels": [
+    "Granola + transcripts",
+    "Notes only",
+    "Notes + facts",
+    "+ transcript when needed"
+   ],
+   "yticks": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+   ]
+  },
+  {
+   "collections": [],
+   "images": [
+    [
+     [
+      83.33333333,
+      100.0,
+      100.0,
+      80.0,
+      100.0,
+      66.66666667,
+      87.5
+     ],
+     [
+      50.0,
+      75.0,
+      87.5,
+      20.0,
+      33.33333333,
+      100.0,
+      25.0
+     ],
+     [
+      83.33333333,
+      87.5,
+      87.5,
+      40.0,
+      33.33333333,
+      100.0,
+      25.0
+     ],
+     [
+      83.33333333,
+      87.5,
+      87.5,
+      100.0,
+      66.66666667,
+      100.0,
+      87.5
+     ]
+    ]
+   ],
+   "legend": [],
+   "lines": [],
+   "patches": [],
+   "texts": [
+    [
+     "83\nn=6",
+     0.0,
+     0.0
+    ],
+    [
+     "100\nn=8",
+     1.0,
+     0.0
+    ],
+    [
+     "100\nn=8",
+     2.0,
+     0.0
+    ],
+    [
+     "80\nn=5",
+     3.0,
+     0.0
+    ],
+    [
+     "100\nn=6",
+     4.0,
+     0.0
+    ],
+    [
+     "67\nn=6",
+     5.0,
+     0.0
+    ],
+    [
+     "88\nn=8",
+     6.0,
+     0.0
+    ],
+    [
+     "50\nn=6",
+     0.0,
+     1.0
+    ],
+    [
+     "75\nn=8",
+     1.0,
+     1.0
+    ],
+    [
+     "88\nn=8",
+     2.0,
+     1.0
+    ],
+    [
+     "20\nn=5",
+     3.0,
+     1.0
+    ],
+    [
+     "33\nn=6",
+     4.0,
+     1.0
+    ],
+    [
+     "100\nn=6",
+     5.0,
+     1.0
+    ],
+    [
+     "25\nn=8",
+     6.0,
+     1.0
+    ],
+    [
+     "83\nn=6",
+     0.0,
+     2.0
+    ],
+    [
+     "88\nn=8",
+     1.0,
+     2.0
+    ],
+    [
+     "88\nn=8",
+     2.0,
+     2.0
+    ],
+    [
+     "40\nn=5",
+     3.0,
+     2.0
+    ],
+    [
+     "33\nn=6",
+     4.0,
+     2.0
+    ],
+    [
+     "100\nn=6",
+     5.0,
+     2.0
+    ],
+    [
+     "25\nn=8",
+     6.0,
+     2.0
+    ],
+    [
+     "83\nn=6",
+     0.0,
+     3.0
+    ],
+    [
+     "88\nn=8",
+     1.0,
+     3.0
+    ],
+    [
+     "88\nn=8",
+     2.0,
+     3.0
+    ],
+    [
+     "100\nn=5",
+     3.0,
+     3.0
+    ],
+    [
+     "67\nn=6",
+     4.0,
+     3.0
+    ],
+    [
+     "100\nn=6",
+     5.0,
+     3.0
+    ],
+    [
+     "88\nn=8",
+     6.0,
+     3.0
+    ]
+   ],
+   "title": "",
+   "xlabel": "",
+   "xlim": [
+    -0.5,
+    6.5
+   ],
+   "xscale": "linear",
+   "xticklabels": [
+    "change",
+    "commitment status",
+    "decision",
+    "disambiguation",
+    "temporal",
+    "unanswerable",
+    "who said"
+   ],
+   "xticks": [
+    0.0,
+    1.0,
+    2.0,
+    3.0,
+    4.0,
+    5.0,
+    6.0
+   ],
+   "ylabel": "",
+   "ylim": [
+    3.5,
+    -0.5
+   ],
+   "yscale": "linear",
+   "yticklabels": [],
+   "yticks": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+   ]
+  }
+ ],
+ "figure_legends": [],
+ "suptitle": "Which questions does deletion hurt, and which layer brings them back?",
+ "texts": [
+  "Which questions does deletion hurt, and which layer brings them back?",
+  "Author's 4 real meetings, 47 questions, DEV (seen during development); run 20261104T012414Z.\nAccuracy (%) and n per cell; cells with n < 5 are greyed out.",
+  "Cells hold 5-23 questions: a 95% CI is roughly ±20-40 points, so read rows and columns as patterns, single cells as hints. Unanswerable: 'correct' means it declined."
+ ]
+}

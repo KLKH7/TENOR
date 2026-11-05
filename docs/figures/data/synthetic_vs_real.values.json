@@ -1,0 +1,246 @@
+{
+ "axes": [
+  {
+   "collections": [
+    {
+     "points": [
+      [
+       91.66666667,
+       -0.0
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       58.97435897,
+       -0.0
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       88.33333333,
+       -1.0
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       76.92307692,
+       -1.0
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       90.0,
+       -2.0
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       92.30769231,
+       -2.0
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       64.44444444,
+       -3.7
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       57.44680851,
+       -3.7
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       87.77777778,
+       -4.7
+      ]
+     ]
+    },
+    {
+     "points": [
+      [
+       65.95744681,
+       -4.7
+      ]
+     ]
+    }
+   ],
+   "images": [],
+   "legend": [],
+   "lines": [],
+   "patches": [],
+   "texts": [
+    [
+     "",
+     91.66666667,
+     -0.0
+    ],
+    [
+     "92",
+     93.86666667,
+     -0.0
+    ],
+    [
+     "59",
+     56.77435897,
+     -0.0
+    ],
+    [
+     "−33 pts",
+     103.0,
+     -0.0
+    ],
+    [
+     "",
+     88.33333333,
+     -1.0
+    ],
+    [
+     "88",
+     90.53333333,
+     -1.0
+    ],
+    [
+     "77",
+     74.72307692,
+     -1.0
+    ],
+    [
+     "−11 pts",
+     103.0,
+     -1.0
+    ],
+    [
+     "",
+     90.0,
+     -2.0
+    ],
+    [
+     "90",
+     87.8,
+     -2.0
+    ],
+    [
+     "92",
+     94.50769231,
+     -2.0
+    ],
+    [
+     "+2 pts",
+     103.0,
+     -2.0
+    ],
+    [
+     "",
+     64.44444444,
+     -3.7
+    ],
+    [
+     "64",
+     66.64444444,
+     -3.7
+    ],
+    [
+     "57",
+     55.24680851,
+     -3.7
+    ],
+    [
+     "−7 pts",
+     103.0,
+     -3.7
+    ],
+    [
+     "",
+     87.77777778,
+     -4.7
+    ],
+    [
+     "88",
+     89.97777778,
+     -4.7
+    ],
+    [
+     "66",
+     63.75744681,
+     -4.7
+    ],
+    [
+     "−22 pts",
+     103.0,
+     -4.7
+    ]
+   ],
+   "title": "",
+   "xlabel": "accuracy (%): hollow = synthetic, filled = real meetings",
+   "xlim": [
+    40.0,
+    112.0
+   ],
+   "xscale": "linear",
+   "xticklabels": [
+    "40",
+    "50",
+    "60",
+    "70",
+    "80",
+    "90",
+    "100"
+   ],
+   "xticks": [
+    40.0,
+    50.0,
+    60.0,
+    70.0,
+    80.0,
+    90.0,
+    100.0
+   ],
+   "ylabel": "",
+   "ylim": [
+    -5.3,
+    0.6
+   ],
+   "yscale": "linear",
+   "yticklabels": [
+    "Memory only (Concentrate)\nquestion answering, n 120 → 39",
+    "Top-k retrieval\nquestion answering, n 120 → 39",
+    "Agent over transcripts*\nquestion answering, n 120 → 39",
+    "Notes only\nretention, n 90 → 47",
+    "Notes + fact layer\nretention, n 90 → 47"
+   ],
+   "yticks": [
+    -0.0,
+    -1.0,
+    -2.0,
+    -3.7,
+    -4.7
+   ]
+  }
+ ],
+ "figure_legends": [],
+ "suptitle": "Why did synthetic data mislead us?",
+ "texts": [
+  "Why did synthetic data mislead us?",
+  "The same approach on synthetic questions (hollow) and on the author's real meetings (filled). Memory built\nfrom extracted facts lost most; reading transcripts held up.",
+  "*Synthetic: our agent re-implementation (b3); real: Granola's own agent, which can only run on real accounts. Synthetic QA is the TEST split; synthetic retention is the DEV retirement run; all real numbers are DEV and n is small. Synthetic is diagnostic, not evidence: its questions target the facts an extractor keeps."
+ ]
+}
