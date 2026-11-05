@@ -58,6 +58,7 @@ _PARTICIPANT = re.compile(
     r"\s\((?P<email>[^()\s]+@[^()\s]+)\)"
 )
 _SPEAKER = re.compile(r"^(?P<source>Microphone|System audio)(?:\s\((?P<name>.+)\))?$")
+_KNOWN_LABEL = re.compile(r"^(?:Microphone|System audio(?: \(.+\))?|Speaker \w+)$")
 
 
 def _attrs(s: str) -> dict[str, str]:
@@ -147,6 +148,37 @@ def passages_to_transcript(passages: list[dict[str, Any]]) -> list[granola.Trans
         )
         last = start
     return items
+
+
+_RENDERED_LINE = re.compile(
+    r"^(?:\[(?:(?P<h>\d+):)?(?P<m>\d+):(?P<s>\d{2})\]\s+)?(?P<label>[^:\n]{1,80}?):\s(?P<text>.*)$"
+)
+
+
+def rendered_to_passages(text: str, base: datetime) -> list[dict[str, Any]]:
+    """Parse a chunk's rendered ``transcript`` text into passage dicts.
+
+    Seen live on 2026-11-05: chunks carry one ``transcript`` string of ``[m:ss] Label: text``
+    lines (blank-line separated) instead of a ``passages`` list. Offsets count from the
+    transcript's earliest timed block, so ``base`` (the note's creation time) anchors them;
+    absolute times are therefore approximate. Lines without a ``Label:`` prefix continue the
+    previous passage.
+    """
+    passages: list[dict[str, Any]] = []
+    for line in text.splitlines():
+        if not line.strip():
+            continue
+        m = _RENDERED_LINE.match(line.strip())
+        if m is None or (m["m"] is None and not _KNOWN_LABEL.match(m["label"])):
+            if passages:
+                passages[-1]["text"] += " " + line.strip()
+            continue
+        time = None
+        if m["m"] is not None:
+            secs = int(m["h"] or 0) * 3600 + int(m["m"]) * 60 + int(m["s"])
+            time = (base + timedelta(seconds=secs)).isoformat()
+        passages.append({"speaker": m["label"], "time": time, "text": m["text"]})
+    return passages
 
 
 # -- source -------------------------------------------------------------------------------------
@@ -287,10 +319,10 @@ class GranolaMCPSource:
             summary_markdown=summary,
             private_notes_text=row["private_notes"] or None,
             private_notes_markdown=row["private_notes"] or None,
-            transcript=self._transcript(row["id"]),
+            transcript=self._transcript(row["id"], created_at),
         )
 
-    def _transcript(self, note_id: str) -> list[granola.TranscriptItem]:
+    def _transcript(self, note_id: str, base: datetime) -> list[granola.TranscriptItem]:
         passages: list[dict[str, Any]] = []
         version: str | None = None
         start, total = 0, None
@@ -307,7 +339,10 @@ class GranolaMCPSource:
             version = page.get("transcript_version") or version
             total = int(page.get("total_chunks") or 0)
             for chunk in sorted(page.get("chunks", []), key=lambda c: c["chunk_id"]):
-                passages.extend(chunk.get("passages", []))
+                if "passages" in chunk:  # format seen until 2026-11-04
+                    passages.extend(chunk["passages"])
+                else:  # rendered text, seen from 2026-11-05
+                    passages.extend(rendered_to_passages(chunk.get("transcript", ""), base))
             start += TRANSCRIPT_BATCH
         return passages_to_transcript(passages)
 

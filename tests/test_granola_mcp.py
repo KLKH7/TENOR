@@ -22,6 +22,7 @@ from concentrate.sources.granola_mcp import (
     McpToolError,
     parse_participants,
     passages_to_transcript,
+    rendered_to_passages,
 )
 from concentrate.sources.poller import sync
 from concentrate.sources.ratelimit import FakeClock
@@ -253,3 +254,28 @@ def test_sync_stores_mcp_notes_and_reloads_them(source: GranolaMCPSource) -> Non
     assert raw_format == "mcp"
     again = sync(source, store)  # incremental: nothing changed
     assert again.fetched == 0 and again.unchanged == 2
+
+
+def test_rendered_transcript_chunks_parse() -> None:
+    """Live format from 2026-11-05: one ``[m:ss] Label: text`` string per chunk."""
+    base = datetime(2026, 11, 5, 5, 53, 42, tzinfo=UTC)
+    text = (
+        "[0:00] System audio: That's as far as it goes.\n\n"
+        "[0:11] Microphone: Hi, guys: welcome.\n\n"
+        "continued line\n\n"
+        "[1:02:03] System audio (Robin Roe): Late.\n\n"
+        "Speaker A: untimed mobile line"
+    )
+    passages = rendered_to_passages(text, base)
+    assert [p["speaker"] for p in passages] == [
+        "System audio",
+        "Microphone",
+        "System audio (Robin Roe)",
+        "Speaker A",
+    ]
+    assert passages[1]["text"] == "Hi, guys: welcome. continued line"
+    assert passages[2]["time"] == "2026-11-05T06:55:45+00:00"
+    assert passages[3]["time"] is None
+    items = passages_to_transcript(passages)
+    assert items[0].speaker.source == "speaker" and items[1].speaker.source == "microphone"
+    assert items[2].speaker.name == "Robin Roe"

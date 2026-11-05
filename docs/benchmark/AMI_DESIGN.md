@@ -207,7 +207,14 @@ Base: `https://groups.inf.ed.ac.uk/ami/AMICorpusMirror/amicorpus/`
 
 **Call condition (planned, after the clean run).** A second condition closer to real use: start a Google Meet with the laptop (running both products) as one participant and a second device (e.g. a phone) as the other, playing the AMI file into the call. This adds call compression, packet loss, noise suppression and meeting-app context. Same 6 meetings, scored the same way; reported **alongside** the direct condition, never mixed. The gap between them measures what the call path costs or adds.
 
-**Pilot (2026-11-05):** IS1008a recorded once with personal settings on, to test the pipeline. Re-recorded under the clean protocol before scoring.
+**Pilot (2026-11-05):** IS1008a recorded once with personal settings on, to test the pipeline. Re-recorded under the clean protocol before any result is reported.
+
+| Pilot, IS1008a only (n = 1 meeting, not a result) | WER | Content-word recall | Speakers found |
+|---|---|---|---|
+| Granola (mic turns dropped: 0) | 10.0% | 94.2% | 0 / 4 (no diarisation in its MCP output) |
+| Wispr Flow (all turns kept) | 9.0% | 95.8% | 3 / 4 |
+
+One meeting, one recording each, personal dictionaries on, and one stray room line in Wispr: a one-point gap is a **tie**, not a ranking. What the pilot does show: the pipeline works end to end, and Granola's MCP transcript format changed overnight (see SCHEMA_NOTES).
 
 **Still open:** reading the participants' consent form; free-plan limits on the fresh accounts; Wispr sign-in (see [PRODUCTS.md](PRODUCTS.md)).
 
