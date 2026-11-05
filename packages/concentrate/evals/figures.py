@@ -11,6 +11,8 @@ Inputs, all committed except where noted:
 - ``evals/scale/*/scale.json`` (latest): the scale curve;
 - ``evals/reports/ami/coverage.json``: AMI capture coverage per 15 s window (numbers and AMI
   meeting IDs only), written by ``concentrate ami coverage``;
+- ``evals/reports/ami/detector.json``: the capture-health detector's results and one example
+  timeline (numbers only), written by ``concentrate ami detector``;
 - ``docs/figures/data/real_slice.json``: a content-free snapshot of the real-meeting slice
   (scores and paired counts only, all already public in ``docs/results/REAL_SLICE.md`` and
   ``docs/archive/concentrate/fallback.md``). It is rebuilt from the gitignored ``data/real``
@@ -81,6 +83,7 @@ class Inputs:
     by_tag: dict[str, Any] | None = None  # evals/reports/notes_vs_transcript.json
     deletion: dict[str, Any] | None = None  # evals/reports/real-deletion-sim-dev.aggregate.json
     coverage: dict[str, Any] | None = None  # evals/reports/ami/coverage.json
+    detector: dict[str, Any] | None = None  # evals/reports/ami/detector.json
     ami_deletion: dict[str, Any] | None = None  # evals/reports/ami/deletion-sim.aggregate.json
     files: dict[str, list[Path]] = field(default_factory=dict)
 
@@ -107,6 +110,7 @@ def load_inputs(stamp: str, root: Path = Path()) -> Inputs:
     tag_path = reports / "notes_vs_transcript.json"
     del_path = reports / "real-deletion-sim-dev.aggregate.json"
     cov_path = reports / "ami" / "coverage.json"
+    det_path = reports / "ami" / "detector.json"
     ami_del_path = reports / "ami" / "deletion-sim.aggregate.json"
     rows = [json.loads(x) for x in rows_path.read_text().splitlines() if x.strip()]
     core = [report_path, rows_path, analysis_path]
@@ -123,6 +127,7 @@ def load_inputs(stamp: str, root: Path = Path()) -> Inputs:
         by_tag=_json(tag_path) if tag_path.exists() else None,
         deletion=_json(del_path) if del_path.exists() else None,
         coverage=_json(cov_path) if cov_path.exists() else None,
+        detector=_json(det_path) if det_path.exists() else None,
         ami_deletion=_json(ami_del_path) if ami_del_path.exists() else None,
         files={
             "report": core,
@@ -133,6 +138,7 @@ def load_inputs(stamp: str, root: Path = Path()) -> Inputs:
             "by_tag": [tag_path] if tag_path.exists() else [],
             "deletion": [del_path] if del_path.exists() else [],
             "coverage": [cov_path] if cov_path.exists() else [],
+            "detector": [det_path] if det_path.exists() else [],
             "ami_deletion": [ami_del_path] if ami_del_path.exists() else [],
         },
     )
@@ -1058,6 +1064,14 @@ FIGURES: tuple[Spec, ...] = (
         lambda inp: FR.fig_capture_coverage(inp.coverage),
         ("coverage",),
         "tracks/CAPTURE.md",
+        "real",
+    ),
+    Spec(
+        "capture_health",
+        "Can a product tell when its transcript has stopped?",
+        lambda inp: FR.fig_capture_health(inp.detector),
+        ("detector",),
+        "tracks/CAPTURE_HEALTH.md",
         "real",
     ),
     Spec(

@@ -168,6 +168,26 @@ def make_root(root: Path) -> Path:
             ],
         },
     )  # fmt: skip
+    split = {
+        "meetings": 2,
+        "hours": 0.9,
+        "detected": 9,
+        "faults_confirmed": 10,
+        "false_alarms_per_hour": 1.1,
+        "delay_s_median": 12.0,
+    }
+    _write(
+        reports / "ami" / "detector.json",
+        {
+            "variants": {v: {"params": {"t_s": 15}, "test": split} for v in
+                         ("energy/start", "oracle/start", "energy/span", "oracle/span")},
+            "example": {"meeting_id": "IS1008b", "window_s": [0, 6], "fault": [2, 3],
+                        "oracle": [0, 1, 1, 1, 1, 0], "energy": [0, 0.5, 1, 1, 0.5, 0],
+                        "blocks_kept": [0.5, 5.5], "blocks_deleted": [2.5],
+                        "alert_onset": {"energy/start": 4, "oracle/start": None,
+                                        "energy/span": 3, "oracle/span": 3}},
+        },
+    )  # fmt: skip
     return root
 
 
@@ -191,6 +211,8 @@ def test_renders_every_figure_as_valid_svg(tmp_path: Path) -> None:
     assert b"How does TENOR work?" in rendered["overview.svg"]
     assert b"2 meetings" in rendered["harness_flow.svg"]
     assert b"EN2002b" in rendered["capture_coverage.svg"]
+    assert b"9/10 caught" in rendered["capture_health.svg"]
+    assert b"missed" in rendered["capture_health.svg"]
 
 
 def test_answer_types_partition_every_answer() -> None:

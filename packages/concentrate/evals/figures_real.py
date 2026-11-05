@@ -675,3 +675,77 @@ def fig_capture_coverage(coverage: dict[str, Any] | None) -> Any:
     )
     fig.subplots_adjust(left=0.1, right=0.98, top=0.8, bottom=0.22)
     return fig
+
+
+# -- capture health (docs/tracks/CAPTURE_HEALTH.md) ------------------------------------------
+
+HEALTH_VARIANTS = (  # (key, label, colour, marker)
+    ("energy/start", "energy VAD + block starts", fs.OTHER_COLOURS[0], "o"),
+    ("oracle/start", "perfect VAD + block starts", fs.OTHER_COLOURS[2], "o"),
+    ("energy/span", "energy VAD + live words (est.)", fs.OTHER_COLOURS[0], "^"),
+    ("oracle/span", "perfect VAD + live words (est.)", fs.OTHER_COLOURS[2], "^"),
+)
+
+
+def fig_capture_health(detector: dict[str, Any] | None) -> Any:
+    """One injected failure on a TEST meeting: speech, transcript blocks, and each alert."""
+    if detector is None or detector.get("example") is None:
+        return None
+    ex, variants = detector["example"], detector["variants"]
+    t0, t1 = ex["window_s"]
+    start, length = ex["fault"]
+    secs = [(t0 + i) / 60 for i in range(len(ex["oracle"]))]
+    fig, ax = fs.new_figure(5.2)
+    ax.axvspan(start / 60, (start + length) / 60, color="#CC6677", alpha=0.12, lw=0, zorder=0)
+    ax.text((start + length / 2) / 60, 4.05, f"injected failure: {length} s of transcript deleted",
+            ha="center", va="bottom", fontsize=8.5, color="#882255")  # fmt: skip
+    for row, key, colour in (
+        (3, "oracle", fs.OTHER_COLOURS[2]),
+        (2, "energy", fs.OTHER_COLOURS[0]),
+    ):
+        base = row - 0.4
+        ax.fill_between(secs, base, [base + 0.8 * v for v in ex[key]], step="post",
+                        color=colour, alpha=0.75, lw=0)  # fmt: skip
+    for t in ex["blocks_kept"]:
+        ax.plot([t / 60, t / 60], [0.62, 1.38], color=fs.INK, lw=1.0)
+    for t in ex["blocks_deleted"]:
+        ax.plot([t / 60, t / 60], [0.62, 1.38], color="#BBBBBB", lw=1.0, ls=(0, (2, 1.5)))
+    for i, (key, label, colour, marker) in enumerate(HEALTH_VARIANTS):
+        y = 0.5 - 0.36 * i
+        onset = ex["alert_onset"].get(key)
+        if onset is None:
+            ax.text(t1 / 60, y, f"{label}: missed", fontsize=8, va="center", ha="right")
+            continue
+        ax.plot([start / 60, onset / 60], [y, y], color=colour, lw=1.0, alpha=0.6)
+        ax.plot([onset / 60], [y], marker=marker, color=colour, ms=6, ls="none")
+        ax.text(onset / 60 + 0.05, y, f"{label}: alert after {onset - start} s",
+                fontsize=8, va="center", color=fs.INK)  # fmt: skip
+    rows = ["Speech heard\n(AMI word timings)", "Speech heard\n(energy VAD)",
+            "Transcript blocks\n(grey: deleted)", "Alert"]  # fmt: skip
+    ax.set_yticks([3, 2, 1, -0.04], rows)
+    ax.set_ylim(-0.85, 4.4)
+    ax.set_xlim(t0 / 60, t1 / 60)
+    ax.grid(axis="y", visible=False)
+    ax.set_xlabel(f"Minutes into AMI meeting {ex['meeting_id']} (TEST)")
+    fs.title(
+        fig,
+        "Can a product tell when its transcript has stopped?",
+        "Alert when speech is heard but no new transcript arrives for T seconds. One injected "
+        "failure, TEST meeting.",
+    )
+    parts = []
+    for key, label, _, _ in HEALTH_VARIANTS:
+        r, p = variants[key]["test"], variants[key]["params"]
+        parts.append(f"{label} (T={p['t_s']} s): {r['detected']}/{r['faults_confirmed']} caught, "
+                     f"{r['false_alarms_per_hour']:.1f} false alarms/h, median delay "
+                     f"{r['delay_s_median']:.0f} s")  # fmt: skip
+    test = variants["energy/start"]["test"]
+    fs.footnote(
+        fig,
+        f"TEST, {test['meetings']} AMI meetings, {test['hours']:.1f} h, injected failures of "
+        "30 s to 5 min confirmed by the coverage scorer. " + "; ".join(parts) + ". Tuned on DEV "
+        "(1 meeting, 15 min) only. 'Live words' spreads each block over its estimated speaking "
+        "time (2.6 words/s, assumed). Injected failures, not observed ones.",
+    )
+    fig.subplots_adjust(left=0.2, right=0.98, top=0.85, bottom=0.3)
+    return fig
