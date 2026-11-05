@@ -24,6 +24,8 @@ Users can auto-delete transcripts. Chat is then "limited to whatever is in your 
 
 Granola's CEO has floated pre-compressed context for agents: "apple juice from concentrate" [1].
 
+Prior benchmarks test memory over chat [4] or a model given one meeting's transcript [5]; none tests shipped products through their agent interfaces, or deletion ([related work](../RELATED_WORK.md)).
+
 **Question:** on real meetings, what does each level of detail buy back, and how do answers fail without it?
 
 ## 2. Method
@@ -101,3 +103,5 @@ All 4 meetings fit in context, so this tests reading, not search (n = 39).
 1. C. Newton, interview with Chris Pedregal, *Platformer*, 30 Jul 2026. https://www.platformer.news/granola-chris-pedregal-interview/
 2. Granola Help Centre, "Transcript auto-deletion". https://docs.granola.ai/help-center/consent-security-privacy/transcript-auto-deletion
 3. Granola, "How Granola thinks about designing agents", 6 May 2026. https://www.granola.ai/blog/how-granola-thinks-about-designing-agents
+4. D. Wu et al. "LongMemEval: Benchmarking Chat Assistants on Long-Term Interactive Memory." ICLR 2025. https://arxiv.org/abs/2410.10813
+5. M. Zhong et al. "QMSum: A New Benchmark for Query-based Multi-domain Meeting Summarization." NAACL 2021. https://arxiv.org/abs/2104.05938

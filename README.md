@@ -92,6 +92,16 @@ Why: the same author built the generator and the extractor, and the questions ta
 - **LLM judge.** A second judge agreed on 96–100% of verdicts; no human check yet.
 - **In progress:** hand-written held-out test questions; paired Granola + Wispr Flow recordings of the same meetings.
 
+## Related work
+
+- **Memory benchmarks use chat, not meetings.** LongMemEval, LoCoMo, MemoryAgentBench, BEAM and RealMem test memory over chat or generated dialogue.
+- **Meeting benchmarks grade a model given the transcript.** QMSum, MeetingQA, ELITR-Bench, AutoMin, MeetBench-XL and MeetingProbe; none tests a shipped product through its agent interface.
+- **Nothing we found tests retention:** what an agent loses once transcripts are deleted.
+- **The closest product comparison scores notes only:** four note takers on the same 5 AMI meetings, run by one of the vendors.
+- **Lessons we take:** fact compression loses detail (LongMemEval found it too); write held-out questions to a fixed schema with review (QMSum).
+
+Table, gap and full references: [`docs/RELATED_WORK.md`](docs/RELATED_WORK.md).
+
 ## Quick start
 
 Needs Python 3.11 and [uv](https://docs.astral.sh/uv/). This block is free: no API key, no LLM calls.

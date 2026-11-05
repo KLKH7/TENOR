@@ -13,4 +13,4 @@ Where every doc lives. Start with the two-page summary; every doc follows [`STYL
 | [`writeup/`](writeup/) | The memo, deck and outreach drafts for Granola | [`MEMO.md`](writeup/MEMO.md) |
 | [`archive/`](archive/) | Earlier plans and probes, kept for the record | — |
 
-The current plan is [`PLAN.md`](PLAN.md); the writing and figure rules are [`STYLE.md`](STYLE.md).
+The current plan is [`PLAN.md`](PLAN.md); the writing and figure rules are [`STYLE.md`](STYLE.md). Prior work and how Hindsight differs: [`RELATED_WORK.md`](RELATED_WORK.md).

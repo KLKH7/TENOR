@@ -25,6 +25,13 @@ External agents (Claude, ChatGPT) reach Granola only through its MCP, the protoc
 
 Granola can measure this internally. An outside benchmark adds independence, comparability across products, and the view an external agent actually gets.
 
+**Related work** (table and lessons: [`RELATED_WORK.md`](../RELATED_WORK.md)).
+
+- **Memory benchmarks use chat or generated dialogue** [24–28]. Meeting benchmarks give a model the transcript and grade the model [29–33]. None we found tests a shipped product through its agent interface, or what deleting transcripts costs.
+- **The closest product comparison** ran four note takers on the same 5 AMI meetings and scored their notes, not questions through an agent; a vendor ran it [36].
+- **Notes faithfulness** follows the claim-by-claim shape of FActScore and MiniCheck [34, 35].
+- **LongMemEval also found** that replacing sessions with extracted facts loses detail [24, §5.2]. **QMSum's protocol** (fixed query schema, annotator training, expert review) is the model for our held-out questions [29, §3.2].
+
 ## 2. Benchmark
 
 - **Outside-in.** Only public interfaces: Granola's REST API format and its official read-only MCP [5, 12]. No claims about Granola internals.
@@ -212,3 +219,19 @@ Web sources were verified at source on 3 November 2026 (recorded in [`FINDINGS_C
 21. [`docs/results/NOTES_VS_TRANSCRIPT.md`](../results/NOTES_VS_TRANSCRIPT.md): notes-sufficient vs transcript-needed.
 22. [`docs/PLAN.md`](../PLAN.md): experiment plan (X1–X8).
 23. [`docs/figures/README.md`](../figures/README.md): figure inputs and CI check.
+
+Related work, verified at source on 4 November 2026 (details in [`RELATED_WORK.md`](../RELATED_WORK.md)):
+
+24. D. Wu et al. "LongMemEval: Benchmarking Chat Assistants on Long-Term Interactive Memory." ICLR 2025. https://arxiv.org/abs/2410.10813 (accessed 2026-11-04)
+25. A. Maharana et al. "Evaluating Very Long-Term Conversational Memory of LLM Agents" (LoCoMo). ACL 2024. https://aclanthology.org/2024.acl-long.747/ (accessed 2026-11-04)
+26. Y. Hu, Y. Wang, J. McAuley. "Evaluating Memory in LLM Agents via Incremental Multi-Turn Interactions" (MemoryAgentBench). arXiv 2025. https://arxiv.org/abs/2507.05257 (accessed 2026-11-04)
+27. M. Tavakoli et al. "Beyond a Million Tokens: Benchmarking and Enhancing Long-Term Memory in LLMs" (BEAM). ICLR 2026. https://arxiv.org/abs/2510.27246 (accessed 2026-11-04)
+28. H. Bian et al. "RealMem: Benchmarking LLMs in Real-World Memory-Driven Interaction." Findings of ACL 2026. https://aclanthology.org/2026.findings-acl.703/ (accessed 2026-11-04)
+29. M. Zhong et al. "QMSum: A New Benchmark for Query-based Multi-domain Meeting Summarization." NAACL 2021. https://arxiv.org/abs/2104.05938 (accessed 2026-11-04)
+30. A. Prasad et al. "MeetingQA: Extractive Question-Answering on Meeting Transcripts." ACL 2023. https://aclanthology.org/2023.acl-long.837/ (accessed 2026-11-04)
+31. T. Thonet, J. Rozen, L. Besacier. "ELITR-Bench: A Meeting Assistant Benchmark for Long-Context Language Models." COLING 2025. https://arxiv.org/abs/2403.20262 (accessed 2026-11-04)
+32. Y. Hu et al. "MeetBench-XL: Calibrated Multi-Dimensional Evaluation and Learned Dual-Policy Agents for Real-Time Meetings." AAAI 2026 workshop. https://arxiv.org/abs/2602.03285 (accessed 2026-11-04)
+33. S. Khairy et al. "Evaluation-as-Search: Adaptive Discovery of Grounding Failures in Meeting Assistants" (MeetingProbe, MARC). arXiv 2026. https://arxiv.org/abs/2608.20392 (accessed 2026-11-04)
+34. S. Min et al. "FActScore: Fine-grained Atomic Evaluation of Factual Precision in Long Form Text Generation." EMNLP 2023. https://arxiv.org/abs/2305.14251 (accessed 2026-11-04)
+35. L. Tang, P. Laban, G. Durrett. "MiniCheck: Efficient Fact-Checking of LLMs on Grounding Documents." EMNLP 2024. https://arxiv.org/abs/2404.10774 (accessed 2026-11-04)
+36. Scribbl. "AI note takers tested on five public meetings (October 2026)." https://github.com/msallese31/ai-note-taker-test-2026 (accessed 2026-11-04)
