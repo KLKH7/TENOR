@@ -13,6 +13,10 @@ Inputs, all committed except where noted:
   meeting IDs only), written by ``concentrate ami coverage``;
 - ``evals/reports/ami/detector.json``: the capture-health detector's results and one example
   timeline (numbers only), written by ``concentrate ami detector``;
+- ``evals/reports/ami/deletion_ami.json``: the AMI retention replication (numbers only);
+- ``evals/reports/ami/notes_check.json``: content-free counts from the notes-grounding pass and
+  the human verification sheet, rebuilt from gitignored files by
+  :func:`concentrate.evals.figures_ami.snapshot_notes_check` (``--refresh-ami``);
 - ``docs/figures/data/real_slice.json``: a content-free snapshot of the real-meeting slice
   (scores and paired counts only, all already public in ``docs/results/REAL_SLICE.md`` and
   ``docs/archive/concentrate/fallback.md``). It is rebuilt from the gitignored ``data/real``
@@ -38,6 +42,7 @@ from typing import Any
 import numpy as np
 
 from concentrate.evals import figstyle as fs
+from concentrate.evals import figures_ami as FA
 from concentrate.evals import figures_diagrams as FD
 from concentrate.evals import figures_real as FR
 from concentrate.evals.scoring import bootstrap_ci
@@ -85,6 +90,8 @@ class Inputs:
     coverage: dict[str, Any] | None = None  # evals/reports/ami/coverage.json
     detector: dict[str, Any] | None = None  # evals/reports/ami/detector.json
     ami_deletion: dict[str, Any] | None = None  # evals/reports/ami/deletion-sim.aggregate.json
+    ami_retention: dict[str, Any] | None = None  # evals/reports/ami/deletion_ami.json
+    notes_check: dict[str, Any] | None = None  # evals/reports/ami/notes_check.json
     files: dict[str, list[Path]] = field(default_factory=dict)
 
 
@@ -112,6 +119,8 @@ def load_inputs(stamp: str, root: Path = Path()) -> Inputs:
     cov_path = reports / "ami" / "coverage.json"
     det_path = reports / "ami" / "detector.json"
     ami_del_path = reports / "ami" / "deletion-sim.aggregate.json"
+    ami_ret_path = reports / "ami" / "deletion_ami.json"
+    notes_path = root / FA.NOTES_CHECK
     rows = [json.loads(x) for x in rows_path.read_text().splitlines() if x.strip()]
     core = [report_path, rows_path, analysis_path]
     return Inputs(
@@ -129,6 +138,8 @@ def load_inputs(stamp: str, root: Path = Path()) -> Inputs:
         coverage=_json(cov_path) if cov_path.exists() else None,
         detector=_json(det_path) if det_path.exists() else None,
         ami_deletion=_json(ami_del_path) if ami_del_path.exists() else None,
+        ami_retention=_json(ami_ret_path) if ami_ret_path.exists() else None,
+        notes_check=_json(notes_path) if notes_path.exists() else None,
         files={
             "report": core,
             "judge": [judge_path] if judge_path else [],
@@ -140,6 +151,8 @@ def load_inputs(stamp: str, root: Path = Path()) -> Inputs:
             "coverage": [cov_path] if cov_path.exists() else [],
             "detector": [det_path] if det_path.exists() else [],
             "ami_deletion": [ami_del_path] if ami_del_path.exists() else [],
+            "ami_retention": [ami_ret_path] if ami_ret_path.exists() else [],
+            "notes_check": [notes_path] if notes_path.exists() else [],
         },
     )
 
@@ -1048,6 +1061,30 @@ FIGURES: tuple[Spec, ...] = (
         fig_deletion,
         ("deletion",),
         "tracks/RETENTION.md",
+        "real",
+    ),
+    Spec(
+        "results_overview",
+        "Where do Granola and Wispr Flow differ, and by how much?",
+        lambda inp: FA.fig_results_overview(inp.coverage, inp.ami_retention, inp.notes_check),
+        ("coverage", "ami_retention", "notes_check"),
+        "../README.md",
+        "real",
+    ),
+    Spec(
+        "ami_retention",
+        "What does deleting transcripts cost, and what wins it back? (68 AMI questions)",
+        lambda inp: FA.fig_ami_retention(inp.ami_retention, inp.deletion),
+        ("ami_retention", "deletion"),
+        "tracks/RETENTION.md",
+        "real",
+    ),
+    Spec(
+        "judge_vs_human",
+        "When an automated judge says \u201cwrong\u201d, does a human agree?",
+        lambda inp: FA.fig_judge_vs_human(inp.notes_check),
+        ("notes_check",),
+        "method/HUMAN_VERIFICATION.md",
         "real",
     ),
     Spec(

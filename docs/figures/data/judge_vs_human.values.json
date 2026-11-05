@@ -1,0 +1,276 @@
+{
+ "axes": [
+  {
+   "collections": [],
+   "images": [],
+   "legend": [],
+   "lines": [],
+   "patches": [
+    [
+     0.0,
+     2.69,
+     1.0,
+     0.62
+    ],
+    [
+     1.0,
+     2.69,
+     1.0,
+     0.62
+    ],
+    [
+     2.0,
+     2.69,
+     1.0,
+     0.62
+    ],
+    [
+     3.0,
+     2.69,
+     1.0,
+     0.62
+    ],
+    [
+     4.0,
+     2.69,
+     1.0,
+     0.62
+    ],
+    [
+     5.0,
+     2.69,
+     1.0,
+     0.62
+    ],
+    [
+     6.0,
+     2.69,
+     1.0,
+     0.62
+    ],
+    [
+     0.0,
+     1.69,
+     1.0,
+     0.62
+    ],
+    [
+     1.0,
+     1.69,
+     1.0,
+     0.62
+    ],
+    [
+     2.0,
+     1.69,
+     1.0,
+     0.62
+    ],
+    [
+     3.0,
+     1.69,
+     1.0,
+     0.62
+    ],
+    [
+     0.0,
+     0.69,
+     1.0,
+     0.62
+    ],
+    [
+     1.0,
+     0.69,
+     1.0,
+     0.62
+    ],
+    [
+     2.0,
+     0.69,
+     1.0,
+     0.62
+    ],
+    [
+     3.0,
+     0.69,
+     1.0,
+     0.62
+    ],
+    [
+     4.0,
+     0.69,
+     1.0,
+     0.62
+    ],
+    [
+     5.0,
+     0.69,
+     1.0,
+     0.62
+    ],
+    [
+     6.0,
+     0.69,
+     1.0,
+     0.62
+    ],
+    [
+     7.0,
+     0.69,
+     1.0,
+     0.62
+    ],
+    [
+     8.0,
+     0.69,
+     1.0,
+     0.62
+    ],
+    [
+     0.0,
+     -0.71,
+     1.0,
+     0.62
+    ],
+    [
+     1.0,
+     -0.71,
+     1.0,
+     0.62
+    ],
+    [
+     2.0,
+     -0.71,
+     1.0,
+     0.62
+    ]
+   ],
+   "texts": [
+    [
+     "4",
+     2.0,
+     3.0
+    ],
+    [
+     "3",
+     5.5,
+     3.0
+    ],
+    [
+     "n = 7; human found 0 wrong",
+     7.15,
+     3.0
+    ],
+    [
+     "3",
+     1.5,
+     2.0
+    ],
+    [
+     "1",
+     3.5,
+     2.0
+    ],
+    [
+     "n = 4; human found 0 wrong",
+     4.15,
+     2.0
+    ],
+    [
+     "4",
+     2.0,
+     1.0
+    ],
+    [
+     "1",
+     4.5,
+     1.0
+    ],
+    [
+     "4",
+     7.0,
+     1.0
+    ],
+    [
+     "n = 9; human found 0 wrong",
+     9.15,
+     1.0
+    ],
+    [
+     "3",
+     1.5,
+     -0.4
+    ],
+    [
+     "n = 3; human found 0 wrong",
+     3.15,
+     -0.4
+    ]
+   ],
+   "title": "",
+   "xlabel": "Number of items (each cell = one human label)",
+   "xlim": [
+    0.0,
+    13.2
+   ],
+   "xscale": "linear",
+   "xticklabels": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9"
+   ],
+   "xticks": [
+    0.0,
+    1.0,
+    2.0,
+    3.0,
+    4.0,
+    5.0,
+    6.0,
+    7.0,
+    8.0,
+    9.0
+   ],
+   "ylabel": "",
+   "ylim": [
+    -0.95,
+    3.55
+   ],
+   "yscale": "linear",
+   "yticklabels": [
+    "Note claim: checker said\n“contradicted”",
+    "Note claim: checker said\n“overreach”",
+    "Note claim: checker said\n“supported”",
+    "Chat answer: judge said\n“confidently wrong”"
+   ],
+   "yticks": [
+    3.0,
+    2.0,
+    1.0,
+    -0.4
+   ]
+  }
+ ],
+ "figure_legends": [
+  [
+   "fine (supported)",
+   "partly right",
+   "overreach",
+   "wrong (0)",
+   "could not judge"
+  ]
+ ],
+ "suptitle": "When an automated judge says “wrong”, does a human agree? (23 labels)",
+ "texts": [
+  "When an automated judge says “wrong”, does a human agree? (23 labels)",
+  "Human: 1 verifier, reading the AMI source. Of 12 note claims the human could judge, they agreed with the checker\non 4. Counts, not rates: the sample is too small for an interval to mean much.",
+  "Note claims: 20 sampled from both apps' notes, leaning towards items the checker flagged (so this overstates the over-count a uniform sample would show); “supported” rows were flagged by the app-transcript check, or are controls. Chat: the 3 answers the automated judge called the strongest confident contradictions. One verifier, who also designed the study; target about 100 labels and a second verifier. docs/method/HUMAN_VERIFICATION.md"
+ ]
+}

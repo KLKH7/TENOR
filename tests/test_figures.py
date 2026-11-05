@@ -11,6 +11,7 @@ import pytest
 
 from concentrate.evals import figstyle as fs
 from concentrate.evals import figures as F
+from concentrate.evals import figures_ami as FA
 from concentrate.evals import figures_diagrams as FD
 from concentrate.evals import figures_real as FR
 
@@ -168,6 +169,44 @@ def make_root(root: Path) -> Path:
             ],
         },
     )  # fmt: skip
+
+    def rate(k: int) -> dict[str, object]:
+        return {"k": k, "rate": k / 10, "ci95_wilson": [max(0.0, k / 10 - 0.2), k / 10 + 0.2]}
+
+    ret_cond = {
+        c: {"n": 10, "correct": rate(k), "not_wrong": rate(k + 3)}
+        for c, k in (("A", 6), ("B", 3), ("B_wispr", 2), ("C", 3), ("D", 5))
+    }
+    ret_pairs = [
+        {"a": a, "b": b, "metric": m, "a_only": 4, "b_only": 1, "both": 2, "neither": 3,
+         "p_two_sided": 0.375}
+        for a, b in (("A", "B"), ("B", "B_wispr"), ("C", "B"), ("D", "C"), ("A", "D"))
+        for m in ("correct", "not_wrong")
+    ]  # fmt: skip
+    _write(
+        reports / "ami" / "deletion_ami.json",
+        {
+            "meta": {"questions": 10, "meetings": 2, "reader_model": "claude-opus-5-5 (B)",
+                     "judge_model": "claude-sonnet-5-5",
+                     "split_counts": {"dev/single_meeting": 3, "test/single_meeting": 7}},
+            "conditions": ret_cond,
+            "paired": ret_pairs,
+        },
+    )  # fmt: skip
+    ok = {"k": 8, "n": 10, "rate": 0.8, "ci95": [0.5, 0.9]}
+    _write(
+        root / FA.NOTES_CHECK,
+        {
+            "grounding": {"products": {"granola": ok, "wispr": {**ok, "k": 6, "rate": 0.6}}},
+            "human": {
+                "verifiers": 1,
+                "claims": {"n": 5, "judgeable": 4, "agree_with_checker": 2,
+                           "by_automated": {"contradicted": {"supported": 2, "cannot_judge": 1},
+                                            "supported": {"supported": 2}}},
+                "chat": {"n": 2, "by_automated": {"confident_contradiction": {"partly_right": 2}}},
+            },
+        },
+    )  # fmt: skip
     split = {
         "meetings": 2,
         "hours": 0.9,
@@ -213,6 +252,51 @@ def test_renders_every_figure_as_valid_svg(tmp_path: Path) -> None:
     assert b"EN2002b" in rendered["capture_coverage.svg"]
     assert b"9/10 caught" in rendered["capture_health.svg"]
     assert b"missed" in rendered["capture_health.svg"]
+    assert b"n = 6 windows each" in rendered["results_overview.svg"]
+    assert b"paired: Wispr 1 better" in rendered["results_overview.svg"]
+    assert b"(10 AMI questions)" in rendered["ami_retention.svg"]
+    assert b"3 DEV + 7 TEST" in rendered["ami_retention.svg"]
+    assert b"(7 labels)" in rendered["judge_vs_human.svg"]
+
+
+def test_paired_counts_follow_the_direction_of_the_step() -> None:
+    """Wins are questions only the later condition gets right, whichever way the row is stored."""
+    rows = [{"a": "D", "b": "C", "metric": "correct", "a_only": 9, "b_only": 0,
+             "p_two_sided": 0.004}]  # fmt: skip
+    assert FA._paired(rows, "C", "D", "correct") == {"wins": 9, "losses": 0, "p": 0.004}
+    assert FA._paired(rows, "D", "C", "correct") == {"wins": 0, "losses": 9, "p": 0.004}
+    with pytest.raises(KeyError):
+        FA._paired(rows, "A", "B", "correct")
+
+
+def test_snapshot_notes_check_keeps_only_counts(tmp_path: Path) -> None:
+    secret = "PRIVATE CLAIM TEXT"
+    rec = tmp_path / "stage2.reclassified.json"
+    ok = {"k": 9, "n": 10, "rate": 0.9, "ci95": [0.6, 0.98]}
+    rec.write_text(json.dumps({"meta": {"git_sha": "abc"},
+                               "products": {"granola": {"classes": {"ok": ok}}}}))  # fmt: skip
+    sheet = tmp_path / "v3.jsonl"
+    rows = [
+        {"product": "granola", "meeting": "IS1008a", "claim": secret, "kian": code,
+         "checker_human_verdict_run1": auto, "verifier": "V"}
+        for auto, code in (("contradicted", "S"), ("supported", "S"), ("inferred", "?"),
+                           ("supported", "O"))
+    ]  # fmt: skip
+    rows.append({"set": "stage3_contradictions", "verifier": "V",
+                 "items": [{"meeting": "IB4003", "q": secret, "kian": "B"}]})  # fmt: skip
+    sheet.write_text("\n".join(json.dumps(r) for r in rows) + "\n")
+    snap = FA.snapshot_notes_check(rec, sheet)
+    text = json.dumps(snap)
+    assert secret not in text and "IS1008a" not in text and "IB4003" not in text
+    cl = snap["human"]["claims"]
+    assert (cl["n"], cl["judgeable"], cl["agree_with_checker"]) == (4, 3, 1)
+    assert cl["by_automated"]["supported"] == {"overreach": 1, "supported": 1}
+    assert snap["human"]["chat"]["by_automated"] == {"confident_contradiction": {"partly_right": 1}}
+    assert snap["grounding"]["products"]["granola"]["k"] == 9
+    bad = tmp_path / "bad.jsonl"
+    bad.write_text(json.dumps({**rows[0], "kian": "Z"}) + "\n")
+    with pytest.raises(KeyError):  # an unknown sheet code is never guessed
+        FA.snapshot_notes_check(rec, bad)
 
 
 def test_answer_types_partition_every_answer() -> None:

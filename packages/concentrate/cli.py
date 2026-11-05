@@ -1889,6 +1889,14 @@ def figures_cmd(
             help="Rebuild docs/figures/data/real_slice.json from the private data/real reports.",
         ),
     ] = False,
+    refresh_ami: Annotated[
+        bool,
+        typer.Option(
+            "--refresh-ami",
+            help="Rebuild evals/reports/ami/notes_check.json (counts only) from the gitignored "
+            "data/ami/results/facts files.",
+        ),
+    ] = False,
     real_main: Annotated[Path, typer.Option(help="Real run: Granola agent + Concentrate.")] = (
         _REAL_REPORTS / "20261103T004019Z.jsonl"
     ),
@@ -1909,6 +1917,16 @@ def figures_cmd(
         F.REAL_SNAPSHOT.parent.mkdir(parents=True, exist_ok=True)
         F.REAL_SNAPSHOT.write_text(_json.dumps(snap, indent=2, sort_keys=True) + "\n")
         typer.echo(f"wrote {F.REAL_SNAPSHOT} (aggregates only)")
+    if refresh_ami:
+        from concentrate.evals import figures_ami as FA
+
+        facts = Path("data/ami/results/facts")
+        snap = FA.snapshot_notes_check(
+            facts / "stage2.reclassified.json", facts / "human_verification_v3.jsonl"
+        )
+        FA.NOTES_CHECK.parent.mkdir(parents=True, exist_ok=True)
+        FA.NOTES_CHECK.write_text(_json.dumps(snap, indent=2, sort_keys=True) + "\n")
+        typer.echo(f"wrote {FA.NOTES_CHECK} (counts only)")
     rendered, skipped = F.render(F.load_inputs(stamp))
     for note in skipped:
         typer.echo(f"skipped {note}", err=True)

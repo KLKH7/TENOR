@@ -1,0 +1,62 @@
+{
+  "grounding": {
+    "products": {
+      "granola": {
+        "ci95": [
+          0.8942,
+          0.961
+        ],
+        "k": 202,
+        "n": 216,
+        "rate": 0.9352
+      },
+      "wispr": {
+        "ci95": [
+          0.7287,
+          0.849
+        ],
+        "k": 136,
+        "n": 171,
+        "rate": 0.7953
+      }
+    },
+    "run": "b68b0df",
+    "what": "note claims supported by both the app's and AMI's transcript (class ok)"
+  },
+  "human": {
+    "chat": {
+      "by_automated": {
+        "confident_contradiction": {
+          "partly_right": 3
+        }
+      },
+      "n": 3
+    },
+    "claims": {
+      "agree_with_checker": 4,
+      "by_automated": {
+        "contradicted": {
+          "cannot_judge": 3,
+          "supported": 4
+        },
+        "inferred": {
+          "cannot_judge": 1,
+          "supported": 3
+        },
+        "supported": {
+          "cannot_judge": 4,
+          "overreach": 1,
+          "supported": 4
+        }
+      },
+      "judgeable": 12,
+      "n": 20
+    },
+    "verifiers": 1
+  },
+  "note": "Content-free counts from the gitignored data/ami/results/facts files: no claim, question or answer text and no meeting IDs. Rebuild with `concentrate figures <stamp> --refresh-ami`.",
+  "sources": [
+    "human_verification_v3.jsonl",
+    "stage2.reclassified.json"
+  ]
+}
