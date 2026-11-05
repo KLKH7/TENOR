@@ -125,6 +125,9 @@ def test_match_and_score(ami_zip: Path) -> None:
     assert r.score.ref_words == 5 and r.score.hyp_words == 7
     assert r.score.content_recall == 1.0
     assert (r.product_speakers, r.reference_speakers) == (0, 2)
-    assert r.mic_utterances == 1  # the microphone line is dropped, not scored
+    assert (r.mic_utterances, r.owner_labelled) == (1, 1)  # mic line dropped, not scored
+    kept = score_note("XX0001a", matched["XX0001a"], "wispr", ami_zip, drop_mic=False)
+    assert (kept.mic_utterances, kept.owner_labelled) == (0, 1)
+    assert kept.score.hyp_words == r.score.hyp_words + 2  # "room chatter" now scored
     with pytest.raises(ValueError):
         match_notes([note, note])

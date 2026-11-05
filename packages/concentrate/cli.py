@@ -2534,6 +2534,14 @@ def ami_status(
 def ami_wer(
     db: Annotated[Path, typer.Option(help="Synced DB of the product's dedicated AMI account.")],
     product: Annotated[str, typer.Option(help="Label for the results, e.g. granola or wispr.")],
+    drop_mic: Annotated[
+        bool,
+        typer.Option(
+            "--drop-mic/--keep-mic",
+            help="Drop microphone turns. Use --keep-mic for products with no capture channel "
+            "(Wispr), where 'me' is only a speaker-name guess.",
+        ),
+    ] = True,
 ) -> None:
     """Score a product's transcripts of the AMI meetings: WER and content-word recall."""
     import json
@@ -2550,7 +2558,9 @@ def ami_wer(
         notes = match_notes(store.iter_notes())
     finally:
         store.close()
-    rows = [score_note(mid, notes[mid], product) for mid in AMI_SET if mid in notes]
+    rows = [
+        score_note(mid, notes[mid], product, drop_mic=drop_mic) for mid in AMI_SET if mid in notes
+    ]
     for r in rows:
         s = r.score
         typer.echo(
@@ -2558,6 +2568,7 @@ def ami_wer(
             f"words ref={s.ref_words} hyp={s.hyp_words}  speakers {r.product_speakers}"
             f"/{r.reference_speakers}"
             + (f"  ⚠ {r.mic_utterances} mic turns dropped" if r.mic_utterances else "")
+            + (f"  {r.owner_labelled} turns named as you" if r.owner_labelled else "")
         )
     missing = [mid for mid in AMI_SET if mid not in notes]
     if missing:
@@ -2570,6 +2581,7 @@ def ami_wer(
         "date": datetime.now(UTC).isoformat(timespec="seconds"),
         "product": product,
         "normaliser_version": NORMALISER_VERSION,
+        "drop_mic": drop_mic,
         "llm": None,
     }
     AMI_RESULTS.mkdir(parents=True, exist_ok=True)

@@ -5,11 +5,14 @@ Each playback gets a calendar event titled ``AMI <meeting id>`` (docs/benchmark/
 dedicated AMI account synced into its own database (``data/ami_<product>.db``), never from the
 author's real meetings.
 
-Only the system-audio side is scored. AMI is played into the product digitally with the
-speakers muted, so the microphone should hear nothing; anything it does hear is the room, not
-AMI. Granola labels the capture channel directly. Wispr has none, so its "me" side is ASSUMED
-(turns attributed to the account holder; see sources/wispr_mcp.py). ``mic_utterances`` counts
-what was dropped: a non-zero value flags a contaminated recording.
+AMI is played in digitally with the speakers muted, so the microphone should hear nothing;
+anything it does hear is the room, not AMI. Granola records the capture channel itself, so its
+microphone turns are dropped (``drop_mic=True``) and counted in ``mic_utterances``: a non-zero
+value flags a contaminated recording. Wispr has no capture channel: our "me" there is only a
+guess from the speaker name (sources/wispr_mcp.py), and on AMI Wispr can name strangers after
+the account holder. Dropping those turns would delete real AMI speech, so Wispr is scored with
+``drop_mic=False`` and its room protection is physical (muted speakers, silent room).
+``owner_labelled`` counts turns attributed to the account holder: on AMI every one is wrong.
 
 Results hold numbers only: no transcript text, note IDs or titles. Raw product output stays
 local (Kian, 2026-11-04: publish scores only).
@@ -38,7 +41,8 @@ class MeetingWer(BaseModel):
     product: str
     score: WerScore
     product_speakers: int  # distinct speaker labels the product gave (0 if none)
-    mic_utterances: int  # microphone-side turns dropped before scoring; > 0 = room leaked in
+    mic_utterances: int  # microphone turns dropped before scoring; > 0 = room leaked in
+    owner_labelled: int  # turns attributed to the account holder, who never speaks in AMI
     reference_speakers: int
 
 
@@ -64,24 +68,34 @@ def match_notes(notes: Iterable[MeetingNote]) -> dict[str, MeetingNote]:
     return out
 
 
-def transcript_text(note: MeetingNote) -> str:
-    """The product's system-audio transcript as one string, in the product's utterance order."""
+def transcript_text(note: MeetingNote, *, drop_mic: bool = True) -> str:
+    """The product's transcript as one string, in its utterance order, mic turns optional."""
     utts = sorted(note.utterances, key=lambda u: u.index)
-    return " ".join(u.text for u in utts if u.channel is not Channel.ME)
+    return " ".join(u.text for u in utts if not (drop_mic and u.channel is Channel.ME))
 
 
 def score_note(
-    meeting_id: str, note: MeetingNote, product: str, zip_path: Path = DEFAULT_ZIP
+    meeting_id: str,
+    note: MeetingNote,
+    product: str,
+    zip_path: Path = DEFAULT_ZIP,
+    *,
+    drop_mic: bool = True,
 ) -> MeetingWer:
-    """Score one product note against the AMI manual transcript of ``meeting_id``."""
+    """Score one product note against the AMI manual transcript of ``meeting_id``.
+
+    ``drop_mic`` only for products whose microphone channel is a real capture channel (Granola).
+    """
     meeting = load_meeting(meeting_id, zip_path)
-    system = [u for u in note.utterances if u.channel is not Channel.ME]
+    mine = [u for u in note.utterances if u.channel is Channel.ME]
+    system = [u for u in note.utterances if not (drop_mic and u.channel is Channel.ME)]
     labels = {u.speaker_name or u.diarization_label for u in system} - {None}
     return MeetingWer(
         meeting_id=meeting_id,
         product=product,
-        score=score(meeting.reference_text(), transcript_text(note)),
+        score=score(meeting.reference_text(), transcript_text(note, drop_mic=drop_mic)),
         product_speakers=len(labels),
         mic_utterances=len(note.utterances) - len(system),
+        owner_labelled=len(mine),
         reference_speakers=len(meeting.speakers),
     )
