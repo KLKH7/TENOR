@@ -53,7 +53,8 @@ UNLABELED_PASSAGE_RATE = 0.1  # identified speakers still appear as bare "System
 LEAD_IN_RATE = 0.2  # a turn opens with its own one-word passage ("So", "Yeah")
 NULL_NAME_RATE = 0.25  # attendees with no display name on the calendar invite
 LOSSY_SUMMARY_DROP = 0.2
-# v2 summaries (docs/archive/northwind/FIDELITY_V2.md): real ones have 4-6 sections, ~30 two-level bullets
+# v2 summaries (docs/archive/northwind/FIDELITY_V2.md): real ones have 4-6 sections,
+# ~30 two-level bullets
 # and
 # ~400 words. Discussion sections are drawn from what the filler actually said.
 SUMMARY_SECTIONS = (4, 6)

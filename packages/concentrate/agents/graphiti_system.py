@@ -109,7 +109,8 @@ logger = logging.getLogger(__name__)
 
 _FORMAT_VERSION = 1  # bump when the episode text or ingestion config changes meaningfully
 
-# Ingestion cost model, calibrated on the 2-meeting smoke test (docs/archive/concentrate/baselines/graphiti.md).
+# Ingestion cost model, calibrated on the 2-meeting smoke test
+# (docs/archive/concentrate/baselines/graphiti.md).
 # Billed input for episode i ~= INGEST_INPUT_PER_TOKEN * tokens(i)
 #   + PREV_CONTEXT_CALLS * tokens(previous <= PREVIOUS_EPISODES episodes),
 # because Graphiti re-sends the last 10 episodes in ~3 prompts per episode (extract nodes,

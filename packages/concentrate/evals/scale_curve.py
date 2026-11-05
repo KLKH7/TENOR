@@ -4,12 +4,12 @@ Nested sub-corpora of Northwind-XL: the first 25%, 50% and 100% of meetings by d
 is *eligible* at a size when every meeting holding its gold evidence is inside that prefix
 (unanswerable questions have none and are eligible everywhere).
 
-Design choice (see docs/archive/northwind/ECONOMICS.md): the question set is fixed up front, the dev questions
-eligible at the *middle* size, and every size runs the subset of it that is eligible there. So
-the questions answerable at 25% are asked at 25%, 50% and 100%, and the rest at 50% and 100%.
-Across sizes the question is the same and only the haystack grows, which isolates the effect we
-want; comparing different question samples per size would confound haystack size with question
-difficulty.
+Design choice (see docs/archive/northwind/ECONOMICS.md): the question set is fixed up front, the
+dev questions eligible at the *middle* size, and every size runs the subset of it that is
+eligible there. So the questions answerable at 25% are asked at 25%, 50% and 100%, and the rest
+at 50% and 100%. Across sizes the question is the same and only the haystack grows, which
+isolates the effect we want; comparing different question samples per size would confound
+haystack size with question difficulty.
 
 Concentrate is not rebuilt per size. Its store is bitemporal and was built causally (meeting by
 meeting, in date order, each extraction seeing only earlier meetings), so the store "as of" a

@@ -93,7 +93,7 @@ def _ending(text: str) -> str:
 
 
 def corpus_stats(meetings: Sequence[Sequence[Passage]]) -> dict[str, float | list[float] | None]:
-    """Style statistics over ``meetings`` (see docs/archive/northwind/FIDELITY.md for the definitions)."""
+    """Style statistics over ``meetings`` (definitions: docs/archive/northwind/FIDELITY.md)."""
     passages = [p for m in meetings for p in m]
     lengths = [len(tokens(p.text)) for p in passages]
     all_toks = [t for p in passages for t in tokens(p.text)]

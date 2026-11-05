@@ -215,7 +215,8 @@ def to_markdown(tags: dict[str, Any], a: dict[str, Any]) -> str:
     """The generated tables behind ``docs/archive/northwind/NOTES_VS_TRANSCRIPT.md``."""
     lines = ["# Notes-sufficient vs transcript-needed: generated tables", "",
              "Regenerate: `uv run concentrate notes-vs-transcript`. Write-up and caveats: "
-             "`docs/archive/northwind/NOTES_VS_TRANSCRIPT.md`.", "", "## Tag counts", ""]  # fmt: skip
+             "`docs/archive/northwind/NOTES_VS_TRANSCRIPT.md`.",
+             "", "## Tag counts", ""]  # fmt: skip
     lines += ["| Set | Split | notes-sufficient | transcript-needed | unanswerable | "
               "rule vs generator (test): agreement · κ |", "|---|---|---|---|---|---|"]  # fmt: skip
     for name, s in tags["synthetic"].items():

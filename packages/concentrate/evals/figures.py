@@ -1088,7 +1088,13 @@ FIGURES: tuple[Spec, ...] = (
         ("report",),
         "archive/northwind/ECONOMICS.md",
     ),
-    Spec("pairwise", "Which gaps are real?", fig_pairwise, ("report",), "archive/northwind/ANALYSIS.md"),
+    Spec(
+        "pairwise",
+        "Which gaps are real?",
+        fig_pairwise,
+        ("report",),
+        "archive/northwind/ANALYSIS.md",
+    ),
     Spec(
         "by_category",
         "Where does each system break?",
@@ -1096,7 +1102,9 @@ FIGURES: tuple[Spec, ...] = (
         ("report",),
         "archive/northwind/ANALYSIS.md",
     ),
-    Spec("failures", "Why is it wrong?", fig_failures, ("report",), "archive/northwind/ANALYSIS.md"),
+    Spec(
+        "failures", "Why is it wrong?", fig_failures, ("report",), "archive/northwind/ANALYSIS.md"
+    ),
     Spec(
         "retirement",
         "What does deleting transcripts cost?",
