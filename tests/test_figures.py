@@ -11,6 +11,8 @@ import pytest
 
 from concentrate.evals import figstyle as fs
 from concentrate.evals import figures as F
+from concentrate.evals import figures_diagrams as FD
+from concentrate.evals import figures_real as FR
 
 STAMP = "20990101T000000Z"
 SYSTEMS = ("b0_topk", "concentrate", "b3_agentic")
@@ -124,10 +126,12 @@ def make_root(root: Path) -> Path:
         {"test_report": {"report": STAMP, "primary": {"cells": cells, "gaps": []}}},
     )
     tag_cell = {"n": 4, "accuracy": 0.5, "accuracy_ci": [0.25, 0.75]}
+    cat_cell = {"n": 6, "accuracy": 0.5}
     conditions = {
-        c: {"n": 8, "accuracy": 0.5, "accuracy_ci": [0.25, 0.75], "confident_error": 0.1,
-            "confident_error_ci": [0.0, 0.25],
-            "by_tag": {t: tag_cell for t in ("notes_sufficient", "transcript_needed")}}
+        c: {"n": 8, "accuracy": 0.5, "accuracy_ci": [0.25, 0.75], "confident_error": 0.125,
+            "confident_error_ci": [0.0, 0.25], "partial": 0.125, "hedged_miss": 0.375,
+            "by_tag": {t: tag_cell for t in ("notes_sufficient", "transcript_needed")},
+            "by_category": {"who_said": cat_cell, "temporal": tag_cell}}
         for c in F.DELETION_CONDITIONS
     }  # fmt: skip
     pair = {"wins": 1, "losses": 3, "sign_p": 0.625}
@@ -156,6 +160,38 @@ def test_renders_every_figure_as_valid_svg(tmp_path: Path) -> None:
     assert b"Why did a tie on synthetic data" in rendered["hero_synthetic_vs_real.svg"]
     assert b"DEV" in rendered["fallback_dev.svg"]
     assert b"DEV" in rendered["deletion_sim.svg"]
+    for name in ("retention_steps", "answer_types", "question_heatmap"):
+        assert b"DEV" in rendered[f"{name}.svg"]
+    assert b"How does Hindsight work?" in rendered["overview.svg"]
+
+
+def test_answer_types_partition_every_answer() -> None:
+    """correct + confident_error + hedged_miss = 1, and partials sit inside hedged_miss."""
+    c = {"accuracy": 0.5, "partial": 0.125, "hedged_miss": 0.375, "confident_error": 0.125}
+    shares = FR.answer_types(c)
+    assert shares == {"complete": 0.5, "incomplete": 0.125, "says_so": 0.25,
+                      "confident_wrong": 0.125}  # fmt: skip
+    assert sum(shares.values()) == pytest.approx(1.0)
+    assert [k for k, _n, _c in fs.ANSWER_TYPES] == list(shares)
+
+
+def test_heatmap_greys_out_small_cells(tmp_path: Path) -> None:
+    inp = F.load_inputs(STAMP, make_root(tmp_path))
+    fig = FR.fig_question_heatmap(inp.deletion)
+    tags, cats = F.plotted_values(fig)["axes"]
+    fs.close(fig)
+    assert all(v is None for row in tags["images"][0] for v in row)  # every tag cell has n=4
+    assert all(row == [None, 50.0] for row in cats["images"][0])  # temporal n=4, who_said n=6
+    assert ["n=4", 0.0, 0.0] in tags["texts"]  # n still printed in a greyed cell
+
+
+def test_track_cards_read_their_numbers_from_the_aggregates(tmp_path: Path) -> None:
+    inp = F.load_inputs(STAMP, make_root(tmp_path))
+    heads = FD._headlines(inp.real, inp.deletion)
+    assert "50% with notes only" in heads["retention"]
+    assert "n=4" in heads["qa"]
+    assert set(heads) <= {t[0] for t in FD.TRACKS}
+    assert FD._headlines(None, None) == {}
 
 
 def test_same_inputs_give_byte_identical_output(tmp_path: Path) -> None:

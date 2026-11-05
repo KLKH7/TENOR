@@ -1,8 +1,10 @@
 # Architecture
 
-Five diagrams, each with a short caption and links to the code it describes. They are in Mermaid, so GitHub renders them. A one-picture overview is [`figures/architecture.svg`](figures/architecture.svg).
+![How does Hindsight work? Meetings go into products (Granola, Wispr Flow, open baselines), five tracks test them, scores come out](figures/overview.svg)
 
-The diagrams show what is **built**, except where a box says *planned*. Every arrow that touches Granola goes through a public interface (the REST API or the official MCP); nothing here depends on Granola internals.
+Five diagrams, each with a short caption and links to the code it describes. They are in Mermaid, so GitHub renders them. The picture above is the ten-second version ([`figures/overview.svg`](figures/overview.svg)); [`figures/tracks.svg`](figures/tracks.svg) shows each track's task, metrics and status.
+
+The diagrams show what is **built**, except where a box says *planned* or *in progress*. Every arrow that touches a product goes through a public interface (an API or an MCP); nothing here depends on product internals.
 
 1. [System map](#1-system-map)
 2. [Query-time vs write-time](#2-query-time-vs-write-time-the-core-idea)
@@ -16,39 +18,27 @@ The diagrams show what is **built**, except where a box says *planned*. Every ar
 
 ```mermaid
 flowchart LR
-  subgraph granola ["Granola: public interfaces only"]
-    REST["REST API<br/>Business / Enterprise key"]
-    GMCP["Official MCP<br/>any plan, read-only"]
+  REAL["<b>Real meetings</b><br/>your own account<br/>evidence"]
+  SYN["<b>Synthetic meetings</b><br/>Northwind, known answers<br/>diagnostic only"]
+  subgraph adapters ["Products, each behind one adapter"]
+    G["Granola<br/>REST API · official MCP"]
+    W["Wispr Flow<br/>in progress"]
+    B["Open baselines<br/>top-k · agent · Mem0 ·<br/>Graphiti · Concentrate"]
   end
-  SYN["concentrate synth<br/>Northwind generator, --seed"]
-
-  subgraph sources ["concentrate.sources: one Source protocol"]
-    S1["GranolaAPISource"]
-    S2["GranolaMCPSource"]
-    S3["FixtureSource<br/>same JSON shape"]
-  end
-  REST --> S1
-  GMCP --> S2
-  SYN --> S3
-
-  S1 --> STORE[("NoteStore<br/>SQLite")]
-  S2 --> STORE
-  S3 --> STORE
-
-  STORE --> QT["Query-time systems<br/>b0 top-k · b1 summaries<br/>b2/b2o full context, oracle · b3 agent"]
-  STORE --> WT["Write-time systems<br/>b4 Mem0 · b5 Graphiti · c Concentrate"]
-  WT --> MEM[("Built memories<br/>data/cache")]
-  GMCP -. "real meetings only:<br/>Granola's own agent, black box" .-> H
-  QT --> H["Eval harness<br/>same answer model + judge"]
-  MEM --> H
-  H --> R[("Reports<br/>evals/reports/*.json, *.jsonl")]
-  R --> AN["analyze · judge-check · hand-check"]
-  R --> FIG["figures<br/>docs/figures, planned"]
-  R --> EX["Results explorer<br/>web/"]
-  MEM --> SRV["Concentrate MCP server · brief"]
+  REAL --> G
+  REAL --> W
+  REAL --> B
+  SYN --> B
+  G --> T["<b>Five tracks</b><br/>question answering · retention ·<br/>notes faithfulness · agent interface ·<br/>contextual integrity"]
+  W --> T
+  B --> T
+  T --> S["Scoring<br/>one judge · paired stats · CIs"]
+  S --> OUT["Reports and figures<br/>real data leaves only as aggregates"]
 ```
 
-**In plain English.** Meetings come in through one door, the `Source` protocol, whether they are synthetic (Northwind fixtures), from Granola's REST API, or from Granola's official MCP. Everything downstream reads the same `NoteStore` and never knows which source it came from. Seven systems answer the same questions, the harness scores them with one answer model and one judge, and every run writes a report that the analysis, the figures and the web explorer all read. Granola's own agent appears only on the dotted line: it can only read the connected user's account, so it is tested as a black box on real meetings, never on Northwind.
+**Two roles for data.** Headline findings come only from real meetings, read through the product's public interface on the owner's own account; only aggregates are committed. Synthetic meetings (Northwind) have known answers, so they are for debugging and comparing open systems, never for headlines: they agreed with real meetings on some systems and badly misled us on others ([`figures/synthetic_vs_real.svg`](figures/synthetic_vs_real.svg)). Products that can't load our corpus, such as Granola, appear only on the real side.
+
+**Inside the adapters.** Meetings come in through one door, the `Source` protocol, whether they are synthetic (Northwind fixtures), from Granola's REST API, or from Granola's official MCP; everything downstream reads the same `NoteStore` and never knows which source it came from. The open baselines answer from that store with one answer model; the harness scores every system with one judge, and every run writes a report that the analysis, the figures and the web explorer all read. Granola's own agent is the exception: it can only read the connected user's account, so it is queried as a black box through its MCP, on real meetings only.
 
 Code: [`sources/base.py`](../packages/concentrate/sources/base.py) (the `Source` protocol) · [`granola_api.py`](../packages/concentrate/sources/granola_api.py) · [`granola_mcp.py`](../packages/concentrate/sources/granola_mcp.py) · [`fixtures.py`](../packages/concentrate/sources/fixtures.py) · [`core/store.py`](../packages/concentrate/core/store.py) · [`agents/baselines.py`](../packages/concentrate/agents/baselines.py) (b0–b3) · [`mem0_system.py`](../packages/concentrate/agents/mem0_system.py) · [`graphiti_system.py`](../packages/concentrate/agents/graphiti_system.py) · [`concentrate_system.py`](../packages/concentrate/agents/concentrate_system.py) · [`evals/runner.py`](../packages/concentrate/evals/runner.py) · [`evals/analyze.py`](../packages/concentrate/evals/analyze.py) · [`mcp_server/`](../packages/concentrate/mcp_server/) · [`web/`](../web/) · field provenance: [`SCHEMA_NOTES.md`](engineering/SCHEMA_NOTES.md).
 

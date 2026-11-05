@@ -1,0 +1,286 @@
+{
+ "axes": [
+  {
+   "collections": [
+    {
+     "segments": [
+      [
+       [
+        0.0,
+        78.72340426
+       ],
+       [
+        0.0,
+        97.87234043
+       ]
+      ]
+     ]
+    },
+    {
+     "segments": [
+      [
+       [
+        1.0,
+        42.55319149
+       ],
+       [
+        1.0,
+        70.21276596
+       ]
+      ]
+     ]
+    },
+    {
+     "segments": [
+      [
+       [
+        2.0,
+        51.06382979
+       ],
+       [
+        2.0,
+        78.72340426
+       ]
+      ]
+     ]
+    },
+    {
+     "segments": [
+      [
+       [
+        3.0,
+        76.59574468
+       ],
+       [
+        3.0,
+        95.74468085
+       ]
+      ]
+     ]
+    }
+   ],
+   "images": [],
+   "legend": [],
+   "lines": [
+    [
+     [
+      0.0,
+      78.72340426
+     ]
+    ],
+    [
+     [
+      0.0,
+      97.87234043
+     ]
+    ],
+    [
+     [
+      1.0,
+      42.55319149
+     ]
+    ],
+    [
+     [
+      1.0,
+      70.21276596
+     ]
+    ],
+    [
+     [
+      2.0,
+      51.06382979
+     ]
+    ],
+    [
+     [
+      2.0,
+      78.72340426
+     ]
+    ],
+    [
+     [
+      3.0,
+      76.59574468
+     ]
+    ],
+    [
+     [
+      3.0,
+      95.74468085
+     ]
+    ],
+    [
+     [
+      0.28,
+      89.36170213
+     ],
+     [
+      0.72,
+      89.36170213
+     ]
+    ],
+    [
+     [
+      1.28,
+      57.44680851
+     ],
+     [
+      1.72,
+      57.44680851
+     ]
+    ],
+    [
+     [
+      2.28,
+      65.95744681
+     ],
+     [
+      2.72,
+      65.95744681
+     ]
+    ]
+   ],
+   "patches": [
+    [
+     0.5,
+     0.0,
+     2.0,
+     1.0
+    ],
+    [
+     -0.28,
+     0.0,
+     0.56,
+     89.36170213
+    ],
+    [
+     0.72,
+     0.0,
+     0.56,
+     57.44680851
+    ],
+    [
+     1.72,
+     0.0,
+     0.56,
+     65.95744681
+    ],
+    [
+     2.72,
+     0.0,
+     0.56,
+     87.23404255
+    ]
+   ],
+   "texts": [
+    [
+     "transcripts deleted",
+     1.5,
+     127.0
+    ],
+    [
+     "transcripts kept",
+     3.0,
+     127.0
+    ],
+    [
+     "89%",
+     0.0,
+     4.0
+    ],
+    [
+     "57%",
+     1.0,
+     4.0
+    ],
+    [
+     "66%",
+     2.0,
+     4.0
+    ],
+    [
+     "87%",
+     3.0,
+     4.0
+    ],
+    [
+     "",
+     0.64,
+     89.36170213
+    ],
+    [
+     "−32 pts\n2 gained, 17 lost\np = 0.00073",
+     0.5,
+     98.36170213
+    ],
+    [
+     "",
+     1.64,
+     57.44680851
+    ],
+    [
+     "+9 pts\n4 gained, 0 lost\np = 0.12",
+     1.5,
+     74.95744681
+    ],
+    [
+     "",
+     2.64,
+     65.95744681
+    ],
+    [
+     "+21 pts\n10 gained, 0 lost\np = 0.002",
+     2.5,
+     96.23404255
+    ]
+   ],
+   "title": "",
+   "xlabel": "",
+   "xlim": [
+    -0.5,
+    3.5
+   ],
+   "xscale": "linear",
+   "xticklabels": [
+    "With transcripts\n(Granola's agent)",
+    "Transcripts deleted:\nnotes only",
+    "+ our fact layer\n(no transcripts)",
+    "+ read the transcript\nwhen notes fall short"
+   ],
+   "xticks": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+   ],
+   "ylabel": "accuracy (%), 95% CI",
+   "ylim": [
+    0.0,
+    132.0
+   ],
+   "yscale": "linear",
+   "yticklabels": [
+    "0",
+    "25",
+    "50",
+    "75",
+    "100"
+   ],
+   "yticks": [
+    0.0,
+    25.0,
+    50.0,
+    75.0,
+    100.0
+   ]
+  }
+ ],
+ "figure_legends": [],
+ "suptitle": "What does deleting transcripts cost, and what brings it back?",
+ "texts": [
+  "What does deleting transcripts cost, and what brings it back?",
+  "Author's 4 real meetings, 47 questions, DEV (seen during development); run 20261104T012414Z.\nEach step is paired on the same questions (exact sign test); bold = p < 0.05.",
+  "Notes only and notes + facts are answered by our model over Granola's own notes, not by Granola's degraded chat. The last bar reads transcripts, so it models 'keep a cold copy', not deletion. LLM-drafted gold, approved in bulk; n is small. docs/benchmark/DELETION_SIM.md"
+ ]
+}

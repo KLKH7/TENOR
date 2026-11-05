@@ -70,6 +70,26 @@ SYSTEM_LABELS: dict[str, str] = {
 # colour never means two different systems. Paul Tol "muted".
 OTHER_COLOURS = ("#332288", "#88CCEE", "#44AA99", "#117733", "#DDCC77", "#CC6677", "#AA4499")
 
+# Granola's four answer types (agent interface quality track), green to red. Paul Tol "muted"
+# plus his pale grey for the safe miss.
+ANSWER_TYPES: tuple[tuple[str, str, str], ...] = (
+    ("complete", "Useful & complete", "#117733"),
+    ("incomplete", "Useful but incomplete", "#DDCC77"),
+    ("says_so", "Incomplete & says so", "#BBBBBB"),
+    ("confident_wrong", "Wrong but confident", "#CC6677"),
+)
+
+# Track status pills: built, in progress, designed.
+STATUS_COLOURS: dict[str, str] = {
+    "built": "#117733",
+    "in progress": "#DDCC77",
+    "designed": "#BBBBBB",
+}
+
+# Real meetings are the evidence; synthetic data is diagnostic. One mark style each, everywhere:
+# filled = real, hollow = synthetic.
+REAL_TINT = "#F2F2F2"
+
 RC: dict[Any, Any] = {  # Any keys: matplotlib types rcParams keys as Literals
     "svg.hashsalt": HASHSALT,
     "svg.fonttype": "none",

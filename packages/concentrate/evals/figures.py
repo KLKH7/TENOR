@@ -34,6 +34,8 @@ from typing import Any
 import numpy as np
 
 from concentrate.evals import figstyle as fs
+from concentrate.evals import figures_diagrams as FD
+from concentrate.evals import figures_real as FR
 from concentrate.evals.scoring import bootstrap_ci
 from concentrate.evals.stats import binom_two_sided_p
 
@@ -843,6 +845,14 @@ class Spec:
     build: Callable[[Inputs], Any]
     inputs: tuple[str, ...]
     page: str
+    section: str = "diagnostic"  # gallery section: one of SECTIONS
+
+
+SECTIONS = (
+    ("start", "Start here"),
+    ("real", "Real meetings: the evidence"),
+    ("diagnostic", "Synthetic data: diagnostics, not evidence"),
+)
 
 
 # -- notes-sufficient vs transcript-needed -----------------------------------------------------
@@ -953,11 +963,59 @@ def fig_deletion(inp: Inputs) -> Any:
 
 FIGURES: tuple[Spec, ...] = (
     Spec(
+        "overview",
+        "How does Hindsight work?",
+        lambda inp: FD.fig_overview(),
+        (),
+        "ARCHITECTURE.md",
+        "start",
+    ),
+    Spec(
+        "tracks",
+        "What does each track test, and how far along is it?",
+        lambda inp: FD.fig_tracks(inp.real, inp.deletion),
+        ("real", "deletion"),
+        "PLAN.md",
+        "start",
+    ),
+    Spec(
+        "retention_steps",
+        "What does deleting transcripts cost, and what brings it back?",
+        lambda inp: FR.fig_retention_steps(inp.deletion),
+        ("deletion",),
+        "benchmark/DELETION_SIM.md",
+        "real",
+    ),
+    Spec(
+        "answer_types",
+        "When the answer isn't right, does it say so?",
+        lambda inp: FR.fig_answer_types(inp.deletion),
+        ("deletion",),
+        "benchmark/DELETION_SIM.md",
+        "real",
+    ),
+    Spec(
+        "question_heatmap",
+        "Which questions does deletion hurt, and which layer brings them back?",
+        lambda inp: FR.fig_question_heatmap(inp.deletion),
+        ("deletion",),
+        "benchmark/DELETION_SIM.md",
+        "real",
+    ),
+    Spec(
         "deletion_sim",
         "What does deleting transcripts cost on real meetings?",
         fig_deletion,
         ("deletion",),
         "benchmark/DELETION_SIM.md",
+        "real",
+    ),
+    Spec(
+        "synthetic_vs_real",
+        "Why did synthetic data mislead us?",
+        lambda inp: FR.fig_synthetic_vs_real(inp.report, inp.real, inp.retirement, inp.deletion),
+        ("report", "real", "retirement", "deletion"),
+        "results/REAL_SLICE.md",
     ),
     Spec(
         "hero_synthetic_vs_real",
@@ -1009,6 +1067,7 @@ FIGURES: tuple[Spec, ...] = (
         fig_fallback,
         ("real",),
         "systems/concentrate/fallback.md",
+        "real",
     ),
     Spec(
         "judge_agreement",
@@ -1075,15 +1134,35 @@ def readme(inp: Inputs, rendered: dict[str, bytes]) -> str:
         f"Prices for every dollar figure: ${PRICE_IN:g}/M input and ${PRICE_OUT:g}/M output "
         "tokens, applied to every system and every token (equal prices, no discounts).",
         "",
+        "**One visual language.** Every figure is titled with the question it answers and "
+        "carries its scope and caveats. One colour per system or condition everywhere "
+        "(`figstyle.py`); Granola's agent is always black; where real and synthetic share a "
+        "chart, filled marks are real meetings and hollow marks synthetic.",
+    ]
+    shown = [s for s in FIGURES if f"{s.name}.svg" in rendered]
+    for key, heading in SECTIONS:
+        specs = [s for s in shown if s.section == key]
+        if not specs:
+            continue
+        lines += ["", f"## {heading}", "", "| | |", "|---|---|"]
+        cells = [
+            f'[<img src="{s.name}.svg" width="400" alt="{s.question}">]({s.name}.svg)<br>'
+            f"**{s.question}**<br>Belongs in [`{s.page}`](../{s.page})"
+            for s in specs
+        ]
+        cells += [""] * (len(cells) % 2)
+        lines += [f"| {cells[i]} | {cells[i + 1]} |" for i in range(0, len(cells), 2)]
+    lines += [
+        "",
+        "## Provenance",
+        "",
         "| Figure | Question | Inputs (sha256 prefix) |",
         "|---|---|---|",
     ]
-    for spec in FIGURES:
+    for spec in shown:
         fname = f"{spec.name}.svg"
-        if fname not in rendered:
-            continue
         files = [p for g in spec.inputs for p in inp.files.get(g, [])]
-        refs = ", ".join(f"`{_rel(p)}` ({_sha(p)})" for p in files)
+        refs = ", ".join(f"`{_rel(p)}` ({_sha(p)})" for p in files) or "none: a diagram"
         lines.append(f"| [{fname}]({fname}) | {spec.question} | {refs} |")
     lines += [
         "",
