@@ -3217,6 +3217,267 @@ def facts_stage3(
     )
 
 
+# -- deletion simulation on AMI (docs/benchmark/DELETION_SIM.md, "AMI replication") -------------
+
+
+@ami_app.command("deletion-sim")
+def ami_deletion_sim(
+    conditions: Annotated[
+        str,
+        typer.Option(
+            help="granola_chat (A), notes_only (B), notes_only_wispr (B'), notes_facts (C), "
+            "notes_facts_fallback (D); comma-separated."
+        ),
+    ] = "granola_chat,notes_only,notes_only_wispr,notes_facts,notes_facts_fallback",
+    split: Annotated[str, typer.Option(help="all, dev or test.")] = "all",
+    quote_only: Annotated[
+        bool,
+        typer.Option("--quote", help="Price the full run and the pilot; spends nothing."),
+    ] = False,
+    pilot: Annotated[
+        bool, typer.Option(help="Sandbox: --pilot-n DEV questions x every condition, tiny cap.")
+    ] = False,
+    pilot_n: Annotated[int, typer.Option(help="--pilot: questions.")] = 5,
+    max_usd: Annotated[
+        float | None,
+        typer.Option(help="Hard spend cap (the approved amount); a pilot defaults to $1.50."),
+    ] = None,
+    yes: Annotated[bool, typer.Option(help="Skip the confirmation prompt.")] = False,
+    reader_model: Annotated[
+        str | None, typer.Option(help="Answer model; default: the original run's (its meta).")
+    ] = None,
+    judge_model: Annotated[str, typer.Option(help="Judge (stage 3's).")] = "claude-sonnet-5-5",
+    judge2: Annotated[str, typer.Option(help="Second judge model, or 'none'.")] = "none",
+    exact: Annotated[
+        bool,
+        typer.Option(
+            "--exact/--heuristic",
+            help="Count input tokens with the free count_tokens endpoint, or chars/3.5 offline.",
+        ),
+    ] = True,
+    seed: Annotated[int, typer.Option()] = 42,
+    answers: Annotated[
+        Path, typer.Option(help="Granola Chat answers (stage 3's cleaned JSONL).")
+    ] = Path("data/ami/results/facts/answers_granola.clean.jsonl"),
+    granola_db: GranolaDbOpt = FACTS_DBS["granola"],
+    wispr_db: WisprDbOpt = FACTS_DBS["wispr"],
+    overrides: OverridesOpt = FACTS_OVERRIDES,
+    questions_file: Annotated[Path, typer.Option("--questions")] = Path(
+        "data/ami_questions/questions.jsonl"
+    ),
+    out_dir: OutDirOpt = AMI_RESULTS / "deletion",
+    commit_to: Annotated[
+        Path | None,
+        typer.Option(help="Also write the aggregate here (checked: numbers only). Not a pilot."),
+    ] = None,
+) -> None:
+    """Deletion simulation on public AMI recordings: Granola Chat vs notes only (Granola and
+    Wispr) vs notes + fact layer vs + transcript fallback. Start with --quote, then --pilot."""
+    import functools
+    import json as _json
+
+    from concentrate.ami.questions import load_questions
+    from concentrate.blackbox.kit import check_committable
+    from concentrate.core.store import read_notes
+    from concentrate.evals import deletion_ami as DA
+    from concentrate.evals import deletion_sim as D
+    from concentrate.evals.real_slice import real_directory
+    from concentrate.evals.wrong_facts import load_answers
+    from concentrate.llm.client import BudgetExceeded, Ledger, count_tokens, estimate_tokens
+
+    names = [c.strip() for c in conditions.split(",") if c.strip()]
+    if unknown := [n for n in names if n not in DA.CONDITIONS]:
+        raise typer.BadParameter(f"unknown conditions {unknown}; choose from {DA.CONDITIONS}")
+    if split not in ("all", "dev", "test"):
+        raise typer.BadParameter("--split must be all, dev or test")
+    if pilot and quote_only:
+        raise typer.BadParameter("--quote already prices the pilot; drop --pilot")
+    recs = DA.load_recordings({"granola": granola_db, "wispr": wispr_db}, overrides, read_notes)
+    notes = {p: DA.reader_notes(r, p) for p, r in recs.items()}
+    chat = {a.question_id: a.answer for a in load_answers(answers) if a.product == "granola"}
+    picked, skipped = DA.select_questions(
+        load_questions(questions_file), {p: list(r) for p, r in recs.items()}, chat, names
+    )
+    as_of = DA.as_of_day(n for ns in notes.values() for n in ns)
+    qs = [DA.adapt(q, as_of) for q in picked if split in ("all", q.split)]
+    if not qs:
+        raise typer.BadParameter(f"no usable questions (skipped: {skipped})")
+    reader = reader_model or DA.original_reader_model()
+    pilot_qs = DA.pilot_questions(qs, pilot_n, seed)
+    run_qs = pilot_qs if pilot else qs
+    typer.echo(
+        f"{len(qs)} questions on {len({m for q in qs for m in q.meetings})} AMI meetings "
+        f"(recordings: {', '.join(f'{p} {len(r)}' for p, r in recs.items())}); "
+        f"skipped {skipped or 'none'}; reader {reader}, judge {judge_model}"
+    )
+    cap = max_usd if max_usd is not None else (DA.PILOT_MAX_USD if pilot else None)
+    if cap is None and os.environ.get("CONCENTRATE_MAX_USD"):
+        cap = float(os.environ["CONCENTRATE_MAX_USD"])
+    if cap is None and not quote_only:
+        raise typer.BadParameter("paid runs need --max-usd (the approved amount); --pilot first")
+    ledger = Ledger()  # one ledger: the cap covers answers, judges and the fact-layer build
+    reader_c = LLMClient(model=reader, ledger=ledger, max_usd=cap, offline=quote_only)
+    judge_c = LLMClient(model=judge_model, ledger=ledger, max_usd=cap, offline=quote_only)
+    j2 = (
+        None
+        if judge2 == "none"
+        else LLMClient(model=judge2, ledger=ledger, max_usd=cap, offline=quote_only)
+    )
+    if j2 is not None and j2.model == judge_c.model:
+        raise typer.BadParameter("the second judge must differ from the primary judge")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    directory = out_dir / "directory.json"  # people from attendee metadata, as the original
+    directory.write_text(_json.dumps(real_directory(notes.get("granola", [])), indent=1))
+
+    def memory_corpus(for_pilot: bool) -> list[Any]:
+        """The fact layer covers every recording; a pilot's only its questions' meetings."""
+        every = notes.get("granola", [])
+        return DA.pilot_corpus(every, pilot_qs) if for_pilot else every
+
+    embedder: Any = None
+
+    def systems_for(for_pilot: bool, build: bool) -> tuple[dict[str, Any], Any, bool]:
+        """Systems by condition, the fact-layer system (for its build quote) and whether the
+        fact layer is built. ``build``: ingest it now (costs money unless cached)."""
+        nonlocal embedder
+        from concentrate.agents.concentrate_system import COMPLETE_MARKER
+
+        out: dict[str, Any] = {}
+        corpus = memory_corpus(for_pilot)
+        probe = DA.AmiNotesFacts(reader_c, directory_path=directory)
+        built = (probe.store_dir(corpus) / COMPLETE_MARKER).exists()
+        for n in names:
+            if n == DA.GRANOLA_CHAT:
+                out[n] = DA.RecordedChatSystem(chat)
+            elif n in ("notes_only", "notes_only_wispr"):
+                product = "wispr" if n.endswith("wispr") else "granola"
+                out[n] = DA.notes_only(reader_c, notes[product], n)
+            elif built or build:
+                if embedder is None:
+                    from concentrate.agents.retrieval import SentenceTransformerEmbedder
+
+                    embedder = SentenceTransformerEmbedder()
+                cls = DA.AmiNotesFacts if n == "notes_facts" else DA.AmiNotesFactsFallback
+                s = cls(reader_c, embedder=embedder, directory_path=directory)
+                s.ingest(corpus)  # free if built; otherwise the paid build, under the cap
+                out[n] = s
+        return out, probe, built
+
+    counter: Any
+    if exact:
+        counter = functools.partial(count_tokens, model=reader, cache_dir=reader_c.cache_dir)
+        how = f"exact (count_tokens, {reader})"
+    else:
+
+        def counter(texts: list[str]) -> list[int]:
+            return [estimate_tokens(t) for t in texts]
+
+        how = "offline chars/3.5 (not exact)"
+    jcount = (
+        functools.partial(count_tokens, model=judge_model, cache_dir=judge_c.cache_dir)
+        if exact
+        else counter
+    )
+    cal = DA.calibration(D.judge_cache_pairs(judge_c.cache_dir, judge_model), jcount)
+    b_granola = DA.notes_only(reader_c, notes.get("granola", []), "notes_only")
+
+    def quote(for_pilot: bool) -> list[Any]:
+        systems, probe, built = systems_for(for_pilot, build=False)
+        label, for_qs = ("pilot", pilot_qs) if for_pilot else (split, qs)
+        return DA.quote_lines(
+            names, for_qs, systems, b_granola, reader_c, judge_c, j2, counter, cal,
+            split=label, built=built, build=DA.quote_build(probe, memory_corpus(for_pilot), label),
+        )  # fmt: skip
+
+    full_lines = quote(False)
+    pilot_lines = quote(True)
+    md = DA.quote_markdown(
+        [
+            (f"Full run: {len(qs)} questions ({split})", full_lines),
+            (f"Pilot: {len(pilot_qs)} DEV questions", pilot_lines),
+        ],
+        cal,
+        reader=reader,
+        judge=judge_model,
+        judge2=judge2,
+        how=how,
+    )
+    (out_dir / "deletion_quote.md").write_text(md)
+    fe, fh = DA.totals(full_lines)
+    pe, ph = DA.totals(pilot_lines)
+    typer.echo(md)
+    typer.echo(
+        f"full run: ${fe:.2f} expected, ${fh:.2f} high · pilot: ${pe:.2f} expected, "
+        f"${ph:.2f} high · {out_dir / 'deletion_quote.md'}"
+    )
+    if quote_only:
+        typer.echo("no money spent (token counting is free)")
+        return
+    assert cap is not None
+    high = ph if pilot else fh
+    if high > cap:
+        typer.echo(f"high estimate ${high:.2f} exceeds the cap ${cap:.2f}", err=True)
+        raise typer.Exit(1)
+    if not yes:
+        typer.confirm(
+            f"{'PILOT: ' if pilot else ''}Run {len(names)} conditions on {len(run_qs)} "
+            f"questions (hard cap ${cap:.2f}, quoted high ${high:.2f})?",
+            abort=True,
+        )
+    stopped = None
+    report: dict[str, Any] | None = None
+    build: DA.CappedBuild | None = None
+    try:
+        systems, _probe, _ = systems_for(pilot, build=True)
+        build = next((s for s in systems.values() if isinstance(s, DA.CappedBuild)), None)
+        report = D.run_deletion_sim(
+            [systems[n] for n in names],
+            run_qs,
+            judge_c,
+            judge2=j2,
+            tags=DA.question_tags(run_qs),
+            seed=seed,
+            budget_usd=cap,
+            out_dir=out_dir,
+            split=split,
+            spent=ledger.spent_usd,
+            pairs=DA.PAIRS,
+            meta={"track": "deletion-sim.ami", "reader_model": reader, "pilot": pilot},
+        )
+    except BudgetExceeded as e:
+        stopped = str(e)
+    typer.echo(f"spent ${ledger.spent_usd():.4f} (cap ${cap:.2f})")
+    if report is None:
+        typer.echo(f"STOPPED: {stopped}. Cached calls replay at $0 on a re-run.", err=True)
+        raise typer.Exit(1)
+    info = DA.RunInfo(
+        reader_model=reader,
+        judge_model=judge_model,
+        judge2_model=j2.model if j2 else None,
+        ingest_model=build.ingest_model if build is not None else None,
+        pilot=pilot,
+        skipped=skipped,
+        recordings={p: len(r) for p, r in recs.items()},
+        build=DA.build_stats(build, memory_corpus(pilot)) if build is not None else {},
+    )
+    agg = DA.aggregate(report, run_qs, info)
+    rows = Path(report["paths"]["jsonl"])
+    check_committable(agg, DA.private_texts(run_qs, rows))
+    path = out_dir / f"{report['meta']['date']}.aggregate.json"
+    path.write_text(_json.dumps(agg, indent=2, default=str) + "\n")
+    if commit_to is not None and not pilot:
+        commit_to.parent.mkdir(parents=True, exist_ok=True)
+        commit_to.write_text(_json.dumps(agg, indent=2, default=str) + "\n")
+    typer.echo(_json.dumps(report["deletion"]["paired"], indent=1)[:3000])
+    if pilot and pe:
+        ratio = ledger.spent_usd() / pe
+        typer.echo(
+            f"pilot spent / pilot expected = {ratio:.2f}; full run re-priced: "
+            f"${fe * ratio * 1.5:.2f} (x1.5 margin). Ask before any run over $2."
+        )
+    typer.echo(f"report: {report['paths']['md']} · aggregate: {path}")
+
+
 # -- MCP contract check (packages/concentrate/sources/contract.py) -----------------------------
 
 CONTRACT_BASELINE = Path("evals/contracts/granola_mcp.json")

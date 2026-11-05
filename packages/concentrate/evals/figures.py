@@ -81,6 +81,7 @@ class Inputs:
     by_tag: dict[str, Any] | None = None  # evals/reports/notes_vs_transcript.json
     deletion: dict[str, Any] | None = None  # evals/reports/real-deletion-sim-dev.aggregate.json
     coverage: dict[str, Any] | None = None  # evals/reports/ami/coverage.json
+    ami_deletion: dict[str, Any] | None = None  # evals/reports/ami/deletion-sim.aggregate.json
     files: dict[str, list[Path]] = field(default_factory=dict)
 
 
@@ -106,6 +107,7 @@ def load_inputs(stamp: str, root: Path = Path()) -> Inputs:
     tag_path = reports / "notes_vs_transcript.json"
     del_path = reports / "real-deletion-sim-dev.aggregate.json"
     cov_path = reports / "ami" / "coverage.json"
+    ami_del_path = reports / "ami" / "deletion-sim.aggregate.json"
     rows = [json.loads(x) for x in rows_path.read_text().splitlines() if x.strip()]
     core = [report_path, rows_path, analysis_path]
     return Inputs(
@@ -121,6 +123,7 @@ def load_inputs(stamp: str, root: Path = Path()) -> Inputs:
         by_tag=_json(tag_path) if tag_path.exists() else None,
         deletion=_json(del_path) if del_path.exists() else None,
         coverage=_json(cov_path) if cov_path.exists() else None,
+        ami_deletion=_json(ami_del_path) if ami_del_path.exists() else None,
         files={
             "report": core,
             "judge": [judge_path] if judge_path else [],
@@ -130,6 +133,7 @@ def load_inputs(stamp: str, root: Path = Path()) -> Inputs:
             "by_tag": [tag_path] if tag_path.exists() else [],
             "deletion": [del_path] if del_path.exists() else [],
             "coverage": [cov_path] if cov_path.exists() else [],
+            "ami_deletion": [ami_del_path] if ami_del_path.exists() else [],
         },
     )
 
@@ -1005,6 +1009,30 @@ FIGURES: tuple[Spec, ...] = (
         "Which questions does deletion hurt, and which layer brings them back?",
         lambda inp: FR.fig_question_heatmap(inp.deletion),
         ("deletion",),
+        "benchmark/DELETION_SIM.md",
+        "real",
+    ),
+    Spec(
+        "ami_retention_steps",
+        "What does deleting transcripts cost on public AMI meetings?",
+        lambda inp: FR.fig_retention_steps(inp.ami_deletion),
+        ("ami_deletion",),
+        "benchmark/DELETION_SIM.md",
+        "real",
+    ),
+    Spec(
+        "ami_answer_types",
+        "On AMI, when the answer isn't right, does it say so?",
+        lambda inp: FR.fig_answer_types(inp.ami_deletion),
+        ("ami_deletion",),
+        "benchmark/DELETION_SIM.md",
+        "real",
+    ),
+    Spec(
+        "ami_question_heatmap",
+        "On AMI, which questions does deletion hurt?",
+        lambda inp: FR.fig_question_heatmap(inp.ami_deletion),
+        ("ami_deletion",),
         "benchmark/DELETION_SIM.md",
         "real",
     ),

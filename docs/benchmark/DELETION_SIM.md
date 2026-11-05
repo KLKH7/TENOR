@@ -3,6 +3,7 @@
 Status: **DEV run done** (47 seen questions, 2026-11-04, $6.42, approved cap $9). Results below. The test split has not run: no test questions exist yet.
 Code: [`evals/deletion_sim.py`](../../packages/concentrate/evals/deletion_sim.py), CLI `concentrate deletion-sim`.
 Tests: [`tests/test_deletion_sim.py`](../../tests/test_deletion_sim.py) (fakes only, no network).
+AMI replication: **planned**, quoted, not run ([below](#ami-replication-planned)).
 
 ## The question
 
@@ -148,6 +149,70 @@ Granola's 6% confident error is the same under P2-T's flag-only definition (answ
 - **Actual: $6.42.** That is $6.13 for answers and the primary judge, plus $0.29 for the second judge. The quote was $6.27 expected, $8.71 high: 2% over expected.
 - **Input tokens matched the quote exactly** for B (248,707) and C (541,338).
 - The overshoot came from the fallback. It fired on 60% of answers, not the 47% assumed, and outputs ran a little long.
+
+## AMI replication (planned)
+
+The result above rests on the author's 4 private meetings, so nobody else can check it. This replicates it on the public [AMI corpus](AMI_DESIGN.md): AMI meetings played into Granola and Wispr Flow. It can be released, and n grows as more AMI meetings are recorded.
+
+Status: **built and quoted; nothing paid has run.** Code: [`evals/deletion_ami.py`](../../packages/concentrate/evals/deletion_ami.py), CLI `concentrate ami deletion-sim`. Tests: [`tests/test_deletion_ami.py`](../../tests/test_deletion_ami.py) (fakes only).
+
+### Conditions
+
+Same ladder, one product comparison added.
+
+| | Condition | What is answered from | Answered by |
+|---|---|---|---|
+| A | `granola_chat` | Granola's own Chat, transcripts kept (answers recorded once, replayed at $0) | Granola |
+| B | `notes_only` | Granola's notes for every recorded meeting | our model, `answer.v1` |
+| B′ | `notes_only_wispr` | the same, Wispr Flow's notes | our model, `answer.v1` |
+| C | `notes_facts` | B + Concentrate's fact layer, extracted from Granola's transcript, then every transcript deleted | our model, `answer.v1` |
+| D | `notes_facts_fallback` | C + Granola's transcript, read only when C hedges or abstains | our model, `answer.v1` |
+
+- **Same code as the original.** B, C and D are the original classes; only the inputs change.
+- **Same answer model:** read from the original's meta (`claude-opus-5-5`).
+- **One judge for all five,** A included: stage 3's `judge.v1` on `claude-sonnet-5-5`, gold + AMI speaker roster, product boilerplate stripped ([WRONG_FACTS.md](WRONG_FACTS.md)). A's judge requests are stage 3's, byte for byte, so they replay from cache.
+- **Paired:** B vs A, B′ vs B, C vs B, D vs C. Exact sign tests, bootstrap and Wilson 95% CIs, by AMI question type and by tag (DEV/TEST, one- vs two-meeting).
+
+### What grows with the data
+
+- **Meetings:** every AMI recording the synced DBs match (`match_recordings` + `recording_ids.txt`). No meeting list in the code.
+- **Questions:** any AMI question whose meetings both apps recorded and that Granola Chat answered. Today: 68 questions on 5 meetings (13 ES2006a questions wait for Chat answers).
+- **Figures:** `ami_retention_steps` (with a Granola vs Wispr notes-only panel), `ami_answer_types`, `ami_question_heatmap`. They read n from the aggregate (`evals/reports/ami/deletion-sim.aggregate.json`) and appear once it exists.
+
+### Quote (2026-11-05, $0 to compute)
+
+`concentrate ami deletion-sim --quote`. Inputs counted with the free `count_tokens`; output and fallback rate from the real DEV run.
+
+| Run | Expected | High |
+|---|---|---|
+| Pilot: 5 DEV questions × 5 conditions, fact layer over 1 meeting | $0.97 | $1.23 |
+| Full: 68 questions × 5 conditions, fact layer over 7 recordings | $13.08 | $16.50 |
+
+- **Largest items:** C ($4.25) and D ($3.17 expected, $5.48 if the fallback always fires). B and B′ are $2.56 each: every question reads all 7 meetings' notes (~7.5k tokens).
+- **ASSUMED until built:** C's memory context is priced at 6,226 tokens/question (C − B on the real run). The fact-layer build ($0.53, high $0.79) is a calibrated model estimate, not a count. After the pilot or build, re-run `--quote`: C and D become exact.
+- **A costs $0:** answers are recorded and all 68 judge verdicts are cached from stage 3.
+- **No second judge by default** (`--judge2 claude-opus-5-5` adds one).
+
+### Commands
+
+```bash
+uv run concentrate ami deletion-sim --quote
+uv run concentrate ami deletion-sim --pilot              # hard cap $1.50, asks first
+uv run concentrate ami deletion-sim --max-usd 17 --commit-to evals/reports/ami/deletion-sim.aggregate.json
+```
+
+Every client (answers, judge, fact-layer build) shares one ledger and one hard cap (`LLMClient(max_usd=...)`). A run refuses to start if the quote's high estimate exceeds the cap. Per-answer rows stay in `data/ami/results/deletion/` (gitignored); the aggregate is checked by `check_committable` (no question, gold or answer text).
+
+### Threats to validity
+
+- **Silent replay: no typed notes.** AMI is played in with nobody typing, so "notes" are AI notes only. Real users' typed notes could make B stronger.
+- **Mostly role-play.** IS1008 is a scenario series (actors designing a remote control); IB4003 is the only non-scenario meeting with questions. Real meetings have more context and less structure.
+- **AMI gold is summary-level.** Gold answers are annotators' summary sentences, not facts checked against the audio; lists must be complete to score "correct", which favours partial verdicts.
+- **One human verifier so far.** The calibrated judge was checked by one person (21 rows, `human_verification_v3`).
+- **Small n.** 68 questions, 13 DEV; most of the ladder steps will not reach p < 0.05.
+- **A − B still mixes model and deletion,** as in the original. B′ − B is clean: same model, same prompt, only the app's notes differ.
+- **B sees every meeting's notes** (an upper bound, as in the original). As meetings grow it becomes a long-context test; a retrieval variant may be needed past ~30 meetings.
+- **The fact layer has no AMI people directory:** only attendee metadata (the account owner), the same method as the original.
 
 ## Why outside-in
 

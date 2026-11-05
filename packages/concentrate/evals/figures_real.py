@@ -2,7 +2,10 @@
 
 Every builder reads committed, content-free aggregates only:
 
-- ``deletion``: ``evals/reports/real-deletion-sim-dev.aggregate.json`` (P2 deletion simulation);
+- ``deletion``: ``evals/reports/real-deletion-sim-dev.aggregate.json`` (P2 deletion simulation),
+  or its AMI replication ``evals/reports/ami/deletion-sim.aggregate.json`` (``meta.corpus ==
+  "ami"``): the same three deletion charts draw either, labelled with the AMI meeting and
+  question counts the aggregate holds;
 - ``real``: ``docs/figures/data/real_slice.json`` (question-answering slice);
 - ``synthetic`` / ``retirement``: the synthetic report and retirement curve, used only to show
   how far synthetic numbers sat from real ones.
@@ -44,6 +47,54 @@ STEPS = (
 )
 MIN_CELL_N = 5  # heatmap cells with fewer questions are greyed out, not coloured
 
+# The AMI replication (docs/benchmark/DELETION_SIM.md, "AMI replication"): A is Granola's own
+# Chat, and B' (Wispr's notes) sits beside the ladder as a product comparison, not a rung.
+AMI_LADDER = ("granola_chat", "notes_only", "notes_facts", "notes_facts_fallback")
+AMI_STEPS = (
+    ("notes_only vs granola_chat", "granola_chat", "notes_only"),
+    ("notes_facts vs notes_only", "notes_only", "notes_facts"),
+    ("notes_facts_fallback vs notes_facts", "notes_facts", "notes_facts_fallback"),
+)
+AMI_ROWS = ("granola_chat", "notes_only", "notes_only_wispr", "notes_facts", "notes_facts_fallback")
+AMI_COMPARE = "notes_only_wispr vs notes_only"
+AMI_LABELS = LADDER_LABELS | {
+    "granola_chat": "With transcripts\n(Granola Chat)",
+    "notes_only": "Transcripts deleted:\nGranola notes only",
+}
+AMI_SHORT = LADDER_SHORT | {
+    "granola_chat": "Granola Chat + transcripts",
+    "notes_only": "Granola notes only",
+    "notes_only_wispr": "Wispr notes only",
+}
+
+
+def is_ami(deletion: dict[str, Any]) -> bool:
+    """Is this the AMI replication's aggregate (not the author's real meetings)?"""
+    return bool(deletion.get("meta", {}).get("corpus") == "ami")
+
+
+def _ladder(deletion: dict[str, Any]) -> tuple[tuple[str, ...], tuple[tuple[str, str, str], ...]]:
+    return (AMI_LADDER, AMI_STEPS) if is_ami(deletion) else (LADDER, STEPS)
+
+
+def _rows(deletion: dict[str, Any]) -> tuple[str, ...]:
+    """Conditions to show, top to bottom (AMI: B' too, where the run has it)."""
+    if not is_ami(deletion):
+        return LADDER
+    cond = deletion["metrics"]["deletion"]["conditions"]
+    return tuple(c for c in AMI_ROWS if c in cond)
+
+
+def _short(deletion: dict[str, Any]) -> dict[str, str]:
+    return AMI_SHORT if is_ami(deletion) else LADDER_SHORT
+
+
+def _colour(c: str) -> str:
+    """Granola's Chat shares its agent's black; Wispr's notes take Wispr's colour."""
+    return {"granola_chat": fs.colour("granola_agent"), "notes_only_wispr": fs.colour("wispr")}.get(
+        c, fs.colour(c)
+    )
+
 
 def _p(p: float) -> str:
     return f"p = {p:.2g}"
@@ -55,23 +106,38 @@ def _pts(x: float) -> str:
 
 
 def _dev_note(meta: dict[str, Any]) -> str:
+    if meta.get("corpus") == "ami":
+        return _ami_note(meta)
     return (
         f"Author's 4 real meetings, {meta['questions']} questions, DEV (seen during development); "
         f"run {meta['date']}."
     )
 
 
+def _ami_note(meta: dict[str, Any]) -> str:
+    """'AMI, n meetings, n questions': both counts come from the aggregate, so they grow as
+    more AMI recordings are synced."""
+    split = {"all": "DEV + TEST", "dev": "DEV", "test": "TEST"}.get(str(meta.get("split")), "?")
+    pilot = ", PILOT" if meta.get("pilot") else ""
+    return (
+        f"AMI, {meta['meetings']} meetings, {meta['questions']} questions ({split}{pilot}): "
+        f"public meetings played into the apps; run {meta['date']}."
+    )
+
+
 # -- (a) retention step chart ------------------------------------------------------------------
 
 
-def fig_retention_steps(deletion: dict[str, Any] | None) -> Any:
-    """Step chart: accuracy at each rung of the real deletion ladder, paired p on each step."""
-    if deletion is None:
-        return None
-    d = deletion["metrics"]["deletion"]
-    cond, paired = d["conditions"], d["paired"]
-    acc = [100 * cond[c]["accuracy"] for c in LADDER]
-    fig, ax = fs.new_figure(4.9)
+def _ladder_bars(
+    ax: Any,
+    cond: dict[str, Any],
+    paired: dict[str, Any],
+    rungs: tuple[str, ...],
+    steps: tuple[tuple[str, str, str], ...],
+    labels: dict[str, str],
+) -> None:
+    """The step chart itself: one bar per rung, a paired annotation on each step."""
+    acc = [100 * cond[c]["accuracy"] for c in rungs]
     ax.axvspan(0.5, 2.5, color=fs.REAL_TINT, zorder=0)
     ax.text(
         1.5,
@@ -93,32 +159,10 @@ def fig_retention_steps(deletion: dict[str, Any] | None) -> Any:
         color=fs.MUTED,
         style="italic",
     )
-    for x, (c, a) in enumerate(zip(LADDER, acc, strict=True)):
-        lo, hi = (100 * v for v in cond[c]["accuracy_ci"])
-        ax.bar(x, a, width=0.56, color=fs.colour(c), zorder=2)
-        ax.errorbar(
-            x,
-            a,
-            yerr=[[a - lo], [hi - a]],
-            fmt="none",
-            ecolor=fs.INK,
-            elinewidth=1,
-            capsize=3,
-            zorder=3,
-        )
-        ax.text(
-            x,
-            4,
-            f"{a:.0f}%",
-            ha="center",
-            va="bottom",
-            fontsize=13,
-            fontweight="bold",
-            color="white",
-            zorder=4,
-        )
-    for key, a, b in STEPS:
-        i, j = LADDER.index(a), LADDER.index(b)
+    for x, (c, a) in enumerate(zip(rungs, acc, strict=True)):
+        _bar(ax, x, a, cond[c]["accuracy_ci"], _colour(c))
+    for key, a, b in steps:
+        i, j = rungs.index(a), rungs.index(b)
         ya, yb = acc[i], acc[j]
         ax.plot([i + 0.28, j - 0.28], [ya, ya], color=fs.MUTED, lw=1, ls=(0, (2, 2)), zorder=2)
         ax.annotate(
@@ -141,26 +185,114 @@ def fig_retention_steps(deletion: dict[str, Any] | None) -> Any:
             fontweight="bold" if sig else "normal",
             zorder=4,
         )
-    ax.set_xticks(range(len(LADDER)), [LADDER_LABELS[c] for c in LADDER], fontsize=9)
+    ax.set_xticks(range(len(rungs)), [labels[c] for c in rungs], fontsize=9)
     ax.set_ylim(0, 132)
     ax.set_yticks([0, 25, 50, 75, 100])
     ax.set_ylabel("accuracy (%), 95% CI")
     ax.set_xlim(-0.5, 3.5)
     ax.grid(axis="x", visible=False)
+
+
+def _bar(ax: Any, x: float, a: float, ci: list[float], colour: str) -> None:
+    lo, hi = (100 * v for v in ci)
+    ax.bar(x, a, width=0.56, color=colour, zorder=2)
+    ax.errorbar(
+        x,
+        a,
+        yerr=[[a - lo], [hi - a]],
+        fmt="none",
+        ecolor=fs.INK,
+        elinewidth=1,
+        capsize=3,
+        zorder=3,
+    )
+    ax.text(
+        x,
+        4,
+        f"{a:.0f}%",
+        ha="center",
+        va="bottom",
+        fontsize=13,
+        fontweight="bold",
+        color="white",
+        zorder=4,
+    )
+
+
+def _compare_panel(ax: Any, cond: dict[str, Any], s: dict[str, Any]) -> None:
+    """AMI side panel: notes only, Granola's notes vs Wispr's, paired on the same questions."""
+    pair = ("notes_only", "notes_only_wispr")
+    acc = [100 * cond[c]["accuracy"] for c in pair]
+    for x, c in enumerate(pair):
+        _bar(ax, x, acc[x], cond[c]["accuracy_ci"], _colour(c))
+    sig = s["sign_p"] < 0.05
+    ax.text(
+        0.5,
+        max(acc) + 9,
+        f"Wispr {_pts(acc[1] - acc[0])}\n{s['wins']} better, {s['losses']} worse\n"
+        f"{_p(s['sign_p'])}",
+        ha="center",
+        va="bottom",
+        fontsize=8.5,
+        color=fs.INK if sig else fs.MUTED,
+        fontweight="bold" if sig else "normal",
+    )
+    ax.set_xticks([0, 1], ["Granola\nnotes", "Wispr Flow\nnotes"], fontsize=9)
+    ax.set_title("Notes only, by app", fontsize=9.5, loc="left", fontweight="normal")
+    ax.set_ylim(0, 132)
+    ax.set_yticks([0, 25, 50, 75, 100], [])
+    ax.set_xlim(-0.6, 1.6)
+    ax.grid(axis="x", visible=False)
+
+
+def fig_retention_steps(deletion: dict[str, Any] | None) -> Any:
+    """Step chart: accuracy at each rung of the deletion ladder, paired p on each step. On the
+    AMI replication, a side panel compares Granola's and Wispr's notes (notes only)."""
+    if deletion is None:
+        return None
+    d = deletion["metrics"]["deletion"]
+    cond, paired = d["conditions"], d["paired"]
+    rungs, steps = _ladder(deletion)
+    if not is_ami(deletion):
+        fig, ax = fs.new_figure(4.9)
+        _ladder_bars(ax, cond, paired, rungs, steps, LADDER_LABELS)
+        fs.title(
+            fig,
+            "What does deleting transcripts cost, and what brings it back?",
+            _dev_note(deletion["meta"]) + "\nEach step is paired on the same questions (exact "
+            "sign test); bold = p < 0.05.",
+        )
+        fs.footnote(
+            fig,
+            "Notes only and notes + facts are answered by our model over Granola's own notes, "
+            "not by Granola's degraded chat. The last bar reads transcripts, so it models 'keep a "
+            "cold copy', not deletion. LLM-drafted gold, approved in bulk; n is small. "
+            "docs/benchmark/DELETION_SIM.md",
+        )
+        fig.subplots_adjust(left=0.09, right=0.98, top=0.8, bottom=0.25)
+        return fig
+    side = "notes_only_wispr" in cond and AMI_COMPARE in paired
+    if side:
+        fig, (ax, ax2) = fs.new_figure(5.1, ncols=2, gridspec_kw={"width_ratios": [4, 1.5]})
+        _compare_panel(ax2, cond, paired[AMI_COMPARE])
+    else:
+        fig, ax = fs.new_figure(5.1)
+    _ladder_bars(ax, cond, paired, rungs, steps, AMI_LABELS)
     fs.title(
         fig,
-        "What does deleting transcripts cost, and what brings it back?",
-        _dev_note(deletion["meta"]) + "\nEach step is paired on the same questions (exact "
+        "What does deleting transcripts cost on public AMI meetings?",
+        _ami_note(deletion["meta"]) + "\nEach step is paired on the same questions (exact "
         "sign test); bold = p < 0.05.",
     )
     fs.footnote(
         fig,
-        "Notes only and notes + facts are answered by our model over Granola's own notes, not by "
-        "Granola's degraded chat. The last bar reads transcripts, so it models 'keep a cold copy', "
-        "not deletion. LLM-drafted gold, approved in bulk; n is small. "
+        "Gold answers come from AMI's human summaries (summary-level; one human verifier so "
+        "far). Silent replay: the apps' notes have no typed notes. Mostly role-play (scenario) "
+        "meetings. Notes-only bars are our model over each app's own notes, not the apps' "
+        "degraded chat; the last bar reads Granola's transcript ('keep a cold copy'). "
         "docs/benchmark/DELETION_SIM.md",
     )
-    fig.subplots_adjust(left=0.09, right=0.98, top=0.8, bottom=0.25)
+    fig.subplots_adjust(left=0.08, right=0.99, top=0.8, bottom=0.27, wspace=0.12)
     return fig
 
 
@@ -190,9 +322,10 @@ def fig_answer_types(deletion: dict[str, Any] | None) -> Any:
     if deletion is None:
         return None
     cond = deletion["metrics"]["deletion"]["conditions"]
-    fig, ax = fs.new_figure(3.9)
-    ys = list(range(len(LADDER)))[::-1]
-    for y, c in zip(ys, LADDER, strict=True):
+    rows, short = _rows(deletion), _short(deletion)
+    fig, ax = fs.new_figure(3.9 + 0.3 * (len(rows) - len(LADDER)))
+    ys = list(range(len(rows)))[::-1]
+    for y, c in zip(ys, rows, strict=True):
         shares = answer_types(cond[c])
         left = 0.0
         for key, _name, col in fs.ANSWER_TYPES:
@@ -209,7 +342,7 @@ def fig_answer_types(deletion: dict[str, Any] | None) -> Any:
                     color="white" if key in ("complete", "confident_wrong") else fs.INK,
                 )
             left += w
-    ax.set_yticks(ys, [f"{LADDER_SHORT[c]}  (n={cond[c]['n']})" for c in LADDER])
+    ax.set_yticks(ys, [f"{short[c]}  (n={cond[c]['n']})" for c in rows])
     ax.set_xlim(0, 100)
     ax.set_xlabel("share of answers (%)")
     ax.grid(False)
@@ -232,8 +365,12 @@ def fig_answer_types(deletion: dict[str, Any] | None) -> Any:
         fig,
         "Mapping: complete = judged correct; incomplete = judged partially correct; says so = "
         "judged incorrect but abstained or said the material doesn't cover it; wrong but "
-        "confident = judged incorrect with no hedge. Granola's confident errors were 2 of 6 "
-        "unanswerable questions.",
+        "confident = judged incorrect with no hedge. "
+        + (
+            "AMI gold is summary-level, so 'incomplete' often means a missed list item."
+            if is_ami(deletion)
+            else "Granola's confident errors were 2 of 6 unanswerable questions."
+        ),
     )
     fig.subplots_adjust(left=0.3, right=0.97, top=0.78, bottom=0.33)
     return fig
@@ -391,11 +528,13 @@ def fig_synthetic_vs_real(
 # -- (d) question type x condition heatmap -----------------------------------------------------
 
 
-def _cells(cond: dict[str, Any], field: str) -> tuple[list[str], np.ndarray, np.ndarray]:
-    keys = sorted({k for c in LADDER for k in cond[c].get(field, {})})
-    acc = np.full((len(LADDER), len(keys)), np.nan)
-    ns = np.zeros((len(LADDER), len(keys)), dtype=int)
-    for i, c in enumerate(LADDER):
+def _cells(
+    cond: dict[str, Any], field: str, rows: tuple[str, ...] = LADDER
+) -> tuple[list[str], np.ndarray, np.ndarray]:
+    keys = sorted({k for c in rows for k in cond[c].get(field, {})})
+    acc = np.full((len(rows), len(keys)), np.nan)
+    ns = np.zeros((len(rows), len(keys)), dtype=int)
+    for i, c in enumerate(rows):
         for j, k in enumerate(keys):
             cell = cond[c].get(field, {}).get(k)
             if cell:
@@ -409,7 +548,8 @@ def fig_question_heatmap(deletion: dict[str, Any] | None) -> Any:
     if deletion is None:
         return None
     cond = deletion["metrics"]["deletion"]["conditions"]
-    panels = [(f, *_cells(cond, f)) for f in ("by_tag", "by_category")]
+    rows = _rows(deletion)
+    panels = [(f, *_cells(cond, f, rows)) for f in ("by_tag", "by_category")]
     panels = [p for p in panels if p[1]]
     widths = [max(len(p[1]), 1) for p in panels]
     fig, axes = fs.new_figure(
@@ -420,7 +560,7 @@ def fig_question_heatmap(deletion: dict[str, Any] | None) -> Any:
     for ax, (field, keys, acc, ns) in zip(axes, panels, strict=True):
         shown = np.ma.masked_where((ns < MIN_CELL_N) | np.isnan(acc), acc)
         ax.imshow(shown, cmap=cmap, vmin=0, vmax=100, aspect="auto")
-        for i in range(len(LADDER)):
+        for i in range(len(rows)):
             for j in range(len(keys)):
                 v, n = acc[i, j], ns[i, j]
                 if n == 0:
@@ -449,7 +589,7 @@ def fig_question_heatmap(deletion: dict[str, Any] | None) -> Any:
         )
         ax.grid(False)
         ax.tick_params(length=0)
-    axes[0].set_yticks(range(len(LADDER)), [LADDER_SHORT[c] for c in LADDER])
+    axes[0].set_yticks(range(len(rows)), [_short(deletion)[c] for c in rows])
     fs.title(
         fig,
         "Which questions does deletion hurt, and which layer brings them back?",
@@ -458,8 +598,14 @@ def fig_question_heatmap(deletion: dict[str, Any] | None) -> Any:
     )
     fs.footnote(
         fig,
-        "Cells hold 5-23 questions: a 95% CI is roughly ±20-40 points, so read rows and columns "
-        "as patterns, single cells as hints. Unanswerable: 'correct' means it declined.",
+        (
+            "Small cells: a 95% CI is roughly ±20-40 points, so read rows and columns as "
+            "patterns, single cells as hints. Tags: DEV/TEST split and one- vs two-meeting "
+            "questions; types are AMI's question templates."
+        )
+        if is_ami(deletion)
+        else "Cells hold 5-23 questions: a 95% CI is roughly ±20-40 points, so read rows and "
+        "columns as patterns, single cells as hints. Unanswerable: 'correct' means it declined.",
     )
     fig.subplots_adjust(left=0.25, right=0.99, top=0.78, bottom=0.27, wspace=0.05)
     return fig

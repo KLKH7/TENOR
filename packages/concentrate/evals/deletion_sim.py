@@ -45,6 +45,7 @@ from concentrate.agents.baselines import (
 )
 from concentrate.agents.concentrate_system import ConcentrateSystem
 from concentrate.core.models import MeetingNote
+from concentrate.evals.faithfulness import wilson
 from concentrate.evals.retirement import meeting_day
 from concentrate.evals.scoring import JudgeOutput, bootstrap_ci, judge_request_for
 from concentrate.evals.stats import binom_two_sided_p
@@ -74,6 +75,12 @@ LADDER: tuple[tuple[str, str], ...] = (
     ("notes_only", "granola"),
     ("notes_facts", "notes_only"),
     ("notes_facts_fallback", "notes_facts"),
+)
+# (report key, later system name, earlier system name): what ``summarize_deletion`` pairs.
+Pair = tuple[str, str, str]
+PAIRS: tuple[Pair, ...] = tuple(
+    (f"{later} vs {earlier}", SYSTEM_NAMES[later], SYSTEM_NAMES[earlier])
+    for later, earlier in LADDER
 )
 # ``build_context`` retires meetings with day < as_of - N; N = -1 retires every meeting held on
 # or before the as-of date, including one held that same day (N = 0 would keep its transcript).
@@ -250,9 +257,11 @@ def _rates(rows: list[dict[str, Any]], seed: int) -> dict[str, Any]:
         "n": n,
         "accuracy": sum(correct) / n if n else None,
         "accuracy_ci": list(bootstrap_ci(correct, seed)) if n else None,
+        "accuracy_wilson": list(wilson(round(sum(correct)), n)) if n else None,
         "partial": sum(r["verdict"] == "partially_correct" for r in rows) / n if n else None,
         "confident_error": sum(ce) / n if n else None,
         "confident_error_ci": list(bootstrap_ci(ce, seed)) if n else None,
+        "confident_error_wilson": list(wilson(round(sum(ce)), n)) if n else None,
         # P2-T's definition (metrics.confident_error): not abstained and judged incorrect, with
         # no hedge detection. An upper bound for Granola, which has no abstain flag.
         "confident_error_flag": sum(
@@ -276,9 +285,12 @@ def _rates(rows: list[dict[str, Any]], seed: int) -> dict[str, Any]:
     return out
 
 
-def summarize_deletion(rows: list[dict[str, Any]], seed: int) -> dict[str, Any]:
-    """Per condition: accuracy, confident-error rate (with bootstrap CIs), second-judge
-    agreement, by category and by tag; plus paired wins/losses along :data:`LADDER`."""
+def summarize_deletion(
+    rows: list[dict[str, Any]], seed: int, pairs: Sequence[Pair] = PAIRS
+) -> dict[str, Any]:
+    """Per condition: accuracy, confident-error rate (bootstrap and Wilson CIs), second-judge
+    agreement, by category and by tag; plus paired wins/losses for each of ``pairs``
+    (default: along :data:`LADDER`)."""
     by_sys: dict[str, list[dict[str, Any]]] = {}
     for r in rows:
         by_sys.setdefault(r["system"], []).append(r)
@@ -296,8 +308,8 @@ def summarize_deletion(rows: list[dict[str, Any]], seed: int) -> dict[str, Any]:
             "by_tag": {t: _rates(v, seed) for t, v in sorted(tagged.items())},
         }
     paired: dict[str, Any] = {}
-    for later, earlier in LADDER:
-        a, b = by_sys.get(SYSTEM_NAMES[later]), by_sys.get(SYSTEM_NAMES[earlier])
+    for key, later, earlier in pairs:
+        a, b = by_sys.get(later), by_sys.get(earlier)
         if not a or not b:
             continue
         va = {r["qid"]: r["verdict"] == "correct" for r in a}
@@ -309,7 +321,7 @@ def summarize_deletion(rows: list[dict[str, Any]], seed: int) -> dict[str, Any]:
             for t in tags[q]:
                 groups.setdefault(t, []).append(q)
         cell = {g: _paired(va, vb, qs) for g, qs in groups.items()}
-        paired[f"{later} vs {earlier}"] = {**cell.pop("all"), "by_tag": cell}
+        paired[key] = {**cell.pop("all"), "by_tag": cell}
     return {"conditions": conditions, "paired": paired}
 
 
@@ -364,8 +376,10 @@ def run_deletion_sim(
     split: str,
     meta: dict[str, Any] | None = None,
     spent: Callable[[], float] | None = None,
+    pairs: Sequence[Pair] = PAIRS,
 ) -> dict[str, Any]:
     """``run_slice`` (answer + primary judge), then the second judge, tags and confident-error.
+    ``client`` is the primary judge (each system brings its own answer client).
 
     Writes ``<stamp>.deletion.jsonl`` (PRIVATE, per answer) next to the run_slice files and adds
     the aggregate ``deletion`` summary to the report and its ``.json``."""
@@ -395,7 +409,7 @@ def run_deletion_sim(
         report["meta"]["judge2_judged"] = f"{len(second)}/{len(rows)}"
     annotated = annotate(rows, tags, second)
     report["meta"]["tagged_questions"] = len({r["qid"] for r in annotated if r["tags"]})
-    report["deletion"] = summarize_deletion(annotated, seed)
+    report["deletion"] = summarize_deletion(annotated, seed, pairs)
     jsonl.with_suffix(".deletion.jsonl").write_text(
         "".join(json.dumps(r, default=str) + "\n" for r in annotated)
     )
@@ -528,6 +542,7 @@ def quote_condition(
     split: str,
     granola_answer: Callable[[Any], tuple[str, bool] | None] | None = None,
     shared: set[Path] | None = None,
+    judge: LLMClient | None = None,
 ) -> QuoteLine:
     """Price one condition on ``questions`` (answer calls + primary judge + second judge).
 
@@ -536,7 +551,8 @@ def quote_condition(
     (Granola's), else counted with an empty answer plus the mean recorded answer length.
     Expected output = calibrated mean; high = 90th percentile, and every fallback firing.
     ``shared`` collects the answer requests already priced for an earlier condition of the same
-    run: an identical request (D's first call is C's, byte for byte) is a cache hit by then."""
+    run: an identical request (D's first call is C's, byte for byte) is a cache hit by then.
+    ``judge`` is the primary judge when it is not the answer ``client``."""
     line = QuoteLine(condition, split, len(questions), 0, 0, 0)
     exp = high = 0.0
     model = client.model
@@ -563,7 +579,7 @@ def quote_condition(
             line.fallback_calls_max, line.fallback_in_max = len(seconds), f_in
             exp += cal.fire_rate * _usd(model, f_in, cal.answer_out[0] * len(seconds))
             high += _usd(model, f_in, cal.answer_out[1] * len(seconds))
-    for jclient, attr in ((client, "judge"), (judge2, "judge2")):
+    for jclient, attr in ((judge or client, "judge"), (judge2, "judge2")):
         if jclient is None:
             continue
         texts, pad, cached = [], 0.0, 0

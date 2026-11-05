@@ -144,6 +144,16 @@ def make_root(root: Path) -> Path:
                                   "notes_facts_fallback vs notes_facts")}}},
         },
     )  # fmt: skip
+    ami_cond = {c: conditions["notes_only"] for c in FR.AMI_ROWS}
+    _write(
+        reports / "ami" / "deletion-sim.aggregate.json",
+        {
+            "meta": {"corpus": "ami", "questions": 8, "meetings": 3, "split": "all",
+                     "date": "20260101T000000Z"},
+            "metrics": {"deletion": {"conditions": ami_cond, "paired": {
+                k: pair for k, _, _ in (*FR.AMI_STEPS, (FR.AMI_COMPARE, "", ""))}}},
+        },
+    )  # fmt: skip
     cov = {"windows": [[0.0, 0.9], [15.0, 0.3], [30.0, 0.8]], "coverage": 0.667, "gaps": []}
     ctrl = {"windows": [[0.0, 0.1], [15.0, 0.0], [30.0, 0.0]], "coverage": 0.0, "gaps": []}
     _write(
@@ -176,6 +186,8 @@ def test_renders_every_figure_as_valid_svg(tmp_path: Path) -> None:
     assert b"DEV" in rendered["deletion_sim.svg"]
     for name in ("retention_steps", "answer_types", "question_heatmap"):
         assert b"DEV" in rendered[f"{name}.svg"]
+        assert b"AMI, 3 meetings, 8 questions" in rendered[f"ami_{name}.svg"]
+    assert b"Wispr" in rendered["ami_retention_steps.svg"]  # the notes-only product panel
     assert b"How does Hindsight work?" in rendered["overview.svg"]
     assert b"2 meetings" in rendered["harness_flow.svg"]
     assert b"EN2002b" in rendered["capture_coverage.svg"]
@@ -189,6 +201,27 @@ def test_answer_types_partition_every_answer() -> None:
                       "confident_wrong": 0.125}  # fmt: skip
     assert sum(shares.values()) == pytest.approx(1.0)
     assert [k for k, _n, _c in fs.ANSWER_TYPES] == list(shares)
+
+
+def test_ami_figures_follow_the_data_not_a_fixed_meeting_list(tmp_path: Path) -> None:
+    """The AMI charts read n meetings / questions from the aggregate, draw B' as a side panel
+    (not a rung), and skip it when the run had no Wispr condition."""
+    inp = F.load_inputs(STAMP, make_root(tmp_path))
+    assert inp.ami_deletion is not None
+    agg = json.loads(json.dumps(inp.ami_deletion))
+    agg["meta"].update(meetings=12, questions=140)
+    fig = FR.fig_retention_steps(agg)
+    texts = json.dumps(F.plotted_values(fig))
+    fs.close(fig)
+    assert "AMI, 12 meetings, 140 questions" in texts and " worse\\n" in texts
+    del agg["metrics"]["deletion"]["conditions"]["notes_only_wispr"]
+    fig = FR.fig_retention_steps(agg)
+    assert " worse\\n" not in json.dumps(F.plotted_values(fig))
+    assert len(fig.axes) == 1
+    fs.close(fig)
+    fig = FR.fig_answer_types(agg)
+    assert len(F.plotted_values(fig)["axes"][0]["yticks"]) == len(FR.AMI_LADDER)
+    fs.close(fig)
 
 
 def test_heatmap_greys_out_small_cells(tmp_path: Path) -> None:
