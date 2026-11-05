@@ -2968,6 +2968,125 @@ def ami_stress_audio(
     typer.echo(f"wrote {side.output_wav}\nwrote {out_dir / f'{mid}.{condition}.json'}")
 
 
+AMI_DETECTOR_OUT = Path("evals/reports/ami/detector.json")  # committed: numbers only
+
+
+@ami_app.command("detector")
+def ami_detector(
+    seed: Annotated[int, typer.Option(help="Fault-injection seed.")] = 0,
+    trials: Annotated[int, typer.Option(help="Injected faults per meeting.")] = 40,
+    granola_db: Annotated[
+        Path, typer.Option(help="Synced Granola AMI account (read-only).")
+    ] = Path("data/ami_granola.db"),
+    audio_dir: Annotated[Path, typer.Option(help="AMI audio root.")] = Path("data/ami"),
+    out: Annotated[Path, typer.Option(help="Committed result (numbers only).")] = AMI_DETECTOR_OUT,
+) -> None:
+    """Capture-health detector: speech heard but transcript not growing => alert ($0, no LLM).
+
+    Tunes on DEV meetings only, reports TEST; energy VAD and an oracle VAD (AMI word timings).
+    Granola only: Wispr's synced transcripts carry no real timing (docs/tracks/CAPTURE_HEALTH.md).
+    """
+    import json
+    from datetime import UTC, datetime
+
+    from concentrate.ami import detector as D
+    from concentrate.ami.corpus import load_meeting
+    from concentrate.ami.products import AMI_SET, match_recordings, read_overrides
+    from concentrate.ami.questions import DEV_MEETINGS
+    from concentrate.core.store import read_notes
+
+    pins = read_overrides(AMI_RESULTS / "recording_ids.txt").get("granola")
+    notes = match_recordings(read_notes(granola_db), pins)
+    sigs = {}
+    for mid in AMI_SET:
+        if mid not in notes:
+            typer.echo(f"{mid}: no Granola recording, skipped")
+            continue
+        wav = audio_dir / mid / f"{mid}.Mix-Headset.wav"
+        sigs[mid] = D.load_signals(load_meeting(mid), wav, notes[mid])
+    dev = [s for m, s in sigs.items() if m in DEV_MEETINGS]
+    test = [s for m, s in sigs.items() if m not in DEV_MEETINGS]
+    faults = {m: D.make_faults(s, seed, trials) for m, s in sigs.items()}
+    variants: dict[str, Any] = {}
+    chosen: dict[str, Any] = {}
+    for v in D.VARIANTS:
+        params, rows = D.tune(dev, faults, v)
+        chosen[v] = params
+        variants[v] = {
+            "params": params.model_dump(),
+            "dev": D.score_split(dev, faults, v, params),
+            "test": D.score_split(test, faults, v, params),
+            "test_by_t_not_used_for_selection": D.sensitivity(test, faults, v, params),
+            "dev_grid": rows,
+        }
+        for split in ("dev", "test"):
+            r = variants[v][split]
+            typer.echo(
+                f"{v:<12} {split:<4} T={params.t_s}s min_speech={params.min_speech} "
+                f"margin={params.margin_db}  recall={r['recall']} "
+                f"({r['detected']}/{r['faults_confirmed']})  delay median={r['delay_s_median']}s "
+                f"p90={r['delay_s_p90']}s  false alarms={r['false_alarms']} "
+                f"({r['false_alarms_per_hour']}/h over {r['hours']:.2f} h)"
+            )
+    margin = chosen["energy/start"].margin_db
+    ex_fault = next(
+        (f for s in test for f in faults[s.meeting_id] if f.confirmed and 60 <= f.length <= 180),
+        None,
+    )
+    payload = {
+        "meta": {
+            "git_sha": _git_sha(),
+            "date": datetime.now(UTC).isoformat(timespec="seconds"),
+            "seed": seed,
+            "trials_per_meeting": trials,
+            "fault_length_s": [D.FAULT_MIN_S, D.FAULT_MAX_S],
+            "product": "granola",
+            "product_timing": "transcript block start times ([m:ss], 1 s), one constant shift "
+            "per meeting onto AMI time; growth 'start' = block starts only (recorded), 'span' = "
+            "also each second of a block's estimated speaking time (ASSUMED 2.6 words/s)",
+            "variants": "VAD/growth: energy or oracle VAD; start or span transcript growth",
+            "split": {"dev": [s.meeting_id for s in dev], "test": [s.meeting_id for s in test]},
+            "split_rule": "concentrate.ami.questions.DEV_MEETINGS",
+            "fixed": {
+                "frame_s": D.FRAME_S,
+                "floor_window_s": D.FLOOR_WINDOW_S,
+                "floor_percentile": D.FLOOR_PCTL,
+                "min_dbfs": D.MIN_DBFS,
+                "coverage_window_s": 15.0,
+                "coverage_min_gap_s": 30.0,
+            },
+            "grid": {
+                "t_s": D.GRID_T,
+                "min_speech": D.GRID_MIN_SPEECH,
+                "margin_db": D.GRID_MARGIN_DB,
+            },
+            "selection": f"DEV: false alarms <= {D.FA_BUDGET_PER_H}/h, then max recall, then "
+            "min median delay, then larger T / min_speech / margin",
+            "method": D.METHOD,
+            "corpus": "AMI Meeting Corpus manual annotations 1.6.2 and Mix-Headset audio "
+            "(CC BY 4.0)",
+            "llm": None,
+        },
+        "alignment": {
+            s.meeting_id: {
+                "shift_s": s.shift_s,
+                "blocks_matched": s.matched,
+                "blocks": len(s.blocks),
+            }
+            for s in sigs.values()
+        },
+        "vad_agreement": {
+            "dev": D.vad_agreement(dev, margin or 0.0),
+            "test": D.vad_agreement(test, margin or 0.0),
+        },
+        "variants": variants,
+        "example": (D.example(sigs[ex_fault.meeting_id], ex_fault, chosen) if ex_fault else None),
+    }
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(payload, indent=1) + "\n")
+    typer.echo(f"wrote {out}")
+
+
 # -- anatomy of a wrong fact (docs/method/WRONG_FACTS.md) ----------------------------------
 
 facts_app = typer.Typer(
