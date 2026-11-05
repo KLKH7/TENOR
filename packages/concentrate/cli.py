@@ -2925,12 +2925,18 @@ def _stress_coverage(
 
 @ami_app.command("stress-audio")
 def ami_stress_audio(
-    condition: Annotated[str, typer.Option(help="Stress condition (A1: long silence).")] = "A1",
+    condition: Annotated[
+        str,
+        typer.Option(help="A1: silence past a 15-min no-audio timeout; A1c: 12-min control."),
+    ] = "A1",
     meeting: Annotated[
         str | None,
-        typer.Option(help="AMI meeting ID. Default: the shortest that leaves >= 10 min after."),
+        typer.Option(help="AMI meeting ID. Default: shortest with >= 10 min of speech after."),
     ] = None,
-    silence_min: Annotated[float, typer.Option(help="Minutes of digital silence.")] = 12.0,
+    silence_min: Annotated[
+        float | None,
+        typer.Option(help="Minutes of digital silence. Default: 17 for A1, 12 for A1c."),
+    ] = None,
     at_min: Annotated[
         float | None,
         typer.Option(help="Cut near this minute (AMI time). Default: middle of the speech."),
@@ -2956,13 +2962,14 @@ def ami_stress_audio(
         load_meeting(mid),
         src,
         out_dir,
-        silence_s=silence_min * 60,
+        silence_s=(silence_min or S.CONDITIONS[condition]) * 60,
         at_s=None if at_min is None else at_min * 60,
+        condition=condition,
     )
     m, s = divmod(side.splice_at_s, 60)
     typer.echo(
         f"{mid}: {side.silence_s / 60:g} min of silence at {int(m)}:{s:05.2f} "
-        f"(sample {side.splice_sample}); {side.meeting_after_s / 60:.1f} min of meeting after; "
+        f"(sample {side.splice_sample}); {side.speech_after_s / 60:.1f} min of speech after; "
         f"output {side.output_duration_s / 60:.1f} min"
     )
     typer.echo(f"wrote {side.output_wav}\nwrote {out_dir / f'{mid}.{condition}.json'}")

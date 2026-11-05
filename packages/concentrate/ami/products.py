@@ -36,7 +36,7 @@ log = logging.getLogger(__name__)
 AMI_SET = ("IS1008a", "IS1008b", "IS1008c", "IS1008d", "IB4003", "EN2002b", "ES2006a")
 _TAG = re.compile(r"\bAMI[\s_-]+([A-Z]{2}\d{4}[a-z]?)\b")
 # A stress-condition recording ("AMI ES2006a A1", docs/tracks/CAPTURE.md) is not a baseline one.
-_STRESS = re.compile(r"\bAMI[\s_-]+([A-Z]{2}\d{4}[a-z]?)[\s_-]+(A\d+)\b")
+_STRESS = re.compile(r"\bAMI[\s_-]+([A-Z]{2}\d{4}[a-z]?)[\s_-]+(A\d+[a-z]?)\b")
 
 
 class MeetingWer(BaseModel):

@@ -66,11 +66,17 @@ def test_pick_boundary_takes_the_longest_pause_near_the_target() -> None:
         S.pick_boundary(words, min_after_s=100)
 
 
-def test_default_meeting_is_the_shortest_with_enough_after() -> None:
-    short = _meeting("XX0001a", _words([(0, "a b"), (10, "c d")]), 20)
-    long = _meeting("XX0002a", _words([(0, "a b"), (30, "c d"), (60, "e f")]), 70)
-    assert S.default_meeting({"XX0001a": short, "XX0002a": long}, min_after_s=5) == "XX0001a"
-    assert S.default_meeting({"XX0001a": short, "XX0002a": long}, min_after_s=20) == "XX0002a"
+def test_voiced_counts_speech_not_pauses() -> None:
+    words = _words([(0, "a b"), (10, "c d")])  # 0-0.8, 1-1.8, 10-10.8, 11-11.8
+    assert S.voiced(words) == pytest.approx(3.2) and S.voiced(words, 5) == pytest.approx(1.6)
+
+
+def test_default_meeting_is_the_shortest_with_enough_speech_after() -> None:
+    short = _meeting("XX0001a", _words([(0, "a b"), (10, "c d e f g h")]), 20)
+    long = _meeting("XX0002a", _words([(0, "a b"), (30, "c d e f g h i j k l")]), 70)
+    pair = {"XX0001a": short, "XX0002a": long}
+    assert S.default_meeting(pair, min_after_s=4) == "XX0001a"  # 6 words x 0.8 s after
+    assert S.default_meeting(pair, min_after_s=6) == "XX0002a"  # 10 words x 0.8 s after
 
 
 def test_splice_offsets_and_determinism(tmp_path: Path) -> None:
@@ -87,7 +93,7 @@ def test_splice_offsets_and_determinism(tmp_path: Path) -> None:
     assert np.array_equal(out[:1190], original[:1190])
     assert not out[1190:1690].any()
     assert np.array_equal(out[1690:], original[1190:])
-    assert side.output_duration_s == 45.0 and side.meeting_after_s == 12.8
+    assert side.output_duration_s == 45.0 and side.speech_after_s == 4.0
     again = S.build_a1(m, src, tmp_path / "out2", silence_s=5, min_after_s=0)
     assert again.output_sha256 == side.output_sha256 == S.sha256(Path(side.output_wav))
     assert side.to_ami(5.0) == 5.0 and side.to_ami(13.0) is None and side.to_ami(20.0) == 15.0
@@ -103,7 +109,7 @@ def _stress_meeting() -> tuple[AmiMeeting, S.Sidecar]:
         meeting_id="XX0001a", condition="A1", source_wav="s", source_sha256="0", output_wav="o",
         output_sha256="0", sample_rate=RATE, splice_sample=11000, splice_at_s=110.0,
         silence_s=600.0, boundary=(109.0, 120.0), source_duration_s=240.0,
-        output_duration_s=840.0, meeting_after_s=110.0, rule="test",
+        output_duration_s=840.0, speech_after_s=110.0, rule="test",
     )  # fmt: skip
     return m, side
 
@@ -142,6 +148,8 @@ def test_stress_notes_are_not_baseline_notes(tmp_path: Path) -> None:
     assert list(match_recordings([base, a1])) == ["XX0001a"]
     assert match_stress([base, a1], "XX0001a", "A1") == a1
     assert match_stress([base], "XX0001a", "A1") is None
+    a1c = make_note("n4", "2026-11-07", "AMI XX0001a A1c", [("them", None, "hi")])
+    assert ami_tag(a1c) is None and match_stress([a1, a1c], "XX0001a", "A1c") == a1c
     assert match_stress([base, a1], "XX0001a", "A1", pinned="n1") == base
     with pytest.raises(ValueError):
         match_stress([a1, a1.model_copy(update={"note_id": "n3"})], "XX0001a", "A1")

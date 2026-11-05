@@ -1,13 +1,15 @@
 """Stress audio for the capture track: condition A1, a long digital silence spliced mid-meeting.
 
 A1 asks whether a product's capture resumes when speech returns after a long silence (an
-inactivity timeout would stop it), and whether the user is told. We build the input from an
+inactivity timeout would stop it), and whether the user is told. Granola's help docs (read
+2026-11-05) say transcription stops after 15 minutes without new audio, so A1 inserts 17 min;
+A1c inserts 12 min, below that timeout, as a control. We build the input from an
 AMI headset mix with ``wave`` only:
 
 1. **Where to cut.** At a turn boundary: the longest stretch with no AMI word being spoken
    (all speakers merged, from the forced-alignment timings) within ``SEARCH_S`` of the target
    time. The default target is the middle of the speech; with ``min_after_s`` the cut must also
-   leave at least that much meeting (first word after the cut to last word) to watch capture
+   leave at least that much voiced speech after it (union of word intervals) to watch capture
    resume. The cut is snapped to a sample.
 2. **What to insert.** ``silence_s`` of digital zeros (exact silence, not room tone).
 3. **A sidecar JSON** records the exact offsets and checksums, so scoring maps the stressed
@@ -31,8 +33,10 @@ from concentrate.ami import coverage as C
 from concentrate.ami.corpus import AmiMeeting, Word
 
 SEARCH_S = 60.0  # how far from the target time to look for a turn boundary
-MIN_AFTER_S = 600.0  # A1 default: at least 10 min of meeting after the cut
-CONDITIONS = ("A1",)
+MIN_AFTER_S = 600.0  # A1 default: at least 10 min of speech after the cut
+# condition -> default minutes of silence: A1 crosses a documented 15-min no-audio timeout,
+# A1c (control) stays below it.
+CONDITIONS = {"A1": 17.0, "A1c": 12.0}
 
 
 class Sidecar(BaseModel):
@@ -53,7 +57,7 @@ class Sidecar(BaseModel):
     boundary: tuple[float, float]  # the no-speech stretch the cut sits in (AMI time)
     source_duration_s: float
     output_duration_s: float
-    meeting_after_s: float  # first word after the cut to the last word (AMI time)
+    speech_after_s: float  # voiced time after the cut: union of AMI word intervals
     rule: str
 
     def to_ami(self, t: float) -> float | None:
@@ -80,6 +84,15 @@ def silences(words: Sequence[Word]) -> list[tuple[float, float]]:
     return out
 
 
+def voiced(words: Sequence[Word], since: float = 0.0) -> float:
+    """Seconds during which at least one word starting at or after ``since`` is spoken."""
+    later = sorted((w for w in words if w.start >= since), key=lambda w: w.start)
+    if not later:
+        return 0.0
+    gaps = sum(b - a for a, b in silences(later))
+    return max(w.end for w in later) - later[0].start - gaps
+
+
 def pick_boundary(
     words: Sequence[Word],
     at_s: float | None = None,
@@ -90,8 +103,8 @@ def pick_boundary(
     """The no-speech stretch to cut in: the longest within ``search_s`` of the target.
 
     Target: ``at_s``, or the middle of the speech (first word start to last word end). Only
-    stretches that leave ``min_after_s`` of meeting after them qualify. Ties go to the earlier
-    stretch. Raises ValueError if none qualifies.
+    stretches with at least ``min_after_s`` of speech (:func:`voiced`) after them qualify.
+    Ties go to the earlier stretch. Raises ValueError if none qualifies.
     """
     spoken = sorted(words, key=lambda w: w.start)
     if not spoken:
@@ -101,12 +114,12 @@ def pick_boundary(
     ok = [
         (a, b)
         for a, b in silences(spoken)
-        if abs((a + b) / 2 - target) <= search_s and last - b >= min_after_s
+        if abs((a + b) / 2 - target) <= search_s and voiced(spoken, b) >= min_after_s
     ]
     if not ok:
         raise ValueError(
             f"no turn boundary within {search_s:.0f} s of {target:.0f} s leaving "
-            f"{min_after_s:.0f} s of meeting after it"
+            f"{min_after_s:.0f} s of speech after it"
         )
     return max(ok, key=lambda s: (round(s[1] - s[0], 3), -s[0]))
 
@@ -157,25 +170,25 @@ def build_a1(
     silence_s: float,
     at_s: float | None = None,
     min_after_s: float = MIN_AFTER_S,
+    condition: str = "A1",
 ) -> Sidecar:
-    """Build the A1 WAV and its sidecar (``<id>.A1.wav`` / ``<id>.A1.json`` in ``out_dir``)."""
+    """Build a silence-splice WAV and its sidecar (``<id>.<condition>.wav`` / ``.json``)."""
     words = meeting.spoken()
     a, b = pick_boundary(words, at_s, min_after_s=0.0 if at_s is not None else min_after_s)
     with wave.open(str(src), "rb") as r:
         rate, nframes = r.getframerate(), r.getnframes()
     sample = round((a + b) / 2 * rate)
     n_silence = round(silence_s * rate)
-    dst = out_dir / f"{meeting.meeting_id}.A1.wav"
+    dst = out_dir / f"{meeting.meeting_id}.{condition}.wav"
     splice_silence(src, dst, sample, n_silence)
-    after = [w for w in words if w.start >= sample / rate]
     rule = (
         f"cut at the middle of the longest no-speech stretch within {SEARCH_S:.0f} s of "
         + (f"{at_s:.0f} s" if at_s is not None else "the middle of the speech")
-        + (f", leaving >= {min_after_s:.0f} s of meeting after it" if at_s is None else "")
+        + (f", leaving >= {min_after_s:.0f} s of speech after it" if at_s is None else "")
     )
     side = Sidecar(
         meeting_id=meeting.meeting_id,
-        condition="A1",
+        condition=condition,
         source_wav=str(src),
         source_sha256=sha256(src),
         output_wav=str(dst),
@@ -187,10 +200,11 @@ def build_a1(
         boundary=(round(a, 3), round(b, 3)),
         source_duration_s=nframes / rate,
         output_duration_s=(nframes + n_silence) / rate,
-        meeting_after_s=round(max(w.end for w in after) - after[0].start, 3) if after else 0.0,
+        speech_after_s=round(voiced(words, sample / rate), 3),
         rule=rule,
     )
-    (out_dir / f"{meeting.meeting_id}.A1.json").write_text(side.model_dump_json(indent=1) + "\n")
+    sidecar = out_dir / f"{meeting.meeting_id}.{condition}.json"
+    sidecar.write_text(side.model_dump_json(indent=1) + "\n")
     return side
 
 
