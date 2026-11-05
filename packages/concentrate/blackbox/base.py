@@ -18,7 +18,18 @@ from typing import Any, Protocol, runtime_checkable
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from concentrate.sources.allowlist import AllowlistCaller, ToolNotAllowed
 from concentrate.sources.granola_mcp import McpCaller
+
+__all__ = [
+    "AllowlistCaller",
+    "McpProduct",
+    "Product",
+    "ProductAnswer",
+    "ToolInfo",
+    "ToolNotAllowed",
+    "preflight",
+]
 
 
 class ProductAnswer(BaseModel):
@@ -44,26 +55,6 @@ class Product(Protocol):
     def ask(self, question: str) -> ProductAnswer:
         """Ask one question about the user's meetings."""
         ...
-
-
-class ToolNotAllowed(PermissionError):
-    """Raised before a call is sent when the tool is not on the product's read-only allowlist."""
-
-
-class AllowlistCaller:
-    """Wraps an ``McpCaller``; refuses any tool outside ``allowed``."""
-
-    def __init__(self, inner: McpCaller, allowed: frozenset[str], product: str = "product") -> None:
-        self._inner = inner
-        self.allowed = allowed
-        self.product = product
-
-    def call(self, tool: str, arguments: dict[str, Any]) -> str:
-        if tool not in self.allowed:
-            raise ToolNotAllowed(
-                f"{tool!r} is not on {self.product}'s read-only allowlist; refusing to call it"
-            )
-        return self._inner.call(tool, arguments)
 
 
 class ToolInfo(BaseModel):

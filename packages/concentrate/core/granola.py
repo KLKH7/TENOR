@@ -182,3 +182,18 @@ class McpNoteSummary(NoteSummary):
 class McpNote(Note):
     id: McpId
     folder_membership: list[McpFolder]  # type: ignore[assignment]
+
+
+# -- Wispr Flow variants ------------------------------------------------------------------------
+# Wispr Flow's MCP (a second product, read through the same Source protocol) uses its own opaque
+# meeting IDs. Same fields and constraints as the API models otherwise, so normalization and
+# storage are shared. See docs/engineering/SCHEMA_NOTES.md ("Wispr Flow MCP").
+
+
+class WisprNoteSummary(NoteSummary):
+    id: str
+
+
+class WisprNote(Note):
+    id: str
+    folder_membership: list[McpFolder]  # type: ignore[assignment]

@@ -483,3 +483,14 @@ Write-up: [`docs/benchmark/NOTES_FAITHFULNESS.md`](../benchmark/NOTES_FAITHFULNE
 - **Finding: a generator bug.** 2 synthetic summary bullets drop the negation of a hedged opinion ("not convinced X is the blocker" becomes "X is the blocker"). Follow-up in `synth/`; fixtures not touched.
 - **Bugs fixed during the run:** the aggregate key `not_supported` matched the note-ID pattern (`not_…`) of the committable check (renamed `ungrounded`); the name pre-check flagged hyphenated compounds; ordinals ("14th") weren't read as numbers.
 - **Open:** the owner's hand verification of the 29-claim private spot-check list is the ground truth and has not happened yet.
+
+## Wispr Flow as the second product (2026-11-04)
+
+Built with fakes only; nothing has run live and no results exist. Write-up: [PRODUCTS.md](../benchmark/PRODUCTS.md).
+
+- **Same `Source` protocol, new wire variant.** `WisprMCPSource` maps Wispr's MCP onto the Granola wire models. `WisprNote` is the API `Note` with free-form IDs, stored as `raw_format = 'wispr'`. Sync, storage and every downstream reader work unchanged. The cost is a Granola-shaped vocabulary: Wispr's generated notes body lands in `private_notes_markdown`, and Me/Them is inferred from speaker names because Wispr has no capture channel. Both are ASSUMED rows in SCHEMA_NOTES.md.
+- **Lenient parsing, every guess listed.** Tool names and arguments are verified from the published schemas. Response key names, the continuation-marker text and the transcript line format were not observed, so each is a single tolerant function (`split_range`, `parse_transcript`), easy to fix after the first real sync. We deliberately did not call the connected Wispr tools to look: that would have put real meetings in a session transcript.
+- **Allowlist moved to `concentrate.sources.allowlist`.** Sources now use it too, not only black-box products. `blackbox.base` re-exports it.
+- **Pairing** is a hard ±10-minute gate plus a weighted score (transcript 3-gram containment 0.6, attendees 0.2, title 0.2), assigned greedily one-to-one, with manual overrides. We chose a transparent, deterministic heuristic over a learned matcher because a few dozen pairs are checked by hand anyway.
+- **The outside agent** fixes model, prompt, budget and schema, and varies only the product's published read tools. Trade-off: tool *design* (call granularity, transcript search) is part of what's measured, by intent. Granola's own agent stays an extra row.
+- **Open:** whether Wispr accepts dynamically registered OAuth clients (if not, the live sync can't sign in); Wispr has no updated-since filter (every sync re-lists, and edits may be missed without a modified time); wiring the outside agent into `real-kit run`.

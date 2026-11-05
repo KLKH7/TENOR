@@ -7,6 +7,8 @@ Hindsight has two tracks (see [PLAN.md](../PLAN.md), section 0.5):
 
 The [agent-interface quality track](AGENT_INTERFACE.md) scores the same adapters' payloads for what an external agent receives: the four answer types, evidence granularity, stability and latency.
 
+For comparing two products on the *same* meetings (Granola and Wispr Flow), including the standard outside agent for products without a QA tool, see [PRODUCTS.md](PRODUCTS.md).
+
 ## Why it exists
 
 External agents (Claude, ChatGPT, Cursor) reach a meeting product only through its MCP. They see an answer, maybe some citations, and a wait. So asking a product questions through that same MCP measures exactly what those agents experience: answer quality, citations, latency and failure modes. It makes no claims about how the product works inside.

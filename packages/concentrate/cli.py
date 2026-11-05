@@ -31,6 +31,7 @@ class SourceKind(StrEnum):
     fixtures = "fixtures"
     granola = "granola"  # public REST API (Business/Enterprise; GRANOLA_API_KEY)
     granola_mcp = "granola-mcp"  # official MCP server (any plan; browser sign-in)
+    wispr_mcp = "wispr-mcp"  # Wispr Flow's official MCP (browser sign-in; WISPR_MCP_URL)
 
 
 def _db_path(db: Path | None) -> Path:
@@ -58,7 +59,9 @@ def sync(
     db: Annotated[Path | None, typer.Option(help="SQLite path (env CONCENTRATE_DB).")] = None,
     full: Annotated[bool, typer.Option(help="Ignore the watermark and re-list all notes.")] = False,
 ) -> None:
-    """Pull notes from Granola (API, MCP) or fixtures and normalize them into SQLite."""
+    """Pull notes from Granola (API, MCP), Wispr Flow (MCP) or fixtures into SQLite.
+
+    Real meetings belong under gitignored paths, e.g. ``--db data/real_wispr.db``."""
     with ExitStack() as stack:
         src: Source
         if source is SourceKind.fixtures:
@@ -67,6 +70,11 @@ def sync(
             api = GranolaAPISource()
             stack.callback(api.close)
             src = api
+        elif source is SourceKind.wispr_mcp:
+            from concentrate.sources.mcp_transport import wispr_caller
+            from concentrate.sources.wispr_mcp import WisprMCPSource
+
+            src = WisprMCPSource(stack.enter_context(wispr_caller()))
         else:
             from concentrate.sources.mcp_transport import LiveMcpCaller
 
@@ -2439,3 +2447,46 @@ def notes_faithfulness_cmd(
     agg_path.write_text(_json.dumps(report, indent=2) + "\n")
     typer.echo(_json.dumps(agg["overall"]["ungrounded"]))
     typer.echo(f"spent ${spent:.4f} · aggregate {agg_path} · per-claim {claims_dir}")
+# -- cross-product pairing (docs/benchmark/PRODUCTS.md) ----------------------------------------
+
+PAIR_OVERRIDES = Path("data/real/pairs.override.json")
+PAIRS_OUT = Path("data/real/pairs.json")
+
+
+@app.command("pair")
+def pair_cmd(
+    granola_db: Annotated[Path, typer.Option(help="Granola sync (product A).")] = Path(
+        "data/real.db"
+    ),
+    wispr_db: Annotated[Path, typer.Option(help="Wispr Flow sync (product B).")] = Path(
+        "data/real_wispr.db"
+    ),
+    overrides: Annotated[Path, typer.Option(help="Manual pairs / never-pairs.")] = PAIR_OVERRIDES,
+    out: Annotated[Path, typer.Option(help="Where to write the pairing (private).")] = PAIRS_OUT,
+    window_min: Annotated[float, typer.Option(help="Start-time window, ± minutes.")] = 10.0,
+) -> None:
+    """Pair meetings recorded by both Granola and Wispr Flow. Prints IDs and scores only."""
+    from datetime import timedelta
+
+    from concentrate.blackbox.pairing import Overrides, pair_meetings
+
+    for db in (granola_db, wispr_db):
+        if not db.exists():
+            raise typer.BadParameter(f"{db} not found: sync it first (see PRODUCTS.md)")
+    stores = [NoteStore(granola_db), NoteStore(wispr_db)]
+    try:
+        a, b = (list(s.iter_notes()) for s in stores)
+    finally:
+        for s in stores:
+            s.close()
+    result = pair_meetings(
+        a, b, window=timedelta(minutes=window_min), overrides=Overrides.load(overrides)
+    )
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(result.model_dump_json(indent=1) + "\n")
+    for p in result.pairs:
+        typer.echo(f"{p.a}  {p.b}  score={p.score:.2f}  {p.method}")
+    typer.echo(
+        f"paired={len(result.pairs)} unpaired_granola={len(result.unpaired_a)} "
+        f"unpaired_wispr={len(result.unpaired_b)} · {out}"
+    )

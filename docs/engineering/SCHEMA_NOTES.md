@@ -179,6 +179,63 @@ How `GranolaMCPSource` turns MCP tool output into our wire models (`McpNote`/`Mc
 | `deleted_at` | always null (the MCP doesn't return deleted notes) | VERIFIED (documented behaviour) |
 | Rate limit | paced at 100 req/min, burst 10; `retry_after_seconds` honoured on rate-limit errors | VERIFIED (docs: ~100/min); error format ASSUMED |
 
+## Wispr Flow MCP (`concentrate.sources.wispr_mcp`)
+
+Wispr Flow is the second real product (see [PRODUCTS.md](../benchmark/PRODUCTS.md)). Sources, read **2026-11-04**:
+
+- [wispr-help] Wispr help centre, "Connect Claude, ChatGPT or another MCP client to Wispr Flow": https://docs.wisprflow.ai/articles/9551372685-connect-an-mcp-client-to-wispr-flow-remote-mcp-server
+- [wispr-search] help-centre pages surfaced by web search (Cursor/VS Code config examples) that give the server URL
+- [wispr-tools] the server's published tool list (names, descriptions, input schemas), read through a connected client. **No tool was called and no meeting was read** to write this section.
+
+### Connection
+
+| Item | Value | Status |
+|---|---|---|
+| Server URL | `https://api.wisprflow.ai/connect/mcp`. The page we read verbatim does not print it: it says to copy it from Wispr Flow → Settings → MCP → "All other apps", exactly as shown, no trailing slash. The URL comes from other help-centre pages via search | ASSUMED [wispr-search]; overridable with `WISPR_MCP_URL` |
+| Transport | Streamable HTTP. The help page says only "remote MCP server" | ASSUMED |
+| Auth | Browser sign-in and authorization; "no API key or token"; expired access prompts reconnection; SSO sign-in must finish within 5 minutes | VERIFIED [wispr-help] |
+| OAuth with dynamic client registration and a loopback redirect (`http://127.0.0.1:33418/callback`) | Not documented. We reuse Granola's OAuth client (`mcp_transport.LiveMcpCaller`, its own token file `~/.config/concentrate/wispr-mcp.json`). If Wispr only allows pre-registered clients (Claude, ChatGPT, Cursor), sign-in fails at registration | ASSUMED |
+| Read-only | Clients "cannot create, edit, share or delete" content or change sharing; no dictation or Notetaker chat history | VERIFIED [wispr-help] |
+| Requirements | Mac/Windows account with Notetaker and MCP access; Cloud Sync may need to be on; a HIPAA BAA or an org policy turns MCP off | VERIFIED [wispr-help] |
+| Rate limit | No numbers. "Too many requests": wait about a minute and retry. We pace at 60/min (burst 5) and wait 60 s on that error | VERIFIED (behaviour) / ASSUMED (our pacing) |
+| Timestamps | "Every timestamp in the response is UTC (ISO 8601, ending in 'Z')" | VERIFIED [wispr-tools] |
+
+### Tools (all read; VERIFIED [wispr-tools])
+
+`search_meetings`, `get_meeting`, `get_meeting_participants_enriched`, `list_folders`, `list_folder_meetings`, `list_meeting_series`, `get_meeting_by_calendar_id`, `search_calendar_events`, `get_calendar_event`, `list_upcoming_meetings`, `get_upcoming_meeting`, `get_scratchpad_note`, `search_scratchpad_notes`, `resolve_share_link`, `resolve_calendar_link`. There is **no question-answering agent tool**. The source allowlists only the first three (`wispr_mcp.SOURCE_TOOLS`).
+
+| Tool / argument | Behaviour | Status |
+|---|---|---|
+| `search_meetings` | `query` (titles, summary, owned notes, speaker names; **not transcripts**), `since`/`until` (calendar start, else creation; half-open), `attendee_emails` + `attendee_match`, `contact_ids`, `field`, `limit` (default 25, max 200), `cursor`. Newest first; `has_more` + `next_cursor`; capped at 1000 results per query (`truncated`) | VERIFIED [wispr-tools] |
+| `search_meetings` rows | id, title, excerpt, `finalized`, `has_transcript`, up to 5 attendees, start/end, `share_link`, `shared`, `owner.name`, `folders` | VERIFIED (field list); exact key names ASSUMED |
+| `get_meeting` | `meeting_id`; `view_content` and `view_transcript` `{start_char, char_limit}` (default 12,000, max 40,000). Content: bounded markdown notes, first range by default. Summary: complete, with a next-steps section. Attendees without emails. Transcript: bounded **plaintext**, only when `view_transcript` is passed. Truncated ranges carry a continuation offset "in the appended marker" | VERIFIED [wispr-tools] |
+| `get_meeting_participants_enriched` | Owned meetings only. The user's own name/email/domain, plus every participant with name, `contact_id`, `emails`, spoke, organizer, `role` (self, organizer, attendee, speaker-only), relationship | VERIFIED [wispr-tools]; key names ASSUMED |
+| Updated-since filter | None. Every sync re-lists everything; unchanged rows are skipped on `updated_at` | VERIFIED (no such argument) |
+| Shared meetings | Summary and permitted transcript only; owner's private notes withheld. We skip `shared=true` rows by default | VERIFIED [wispr-tools] |
+
+### Mapping to our wire models (`WisprNote`, `WisprNoteSummary`: the API models with free-form IDs, `raw_format = 'wispr'`)
+
+| Wire field | From Wispr | Status |
+|---|---|---|
+| Response encoding | JSON objects; a `{"meeting": {...}}` wrapper is unwrapped; list key `meetings` (or `results`/`items`/`data`) | ASSUMED (not yet observed) |
+| `id` | meeting id, verbatim | VERIFIED (opaque string) |
+| `created_at` | meeting start (`start`/`start_time`/`started_at`/...). Wispr exposes no creation time we know of | ASSUMED |
+| `updated_at` | `updated_at`/`modified_at`, else end, else start. Without a real modified time, edits to a meeting after its first sync are missed; run `sync --full` to re-read | ASSUMED |
+| `owner` | `get_meeting_participants_enriched` top-level user; else `owner.name` with email `""` | ASSUMED |
+| `attendees` | enriched participants except `role: self`, first email (or `""`); else `get_meeting` attendee names with email `""`. The `attendees` table keys on (note, email), so nameless-email rows collapse there; `raw_json` keeps them all | ASSUMED |
+| `calendar_event` | synthesized when a start time exists: title, invitees = attendee emails, organiser = participant with `organizer: true`, start/end. `calendar_event_id` null | ASSUMED |
+| `summary_markdown` / `summary_text` | `summary` (the Flow Summary) | VERIFIED field; ASSUMED key name |
+| `private_notes_markdown` | `content`, all ranges concatenated. **Not typed notes**: Wispr's `content` is its markdown notes body, which its tool text calls "auto-generated" | ASSUMED |
+| `folder_membership` | meeting `folders` `[{id, name}]` | VERIFIED shape [wispr-tools] |
+| Not finalized | `finalized: false` → `NoteNotReady` (retried on the next sync) | ASSUMED |
+| Continuation offset | a field (`next_start_char`/`next_offset`/`continuation_offset`) or a bracketed marker at the end of the range naming `start_char` and a number, e.g. `[truncated: continue with start_char=40000]` | ASSUMED (marker text not observed) |
+| Transcript line format | `Name: text`, `[mm:ss] Name: text`, `mm:ss Name: text`, `Name (mm:ss): text`; a line without a speaker continues the previous turn (or is its own turn when no speaker was seen yet). Speaker names can be user-corrected; on shared meetings, contact-linked speakers are unnamed ("Speaker 1") [wispr-help] | ASSUMED (format not observed) |
+| Speaker → channel | Wispr has **no capture channel**. A turn whose speaker is the account holder (enriched `user.name` or `role: self`) → `microphone` (Me); every other turn → `speaker` (Them). `Speaker N` labels → `diarization_label` | ASSUMED |
+| Utterance times | `mm:ss` offsets are taken from the meeting start. Without offsets, start times are spread across [start, end] by character share: **synthetic but ordered**. End = next start, capped by a words-per-second estimate | ASSUMED |
+| `deleted_at` | always null; deleted meetings and transcripts are simply unavailable [wispr-help] | ASSUMED |
+
+When Kian first syncs, check the ASSUMED rows above against real responses (without printing them) and update this table: the parser is lenient, but a wrong guess silently drops data (e.g. no transcript turns, or one giant turn).
+
 ## Fixture format
 
 `data/fixtures/<set>/notes/<note_id>.json` is the exact 200 body of `GET /v1/notes/{id}?include=transcript`. `folders.json` is the exact 200 body of `GET /v1/folders` (one page). `tests/test_contract.py` checks each file round-trips byte-for-byte (as JSON values) through the same models used for live parsing.
