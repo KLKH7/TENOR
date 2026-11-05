@@ -78,6 +78,10 @@ class LLMTruncated(LLMError):
     """Output hit ``max_tokens``; the JSON is incomplete."""
 
 
+class BudgetExceeded(LLMError):
+    """A live call would take this run past its approved spend cap (``max_usd``)."""
+
+
 # Prompt caching: reads cost $0.20/MTok on the current Opus and Sonnet (model table); writes
 # cost 1.25x the input price (5-minute TTL).
 CACHE_READ_PER_MTOK: dict[str, float] = {"claude-opus-5-5": 0.20, "claude-sonnet-5-5": 0.20}
@@ -264,12 +268,29 @@ class LLMClient:
         cache_dir: Path | None = None,
         ledger: Ledger | None = None,
         offline: bool = False,
+        max_usd: float | None = None,
     ) -> None:
         self.model = model or os.environ.get("CONCENTRATE_MODEL") or DEFAULT_MODEL
         self._backend = backend
         self._cache_dir = cache_dir or Path(os.environ.get("CONCENTRATE_CACHE", "data/cache/llm"))
         self.ledger = ledger or Ledger()
         self.offline = offline  # cache-only: raise instead of calling the API on a miss
+        # Hard spend cap for this process: set it to the amount Kian approved. A live call is
+        # refused once spend reaches it, so a run can overshoot by at most one call; batches are
+        # checked against a worst-case estimate before they are submitted.
+        env_cap = os.environ.get("CONCENTRATE_MAX_USD")
+        self.max_usd = max_usd if max_usd is not None else (float(env_cap) if env_cap else None)
+
+    def check_budget(self, next_usd: float = 0.0) -> None:
+        """Raise :class:`BudgetExceeded` if spending ``next_usd`` more would pass ``max_usd``."""
+        if self.max_usd is None:
+            return
+        spent = self.ledger.spent_usd()
+        if spent >= self.max_usd or spent + next_usd > self.max_usd:
+            raise BudgetExceeded(
+                f"spend cap ${self.max_usd:.2f} reached: spent ${spent:.4f}, "
+                f"next would add ~${next_usd:.4f}"
+            )
 
     @property
     def cache_dir(self) -> Path:
@@ -315,6 +336,7 @@ class LLMClient:
         else:
             if self.offline:
                 raise LLMError(f"cache miss in offline mode for {req.prompt_id} ({key[:12]})")
+            self.check_budget()
             if self._backend is None:
                 self._backend = AnthropicBackend()
             completion = self._backend.complete(req, self.model)
@@ -494,6 +516,7 @@ def run_turn(
     else:
         if client.offline:
             raise LLMError(f"cache miss in offline mode for {request.prompt_id} ({key[:12]})")
+        client.check_budget()
         if backend is None:
             backend = _SdkToolBackend(anthropic_client())
         completion = backend.turn(request, client.model)
@@ -690,6 +713,14 @@ class _Item:
     write: Callable[[dict[str, Any]], None]  # write the cache entry from a usable Message
 
 
+def _worst_case_usd(model: str, params: dict[str, Any]) -> float:
+    """Upper-bound price of one batch item: estimated input, full ``max_tokens`` output."""
+    text = json.dumps(
+        {k: params.get(k) for k in ("system", "messages", "tools")}, ensure_ascii=False
+    )
+    return cost_usd(model, estimate_tokens(text), int(params.get("max_tokens", 0)), batch=True)
+
+
 def _chunks(items: list[_Item]) -> list[list[_Item]]:
     out: list[list[_Item]] = [[]]
     size = 0
@@ -718,6 +749,7 @@ def _run_batch(
     for it in items:
         if not _CUSTOM_ID.match(it.key):
             raise ValueError(f"cache key {it.key!r} is not a valid batch custom_id")
+    client.check_budget(sum(_worst_case_usd(client.model, it.params) for it in items))
     backend = backend or AnthropicBatchBackend()
     by_id = {it.key: it for it in items}
     start = time.perf_counter()

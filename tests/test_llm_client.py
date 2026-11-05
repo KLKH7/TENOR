@@ -81,3 +81,48 @@ def test_unknown_model_pricing_is_an_error() -> None:
 def test_default_model_comes_from_env(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     monkeypatch.setenv("CONCENTRATE_MODEL", "claude-sonnet-5-5")
     assert LLMClient(FakeBackend(), cache_dir=tmp_path).model == "claude-sonnet-5-5"
+
+
+def test_spend_cap_stops_live_calls_but_not_cache_hits(tmp_path: Path) -> None:
+    from concentrate.llm.client import BudgetExceeded
+
+    one_call = cost_usd("claude-sonnet-5-5", 1000, 500)  # 1000 in, 500 out per fake call
+    backend = FakeBackend()
+    client = LLMClient(
+        backend, model="claude-sonnet-5-5", cache_dir=tmp_path, max_usd=one_call * 2.5
+    )
+    client.structured(_req("a"), Out)
+    client.structured(_req("b"), Out)
+    client.structured(_req("c"), Out)  # spent 2 calls < cap: allowed, overshoots by one call
+    with pytest.raises(BudgetExceeded):
+        client.structured(_req("d"), Out)
+    assert backend.calls == 3
+    assert client.structured(_req("a"), Out).answer == "hi"  # cache hits stay free and allowed
+
+
+def test_spend_cap_from_env(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    from concentrate.llm.client import BudgetExceeded
+
+    monkeypatch.setenv("CONCENTRATE_MAX_USD", "0")
+    client = LLMClient(FakeBackend(), model="claude-sonnet-5-5", cache_dir=tmp_path)
+    with pytest.raises(BudgetExceeded):
+        client.structured(_req(), Out)
+
+
+def test_batch_refused_before_submit_when_worst_case_exceeds_cap(tmp_path: Path) -> None:
+    from concentrate.llm.client import BudgetExceeded, prefetch_structured
+
+    class NeverSubmit:
+        def create(self, requests: list[dict[str, object]]) -> str:
+            raise AssertionError("batch must not be submitted")
+
+        def retrieve(self, batch_id: str) -> str:
+            raise AssertionError
+
+        def results(self, batch_id: str) -> list[object]:
+            raise AssertionError
+
+    client = LLMClient(model="claude-sonnet-5-5", cache_dir=tmp_path, max_usd=0.0001)
+    reqs = [_req(f"q{i} " * 200) for i in range(50)]
+    with pytest.raises(BudgetExceeded):
+        prefetch_structured(client, reqs, NeverSubmit())  # type: ignore[arg-type]

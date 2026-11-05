@@ -23,6 +23,11 @@ transcript retrieval". The audience is Granola's engineering team: rigour and ho
   `docs/engineering/DESIGN.md` and the README, not hidden. Every eval result records git SHA, model, prompt
   versions, seed, date.
 - **Budget.** Before any eval run estimated > $2 of LLM spend, print the estimate and ask the user.
+  **Sandbox first:** every paid run starts with a pilot of a few items (e.g. 3 questions × 2
+  conditions) under a tiny cap. Check the outputs are sane and take the real per-call cost from the
+  pilot's ledger, extrapolate with a 1.5× margin, then ask. Every paid run sets a hard cap equal
+  to the approved amount (`LLMClient(max_usd=...)` or `CONCENTRATE_MAX_USD`); the client refuses
+  live calls past it and refuses batches whose worst case would pass it.
 
 ## Code
 - Python 3.11, `uv`. Run: `uv run pytest`, `uv run ruff check .`, `uv run ruff format .`,
