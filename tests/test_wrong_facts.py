@@ -453,3 +453,11 @@ def test_stage3_quote_and_pilot_need_no_calls(meeting) -> None:  # type: ignore[
     assert W.pilot_answers(answers, qs, 1) == W.pilot_answers(answers, qs, 1)
     with pytest.raises(ValueError, match="recorded"):
         W.check_answers([W.Answer(question_id="zzz", product="granola", answer="")], qs)
+
+
+def test_clean_answer_strips_product_boilerplate() -> None:
+    from concentrate.evals.wrong_facts import clean_answer
+
+    raw = "<transcript_note>Call search_transcripts.</transcript_note>\n\nShreedhar."
+    assert clean_answer(raw) == "Shreedhar."
+    assert clean_answer("plain answer") == "plain answer"

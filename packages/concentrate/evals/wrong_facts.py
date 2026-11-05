@@ -37,6 +37,7 @@ Everything here is pure or goes through :class:`concentrate.llm.client.LLMClient
 
 from __future__ import annotations
 
+import functools
 import json
 import random
 import re
@@ -462,6 +463,63 @@ def attribute(verdict: str, transcript: bool | None, notes: bool | None) -> Stag
     return "answering" if notes else "notes_or_answering"
 
 
+_ROLE = {
+    "PM": "Project Manager",
+    "UI": "User Interface Designer",
+    "ID": "Industrial Designer",
+    "ME": "Marketing Expert",
+}
+_BOILERPLATE = re.compile(r"<transcript_note>.*?</transcript_note>", re.S)
+
+
+@functools.lru_cache(maxsize=1)
+def _spoken() -> dict[str, str]:
+    from concentrate.ami.corpus import load_meeting
+    from concentrate.ami.facts import spoken_names
+    from concentrate.ami.products import AMI_SET
+
+    return spoken_names(load_meeting(m) for m in AMI_SET)
+
+
+def roster(meeting_ids: Sequence[str]) -> str:
+    """Who is who in AMI: role -> the name the person introduced themselves by.
+
+    AMI gold answers name people by role ("the Project Manager"); products name them as heard
+    ("Shreedhar"). The judge gets this roster so a correct name is not marked wrong. Empty
+    when AMI has no roles or self-introductions for the meeting.
+    """
+    from concentrate.ami.corpus import load_meeting
+
+    try:
+        names = _spoken()
+        speakers = load_meeting(meeting_ids[0]).speakers
+    except (KeyError, OSError):  # not an AMI meeting, or the annotations zip isn't present
+        return ""
+    parts: list[str] = []
+    for s in speakers:
+        role = _ROLE.get(s.role or "")
+        name = names.get(s.participant)
+        if role and name:
+            parts.append(f"{role} = {name}")
+    if not parts:
+        return ""
+    return (
+        "Speaker roster (from the meeting's own introductions; products may spell names "
+        "differently, so treat close spellings as the same person): " + "; ".join(parts) + "."
+    )
+
+
+def judge_gold(q: AmiQuestion) -> str:
+    """The gold answer plus the speaker roster, for the judge."""
+    r = roster(q.meetings)
+    return f"{q.gold_answer}\n\n{r}" if r else q.gold_answer
+
+
+def clean_answer(answer: str) -> str:
+    """Drop product boilerplate that is not part of the answer (Granola's <transcript_note>)."""
+    return _BOILERPLATE.sub("", answer).strip()
+
+
 def run_stage3(
     answers: Sequence[Answer],
     qs: Mapping[str, AmiQuestion],
@@ -477,7 +535,9 @@ def run_stage3(
     for a in answers:
         q = qs[a.question_id]
         v = judge.structured(
-            judge_request_for(q.question, q.gold_answer, q.unanswerable, a.answer, False),
+            judge_request_for(
+                q.question, judge_gold(q), q.unanswerable, clean_answer(a.answer), False
+            ),
             JudgeOutput,
         ).verdict
         tc: TranscriptCheck | None = None
@@ -527,7 +587,9 @@ def quote_stage3(
     check_worst = 0.0
     for a in answers:
         q = qs[a.question_id]
-        req = judge_request_for(q.question, q.gold_answer, q.unanswerable, a.answer, False)
+        req = judge_request_for(
+            q.question, judge_gold(q), q.unanswerable, clean_answer(a.answer), False
+        )
         j_in += estimate_tokens(system + req.user)
         j_out += JUDGE_OUT_TOKENS
         md = ev.notes(q, a.product)
