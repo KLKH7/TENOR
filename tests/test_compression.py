@@ -3,6 +3,7 @@ no corpus files except the last test, which skips without the AMI zip)."""
 
 from __future__ import annotations
 
+import dataclasses
 import json
 import re
 from pathlib import Path
@@ -27,7 +28,14 @@ from concentrate.ami.questions import (
     write_jsonl,
 )
 from concentrate.evals import compression as C
-from concentrate.llm.client import Completion, LLMClient, LLMRequest, TurnCompletion, TurnRequest
+from concentrate.llm.client import (
+    Completion,
+    Ledger,
+    LLMClient,
+    LLMRequest,
+    TurnCompletion,
+    TurnRequest,
+)
 
 ROLES = [("A", "PM", "P1"), ("B", "UI", "P2"), ("C", "ID", "P3"), ("D", "ME", "P4")]
 
@@ -344,3 +352,71 @@ def test_committed_question_set_matches_builder(tmp_path: Path) -> None:
     assert (tmp_path / "q.jsonl").read_bytes() == Path(
         "data/ami_questions/questions.jsonl"
     ).read_bytes()
+
+
+def _run(tmp_path: Path, cap: float | None, judge2_share: float = 0.3) -> tuple[dict, Ledger]:
+    mats = C.ami_materials([A, B])
+    layers = C.build_layers(mats, C.zero_cost_compressors(seed=42))
+    qs = C.pilot_questions(build_questions([A, B], 42), 3, 42)
+    ledger = Ledger()
+    fake = FakeReader()
+    reader = LLMClient(
+        model="claude-haiku-5-5", cache_dir=tmp_path / "r", ledger=ledger, max_usd=cap
+    )
+    judge = LLMClient(
+        FakeJudge(), model="claude-haiku-5-5", cache_dir=tmp_path / "j", ledger=ledger, max_usd=cap
+    )
+    j2 = LLMClient(
+        FakeJudge(),
+        model="claude-sonnet-5-5",
+        cache_dir=tmp_path / "j2",
+        ledger=ledger,
+        max_usd=cap,
+    )
+    readers = [C.LayerReader(reader, c, mats, layers, fake) for c in C.PILOT_CONDITIONS]
+    report = C.run_compression(
+        readers, qs, judge, layers=layers, materials=mats, seed=42, budget_usd=cap or 1.0,
+        out_dir=tmp_path / "out", spent=ledger.spent_usd, judge2=j2, judge2_share=judge2_share,
+    )  # fmt: skip
+    return report, ledger
+
+
+def test_pilot_questions_dev_only_and_deterministic() -> None:
+    qs = build_questions([A, B], 42)
+    picked = C.pilot_questions(qs, 3, 42)
+    assert len(picked) == 3 and all(q.split == "dev" for q in picked)
+    assert len({q.type for q in picked}) == 3  # one type at a time
+    assert [q.id for q in picked] == [q.id for q in C.pilot_questions(qs, 3, 42)]
+
+
+def test_hard_cap_stops_the_run_cleanly(tmp_path: Path) -> None:
+    report, ledger = _run(tmp_path, cap=1e-9)  # the first live call passes the cap
+    assert "spend cap" in report["meta"]["stopped_early"]
+    assert len(ledger.records) == 1  # refused before a second live call
+
+
+def test_pilot_measures_and_extrapolates(tmp_path: Path) -> None:
+    _, ledger = _run(tmp_path, cap=1.0, judge2_share=1.0)
+    mats = C.ami_materials([A, B])
+    layers = C.build_layers(mats, C.zero_cost_compressors(seed=42))
+    qs = build_questions([A, B], 42)
+    picked = C.pilot_questions(qs, 3, 42)
+
+    def counter(texts: list[str]) -> list[int]:
+        return [len(t.split()) for t in texts]
+
+    a = C.QuoteAssumptions()
+    sub = dataclasses.replace(a, real_questions=0, judge2_share=1.0)
+    pq = C.quote(picked, mats, layers, counter, sub, C.PILOT_CONDITIONS, optional=False)
+    m = C.measure(ledger.records, pq, "claude-sonnet-5-5")
+    assert m["answer"].calls == 6 and m["judge"].calls == 6 and m["judge2"].calls == 6
+    assert m["answer"].mean_in == 100 and m["answer"].factor > 0
+    plan = C.quote(qs, mats, layers, counter, a)
+    md, total = C.extrapolate_markdown(plan, m)
+    expected = sum(
+        r.usd() * m[C.row_kind(r)].factor * C.PILOT_MARGIN
+        for r in plan
+        if not r.part.startswith("OPTIONAL")
+    )
+    assert total == pytest.approx(expected)
+    assert "$/call real" in md and "**total (required)**" in md

@@ -46,6 +46,8 @@ from concentrate.evals.deletion_sim import _paired, _rates, confident_error
 from concentrate.evals.scoring import JUDGE_PROMPT, JudgeOutput, judge_request_for
 from concentrate.evals.stats import paired_bootstrap
 from concentrate.llm.client import (
+    BudgetExceeded,
+    CallRecord,
     LLMClient,
     ToolBackend,
     TurnRequest,
@@ -406,10 +408,13 @@ def run_compression(
     out_dir: Path,
     spent: Callable[[], float],
     judge2: LLMClient | None = None,
+    judge2_share: float = SECOND_JUDGE_SHARE,
     meta: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Answer and judge every (reader, question), then second-judge a seeded 30% sample.
-    Stops when ``spent()`` passes ``budget_usd``. Writes ``<stamp>.compression.{jsonl,json}``."""
+    """Answer and judge every (reader, question), then second-judge a seeded ``judge2_share``.
+    Stops when ``spent()`` passes ``budget_usd`` or a client's hard cap raises
+    :class:`BudgetExceeded` (rows so far are kept and the report says why it stopped).
+    Writes ``<stamp>.compression.{jsonl,json}``."""
     from concentrate.evals.runner import _git
 
     rows: list[dict[str, Any]] = []
@@ -419,12 +424,16 @@ def run_compression(
             if spent() > budget_usd:
                 stopped = f"spent ${spent():.2f} > budget ${budget_usd:.2f}"
                 break
-            res = r.run(q)
-            a = res.answer
-            v = judge.structured(
-                judge_request_for(q.question, q.gold_answer, False, a.answer, a.abstain),
-                JudgeOutput,
-            )
+            try:
+                res = r.run(q)
+                a = res.answer
+                v = judge.structured(
+                    judge_request_for(q.question, q.gold_answer, False, a.answer, a.abstain),
+                    JudgeOutput,
+                )
+            except BudgetExceeded as e:  # the client's hard cap (max_usd)
+                stopped = str(e)
+                break
             flagged = a.abstain or any(text_flags(a.answer).values())
             cond = r.name
             rows.append(
@@ -457,7 +466,7 @@ def run_compression(
         if stopped:
             break
     if judge2 is not None:
-        sample = second_judge_sample([(x["system"], x["qid"]) for x in rows], seed)
+        sample = second_judge_sample([(x["system"], x["qid"]) for x in rows], seed, judge2_share)
         by_id = {q.id: q for q in questions}
         for x in rows:
             if (x["system"], x["qid"]) in sample and spent() <= budget_usd:
@@ -465,7 +474,11 @@ def run_compression(
                 req = judge_request_for(
                     q.question, q.gold_answer, False, x["answer"]["answer"], x["abstained"]
                 )
-                x["judge2_verdict"] = judge2.structured(req, JudgeOutput).verdict
+                try:
+                    x["judge2_verdict"] = judge2.structured(req, JudgeOutput).verdict
+                except BudgetExceeded as e:
+                    stopped = stopped or str(e)
+                    break
     stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
     report = {
         "meta": {
@@ -861,3 +874,115 @@ def quote_markdown(rows: Sequence[QuoteRow], counting: str) -> str:
             f"${h + sum(r.usd(True) for r in opt):.2f} | |"
         )
     return "\n".join(out) + "\n"
+
+
+# -- the sandbox pilot -----------------------------------------------------------------------------
+
+PILOT_CONDITIONS = (CEILING, "random_20")  # the largest prompt and a typical one
+PILOT_QUESTIONS = 3
+PILOT_MAX_USD = 0.10
+PILOT_MARGIN = 1.5
+
+
+def pilot_questions(qs: Sequence[AmiQuestion], n: int, seed: int) -> list[AmiQuestion]:
+    """``n`` DEV questions, one type at a time (round-robin over sorted types), seeded within a
+    type. DEV only: a pilot's answers are read by a person, so it must not show TEST."""
+    by: dict[str, list[AmiQuestion]] = {}
+    for q in qs:
+        if q.split == "dev":
+            by.setdefault(q.type, []).append(q)
+    for t, group in by.items():
+        random.Random(f"{seed}:pilot:{t}").shuffle(group)
+    out: list[AmiQuestion] = []
+    while len(out) < n and any(by.values()):
+        for t in sorted(by):
+            if by[t] and len(out) < n:
+                out.append(by[t].pop(0))
+    return out
+
+
+def call_kind(r: CallRecord, judge2_model: str | None) -> str:
+    """answer / judge / judge2, from a ledger record."""
+    if r.stage != "eval.judge":
+        return "answer"
+    return "judge2" if judge2_model and r.model == judge2_model else "judge"
+
+
+def row_kind(row: QuoteRow) -> str:
+    """Which measured kind prices a quote row (ingest and the Sonnet reader borrow answer's)."""
+    if row.part.startswith("second judge"):
+        return "judge2"
+    if row.part.startswith("judge"):
+        return "judge"
+    return "answer"
+
+
+@dataclass(frozen=True)
+class Measured:
+    kind: str
+    calls: int
+    usd_per_call: float  # actual, from the ledger (a cache hit counts at its original price)
+    quoted_per_call: float  # what :func:`quote` predicts for the same calls
+    mean_in: float
+    mean_out: float
+
+    @property
+    def factor(self) -> float:
+        return self.usd_per_call / self.quoted_per_call if self.quoted_per_call else 1.0
+
+
+def measure(
+    records: Sequence[CallRecord], pilot_quote: Sequence[QuoteRow], judge2_model: str | None
+) -> dict[str, Measured]:
+    """Per kind: the pilot's real cost per call vs the quote's per-call price for the same
+    questions and conditions. Per call, so the quote's closed-book row doesn't skew it."""
+    quoted: dict[str, float] = {}
+    for row in pilot_quote:
+        if row.part == "answers: AMI" or row_kind(row) != "answer":
+            quoted[row_kind(row)] = row.usd() / row.calls if row.calls else 0.0
+    out: dict[str, Measured] = {}
+    for kind in ("answer", "judge", "judge2"):
+        rs = [r for r in records if call_kind(r, judge2_model) == kind]
+        if not rs:
+            continue
+        n = len(rs)
+        out[kind] = Measured(
+            kind,
+            n,
+            sum(r.cost_usd for r in rs) / n,
+            quoted.get(kind, 0.0),
+            sum(r.input_tokens for r in rs) / n,
+            sum(r.output_tokens for r in rs) / n,
+        )
+    return out
+
+
+def extrapolate_markdown(
+    full: Sequence[QuoteRow], measured: Mapping[str, Measured], margin: float = PILOT_MARGIN
+) -> tuple[str, float]:
+    """The full plan re-priced: each row's quote x the measured/quoted factor of its kind
+    (1.0 where the pilot measured nothing), x ``margin``. Returns (markdown, required total)."""
+    out = [
+        "| kind | pilot calls | mean in | mean out | $/call real | $/call quoted | factor |",
+        "|---|---|---|---|---|---|---|",
+    ]
+    for m in measured.values():
+        out.append(
+            f"| {m.kind} | {m.calls} | {m.mean_in:,.0f} | {m.mean_out:,.0f} | "
+            f"${m.usd_per_call:.5f} | ${m.quoted_per_call:.5f} | {m.factor:.2f} |"
+        )
+    out += ["", f"| part | quote | factor | x{margin} |", "|---|---|---|---|"]
+    total = optional = 0.0
+    for row in full:
+        k = row_kind(row)
+        f = measured[k].factor if k in measured else 1.0
+        usd = row.usd() * f * margin
+        if row.part.startswith("OPTIONAL"):
+            optional += usd
+        else:
+            total += usd
+        note = "" if k in measured else " (not measured)"
+        out.append(f"| {row.part} | ${row.usd():.2f} | {f:.2f}{note} | ${usd:.2f} |")
+    out.append(f"| **total (required)** | | | **${total:.2f}** |")
+    out.append(f"| total incl. optional | | | ${total + optional:.2f} |")
+    return "\n".join(out) + "\n", total

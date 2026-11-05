@@ -2824,10 +2824,26 @@ def compression_cmd(
         "claude-sonnet-5-5"
     ),
     seed: Annotated[int, typer.Option()] = 42,
-    budget: Annotated[float, typer.Option(help="Hard cap on API spend (USD).")] = 2.0,
+    max_usd: Annotated[
+        float | None,
+        typer.Option(
+            "--max-usd",
+            help="Hard spend cap for the whole run (reader + judges share one ledger); "
+            "default CONCENTRATE_MAX_USD. Required for paid runs; a pilot defaults to $0.10.",
+        ),
+    ] = None,
     quote_only: Annotated[
         bool, typer.Option("--quote", help="Price the full plan (§5); spends nothing.")
     ] = False,
+    pilot: Annotated[
+        bool,
+        typer.Option(
+            "--pilot",
+            help="Sandbox run: a few DEV questions x 2 conditions under a tiny cap; prints the "
+            "real per-call cost and the full plan extrapolated with a 1.5x margin.",
+        ),
+    ] = False,
+    pilot_n: Annotated[int, typer.Option(help="--pilot: questions.")] = 3,
     exact: Annotated[
         bool,
         typer.Option(help="--quote: exact input counts via the free count_tokens endpoint."),
@@ -2849,7 +2865,7 @@ def compression_cmd(
     from concentrate.evals import compression as C
     from concentrate.evals.deletion_sim import judge_cache_pairs
     from concentrate.evals.runner import HEURISTIC_TO_EXACT
-    from concentrate.llm.client import count_tokens, estimate_tokens
+    from concentrate.llm.client import Ledger, count_tokens, estimate_tokens
 
     questions = load_questions(questions_file)
     materials = C.ami_materials(load_meeting(m) for m in QUESTION_MEETINGS)
@@ -2857,21 +2873,26 @@ def compression_cmd(
     if sizes_only:
         typer.echo(_json.dumps(C.sizes(layers, questions, materials), indent=1))
         return
+    cache = Path(os.environ.get("CONCENTRATE_CACHE", "data/cache/llm"))
+    a = C.QuoteAssumptions(reader=model, judge=judge_model)
+    cal = C.judge_output_calibration(judge_cache_pairs(cache, judge_model), a.judge_out)
+    a = C.QuoteAssumptions(
+        reader=model,
+        judge=judge_model,
+        judge2=a.judge2 if judge2 == "none" else judge2,
+        judge_out=cal,
+    )
+
+    def heuristic(texts: list[str]) -> list[int]:
+        return [round(estimate_tokens(t) * HEURISTIC_TO_EXACT) for t in texts]
+
+    counter: C.Counter = heuristic
+    if exact:
+        counter = functools.partial(count_tokens, model=model, cache_dir=cache)
+        how = f"exact (count_tokens, {model}) + measured schema overhead"
+    else:
+        how = f"offline chars/3.5 x {HEURISTIC_TO_EXACT} (measured undercount on transcripts)"
     if quote_only:
-        cache = Path(os.environ.get("CONCENTRATE_CACHE", "data/cache/llm"))
-        a = C.QuoteAssumptions(reader=model, judge=judge_model)
-        cal = C.judge_output_calibration(judge_cache_pairs(cache, judge_model), a.judge_out)
-        a = C.QuoteAssumptions(reader=model, judge=judge_model, judge_out=cal)
-
-        def heuristic(texts: list[str]) -> list[int]:
-            return [round(estimate_tokens(t) * HEURISTIC_TO_EXACT) for t in texts]
-
-        counter: C.Counter = heuristic
-        if exact:
-            counter = functools.partial(count_tokens, model=model, cache_dir=cache)
-            how = f"exact (count_tokens, {model}) + measured schema overhead"
-        else:
-            how = f"offline chars/3.5 x {HEURISTIC_TO_EXACT} (measured undercount on transcripts)"
         full = C.quote_markdown(C.quote(questions, materials, layers, counter, a), how)
         now = C.quote_markdown(
             C.quote(
@@ -2895,26 +2916,35 @@ def compression_cmd(
         typer.echo(md)
         typer.echo(f"quote written: {path} (no money spent)")
         return
-    picked = [q for q in questions if split == "all" or q.split == split]
-    names = [c for c in conditions.split(",") if c] or [*C.ZERO_COST_CONDITIONS, C.CLOSED]
-    reader = LLMClient(model=model)
-    judge = LLMClient(model=judge_model)
-    j2 = None if judge2 == "none" else LLMClient(model=judge2)
+    if pilot:
+        picked = C.pilot_questions(questions, pilot_n, seed)
+        names = [c for c in conditions.split(",") if c] or list(C.PILOT_CONDITIONS)
+        cap = max_usd if max_usd is not None else C.PILOT_MAX_USD
+    else:
+        picked = [q for q in questions if split == "all" or q.split == split]
+        names = [c for c in conditions.split(",") if c] or [*C.ZERO_COST_CONDITIONS, C.CLOSED]
+        env_cap = os.environ.get("CONCENTRATE_MAX_USD")
+        if max_usd is None and not env_cap:
+            raise typer.BadParameter(
+                "paid runs need a hard cap: pass --max-usd (the approved amount) or set "
+                "CONCENTRATE_MAX_USD; run --pilot first"
+            )
+        cap = max_usd if max_usd is not None else float(env_cap or 0)
+    ledger = Ledger()  # one ledger: the cap covers reader + judge + second judge together
+    reader = LLMClient(model=model, ledger=ledger, max_usd=cap)
+    judge = LLMClient(model=judge_model, ledger=ledger, max_usd=cap)
+    j2 = None if judge2 == "none" else LLMClient(model=judge2, ledger=ledger, max_usd=cap)
     readers = [
         C.ClosedBookReader(reader) if n == C.CLOSED else C.LayerReader(reader, n, materials, layers)
         for n in names
     ]
+    what = "PILOT: " if pilot else ""
     if not yes:
         typer.confirm(
-            f"Run {len(readers)} conditions on {len(picked)} {split} questions "
-            f"(cap ${budget:.2f}; run --quote first)?",
+            f"{what}Run {len(readers)} conditions on {len(picked)} "
+            f"{'dev' if pilot else split} questions (hard cap ${cap:.2f}; run --quote first)?",
             abort=True,
         )
-
-    def spent() -> float:
-        more = j2.ledger.spent_usd() if j2 is not None else 0.0
-        return reader.ledger.spent_usd() + judge.ledger.spent_usd() + more
-
     report = C.run_compression(
         readers,
         picked,
@@ -2922,13 +2952,45 @@ def compression_cmd(
         layers=layers,
         materials=materials,
         seed=seed,
-        budget_usd=budget,
+        budget_usd=cap,
         out_dir=out,
-        spent=spent,
+        spent=ledger.spent_usd,
         judge2=j2,
-        meta={"split": split, "conditions": names},
+        judge2_share=1.0 if pilot else C.SECOND_JUDGE_SHARE,
+        meta={"split": "dev" if pilot else split, "conditions": names, "pilot": pilot},
     )
-    typer.echo(_json.dumps(report["summary"], indent=1, default=str)[:4000])
+    if report["meta"]["stopped_early"]:
+        typer.echo(f"stopped early: {report['meta']['stopped_early']}")
+    if not pilot:
+        typer.echo(_json.dumps(report["summary"], indent=1, default=str)[:4000])
+        return
+    rows = sorted(out.glob(f"{report['meta']['date']}.compression.jsonl"))
+    for line in rows[0].read_text().splitlines() if rows else []:
+        x = _json.loads(line)
+        typer.echo(
+            f"{x['qid']:<28} {x['system']:<16} {x['verdict']:<18} "
+            f"j2={x.get('judge2_verdict') or '-':<18} {x['answer']['answer'][:70]!r}"
+        )
+    pq = C.quote(
+        picked,
+        materials,
+        layers,
+        counter,
+        dataclasses.replace(a, real_questions=0, judge2_share=1.0),
+        conditions=names,
+        optional=False,
+    )
+    measured = C.measure(ledger.records, pq, j2.model if j2 else None)
+    plan = C.quote(questions, materials, layers, counter, a)
+    md, total = C.extrapolate_markdown(plan, measured)
+    path = out / "compression_pilot.md"
+    path.write_text(
+        f"Pilot {report['meta']['date']}: {len(picked)} DEV q x {names}, spent "
+        f"${ledger.spent_usd():.4f} (cap ${cap:.2f}). Quote counting: {how}.\n\n{md}"
+    )
+    typer.echo(md)
+    typer.echo(f"pilot spent ${ledger.spent_usd():.4f}; full plan x{C.PILOT_MARGIN}: ${total:.2f}")
+    typer.echo(f"written: {path}. Ask before any run over $2.")
 
 
 @app.command("mcp-contract")
