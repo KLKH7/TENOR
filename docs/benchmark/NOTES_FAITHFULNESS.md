@@ -4,7 +4,7 @@
 
 The track is product-neutral: any notetaker, or our own summariser, can be scored the same way.
 
-**Why.** A note that adds things the meeting never said is worse than a shorter note: people act on it. Granola's CEO has named this worry in public: AI notes making inferences the meeting didn't contain (Every's *AI & I* podcast, 15 Jul 2026). Granola's prompting post (Dec 2025) states the rule we test: only claim what you can point to in the transcript. No notetaker publishes a grounding number, so the track measures one.
+**Why.** A note that adds things the meeting never said is worse than a shorter note: people act on it. Granola's prompting post (Dec 2025) states the rule we test: only claim what you can point to in the transcript. No notetaker publishes a grounding number, so the track measures one.
 
 **First results.** Two systems so far.
 
