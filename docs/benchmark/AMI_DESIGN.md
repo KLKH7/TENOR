@@ -1,0 +1,195 @@
+# Public real meetings: AMI played into the products
+
+This is a design for a track source of **real, public, shareable meetings**: AMI Meeting Corpus recordings played into Granola and Wispr Flow, then scored against AMI's human transcripts and annotations. It is for the coordinator and Kian, who decide whether to go ahead.
+
+**Status (2026-11-04): design only.** Nothing has been downloaded, played or run. Spend so far: $0. Facts marked ✓ were read on the official pages listed in §8. Everything else is a proposal or an ASSUMED behaviour to check in a pilot.
+
+## In short
+
+- **Why.** Headline findings must come from real meetings. Kian's real meetings are private and few. AMI is real speech with human ground truth, licensed CC BY 4.0, so anyone can rerun exactly what we ran.
+- **What it unlocks.** A four-meeting series by the same team gives cross-meeting questions (decisions, changes, owners) with answers taken from human annotations, not from an LLM. It also gives a new metric for free: transcription accuracy (WER, word error rate) against AMI's manual transcript.
+- **Cost.** About 2 h 40 min of real-time playback (6 meetings), about 310 MiB of downloads, and about $2 of judge spend per full scoring run. Kian runs the playback.
+- **Main caveats.** The scenario meetings are role-play from 2005. Everything reaches the products as one mixed channel. AMI is public, so models may have seen it. §7 covers each risk and how it is controlled.
+
+## 1. Facts about AMI (verified at source)
+
+| Fact | Value | Source |
+|---|---|---|
+| **Licence** ✓ | CC BY 4.0, standard legal code, no NC or ND clause, no added terms. The licence page: "The AMI corpus and its annotations are released under the Creative Commons Attribution 4.0" | license.shtml |
+| **Licence scope** ✓ | The home and download pages are more cautious: "all of the signals and transcription, and some of the annotations". The two annotation zips were relicensed to CC BY 4.0 on 10 Apr 2017 | home, download |
+| **Size** ✓ | 100 hours. About two-thirds is role-play scenario meetings, the rest naturally occurring meetings | home |
+| **Language** ✓ | English, "mostly non-native speakers" | overview |
+| **Sample rate** ✓ | 16 kHz WAV, downsampled from 48 kHz | signals.shtml |
+| **Files** ✓ | `amicorpus/<ID>/audio/<ID>.<stream>.wav`. The streams are `Mix-Headset` (all headsets mixed, mono), `Mix-Lapel`, `Headset-0..3`, `Lapel-0..3`, `Array1-01..08`, `Array2-01..08` (far-field table arrays; Idiap's Array2 has 4 channels) | mirror directory listings |
+| **Annotations** ✓ | `ami_public_manual_1.6.2.zip`, 22 MB, NXT XML. It contains per-speaker words with forced-alignment timings, dialogue acts, topic segments, extractive summaries (about 10% of the transcript, linked to the abstract's sentences), abstractive summaries (about 200 words, under ABSTRACT / DECISIONS / PROBLEMS / ACTIONS), decision points (a subset of meetings), named entities, and `meetings.xml` (speaker letter → role → audio channel) | download, annotation.shtml |
+| **Coverage** ✓ | Every meeting has a manual transcript. Nearly every scenario meeting has summaries, dialogue acts and topics. EN and IN (natural) meetings have the transcript only | annotationpresent.shtml |
+| **Partitions** ✓ | Standard train / dev / test splits exist. IS1008 is dev in all three partitions, IB4003 is dev, EN2002 is test | datasets.shtml |
+
+**Meeting types** ✓ (scenariomeetings, meetingids, nonscenariomeetings):
+
+| Type | IDs | What it is |
+|---|---|---|
+| **Scenario** | ES2002–2016, IS1000–1009, TS3003–3012, each with sessions a–d (a few missing) | 4 people play a design team: project manager, marketing expert, user-interface designer, industrial designer. They design a TV remote in four meetings recorded on one day: kick-off, functional, conceptual and detailed design. Participants were "neither professionally trained for design work nor experienced in their role". About 11–56 min each |
+| **IB** | IB4001–4011 | Staged too: "a fictitious scenario of their own: these are not naturally occurring meetings" |
+| **EN, IN** | EN2001–2009, IN1001–1016 | Real meetings that "would have happened whether they were being recorded or not" (students, research colleagues). Transcript only |
+
+### Licence: what we may do, and the attribution
+
+- **Playing the audio into commercial products is allowed.** CC BY 4.0 permits any use, including commercial use, reproduction and adaptation, with attribution. Sending the audio to Granola or Wispr is a reproduction; their transcripts and notes are adaptations.
+- **Publishing derived scores is allowed.** Scores, labels and question sets built from AMI annotations are adaptations, and CC BY only asks for attribution plus a note of what changed.
+- **Two things the licence doesn't cover.** CC BY §2(b) excludes privacy and publicity rights. The participants signed a consent form (`ami_consent_form_081004.pdf`) that we have **not read**. Kian should read it before we start (open question 2). A precedent exists: [msallese31/ai-note-taker-test-2026](https://github.com/msallese31/ai-note-taker-test-2026) did exactly this with Granola, Otter, Fireflies and Scribbl, and published the outputs.
+- **Product terms are a separate question.** Whether we may publish Granola's or Wispr's raw notes depends on their terms, not on AMI's. Until checked, we commit per-claim labels and aggregates only (open question 3).
+
+**Attribution text** (for the README, the results page and each published file built from AMI):
+
+> Uses the AMI Meeting Corpus (University of Edinburgh and AMI consortium partners), licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), https://groups.inf.ed.ac.uk/ami/corpus/. Changes: the audio was played in real time into third-party meeting products, and questions were derived mechanically from the manual annotations. Citation: J. Carletta et al., "The AMI Meeting Corpus: A Pre-announcement", MLMI 2005, LNCS 3869, pp. 28–39.
+
+## 2. Why it fits Hindsight
+
+| Need | What AMI gives |
+|---|---|
+| **Real speech** | Real people really talking, with overlap, hesitation and accents. Not generated text |
+| **Human ground truth** | Who said each word and when; decisions, actions and problems written by annotators; links from each summary sentence to the dialogue acts that support it |
+| **Cross-meeting memory** | One team meets four times. Decisions made in meeting b are revisited in c and d. That gives change and commitment questions, not just questions about one meeting |
+| **Shareable and reproducible** | Anyone can download the same files, play them into any product and score them with our code. Unlike Kian's meetings, per-question results can be published |
+| **Comparable with systems** | The same meetings, loaded from the *human* transcript, can run through the public track (Concentrate, Mem0, plain RAG). That puts products and systems on the same questions for the first time |
+
+## 3. Protocol: playing a meeting into both products
+
+**The setup** (one Mac, both apps running):
+
+| Step | What to do | Why |
+|---|---|---|
+| **Dedicated accounts** | Use a fresh Granola account and a fresh Wispr account that hold only AMI meetings | Keeps Kian's private meetings out of retrieval and out of the cross-meeting bleed check, and makes outputs publishable |
+| **Calendar event** | For each playback, create an event titled `AMI IS1008a` (etc.) at that time, with no attendees. Both apps read the calendar | Both products get the same title and start time, so `concentrate pair` matches them, and the title names the AMI source |
+| **Audio file** | `<ID>.Mix-Headset.wav`, unchanged: no conversion, no MP3 | The cleanest mono mix. Far-field array channels would add room reverb, a second variable we don't want in v1 |
+| **Player** | `afplay <file>` (built into macOS) at 1.0× speed | Real time, no player chrome, nothing to misclick |
+| **Microphone** | Input volume at 0, or a muted mic, in the room | Otherwise the speaker output re-enters the mic as a duplicate "Me" track |
+| **Output** | Normal volume through headphones, or volume 0 if the pilot shows capture is pre-volume. The precedent ran Granola with output at 0 | Both apps capture system audio digitally (Screen & System Audio Recording permission), not through the air |
+| **Quiet Mac** | Do Not Disturb on, nothing else playing, sleep disabled | System sounds would be captured as speech |
+| **Start/stop** | Start both recorders, then `afplay`. Stop both 30 s after the file ends | |
+
+**Pilot first (≈ 5 min).** Play 2 minutes of one meeting and check that **both** apps transcribe at the same time, and with which output volume. Two apps capturing system audio at once is ASSUMED to work; nobody has checked it here.
+
+**One channel, many speakers: is that fair?** Yes, and it is realistic.
+
+- **What happens.** Granola labels audio by capture channel: mic = Me, system audio = Them. All four AMI voices arrive on system audio, so Granola's transcript is all "Them" with no split between speakers (desktop diarisation isn't exposed, per [SCHEMA_NOTES.md](../engineering/SCHEMA_NOTES.md)). Wispr diarises system audio into Speaker 1, 2, … and names speakers afterwards from the calendar invite and names said aloud (Wispr's own pages).
+- **Why it's fair.** It is exactly what a product faces when the owner listens silently to a four-person call: every remote voice arrives mixed on one channel. It isn't fair to expect *names*, because AMI people rarely say their names. So who-said questions ask for **roles**, which people do say ("as marketing expert, I…"), especially in the kick-off meeting.
+- **How it's reported.** Who-said results are reported as their own slice, never in a headline. Granola answering "unknown" on a role question is a correct reading of its capture model, not a failure to hide.
+- **Variant for later, not v1.** Route the project manager's own headset channel to the mic through a virtual device, and the other three to system audio. Granola then gets a true Me/Them split, as in a real call where Kian is the PM. It needs a local re-mix and a third-party audio driver, so it waits until v1 shows the track is worth it.
+
+**Pairing with the AMI source.**
+1. **Product ↔ product:** the existing `concentrate pair` (±10 min gate, transcript 3-gram containment), with the shared calendar title as the third signal.
+2. **Product ↔ AMI:** the calendar title gives the AMI ID. A check confirms it: the product transcript's word 3-gram containment against the AMI manual transcript must be at least 0.3, and highest for the claimed ID. A mismatch blocks scoring.
+3. **Reference loader:** a new `concentrate.corpora.ami` reads the NXT files into a reference transcript (speaker letter, role, words with times) plus the annotations. It is not a `Source` (it is not a Granola-shaped product). For the public track it can also emit `MeetingNote`s with roles as speaker names.
+
+**Time.** Real-time playback, plus about 5 minutes of setup and processing wait per meeting. The proposed set (§5) is 2 h 39 min of audio, so about 3 h 10 min of wall-clock time. Kian only needs to be present at the start and end of each meeting. Play the series in order (a → d), on one day if possible: AMI's four sessions were recorded on one day too.
+
+## 4. Tracks it unlocks
+
+| Track | Task on AMI | Ground truth | Metric | Spend |
+|---|---|---|---|---|
+| **Transcription accuracy** (new) | Compare each product's transcript (via MCP) with the AMI manual words | AMI `words.xml`, all speakers merged by start time | WER after normalisation (lower case, no punctuation, AMI vocal-sound and filler tokens removed on both sides, numbers spelt out); also content-word recall, which doesn't depend on word order across overlapping speakers | $0 |
+| **Notes faithfulness** | The existing pipeline, with `paired_cases` using the **AMI manual transcript** as the one shared reference | Human transcript with role labels, so wrong-owner claims can now be caught. Granola's own channel transcript can't catch them | supported / inferred / unsupported / contradicted by claim type; plus **coverage**: share of abstractive-summary sentences the notes state (the precedent's answer-key method) | ≈ $0.4 per product for 6 meetings ($0.26 for 4 real meetings so far) |
+| **Question answering** | Questions from §6, asked to Granola's agent and to the standard outside agent on both products | Decisions, actions, problems, decision points, summary→dialogue-act links, roles | accuracy with 95% CI, abstention on unanswerable questions | ≈ $0.5 judge spend for ~60 questions × 3 rows |
+| **Retention** | The same questions with the outside agent allowed notes only, vs notes plus transcript | as above | loss per question type when transcripts are unavailable | ≈ $0.3 |
+| **Agent interface** | The same questions; score the payloads | as above | the four answer types, evidence granularity, stability across repeats, latency | ≈ $0.3 |
+
+Every eval run states its estimate first and asks before going over $2, as usual. A full pass of all five tracks should come to about $2, so each run gets its own quote first.
+
+**What's newly possible here:** per-question outputs on real speech can be committed, so Granola's engineers can open any failure and listen to the exact second of audio behind it.
+
+## 5. Selection: 6 meetings, 2 h 39 min
+
+| Meeting | Length ✓ | Type | Why |
+|---|---|---|---|
+| **IS1008a** | 15:31 | scenario, kick-off | Roles are introduced here; later who-said questions depend on remembering them |
+| **IS1008b** | 29:24 | scenario, functional design | |
+| **IS1008c** | 25:46 | scenario, conceptual design | |
+| **IS1008d** | 24:30 | scenario, detailed design | Also in the precedent, so it is a direct replication check |
+| **IB4003** | 33:43 | staged, non-scenario (an office move) | A different task and team, with abstractive summaries. Also in the precedent |
+| **EN2002b** | 29:47 | real, natural meeting | The realism check: transcript only, so it feeds WER and notes faithfulness, not QA |
+
+**Why IS1008 over the other series:**
+- **The fullest annotations.** It has decision points in all four meetings, plus summaries, dialogue acts and topic segments. Few series have all of these (ES2008 has no decision points; ES2002 has them in a and d only).
+- **Clean audio.** No meeting-specific entries on dataproblems.shtml. ES2002 has a misworn headset and dropouts, and ES2008c has a dropout.
+- **Held out from training.** IS1008 and IB4003 are in AMI's dev set and EN2002 is in its test set, in every standard partition. Speech models trained "on AMI" normally train on the train split only, which lowers (but doesn't remove) contamination (§7).
+- **Short.** 95 minutes for the whole series.
+
+**Stretch, if v1 is useful:** TS3005 a–d (2 h 28 min, decision points in all four, a different site) as a second series. That doubles the cross-meeting questions.
+
+## 6. Question construction: from annotations, no LLM drafting
+
+Questions are produced by a deterministic script (`concentrate ami-questions --seed`) from the annotation files. No LLM writes or rewrites a question. Kian's only role is **keep or drop** on a printed list; he never edits wording.
+
+| Template | Built from | Example shape | Answer key | Est. n |
+|---|---|---|---|---|
+| **T1 decisions in a meeting** | DECISIONS section of the abstractive summary | "What did the team decide in the conceptual design meeting of team IS1008?" | the list of decision sentences, scored by item recall | 5 |
+| **T2 who proposed it** | decision sentence → linked dialogue acts → speaker letter → role from `meetings.xml` | "Which role first proposed: '<decision sentence>'?" | the role holding at least 60% of the linked dialogue acts, else the question is dropped | ~15 |
+| **T3 action owner** | ACTIONS sentences that name a role (a closed set of 4 role names, matched by regex) | "Which role was asked to: '<sentence with the role replaced by [someone]>'?" | the role | ~10 |
+| **T4 when was it decided** | each decision sentence plus the meeting it came from | "In which of team IS1008's meetings was it decided that '<decision>'?" | the meeting phase | ~15 |
+| **T5 what changed** | decisions on the same AMI topic label (topics come from a closed default list) in two different sessions | "How did the decision on <topic> change between the functional and the detailed design meeting?" | both decision sentences; Kian keeps only real changes | ~4 |
+| **T6 problems raised** | PROBLEMS section | "What problems were raised in meeting <phase>?" | item recall | 5 |
+| **T7 unanswerable** | a decision from another series (TS3005) on a topic IS1008 never discusses | "What did team IS1008 decide about <topic>?" | must abstain | ~5 |
+
+- **Estimate: about 60 questions** (range 40–70) from IS1008 + IB4003. That has to be counted from the files after download. At n = 60, a 95% CI on accuracy is about ±12 points; the TS3005 stretch would double n.
+- **Weakness:** T2 and T4 quote the annotator's sentence, which gives away wording. This is acceptable for who and when questions, where the answer is a role or a phase, not the wording itself.
+- **Split:** a seeded 50/50 dev/test split, stratified by template. Judge prompts and the outside agent's prompt are tuned on dev only.
+- **Judge:** the existing `judge.v1`. Items with list answers (T1, T6) are scored per item, as the precedent did.
+
+## 7. Risks and contamination
+
+| Risk | How bad | What we do |
+|---|---|---|
+| **Products may learn nothing special.** A fresh account with 6 meetings and no attendees has no history, contacts or calendar context to use | Medium. It tests memory over a small, clean account, not a lived-in one | Say so in every result. AMI complements Kian's real meetings; it doesn't replace them |
+| **Realism.** 2005 recordings, role-play, a toy design task, non-native speakers, 16 kHz audio, no screen share | Medium for the scenario meetings | EN2002b is a real natural meeting, kept as the check. Report scenario and natural meetings separately |
+| **Audio path.** Products are tuned for live call audio, not a corpus mix | Low | The pilot checks capture. The precedent ran Granola this way and got normal-looking notes |
+| **Single channel.** Granola gets no speaker split | Real, but it is the product's actual behaviour | Who-said is its own slice (§3) |
+| **ASR contamination.** AMI is a standard ASR benchmark, and product speech vendors may have trained or tuned on it | Medium for WER | Use dev/test meetings only. Report WER as a *best case* for the products, never as a claim about real-world accuracy. Do not compare it with WERs on private meetings |
+| **LLM contamination.** AMI transcripts and summaries have been public for about 20 years and sit inside summarisation sets (e.g. QMSum), so the models behind the products and our judge may know them | Medium for QA and summary coverage | **Closed-book control:** ask every question to the same model with no meeting access. Report its score, and flag every question it gets right. Headline QA numbers use only questions the closed-book model fails |
+| **Consent scope.** The consent form isn't read; CC BY doesn't license privacy rights | Low (the data has been redistributed publicly for 20 years and the precedent used it this way) but unchecked | Kian reads the form before playback (open question 2) |
+| **ICSI as an alternative** | | See below |
+
+### ICSI: assessed, kept for later
+
+| | AMI | ICSI |
+|---|---|---|
+| Licence | CC BY 4.0 ✓ | CC BY 4.0 ✓ (the home page says "some of the annotations") |
+| Realism | two-thirds role-play | **real research group meetings** (75 meetings, about 70 h) ✓ |
+| Series | 4 meetings per team, one day | **long real series**: Bmr 29, Bro 23, Bed 15 meetings ✓ |
+| Length | 11–56 min | about 1 h each (ASSUMED from the 70 h / 75 split) |
+| Audio | headset mix, lapel, arrays | headset mix (≈120 MB) and individual headsets only on the download page ✓ |
+| Decisions / actions | annotated in abstractive summaries and decision points ✓ | not stated on the pages; summaries sit in a third-party "contributed" set ✓ |
+
+**Verdict:** AMI for v1, because its decision and action annotations make mechanical questions possible. ICSI is the better test of long-horizon memory over a real recurring team. Three consecutive Bed meetings (about 3 h) would be the natural v2, once we know which ICSI annotations carry decisions.
+
+## 8. Exact files to download (needs Kian's explicit permission)
+
+Nothing below has been downloaded. All files are CC BY 4.0 (AMI licence page). Sizes marked ≈ are computed from the verified lengths at 16 kHz, 16-bit mono (32 kB/s); they match the two listings checked (IB4003 62M, ES2008a 32M).
+
+Base: `https://groups.inf.ed.ac.uk/ami/AMICorpusMirror/amicorpus/`
+
+| # | File | URL | Size | Licence |
+|---|---|---|---|---|
+| 1 | `ami_public_manual_1.6.2.zip` | https://groups.inf.ed.ac.uk/ami/AMICorpusAnnotations/ami_public_manual_1.6.2.zip | 22 MB (listed) | CC BY 4.0 |
+| 2 | `IS1008a.Mix-Headset.wav` | `<base>IS1008a/audio/IS1008a.Mix-Headset.wav` | ≈ 28 MiB | CC BY 4.0 |
+| 3 | `IS1008b.Mix-Headset.wav` | `<base>IS1008b/audio/IS1008b.Mix-Headset.wav` | ≈ 54 MiB | CC BY 4.0 |
+| 4 | `IS1008c.Mix-Headset.wav` | `<base>IS1008c/audio/IS1008c.Mix-Headset.wav` | ≈ 47 MiB | CC BY 4.0 |
+| 5 | `IS1008d.Mix-Headset.wav` | `<base>IS1008d/audio/IS1008d.Mix-Headset.wav` | ≈ 45 MiB | CC BY 4.0 |
+| 6 | `IB4003.Mix-Headset.wav` | `<base>IB4003/audio/IB4003.Mix-Headset.wav` | 62 MiB (listed) | CC BY 4.0 |
+| 7 | `EN2002b.Mix-Headset.wav` | `<base>EN2002b/audio/EN2002b.Mix-Headset.wav` | ≈ 55 MiB | CC BY 4.0 |
+| | **Total** | | **≈ 310 MiB** | |
+
+- **Optional, to read first:** the consent form `ami_consent_form_081004.pdf`, linked from https://groups.inf.ed.ac.uk/ami/corpus/ethicsandconsent.shtml (exact URL and size not checked).
+- **Not needed for v1:** individual headsets (the PM-on-mic variant, about 4 × the mix size per meeting) and TS3005 (stretch, about 270 MiB).
+- **Where they go:** `data/ami/` (gitignored, so audio is never committed), with SHA-256 checksums recorded in a committed `data/ami/MANIFEST.json`. Each file goes in its own directory and is read only by our scripts.
+
+**Pages read for this doc** (all on `groups.inf.ed.ac.uk/ami/`, HTTP 200, 2026-11-04): `corpus/` (home), `license.shtml`, `download/`, `overview.shtml`, `signals.shtml`, `annotation.shtml`, `annotationpresent.shtml`, `meetingids.shtml`, `scenariomeetings.shtml`, `nonscenariomeetings.shtml`, `meetingrooms.shtml`, `datasets.shtml`, `dataproblems.shtml`, `ethicsandconsent.shtml`, the mirror listings for ES2008a, IB4003 and EN2002a, and `icsi/` (home, licence, download). Also the precedent's README, PROTOCOL, RESULTS and plans, and Wispr's Notetaker help pages.
+
+## 9. Open questions for Kian
+
+1. **Go / no-go** on the 6-meeting set and about 3 h of playback, and permission to download the files in §8.
+2. **Consent form:** will you read the participants' consent form first?
+3. **Publishing product output:** may raw Granola and Wispr notes on AMI be committed (the precedent did), or only labels and aggregates?
+4. **Dedicated accounts:** can you create fresh Granola and Wispr accounts for AMI? Does a free plan cap the number of meetings or the history?
+5. **Wispr sign-in:** this still depends on the open OAuth question in [PRODUCTS.md](PRODUCTS.md).
