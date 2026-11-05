@@ -54,3 +54,17 @@ One engine: claims, decisions and promises extracted when notes are written, eac
 Each surface shows a line **only when confident**; the threshold is set and validated with the calibrated judge above (precision first). Each line carries its source quote.
 
 Why Granola might not want these: more surface area to design and support; false alarms erode the calm feel; some overlap with existing todos, briefs and citations. Each needs a measured precision before it's worth shipping.
+
+### The ambitious one: Exact
+
+**Numbers, codes and names you can trust, without keeping recordings.** Users name this directly: transcripts "often miss numbers and codes", there is "no audio or video to verify notes against", and the product is "not a great fit" for enterprise client calls or "anyone who needs peace of mind about note accuracy" (a 2026 review; source to cite and check). Our AMI stage-1 data points the same way, on a small sample: Granola kept 3 of 11 money/percent mentions in IS1008d (Wispr 8 of 11); plain numbers 75–100%.
+
+| What the user sees | How it works |
+|---|---|
+| An "Exact" strip under the notes: each number, code, date and name with ✓ (two sources agree) or ◌ (uncertain) | Reconcile several sources instead of trusting one transcript: a number-focused second pass on spans with digits, money, dates or codes; **Snapshots** (read the value off the shared screen); the user's typed notes; calendar attendees for name spellings; past meetings' facts (the kept layer) |
+| Tap ◌ to hear a 3-second clip or see the screen snapshot | Optional, local-only clips around uncertain values, deleted with the transcript under the user's retention policy. Never the whole recording |
+| A quiet stamp: "All numbers checked ✓" or "2 to confirm" | The peace-of-mind line for client calls |
+
+**What we can measure from outside now ($0):** exact-value recall per product on AMI (stage 1), and whether "two sources agree" separates right values from wrong ones. Number-heavy AMI series (ES, TS: prices, costs, dates) give a bigger sample.
+
+**Why Granola might say no:** it chose no audio on purpose, so even short clips may be off the table (snapshots and typed notes still help without them); a second transcription pass costs compute; a ◌ shown too often would undermine the calm feel.
