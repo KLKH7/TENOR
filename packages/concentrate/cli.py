@@ -2183,3 +2183,57 @@ def deletion_sim_cmd(
         write_committable(agg, commit_to, private)
     typer.echo(_json.dumps(report["deletion"]["paired"], indent=1))
     typer.echo(f"spent ${spent():.2f} · report: {report['paths']['md']} · aggregate: {path}")
+
+
+# -- what Granola's MCP returns (payload audit) ------------------------------------------------
+
+
+@app.command("mcp-payload")
+def mcp_payload_cmd(
+    report: Annotated[
+        Path, typer.Option(help="Deletion-sim report .jsonl holding the judged Granola answers.")
+    ] = Path("data/real/reports/20261104T012414Z.deletion.jsonl"),
+    tags: Annotated[Path, typer.Option(help="Question tag file.")] = Path(
+        "data/real/tags.p2t.json"
+    ),
+    db: Annotated[Path, typer.Option()] = REAL_DB,
+    sample: Annotated[int, typer.Option(help="Questions to re-ask.")] = 12,
+    repeats: Annotated[int, typer.Option(help="Extra asks per sampled question.")] = 2,
+    seed: Annotated[int, typer.Option()] = 42,
+    live: Annotated[
+        bool, typer.Option(help="Re-ask missing repeats via query_granola_meetings (read-only).")
+    ] = False,
+    max_calls: Annotated[int, typer.Option(help="Hard cap on live MCP calls.")] = 24,
+    out: Annotated[Path, typer.Option(help="Committable aggregate.")] = Path(
+        "evals/reports/mcp-payload.aggregate.json"
+    ),
+) -> None:
+    """Profile what Granola's MCP returns per question type, bucket answers into Granola's four
+    answer types, and measure repeat-ask stability. No LLM calls ($0); see
+    docs/results/MCP_PAYLOAD.md."""
+    import json as _json
+    import subprocess
+    from contextlib import ExitStack
+    from datetime import UTC, datetime
+
+    from concentrate.evals import mcp_payload as M
+
+    sha = subprocess.run(["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True)
+    meta = {
+        "date": datetime.now(UTC).isoformat(timespec="seconds"),
+        "git_sha": sha.stdout.strip(),
+        "source_report": report.name,
+        "judge": "judge.v1 (opus) primary, sonnet second judge",
+        "llm_calls": 0,
+    }
+    with ExitStack() as stack:
+        product = None
+        if live:
+            from concentrate.blackbox.products import open_product
+
+            product = open_product("granola", stack)
+        agg, _ = M.run(report, tags, db, meta, sample, repeats, seed, product, max_calls)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(_json.dumps(agg, indent=2) + "\n")
+    typer.echo(_json.dumps(agg["four_types"]["overall"], indent=1))
+    typer.echo(f"live calls: {agg['meta']['live_calls_this_run']} · aggregate: {out}")
