@@ -504,3 +504,15 @@ Built with fakes only; nothing has run live and no results exist. Write-up: [PRO
 - **Pairing** is a hard ±10-minute gate plus a weighted score (transcript 3-gram containment 0.6, attendees 0.2, title 0.2), assigned greedily one-to-one, with manual overrides. We chose a transparent, deterministic heuristic over a learned matcher because a few dozen pairs are checked by hand anyway.
 - **The outside agent** fixes model, prompt, budget and schema, and varies only the product's published read tools. Trade-off: tool *design* (call granularity, transcript search) is part of what's measured, by intent. Granola's own agent stays an extra row.
 - **Open:** whether Wispr accepts dynamically registered OAuth clients (if not, the live sync can't sign in); Wispr has no updated-since filter (every sync re-lists, and edits may be missed without a modified time); wiring the outside agent into `real-kit run`.
+
+## Evidence compression, $0 parts (2026-11-05)
+
+Plan: [EVIDENCE_COMPRESSION.md](../benchmark/EVIDENCE_COMPRESSION.md). Code: `ami/questions.py`, `evals/compression.py`, prompt `closed_book.v1`, commands `concentrate ami questions` and `concentrate compression`. Nothing paid has run.
+
+- **Decision: questions by template, not by LLM.** Each annotator sentence is split at its first will/decided/discussed/agreed; the subject picks the template, the sentence is the gold. Pronouns take the previous subject. Trade-off: stilted wording and summary-level questions; in return, every gold answer is human-written and the set is reproducible from the seed.
+- **Decision: who-said-it keys on AMI's participant code**, because NXT letters change between IS1008 sessions. Quotes are summary-linked acts of 10–40 words, distinct speakers first.
+- **Decision: compressors take a meeting and nothing else** (`Compressor = Callable[[Material], KeptLayer]`); all layers are built before questions are loaded. Random lines use one seeded permutation per meeting, so budgets nest (5% ⊂ 10% ⊂ …).
+- **Decision: verbatim share = words inside a 5-word run copied from the transcript**, line IDs and speaker labels stripped; short lines match whole. Extractive layers score 1.0 by construction; it matters for abstractive ones.
+- **Reuse:** `answer.v1` via `agents.baselines._Base`, `judge.v1` via `judge_request_for`, `deletion_sim._rates/_paired/confident_error`, `agent_interface.bucket` (Granola's four answer types), `stats.paired_bootstrap` (H1 reads the lower bound of the paired CI vs full transcript).
+- **Quote:** inputs counted per prompt part (free `count_tokens`); LLM methods priced at their budget's random-lines size; output from the deletion-sim calibration and cached Haiku judge calls. Real-meeting sizes are assumed (real data not read). $4.92 expected vs ~$3 planned.
+- **Open:** swap in product notes (`with_notes`) and fill `notes_can_answer`; build the LLM compressors (§2) and the H2 sign test against the best method.

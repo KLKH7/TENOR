@@ -91,4 +91,10 @@ We can't see inside Granola. These are reasons a reasonable team might **not** s
 
 ## Change log
 
-*(empty: nothing run yet)*
+*Nothing run yet. Build notes from the $0 parts (§8 steps 1–2), 2026-11-05, before any answer:*
+
+- **AMI set is 68 questions, not ~60** (13 DEV, 55 TEST; [data/ami_questions](../../data/ami_questions/README.md)). EN2002b gives none (no summary or dialogue acts in AMI 1.6.2); IB4003 has no gold evidence.
+- **Stand-in notes.** Until Granola/Wispr notes for the AMI meetings are synced, the notes are AMI's own human summary, the text most gold answers come from. Notes-only will be near its ceiling on those questions; that run measures nothing about compression and is not reported as a result.
+- **Oracle meeting choice.** The reader gets the question's own meeting(s), so the test isolates compression from retrieval.
+- **Cost is above §5.** Exact quote (`concentrate compression --quote --exact`): **$4.92 expected, $5.40 high** for the required plan, against ~$3 in §5. The Sonnet re-judge ($1.74) and the real-meeting answers ($1.73, sizes assumed) are most of it. The next step alone ($0 conditions + closed-book on all 68 AMI questions) is **$0.75 / $0.84**.
+- **$0 sizes.** Random lines hit their budgets (5/10/20/40% → 5.0/10.0/20.0/40.0% mean) and keep 6/10/20/36% of gold evidence lines (n = 61 questions with evidence): as expected for random, a baseline, not a finding.

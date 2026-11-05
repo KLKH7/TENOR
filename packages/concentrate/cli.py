@@ -2779,6 +2779,158 @@ def ami_wer(
 CONTRACT_BASELINE = Path("evals/contracts/granola_mcp.json")
 
 
+@ami_app.command("questions")
+def ami_questions(
+    seed: Annotated[int, typer.Option()] = 42,
+    out: Annotated[Path, typer.Option(help="Output folder (committed: AMI is CC BY 4.0).")] = Path(
+        "data/ami_questions"
+    ),
+) -> None:
+    """Build the evidence-compression question set from AMI's human annotations (no LLM), and
+    the closed-book control prompts. Same seed, byte-identical files."""
+    from concentrate.ami.corpus import load_meeting
+    from concentrate.ami.questions import (
+        QUESTION_MEETINGS,
+        build_questions,
+        closed_book_prompts,
+        counts,
+        write_jsonl,
+    )
+    from concentrate.llm.client import load_prompt
+
+    qs = build_questions([load_meeting(m) for m in QUESTION_MEETINGS], seed)
+    write_jsonl(qs, out / "questions.jsonl")
+    write_jsonl(closed_book_prompts(qs, load_prompt("closed_book.v1")), out / "closed_book.jsonl")
+    typer.echo(f"{len(qs)} questions -> {out}/questions.jsonl (+ closed_book.jsonl)")
+    for t, c in counts(qs).items():
+        typer.echo(f"  {t:<13} dev={c['dev']:>2} test={c['test']:>2}")
+
+
+# -- evidence compression (thesis A) ------------------------------------------------------------
+
+
+@app.command("compression")
+def compression_cmd(
+    split: Annotated[str, typer.Option(help="dev, test or all.")] = "dev",
+    conditions: Annotated[
+        str, typer.Option(help="Comma-separated; default: the $0 conditions plus closed_book.")
+    ] = "",
+    questions_file: Annotated[Path, typer.Option("--questions")] = Path(
+        "data/ami_questions/questions.jsonl"
+    ),
+    model: Annotated[str, typer.Option(help="Reader model.")] = "claude-haiku-5-5",
+    judge_model: Annotated[str, typer.Option()] = "claude-haiku-5-5",
+    judge2: Annotated[str, typer.Option(help="Second judge on 30%, or 'none'.")] = (
+        "claude-sonnet-5-5"
+    ),
+    seed: Annotated[int, typer.Option()] = 42,
+    budget: Annotated[float, typer.Option(help="Hard cap on API spend (USD).")] = 2.0,
+    quote_only: Annotated[
+        bool, typer.Option("--quote", help="Price the full plan (§5); spends nothing.")
+    ] = False,
+    exact: Annotated[
+        bool,
+        typer.Option(help="--quote: exact input counts via the free count_tokens endpoint."),
+    ] = False,
+    sizes_only: Annotated[
+        bool, typer.Option("--sizes", help="Kept size, verbatim share, evidence recall; $0.")
+    ] = False,
+    out: Annotated[Path, typer.Option()] = Path("data/cache/compression"),
+    yes: Annotated[bool, typer.Option("--yes")] = False,
+) -> None:
+    """Evidence compression on AMI (docs/benchmark/EVIDENCE_COMPRESSION.md): one reader, notes
+    plus a kept layer built before any question is seen. Start with --sizes and --quote."""
+    import dataclasses
+    import functools
+    import json as _json
+
+    from concentrate.ami.corpus import load_meeting
+    from concentrate.ami.questions import QUESTION_MEETINGS, load_questions
+    from concentrate.evals import compression as C
+    from concentrate.evals.deletion_sim import judge_cache_pairs
+    from concentrate.evals.runner import HEURISTIC_TO_EXACT
+    from concentrate.llm.client import count_tokens, estimate_tokens
+
+    questions = load_questions(questions_file)
+    materials = C.ami_materials(load_meeting(m) for m in QUESTION_MEETINGS)
+    layers = C.build_layers(materials, C.zero_cost_compressors(seed))  # before any question
+    if sizes_only:
+        typer.echo(_json.dumps(C.sizes(layers, questions, materials), indent=1))
+        return
+    if quote_only:
+        cache = Path(os.environ.get("CONCENTRATE_CACHE", "data/cache/llm"))
+        a = C.QuoteAssumptions(reader=model, judge=judge_model)
+        cal = C.judge_output_calibration(judge_cache_pairs(cache, judge_model), a.judge_out)
+        a = C.QuoteAssumptions(reader=model, judge=judge_model, judge_out=cal)
+
+        def heuristic(texts: list[str]) -> list[int]:
+            return [round(estimate_tokens(t) * HEURISTIC_TO_EXACT) for t in texts]
+
+        counter: C.Counter = heuristic
+        if exact:
+            counter = functools.partial(count_tokens, model=model, cache_dir=cache)
+            how = f"exact (count_tokens, {model}) + measured schema overhead"
+        else:
+            how = f"offline chars/3.5 x {HEURISTIC_TO_EXACT} (measured undercount on transcripts)"
+        full = C.quote_markdown(C.quote(questions, materials, layers, counter, a), how)
+        now = C.quote_markdown(
+            C.quote(
+                questions,
+                materials,
+                layers,
+                counter,
+                dataclasses.replace(a, real_questions=0),
+                conditions=C.ZERO_COST_CONDITIONS,
+                optional=False,
+            ),
+            how,
+        )
+        md = (
+            f"## Full plan (§5)\n\n{full}\n## Next step only: the $0 conditions + closed-book "
+            f"on all {len(questions)} AMI questions\n\n{now}"
+        )
+        path = out / "compression_quote.md"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(md)
+        typer.echo(md)
+        typer.echo(f"quote written: {path} (no money spent)")
+        return
+    picked = [q for q in questions if split == "all" or q.split == split]
+    names = [c for c in conditions.split(",") if c] or [*C.ZERO_COST_CONDITIONS, C.CLOSED]
+    reader = LLMClient(model=model)
+    judge = LLMClient(model=judge_model)
+    j2 = None if judge2 == "none" else LLMClient(model=judge2)
+    readers = [
+        C.ClosedBookReader(reader) if n == C.CLOSED else C.LayerReader(reader, n, materials, layers)
+        for n in names
+    ]
+    if not yes:
+        typer.confirm(
+            f"Run {len(readers)} conditions on {len(picked)} {split} questions "
+            f"(cap ${budget:.2f}; run --quote first)?",
+            abort=True,
+        )
+
+    def spent() -> float:
+        more = j2.ledger.spent_usd() if j2 is not None else 0.0
+        return reader.ledger.spent_usd() + judge.ledger.spent_usd() + more
+
+    report = C.run_compression(
+        readers,
+        picked,
+        judge,
+        layers=layers,
+        materials=materials,
+        seed=seed,
+        budget_usd=budget,
+        out_dir=out,
+        spent=spent,
+        judge2=j2,
+        meta={"split": split, "conditions": names},
+    )
+    typer.echo(_json.dumps(report["summary"], indent=1, default=str)[:4000])
+
+
 @app.command("mcp-contract")
 def mcp_contract(
     baseline: Annotated[Path, typer.Option(help="Committed shape baseline.")] = CONTRACT_BASELINE,
