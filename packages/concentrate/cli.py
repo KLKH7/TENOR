@@ -2494,3 +2494,85 @@ def pair_cmd(
         f"paired={len(result.pairs)} unpaired_granola={len(result.unpaired_a)} "
         f"unpaired_wispr={len(result.unpaired_b)} · {out}"
     )
+
+
+# -- AMI: public meetings played into the products (docs/benchmark/AMI_DESIGN.md) ---------------
+
+ami_app = typer.Typer(no_args_is_help=True, help="AMI corpus: ground truth and transcript scoring.")
+app.add_typer(ami_app, name="ami")
+AMI_RESULTS = Path("data/ami/results")
+
+
+@ami_app.command("status")
+def ami_status(
+    db: Annotated[
+        list[Path] | None, typer.Option(help="Synced AMI-account DB(s) to check for recordings.")
+    ] = None,
+) -> None:
+    """Show each AMI meeting's ground truth, and which synced DBs already hold a recording."""
+    from concentrate.ami.corpus import load_meeting
+    from concentrate.ami.products import AMI_SET, match_notes
+
+    found: dict[Path, set[str]] = {}
+    for path in db or []:
+        store = NoteStore(path)
+        try:
+            found[path] = set(match_notes(store.iter_notes()))
+        finally:
+            store.close()
+    for mid in AMI_SET:
+        m = load_meeting(mid)
+        sections = " ".join(f"{k}={len(v)}" for k, v in m.summary.items()) or "no summary"
+        rec = " ".join(f"{p.stem}:{'yes' if mid in s else 'no'}" for p, s in found.items())
+        typer.echo(
+            f"{mid}  {m.type:<11} {m.duration_s // 60:>2} min  speakers={len(m.speakers)}  "
+            f"words={len(m.spoken()):>5}  {sections}  {rec}".rstrip()
+        )
+
+
+@ami_app.command("wer")
+def ami_wer(
+    db: Annotated[Path, typer.Option(help="Synced DB of the product's dedicated AMI account.")],
+    product: Annotated[str, typer.Option(help="Label for the results, e.g. granola or wispr.")],
+) -> None:
+    """Score a product's transcripts of the AMI meetings: WER and content-word recall."""
+    import json
+    import subprocess
+    from datetime import UTC, datetime
+
+    from concentrate.ami.products import AMI_SET, match_notes, score_note
+    from concentrate.ami.wer import NORMALISER_VERSION
+
+    if not db.exists():
+        raise typer.BadParameter(f"{db} not found: sync the AMI account first")
+    store = NoteStore(db)
+    try:
+        notes = match_notes(store.iter_notes())
+    finally:
+        store.close()
+    rows = [score_note(mid, notes[mid], product) for mid in AMI_SET if mid in notes]
+    for r in rows:
+        s = r.score
+        typer.echo(
+            f"{r.meeting_id}  WER={s.wer:.1%}  content_recall={s.content_recall:.1%}  "
+            f"words ref={s.ref_words} hyp={s.hyp_words}  speakers {r.product_speakers}"
+            f"/{r.reference_speakers}"
+        )
+    missing = [mid for mid in AMI_SET if mid not in notes]
+    if missing:
+        typer.echo(f"not recorded yet: {' '.join(missing)}")
+    if not rows:
+        return
+    sha = subprocess.run(["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True)
+    meta = {
+        "git_sha": sha.stdout.strip(),
+        "date": datetime.now(UTC).isoformat(timespec="seconds"),
+        "product": product,
+        "normaliser_version": NORMALISER_VERSION,
+        "llm": None,
+    }
+    AMI_RESULTS.mkdir(parents=True, exist_ok=True)
+    out = AMI_RESULTS / f"wer_{product}.json"
+    payload = {"meta": meta, "meetings": [r.model_dump() for r in rows]}
+    out.write_text(json.dumps(payload, indent=1) + "\n")
+    typer.echo(f"wrote {out}")

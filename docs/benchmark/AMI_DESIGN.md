@@ -195,3 +195,14 @@ Base: `https://groups.inf.ed.ac.uk/ami/AMICorpusMirror/amicorpus/`
 | Publishing product output | **Scores only.** Raw Granola and Wispr notes on AMI stay local and are never committed; we publish labels and aggregates |
 
 **Still open:** reading the participants' consent form; free-plan limits on the fresh accounts; Wispr sign-in (see [PRODUCTS.md](PRODUCTS.md)).
+
+## 10. Tooling (built 2026-11-04, $0)
+
+| Command | What it does |
+|---|---|
+| `concentrate ami status [--db data/ami_granola.db]` | Ground truth per meeting (length, speakers, words, summary sections), and which synced DBs hold a recording |
+| `concentrate ami wer --db data/ami_granola.db --product granola` | WER and content-word recall per meeting; numbers only, written to `data/ami/results/` |
+
+Code: `concentrate.ami` (`corpus` parses the zip in place, `wer` scores, `products` matches notes tagged `AMI <ID>`). Tests use a hand-made NXT zip, not the corpus.
+
+**Parser finding:** NXT agent letters are per meeting. In IS1008 the same participant is agent B in sessions a and c and agent C in b and d, so cross-meeting questions must key on the participant code, not the letter.
