@@ -17,7 +17,7 @@ As of 5 November 2026:
 | Human labels on product outputs | 23 (20 note claims, 3 Chat answers), from 1 verifier |
 | Scorers | Capture coverage, WER, fact-token recall and an MCP contract check (all free); a grounding checker and an answer judge (LLM, calibration in progress) |
 
-**All AMI results are preliminary.** The sample is 7 meetings, the human-labelled set is small, and the automated judges have not yet been calibrated against enough human labels to be trusted on their own. No result below is confirmed. Planned next: capture stress tests and a nightly replay suite ([next research step](#next-research-step-capture-reliability-and-regression-replay)), about 100 human labels, and the AMI replication of the retention study.
+**All AMI results are preliminary.** The sample is 7 meetings, the human-labelled set is small, and the automated judges have not yet been calibrated against enough human labels to be trusted on their own. No result below is confirmed. Planned next: capture stress tests and a nightly replay suite ([next research step](#next-research-step-capture-reliability-and-regression-replay)), and about 100 human labels. The AMI replication of the retention study ran on 5 November 2026 ([results](#retention-what-deleting-transcripts-costs)).
 
 An earlier study on the author's own 4 private Granola meetings (October–November 2026) is reported below where relevant and labelled as such; it is superseded by the AMI work as each replication lands.
 
@@ -104,18 +104,21 @@ On the first pass Granola's notes were grounded more often than Wispr Flow's; wh
 
 Track: [`docs/tracks/AGENT_INTERFACE.md`](docs/tracks/AGENT_INTERFACE.md).
 
-### Retention (earlier, 4 private meetings, superseded by the AMI replication in progress)
+### Retention: what deleting transcripts costs
 
-What does answering from notes alone cost once transcripts are deleted? Four conditions on the same 47 DEV questions about the author's own Granola meetings, each adding one layer:
+What does answering from notes alone cost once transcripts are deleted? Five conditions on the same 68 AMI questions (5 meetings), each answered over the question's own meetings. "Not wrong" = judged correct or partially correct; brackets are Wilson 95% CIs.
 
-| Condition | Accuracy [95% bootstrap CI] | vs row above (paired wins–losses) |
-|---|---|---|
-| A. Granola's agent, transcripts kept | 89% [79, 98] | — |
-| B. Notes only (our answer model over Granola's notes) | 57% [43, 70] | 2–17, p = 0.001 |
-| C. B plus an extracted fact layer | 66% [51, 79] | 4–0, p = 0.13 (not significant) |
-| D. C plus a kept transcript read only when needed | 87% [77, 96] | 10–0, p = 0.002 |
+| Condition | Correct | Not wrong | Paired wins–losses, correct | Status |
+|---|---|---|---|---|
+| A. Granola Chat, transcript kept | 41% [30, 53] | 76% [65, 85] | — | Preliminary |
+| B. Granola notes only (our reader) | 21% [13, 32] | 50% [38, 62] | vs A: 2–16, p = 0.001 | Preliminary |
+| B′. Wispr Flow notes only (our reader) | 12% [6, 22] | 44% [33, 56] | vs B: 4–10, p = 0.18 (not significant) | Preliminary |
+| C. B plus an extracted fact layer | 19% [12, 30] | 51% [40, 63] | vs B: 2–3, not significant | Preliminary |
+| D. C plus the transcript, read only when C abstains or hedges | 32% [22, 44] | 60% [48, 71] | vs C: 9–0, p = 0.004 | Preliminary |
 
-The loss fell on detail: on questions the notes could not answer, accuracy went from 94% to 44%. Without transcripts the answer model declined rather than answering wrongly with confidence. Condition B used our answer model, not the product's own post-deletion chat, so A − B mixes deletion with a change of model. The AMI replication adds Wispr Flow's notes as a second notes-only row and is built and quoted, not yet run. Track: [`docs/tracks/RETENTION.md`](docs/tracks/RETENTION.md); interim report: [`docs/results/TENOR_TECHNICAL_REPORT.md`](docs/results/TENOR_TECHNICAL_REPORT.md).
+**Deletion costs a lot; the fact layer adds nothing; an on-demand transcript recovers part of the loss, not all.** Granola Chat still beats D: 17–6 on not-wrong answers (p = 0.035, uncorrected; not significant after Holm correction) and 9–3 on correct (p = 0.15). This does not replicate the earlier private study, where D nearly matched Granola. A used Granola's own Chat and B–D our reader, so A − B mixes deletion with a change of model. The automated judge over-counts errors, equally for all conditions; decision questions score 0–20% everywhere because the answer key is strict. Track: [`docs/tracks/RETENTION.md`](docs/tracks/RETENTION.md); numbers: [`evals/reports/ami/deletion_ami.json`](evals/reports/ami/deletion_ami.json).
+
+*Earlier, 4 private meetings (47 DEV questions):* Granola's agent 89%, notes only 57% (2–17, p = 0.001), fact layer 66% (not significant), on-demand transcript 87%; superseded by the AMI run above ([interim report](docs/results/TENOR_TECHNICAL_REPORT.md)).
 
 ## Next research step: capture reliability and regression replay
 
@@ -177,7 +180,7 @@ uv run concentrate facts stage2 --quote                                 # notes 
 uv run concentrate mcp-contract                                         # MCP drift check
 ```
 
-**Costs.** Capture, WER, fact recall and the contract check make no LLM calls. Judged steps need `ANTHROPIC_API_KEY` in `.env` (see `.env.example`): notes grounding about $0.11 for all 7 meetings; answer attribution at most about $0.07; the AMI retention replication about $8 (quoted, not run). Every paid command prints an exact quote first and asks before spending more than $2.
+**Costs.** Capture, WER, fact recall and the contract check make no LLM calls. Judged steps need `ANTHROPIC_API_KEY` in `.env` (see `.env.example`): notes grounding about $0.11 for all 7 meetings; answer attribution at most about $0.07; the AMI retention replication $5.64 (run; quoted at about $8). Every paid command prints an exact quote first and asks before spending more than $2.
 
 **Product plans.** Reading Granola transcripts through its MCP requires a paid plan (a free trial covers it), and Granola accepts work accounts only. Wispr Flow needs its Notetaker, MCP access and cloud sync enabled; plan requirements beyond that have not been verified.
 

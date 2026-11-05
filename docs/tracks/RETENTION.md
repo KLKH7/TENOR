@@ -1,21 +1,96 @@
 # Retention track
 
-This page defines the retention track (what an answer loses when transcripts are deleted and only notes remain), with the earlier private-meeting result and the AMI replication design.
+This page defines the retention track (what an answer loses when transcripts are deleted and only notes remain). It holds the AMI replication result, its design, and the earlier private-meeting study.
+
+**The earlier headline did not replicate.** On 4 private meetings, a kept transcript read on demand (D) recovered almost all of the loss: 87% against Granola's 89%. On 5 public AMI meetings it recovers part of the gap, but Granola Chat still beats D: 17–6 on not-wrong answers, p = 0.035.
 
 | | |
 |---|---|
 | **Question** | When transcripts are deleted, how much worse do answers get, on which questions, and does the product then decline or answer wrongly with confidence? |
 | **How measured** | A ladder of conditions on the same questions: the product with transcripts; an answer model over the product's notes only; plus a kept fact layer; plus a transcript read only when needed. Paired wins and losses, exact sign tests |
-| **Earlier result** | Author's 4 private Granola meetings, 47 DEV questions: 89% with transcripts, 57% from notes only (paired 2–17, p = 0.001); 87% when a kept transcript is read on demand. **Superseded by the AMI replication in progress** |
-| **AMI replication** | Built and quoted; adds Wispr Flow's notes as a second notes-only row. Not run |
-| **Status** | Earlier result preliminary and private; AMI replication pending |
+| **AMI result (5 Nov 2026)** | 68 questions, 5 AMI meetings. Correct: Granola Chat 41%, Granola notes only 21% (paired 16–2, p = 0.001), plus fact layer 19% (n.s.), plus on-demand transcript 32%. [Results below](#ami-replication-5-nov-2026) |
+| **Earlier result** | Author's 4 private Granola meetings, 47 DEV questions: 89% with transcripts, 57% from notes only (paired 2–17, p = 0.001); 87% with an on-demand transcript. Superseded |
+| **Status** | AMI result preliminary (automated judge, n = 68). Earlier result private and superseded |
 
-The rest of this page is the original design and DEV write-up.
-
-Status: **DEV run done** (47 seen questions, 2026-11-04, $6.42, approved cap $9). Results below. The test split has not run: no test questions exist yet.
 Code: [`evals/deletion_sim.py`](../../packages/concentrate/evals/deletion_sim.py), CLI `concentrate deletion-sim`.
 Tests: [`tests/test_deletion_sim.py`](../../tests/test_deletion_sim.py) (fakes only, no network).
-AMI replication: **planned**, quoted, not run ([below](#ami-replication-planned)).
+AMI replication: **run 5 Nov 2026** ([results](#ami-replication-5-nov-2026), [design](#ami-replication-design)).
+
+## AMI replication (5 Nov 2026)
+
+**Preliminary.** Public AMI meetings replayed into Granola and Wispr Flow; automated judge; n = 68 questions on 5 meetings (13 DEV, 55 TEST). Nothing was tuned on this run.
+
+- Run `20261105T211504Z`, git `48ef477` (working tree dirty), seed 42. Design: [below](#ami-replication-design).
+- Reader `claude-opus-5-5` for B–D (`answer.v1`; C and D add `extract.v2`, `entail.v2`). A is Granola's own Chat.
+- One judge for all five: `judge.v1` on `claude-sonnet-5-5`.
+- Scope: each question's own meeting(s), as Granola Chat was asked.
+- Spent $5.64 (quote $7.79 expected, hard cap $11).
+- Numbers: [`evals/reports/ami/deletion_ami.json`](../../evals/reports/ami/deletion_ami.json) (counts, Wilson CIs, paired tests; no answer text). Per-answer rows stay local.
+
+### Per condition
+
+"Not wrong" = judged correct or partially correct. Brackets: Wilson 95% CI.
+
+| Condition | Correct | Not wrong | Confident errors |
+|---|---|---|---|
+| A. Granola Chat, transcript kept | 28 / 68 = 41% [30, 53] | 52 / 68 = 76% [65, 85] | 16 |
+| B. Granola notes only | 14 = 21% [13, 32] | 34 = 50% [38, 62] | 9 |
+| B′. Wispr Flow notes only | 8 = 12% [6, 22] | 30 = 44% [33, 56] | 14 |
+| C. Granola notes + fact layer | 13 = 19% [12, 30] | 35 = 51% [40, 63] | 8 |
+| D. C + transcript read on abstain | 22 = 32% [22, 44] | 41 = 60% [48, 71] | 15 |
+
+- **D's fallback fired on 36 of 68 questions** (when C's first answer abstained or hedged).
+- **Confident error** = judged incorrect without abstaining or saying the material doesn't cover it. Granola Chat has no abstain signal, so all 16 of its incorrect answers count.
+
+### Paired tests (same 68 questions)
+
+Wins–losses on questions where exactly one side meets the metric; exact two-sided sign test.
+
+| Comparison | Correct | Not wrong |
+|---|---|---|
+| A vs B: deletion (plus a model change) | 16–2, p = 0.001 | 19–1, p < 0.001 |
+| B vs B′: Granola's notes vs Wispr Flow's | 10–4, p = 0.18 (not significant) | 11–7, p = 0.48 (not significant) |
+| C vs B: what the fact layer adds | 2–3, p = 1.0 (not significant) | 4–3, p = 1.0 (not significant) |
+| D vs C: what the on-demand transcript adds | 9–0, p = 0.004 | 10–4, p = 0.18 (not significant) |
+| A vs D: the gap left | 9–3, p = 0.15 (not significant) | 17–6, p = 0.035 |
+
+**Multiple tests.** These p-values are uncorrected. With Holm correction across the five tests per metric, A vs B and D vs C (correct) stay significant; A vs D on not-wrong (adjusted p = 0.14) does not.
+
+### By question type (correct, of n)
+
+| Type | n | A | B | B′ | C | D |
+|---|---|---|---|---|---|---|
+| action: what | 16 | 4 | 3 | 3 | 1 | 2 |
+| action: who | 15 | 11 | 7 | 4 | 8 | 9 |
+| decision | 10 | 2 | 0 | 0 | 0 | 0 |
+| problem | 4 | 1 | 1 | 0 | 0 | 0 |
+| what changed | 11 | 4 | 1 | 0 | 1 | 2 |
+| who said | 12 | 6 | 2 | 1 | 3 | 9 |
+
+- **Decision questions score 0–20% for every condition.** Their not-wrong rate is 40–60%, so this is mostly the strict summary-level answer key, not a deletion effect.
+- **"Who said" is where the transcript matters.** D gets 9 of 12 against B's 2. D also beats Granola Chat here (9 vs 6; n = 12, untested).
+
+### What replicated
+
+- **Deletion costs a lot, and it is significant.** A vs B: 16–2 here, 17–2 on the private meetings. Both p ≤ 0.001.
+- **The fact layer adds nothing, twice.** C vs B: 2–3 here; 4–0 (p = 0.13) before. Neither is significant.
+- **The on-demand transcript recovers a significant part.** D vs C: 9–0 here, 10–0 before.
+
+### What did not replicate
+
+- **D does not close the gap.** Before, D reached 87% against Granola's 89%. Here Granola Chat beats D, 17–6 on not-wrong (p = 0.035, not significant after Holm) and 9–3 on correct (p = 0.15).
+- **"Hedges, doesn't bluff" did not hold.** Before, B and C made 0 confident errors. Here B made 9, C 8, D 15. The automated judge over-counts errors, so these are upper bounds.
+- **Granola's notes beat Wispr Flow's on the point estimate only.** 14 vs 8 correct; 10–4, not significant.
+
+### Threats to validity
+
+- **A vs B–D use different answerers.** A is Granola's own Chat; B–D are our reader. So A − B mixes deletion with a model change, and so does A − D. B′ − B, C − B and D − C share the reader and are clean.
+- **The automated judge over-counts errors.** Human checks found most of its error verdicts did not hold ([CALIBRATED_JUDGING.md](../method/CALIBRATED_JUDGING.md)). It is applied equally to all five conditions, so paired differences are less affected than levels.
+- **Templated questions, strict gold.** Questions come from fixed templates over AMI annotations; gold answers are annotators' summary sentences. Decision questions show the cost: 0–20% correct everywhere.
+- **Wispr Flow's notes use generic speaker labels** ("Speaker 1"), which hurts who-questions for B′ (action: who 4 vs B's 7; who said 1 vs 2).
+- **Small sample.** n = 68 questions on 5 meetings, four of them one design-team series. Questions within a meeting are not independent.
+- **One product's Chat.** Only Granola has a Chat answer to compare against; Wispr Flow's MCP has no question-answering tool.
+- **Oracle scope.** Every condition is told which meetings to read, so retrieval failures are excluded for all.
 
 ## The question
 
@@ -162,11 +237,11 @@ Granola's 6% confident error is the same under P2-T's flag-only definition (answ
 - **Input tokens matched the quote exactly** for B (248,707) and C (541,338).
 - The overshoot came from the fallback. It fired on 60% of answers, not the 47% assumed, and outputs ran a little long.
 
-## AMI replication (planned)
+## AMI replication: design
 
 The result above rests on the author's 4 private meetings, so nobody else can check it. This replicates it on the public [AMI corpus](../method/AMI_REPLAY.md): AMI meetings played into Granola and Wispr Flow. It can be released, and n grows as more AMI meetings are recorded.
 
-Status: **built and quoted; nothing paid has run.** Code: [`evals/deletion_ami.py`](../../packages/concentrate/evals/deletion_ami.py), CLI `concentrate ami deletion-sim`. Tests: [`tests/test_deletion_ami.py`](../../tests/test_deletion_ami.py) (fakes only).
+Status: **run 5 Nov 2026**; results [above](#ami-replication-5-nov-2026). Code: [`evals/deletion_ami.py`](../../packages/concentrate/evals/deletion_ami.py), CLI `concentrate ami deletion-sim`. Tests: [`tests/test_deletion_ami.py`](../../tests/test_deletion_ami.py) (fakes only).
 
 ### Conditions
 
@@ -192,7 +267,7 @@ Same ladder, one product comparison added.
 
 - **Meetings:** every AMI recording the synced DBs match (`match_recordings` + `recording_ids.txt`). No meeting list in the code.
 - **Questions:** any AMI question whose meetings both apps recorded and that Granola Chat answered. Today: 68 questions on 5 meetings (13 ES2006a questions wait for Chat answers).
-- **Figures:** `ami_retention_steps` (with a Granola vs Wispr notes-only panel), `ami_answer_types`, `ami_question_heatmap`. They read n from the aggregate (`evals/reports/ami/deletion-sim.aggregate.json`) and appear once it exists.
+- **Figures:** `ami_retention_steps` (with a Granola vs Wispr notes-only panel), `ami_answer_types`, `ami_question_heatmap`. They read n from the aggregate (`evals/reports/ami/deletion-sim.aggregate.json`) and appear once it exists. The 5 Nov run did not commit that aggregate, so these figures are not generated yet; its numbers are in `deletion_ami.json`.
 
 ### Quote (2026-11-05, question scope, $0 to compute)
 

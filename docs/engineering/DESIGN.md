@@ -530,3 +530,13 @@ Write-up: [WRONG_FACTS.md](../method/WRONG_FACTS.md). Code: `ami/facts.py`, `eva
 - **Decision: databases are read read-only** (`store.read_notes`, SQLite `mode=ro`): the sync can run alongside, and nothing is created or migrated.
 - **Found:** Wispr's MCP transcript starts with a `<<<…>>>` safety banner that `sources/wispr_mcp.py` stores as utterance 0. The facts code drops it; the source and `ami wer` still include it.
 - **Open:** fix the banner in the Wispr source; a phonetic-similarity split for name substitutions (spelling vs a different person); collect Chat answers for stage 3.
+
+## Retention replicated on AMI (2026-11-05)
+
+Write-up: [RETENTION.md](../tracks/RETENTION.md#ami-replication-5-nov-2026). Numbers: `evals/reports/ami/deletion_ami.json`. Run `20261105T211504Z`, $5.64.
+
+- **Finding: deletion cost replicated; full recovery did not.** Notes only vs Granola Chat 2–16 (p = 0.001). The on-demand transcript recovered part (D vs C 9–0), but Granola Chat still beat D 17–6 on not-wrong (p = 0.035 uncorrected; 0.14 after Holm).
+- **Decision: drop the fact layer from future work.** Two null results: C vs B 4–0 (p = 0.13) on the private meetings, 2–3 on AMI. It costs an extraction pass per meeting and adds nothing measurable.
+- **Decision: the on-demand transcript is the retained mechanism.** It is the only layer with a significant gain in both studies. It needs the transcript to exist, so it models "keep a cold copy", not deletion.
+- **Trade-off:** A − D still mixes Granola's model with ours. Whether a cold-copy reader with Granola's own model would close the gap is open.
+- **Process:** numbers were recomputed from the local per-answer rows (questions matched across systems) and committed as counts only; no answer, gold or question text.

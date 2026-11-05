@@ -1,0 +1,451 @@
+{
+ "meta": {
+  "study": "retention (transcript deletion) replication on AMI",
+  "corpus": "AMI Meeting Corpus manual annotations 1.6.2 (CC BY 4.0), replayed into Granola and Wispr Flow",
+  "run": "20261105T211504Z",
+  "git": {
+   "sha": "48ef477",
+   "dirty": true
+  },
+  "seed": 42,
+  "split": "all (13 dev + 55 test questions; replication run, nothing tuned on it)",
+  "split_counts": {
+   "dev/single_meeting": 13,
+   "test/multi_meeting": 11,
+   "test/single_meeting": 44
+  },
+  "questions": 68,
+  "meetings": 5,
+  "meeting_ids": [
+   "IB4003",
+   "IS1008a",
+   "IS1008b",
+   "IS1008c",
+   "IS1008d"
+  ],
+  "scope": "each question answered over its own meeting(s) only",
+  "skipped_questions": {
+   "no Granola Chat answer": 13,
+   "not recorded by granola+wispr": 230
+  },
+  "reader_model": "claude-opus-5-5 (B, B_wispr, C, D)",
+  "answerer_A": "Granola Chat (Granola's own model; not our reader)",
+  "judge_model": "claude-sonnet-5-5",
+  "ingest_model": "claude-sonnet-5-5",
+  "prompts": {
+   "granola_chat": [
+    "granola:chat"
+   ],
+   "notes_only": [
+    "answer.v1"
+   ],
+   "notes_only_wispr": [
+    "answer.v1"
+   ],
+   "notes_facts": [
+    "answer.v1",
+    "extract.v2",
+    "entail.v2"
+   ],
+   "notes_facts_fallback": [
+    "answer.v1",
+    "extract.v2",
+    "entail.v2"
+   ],
+   "judge": [
+    "judge.v1"
+   ]
+  },
+  "spent_usd": 5.64,
+  "not_wrong": "verdict correct or partially_correct",
+  "confident_error": "judged incorrect and neither abstained nor said the material does not cover it",
+  "paired_test": "exact two-sided sign test (McNemar) on questions where exactly one system meets the metric; a_only = A meets it and B does not",
+  "ci": "Wilson 95%",
+  "note": "Numbers only: no answer, gold or question text. Raw run is local and gitignored."
+ },
+ "conditions": {
+  "A": {
+   "system": "granola_chat",
+   "label": "Granola Chat (transcript kept)",
+   "n": 68,
+   "verdicts": {
+    "correct": 28,
+    "incorrect": 16,
+    "partially_correct": 24
+   },
+   "correct": {
+    "k": 28,
+    "rate": 0.4118,
+    "ci95_wilson": [
+     0.3026,
+     0.5304
+    ]
+   },
+   "not_wrong": {
+    "k": 52,
+    "rate": 0.7647,
+    "ci95_wilson": [
+     0.6514,
+     0.8497
+    ]
+   },
+   "abstained": 0,
+   "confident_error": 16
+  },
+  "B": {
+   "system": "notes_only",
+   "label": "Granola notes only (transcript deleted)",
+   "n": 68,
+   "verdicts": {
+    "correct": 14,
+    "incorrect": 34,
+    "partially_correct": 20
+   },
+   "correct": {
+    "k": 14,
+    "rate": 0.2059,
+    "ci95_wilson": [
+     0.1268,
+     0.3164
+    ]
+   },
+   "not_wrong": {
+    "k": 34,
+    "rate": 0.5,
+    "ci95_wilson": [
+     0.3844,
+     0.6156
+    ]
+   },
+   "abstained": 23,
+   "confident_error": 9
+  },
+  "B_wispr": {
+   "system": "notes_only_wispr",
+   "label": "Wispr Flow notes only (transcript deleted)",
+   "n": 68,
+   "verdicts": {
+    "correct": 8,
+    "incorrect": 38,
+    "partially_correct": 22
+   },
+   "correct": {
+    "k": 8,
+    "rate": 0.1176,
+    "ci95_wilson": [
+     0.0608,
+     0.2154
+    ]
+   },
+   "not_wrong": {
+    "k": 30,
+    "rate": 0.4412,
+    "ci95_wilson": [
+     0.3295,
+     0.5592
+    ]
+   },
+   "abstained": 22,
+   "confident_error": 14
+  },
+  "C": {
+   "system": "notes_facts",
+   "label": "Granola notes + fact layer",
+   "n": 68,
+   "verdicts": {
+    "correct": 13,
+    "incorrect": 33,
+    "partially_correct": 22
+   },
+   "correct": {
+    "k": 13,
+    "rate": 0.1912,
+    "ci95_wilson": [
+     0.1153,
+     0.3001
+    ]
+   },
+   "not_wrong": {
+    "k": 35,
+    "rate": 0.5147,
+    "ci95_wilson": [
+     0.3983,
+     0.6295
+    ]
+   },
+   "abstained": 22,
+   "confident_error": 8
+  },
+  "D": {
+   "system": "notes_facts_fallback",
+   "label": "C + transcript fallback on abstain",
+   "n": 68,
+   "verdicts": {
+    "correct": 22,
+    "incorrect": 27,
+    "partially_correct": 19
+   },
+   "correct": {
+    "k": 22,
+    "rate": 0.3235,
+    "ci95_wilson": [
+     0.2244,
+     0.4416
+    ]
+   },
+   "not_wrong": {
+    "k": 41,
+    "rate": 0.6029,
+    "ci95_wilson": [
+     0.4842,
+     0.7107
+    ]
+   },
+   "abstained": 10,
+   "confident_error": 15,
+   "fallback_fired": 36
+  }
+ },
+ "paired": [
+  {
+   "a": "A",
+   "b": "B",
+   "metric": "correct",
+   "a_only": 16,
+   "b_only": 2,
+   "both": 12,
+   "neither": 38,
+   "p_two_sided": 0.00131
+  },
+  {
+   "a": "A",
+   "b": "B",
+   "metric": "not_wrong",
+   "a_only": 19,
+   "b_only": 1,
+   "both": 33,
+   "neither": 15,
+   "p_two_sided": 4.01e-05
+  },
+  {
+   "a": "B",
+   "b": "B_wispr",
+   "metric": "correct",
+   "a_only": 10,
+   "b_only": 4,
+   "both": 4,
+   "neither": 50,
+   "p_two_sided": 0.18
+  },
+  {
+   "a": "B",
+   "b": "B_wispr",
+   "metric": "not_wrong",
+   "a_only": 11,
+   "b_only": 7,
+   "both": 23,
+   "neither": 27,
+   "p_two_sided": 0.481
+  },
+  {
+   "a": "C",
+   "b": "B",
+   "metric": "correct",
+   "a_only": 2,
+   "b_only": 3,
+   "both": 11,
+   "neither": 52,
+   "p_two_sided": 1.0
+  },
+  {
+   "a": "C",
+   "b": "B",
+   "metric": "not_wrong",
+   "a_only": 4,
+   "b_only": 3,
+   "both": 31,
+   "neither": 30,
+   "p_two_sided": 1.0
+  },
+  {
+   "a": "D",
+   "b": "C",
+   "metric": "correct",
+   "a_only": 9,
+   "b_only": 0,
+   "both": 13,
+   "neither": 46,
+   "p_two_sided": 0.00391
+  },
+  {
+   "a": "D",
+   "b": "C",
+   "metric": "not_wrong",
+   "a_only": 10,
+   "b_only": 4,
+   "both": 31,
+   "neither": 23,
+   "p_two_sided": 0.18
+  },
+  {
+   "a": "A",
+   "b": "D",
+   "metric": "correct",
+   "a_only": 9,
+   "b_only": 3,
+   "both": 19,
+   "neither": 37,
+   "p_two_sided": 0.146
+  },
+  {
+   "a": "A",
+   "b": "D",
+   "metric": "not_wrong",
+   "a_only": 17,
+   "b_only": 6,
+   "both": 35,
+   "neither": 10,
+   "p_two_sided": 0.0347
+  }
+ ],
+ "by_category": {
+  "action_what": {
+   "n": 16,
+   "A": {
+    "correct": 4,
+    "not_wrong": 14
+   },
+   "B": {
+    "correct": 3,
+    "not_wrong": 8
+   },
+   "B_wispr": {
+    "correct": 3,
+    "not_wrong": 9
+   },
+   "C": {
+    "correct": 1,
+    "not_wrong": 8
+   },
+   "D": {
+    "correct": 2,
+    "not_wrong": 9
+   }
+  },
+  "action_who": {
+   "n": 15,
+   "A": {
+    "correct": 11,
+    "not_wrong": 11
+   },
+   "B": {
+    "correct": 7,
+    "not_wrong": 8
+   },
+   "B_wispr": {
+    "correct": 4,
+    "not_wrong": 5
+   },
+   "C": {
+    "correct": 8,
+    "not_wrong": 8
+   },
+   "D": {
+    "correct": 9,
+    "not_wrong": 10
+   }
+  },
+  "decision": {
+   "n": 10,
+   "A": {
+    "correct": 2,
+    "not_wrong": 6
+   },
+   "B": {
+    "correct": 0,
+    "not_wrong": 6
+   },
+   "B_wispr": {
+    "correct": 0,
+    "not_wrong": 4
+   },
+   "C": {
+    "correct": 0,
+    "not_wrong": 5
+   },
+   "D": {
+    "correct": 0,
+    "not_wrong": 6
+   }
+  },
+  "problem": {
+   "n": 4,
+   "A": {
+    "correct": 1,
+    "not_wrong": 4
+   },
+   "B": {
+    "correct": 1,
+    "not_wrong": 2
+   },
+   "B_wispr": {
+    "correct": 0,
+    "not_wrong": 3
+   },
+   "C": {
+    "correct": 0,
+    "not_wrong": 2
+   },
+   "D": {
+    "correct": 0,
+    "not_wrong": 1
+   }
+  },
+  "what_changed": {
+   "n": 11,
+   "A": {
+    "correct": 4,
+    "not_wrong": 10
+   },
+   "B": {
+    "correct": 1,
+    "not_wrong": 7
+   },
+   "B_wispr": {
+    "correct": 0,
+    "not_wrong": 8
+   },
+   "C": {
+    "correct": 1,
+    "not_wrong": 8
+   },
+   "D": {
+    "correct": 2,
+    "not_wrong": 5
+   }
+  },
+  "who_said": {
+   "n": 12,
+   "A": {
+    "correct": 6,
+    "not_wrong": 7
+   },
+   "B": {
+    "correct": 2,
+    "not_wrong": 3
+   },
+   "B_wispr": {
+    "correct": 1,
+    "not_wrong": 1
+   },
+   "C": {
+    "correct": 3,
+    "not_wrong": 4
+   },
+   "D": {
+    "correct": 9,
+    "not_wrong": 10
+   }
+  }
+ }
+}
