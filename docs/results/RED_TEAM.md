@@ -246,8 +246,8 @@ What this means:
 | README.md:35 | "Only Concentrate gets an org directory … The directory ablation hasn't been run yet." | Fine, but add the measured floor | "…It decided 1/120 questions directly (q246); the ablation is pending." |
 | README.md:3 / What's inside | "each with a verified answer" | At least q694 ("reported complete on None") and q036 are wrong (R5) | "…answers verified by construction (known gold errors: q036, q694, …)" |
 | README.md:73 Quick start | `uv run pytest` / `concentrate eval …` | HEAD doesn't import (R8) | Fix `roster.py`; add `--k 10` to the reproduction command |
-| docs/writeup/MEMO.md:23 | "Statistics you can rely on." | The statistics are sound; the inputs (wiring, price basis) are what mislead | "Paired significance tests and power analysis (see their limits in RED_TEAM.md)." |
-| docs/writeup/MEMO.md:15 | "…(e.g. knowing which Sam you mean)" as a Concentrate capability | In this benchmark that comes from the directory, which Granola lacks (R3) | Say the directory provides it |
+| earlier summary draft (not published) | "Statistics you can rely on." | The statistics are sound; the inputs (wiring, price basis) are what mislead | "Paired significance tests and power analysis (see their limits in RED_TEAM.md)." |
+| earlier summary draft (not published) | "…(e.g. knowing which Sam you mean)" as a Concentrate capability | In this benchmark that comes from the directory, which Granola lacks (R3) | Say the directory provides it |
 | `.analysis.md` summary | "b5_graphiti, b3_agentic, b0_topk are beaten on both by another system" | At 1,000 questions per corpus and on mixed price bases | Give the volume and price basis in the sentence |
 
 ## Cheapest fixes, in order

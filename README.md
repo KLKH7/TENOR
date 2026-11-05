@@ -126,7 +126,6 @@ uv run concentrate real-kit --help
 
 | Start here | |
 |---|---|
-| [`docs/report/HINDSIGHT_2PAGE.md`](docs/report/HINDSIGHT_2PAGE.md) ([PDF](docs/report/HINDSIGHT_2PAGE.pdf)) | Two-page summary with figures |
 | [`docs/report/HINDSIGHT_REPORT.md`](docs/report/HINDSIGHT_REPORT.md) | Full technical report |
 | [`docs/README.md`](docs/README.md) | Map of every doc |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Diagrams, linked to the code |

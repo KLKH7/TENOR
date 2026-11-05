@@ -321,7 +321,7 @@ uv run python -m concentrate.enhance.evaluate data/fixtures/northwind
 
 **Predict** accuracy on remote vs in-person lines. **Expected:** remote 94.9%, in-person **21.0%**.
 The last line reads "Baseline, in-person: always the note owner: accuracy 64.2%". So the clever
-method loses to the dumb baseline in person. Be ready to say that in an interview (INTERVIEW_PREP Q7).
+method loses to the dumb baseline in person. Report it as a limitation of the method.
 
 ## When you've done all eight
 

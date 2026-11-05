@@ -2,7 +2,7 @@
 
 **Kian Lakhani** · Technical report · 4 November 2026 · Independent research prototype, not affiliated with Granola
 
-*What this is: the full technical report behind the [two-page summary](HINDSIGHT_2PAGE.md). It covers method, real-meeting results, synthetic diagnostics, limitations and how to reproduce every number.*
+*What this is: the full technical report. It covers method, real-meeting results, synthetic diagnostics, limitations and how to reproduce every number.*
 
 ## Abstract
 
@@ -194,7 +194,7 @@ Everything about your meetings stays in the gitignored `data/real/`; only a cont
 
 ## References
 
-Web sources were verified at source on 3 November 2026 (recorded in [`FINDINGS_CHECKLIST.md`](../writeup/FINDINGS_CHECKLIST.md)); repository files are at this branch.
+Web sources were verified at source on 3 November 2026; repository files are at this branch.
 
 1. C. Newton, interview with Granola CEO Chris Pedregal, *Platformer*, 30 Jul 2026. https://www.platformer.news/granola-chris-pedregal-interview/ (accessed 2026-11-03)
 2. Granola Help Centre, "Transcript auto-deletion". https://docs.granola.ai/help-center/consent-security-privacy/transcript-auto-deletion (accessed 2026-11-03)

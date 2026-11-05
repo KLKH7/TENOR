@@ -6,7 +6,7 @@ links point at `HEAD 50fefb4` (branch `feat/granola-mcp-source`). If a line has 
 for the function name.
 
 Companion docs: [CONCEPTS.md](CONCEPTS.md) explains every technique named here, [EXERCISES.md](EXERCISES.md)
-has hands-on drills, and [INTERVIEW_PREP.md](INTERVIEW_PREP.md) covers what to say about it.
+has hands-on drills.
 
 > **One-sentence version.** We turn Granola notes into a test: a synthetic company with known
 > answers. Seven systems answer the same questions with the same model and are graded by the same
@@ -184,7 +184,7 @@ flowchart TB
 
 **Why b3 matters most:** the live probe ([`docs/archive/PROBE_2026-11-02.md`](../archive/PROBE_2026-11-02.md)) showed
 Granola's MCP is now an agent, so "naive top-k" is no longer the baseline to beat. b3 is our
-*re-implementation of the shape*. It is not Granola's agent (see INTERVIEW_PREP Q4).
+*re-implementation of the shape*. It is not Granola's agent.
 
 ## Stop 4b: Write-time systems (b4 Mem0, b5 Graphiti)
 
