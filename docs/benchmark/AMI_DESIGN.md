@@ -194,6 +194,12 @@ Base: `https://groups.inf.ed.ac.uk/ami/AMICorpusMirror/amicorpus/`
 | Dedicated accounts | **Yes:** fresh Granola and Wispr accounts holding only AMI meetings |
 | Publishing product output | **Scores only.** Raw Granola and Wispr notes on AMI stay local and are never committed; we publish labels and aggregates |
 
+| Accounts (revised) | Granola only accepts work accounts, so both products use Kian's **main** accounts. Granola questions are scoped to the AMI notes with `document_ids`; our agent gets only AMI notes from Wispr. AMI notes are deleted after the run |
+| Personal vocabulary | **Off for scored runs.** The pilot showed Wispr writing the account holder's name for an AMI speaker. Back up and clear the personal dictionary (both products, where one exists) before recording; restore after. Voice profile and account name can't be removed: a stated threat to validity |
+| Room isolation | Speakers muted: products capture system audio digitally, the room stays silent. Granola mic turns are dropped and counted; Wispr has no capture channel, so it needs a silent room |
+
+**Pilot (2026-11-05):** IS1008a recorded once with personal settings on, to test the pipeline. Re-recorded under the clean protocol before scoring.
+
 **Still open:** reading the participants' consent form; free-plan limits on the fresh accounts; Wispr sign-in (see [PRODUCTS.md](PRODUCTS.md)).
 
 ## 10. Tooling (built 2026-11-04, $0)
