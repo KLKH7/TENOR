@@ -15,8 +15,8 @@ Window counts are not independent (they cluster by meeting), so no pooled interv
 
 | Test | Question | Why it matters |
 |---|---|---|
-| **A. Capture reliability** | Did the product capture the whole meeting, and does it fail silently? | The most common recent user complaint on Reddit (~16 of ~75 feedback items: "appeared to be recording… and simply wasn't"; notes for only some calls) |
-| **B. Typed vs silent** | How much do Granola's notes improve when the user types a few words? | Granola's identity is notes that blend your typing with the transcript; reviews say "note quality depends on your participation"; all our AMI notes so far are silent replays |
+| **A. Capture reliability** | Did the product capture the whole meeting, and does it fail silently? | The most common theme in a 2026 sample of public user reports about meeting note-takers (about 16 of about 75 items, one forum, one product's user community): a recording that appeared to run but captured nothing, or notes for only some calls |
+| **B. Typed vs silent** | How much do a product's notes improve when the user types a few words? | Some note-takers (Granola among them) blend the user's typing with the transcript, and a 2026 review says note quality depends on participation; all TENOR's AMI notes so far are silent replays |
 
 ---
 
@@ -43,12 +43,12 @@ Window counts are not independent (they cluster by meeting), so no pooled interv
 | # | Condition | What it probes | Who does what |
 |---|---|---|---|
 | A0 | Baseline: the 7 existing recordings | Coverage under normal use | Done (re-score at $0) |
-| A1 | **Long silence**: 12 min of silence spliced mid-meeting | Granola's "stopped after 10 minutes of inactivity": does capture resume when speech returns, and is the user told? | Automated |
-| A2 | **Back-to-back, one note**: meeting X then meeting Y with no stop | The viral Reddit case: notes from one meeting written into another | Automated |
+| A1 | **Long silence**: 12 min of silence spliced mid-meeting | Inactivity timeouts (at least one product documents stopping after 10 minutes of inactivity): does capture resume when speech returns, and is the user told? | Automated |
+| A2 | **Back-to-back, one note**: meeting X then meeting Y with no stop | A reported failure mode: notes from one meeting written into another | Automated |
 | A3 | **Back-to-back, two notes started late**: Y's note started 2 min after Y's audio begins | Missed openings; which note gets the overlap | Automated |
-| A4 | **App in the background / another full-screen Space** | Last night's failure: we lost control when the window left the Space | Automated, screenshots |
-| A5 | **Display sleep / lid closed** (`caffeinate` off) | Does capture survive sleep? | Kian (system setting; I don't change it) |
-| A6 | **Network drop for 60 s** | Offline handling | Kian toggles Wi-Fi |
+| A4 | **App in the background / another full-screen Space** | Capture when the app is not visible; in the 5 Nov 2026 overnight replay the replay automation lost control when the window left its desktop | Automated, screenshots |
+| A5 | **Display sleep / lid closed** (`caffeinate` off) | Does capture survive sleep? | The author (a system setting the automation does not change) |
+| A6 | **Network drop for 60 s** | Offline handling | The author toggles Wi-Fi |
 
 **Comparison:** Granola and Wispr Flow side by side on every condition; same audio, same timing.
 
@@ -71,7 +71,7 @@ Window counts are not independent (they cluster by meeting), so no pooled interv
 
 **Meetings:** IS1008a–d and ES2006a (5 meetings, ~2 h of replay). Paired by meeting.
 
-**Who types:** scheduled typing into Granola's note body by the replay script (computer use), or Kian from a printed cue sheet with timestamps. Scripted is more consistent; human is more realistic. Start scripted.
+**Who types:** scheduled typing into the product's note body by the replay script (computer use), or the author from a printed cue sheet with timestamps. Scripted is more consistent; human is more realistic. Start scripted.
 
 **Cost:** judging ~$0.30 (Sonnet), grounding ~$0.10.
 
