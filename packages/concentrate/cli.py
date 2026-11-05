@@ -2782,28 +2782,38 @@ CONTRACT_BASELINE = Path("evals/contracts/granola_mcp.json")
 @ami_app.command("questions")
 def ami_questions(
     seed: Annotated[int, typer.Option()] = 42,
+    target: Annotated[int, typer.Option(help="Add whole series until this many questions.")] = 300,
     out: Annotated[Path, typer.Option(help="Output folder (committed: AMI is CC BY 4.0).")] = Path(
         "data/ami_questions"
     ),
 ) -> None:
     """Build the evidence-compression question set from AMI's human annotations (no LLM), and
     the closed-book control prompts. Same seed, byte-identical files."""
-    from concentrate.ami.corpus import load_meeting
+    from concentrate.ami.corpus import DEFAULT_ZIP, load_meeting
     from concentrate.ami.questions import (
-        QUESTION_MEETINGS,
         build_questions,
         closed_book_prompts,
         counts,
+        select_meetings,
         write_jsonl,
     )
     from concentrate.llm.client import load_prompt
 
-    qs = build_questions([load_meeting(m) for m in QUESTION_MEETINGS], seed)
+    meetings, sel = select_meetings(DEFAULT_ZIP, load_meeting, seed, target)
+    qs = build_questions(meetings, seed)
     write_jsonl(qs, out / "questions.jsonl")
     write_jsonl(closed_book_prompts(qs, load_prompt("closed_book.v1")), out / "closed_book.jsonl")
-    typer.echo(f"{len(qs)} questions -> {out}/questions.jsonl (+ closed_book.jsonl)")
+    (out / "meetings.json").write_text(sel.model_dump_json(indent=1) + "\n")
+    typer.echo(
+        f"{len(qs)} questions from {len(meetings)} meetings -> {out}/questions.jsonl "
+        f"(+ closed_book.jsonl, meetings.json); added series {sel.added_series}, "
+        f"non-scenario {sel.added_nonscenario}"
+    )
     for t, c in counts(qs).items():
-        typer.echo(f"  {t:<13} dev={c['dev']:>2} test={c['test']:>2}")
+        typer.echo(
+            f"  {t:<13} dev={c['dev']:>3} test={c['test']:>3} "
+            f"recorded={c['recorded']:>3} annotation_only={c['annotation_only']:>3}"
+        )
 
 
 # -- evidence compression (thesis A) ------------------------------------------------------------
@@ -2861,14 +2871,14 @@ def compression_cmd(
     import json as _json
 
     from concentrate.ami.corpus import load_meeting
-    from concentrate.ami.questions import QUESTION_MEETINGS, load_questions
+    from concentrate.ami.questions import load_questions, load_selection
     from concentrate.evals import compression as C
     from concentrate.evals.deletion_sim import judge_cache_pairs
     from concentrate.evals.runner import HEURISTIC_TO_EXACT
     from concentrate.llm.client import Ledger, count_tokens, estimate_tokens
 
     questions = load_questions(questions_file)
-    materials = C.ami_materials(load_meeting(m) for m in QUESTION_MEETINGS)
+    materials = C.ami_materials(load_meeting(m) for m in load_selection().meetings)
     layers = C.build_layers(materials, C.zero_cost_compressors(seed))  # before any question
     if sizes_only:
         typer.echo(_json.dumps(C.sizes(layers, questions, materials), indent=1))

@@ -1,27 +1,37 @@
 # AMI questions for the evidence-compression experiment
 
-68 questions about six AMI meetings, for [EVIDENCE_COMPRESSION.md](../../docs/benchmark/EVIDENCE_COMPRESSION.md). Built by fixed templates from AMI's human annotations; no LLM wrote any question or answer.
+311 questions about 33 AMI meetings, for [EVIDENCE_COMPRESSION.md](../../docs/benchmark/EVIDENCE_COMPRESSION.md). Built by fixed templates from AMI's human annotations; no LLM wrote any question or answer.
 
 **Source and licence.** AMI Meeting Corpus, manual annotations v1.6.2 (University of Edinburgh and the AMI Consortium), CC BY 4.0. Gold answers quote the AMI annotators' abstractive summaries; who-said-it questions quote AMI's manual transcript. Regenerate with `uv run concentrate ami questions --seed 42` (byte-identical; a test checks it).
 
 | File | What |
 |---|---|
-| `questions.jsonl` | One question per line: `type`, `template`, `meetings`, `question`, `gold_answer`, `gold_evidence` (AMI dialogue-act IDs), `evidence_source`, `fact_group`, `notes_can_answer` (null until product notes are synced), `split`, `seed` |
+| `questions.jsonl` | One question per line: `type`, `template`, `meetings`, `question`, `gold_answer`, `gold_evidence` (AMI dialogue-act IDs), `evidence_source`, `fact_group`, `notes_can_answer` (null for now), `split`, **`subset`**, `seed` |
 | `closed_book.jsonl` | The same questions exactly as the closed-book control sends them: no meeting at all |
+| `meetings.json` | Which meetings, the seeded rule that chose them, and the full candidate order |
 
-| Type | DEV | TEST | Built from |
+## Two subsets: report them apart
+
+| Subset | Meetings | Questions | Notes the reader gets |
 |---|---|---|---|
-| decision | 1 | 9 | decision sentences, grouped by subject |
-| action_who | 4 | 11 | action sentences whose subject is a role |
-| action_what | 4 | 12 | action sentences, grouped by subject |
-| problem | 1 | 3 | problem sentences, one list per meeting |
-| who_said | 3 | 9 | a seeded sample of summary-linked dialogue acts, quoted; gold is the role, looked up by participant code |
-| what_changed | 0 | 11 | IS1008k action item → what that role presented in IS1008k+1 (8); a decision and its closest decision in the next meeting (3) |
+| `recorded` | IS1008a–d, IB4003, EN2002b (played into Granola and Wispr) | 68 | AMI's abstract now; real product notes once synced |
+| `annotation_only` | 6 series (ES2006, IS1006, TS3009, ES2012, IS1003, TS3007) + IB4005, IB4010, IB4011 | 243 | AMI's abstract, a **stand-in**, less realistic |
+
+**How meetings were chosen.** The recorded six, plus every other non-scenario meeting with a summary (only IB4005, IB4010, IB4011 exist). Then whole scenario series: of AMI's 32 series with a summary and summary links in all four sessions, each site's (ES, IS, TS) were shuffled with seed 42 and taken round-robin until the set reached 300 questions. Whole series keep the cross-meeting questions working.
+
+| Type | DEV | TEST | recorded | annotation_only | Built from |
+|---|---|---|---|---|---|
+| decision | 1 | 72 | 10 | 63 | decision sentences, grouped by subject |
+| action_who | 4 | 42 | 15 | 31 | action sentences whose subject is a role |
+| action_what | 4 | 52 | 16 | 40 | action sentences, grouped by subject |
+| problem | 1 | 28 | 4 | 25 | problem sentences, one list per meeting |
+| who_said | 3 | 81 | 12 | 72 | a seeded sample of summary-linked dialogue acts, quoted; gold is the role, by participant code |
+| what_changed | 0 | 23 | 11 | 12 | session k action item → what that role presented in session k+1; a decision and its closest decision next session |
 
 **Limits, read before using.**
 - **DEV = questions about IS1008a only** (13). Everything else is TEST.
-- **EN2002b gives no questions**: AMI 1.6.2 has no summary or dialogue acts for it. It still counts for compression sizes.
-- **IB4003 has no gold evidence** (no summary links) and no who-said-it questions (no scenario roles).
-- **Lists over 5 sentences are dropped** (IB4003's 10 problems): judge.v1 needs every item for "correct".
-- **Summary-level questions.** Most gold answers are summary sentences, so any notes resembling that summary can answer them. Only `who_said` is a pure detail question.
+- **EN2002b gives no questions** (no summary or dialogue acts in AMI 1.6.2). It still counts for compression sizes.
+- **IB4003–IB4011 have no gold evidence** (no summary links) and no who-said-it questions (no scenario roles). IB4005–IB4011 also have no dialogue acts; their transcript is AMI's words grouped into speaker turns.
+- **Lists over 5 sentences are dropped**: judge.v1 needs every item for "correct".
+- **Summary-level questions.** Most gold answers are summary sentences, so notes resembling that summary can answer them. Only `who_said` is a pure detail question.
 - **`action_who` and `action_what` on one sentence share a `fact_group`**: they are not independent.

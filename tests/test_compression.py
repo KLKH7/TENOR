@@ -19,11 +19,16 @@ from concentrate.ami.corpus import (
     Word,
 )
 from concentrate.ami.questions import (
-    QUESTION_MEETINGS,
+    RECORDED,
+    TARGET_QUESTIONS,
     build_questions,
     closed_book_prompts,
     load_questions,
+    load_selection,
     roles_in,
+    select_meetings,
+    series_of,
+    series_order,
     split_subject,
     write_jsonl,
 )
@@ -346,12 +351,50 @@ def test_quote_prices_without_spending() -> None:
 def test_committed_question_set_matches_builder(tmp_path: Path) -> None:
     from concentrate.ami.corpus import load_meeting
 
-    write_jsonl(
-        build_questions([load_meeting(m) for m in QUESTION_MEETINGS], 42), tmp_path / "q.jsonl"
-    )
-    assert (tmp_path / "q.jsonl").read_bytes() == Path(
-        "data/ami_questions/questions.jsonl"
-    ).read_bytes()
+    meetings, sel = select_meetings(DEFAULT_ZIP, load_meeting, 42)
+    write_jsonl(build_questions(meetings, 42), tmp_path / "q.jsonl")
+    committed = Path("data/ami_questions")
+    assert (tmp_path / "q.jsonl").read_bytes() == (committed / "questions.jsonl").read_bytes()
+    assert sel == load_selection(committed / "meetings.json")
+    assert sel.recorded == list(RECORDED) and sel.questions >= TARGET_QUESTIONS
+    recorded = [q for q in load_questions(committed / "questions.jsonl") if q.subset == "recorded"]
+    assert all(set(q.meetings) <= set(RECORDED) for q in recorded) and len(recorded) == 68
+
+
+def test_series_order_seeded_and_site_balanced() -> None:
+    cands = ["ES2002", "ES2003", "ES2004", "IS1000", "IS1001", "TS3003", "TS3004"]
+    order = series_order(cands, 42)
+    assert sorted(order) == sorted(cands) and order == series_order(cands, 42)
+    assert [s[:2] for s in order[:3]] == ["ES", "IS", "TS"]
+    assert series_order(cands, 1) != order
+
+
+def test_subsets_series_and_role_aliases() -> None:
+    c = _meeting(
+        "ES2006a",
+        {"P1": "A", "P2": "B", "P3": "C", "P4": "D"},
+        [
+            ("actions", "The interface specialist will look at buttons. The Marketing Expert will "
+             "watch trends.", [0]),
+            ("actions", "In june they will meet again.", [1]),
+            ("decisions", "They will use a wood case.", [2]),
+        ],
+    )  # fmt: skip
+    qs = build_questions([A, B, c], 42)
+    assert {q.subset for q in qs if "ES2006a" in q.meetings} == {"annotation_only"}
+    assert {q.subset for q in qs if "ES2006a" not in q.meetings} == {"recorded"}
+    natural = EMPTY.model_copy(update={"type": "nonscenario"})
+    assert series_of([A, B, c, natural]) == {
+        "ES2006": ["ES2006a"],
+        "IS1008": ["IS1008a", "IS1008b"],
+    }
+    who = next(q for q in qs if q.type == "action_who" and q.meetings == ["ES2006a"])
+    assert who.gold_answer == "The User Interface Designer."
+    assert who.question.endswith("to look at buttons?")  # second sentence cut: it names the ME
+    whats = {q.question for q in qs if q.type == "action_what" and q.meetings == ["ES2006a"]}
+    assert "In meeting ES2006a, what action items were assigned to the group?" in whats
+    dec = next(q for q in qs if q.type == "decision" and q.meetings == ["ES2006a"])
+    assert dec.question == "In meeting ES2006a, what did the group decide?"
 
 
 def _run(tmp_path: Path, cap: float | None, judge2_share: float = 0.3) -> tuple[dict, Ledger]:

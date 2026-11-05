@@ -443,6 +443,7 @@ def run_compression(
                     "type": q.type,
                     "category": q.type,
                     "split": q.split,
+                    "subset": q.subset,
                     "question": q.question,
                     "gold": q.gold_answer,
                     "answer": a.model_dump(),
@@ -511,16 +512,28 @@ def run_compression(
 
 
 def summarize(rows: Sequence[dict[str, Any]], seed: int) -> dict[str, Any]:
-    """Per condition and split: accuracy (bootstrap CI), confident errors, the four answer types,
-    by question type. Paired vs the ceiling (mean difference and 95% CI: H1 reads the lower
-    bound) and vs the floor. ``headline`` repeats it on questions closed-book got wrong."""
+    """Per split, overall and per subset (``recorded`` meetings get real product notes;
+    ``annotation_only`` ones use AMI's abstract as stand-in notes, so report them apart):
+    accuracy (bootstrap CI), confident errors, the four answer types, by question type; paired
+    vs the ceiling (mean difference and 95% CI: H1 reads the lower bound) and vs the floor.
+    ``headline`` repeats each block on questions closed-book got wrong."""
     known = {x["qid"] for x in rows if x["system"] == CLOSED and x["verdict"] == "correct"}
+
+    def both(rs: Sequence[dict[str, Any]]) -> dict[str, Any]:
+        return {
+            "all": _block(rs, seed),
+            "headline": _block([x for x in rs if x["qid"] not in known], seed),
+        }
+
     out: dict[str, Any] = {}
     for split in sorted({x["split"] for x in rows}):
         rs = [x for x in rows if x["split"] == split]
+        subsets = sorted({x.get("subset", "recorded") for x in rs})
         out[split] = {
-            "all": _block(rs, seed),
-            "headline": _block([x for x in rs if x["qid"] not in known], seed),
+            **both(rs),
+            "by_subset": {
+                sub: both([x for x in rs if x.get("subset", "recorded") == sub]) for sub in subsets
+            },
             "closed_book_correct": sorted(q for q in known if any(x["qid"] == q for x in rs)),
         }
     return out
