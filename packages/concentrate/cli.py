@@ -2787,6 +2787,13 @@ def ami_coverage(
         "data/ami_wispr.db"
     ),
     out: Annotated[Path, typer.Option(help="Committed result (numbers only).")] = AMI_COVERAGE_OUT,
+    stress: Annotated[
+        Path | None,
+        typer.Option(
+            help="Sidecar JSON from `ami stress-audio`: score that stress recording on its "
+            "shifted timeline instead (writes evals/reports/ami/stress_<cond>_<id>.json).",
+        ),
+    ] = None,
 ) -> None:
     """Per-15 s capture coverage of the AMI meetings, per product, with a wrong-meeting control.
 
@@ -2803,6 +2810,10 @@ def ami_coverage(
     from concentrate.core.store import read_notes
 
     pins = read_overrides(AMI_RESULTS / "recording_ids.txt")
+    if stress is not None:
+        _stress_coverage(stress, {"granola": granola_db, "wispr": wispr_db}, pins,
+                         None if out == AMI_COVERAGE_OUT else out)  # fmt: skip
+        return
     dbs = {"granola": granola_db, "wispr": wispr_db}
     recs = {p: match_recordings(read_notes(db), pins.get(p)) for p, db in dbs.items()}
     meets = {mid: load_meeting(mid) for mid in AMI_SET}
@@ -2847,6 +2858,114 @@ def ami_coverage(
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(payload, indent=1) + "\n")
     typer.echo(f"wrote {out}")
+
+
+def _git_sha() -> str:
+    import subprocess
+
+    sha = subprocess.run(["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True)
+    return sha.stdout.strip()
+
+
+def _stress_coverage(
+    sidecar: Path, dbs: dict[str, Path], pins: dict[str, dict[str, str]], out: Path | None
+) -> None:
+    """Score each product's stress recording against the sidecar's shifted timeline."""
+    import json
+    from datetime import UTC, datetime
+
+    from concentrate.ami import coverage as C
+    from concentrate.ami import stress as S
+    from concentrate.ami.corpus import load_meeting
+    from concentrate.ami.products import match_stress, transcript_text
+    from concentrate.ami.wer import NORMALISER_VERSION
+    from concentrate.core.store import read_notes
+
+    side = S.Sidecar.model_validate_json(sidecar.read_text())
+    words = load_meeting(side.meeting_id).spoken()
+    results: dict[str, Any] = {}
+    for p, db in dbs.items():
+        pin = pins.get(f"{p}_{side.condition.lower()}", {}).get(side.meeting_id)
+        note = match_stress(read_notes(db), side.meeting_id, side.condition, pin)
+        if note is None:
+            typer.echo(f"{p}: no note titled 'AMI {side.meeting_id} {side.condition}' (or pin)")
+            results[p] = None
+            continue
+        r = S.score_stress(words, transcript_text(note, drop_mic=(p == "granola")), side)
+        results[p] = r.model_dump()
+        resume = f"{r.time_to_resume_s:.0f} s" if r.time_to_resume_s is not None else "never"
+        typer.echo(
+            f"{p}: before {r.coverage_before:.0%} (n={r.windows_before})  after "
+            f"{r.coverage_after:.0%} (n={r.windows_after})  resumed={r.resumed} ({resume})  "
+            f"gaps>=30s={[(round(a), round(n)) for a, n in r.gaps]}"
+        )
+    payload = {
+        "meta": {
+            "git_sha": _git_sha(),
+            "date": datetime.now(UTC).isoformat(timespec="seconds"),
+            "condition": side.condition,
+            "meeting_id": side.meeting_id,
+            "splice_at_s": side.splice_at_s,
+            "silence_s": side.silence_s,
+            "output_sha256": side.output_sha256,
+            "window_s": C.WINDOW_S,
+            "threshold": C.THRESHOLD,
+            "min_gap_s": C.MIN_GAP_S,
+            "normaliser_version": NORMALISER_VERSION,
+            "timeline": "stressed (AMI time + silence_s after the splice)",
+            "llm": None,
+        },
+        "products": results,
+    }
+    dest = out or Path(f"evals/reports/ami/stress_{side.condition}_{side.meeting_id}.json")
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_text(json.dumps(payload, indent=1) + "\n")
+    typer.echo(f"wrote {dest}")
+
+
+@ami_app.command("stress-audio")
+def ami_stress_audio(
+    condition: Annotated[str, typer.Option(help="Stress condition (A1: long silence).")] = "A1",
+    meeting: Annotated[
+        str | None,
+        typer.Option(help="AMI meeting ID. Default: the shortest that leaves >= 10 min after."),
+    ] = None,
+    silence_min: Annotated[float, typer.Option(help="Minutes of digital silence.")] = 12.0,
+    at_min: Annotated[
+        float | None,
+        typer.Option(help="Cut near this minute (AMI time). Default: middle of the speech."),
+    ] = None,
+    audio_dir: Annotated[Path, typer.Option(help="AMI audio root.")] = Path("data/ami"),
+    out_dir: Annotated[Path, typer.Option(help="Output (gitignored).")] = Path("data/ami/stress"),
+) -> None:
+    """Build a stress WAV plus a sidecar JSON of its exact splice offsets ($0, deterministic).
+
+    The cut lands at a turn boundary taken from AMI's word timings (docs/tracks/CAPTURE.md, A1).
+    """
+    from concentrate.ami import stress as S
+    from concentrate.ami.corpus import load_meeting
+    from concentrate.ami.products import AMI_SET
+
+    if condition not in S.CONDITIONS:
+        raise typer.BadParameter(f"--condition must be one of {', '.join(S.CONDITIONS)}")
+    mid = meeting or S.default_meeting({m: load_meeting(m) for m in AMI_SET})
+    src = audio_dir / mid / f"{mid}.Mix-Headset.wav"
+    if not src.is_file():
+        raise typer.BadParameter(f"{src} not found")
+    side = S.build_a1(
+        load_meeting(mid),
+        src,
+        out_dir,
+        silence_s=silence_min * 60,
+        at_s=None if at_min is None else at_min * 60,
+    )
+    m, s = divmod(side.splice_at_s, 60)
+    typer.echo(
+        f"{mid}: {side.silence_s / 60:g} min of silence at {int(m)}:{s:05.2f} "
+        f"(sample {side.splice_sample}); {side.meeting_after_s / 60:.1f} min of meeting after; "
+        f"output {side.output_duration_s / 60:.1f} min"
+    )
+    typer.echo(f"wrote {side.output_wav}\nwrote {out_dir / f'{mid}.{condition}.json'}")
 
 
 # -- anatomy of a wrong fact (docs/method/WRONG_FACTS.md) ----------------------------------

@@ -35,6 +35,8 @@ log = logging.getLogger(__name__)
 
 AMI_SET = ("IS1008a", "IS1008b", "IS1008c", "IS1008d", "IB4003", "EN2002b", "ES2006a")
 _TAG = re.compile(r"\bAMI[\s_-]+([A-Z]{2}\d{4}[a-z]?)\b")
+# A stress-condition recording ("AMI ES2006a A1", docs/tracks/CAPTURE.md) is not a baseline one.
+_STRESS = re.compile(r"\bAMI[\s_-]+([A-Z]{2}\d{4}[a-z]?)[\s_-]+(A\d+)\b")
 
 
 class MeetingWer(BaseModel):
@@ -49,8 +51,22 @@ class MeetingWer(BaseModel):
     reference_speakers: int
 
 
+def stress_tag(note: MeetingNote) -> tuple[str, str] | None:
+    """(AMI meeting ID, condition) for a stress recording titled like ``AMI ES2006a A1``."""
+    for text in (note.title, note.event_title):
+        hit = _STRESS.search(text or "")
+        if hit:
+            return hit[1], hit[2]
+    return None
+
+
 def ami_tag(note: MeetingNote) -> str | None:
-    """Return the AMI meeting ID tagged in a note's title or calendar event, if any."""
+    """Return the AMI meeting ID tagged in a note's title or calendar event, if any.
+
+    Stress recordings (:func:`stress_tag`) are not baseline recordings and return None.
+    """
+    if stress_tag(note) is not None:
+        return None
     for text in (note.title, note.event_title):
         hit = _TAG.search(text or "")
         if hit:
@@ -74,16 +90,17 @@ def match_notes(notes: Iterable[MeetingNote]) -> dict[str, MeetingNote]:
 _BARE_ID = re.compile(r"[A-Z]{2}\d{4}[a-z]?")
 
 
-_PIN = re.compile(r"([a-z][a-z_]*)=(\S+)")
+_PIN = re.compile(r"([a-z][a-z0-9_]*)=(\S+)")
 
 
 def read_overrides(path: Path) -> dict[str, dict[str, str]]:
     """Read manual recording IDs: product -> AMI meeting ID -> note ID.
 
     A pin line starts with a meeting ID followed by ``<product>=<note id>`` tokens, e.g.
-    ``IB4003 wispr=<uuid> granola=<uuid>``. Anything else is a human note and is ignored:
-    other words on a pin line ("(untitled)"), lines not starting with a bare meeting ID, and
-    text after ``#``. A missing file means no overrides.
+    ``IB4003 wispr=<uuid> granola=<uuid>``. A stress recording pins under
+    ``<product>_<condition>`` in lower case (``granola_a1=<uuid>``). Anything else is a human
+    note and is ignored: other words on a pin line ("(untitled)"), lines not starting with a
+    bare meeting ID, and text after ``#``. A missing file means no overrides.
     """
     out: dict[str, dict[str, str]] = {}
     if not path.is_file():
@@ -128,6 +145,24 @@ def match_recordings(
         else:
             log.warning("override for %s names a note that isn't synced yet; skipped", mid)
     return out
+
+
+def match_stress(
+    notes: Iterable[MeetingNote], meeting_id: str, condition: str, pinned: str | None = None
+) -> MeetingNote | None:
+    """The one note recording ``meeting_id`` under ``condition``: a pinned note ID wins, else
+    the note titled ``AMI <meeting_id> <condition>``. Raises if two notes match."""
+    found: list[MeetingNote] = []
+    for note in notes:
+        if pinned is not None:
+            if note.note_id == pinned:
+                return note
+            continue
+        if stress_tag(note) == (meeting_id, condition):
+            found.append(note)
+    if len(found) > 1:
+        raise ValueError(f"{meeting_id} {condition} matched {len(found)} notes; pin one")
+    return found[0] if found else None
 
 
 def transcript_text(note: MeetingNote, *, drop_mic: bool = True) -> str:
