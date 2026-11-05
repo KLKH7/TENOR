@@ -21,12 +21,10 @@ Granola's agent reads about 100 meetings at a high level rather than 10 in full 
 - **Outside-in.** Only public interfaces are used: Granola's API note format and its official read-only MCP. No claims are made about Granola internals.
 - **Synthetic track.** *Northwind* is a generated company: 184 meetings in Granola's exact JSON schema, with 296 questions whose answers are known by construction. 120 held-out test questions were run.
 - **Black-box track.** The author's 4 real meetings and 47 questions, asked through each product's public MCP.
-- **Systems:**
-  - query-time: top-k retrieval, summaries only, an agent over search and transcript tools;
-  - write-time: Mem0, Graphiti, and **Concentrate**, a reference fact memory that extracts cited, time-stamped facts;
-  - a gold-meeting oracle as a ceiling.
-
-  All systems share one answer model (Opus 5.5).
+- **Systems** (one shared answer model, Opus 5.5):
+    - query-time: top-k retrieval, summaries only, an agent over search and transcript tools;
+    - write-time: Mem0, Graphiti, and **Concentrate**, a reference fact memory that extracts cited, time-stamped facts;
+    - a gold-meeting oracle as a ceiling.
 - **Measurement.** Six dimensions: correctness, judge reliability, grounding, confident error (answered *and* wrong), equal-price cost, and robustness. Comparisons are paired (McNemar or exact sign test, Holm-corrected, 95% bootstrap CIs), and a second model re-grades every answer.
 
 ## 3. Results
@@ -45,17 +43,13 @@ Granola's agent reads about 100 meetings at a high level rather than 10 in full 
 | Summaries only | 71% [62, 78] | 0.017 | — |
 
 - **Fact memory, agent and top-k are statistically indistinguishable.** Fact memory vs agent splits 6–4 on discordant questions (Holm p = 1.0).
-- **The cost advantage is real but conditional.** About 3.5× cheaper than the agent per question (about 2× against an agent with prompt caching), and cheaper overall only once a set of meetings receives more than about 50 questions.
-
-![Figure 1](../figures/cost_frontier.svg)
-
-**Figure 1.** Accuracy vs cost per question, with ingest amortised over 10, 100 and 1,000 questions. The agent and top-k are dominated only at higher query volumes.
+- **The cost advantage is real but conditional.** About 3.5× cheaper than the agent per question (about 2× against an agent with prompt caching), and cheaper overall only once a set of meetings receives more than about 50 questions ([cost frontier](../figures/cost_frontier.svg)).
 
 ### 3.2 Real meetings: the tie becomes a loss
 
-![Figure 2](../figures/hero_synthetic_vs_real.svg)
+![Figure 1](../figures/hero_synthetic_vs_real.svg)
 
-**Figure 2.** The same comparison on synthetic data (left) and on the author's real meetings (right). Granola's agent 92% [82, 100] vs fact memory 59% [44, 74], n = 39. Paired: 14 questions only Granola answered correctly, 1 only the fact memory did (p ≈ 0.001).
+**Figure 1.** The same comparison on synthetic data (left) and on the author's real meetings (right). Granola's agent 92% [82, 100] vs fact memory 59% [44, 74], n = 39. Paired: 14 questions only Granola answered correctly, 1 only the fact memory did (p ≈ 0.001).
 
 The fact memory had extracted 43 facts across the 4 meetings. Ten of its 16 misses were abstentions ("not in the material"), and it scored **0 of 8 on "who said X"** (Granola 7 of 8). It led only on "what changed" (6 of 6 vs 5 of 6), the category a time-stamped store is designed for.
 
@@ -63,9 +57,9 @@ The fact memory had extracted 43 facts across the 4 meetings. Ten of its 16 miss
 
 Four conditions on the same 47 questions, each adding one layer: **(A)** Granola's agent with transcripts; **(B)** notes only, answered by our model over Granola's own notes (≈ chat after auto-deletion); **(C)** B plus the extracted fact layer; **(D)** C plus reading the transcript only when the notes and facts don't cover the question.
 
-![Figure 3](../figures/deletion_sim.svg)
+![Figure 2](../figures/deletion_sim.svg)
 
-**Figure 3.** Accuracy by question type, and confident-error rate, for each condition.
+**Figure 2.** Accuracy by question type, and confident-error rate, for each condition.
 
 **Table 2.** Paired effects of each layer (all 47 questions; wins–losses on discordant questions, exact sign test).
 
@@ -81,10 +75,7 @@ Four conditions on the same 47 questions, each adding one layer: **(A)** Granola
 2. **Compression into facts does not substitute for the transcript on real questions.** The fact layer's +9 points isn't distinguishable from zero at this n. On synthetic data the same layer appeared to recover nearly everything (notes only 64% → with facts 88% on the dev set). The difference is the questions: synthetic questions target the facts a generator planted, which is exactly what an extractor keeps, while real questions target whatever was said.
 3. **Selective depth recovers the loss.** Reading the transcript only on demand restored 87% (vs 89% for Granola), with no confident errors. It fired on 60% of questions here, so on small corpora it isn't cheap. This is Granola's own "deeper only when needed" principle. **The implication is about retention, not retrieval: once transcripts are deleted, the deeper tier no longer exists.**
 4. **Confident error was rare but concentrated.** Granola's agent erred confidently on 3 of 47, two of them unanswerable questions. Our notes-only condition hedged instead. On synthetic data a notes-only reader answered 41% of transcript-needed questions confidently and wrongly, so this behaviour depends on the model and prompt and is worth measuring directly.
-5. **Robustness checks.**
-   - A second judge agreed on 96–100% of verdicts per condition and on 97% of synthetic verdicts (κ 0.90), with no change in ranking.
-   - A red-team audit corrected the cost comparison (originally overstated) and attributed the Mem0 and Graphiti gaps to our configuration.
-   - With n = 120, the minimum detectable gap between top systems is about 7 points. Smaller differences are reported as ties.
+5. **Robustness checks.** A second judge agreed on 96–100% of verdicts per condition and on 97% of synthetic verdicts (κ 0.90), with no change in ranking. A red-team audit corrected the cost comparison (originally overstated) and attributed the Mem0 and Graphiti gaps to our configuration. With n = 120, the minimum detectable gap between top systems is about 7 points; smaller differences are reported as ties.
 
 ## 5. Implications
 
