@@ -33,7 +33,7 @@ from concentrate.core.models import Channel, MeetingNote
 
 log = logging.getLogger(__name__)
 
-AMI_SET = ("IS1008a", "IS1008b", "IS1008c", "IS1008d", "IB4003", "EN2002b")
+AMI_SET = ("IS1008a", "IS1008b", "IS1008c", "IS1008d", "IB4003", "EN2002b", "ES2006a")
 _TAG = re.compile(r"\bAMI[\s_-]+([A-Z]{2}\d{4}[a-z]?)\b")
 
 
@@ -133,7 +133,17 @@ def match_recordings(
 def transcript_text(note: MeetingNote, *, drop_mic: bool = True) -> str:
     """The product's transcript as one string, in its utterance order, mic turns optional."""
     utts = sorted(note.utterances, key=lambda u: u.index)
-    return " ".join(u.text for u in utts if not (drop_mic and u.channel is Channel.ME))
+    return " ".join(
+        u.text
+        for u in utts
+        if not (drop_mic and u.channel is Channel.ME) and not _is_banner(u.text)
+    )
+
+
+def _is_banner(text: str) -> bool:
+    """Wispr prepends a ``<<<…>>>`` safety banner as utterance 0; it is not speech."""
+    t = text.strip()
+    return t.startswith("<<<") and t.endswith(">>>")
 
 
 def score_note(

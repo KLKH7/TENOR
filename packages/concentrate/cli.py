@@ -2731,14 +2731,15 @@ def ami_wer(
     import subprocess
     from datetime import UTC, datetime
 
-    from concentrate.ami.products import AMI_SET, match_notes, score_note
+    from concentrate.ami.products import AMI_SET, match_recordings, read_overrides, score_note
     from concentrate.ami.wer import NORMALISER_VERSION
 
     if not db.exists():
         raise typer.BadParameter(f"{db} not found: sync the AMI account first")
+    pins = read_overrides(AMI_RESULTS / "recording_ids.txt").get(product)
     store = NoteStore(db)
     try:
-        notes = match_notes(store.iter_notes())
+        notes = match_recordings(store.iter_notes(), pins)
     finally:
         store.close()
     rows = [
