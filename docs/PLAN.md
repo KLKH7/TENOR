@@ -43,6 +43,20 @@
 
 ---
 
+## 0.6 Benchmark, not audit: everything is a track
+
+Every investigation is a **track**: a task plus metrics that any system or product can be scored on. Granola is one entry in each track, never the subject of a one-off audit. That's what makes this a benchmark (comparable, reusable, product-neutral) rather than a review of one company.
+
+| Track | Task, for any system | Metrics | Entries |
+|---|---|---|---|
+| **Question answering** (built) | Answer questions about many meetings | accuracy, confident error, citations, cost, latency | 7 systems on synthetic data; Granola and others on real meetings |
+| **Retention** (built) | Answer after transcripts are deleted | deletion cost by question type, recovery per layer | any system; real-meeting ladder via the public MCP |
+| **Notes faithfulness** (in progress) | Write notes for a meeting; is every line backed by what was said? | support / inferred / unsupported / contradicted by claim type; cross-meeting bleed | any notetaker on a user's own meetings; summariser baselines on synthetic meetings |
+| **Agent interface quality** (in progress) | An outside agent asks a meeting product a question; how good is the payload? | Granola's four answer types, evidence granularity, stability across repeats, latency | any meeting MCP: Granola, Concentrate's MCP, others |
+| **Contextual integrity** (designed, [SHARING_LEAKS_DESIGN](benchmark/SHARING_LEAKS_DESIGN.md)) | Answer an asker who can only see some meetings, without revealing the rest | leak rate, over-restriction, inference-leak rate | any memory system, on the synthetic company with access labels |
+
+**How tracks are chosen** (Kian's rules): the problem is evidenced recently; it isn't Granola's visible top priority; and an outside measurement or technique could moderately or heavily improve it.
+
 ## 1. What the benchmark measures
 
 There is deliberately **no single score**. One number would hide trade-offs: a system can be cheap and wrong, or right and slow. Results are shown along six dimensions, plus a cost/quality frontier.
