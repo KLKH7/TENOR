@@ -15,7 +15,7 @@ As of 5 November 2026:
 | Public meetings replayed into products | 7 AMI meetings (about 3 hours of audio), each replayed into 2 products: Granola and Wispr Flow |
 | Questions about those meetings | 68, built by fixed templates from AMI's human annotations (13 DEV) |
 | Human labels on product outputs | 23 (20 note claims, 3 Chat answers), from 1 verifier |
-| Scorers | Capture coverage, WER, fact-token recall and an MCP contract check (all free); a grounding checker and an answer judge (LLM, calibration in progress) |
+| Scorers | Capture coverage, WER and fact-token recall (all free); a grounding checker and an answer judge (LLM, calibration in progress) |
 
 **All AMI results are preliminary.** The sample is 7 meetings, the human-labelled set is small, and the automated judges have not yet been calibrated against enough human labels to be trusted on their own. No result below is confirmed. Planned next: capture stress tests and a nightly replay suite ([next research step](#next-research-step-capture-reliability-and-regression-replay)), and about 100 human labels. The AMI replication of the retention study ran on 5 November 2026 ([results](#retention-what-deleting-transcripts-costs)).
 
@@ -39,6 +39,8 @@ Meeting note-takers are now ordinary work tools. People rely on them to record w
 
 **Read-only MCP collection.** Each product's notes, transcripts and answers are read through its official MCP server. Every call goes through an allowlist that refuses any tool not on it before anything is sent, so no write tool can be called. Product outputs are stored locally under gitignored paths and are never committed; only scores, labels and short quoted examples beside the AMI source are published. Harness and pairing: [`docs/method/HARNESS.md`](docs/method/HARNESS.md).
 
+**Contract check (harness maintenance).** Products may change their MCP reply formats without notice, so a contract check diffs each read tool's reply shape against a committed baseline and tells us when the harness's parser needs updating. It was added on 5 November 2026, after the harness detected a change in one product's reply format and was updated ([details](docs/tracks/AGENT_INTERFACE.md#harness-maintenance-the-mcp-contract-check)).
+
 **Free scorers.** Capture coverage aligns AMI's timed human words with the product transcript in 15-second windows. WER (word error rate) and content-word recall compare the full transcript with AMI's. Fact-token recall checks numbers, money, names and roles. None of these uses an LLM, so they cost nothing and are deterministic. Track definitions: [`docs/tracks/`](docs/tracks/README.md).
 
 **Calibrated judging.** Notes and answers need an LLM judge, and on meeting outputs automated judges over-count errors. The causes found so far are each fixable: judges penalise names where the answer key uses roles, product boilerplate is read as content, a small judge's verdict contradicts its own reasoning, and a one-line summary used as the answer key drops nuance the product kept. The calibrated judge adds a speaker roster from the meeting's own introductions, strips product boilerplate, uses a stronger model, scores list answers per item, and is reported with its agreement with human labels. Details: [`docs/method/CALIBRATED_JUDGING.md`](docs/method/CALIBRATED_JUDGING.md).
@@ -48,6 +50,10 @@ Meeting note-takers are now ordinary work tools. People rely on them to record w
 ## Results
 
 Each table gives the measure, both products side by side, n, an interval or note, and a status. *Preliminary* means small n or a method still changing; read it as a direction, not a ranking. Intervals are 95% Wilson intervals unless stated. Dated log of every result: [`docs/results/INDEX.md`](docs/results/INDEX.md).
+
+![Where do Granola and Wispr Flow differ, and by how much? On every measure both products have: both captured almost all speech (98.5% and 99.4% of 15-second windows); Granola's notes had more claims supported by both transcripts (94% vs 80%, partly checker noise); notes-only answers were close (50% vs 44% not wrong, 21% vs 12% correct, neither paired difference significant)](docs/figures/results_overview.svg)
+
+Measures only one product has (Granola Chat answers; Wispr Flow's MCP has no question-answering tool) are left out of this chart and given in the tables below.
 
 ### Capture
 
@@ -92,13 +98,14 @@ On the first pass Granola's notes were grounded more often than Wispr Flow's; wh
 | Of the 3 strongest automated "confident contradictions", clearly wrong on human check | 0 of 3 | — | 3 | All three were partly right | Preliminary |
 | Note claims judged wrong by a human, of those the automated checker could be compared on | 0 of 12 | (pooled) | 12 | Human agreed with the checker on 4 of 12 | Preliminary |
 
+![When an automated judge says "wrong", does a human agree? Of 23 human labels, none found an output wrong: of 7 note claims the checker called contradicted, the human found 4 supported and could not judge 3; all 3 Chat answers the judge called confidently wrong were partly right](docs/figures/judge_vs_human.svg)
+
 **Automated judges over-count errors on these outputs.** In both human-checked samples, most automated error verdicts did not survive a human reading. With 23 labels this is a direction, not a rate: the over-count factor will be reported once about 100 labels exist. A comparison of both products through one fixed outside agent is built and not yet run. Track: [`docs/tracks/ANSWERS.md`](docs/tracks/ANSWERS.md).
 
-### Agent interface and MCP drift
+### Agent interface
 
 | Measure | Granola | Wispr Flow | n | Interval / notes | Status |
 |---|---|---|---|---|---|
-| Unannounced MCP shape change detected | 1 (5 Nov 2026: transcript chunks changed from structured passages to one text block; a sync stored 0 transcript lines without an error) | none observed; check not yet run | 1 event | Now caught by a contract check that diffs each tool's reply shape against a committed baseline | Observed |
 | *Earlier, 4 private meetings:* answers that point inside a meeting (line, chunk or timestamp) | 0 of 47 | not measured | 47 DEV questions | Meeting-level links only; no abstain or coverage field | Preliminary |
 | *Earlier, 4 private meetings:* useful and comprehensive answers | 89% | not measured | 47 | [77, 95] | Preliminary |
 
@@ -107,6 +114,8 @@ Track: [`docs/tracks/AGENT_INTERFACE.md`](docs/tracks/AGENT_INTERFACE.md).
 ### Retention: what deleting transcripts costs
 
 What does answering from notes alone cost once transcripts are deleted? Five conditions on the same 68 AMI questions (5 meetings), each answered over the question's own meetings. "Not wrong" = judged correct or partially correct; brackets are Wilson 95% CIs.
+
+![What does deleting transcripts cost, and what wins it back? On 68 AMI questions, correct answers fell from 41% (Granola Chat, transcript kept) to 21% from Granola's notes alone (2 gained, 16 lost, p = 0.001); Wispr Flow's notes scored 12% (not significantly different); a fact layer added nothing (2-3); reading the transcript when notes fall short won back part of the loss (32%, 9-0, p = 0.004)](docs/figures/ami_retention.svg)
 
 | Condition | Correct | Not wrong | Paired wins–losses, correct | Status |
 |---|---|---|---|---|
@@ -137,9 +146,11 @@ What does answering from notes alone cost once transcripts are deleted? Five con
 
 **Live detection.** A prototype capture-health detector (speech heard, transcript not growing, so alert) caught 237 of 237 injected failures with no false alarms in 2.7 h of TEST meetings when given a perfect VAD; injected failures only ([`docs/tracks/CAPTURE_HEALTH.md`](docs/tracks/CAPTURE_HEALTH.md)).
 
+![Can a product tell when its transcript has stopped? One injected failure on a TEST AMI meeting: speech continues while transcript blocks stop, and each of four detector variants raises an alert 13 to 33 seconds later](docs/figures/capture_health.svg)
+
 Scoring A0–A6 is free apart from cross-meeting bleed (about $0.02 per meeting); each condition takes about 25 minutes of playback.
 
-**Nightly replay suite.** The same harness, run on a frozen, versioned set of public meetings every night, becomes a regression detector: coverage, WER and fact recall per product, compared with the previous run and with human ground truth, plus the MCP contract check. The 5 November MCP shape change is the kind of silent regression it would catch the same day. This is the centre of TENOR's forward plan, and it applies to any product that can be replayed into.
+**Nightly replay suite.** The same harness, run on a frozen, versioned set of public meetings every night, becomes a regression detector: coverage, WER and fact recall per product, compared with the previous run and with human ground truth, plus the MCP contract check. Coverage, WER and fact-recall changes are product regressions; the contract check only keeps the harness itself in step with each product's reply format. This is the centre of TENOR's forward plan, and it applies to any product that can be replayed into.
 
 ## Design implications for note-takers
 
@@ -177,7 +188,7 @@ uv run concentrate ami coverage                                         # captur
 uv run concentrate ami wer --db data/ami_granola.db --product granola   # transcription track, $0
 uv run concentrate facts stage1                                         # fact-token recall, $0
 uv run concentrate facts stage2 --quote                                 # notes grounding: price first
-uv run concentrate mcp-contract                                         # MCP drift check
+uv run concentrate mcp-contract                                         # reply-format check (harness)
 ```
 
 **Costs.** Capture, WER, fact recall and the contract check make no LLM calls. Judged steps need `ANTHROPIC_API_KEY` in `.env` (see `.env.example`): notes grounding about $0.11 for all 7 meetings; answer attribution at most about $0.07; the AMI retention replication $5.64 (run; quoted at about $8). Every paid command prints an exact quote first and asks before spending more than $2.

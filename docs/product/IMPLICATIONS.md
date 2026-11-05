@@ -30,7 +30,7 @@ These are hypotheses, not recommendations. The evidence behind most of them is p
 
 ## 2. Nightly replay regression suite
 
-- **Evidence.** On 5 November 2026 a transcript tool in one product's MCP changed shape without an error or announcement, and downstream readers silently received empty results ([`AGENT_INTERFACE.md`](../tracks/AGENT_INTERFACE.md#mcp-drift-the-contract-check)).
+- **Evidence.** On 5 November 2026 a transcript tool in one product's MCP changed shape without an error or announcement, and downstream readers silently received empty results ([`AGENT_INTERFACE.md`](../tracks/AGENT_INTERFACE.md#harness-maintenance-the-mcp-contract-check)).
 - **What a product could do.** Replay a frozen set of public meetings every night through the shipped pipeline, and compare capture, transcription, notes and answers against the previous night and against human ground truth.
 - **How TENOR would measure it.** TENOR's harness is such a suite from the outside: a frozen, versioned meeting set, free scorers (coverage, WER, fact recall) and an MCP contract check.
 - **Why a product might not.** Real-time replay is slow and needs dedicated machines and accounts; public corpora under-represent a product's real users; internal telemetry may already catch most regressions.

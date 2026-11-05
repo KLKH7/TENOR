@@ -12,7 +12,7 @@ Products: Granola and Wispr Flow, the two reference products. Meetings: 7 AMI re
 | Notes | Are the notes faithful and complete? | Per-claim grounding against the product's and AMI's transcripts; human-checked sample | Preliminary | [`NOTES.md`](NOTES.md) |
 | Answers (Chat) | Are answers about the meeting right? | Calibrated judge against AMI-derived questions; human-checked sample | Preliminary | [`ANSWERS.md`](ANSWERS.md) |
 | Retention | What is lost when transcripts are deleted? | Accuracy ladder: product with transcripts, notes only, notes plus kept layers | Earlier study on 4 private meetings; AMI replication built, not run | [`RETENTION.md`](RETENTION.md) |
-| Agent interface and MCP drift | What does an outside agent receive through the product's MCP, and does its shape change without notice? | Answer types, evidence granularity, stability, latency; shape diff against a baseline | Preliminary (Granola, earlier private meetings); drift check runs on Granola | [`AGENT_INTERFACE.md`](AGENT_INTERFACE.md) |
+| Agent interface | What does an outside agent receive through the product's MCP? | Answer types, evidence granularity, stability, latency | Preliminary (Granola, earlier private meetings) | [`AGENT_INTERFACE.md`](AGENT_INTERFACE.md) |
 
 ![What does each track test, and how far along is it?](../figures/tracks.svg)
 

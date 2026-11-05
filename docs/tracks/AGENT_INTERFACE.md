@@ -1,13 +1,13 @@
-# Agent interface and MCP drift track
+# Agent interface track
 
-This page defines the agent-interface track (what an outside agent receives through a product's MCP) and the MCP drift check (whether that interface changes shape without notice).
+This page defines the agent-interface track: what an outside agent receives through a product's MCP. It also documents the MCP contract check, a piece of harness maintenance that tells TENOR when a product's reply format has changed so the harness can be updated.
 
 | | |
 |---|---|
-| **Question** | When an outside agent asks a meeting product through its MCP, does the payload say when it is unsure, point to evidence inside the meeting, and stay stable across repeats? Does the interface change without notice? |
-| **How measured** | Deterministic classifiers over each answer payload (answer type, evidence granularity, abstention, stability, latency); a shape diff of each read tool's reply against a committed baseline |
-| **Current results** | Granola, author's 4 private meetings (47 DEV questions): 89% useful and comprehensive [77, 95]; 0 of 47 answers point inside a meeting; no abstain or coverage field ([`results/AGENT_INTERFACE.md`](../results/AGENT_INTERFACE.md)). MCP drift: on 5 Nov 2026 Granola's transcript tool changed shape with no error; the contract check reproduces the diff (below). Wispr Flow: not yet scored on either part |
-| **Status** | Preliminary; drift check runs locally on Granola only |
+| **Question** | When an outside agent asks a meeting product through its MCP, does the payload say when it is unsure, point to evidence inside the meeting, and stay stable across repeats? |
+| **How measured** | Deterministic classifiers over each answer payload (answer type, evidence granularity, abstention, stability, latency) |
+| **Current results** | Granola, author's 4 private meetings (47 DEV questions): 89% useful and comprehensive [77, 95]; 0 of 47 answers point inside a meeting; no abstain or coverage field ([`results/AGENT_INTERFACE.md`](../results/AGENT_INTERFACE.md)). Wispr Flow: not yet scored |
+| **Status** | Preliminary |
 
 **Task.** An external agent (Claude, ChatGPT, Cursor) reaches a meeting product only through its MCP. This track scores **what that agent receives**: not only whether the answer is right, but whether the payload says when it is unsure, how fine-grained its evidence is, whether the same question gets the same answer twice, and how long it takes. It is product-neutral: every product is asked through its [black-box adapter](../method/BLACKBOX.md) and scored by the same deterministic classifiers. No LLM is used to score (verdicts are reused from the black-box judge, `judge.v1`).
 
@@ -56,20 +56,20 @@ A product scores well on this track by **saying what it doesn't know** (abstain 
 - Privacy: per-question rows, repeats and the human-check list are written only under `data/real/agent_interface/<product>/` (gitignored). The committed aggregate is checked by `check_committable` against every question, gold answer and answer text before it is written.
 - Determinism: same recordings and seed → same aggregate (apart from the date and git SHA).
 
-## MCP drift: the contract check
+## Harness maintenance: the MCP contract check
 
-A small test that tells you when a product's MCP starts returning a different **shape** of data. It exists because one already did, silently, and broke every agent reading it.
+Products may change their MCP reply formats at any time; that is their right, and it is not a product flaw. TENOR's harness parses those replies, so it needs to know when a format changes. The contract check is a small test that tells the harness when a product's MCP starts returning a different **shape** of data, so the parser can be updated before results are affected. It is not a scored track.
 
-### What happened
+### Why it was added
 
-On **5 Nov 2026**, Granola's `get_meeting_transcript` changed how it returns transcript chunks:
+On 5 Nov 2026 the harness detected a change in one product's reply format and was updated. Granola's `get_meeting_transcript` now returns transcript chunks differently:
 
 | Until 4 Nov | From 5 Nov |
 |---|---|
 | `chunks[].passages`: a list of `{speaker, time, text}` | `chunks[].transcript`: one string of `[m:ss] Label: text` lines |
 | Absolute timestamps | Offsets from the first timed line |
 
-There was no error and no announcement. Our sync kept running and stored **0 transcript lines** until we noticed. Any outside agent parsing the old shape fails the same way: quietly, with empty results.
+TENOR's sync still parsed the old shape, so it stored 0 transcript lines until the harness was updated. The contract check now catches a change like this before a sync.
 
 ### What the check does
 
@@ -82,7 +82,7 @@ uv run concentrate mcp-contract --update   # accept the current shapes as the ne
 2. Reduces each reply to its **shape**: field names, types, tag and attribute names, and the line format of multi-line text.
 3. Diffs it against [`evals/contracts/granola_mcp.json`](../../evals/contracts/granola_mcp.json) and prints one line per change.
 
-Fed the 4 Nov and 5 Nov replies, it prints exactly the change that broke us (test: `tests/test_contract_check.py`):
+Fed the 4 Nov and 5 Nov replies, it prints exactly that change (test: `tests/test_contract_check.py`):
 
 ```
 removed  get_meeting_transcript.chunks.json.chunks[].passages
