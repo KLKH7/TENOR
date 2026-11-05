@@ -235,6 +235,6 @@
  "texts": [
   "What does deleting transcripts cost?",
   "DEV split, n=90; synthetic Northwind; 95% bootstrap CIs.",
-  "DEV only. Northwind questions follow planted facts, which favour extracted memory; exact-quote and who-said questions (where deletion should hurt) are under-represented. See docs/results/RETIREMENT.md."
+  "DEV only. Northwind questions follow planted facts, which favour extracted memory; exact-quote and who-said questions (where deletion should hurt) are under-represented. See docs/archive/northwind/RETIREMENT.md."
  ]
 }

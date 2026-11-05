@@ -293,6 +293,6 @@
  "texts": [
   "Does retrieval degrade as meetings pile up?",
   "Haiku, directional, not significant: the same 21 DEV questions at each size; Wilson 95% CIs.",
-  "A cheap model and 21 shared questions: every CI overlaps. This shows the experiment works, not a scale effect. See docs/results/ECONOMICS.md."
+  "A cheap model and 21 shared questions: every CI overlaps. This shows the experiment works, not a scale effect. See docs/archive/northwind/ECONOMICS.md."
  ]
 }

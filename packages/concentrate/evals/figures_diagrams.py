@@ -387,7 +387,7 @@ def fig_tracks(real: dict[str, Any] | None, deletion: dict[str, Any] | None) -> 
     return fig
 
 
-# -- the outside-in evaluation harness (docs/benchmark/HONEST_EVAL.md) -------------------------
+# -- the outside-in evaluation harness (docs/method/CALIBRATED_JUDGING.md) -------------------------
 
 
 def _varrow(ax: Any, x0: float, y0: float, x1: float, y1: float, dashed: bool = False) -> None:

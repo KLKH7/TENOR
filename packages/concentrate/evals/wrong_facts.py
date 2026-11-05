@@ -1,4 +1,4 @@
-"""Stages 2 and 3 of "Anatomy of a wrong fact" (``docs/benchmark/WRONG_FACTS.md``).
+"""Stages 2 and 3 of "Anatomy of a wrong fact" (``docs/method/WRONG_FACTS.md``).
 
 **Stage 2, note-writing.** Each claim in a product's notes on an AMI meeting is checked twice
 by the grounding checker (:mod:`concentrate.evals.grounding`, prompt unchanged): against the
@@ -95,7 +95,7 @@ LABELS_NOTE = (
     "they said, not by label: a claim is not contradicted just because its label differs. Check "
     "who said something only when the claim's name also appears in this transcript's labels."
 )
-# Retrieval for the excerpt pass (docs/benchmark/WRONG_FACTS.md: chosen on DEV IS1008a).
+# Retrieval for the excerpt pass (docs/method/WRONG_FACTS.md: chosen on DEV IS1008a).
 K = 16
 SPAN = 2
 WINDOW = 0

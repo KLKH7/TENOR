@@ -16,7 +16,7 @@ both products at once. This module finds those pairs from what each product expo
    deterministic), keeping pairs with ``score >= threshold``.
 
 A manual override file (``data/real/pairs.override.json``, private) wins over everything:
-``pairs`` are forced, ``never`` pairs are excluded. See docs/benchmark/PRODUCTS.md.
+``pairs`` are forced, ``never`` pairs are excluded. See docs/method/HARNESS.md.
 
 The output names meeting IDs and scores only: no titles, names or text, so printing it is safe.
 """

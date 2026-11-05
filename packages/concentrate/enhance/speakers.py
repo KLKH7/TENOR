@@ -47,7 +47,7 @@ from concentrate.enhance.mentions import is_vocative
 from concentrate.enhance.models import MentionLink, SpeakerResolution
 from concentrate.enhance.tasks import TaskIndex, task_phrases
 
-# Log-odds weights for cues (tuned on base only; see docs/systems/concentrate/enhance.md).
+# Log-odds weights for cues (tuned on base only; see docs/archive/concentrate/enhance.md).
 # Odds that two adjacent system-audio lines share a speaker, by how they join (measured on the
 # base fixture set: a continued sentence 26/30, a one-word lead-in 51/53, otherwise ~1:1). The
 # chain weight converts odds to a log-potential given the effective number of candidates.

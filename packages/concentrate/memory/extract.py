@@ -8,7 +8,7 @@ average ~72 lines (~2k tokens) and XL ones ~7k tokens, far inside the context wi
 per meeting keeps a fact's statement, its reason and its follow-up together (they are often
 dozens of lines apart) and pays the cached system prompt once per meeting instead of once per
 window. ``window_lines`` splits long meetings into overlapping windows for the comparison and
-for pathological transcripts; see docs/systems/concentrate/memory.md for the measurement.
+for pathological transcripts; see docs/archive/concentrate/memory.md for the measurement.
 """
 
 from __future__ import annotations

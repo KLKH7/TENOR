@@ -45,11 +45,11 @@ SYSTEM_COLOURS: dict[str, str] = {
     "b4_mem0": "#CC79A7",  # reddish purple
     "b5_graphiti": "#882255",  # wine (Tol)
     "granola_agent": "#000000",  # black: the only real product
-    # Real-meeting deletion simulation conditions (docs/benchmark/DELETION_SIM.md).
+    # Real-meeting deletion simulation conditions (docs/tracks/RETENTION.md).
     "notes_only": "#D55E00",  # vermillion: same family as summaries-only
     "notes_facts": "#0072B2",  # blue: Concentrate's fact layer
     "notes_facts_fallback": "#56B4E9",  # sky blue: + transcript fallback
-    # Products captured from the outside (docs/benchmark/CAPTURE_TESTS.md).
+    # Products captured from the outside (docs/tracks/CAPTURE.md).
     "granola": "#000000",  # black, like Granola's agent: the real product
     "wispr": "#009988",  # teal (Tol vibrant): the second real product
 }

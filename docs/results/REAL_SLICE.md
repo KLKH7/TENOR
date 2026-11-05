@@ -126,7 +126,7 @@ Granola's agent costs us nothing: it runs on Granola's side.
 
 ## Ask both MCPs the same question about the same real meetings
 
-`concentrate real-kit serve` serves Concentrate's memory of **your real meetings** through WS-D's read-only MCP server ([`MCP_SERVER.md`](../systems/MCP_SERVER.md)). It offers the same six tools as `mcp-serve`:
+`concentrate real-kit serve` serves Concentrate's memory of **your real meetings** through WS-D's read-only MCP server ([`MCP_SERVER.md`](../archive/concentrate/MCP_SERVER.md)). It offers the same six tools as `mcp-serve`:
 - the store is opened SQLite `mode=ro`;
 - the corpus comes from `data/real.db` and the directory from `data/real/directory.json`;
 - `ask_memory(answer: true)` caches in `data/real/cache/llm`;

@@ -1,7 +1,7 @@
 """Render a Markdown report to a print-quality PDF with headless Chrome.
 
 Usage:
-    uv run --with markdown python scripts/build_pdf.py docs/report/HINDSIGHT_REPORT.md
+    uv run --with markdown python scripts/build_pdf.py docs/results/TENOR_TECHNICAL_REPORT.md
 
 Writes the PDF next to the Markdown file. Figures referenced as relative image paths (the SVGs
 in docs/figures/) are embedded inline, so the PDF is self-contained. Needs Google Chrome.
@@ -90,5 +90,5 @@ def build(md_path: Path) -> Path:
 
 
 if __name__ == "__main__":
-    for arg in sys.argv[1:] or ["docs/report/HINDSIGHT_REPORT.md"]:
+    for arg in sys.argv[1:] or ["docs/results/TENOR_TECHNICAL_REPORT.md"]:
         print(build(Path(arg)))

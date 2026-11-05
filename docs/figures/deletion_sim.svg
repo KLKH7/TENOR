@@ -880,7 +880,7 @@ L 558.72 241.776
   <g id="text_42">
    <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; fill: #666666" transform="translate(5.76 305.960969)">Paired, all questions: notes only vs Granola 2-17, p=0.001; notes+facts vs notes only 4-0, p=0.125; +fallback vs notes+facts 10-0, p=0.002</text>
    <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; fill: #666666" transform="translate(5.76 315.563156)">(wins-losses, exact sign test). The fallback reads transcripts, so it models 'keep a cold copy', not deletion. LLM-drafted gold approved in bulk;</text>
-   <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; fill: #666666" transform="translate(5.76 325.165344)">n is small. Write-up: docs/benchmark/DELETION_SIM.md.</text>
+   <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; fill: #666666" transform="translate(5.76 325.165344)">n is small. Write-up: docs/tracks/RETENTION.md.</text>
   </g>
  </g>
  <defs>

@@ -17,7 +17,7 @@ Everything runs locally except LLM calls:
   ``AnthropicClient`` whose requests are valid for current models and which records the usage of
   every call so ingestion cost is measured, not guessed.
 
-See ``docs/systems/baselines/graphiti.md`` for every deviation from Graphiti's defaults.
+See ``docs/archive/concentrate/baselines/graphiti.md`` for every deviation from Graphiti's defaults.
 """
 
 from __future__ import annotations
@@ -99,7 +99,7 @@ from concentrate.llm.resilience import acall_with_retries, async_anthropic_clien
 
 DEFAULT_INGEST_MODEL = "claude-sonnet-5-5"
 DEFAULT_CACHE_ROOT = Path("data/cache/graphiti")
-# Utterances per episode (see docs/systems/baselines/graphiti.md for the cost case).
+# Utterances per episode (see docs/archive/concentrate/baselines/graphiti.md for the cost case).
 EPISODE_UTTERANCES = 40
 MIN_TAIL_UTTERANCES = 10  # a shorter trailing chunk is merged into the previous episode
 K_EDGES, K_NODES = 30, 10
@@ -109,7 +109,7 @@ logger = logging.getLogger(__name__)
 
 _FORMAT_VERSION = 1  # bump when the episode text or ingestion config changes meaningfully
 
-# Ingestion cost model, calibrated on the 2-meeting smoke test (docs/systems/baselines/graphiti.md).
+# Ingestion cost model, calibrated on the 2-meeting smoke test (docs/archive/concentrate/baselines/graphiti.md).
 # Billed input for episode i ~= INGEST_INPUT_PER_TOKEN * tokens(i)
 #   + PREV_CONTEXT_CALLS * tokens(previous <= PREVIOUS_EPISODES episodes),
 # because Graphiti re-sends the last 10 episodes in ~3 prompts per episode (extract nodes,

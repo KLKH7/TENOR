@@ -213,7 +213,7 @@ def test_concentrate_adapter_over_its_real_mcp_server(tmp_path: Path) -> None:
 def test_the_documented_example_spec_is_valid() -> None:
     from concentrate.blackbox.products import load_spec
 
-    spec = load_spec(str(Path(__file__).parent.parent / "docs/benchmark/product.example.json"))
+    spec = load_spec(str(Path(__file__).parent.parent / "docs/method/product.example.json"))
     assert spec.read_only_tools == [spec.tool]
 
 

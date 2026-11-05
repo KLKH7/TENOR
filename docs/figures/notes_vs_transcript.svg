@@ -827,7 +827,7 @@ L 558.72 221.76
   <g id="text_39">
    <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; fill: #666666" transform="translate(5.76 291.704969)">Synthetic summaries drop ~20% of facts by a generator setting, so the transcript-needed share and n (17) are small and set by design.</text>
    <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; fill: #666666" transform="translate(5.76 301.307156)">Notes-only scoring 0% there is close to true by construction; the measured parts are its confident-error rate and how much transcript readers</text>
-   <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; fill: #666666" transform="translate(5.76 310.909344)">recover. Write-up: docs/results/NOTES_VS_TRANSCRIPT.md.</text>
+   <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; fill: #666666" transform="translate(5.76 310.909344)">recover. Write-up: docs/archive/northwind/NOTES_VS_TRANSCRIPT.md.</text>
   </g>
  </g>
  <defs>

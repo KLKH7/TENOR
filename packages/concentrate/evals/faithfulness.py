@@ -23,7 +23,7 @@ The output is per-claim labels and aggregate metrics:
   meetings (needs human confirmation).
 
 For a private system (real meetings) per-claim output goes only to ``data/real/``; committed
-files hold aggregates. Write-up: ``docs/benchmark/NOTES_FAITHFULNESS.md``.
+files hold aggregates. Write-up: ``docs/tracks/NOTES.md``.
 """
 
 from __future__ import annotations

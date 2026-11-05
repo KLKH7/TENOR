@@ -1,6 +1,6 @@
 # Agent-interface quality: results
 
-**Question.** When an external agent asks a meeting product through its MCP, what does it receive? Does the payload say when it is unsure, how fine-grained is its evidence, does the same question get the same answer twice, and how long does it take? Track definition and metrics: [docs/benchmark/AGENT_INTERFACE.md](../benchmark/AGENT_INTERFACE.md).
+**Question.** When an external agent asks a meeting product through its MCP, what does it receive? Does the payload say when it is unsure, how fine-grained is its evidence, does the same question get the same answer twice, and how long does it take? Track definition and metrics: [docs/tracks/AGENT_INTERFACE.md](../tracks/AGENT_INTERFACE.md).
 
 **Short answer (real DEV, one person's meetings):**
 - **Granola** (`query_granola_meetings`, n = 47) is accurate (89% useful and comprehensive [77, 95]), but its payload is one prose string with **meeting-level links only** (0 of 47 point inside a meeting) and **no abstain or coverage field**. Every answer (47/47) carries the same standing note telling the agent to call `search_transcripts` itself. Its confident errors cluster on unanswerable questions: **2 of 6** [10, 70], reproduced unchanged in all three asks.

@@ -1,6 +1,6 @@
 """Evidence compression: how much of a meeting do you need to keep?
 
-Plan: docs/benchmark/EVIDENCE_COMPRESSION.md.
+Plan: docs/method/EVIDENCE_COMPRESSION.md.
 
 One reader gets each question's meeting notes plus a **kept layer** of the transcript, and
 answers with ``answer.v1``; ``judge.v1`` grades it. Layers are built by :func:`build_layers`
@@ -607,7 +607,7 @@ class QuoteAssumptions:
     judge: str = "claude-haiku-5-5"
     judge2: str = "claude-sonnet-5-5"
     judge2_share: float = SECOND_JUDGE_SHARE
-    # Measured on cached deletion-sim calls (docs/benchmark/DELETION_SIM.md hand-over): the
+    # Measured on cached deletion-sim calls (docs/tracks/RETENTION.md hand-over): the
     # structured-output schema and framing that count_tokens on the text doesn't see.
     answer_overhead: int = 255
     judge_overhead: int = 246

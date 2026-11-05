@@ -18,7 +18,7 @@ from concentrate.synth.roster import PEOPLE
 
 class NoiseRates(BaseModel):
     """Per-opportunity probabilities, calibrated on real Granola output
-    (docs/benchmark/FIDELITY_V2.md).
+    (docs/archive/northwind/FIDELITY_V2.md).
 
     v1 defaults (filler 0.04, repeat 0.015, false starts 0.06) gave 5-8x the real filler rate
     and hyphenated false starts that Granola's ASR never emits; real remote passages also often

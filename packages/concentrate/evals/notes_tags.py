@@ -20,7 +20,7 @@ Two deterministic taggers, both pure:
   gold meeting's notes. Exact by construction, so it is the primary synthetic tag and the
   yardstick the portable rule is measured against (dev used for tuning, test for reporting).
 
-Definitions and caveats: ``docs/results/NOTES_VS_TRANSCRIPT.md``.
+Definitions and caveats: ``docs/archive/northwind/NOTES_VS_TRANSCRIPT.md``.
 """
 
 from __future__ import annotations

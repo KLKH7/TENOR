@@ -204,7 +204,7 @@ is a free cache hit. `--stall-minutes 0` turns the watchdog off.
   - 238 tests, with no API keys and `HF_HUB_OFFLINE=1`.
 
 **Formatting markdown.** `ruff format --check` was failing on a Python sketch in
-`docs/systems/concentrate/enhance.md`: valid code, but with hand-aligned comments. We now exclude `*.md`
+`docs/archive/concentrate/enhance.md`: valid code, but with hand-aligned comments. We now exclude `*.md`
 from the formatter (`[tool.ruff.format] exclude`). Docs code blocks are illustrations, not source
 files, and rewriting someone's alignment is more surprising than leaving it.
 

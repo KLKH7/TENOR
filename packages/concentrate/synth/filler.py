@@ -1,7 +1,7 @@
 """Compositional, fact-free filler speech for padding meetings (generator northwind-2).
 
 v1 drew filler from 69 fixed sentences, so 78% of XL passages of 6+ words were exact
-duplicates and retrieval was unrealistically easy (docs/benchmark/FIDELITY.md). Here filler is
+duplicates and retrieval was unrealistically easy (docs/archive/northwind/FIDELITY.md). Here filler is
 composed
 from templates whose slots are filled from vocabulary specific to the meeting type, the
 projects and customers the meeting is about, and generic workplace speech. The combinatorics

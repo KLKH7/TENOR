@@ -3,7 +3,7 @@
 Ten hand-authored meetings (keys start with ``v21-``) about a new project, **Halyard** (the
 partner API), layered on the v2 world without touching it: they use new subjects only, and
 their facts and commitments are kept out of the v2 question generators, so every v2 question,
-its answer and its split stay identical. Phenomena (docs/benchmark/V2_EXTRAS.md):
+its answer and its split stay identical. Phenomena (docs/archive/northwind/V2_EXTRAS.md):
 
 1. **Hybrid rooms.** "Room 4B" joins the Halyard syncs as one system-audio participant that
    carries Dev, Rosa and Felix; only conversational cues ("Dev, what date…?", "Felix here")

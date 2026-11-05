@@ -1,6 +1,6 @@
 """Match product notes to AMI meetings and score their transcripts against the manual words.
 
-Each playback gets a calendar event titled ``AMI <meeting id>`` (docs/benchmark/AMI_DESIGN.md
+Each playback gets a calendar event titled ``AMI <meeting id>`` (docs/method/AMI_REPLAY.md
 §3), so a synced note is matched by that tag in its title or event title. Notes come from a
 dedicated AMI account synced into its own database (``data/ami_<product>.db``), never from the
 author's real meetings.

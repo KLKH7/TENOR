@@ -713,6 +713,6 @@
  "texts": [
   "What does a notes-only answer lose?",
   "Synthetic test report 20261103T002456Z, split by whether the gold meetings' notes hold the answer.\nSummaries (b1) reads notes only: what chat has after transcript deletion.",
-  "Synthetic summaries drop ~20% of facts by a generator setting, so the transcript-needed share and n (17) are small and set by design. Notes-only scoring 0% there is close to true by construction; the measured parts are its confident-error rate and how much transcript readers recover. Write-up: docs/results/NOTES_VS_TRANSCRIPT.md."
+  "Synthetic summaries drop ~20% of facts by a generator setting, so the transcript-needed share and n (17) are small and set by design. Notes-only scoring 0% there is close to true by construction; the measured parts are its confident-error rate and how much transcript readers recover. Write-up: docs/archive/northwind/NOTES_VS_TRANSCRIPT.md."
  ]
 }

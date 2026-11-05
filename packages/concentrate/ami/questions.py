@@ -1,6 +1,6 @@
 """AMI question set for the evidence-compression experiment.
 
-Plan: docs/benchmark/EVIDENCE_COMPRESSION.md.
+Plan: docs/method/EVIDENCE_COMPRESSION.md.
 
 Every question is built by a fixed template from AMI's **human** annotations; no LLM drafts
 anything. The gold answer is the annotator's own sentence(s); the gold evidence is the dialogue

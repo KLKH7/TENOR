@@ -9,7 +9,7 @@ Writes two committed files, both safe to publish:
   synthetic test report, the retirement curve runs and (aggregates only) the real slice.
 
 The real section needs the private ``data/real`` files; without them the previous real
-section is kept. Write-up: ``docs/results/NOTES_VS_TRANSCRIPT.md``.
+section is kept. Write-up: ``docs/archive/northwind/NOTES_VS_TRANSCRIPT.md``.
 """
 
 from __future__ import annotations
@@ -158,7 +158,7 @@ def build(seed: int = 0, *, real: bool = True) -> tuple[dict[str, Any], dict[str
     primary = {t.qid: t.tag for t in v1}
     rule = {t.qid: t.rule for t in v1}
     tags_out: dict[str, Any] = {
-        "definition": "docs/results/NOTES_VS_TRANSCRIPT.md",
+        "definition": "docs/archive/northwind/NOTES_VS_TRANSCRIPT.md",
         "primary": "generator reference (synthetic); portable rule (real)",
         "synthetic": {
             name: {
@@ -212,10 +212,10 @@ def _real_counts(rt: dict[str, Tag]) -> dict[str, dict[str, int]]:
 
 
 def to_markdown(tags: dict[str, Any], a: dict[str, Any]) -> str:
-    """The generated tables behind ``docs/results/NOTES_VS_TRANSCRIPT.md``."""
+    """The generated tables behind ``docs/archive/northwind/NOTES_VS_TRANSCRIPT.md``."""
     lines = ["# Notes-sufficient vs transcript-needed: generated tables", "",
              "Regenerate: `uv run concentrate notes-vs-transcript`. Write-up and caveats: "
-             "`docs/results/NOTES_VS_TRANSCRIPT.md`.", "", "## Tag counts", ""]  # fmt: skip
+             "`docs/archive/northwind/NOTES_VS_TRANSCRIPT.md`.", "", "## Tag counts", ""]  # fmt: skip
     lines += ["| Set | Split | notes-sufficient | transcript-needed | unanswerable | "
               "rule vs generator (test): agreement · κ |", "|---|---|---|---|---|---|"]  # fmt: skip
     for name, s in tags["synthetic"].items():

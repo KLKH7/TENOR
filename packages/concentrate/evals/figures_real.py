@@ -47,7 +47,7 @@ STEPS = (
 )
 MIN_CELL_N = 5  # heatmap cells with fewer questions are greyed out, not coloured
 
-# The AMI replication (docs/benchmark/DELETION_SIM.md, "AMI replication"): A is Granola's own
+# The AMI replication (docs/tracks/RETENTION.md, "AMI replication"): A is Granola's own
 # Chat, and B' (Wispr's notes) sits beside the ladder as a product comparison, not a rung.
 AMI_LADDER = ("granola_chat", "notes_only", "notes_facts", "notes_facts_fallback")
 AMI_STEPS = (
@@ -267,7 +267,7 @@ def fig_retention_steps(deletion: dict[str, Any] | None) -> Any:
             "Notes only and notes + facts are answered by our model over Granola's own notes, "
             "not by Granola's degraded chat. The last bar reads transcripts, so it models 'keep a "
             "cold copy', not deletion. LLM-drafted gold, approved in bulk; n is small. "
-            "docs/benchmark/DELETION_SIM.md",
+            "docs/tracks/RETENTION.md",
         )
         fig.subplots_adjust(left=0.09, right=0.98, top=0.8, bottom=0.25)
         return fig
@@ -290,7 +290,7 @@ def fig_retention_steps(deletion: dict[str, Any] | None) -> Any:
         "far). Silent replay: the apps' notes have no typed notes. Mostly role-play (scenario) "
         "meetings. Notes-only bars are our model over each app's own notes, not the apps' "
         "degraded chat; the last bar reads Granola's transcript ('keep a cold copy'). "
-        "docs/benchmark/DELETION_SIM.md",
+        "docs/tracks/RETENTION.md",
     )
     fig.subplots_adjust(left=0.08, right=0.99, top=0.8, bottom=0.27, wspace=0.12)
     return fig
@@ -611,7 +611,7 @@ def fig_question_heatmap(deletion: dict[str, Any] | None) -> Any:
     return fig
 
 
-# -- capture coverage (docs/benchmark/CAPTURE_TESTS.md, section A) ------------------------------
+# -- capture coverage (docs/tracks/CAPTURE.md, section A) ------------------------------
 
 COVERAGE_MEETING = "EN2002b"  # the one real (unstaged) meeting with a flagged gap
 COVERAGE_PRODUCTS = ("granola", "wispr")

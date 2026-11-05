@@ -4,7 +4,7 @@ Product-neutral and LLM-free. Every answer goes through the product's black-box 
 (:mod:`concentrate.blackbox.products`), so any product the black-box track can ask can be
 scored here: answer types (Granola's four-way taxonomy), evidence granularity, payload signals
 (hedges, coverage caveats, abstention, instructions to the caller), repeat-ask stability and
-latency. See docs/benchmark/AGENT_INTERFACE.md (the task) and docs/results/AGENT_INTERFACE.md.
+latency. See docs/tracks/AGENT_INTERFACE.md (the task) and docs/results/AGENT_INTERFACE.md.
 
 Per-question output stays under ``data/real/`` (private); :func:`aggregate` is the committable
 view and is checked by :func:`~concentrate.blackbox.kit.check_committable`.
@@ -746,7 +746,7 @@ def aggregate(
     on shared questions judged in the same run (``pairs``: label, label, entry, entry)."""
     out: dict[str, Any] = {
         "meta": meta,
-        "rule": "concentrate.evals.agent_interface.bucket; docs/benchmark/AGENT_INTERFACE.md",
+        "rule": "concentrate.evals.agent_interface.bucket; docs/tracks/AGENT_INTERFACE.md",
         "products": {n: product_block(e, r, s) for n, (e, r, s) in results.items()},
     }
     if pairs:

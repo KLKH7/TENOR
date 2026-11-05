@@ -1,6 +1,6 @@
 # AMI questions for the evidence-compression experiment
 
-311 questions about 33 AMI meetings, for [EVIDENCE_COMPRESSION.md](../../docs/benchmark/EVIDENCE_COMPRESSION.md). Built by fixed templates from AMI's human annotations; no LLM wrote any question or answer.
+311 questions about 33 AMI meetings, for [EVIDENCE_COMPRESSION.md](../../docs/method/EVIDENCE_COMPRESSION.md). Built by fixed templates from AMI's human annotations; no LLM wrote any question or answer.
 
 **Source and licence.** AMI Meeting Corpus, manual annotations v1.6.2 (University of Edinburgh and the AMI Consortium), CC BY 4.0. Gold answers quote the AMI annotators' abstractive summaries; who-said-it questions quote AMI's manual transcript. Regenerate with `uv run concentrate ami questions --seed 42` (byte-identical; a test checks it).
 

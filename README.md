@@ -13,7 +13,7 @@ Real meetings, DEV results: 4 meetings, 39–47 questions, seen during developme
 - **The loss is in the details.** Questions the notes can't answer drop from 94% to 44%.
 - **Reaching the transcript recovers it; a fact layer doesn't.** Notes + extracted facts: 66% (not significant). Reading the transcript only when needed: 87%.
 - **Reading real speech, Granola's agent beat our fact memory 92% to 59%** (paired 14–1, p ≈ 0.001).
-- **Granola's notes invent nothing, but about 1 claim in 7 overreaches:** 84% supported, 0% made up, 14% go beyond what was said (132 claims, [`NOTES_FAITHFULNESS`](docs/benchmark/NOTES_FAITHFULNESS.md)).
+- **Granola's notes invent nothing, but about 1 claim in 7 overreaches:** 84% supported, 0% made up, 14% go beyond what was said (132 claims, [`NOTES_FAITHFULNESS`](docs/tracks/NOTES.md)).
 - **Through the MCP, Granola's wrong answers look like its right ones:** no line-level citations and no "unsure" flag (3 of 47 wrong but confident, [`AGENT_INTERFACE`](docs/results/AGENT_INTERFACE.md)).
 
 *Independent research prototype; [not affiliated with Granola](#not-affiliated-with-granola).*
@@ -24,7 +24,7 @@ All from the author's 4 Granola meetings, read through Granola's public MCP (rea
 
 ### Retention: what deleting transcripts costs
 
-Same 47 questions, four conditions; each adds one layer. Full write-up: [`DELETION_SIM`](docs/benchmark/DELETION_SIM.md).
+Same 47 questions, four conditions; each adds one layer. Full write-up: [`DELETION_SIM`](docs/tracks/RETENTION.md).
 
 | Condition | Accuracy [95% CI] | Correct / partial / declined / wrong but confident ¹ | Questions notes can't answer (n = 18) | vs row above ² |
 |---|---|---|---|---|
@@ -55,13 +55,13 @@ All 4 meetings fit in a model's context, so this tests reading, not search. Writ
 
 - **Concentrate misses details it never extracted.** 0 of 8 on "who said X" (Granola 7 of 8); 10 of its 16 misses were declines.
 - **It leads only on "what changed"** (6 of 6 vs 5 of 6), what its time-stamped store is built for.
-- **A transcript fallback closed most of the gap (DEV only).** 12/22 → 20/22 (8 fixed, 0 broken, p = 0.008); Granola 19/22 on the same questions ([`fallback`](docs/systems/concentrate/fallback.md)).
+- **A transcript fallback closed most of the gap (DEV only).** 12/22 → 20/22 (8 fixed, 0 broken, p = 0.008); Granola 19/22 on the same questions ([`fallback`](docs/archive/concentrate/fallback.md)).
 
 ## Synthetic diagnostics (not evidence of real-world performance)
 
 Northwind is a synthetic company in Granola's format: 184 meetings, 296 questions with known answers.
 On it, our fact memory tied the transcript readers (92 / 90 / 88%) and facts recovered deletion (64% → 88%). Real meetings reversed both.
-Why: the same author built the generator and the extractor, and the questions target planted facts. Details and all seven systems: [`SYNTHETIC_DIAGNOSTICS`](docs/results/SYNTHETIC_DIAGNOSTICS.md).
+Why: the same author built the generator and the extractor, and the questions target planted facts. Details and all seven systems: [`SYNTHETIC_DIAGNOSTICS`](docs/archive/northwind/SYNTHETIC_DIAGNOSTICS.md).
 
 ![Same approaches on synthetic vs real meetings: memory-only fell 33 points, the fact layer 22, the agent over transcripts held](docs/figures/synthetic_vs_real.svg)
 
@@ -70,9 +70,9 @@ Why: the same author built the generator and the extractor, and the questions ta
 ![How Hindsight works: meetings go into products through adapters, five tracks test them, scores come out](docs/figures/overview.svg)
 
 - **Outside-in.** Only public interfaces: Granola's API note format and its read-only MCP. No claims about Granola internals.
-- **Black-box kit.** Asks any meeting product's MCP your questions, on your meetings. Only content-free scores leave your machine ([`BLACKBOX`](docs/benchmark/BLACKBOX.md)).
-- **Concentrate** is a reference memory, not a product: it extracts cited, time-stamped facts to show what precomputing gains and loses ([`memory`](docs/systems/concentrate/memory.md)).
-- **No single score.** Six dimensions, from correctness to cost ([`METRICS`](docs/benchmark/METRICS.md)). Comparisons are paired, so a tie is never called a win.
+- **Black-box kit.** Asks any meeting product's MCP your questions, on your meetings. Only content-free scores leave your machine ([`BLACKBOX`](docs/method/BLACKBOX.md)).
+- **Concentrate** is a reference memory, not a product: it extracts cited, time-stamped facts to show what precomputing gains and loses ([`memory`](docs/archive/concentrate/memory.md)).
+- **No single score.** Six dimensions, from correctness to cost ([`METRICS`](docs/method/METRICS.md)). Comparisons are paired, so a tie is never called a win.
 
 | Track | Task, for any system | Status |
 |---|---|---|
@@ -80,7 +80,7 @@ Why: the same author built the generator and the extractor, and the questions ta
 | Retention | Answer after transcripts are deleted | ✅ real (DEV) |
 | Notes faithfulness | Is every line of the notes backed by what was said? | ✅ real (4 meetings) + baseline |
 | Agent interface quality | Answer type, evidence, stability, latency through the MCP | ✅ real (DEV) |
-| Contextual integrity | Answer without revealing meetings the asker can't see | 📐 [designed](docs/benchmark/SHARING_LEAKS_DESIGN.md) |
+| Contextual integrity | Answer without revealing meetings the asker can't see | 📐 [designed](docs/archive/SHARING_LEAKS_DESIGN.md) |
 
 ## Reasons to be skeptical
 
@@ -126,9 +126,9 @@ uv run concentrate real-kit --help
 
 | Start here | |
 |---|---|
-| [`docs/report/HINDSIGHT_REPORT.md`](docs/report/HINDSIGHT_REPORT.md) | Full technical report |
+| [`docs/results/TENOR_TECHNICAL_REPORT.md`](docs/results/TENOR_TECHNICAL_REPORT.md) | Full technical report |
 | [`docs/README.md`](docs/README.md) | Map of every doc |
-| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Diagrams, linked to the code |
+| [`docs/engineering/ARCHITECTURE.md`](docs/engineering/ARCHITECTURE.md) | Diagrams, linked to the code |
 | [`docs/STYLE.md`](docs/STYLE.md) | How docs and figures are written |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md), [`SECURITY.md`](SECURITY.md) | Adding a system; reporting a problem |
 

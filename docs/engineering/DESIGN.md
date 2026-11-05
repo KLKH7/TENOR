@@ -173,7 +173,7 @@ The remote 38+ word monologue tail is a content limitation of scripted turns and
 - concrete live-probe findings;
 - numbers on the transcript-retirement question they've said they're weighing.
 
-**Trade-off:** the work hardly changes, but polish moves to the benchmark: a card ([`BENCHMARK.md`](../benchmark/DESIGN.md)), one command per system, and a documented way to add a system. Its biggest weakness, being synthetic, is stated up front.
+**Trade-off:** the work hardly changes, but polish moves to the benchmark: a card ([`BENCHMARK.md`](../archive/northwind/DESIGN.md)), one command per system, and a documented way to add a system. Its biggest weakness, being synthetic, is stated up front.
 
 ## Hardening: timeouts, retries, stall watchdog, CI (2026-11-02)
 
@@ -204,7 +204,7 @@ connection could block for up to 50 minutes. Full write-up: [`HARDENING.md`](HAR
 
 ## Report v2: paired significance, power, Pareto, failure taxonomy (2026-11-02)
 
-`concentrate analyze <report>` works post hoc on any saved report and costs nothing unless `--llm` is passed. Methods are in [`ANALYSIS.md`](../results/ANALYSIS.md).
+`concentrate analyze <report>` works post hoc on any saved report and costs nothing unless `--llm` is passed. Methods are in [`ANALYSIS.md`](../archive/northwind/ANALYSIS.md).
 - **Paired, not overlapping CIs.** Every system answers the same questions, so pairs are compared with McNemar's exact test and a paired bootstrap CI of the gap. Holm–Bonferroni corrects across all pairs; each category is its own family.
 - **Power from observed discordance.** Sample sizes use Connor's approximation with the observed share of questions on which two systems disagree. A Monte Carlo test confirms about 80% power. Trade-off: discordance from a small pilot is noisy, so the numbers are re-estimated on each report rather than fixed.
 - **Ingest amortised at a stated volume.** The frontier is shown at several volumes, along with break-even volumes, because write-time vs query-time is a volume question.
@@ -213,7 +213,7 @@ connection could block for up to 50 minutes. Full write-up: [`HARDENING.md`](HAR
 
 ## Concentrate as an MCP server (workstream D, 2026-11-02)
 
-`concentrate mcp-serve [--xl]` serves a built memory over stdio with six read-only tools (`ask_memory`, `get_facts`, `get_commitments`, `resolve_entity`, `get_meeting`, `get_transcript_lines`) and one resource (`concentrate://memory`). Details, client config and a demo script are in [`MCP_SERVER.md`](../systems/MCP_SERVER.md).
+`concentrate mcp-serve [--xl]` serves a built memory over stdio with six read-only tools (`ask_memory`, `get_facts`, `get_commitments`, `resolve_entity`, `get_meeting`, `get_transcript_lines`) and one resource (`concentrate://memory`). Details, client config and a demo script are in [`MCP_SERVER.md`](../archive/concentrate/MCP_SERVER.md).
 
 - **Logic split from protocol.** `mcp_server/service.py` is plain Python over `MemoryStore`, `EntityDirectory` and `build_context`. `server.py` only registers tools (mcp 2.x `MCPServer`; FastMCP was renamed in v2). Tests drive the real protocol through the SDK's in-process client.
 - **Read-only twice over.** The tools carry `readOnlyHint` annotations, and `MemoryStore(read_only=True)` opens SQLite with `mode=ro`, so a write fails at the database. The read-only connection is shared across the SDK's worker threads (`check_same_thread=False`), which is safe because the sqlite3 module serializes access.
@@ -233,7 +233,7 @@ connection could block for up to 50 minutes. Full write-up: [`HARDENING.md`](HAR
 
 ## Pre-meeting brief (workstream H, 2026-11-02)
 
-**Built:** `concentrate brief <note_id>` prints a cited brief for an upcoming meeting: open commitments, what changed since the series last met, open customer requests, and the last meeting's digest. `concentrate brief-eval` grades briefs against the generator's world. Details and results are in [`BRIEF.md`](../results/BRIEF.md).
+**Built:** `concentrate brief <note_id>` prints a cited brief for an upcoming meeting: open commitments, what changed since the series last met, open customer requests, and the last meeting's digest. `concentrate brief-eval` grades briefs against the generator's world. Details and results are in [`BRIEF.md`](../archive/concentrate/BRIEF.md).
 
 **Decisions:**
 - The brief is a deterministic **as-of query**: it reads only rows recorded before the meeting starts, so a historical brief has no leakage and every meeting is a test case.
@@ -244,7 +244,7 @@ connection could block for up to 50 minutes. Full write-up: [`HARDENING.md`](HAR
 
 ## Benchmark v2: realistic wording (generator `northwind-2`, 2026-11-02)
 
-Details and metrics are in `docs/benchmark/FIDELITY_V2.md`.
+Details and metrics are in `docs/archive/northwind/FIDELITY_V2.md`.
 
 **Decisions.**
 - **Template-composed filler instead of an LLM rewrite.** Filler is composed from templates filled with meeting-specific vocabulary (`synth/filler.py`), so it costs $0 and the same seed gives byte-identical output. This brings exact ≥6-word duplicates from 78% down to 4.9% and TTR@2k from .11 to .21. The trade-off: the sentence frames still recur (54% of long passages share their first 6 words; real data: 0.6%). An LLM polish would fix that for an estimated ≈$28–55 and is left for the user to decide.
@@ -285,7 +285,7 @@ Query-side only, dev only; details, error analysis and ablations in `docs/archiv
 - **Result (XL dev, $7.04):** Concentrate 89% at N = ∞ → 88% at N = 0, keeping ~5% of transcript
   tokens; summaries-only b1 scores 64%. b0's retired accuracy was not run (≈ $29 at N = ∞). The
   benchmark has no verbatim-quote questions, so the main expected loss is untested. See
-  `docs/results/RETIREMENT.md`.
+  `docs/archive/northwind/RETIREMENT.md`.
 
 ## Report provenance: judge reasons, data version, per-system k (workstream R, 2026-11-02)
 
@@ -311,7 +311,7 @@ Query-side only, dev only; details, error analysis and ablations in `docs/archiv
 
 ## Unit economics and scale curve (workstream F, 2026-11-02)
 
-Details and results: [`ECONOMICS.md`](../results/ECONOMICS.md).
+Details and results: [`ECONOMICS.md`](../archive/northwind/ECONOMICS.md).
 
 - **Re-price measured tokens, don't estimate costs.** `concentrate economics` reads the builds'
   `progress.jsonl` and an eval report's per-question rows, infers each build's model by
@@ -331,11 +331,11 @@ Details and results: [`ECONOMICS.md`](../results/ECONOMICS.md).
 
 - `enhance-v2` adds two cues. **Task continuity**: an "I'll take X" or "X is done" line is credited to whoever said X on identified lines in other meetings. **Diarized owner prior**: the owner gets a stronger prior on the largest iOS diarization cluster. It is opt-in (`CONCENTRATE_ENHANCER`) so existing stores stay valid.
 - Turn-taking and an HMM over the microphone run were measured and rejected *for this corpus*. Synthetic filler speakers are drawn i.i.d., so there is no structure to learn. That's a fidelity gap to close, not a verdict on the idea.
-- With batch lookahead, v2 fixes 4 of the 8 owner-misattributed in-person commitments behind the brief's precision gap, adding no new errors. With history only (what the pipeline does today), it fixes none. Numbers: docs/systems/concentrate/enhance_v2.md.
+- With batch lookahead, v2 fixes 4 of the 8 owner-misattributed in-person commitments behind the brief's precision gap, adding no new errors. With history only (what the pipeline does today), it fixes none. Numbers: docs/archive/concentrate/enhance_v2.md.
 
 ## Benchmark v2.1 extras (workstream P, generator `northwind-2.1`, 2026-11-02)
 
-Details: [BENCHMARK_V2_EXTRAS.md](../benchmark/V2_EXTRAS.md).
+Details: [BENCHMARK_V2_EXTRAS.md](../archive/northwind/V2_EXTRAS.md).
 - **Additive and opt-in.** `--extras` appends 10 hand-authored meetings about one new project (Halyard) and 51 questions in seven new categories:
   `room_attribution`, `identity_resolution`, `correction`, `commitment_tracking`, `long_horizon`, and the transcript-only `exact_quote` and `speaker_attribution`.
   `questions.NEEDS_TRANSCRIPT` marks the categories the retirement curve should report separately.
@@ -360,7 +360,7 @@ Details: [BENCHMARK_V2_EXTRAS.md](../benchmark/V2_EXTRAS.md).
 - **First real result (bad for Concentrate, reported as-is).** On 39 real questions, Granola's agent scored 92% [82, 100], b0 76% (k=1, n=37) and Concentrate 59% [44, 74]. Concentrate got 0 of 8 on "who said X", and 10 of its 16 misses were "not in the material". The cause: the write-time memory keeps ~43 facts for 4 meetings, and real questions target long-tail transcript details that our synthetic questions (generated from planted facts) never ask about. Concentrate led only on "what changed" (6/6). No tuning was done on this slice; the next step needs fresh real questions as a dev set. Full detail is in REAL_SLICE.md.
 
 ## Transcript fallback for Concentrate (workstream L, 2026-11-03)
-Details: `docs/systems/concentrate/fallback.md`. Everything below is **dev**.
+Details: `docs/archive/concentrate/fallback.md`. Everything below is **dev**.
 - **Decision:** a hybrid. Facts answer state and change questions; raw transcript passages fill the long tail.
   - `ConcentrateSystem(fallback="off"|"on_abstain"|"always")`, default `off`.
   - Passages use b0's chunking and the hybrid index, keep line IDs, respect as-of and retirement, and fit a fixed token budget.
@@ -374,7 +374,7 @@ Details: `docs/systems/concentrate/fallback.md`. Everything below is **dev**.
 - **Open:** confirm on fresh real test questions written after this design freeze.
 
 ## Black-box track: any meeting MCP (P1-B, 2026-11-03)
-Details: `docs/benchmark/BLACKBOX.md`.
+Details: `docs/method/BLACKBOX.md`.
 - **One protocol, `Product.ask(question) -> ProductAnswer`** (text, cited IDs, latency, raw response, abstain flag if any). Adapters: Granola (`query_granola_meetings`), Concentrate's own server (`ask_memory`, over stdio), and a JSON spec for any other MCP. The kit (`real-kit run`) wraps a product in `ProductSystem`, so scoring reuses `run_slice` and `judge.v1` unchanged.
 - **Least privilege, by construction.** Each adapter allowlists exactly its one question tool (the old kit allowed 7 for Granola; probes keep that list). `AllowlistCaller` refuses everything else before sending. For servers we can list, a preflight also refuses a tool annotated as not read-only. Unannotated tools pass the preflight, so the human checklist in BLACKBOX.md stays the real guard.
 - **Questions are product-independent.** They are about the user's meetings, so `--product` appears where a product is involved (`status`, `run`, `spotcheck`), not on `draft`/`review`/`add`. Drafting from a product's own answers would bias the gold toward that product.
@@ -431,7 +431,7 @@ eleven PLAN section-5 figures into `docs/figures/` as SVG; `docs/results/INDEX.m
   reliability diagram waits for X5 (no confidence field yet).
 
 ## P1-M: the measurement framework and the $0 metrics (2026-11-03)
-Definitions: [`docs/benchmark/METRICS.md`](../benchmark/METRICS.md). Code: `evals/metrics.py`, wired into `concentrate analyze`.
+Definitions: [`docs/method/METRICS.md`](../method/METRICS.md). Code: `evals/metrics.py`, wired into `concentrate analyze`.
 - **Decision: one price list for every $/question.** `analyze` and `economics` re-price each answer from its tokens at the interactive `--price-model` price (Opus 5.5 by default). The Batch API saving is a separate column, never mixed in.
   - Fixes red-team R1: recorded `cost_usd` mixed 50%-off batched rows with full-price rows.
   - `economics` additionally read that discount as ~50% prompt-cache hits.
@@ -445,7 +445,7 @@ Definitions: [`docs/benchmark/METRICS.md`](../benchmark/METRICS.md). Code: `eval
 - **Open:** partial credit uses an arbitrary 0.5 weight; latency for batched systems still rests on n = 10; calibration (X5) and faithfulness (X2) need runs.
 
 ## P2-T: notes-sufficient vs transcript-needed tags, confident error (2026-11-03)
-Write-up: [`docs/results/NOTES_VS_TRANSCRIPT.md`](../results/NOTES_VS_TRANSCRIPT.md). Code: `evals/notes_tags.py`, `evals/by_tag.py`, `evals/notes_vs_transcript.py`; command `concentrate notes-vs-transcript` ($0).
+Write-up: [`docs/archive/northwind/NOTES_VS_TRANSCRIPT.md`](../archive/northwind/NOTES_VS_TRANSCRIPT.md). Code: `evals/notes_tags.py`, `evals/by_tag.py`, `evals/notes_vs_transcript.py`; command `concentrate notes-vs-transcript` ($0).
 - **Decision: two deterministic taggers, not hand labels.**
   - The *generator reference* (did the planted summary bullet survive?) is the primary synthetic tag: it is exact by construction.
   - The *portable rule* (gold key values string-matched in the gold meetings' title, date, summary and typed notes) is the only option on real data. It is measured against the reference: v1 test 90%, κ 0.63.
@@ -459,7 +459,7 @@ Write-up: [`docs/results/NOTES_VS_TRANSCRIPT.md`](../results/NOTES_VS_TRANSCRIPT
 - **Open:** a real notes-only run and a v2.1 run would give larger n and a direct real deletion measurement (both cost money).
 
 ## P2-D: the deletion simulation, built not run (2026-11-03)
-Design: [`docs/benchmark/DELETION_SIM.md`](../benchmark/DELETION_SIM.md). Code: `evals/deletion_sim.py`, `concentrate deletion-sim`.
+Design: [`docs/tracks/RETENTION.md`](../tracks/RETENTION.md). Code: `evals/deletion_sim.py`, `concentrate deletion-sim`.
 - **Decision: a ladder of four conditions, each adding one layer.** A Granola's agent (black box) → B Granola's notes only → C + Concentrate facts/digests with every transcript deleted → D + the on-abstain transcript fallback. B, C and D share the answer model, prompt and judges, so C − B and D − C are clean; A − B also mixes in Granola's own model and prompt, and the doc says so.
 - **Decision: B shows all notes, not a retrieval.** With 4 meetings (~4k tokens of notes) retrieval is moot, so B is an upper bound for a notes-only agent. It approximates Granola's degraded chat; it is not Granola's post-deletion behaviour, which we can't observe.
 - **Decision: notes come from the synced `data/real.db`** (the same public-MCP `get_meetings` data), so the run makes no extra live Granola calls beyond `query_granola_meetings` for unrecorded A answers.
@@ -472,7 +472,7 @@ Design: [`docs/benchmark/DELETION_SIM.md`](../benchmark/DELETION_SIM.md). Code: 
 - **Bug fixed during the run:** the committable check refused the aggregate because the gold placeholder "UNANSWERABLE" matched the category name `unanswerable`. The CLI now leaves placeholder golds out of the forbidden-text list, and adds the run's answers to it.
 
 ## Notes faithfulness track (2026-11-05)
-Write-up: [`docs/benchmark/NOTES_FAITHFULNESS.md`](../benchmark/NOTES_FAITHFULNESS.md). Code: `evals/faithfulness.py`, prompt `notes_audit.v1`, command `concentrate notes-faithfulness --system granola|northwind-synth` ($0.40 total).
+Write-up: [`docs/tracks/NOTES.md`](../tracks/NOTES.md). Code: `evals/faithfulness.py`, prompt `notes_audit.v1`, command `concentrate notes-faithfulness --system granola|northwind-synth` ($0.40 total).
 - **Decision: a product-neutral benchmark track, not a Granola audit** (Kian). Input is a `NotesSystem`, a set of (meeting, that system's notes markdown) pairs plus the account's meeting pool, built by a ~10-line adapter. Granola's AI notes are the first entry and the synthetic Northwind summaries a baseline; any notetaker or our own summariser plugs in the same way.
 - **Decision: one claim per bullet or sentence.** Headings and lead-ins (all-bold items, items ending in ":") are labels, not claims; they are kept as each claim's section/context so an owner's name over a task list still reaches the checker.
 - **Decision: one call per meeting, transcript as a cached system prompt.** `LLMRequest.cache_system` (new, opt-in; it enters the cache key only when set, so old keys are unchanged) marks the system prompt as a cache breakpoint, and `Completion` now records cache read/write tokens so cost is exact. With one call per meeting per model nothing is reused, so caching here costs the 1.25x write premium; it pays off on retries.
@@ -485,7 +485,7 @@ Write-up: [`docs/benchmark/NOTES_FAITHFULNESS.md`](../benchmark/NOTES_FAITHFULNE
 - **Open:** the owner's hand verification of the 29-claim private spot-check list is the ground truth and has not happened yet.
 
 ## Notes grounding checker, validated on AMI (2026-11-05)
-Write-up: [`docs/benchmark/GROUNDING_CHECKER.md`](../benchmark/GROUNDING_CHECKER.md). Code: `evals/grounding.py`, `evals/grounding_ami.py`, prompt `grounding.v1`, commands `concentrate ground` and `concentrate ground-ami` ($0.0445 spent).
+Write-up: [`docs/method/GROUNDING_CHECKER.md`](../method/GROUNDING_CHECKER.md). Code: `evals/grounding.py`, `evals/grounding_ami.py`, prompt `grounding.v1`, commands `concentrate ground` and `concentrate ground-ami` ($0.0445 spent).
 - **Decision: a tool, not a leaderboard.** Per claim: verdict, cited `utterance_id`s, a verbatim quote. It reuses the faithfulness track's `split_claims`, `precheck`, labels and `nearest_lines` (now with optional IDF weights and stemming; `claims_message` factored out of `check_request`).
 - **Decision: retrieval first, full transcript only on doubt.** Per claim, the top-8 IDF-weighted lines ±1 go to one excerpt call per meeting; claims with no candidates or not called `supported` go to one full-transcript call whose verdict is final. A retrieval miss costs a call, not a false flag.
 - **Decision: the quote is copied, not generated** (the cited line with most shared words, 25 words max).
@@ -496,7 +496,7 @@ Write-up: [`docs/benchmark/GROUNDING_CHECKER.md`](../benchmark/GROUNDING_CHECKER
 
 ## Wispr Flow as the second product (2026-11-04)
 
-Built with fakes only; nothing has run live and no results exist. Write-up: [PRODUCTS.md](../benchmark/PRODUCTS.md).
+Built with fakes only; nothing has run live and no results exist. Write-up: [PRODUCTS.md](../method/HARNESS.md).
 
 - **Same `Source` protocol, new wire variant.** `WisprMCPSource` maps Wispr's MCP onto the Granola wire models. `WisprNote` is the API `Note` with free-form IDs, stored as `raw_format = 'wispr'`. Sync, storage and every downstream reader work unchanged. The cost is a Granola-shaped vocabulary: Wispr's generated notes body lands in `private_notes_markdown`, and Me/Them is inferred from speaker names because Wispr has no capture channel. Both are ASSUMED rows in SCHEMA_NOTES.md.
 - **Lenient parsing, every guess listed.** Tool names and arguments are verified from the published schemas. Response key names, the continuation-marker text and the transcript line format were not observed, so each is a single tolerant function (`split_range`, `parse_transcript`), easy to fix after the first real sync. We deliberately did not call the connected Wispr tools to look: that would have put real meetings in a session transcript.
@@ -507,7 +507,7 @@ Built with fakes only; nothing has run live and no results exist. Write-up: [PRO
 
 ## Evidence compression, $0 parts (2026-11-05)
 
-Plan: [EVIDENCE_COMPRESSION.md](../benchmark/EVIDENCE_COMPRESSION.md). Code: `ami/questions.py`, `evals/compression.py`, prompt `closed_book.v1`, commands `concentrate ami questions` and `concentrate compression`. Nothing paid has run.
+Plan: [EVIDENCE_COMPRESSION.md](../method/EVIDENCE_COMPRESSION.md). Code: `ami/questions.py`, `evals/compression.py`, prompt `closed_book.v1`, commands `concentrate ami questions` and `concentrate compression`. Nothing paid has run.
 
 - **Decision: questions by template, not by LLM.** Each annotator sentence is split at its first will/decided/discussed/agreed; the subject picks the template, the sentence is the gold. Pronouns take the previous subject. Trade-off: stilted wording and summary-level questions; in return, every gold answer is human-written and the set is reproducible from the seed.
 - **Decision: who-said-it keys on AMI's participant code**, because NXT letters change between IS1008 sessions. Quotes are summary-linked acts of 10–40 words, distinct speakers first.
@@ -522,7 +522,7 @@ Plan: [EVIDENCE_COMPRESSION.md](../benchmark/EVIDENCE_COMPRESSION.md). Code: `am
 
 ## Anatomy of a wrong fact, $0 parts (2026-11-05)
 
-Write-up: [WRONG_FACTS.md](../benchmark/WRONG_FACTS.md). Code: `ami/facts.py`, `evals/wrong_facts.py`, command `concentrate facts stage1|stage2|stage3`. Nothing paid has run.
+Write-up: [WRONG_FACTS.md](../method/WRONG_FACTS.md). Code: `ami/facts.py`, `evals/wrong_facts.py`, command `concentrate facts stage1|stage2|stage3`. Nothing paid has run.
 
 - **Decision: stage 1 is deterministic.** Fact tokens (numbers, money/percent, names, roles) come from AMI's manual transcript by rule; substitutions come from n-gram anchoring plus a small word alignment per fact, not a full-meeting alignment (cheaper, and robust to products segmenting and ordering overlapping speech differently). Validated: AMI scored against itself gives 100% recall, 0 substitutions on all six meetings.
 - **Decision: the human side is utterance-based** (dialogue acts, or punctuated word turns for EN2002b), so number runs never cross speakers and sentence starts are visible to the name rule.

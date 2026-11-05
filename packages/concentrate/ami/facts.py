@@ -29,7 +29,7 @@ For one product transcript we report, per kind:
 
 Results hold counts plus at most :data:`MAX_EXAMPLES` short examples per kind (normalised
 words, a few either side). Kian approved short quoted examples beside the AMI source
-(``docs/benchmark/AMI_DESIGN.md``). ``FACTS_VERSION`` is logged with every result; bump it when
+(``docs/method/AMI_REPLAY.md``). ``FACTS_VERSION`` is logged with every result; bump it when
 extraction or alignment changes.
 """
 

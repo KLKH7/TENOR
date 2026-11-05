@@ -375,7 +375,7 @@ z
   </g>
   <g id="text_22">
    <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; fill: #666666" transform="translate(5.76 336.947156)">Notes only and notes + facts are answered by our model over Granola's own notes, not by Granola's degraded chat. The last bar reads</text>
-   <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; fill: #666666" transform="translate(5.76 346.549344)">transcripts, so it models 'keep a cold copy', not deletion. LLM-drafted gold, approved in bulk; n is small. docs/benchmark/DELETION_SIM.md</text>
+   <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; fill: #666666" transform="translate(5.76 346.549344)">transcripts, so it models 'keep a cold copy', not deletion. LLM-drafted gold, approved in bulk; n is small. docs/tracks/RETENTION.md</text>
   </g>
  </g>
  <defs>

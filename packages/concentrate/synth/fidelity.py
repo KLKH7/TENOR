@@ -1,5 +1,5 @@
-"""Aggregate style statistics for transcript corpora (docs/benchmark/FIDELITY.md,
-docs/benchmark/FIDELITY_V2.md).
+"""Aggregate style statistics for transcript corpora (docs/archive/northwind/FIDELITY.md,
+docs/archive/northwind/FIDELITY_V2.md).
 
 Used to compare the synthetic corpus with real Granola meetings and public meeting corpora.
 Only aggregate numbers come out: no text is returned, so the same code can run over private
@@ -93,7 +93,7 @@ def _ending(text: str) -> str:
 
 
 def corpus_stats(meetings: Sequence[Sequence[Passage]]) -> dict[str, float | list[float] | None]:
-    """Style statistics over ``meetings`` (see docs/benchmark/FIDELITY.md for the definitions)."""
+    """Style statistics over ``meetings`` (see docs/archive/northwind/FIDELITY.md for the definitions)."""
     passages = [p for m in meetings for p in m]
     lengths = [len(tokens(p.text)) for p in passages]
     all_toks = [t for p in passages for t in tokens(p.text)]

@@ -109,7 +109,7 @@ export function filterQuery(f: Filters): string {
   return s ? `?${s}` : "";
 }
 
-/** Failure types present in the rows, in docs/results/ANALYSIS.md's precedence order. */
+/** Failure types present in the rows, in docs/archive/northwind/ANALYSIS.md's precedence order. */
 export const FAILURE_ORDER = [
   "abstained_wrongly",
   "should_have_abstained",

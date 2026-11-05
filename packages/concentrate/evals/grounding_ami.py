@@ -13,7 +13,7 @@ for each summary sentence, the dialogue acts an annotator marked as its support.
 
 Everything except the checker calls is deterministic and $0: the perturbation set, the
 retrieval recall of the candidate lines against the summary links, the pre-check baseline and
-the cost quote. Write-up: ``docs/benchmark/GROUNDING_CHECKER.md``.
+the cost quote. Write-up: ``docs/method/GROUNDING_CHECKER.md``.
 """
 
 from __future__ import annotations

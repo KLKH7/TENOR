@@ -13,7 +13,7 @@ Inputs, all committed except where noted:
   meeting IDs only), written by ``concentrate ami coverage``;
 - ``docs/figures/data/real_slice.json``: a content-free snapshot of the real-meeting slice
   (scores and paired counts only, all already public in ``docs/results/REAL_SLICE.md`` and
-  ``docs/systems/concentrate/fallback.md``). It is rebuilt from the gitignored ``data/real``
+  ``docs/archive/concentrate/fallback.md``). It is rebuilt from the gitignored ``data/real``
   reports by :func:`snapshot_real`, which reads only ``qid``, ``system``, ``category``,
   ``correct`` and ``verdict`` from each row, never questions or answers. CI never rebuilds it;
   it checks the figures against it.
@@ -586,7 +586,7 @@ def fig_retirement(inp: Inputs) -> Any:
         fig,
         "DEV only. Northwind questions follow planted facts, which favour "
         "extracted memory; exact-quote and who-said questions (where deletion should "
-        "hurt) are under-represented. See docs/results/RETIREMENT.md.",
+        "hurt) are under-represented. See docs/archive/northwind/RETIREMENT.md.",
     )
     fig.subplots_adjust(left=0.1, right=0.97, top=0.8, bottom=0.27)
     return fig
@@ -658,7 +658,7 @@ def fig_scale(inp: Inputs) -> Any:
     fs.footnote(
         fig,
         "A cheap model and 21 shared questions: every CI overlaps. This shows the "
-        "experiment works, not a scale effect. See docs/results/ECONOMICS.md.",
+        "experiment works, not a scale effect. See docs/archive/northwind/ECONOMICS.md.",
     )
     fig.subplots_adjust(left=0.1, right=0.97, top=0.82, bottom=0.22)
     return fig
@@ -906,7 +906,7 @@ def fig_notes_vs_transcript(inp: Inputs) -> Any:
         "Synthetic summaries drop ~20% of facts by a generator setting, so the transcript-needed "
         "share and n (17) are small and set by design. Notes-only scoring 0% there is close to "
         "true by construction; the measured parts are its confident-error rate and how much "
-        "transcript readers recover. Write-up: docs/results/NOTES_VS_TRANSCRIPT.md.",
+        "transcript readers recover. Write-up: docs/archive/northwind/NOTES_VS_TRANSCRIPT.md.",
     )
     fig.subplots_adjust(left=0.34, right=0.97, top=0.8, bottom=0.3, wspace=0.12)
     return fig
@@ -965,7 +965,7 @@ def fig_deletion(inp: Inputs) -> Any:
         f"{_pair('notes_facts vs notes_only')}; +fallback vs notes+facts "
         f"{_pair('notes_facts_fallback vs notes_facts')} (wins-losses, exact sign test). "
         "The fallback reads transcripts, so it models 'keep a cold copy', not deletion. "
-        "LLM-drafted gold approved in bulk; n is small. Write-up: docs/benchmark/DELETION_SIM.md.",
+        "LLM-drafted gold approved in bulk; n is small. Write-up: docs/tracks/RETENTION.md.",
     )
     fig.subplots_adjust(left=0.36, right=0.97, top=0.8, bottom=0.27, wspace=0.12)
     return fig
@@ -977,7 +977,7 @@ FIGURES: tuple[Spec, ...] = (
         "How does Hindsight work?",
         lambda inp: FD.fig_overview(),
         (),
-        "ARCHITECTURE.md",
+        "engineering/ARCHITECTURE.md",
         "start",
     ),
     Spec(
@@ -985,7 +985,7 @@ FIGURES: tuple[Spec, ...] = (
         "What does each track test, and how far along is it?",
         lambda inp: FD.fig_tracks(inp.real, inp.deletion),
         ("real", "deletion"),
-        "PLAN.md",
+        "tracks/README.md",
         "start",
     ),
     Spec(
@@ -993,7 +993,7 @@ FIGURES: tuple[Spec, ...] = (
         "What does deleting transcripts cost, and what brings it back?",
         lambda inp: FR.fig_retention_steps(inp.deletion),
         ("deletion",),
-        "benchmark/DELETION_SIM.md",
+        "tracks/RETENTION.md",
         "real",
     ),
     Spec(
@@ -1001,7 +1001,7 @@ FIGURES: tuple[Spec, ...] = (
         "When the answer isn't right, does it say so?",
         lambda inp: FR.fig_answer_types(inp.deletion),
         ("deletion",),
-        "benchmark/DELETION_SIM.md",
+        "tracks/RETENTION.md",
         "real",
     ),
     Spec(
@@ -1009,7 +1009,7 @@ FIGURES: tuple[Spec, ...] = (
         "Which questions does deletion hurt, and which layer brings them back?",
         lambda inp: FR.fig_question_heatmap(inp.deletion),
         ("deletion",),
-        "benchmark/DELETION_SIM.md",
+        "tracks/RETENTION.md",
         "real",
     ),
     Spec(
@@ -1017,7 +1017,7 @@ FIGURES: tuple[Spec, ...] = (
         "What does deleting transcripts cost on public AMI meetings?",
         lambda inp: FR.fig_retention_steps(inp.ami_deletion),
         ("ami_deletion",),
-        "benchmark/DELETION_SIM.md",
+        "tracks/RETENTION.md",
         "real",
     ),
     Spec(
@@ -1025,7 +1025,7 @@ FIGURES: tuple[Spec, ...] = (
         "On AMI, when the answer isn't right, does it say so?",
         lambda inp: FR.fig_answer_types(inp.ami_deletion),
         ("ami_deletion",),
-        "benchmark/DELETION_SIM.md",
+        "tracks/RETENTION.md",
         "real",
     ),
     Spec(
@@ -1033,7 +1033,7 @@ FIGURES: tuple[Spec, ...] = (
         "On AMI, which questions does deletion hurt?",
         lambda inp: FR.fig_question_heatmap(inp.ami_deletion),
         ("ami_deletion",),
-        "benchmark/DELETION_SIM.md",
+        "tracks/RETENTION.md",
         "real",
     ),
     Spec(
@@ -1041,7 +1041,7 @@ FIGURES: tuple[Spec, ...] = (
         "What does deleting transcripts cost on real meetings?",
         fig_deletion,
         ("deletion",),
-        "benchmark/DELETION_SIM.md",
+        "tracks/RETENTION.md",
         "real",
     ),
     Spec(
@@ -1049,7 +1049,7 @@ FIGURES: tuple[Spec, ...] = (
         "How does the outside-in evaluation harness work?",
         lambda inp: FD.fig_harness_flow(inp.coverage),
         ("coverage",),
-        "benchmark/HONEST_EVAL.md",
+        "method/CALIBRATED_JUDGING.md",
         "start",
     ),
     Spec(
@@ -1057,7 +1057,7 @@ FIGURES: tuple[Spec, ...] = (
         "How much of what was said did each app catch?",
         lambda inp: FR.fig_capture_coverage(inp.coverage),
         ("coverage",),
-        "benchmark/CAPTURE_TESTS.md",
+        "tracks/CAPTURE.md",
         "real",
     ),
     Spec(
@@ -1079,44 +1079,44 @@ FIGURES: tuple[Spec, ...] = (
         "Who's ahead, and is it real?",
         fig_leaderboard,
         ("report",),
-        "results/ANALYSIS.md",
+        "archive/northwind/ANALYSIS.md",
     ),
     Spec(
         "cost_frontier",
         "What's the best system for a given budget?",
         fig_cost_frontier,
         ("report",),
-        "results/ECONOMICS.md",
+        "archive/northwind/ECONOMICS.md",
     ),
-    Spec("pairwise", "Which gaps are real?", fig_pairwise, ("report",), "results/ANALYSIS.md"),
+    Spec("pairwise", "Which gaps are real?", fig_pairwise, ("report",), "archive/northwind/ANALYSIS.md"),
     Spec(
         "by_category",
         "Where does each system break?",
         fig_by_category,
         ("report",),
-        "results/ANALYSIS.md",
+        "archive/northwind/ANALYSIS.md",
     ),
-    Spec("failures", "Why is it wrong?", fig_failures, ("report",), "results/ANALYSIS.md"),
+    Spec("failures", "Why is it wrong?", fig_failures, ("report",), "archive/northwind/ANALYSIS.md"),
     Spec(
         "retirement",
         "What does deleting transcripts cost?",
         fig_retirement,
         ("retirement",),
-        "results/RETIREMENT.md",
+        "archive/northwind/RETIREMENT.md",
     ),
     Spec(
         "scale",
         "Does retrieval degrade as meetings pile up?",
         fig_scale,
         ("scale",),
-        "results/ECONOMICS.md",
+        "archive/northwind/ECONOMICS.md",
     ),
     Spec(
         "fallback_dev",
         "Did the transcript fallback help, and where? (DEV)",
         fig_fallback,
         ("real",),
-        "systems/concentrate/fallback.md",
+        "archive/concentrate/fallback.md",
         "real",
     ),
     Spec(
@@ -1124,21 +1124,21 @@ FIGURES: tuple[Spec, ...] = (
         "Can we trust the grader?",
         fig_judge,
         ("report", "judge"),
-        "results/ANALYSIS.md",
+        "archive/northwind/ANALYSIS.md",
     ),
     Spec(
         "cost_breakdown",
         "Where does the money go?",
         fig_cost_breakdown,
         ("report",),
-        "results/ECONOMICS.md",
+        "archive/northwind/ECONOMICS.md",
     ),
     Spec(
         "notes_vs_transcript",
         "What does a notes-only answer lose?",
         fig_notes_vs_transcript,
         ("by_tag",),
-        "results/NOTES_VS_TRANSCRIPT.md",
+        "archive/northwind/NOTES_VS_TRANSCRIPT.md",
     ),
 )
 

@@ -1,4 +1,4 @@
-"""The deletion simulation replicated on public AMI recordings (docs/benchmark/DELETION_SIM.md,
+"""The deletion simulation replicated on public AMI recordings (docs/tracks/RETENTION.md,
 "AMI replication").
 
 Same ladder as :mod:`concentrate.evals.deletion_sim`, on the AMI meetings played into Granola and
@@ -98,7 +98,7 @@ PILOT_N = 5
 PILOT_MAX_USD = 1.00
 INGEST_SAFETY = 1.5  # the fact-layer build is priced by a calibrated model, not counted
 
-# Calibration from the real DEV run (docs/benchmark/DELETION_SIM.md, "The exact cost quote" and
+# Calibration from the real DEV run (docs/tracks/RETENTION.md, "The exact cost quote" and
 # "Spend vs the quote"): what token counting can't see before a call is made.
 ANSWER_OVERHEAD = 255  # answer.v1 structured-output overhead per call (recorded - counted)
 ANSWER_OUT = (261.0, 456.0)  # answer output tokens incl. thinking: mean, p90

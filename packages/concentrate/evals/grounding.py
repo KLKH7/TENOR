@@ -21,7 +21,7 @@ It is built to be cheap:
 
 The quote is not generated: it is the cited line that shares the most words with the claim,
 cut to 25 words, so it is always verbatim. Validation against AMI's human annotations:
-:mod:`concentrate.evals.grounding_ami`; write-up ``docs/benchmark/GROUNDING_CHECKER.md``.
+:mod:`concentrate.evals.grounding_ami`; write-up ``docs/method/GROUNDING_CHECKER.md``.
 """
 
 from __future__ import annotations

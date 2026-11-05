@@ -1,6 +1,6 @@
 """The products the black-box track can ask: Granola's agent, Concentrate's server, and any
 other meeting MCP described by a :class:`ProductSpec` (the template; see
-docs/benchmark/BLACKBOX.md, "Adding a product").
+docs/method/BLACKBOX.md, "Adding a product").
 
 Each adapter calls exactly one question-answering tool and allowlists only that tool.
 """
@@ -91,7 +91,7 @@ class ConcentrateProduct(McpProduct):
 
 class ProductSpec(BaseModel):
     """A meeting MCP described in JSON, so adding a product needs no code. See
-    ``docs/benchmark/product.example.json`` and the checklist in docs/benchmark/BLACKBOX.md."""
+    ``docs/method/product.example.json`` and the checklist in docs/method/BLACKBOX.md."""
 
     model_config = ConfigDict(extra="forbid")
 

@@ -1,5 +1,5 @@
 // Paired significance + Pareto frontier from <stamp>.analysis.json (`concentrate analyze`).
-// Read-only rendering of numbers computed in Python; see docs/results/ANALYSIS.md for the methods.
+// Read-only rendering of numbers computed in Python; see docs/archive/northwind/ANALYSIS.md for the methods.
 
 import { Card, systemLabel } from "@/components/results/ui";
 import { pct, usd } from "@/lib/explore";

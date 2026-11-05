@@ -1,4 +1,4 @@
-"""The real-meeting deletion simulation (docs/benchmark/DELETION_SIM.md).
+"""The real-meeting deletion simulation (docs/tracks/RETENTION.md).
 
 Four conditions answer the same real questions; each later one adds one layer:
 

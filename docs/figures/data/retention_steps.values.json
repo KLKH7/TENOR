@@ -281,6 +281,6 @@
  "texts": [
   "What does deleting transcripts cost, and what brings it back?",
   "Author's 4 real meetings, 47 questions, DEV (seen during development); run 20261104T012414Z.\nEach step is paired on the same questions (exact sign test); bold = p < 0.05.",
-  "Notes only and notes + facts are answered by our model over Granola's own notes, not by Granola's degraded chat. The last bar reads transcripts, so it models 'keep a cold copy', not deletion. LLM-drafted gold, approved in bulk; n is small. docs/benchmark/DELETION_SIM.md"
+  "Notes only and notes + facts are answered by our model over Granola's own notes, not by Granola's degraded chat. The last bar reads transcripts, so it models 'keep a cold copy', not deletion. LLM-drafted gold, approved in bulk; n is small. docs/tracks/RETENTION.md"
  ]
 }

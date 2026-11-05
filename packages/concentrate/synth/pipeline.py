@@ -41,12 +41,12 @@ from concentrate.synth.roster import (
 from concentrate.synth.scenario import build_world
 from concentrate.synth.world import World
 
-# 1.1: artefact fixes (docs/benchmark/FIDELITY.md a-e). XL v1 comes from git tag northwind-xl-v1.
-# 2: realistic wording (docs/benchmark/FIDELITY_V2.md): compositional filler, slot-scaled length,
+# 1.1: artefact fixes (docs/archive/northwind/FIDELITY.md a-e). XL v1 comes from git tag northwind-xl-v1.
+# 2: realistic wording (docs/archive/northwind/FIDELITY_V2.md): compositional filler, slot-scaled length,
 # calibrated noise, digits, heavy-tailed timing, richer summaries. Write XL v2 to
 # data/fixtures/large/northwind-xl-v2 (v1 stays in northwind-xl).
 GENERATOR_VERSION = "northwind-2"
-# 2.1 = 2 plus the opt-in extras (``--extras``, docs/benchmark/V2_EXTRAS.md): hybrid rooms,
+# 2.1 = 2 plus the opt-in extras (``--extras``, docs/archive/northwind/V2_EXTRAS.md): hybrid rooms,
 # identity mess, corrections, implicit/out-of-band commitments, long-horizon questions. Every
 # v2 meeting, fact and question is unchanged; extras are appended. Write XL v2.1 to
 # data/fixtures/large/northwind-xl-v2.1.

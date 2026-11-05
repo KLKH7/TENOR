@@ -70,7 +70,7 @@ def preflight(product: Product, tools: list[ToolInfo]) -> list[str]:
 
     Fails when an allowed tool is missing, or when the server *annotates* it as not read-only or
     destructive. Unannotated tools pass: annotations are optional in MCP, so the allowlist (which
-    a human checked against the checklist in docs/benchmark/BLACKBOX.md) stays the real guard.
+    a human checked against the checklist in docs/method/BLACKBOX.md) stays the real guard.
     """
     by_name = {t.name: t for t in tools}
     problems = []

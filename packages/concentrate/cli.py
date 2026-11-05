@@ -493,7 +493,7 @@ def analyze(
     ] = None,
 ) -> None:
     """Report v2: paired significance, power, Pareto frontier, failure taxonomy and the $0
-    metrics (docs/benchmark/METRICS.md). Free unless --llm."""
+    metrics (docs/method/METRICS.md). Free unless --llm."""
     import json as _json
 
     from concentrate.evals.analyze import load_rows, write_analysis
@@ -585,7 +585,7 @@ def mcp_serve(
     """Serve a built Concentrate memory as a read-only MCP server over stdio.
 
     stdout carries the MCP protocol, so this command prints nothing to it; errors go to stderr.
-    See docs/systems/MCP_SERVER.md for the Claude Desktop / Claude Code config.
+    See docs/archive/concentrate/MCP_SERVER.md for the Claude Desktop / Claude Code config.
     """
     from concentrate.mcp_server.server import build_server
     from concentrate.mcp_server.service import Answerer, open_memory
@@ -758,7 +758,7 @@ def fidelity(
         str, typer.Argument(help="Fixture directory, or a NoteStore .db (e.g. data/real.db).")
     ],
 ) -> None:
-    """Aggregate style statistics of a corpus (docs/benchmark/FIDELITY_V2.md).
+    """Aggregate style statistics of a corpus (docs/archive/northwind/FIDELITY_V2.md).
 
     Prints no transcript text.
     """
@@ -778,7 +778,7 @@ TUNE_VARIANTS: dict[str, dict[str, object]] = {
     "no_entities": {"query_entities": False},  # question parser resolves no entities
     "no_supersession": {"supersession": False},  # append-only fact log, no validity/state
     "no_digests": {"k_digests": 0},
-    "fallback_on_abstain": {"fallback": "on_abstain"},  # docs/systems/concentrate/fallback.md
+    "fallback_on_abstain": {"fallback": "on_abstain"},  # docs/archive/concentrate/fallback.md
     "fallback_always": {"fallback": "always"},
 }
 
@@ -1731,7 +1731,7 @@ def real_spotcheck(
 
 # -- black-box track (P1-B): any meeting-memory MCP, public interfaces only ----------------------
 # Products: `granola` (query_granola_meetings), `concentrate` (ask_memory over stdio), or a JSON
-# spec (docs/benchmark/product.example.json). Answers, questions and per-question reports stay
+# spec (docs/method/product.example.json). Answers, questions and per-question reports stay
 # under data/real/; only the aggregate passes the committable-report check.
 
 
@@ -1952,7 +1952,7 @@ def deletion_sim_cmd(
         str,
         typer.Option(
             help="granola (A), notes_only (B), notes_facts (C), notes_facts_fallback (D); "
-            "comma-separated. See docs/benchmark/DELETION_SIM.md."
+            "comma-separated. See docs/tracks/RETENTION.md."
         ),
     ] = "granola,notes_only,notes_facts,notes_facts_fallback",
     split: SplitOpt = SplitName.dev,
@@ -2230,7 +2230,7 @@ def agent_interface_cmd(
 ) -> None:
     """Score meeting products' MCP answers on the agent-interface track: four answer types,
     evidence granularity, payload signals, stability, latency. No LLM calls unless --live names
-    a product that makes them; see docs/benchmark/AGENT_INTERFACE.md."""
+    a product that makes them; see docs/tracks/AGENT_INTERFACE.md."""
     import json as _json
     import subprocess
     from contextlib import ExitStack
@@ -2451,7 +2451,7 @@ def notes_faithfulness_cmd(
     typer.echo(f"spent ${spent:.4f} · aggregate {agg_path} · per-claim {claims_dir}")
 
 
-# -- notes grounding checker (docs/benchmark/GROUNDING_CHECKER.md) -----------------------------
+# -- notes grounding checker (docs/method/GROUNDING_CHECKER.md) -----------------------------
 
 
 def _provenance(**extra: object) -> dict[str, object]:
@@ -2634,7 +2634,7 @@ def ground_ami_cmd(
     typer.echo(f"spent ${client.ledger.spent_usd():.4f} · {out_dir / stem}.json")
 
 
-# -- cross-product pairing (docs/benchmark/PRODUCTS.md) ----------------------------------------
+# -- cross-product pairing (docs/method/HARNESS.md) ----------------------------------------
 
 PAIR_OVERRIDES = Path("data/real/pairs.override.json")
 PAIRS_OUT = Path("data/real/pairs.json")
@@ -2679,7 +2679,7 @@ def pair_cmd(
     )
 
 
-# -- AMI: public meetings played into the products (docs/benchmark/AMI_DESIGN.md) ---------------
+# -- AMI: public meetings played into the products (docs/method/AMI_REPLAY.md) ---------------
 
 ami_app = typer.Typer(no_args_is_help=True, help="AMI corpus: ground truth and transcript scoring.")
 app.add_typer(ami_app, name="ami")
@@ -2849,7 +2849,7 @@ def ami_coverage(
     typer.echo(f"wrote {out}")
 
 
-# -- anatomy of a wrong fact (docs/benchmark/WRONG_FACTS.md) ----------------------------------
+# -- anatomy of a wrong fact (docs/method/WRONG_FACTS.md) ----------------------------------
 
 facts_app = typer.Typer(
     no_args_is_help=True,
@@ -3217,7 +3217,7 @@ def facts_stage3(
     )
 
 
-# -- deletion simulation on AMI (docs/benchmark/DELETION_SIM.md, "AMI replication") -------------
+# -- deletion simulation on AMI (docs/tracks/RETENTION.md, "AMI replication") -------------
 
 
 @ami_app.command("deletion-sim")
@@ -3602,7 +3602,7 @@ def compression_cmd(
     out: Annotated[Path, typer.Option()] = Path("data/cache/compression"),
     yes: Annotated[bool, typer.Option("--yes")] = False,
 ) -> None:
-    """Evidence compression on AMI (docs/benchmark/EVIDENCE_COMPRESSION.md): one reader, notes
+    """Evidence compression on AMI (docs/method/EVIDENCE_COMPRESSION.md): one reader, notes
     plus a kept layer built before any question is seen. Start with --sizes and --quote."""
     import dataclasses
     import functools

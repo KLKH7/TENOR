@@ -1,6 +1,6 @@
 """The $0 metrics: computed from the saved per-answer rows of a report, no LLM calls.
 
-Definitions, rationale and weaknesses: ``docs/benchmark/METRICS.md``. Every function here is
+Definitions, rationale and weaknesses: ``docs/method/METRICS.md``. Every function here is
 pure over the report rows (``<stamp>.jsonl``) and a small gold table, so the same code scores
 the synthetic benchmark (gold from ``questions.jsonl``) and the real slice (gold from the
 owner-approved real questions), and can be run on aggregate-only outputs.
@@ -406,7 +406,7 @@ def to_markdown(m: dict[str, Any], *, section: int = 5) -> list[str]:
             "**Source recall** = share of answerable questions where at least one gold meeting "
             "was among the meetings the system pulled (*all* = every gold meeting). **Pulled** "
             '= distinct meetings per answer. What "pulled" means differs by system (last '
-            "column), so compare with care. Definitions: `docs/benchmark/METRICS.md`.",
+            "column), so compare with care. Definitions: `docs/method/METRICS.md`.",
             "",
             "| System | n | Source recall (any) | (all) | Pulled: mean | median | max | "
             "Line citations | What `retrieved` holds |",

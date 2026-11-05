@@ -182,7 +182,7 @@ How `GranolaMCPSource` turns MCP tool output into our wire models (`McpNote`/`Mc
 
 ## Wispr Flow MCP (`concentrate.sources.wispr_mcp`)
 
-Wispr Flow is the second real product (see [PRODUCTS.md](../benchmark/PRODUCTS.md)). Sources, read **2026-11-04**:
+Wispr Flow is the second real product (see [PRODUCTS.md](../method/HARNESS.md)). Sources, read **2026-11-04**:
 
 - [wispr-help] Wispr help centre, "Connect Claude, ChatGPT or another MCP client to Wispr Flow": https://docs.wisprflow.ai/articles/9551372685-connect-an-mcp-client-to-wispr-flow-remote-mcp-server
 - [wispr-search] help-centre pages surfaced by web search (Cursor/VS Code config examples) that give the server URL
