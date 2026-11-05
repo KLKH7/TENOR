@@ -125,12 +125,14 @@ The loss fell on detail: on questions the notes could not answer, accuracy went 
 
 | # | Condition | What it probes |
 |---|---|---|
-| A1 | 12 minutes of silence spliced mid-meeting | Whether capture resumes when speech returns after an inactivity timeout, and whether the user is told |
+| A1 | 17 minutes of silence spliced mid-meeting (12-minute control) | Whether capture resumes when speech returns after a documented 15-minute no-audio timeout, and whether the user is told |
 | A2 | Two meetings back to back, one recording | Content from one meeting written into another |
 | A3 | Two meetings back to back, second recording started late | Missed openings; which note gets the overlap |
 | A4 | App in the background or on another full-screen desktop | Capture when the app is not visible |
 | A5 | Display sleep or lid closed | Capture across system sleep |
 | A6 | Network drop for 60 seconds | Offline handling |
+
+**Live detection.** A prototype capture-health detector (speech heard, transcript not growing, so alert) caught 237 of 237 injected failures with no false alarms in 2.7 h of TEST meetings when given a perfect VAD; injected failures only ([`docs/tracks/CAPTURE_HEALTH.md`](docs/tracks/CAPTURE_HEALTH.md)).
 
 Scoring A0–A6 is free apart from cross-meeting bleed (about $0.02 per meeting); each condition takes about 25 minutes of playback.
 

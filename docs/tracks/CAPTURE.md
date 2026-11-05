@@ -7,7 +7,7 @@ This page defines the capture track (did the product capture the whole meeting, 
 | **Question** | Did the product capture the whole meeting, and when it did not, did it say so? |
 | **How measured** | Per 15 s window of AMI's timed human words, the share of distinctive word pairs found in the product transcript; ≥ 40% counts as captured. Gaps of ≥ 30 s; silent failure = a gap with no visible warning. A wrong-meeting control calibrates the threshold. $0, no LLM |
 | **Current results** | Baseline (no stress), 7 AMI meetings: Granola 98.5% of 665 windows captured (per meeting 93.6–100%), Wispr Flow 99.4% of 665 (96.4–100%). One gap flagged (Granola, EN2002b, 51 s), where Wispr Flow's coverage also dips (overlapping speech). Wrong-meeting control: 0–2% of windows pass. No silent failures |
-| **Status** | Baseline preliminary; stress conditions A1–A6 and the typed-vs-silent test designed, not run |
+| **Status** | Baseline preliminary; A1 audio built and run sheet ready, not run; A2–A6 and the typed-vs-silent test designed. Live detection of silent failures: [`CAPTURE_HEALTH.md`](CAPTURE_HEALTH.md) (prototype) |
 
 Window counts are not independent (they cluster by meeting), so no pooled interval is given; the per-meeting range is the honest summary. Numbers: [`evals/reports/ami/coverage.json`](../../evals/reports/ami/coverage.json).
 
@@ -43,7 +43,7 @@ Window counts are not independent (they cluster by meeting), so no pooled interv
 | # | Condition | What it probes | Who does what |
 |---|---|---|---|
 | A0 | Baseline: the 7 existing recordings | Coverage under normal use | Done (re-score at $0) |
-| A1 | **Long silence**: 12 min of silence spliced mid-meeting | Inactivity timeouts (at least one product documents stopping after 10 minutes of inactivity): does capture resume when speech returns, and is the user told? | Automated |
+| A1 | **Long silence**: 17 min of digital silence spliced mid-meeting (A1c: 12 min, a below-timeout control) | Inactivity timeouts. At least one product documents stopping after 15 minutes without new audio (Granola help docs, undated, read 2026-11-05); Wispr Flow documents a card after about 30 s that it "isn't getting any audio", plus gap marking (help docs, read 2026-11-05). For both products: does capture resume after the timeout, and is the user told? | The author ([run sheet](#a1-run-sheet)) |
 | A2 | **Back-to-back, one note**: meeting X then meeting Y with no stop | A reported failure mode: notes from one meeting written into another | Automated |
 | A3 | **Back-to-back, two notes started late**: Y's note started 2 min after Y's audio begins | Missed openings; which note gets the overlap | Automated |
 | A4 | **App in the background / another full-screen Space** | Capture when the app is not visible; in the 5 Nov 2026 overnight replay the replay automation lost control when the window left its desktop | Automated, screenshots |
@@ -51,6 +51,22 @@ Window counts are not independent (they cluster by meeting), so no pooled interv
 | A6 | **Network drop for 60 s** | Offline handling | The author toggles Wi-Fi |
 
 **Comparison:** Granola and Wispr Flow side by side on every condition; same audio, same timing.
+
+### A1 run sheet
+
+**Audio** (built, gitignored): `uv run concentrate ami stress-audio` writes `data/ami/stress/IS1008d.A1.wav` (41.7 min) and a sidecar JSON with the exact splice. IS1008d is the shortest of the 7 meetings with ≥ 10 min of voiced speech after a mid-meeting turn boundary (10.6 min). Silence runs from **12:11 to 29:11** of playback. `--condition A1c` builds the 12-min control (silence 12:11–24:11).
+
+| # | Step |
+|---|---|
+| 1 | Sign in to both MCPs first: `uv run concentrate sync --source granola-mcp --db data/ami_granola.db` and `... --source wispr-mcp --db data/ami_wispr.db` (read-only) |
+| 2 | Normal desktop, no full-screen apps; Do Not Disturb on; speakers muted and mic per [`AMI_REPLAY.md`](../method/AMI_REPLAY.md) §3 |
+| 3 | Calendar event titled exactly `AMI IS1008d A1`, no attendees, 45 min |
+| 4 | Start a note for that event in Granola and in Wispr Flow |
+| 5 | `caffeinate -dims afplay data/ami/stress/IS1008d.A1.wav` |
+| 6 | Screenshot both apps at about 12:45 (Wispr's 30 s card), 27:15 (past Granola's 15 min), 29:30 (speech is back) and the end, plus any warning when it appears. Don't touch the apps: whether capture resumes on its own is the measurement |
+| 7 | Stop both notes 30 s after playback ends |
+| 8 | Sync both (step 1 commands). If a title differs, pin it in `data/ami/results/recording_ids.txt`: `IS1008d granola_a1=<id> wispr_a1=<id>` |
+| 9 | Score: `uv run concentrate ami coverage --stress data/ami/stress/IS1008d.A1.json` (coverage before and after the silence, resumed or not, time to resume, gaps ≥ 30 s; numbers to `evals/reports/ami/stress_A1_IS1008d.json`) |
 
 **Cost:** $0 for A0–A6 scoring except bleed (grounding checker, ~$0.02 per meeting). Time: ~25 min of playback per condition.
 

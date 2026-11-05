@@ -7,6 +7,7 @@ Products: Granola and Wispr Flow, the two reference products. Meetings: 7 AMI re
 | Track | Question | Main measure | Status | Page |
 |---|---|---|---|---|
 | Capture | Was the whole meeting captured, and does capture fail silently? | Share of 15 s windows of AMI speech found in the product transcript; gaps; silent failures | Baseline preliminary; stress conditions designed | [`CAPTURE.md`](CAPTURE.md) |
+| Capture health | Can a product detect, live, that its transcript stopped while people still talk? | Recall, delay and false alarms per hour of a speech-vs-transcript-growth rule, on injected failures | Prototype (Granola, injected failures) | [`CAPTURE_HEALTH.md`](CAPTURE_HEALTH.md) |
 | Transcription | Are the words, numbers and names right? | WER and content-word recall against AMI's manual transcript; fact-token recall | Pilot only (1 meeting) | [`TRANSCRIPTION.md`](TRANSCRIPTION.md) |
 | Notes | Are the notes faithful and complete? | Per-claim grounding against the product's and AMI's transcripts; human-checked sample | Preliminary | [`NOTES.md`](NOTES.md) |
 | Answers (Chat) | Are answers about the meeting right? | Calibrated judge against AMI-derived questions; human-checked sample | Preliminary | [`ANSWERS.md`](ANSWERS.md) |

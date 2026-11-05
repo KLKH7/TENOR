@@ -8,7 +8,7 @@ These are hypotheses, not recommendations. The evidence behind most of them is p
 
 | Idea | Evidence strength | TENOR measure | Measurable now? |
 |---|---|---|---|
-| [Capture-health indicator and silent-failure detection](#1-capture-health-indicator-and-silent-failure-detection) | Public user reports; baseline replay found no failures | Capture track, stress conditions | Designed |
+| [Capture-health indicator and silent-failure detection](#1-capture-health-indicator-and-silent-failure-detection) | Public user reports; baseline replay found no failures; detector prototype on injected failures | Capture track, stress conditions; capture-health detector | Prototype (injected failures) |
 | [Nightly replay regression suite](#2-nightly-replay-regression-suite) | One observed silent interface change | Replay of a frozen meeting set | Partly built |
 | [Said, not noted](#3-said-not-noted-completeness) | About a third of Chat answers partial (automated judge) | Gold-item recall in notes and answers | Yes |
 | [Inferred ink](#4-inferred-ink) | 14% of note claims inferred (4 private meetings) | Grounding classes per claim | Yes |
@@ -25,6 +25,7 @@ These are hypotheses, not recommendations. The evidence behind most of them is p
 - **Evidence.** Silent capture failures (a recording that appeared to run but captured nothing, or notes for only part of a meeting) were the most common theme in a 2026 sample of public user reports about meeting note-takers: about 16 of about 75 items, from one public forum and one product's user community ([`CAPTURE.md`](../tracks/CAPTURE.md)). TENOR's baseline replay found no failures in either reference product on 7 meetings, so the problem, if real at scale, appears under conditions the baseline does not exercise.
 - **What a product could do.** Show capture health during the meeting (audio level received, transcript growing) and warn when audio arrives but no text does, or when capture stops while the meeting continues. Mark gaps in the transcript and notes rather than closing over them.
 - **How TENOR would measure it.** The capture stress conditions (long silence, back-to-back meetings, background app, sleep, network drop): gap rate, and whether each gap was accompanied by a visible warning.
+- **Prototype.** A detector that compares voice activity with transcript growth caught 237 of 237 injected failures on 6 TEST meetings (2.7 h) with no false alarms and a median delay of 11 s, given a perfect VAD and a live word stream; a plain energy VAD on recorded block times caught 234 with 1.1 false alarms per hour. Injected failures only, one product ([`CAPTURE_HEALTH.md`](../tracks/CAPTURE_HEALTH.md)).
 - **Why a product might not.** Health indicators add visual noise to a calm interface; false warnings erode trust faster than rare silent failures; some failures (operating-system audio permissions, sleep) are outside the product's control.
 
 ## 2. Nightly replay regression suite
