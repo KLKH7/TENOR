@@ -128,6 +128,8 @@ class LLMRequest:
     schema: dict[str, Any]
     max_tokens: int = 16000
     effort: str = "medium"
+    # Mark ``system`` as a prompt-cache breakpoint (put the long, shared context there).
+    cache_system: bool = False
 
 
 @dataclass(frozen=True)
@@ -140,6 +142,8 @@ class Completion:
     output_tokens: int
     stop_reason: str
     batch: bool = False  # produced by the Message Batches API (batch price, no latency)
+    cache_read_tokens: int = 0
+    cache_write_tokens: int = 0
 
 
 class Backend(Protocol):
@@ -148,10 +152,13 @@ class Backend(Protocol):
 
 def structured_params(request: LLMRequest, model: str) -> dict[str, Any]:
     """Messages API params for a single-turn structured call (shared by interactive and batch)."""
+    system: Any = request.system
+    if request.cache_system:
+        system = [{"type": "text", "text": request.system, "cache_control": {"type": "ephemeral"}}]
     return {
         "model": model,
         "max_tokens": request.max_tokens,
-        "system": request.system,
+        "system": system,
         "messages": [{"role": "user", "content": request.user}],
         "output_config": {
             "effort": request.effort,
@@ -197,6 +204,8 @@ class AnthropicBackend:
             input_tokens=response.usage.input_tokens,
             output_tokens=response.usage.output_tokens,
             stop_reason=str(response.stop_reason),
+            cache_read_tokens=int(getattr(response.usage, "cache_read_input_tokens", 0) or 0),
+            cache_write_tokens=int(getattr(response.usage, "cache_creation_input_tokens", 0) or 0),
         )
 
 
@@ -276,6 +285,8 @@ class LLMClient:
             "max_tokens": req.max_tokens,
             "effort": req.effort,
         }
+        if req.cache_system:  # only when set, so existing cache keys are unchanged
+            payload["cache_system"] = True
         blob = json.dumps(payload, sort_keys=True, ensure_ascii=False).encode()
         return hashlib.sha256(blob).hexdigest()
 
@@ -324,6 +335,8 @@ class LLMClient:
                     completion.model,
                     completion.input_tokens,
                     completion.output_tokens,
+                    completion.cache_read_tokens,
+                    completion.cache_write_tokens,
                     batch=completion.batch,
                 ),
                 cached=cached,

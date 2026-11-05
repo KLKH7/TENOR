@@ -1,0 +1,1185 @@
+{
+  "meta": {
+    "track": "notes-faithfulness",
+    "system": "granola",
+    "system_description": "Granola AI notes (summary_markdown) via Granola's official read-only MCP",
+    "date": "2026-11-05T02:07:45Z",
+    "git_sha": "6fe6d53",
+    "check_model": "claude-haiku-5-5",
+    "check_effort": "low",
+    "recheck_model": "claude-sonnet-5-5",
+    "recheck_fraction": 0.3,
+    "strict_pass": "claude-sonnet-5-5 on every claim",
+    "prompt": "notes_audit.v1",
+    "seed": 0,
+    "meetings": 4,
+    "pool_meetings": 4,
+    "quote_usd": 0.0,
+    "cost_usd": 0.2606,
+    "spent_this_invocation_usd": 0,
+    "tokens_quoted": {
+      "claude-haiku-5-5": {
+        "system_cached": 44804,
+        "user": 5845,
+        "est_output": 13200
+      },
+      "claude-sonnet-5-5": {
+        "system_cached": 89608,
+        "user": 7565,
+        "est_output": 17200
+      }
+    },
+    "missing_verdicts": {},
+    "by_stage": {
+      "faithfulness.check": {
+        "calls": 4,
+        "cached": 4,
+        "input_tokens": 5837,
+        "output_tokens": 8377,
+        "usd": 0.0
+      },
+      "faithfulness.recheck": {
+        "calls": 4,
+        "cached": 4,
+        "input_tokens": 1712,
+        "output_tokens": 2643,
+        "usd": 0.0
+      },
+      "faithfulness.strict": {
+        "calls": 4,
+        "cached": 4,
+        "input_tokens": 5837,
+        "output_tokens": 8226,
+        "usd": 0.0
+      }
+    }
+  },
+  "claims_total": 132,
+  "claims_labelled": 132,
+  "claims_missing_verdict": 0,
+  "uncited_support_relabelled": 0,
+  "by_meeting": {
+    "M1": {
+      "claims": 33,
+      "headings_dropped": 4,
+      "lead_ins_dropped": 4,
+      "labels": {
+        "supported": 30,
+        "inferred": 3
+      }
+    },
+    "M2": {
+      "claims": 39,
+      "headings_dropped": 6,
+      "lead_ins_dropped": 4,
+      "labels": {
+        "inferred": 2,
+        "supported": 37
+      }
+    },
+    "M3": {
+      "claims": 23,
+      "headings_dropped": 4,
+      "lead_ins_dropped": 5,
+      "labels": {
+        "inferred": 3,
+        "supported": 20
+      }
+    },
+    "M4": {
+      "claims": 37,
+      "headings_dropped": 5,
+      "lead_ins_dropped": 1,
+      "labels": {
+        "supported": 35,
+        "inferred": 2
+      }
+    }
+  },
+  "overall": {
+    "n": 132,
+    "supported": {
+      "k": 122,
+      "rate": 0.9242,
+      "ci95": [
+        0.8662,
+        0.9583
+      ]
+    },
+    "inferred": {
+      "k": 10,
+      "rate": 0.0758,
+      "ci95": [
+        0.0417,
+        0.1338
+      ]
+    },
+    "unsupported": {
+      "k": 0,
+      "rate": 0.0,
+      "ci95": [
+        0.0,
+        0.0283
+      ]
+    },
+    "contradicted": {
+      "k": 0,
+      "rate": 0.0,
+      "ci95": [
+        0.0,
+        0.0283
+      ]
+    },
+    "ungrounded": {
+      "k": 10,
+      "rate": 0.0758,
+      "ci95": [
+        0.0417,
+        0.1338
+      ]
+    }
+  },
+  "by_type": {
+    "decision": {
+      "n": 18,
+      "supported": {
+        "k": 17,
+        "rate": 0.9444,
+        "ci95": [
+          0.7424,
+          0.9901
+        ]
+      },
+      "inferred": {
+        "k": 1,
+        "rate": 0.0556,
+        "ci95": [
+          0.0099,
+          0.2576
+        ]
+      },
+      "unsupported": {
+        "k": 0,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.1759
+        ]
+      },
+      "contradicted": {
+        "k": 0,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.1759
+        ]
+      },
+      "ungrounded": {
+        "k": 1,
+        "rate": 0.0556,
+        "ci95": [
+          0.0099,
+          0.2576
+        ]
+      }
+    },
+    "action_item": {
+      "n": 36,
+      "supported": {
+        "k": 32,
+        "rate": 0.8889,
+        "ci95": [
+          0.7468,
+          0.9559
+        ]
+      },
+      "inferred": {
+        "k": 4,
+        "rate": 0.1111,
+        "ci95": [
+          0.0441,
+          0.2532
+        ]
+      },
+      "unsupported": {
+        "k": 0,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.0964
+        ]
+      },
+      "contradicted": {
+        "k": 0,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.0964
+        ]
+      },
+      "ungrounded": {
+        "k": 4,
+        "rate": 0.1111,
+        "ci95": [
+          0.0441,
+          0.2532
+        ]
+      }
+    },
+    "number_date": {
+      "n": 2,
+      "supported": {
+        "k": 2,
+        "rate": 1.0,
+        "ci95": [
+          0.3424,
+          1.0
+        ]
+      },
+      "inferred": {
+        "k": 0,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.6576
+        ]
+      },
+      "unsupported": {
+        "k": 0,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.6576
+        ]
+      },
+      "contradicted": {
+        "k": 0,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.6576
+        ]
+      },
+      "ungrounded": {
+        "k": 0,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.6576
+        ]
+      }
+    },
+    "attribution": {
+      "n": 2,
+      "supported": {
+        "k": 2,
+        "rate": 1.0,
+        "ci95": [
+          0.3424,
+          1.0
+        ]
+      },
+      "inferred": {
+        "k": 0,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.6576
+        ]
+      },
+      "unsupported": {
+        "k": 0,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.6576
+        ]
+      },
+      "contradicted": {
+        "k": 0,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.6576
+        ]
+      },
+      "ungrounded": {
+        "k": 0,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.6576
+        ]
+      }
+    },
+    "opinion_sentiment": {
+      "n": 13,
+      "supported": {
+        "k": 12,
+        "rate": 0.9231,
+        "ci95": [
+          0.6669,
+          0.9863
+        ]
+      },
+      "inferred": {
+        "k": 1,
+        "rate": 0.0769,
+        "ci95": [
+          0.0137,
+          0.3331
+        ]
+      },
+      "unsupported": {
+        "k": 0,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.2281
+        ]
+      },
+      "contradicted": {
+        "k": 0,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.2281
+        ]
+      },
+      "ungrounded": {
+        "k": 1,
+        "rate": 0.0769,
+        "ci95": [
+          0.0137,
+          0.3331
+        ]
+      }
+    },
+    "generalisation": {
+      "n": 2,
+      "supported": {
+        "k": 1,
+        "rate": 0.5,
+        "ci95": [
+          0.0945,
+          0.9055
+        ]
+      },
+      "inferred": {
+        "k": 1,
+        "rate": 0.5,
+        "ci95": [
+          0.0945,
+          0.9055
+        ]
+      },
+      "unsupported": {
+        "k": 0,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.6576
+        ]
+      },
+      "contradicted": {
+        "k": 0,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.6576
+        ]
+      },
+      "ungrounded": {
+        "k": 1,
+        "rate": 0.5,
+        "ci95": [
+          0.0945,
+          0.9055
+        ]
+      }
+    },
+    "fact": {
+      "n": 59,
+      "supported": {
+        "k": 56,
+        "rate": 0.9492,
+        "ci95": [
+          0.8608,
+          0.9826
+        ]
+      },
+      "inferred": {
+        "k": 3,
+        "rate": 0.0508,
+        "ci95": [
+          0.0174,
+          0.1392
+        ]
+      },
+      "unsupported": {
+        "k": 0,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.0611
+        ]
+      },
+      "contradicted": {
+        "k": 0,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.0611
+        ]
+      },
+      "ungrounded": {
+        "k": 3,
+        "rate": 0.0508,
+        "ci95": [
+          0.0174,
+          0.1392
+        ]
+      }
+    }
+  },
+  "types_ranked_by_ungrounded": [
+    {
+      "type": "generalisation",
+      "ungrounded_rate": 0.5,
+      "n": 2
+    },
+    {
+      "type": "action_item",
+      "ungrounded_rate": 0.1111,
+      "n": 36
+    },
+    {
+      "type": "opinion_sentiment",
+      "ungrounded_rate": 0.0769,
+      "n": 13
+    },
+    {
+      "type": "decision",
+      "ungrounded_rate": 0.0556,
+      "n": 18
+    },
+    {
+      "type": "fact",
+      "ungrounded_rate": 0.0508,
+      "n": 59
+    },
+    {
+      "type": "number_date",
+      "ungrounded_rate": 0.0,
+      "n": 2
+    },
+    {
+      "type": "attribution",
+      "ungrounded_rate": 0.0,
+      "n": 2
+    }
+  ],
+  "precheck": {
+    "numbers_checked": 21,
+    "date_words_checked": 6,
+    "name_candidates_checked": 80,
+    "claims_flagged": 0,
+    "flagged_numbers": 0,
+    "flagged_dates": 0,
+    "flagged_names": 0,
+    "claims_with_calendar_only_names": 3,
+    "llm_labels_of_flagged": {},
+    "flagged_but_llm_supported": 0
+  },
+  "cross_meeting_bleed": {
+    "heuristic": "deterministic term match; needs human confirmation",
+    "ungrounded_claims": {
+      "n": 29,
+      "k": 11,
+      "rate": 0.3793,
+      "ci95": [
+        0.2269,
+        0.56
+      ]
+    },
+    "ungrounded_claims_strong": {
+      "n": 29,
+      "k": 0,
+      "rate": 0.0,
+      "ci95": [
+        0.0,
+        0.117
+      ]
+    },
+    "all_claims_baseline": {
+      "n": 132,
+      "k": 33,
+      "rate": 0.25,
+      "ci95": [
+        0.1839,
+        0.3302
+      ]
+    },
+    "all_claims_baseline_strong": {
+      "n": 132,
+      "k": 0,
+      "rate": 0.0,
+      "ci95": [
+        0.0,
+        0.0283
+      ]
+    },
+    "term_kinds_in_flagged_ungrounded": {
+      "word": 12
+    }
+  },
+  "reliability": {
+    "check_vs_recheck_sample": {
+      "n": 40,
+      "agreement_4way": 0.775,
+      "kappa_4way": -0.0435,
+      "kappa_supported_vs_not": -0.0465,
+      "confusion": {
+        "inferred->supported": 1,
+        "supported->contradicted": 1,
+        "supported->inferred": 7,
+        "supported->supported": 31
+      },
+      "first_rates": {
+        "n": 40,
+        "supported": {
+          "k": 39,
+          "rate": 0.975,
+          "ci95": [
+            0.8712,
+            0.9956
+          ]
+        },
+        "inferred": {
+          "k": 1,
+          "rate": 0.025,
+          "ci95": [
+            0.0044,
+            0.1288
+          ]
+        },
+        "unsupported": {
+          "k": 0,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.0876
+          ]
+        },
+        "contradicted": {
+          "k": 0,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.0876
+          ]
+        },
+        "ungrounded": {
+          "k": 1,
+          "rate": 0.025,
+          "ci95": [
+            0.0044,
+            0.1288
+          ]
+        }
+      },
+      "second_rates": {
+        "n": 40,
+        "supported": {
+          "k": 32,
+          "rate": 0.8,
+          "ci95": [
+            0.6524,
+            0.895
+          ]
+        },
+        "inferred": {
+          "k": 7,
+          "rate": 0.175,
+          "ci95": [
+            0.0875,
+            0.3195
+          ]
+        },
+        "unsupported": {
+          "k": 0,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.0876
+          ]
+        },
+        "contradicted": {
+          "k": 1,
+          "rate": 0.025,
+          "ci95": [
+            0.0044,
+            0.1288
+          ]
+        },
+        "ungrounded": {
+          "k": 8,
+          "rate": 0.2,
+          "ci95": [
+            0.105,
+            0.3476
+          ]
+        }
+      }
+    },
+    "check_vs_strict_all": {
+      "n": 132,
+      "agreement_4way": 0.8561,
+      "kappa_4way": 0.3225,
+      "kappa_supported_vs_not": 0.317,
+      "confusion": {
+        "inferred->inferred": 6,
+        "inferred->supported": 4,
+        "supported->contradicted": 3,
+        "supported->inferred": 12,
+        "supported->supported": 107
+      },
+      "first_rates": {
+        "n": 132,
+        "supported": {
+          "k": 122,
+          "rate": 0.9242,
+          "ci95": [
+            0.8662,
+            0.9583
+          ]
+        },
+        "inferred": {
+          "k": 10,
+          "rate": 0.0758,
+          "ci95": [
+            0.0417,
+            0.1338
+          ]
+        },
+        "unsupported": {
+          "k": 0,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.0283
+          ]
+        },
+        "contradicted": {
+          "k": 0,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.0283
+          ]
+        },
+        "ungrounded": {
+          "k": 10,
+          "rate": 0.0758,
+          "ci95": [
+            0.0417,
+            0.1338
+          ]
+        }
+      },
+      "second_rates": {
+        "n": 132,
+        "supported": {
+          "k": 111,
+          "rate": 0.8409,
+          "ci95": [
+            0.769,
+            0.8935
+          ]
+        },
+        "inferred": {
+          "k": 18,
+          "rate": 0.1364,
+          "ci95": [
+            0.088,
+            0.2053
+          ]
+        },
+        "unsupported": {
+          "k": 0,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.0283
+          ]
+        },
+        "contradicted": {
+          "k": 3,
+          "rate": 0.0227,
+          "ci95": [
+            0.0078,
+            0.0647
+          ]
+        },
+        "ungrounded": {
+          "k": 21,
+          "rate": 0.1591,
+          "ci95": [
+            0.1065,
+            0.231
+          ]
+        }
+      }
+    },
+    "strict_test_retest_on_sample": {
+      "n": 40,
+      "agreement_4way": 0.875,
+      "kappa_4way": 0.5565,
+      "kappa_supported_vs_not": 0.5455,
+      "confusion": {
+        "contradicted->contradicted": 1,
+        "inferred->inferred": 3,
+        "inferred->supported": 1,
+        "supported->inferred": 4,
+        "supported->supported": 31
+      },
+      "first_rates": {
+        "n": 40,
+        "supported": {
+          "k": 35,
+          "rate": 0.875,
+          "ci95": [
+            0.7389,
+            0.9454
+          ]
+        },
+        "inferred": {
+          "k": 4,
+          "rate": 0.1,
+          "ci95": [
+            0.0396,
+            0.2305
+          ]
+        },
+        "unsupported": {
+          "k": 0,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.0876
+          ]
+        },
+        "contradicted": {
+          "k": 1,
+          "rate": 0.025,
+          "ci95": [
+            0.0044,
+            0.1288
+          ]
+        },
+        "ungrounded": {
+          "k": 5,
+          "rate": 0.125,
+          "ci95": [
+            0.0546,
+            0.2611
+          ]
+        }
+      },
+      "second_rates": {
+        "n": 40,
+        "supported": {
+          "k": 32,
+          "rate": 0.8,
+          "ci95": [
+            0.6524,
+            0.895
+          ]
+        },
+        "inferred": {
+          "k": 7,
+          "rate": 0.175,
+          "ci95": [
+            0.0875,
+            0.3195
+          ]
+        },
+        "unsupported": {
+          "k": 0,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.0876
+          ]
+        },
+        "contradicted": {
+          "k": 1,
+          "rate": 0.025,
+          "ci95": [
+            0.0044,
+            0.1288
+          ]
+        },
+        "ungrounded": {
+          "k": 8,
+          "rate": 0.2,
+          "ci95": [
+            0.105,
+            0.3476
+          ]
+        }
+      }
+    },
+    "type_agreement_check_vs_strict": 0.7424
+  },
+  "strict": {
+    "n": 132,
+    "overall": {
+      "n": 132,
+      "supported": {
+        "k": 111,
+        "rate": 0.8409,
+        "ci95": [
+          0.769,
+          0.8935
+        ]
+      },
+      "inferred": {
+        "k": 18,
+        "rate": 0.1364,
+        "ci95": [
+          0.088,
+          0.2053
+        ]
+      },
+      "unsupported": {
+        "k": 0,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.0283
+        ]
+      },
+      "contradicted": {
+        "k": 3,
+        "rate": 0.0227,
+        "ci95": [
+          0.0078,
+          0.0647
+        ]
+      },
+      "ungrounded": {
+        "k": 21,
+        "rate": 0.1591,
+        "ci95": [
+          0.1065,
+          0.231
+        ]
+      }
+    },
+    "by_type": {
+      "decision": {
+        "n": 29,
+        "supported": {
+          "k": 24,
+          "rate": 0.8276,
+          "ci95": [
+            0.6545,
+            0.924
+          ]
+        },
+        "inferred": {
+          "k": 3,
+          "rate": 0.1034,
+          "ci95": [
+            0.0358,
+            0.2639
+          ]
+        },
+        "unsupported": {
+          "k": 0,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.117
+          ]
+        },
+        "contradicted": {
+          "k": 2,
+          "rate": 0.069,
+          "ci95": [
+            0.0191,
+            0.2196
+          ]
+        },
+        "ungrounded": {
+          "k": 5,
+          "rate": 0.1724,
+          "ci95": [
+            0.076,
+            0.3455
+          ]
+        }
+      },
+      "action_item": {
+        "n": 26,
+        "supported": {
+          "k": 20,
+          "rate": 0.7692,
+          "ci95": [
+            0.5795,
+            0.8897
+          ]
+        },
+        "inferred": {
+          "k": 6,
+          "rate": 0.2308,
+          "ci95": [
+            0.1103,
+            0.4205
+          ]
+        },
+        "unsupported": {
+          "k": 0,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.1287
+          ]
+        },
+        "contradicted": {
+          "k": 0,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.1287
+          ]
+        },
+        "ungrounded": {
+          "k": 6,
+          "rate": 0.2308,
+          "ci95": [
+            0.1103,
+            0.4205
+          ]
+        }
+      },
+      "number_date": {
+        "n": 1,
+        "supported": {
+          "k": 1,
+          "rate": 1.0,
+          "ci95": [
+            0.2065,
+            1.0
+          ]
+        },
+        "inferred": {
+          "k": 0,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.7935
+          ]
+        },
+        "unsupported": {
+          "k": 0,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.7935
+          ]
+        },
+        "contradicted": {
+          "k": 0,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.7935
+          ]
+        },
+        "ungrounded": {
+          "k": 0,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.7935
+          ]
+        }
+      },
+      "attribution": {
+        "n": 2,
+        "supported": {
+          "k": 2,
+          "rate": 1.0,
+          "ci95": [
+            0.3424,
+            1.0
+          ]
+        },
+        "inferred": {
+          "k": 0,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.6576
+          ]
+        },
+        "unsupported": {
+          "k": 0,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.6576
+          ]
+        },
+        "contradicted": {
+          "k": 0,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.6576
+          ]
+        },
+        "ungrounded": {
+          "k": 0,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.6576
+          ]
+        }
+      },
+      "opinion_sentiment": {
+        "n": 6,
+        "supported": {
+          "k": 5,
+          "rate": 0.8333,
+          "ci95": [
+            0.4365,
+            0.9699
+          ]
+        },
+        "inferred": {
+          "k": 1,
+          "rate": 0.1667,
+          "ci95": [
+            0.0301,
+            0.5635
+          ]
+        },
+        "unsupported": {
+          "k": 0,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.3903
+          ]
+        },
+        "contradicted": {
+          "k": 0,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.3903
+          ]
+        },
+        "ungrounded": {
+          "k": 1,
+          "rate": 0.1667,
+          "ci95": [
+            0.0301,
+            0.5635
+          ]
+        }
+      },
+      "generalisation": {
+        "n": 1,
+        "supported": {
+          "k": 1,
+          "rate": 1.0,
+          "ci95": [
+            0.2065,
+            1.0
+          ]
+        },
+        "inferred": {
+          "k": 0,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.7935
+          ]
+        },
+        "unsupported": {
+          "k": 0,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.7935
+          ]
+        },
+        "contradicted": {
+          "k": 0,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.7935
+          ]
+        },
+        "ungrounded": {
+          "k": 0,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.7935
+          ]
+        }
+      },
+      "fact": {
+        "n": 67,
+        "supported": {
+          "k": 58,
+          "rate": 0.8657,
+          "ci95": [
+            0.764,
+            0.9277
+          ]
+        },
+        "inferred": {
+          "k": 8,
+          "rate": 0.1194,
+          "ci95": [
+            0.0618,
+            0.2183
+          ]
+        },
+        "unsupported": {
+          "k": 0,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.0542
+          ]
+        },
+        "contradicted": {
+          "k": 1,
+          "rate": 0.0149,
+          "ci95": [
+            0.0026,
+            0.0798
+          ]
+        },
+        "ungrounded": {
+          "k": 9,
+          "rate": 0.1343,
+          "ci95": [
+            0.0723,
+            0.236
+          ]
+        }
+      }
+    },
+    "llm_labels_of_flagged": {}
+  }
+}
