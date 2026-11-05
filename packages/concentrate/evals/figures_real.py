@@ -463,3 +463,69 @@ def fig_question_heatmap(deletion: dict[str, Any] | None) -> Any:
     )
     fig.subplots_adjust(left=0.25, right=0.99, top=0.78, bottom=0.27, wspace=0.05)
     return fig
+
+
+# -- capture coverage (docs/benchmark/CAPTURE_TESTS.md, section A) ------------------------------
+
+COVERAGE_MEETING = "EN2002b"  # the one real (unstaged) meeting with a flagged gap
+COVERAGE_PRODUCTS = ("granola", "wispr")
+
+
+def _cov_series(rows: list[list[float]]) -> tuple[list[float], list[float]]:
+    return [t / 60 for t, _ in rows], [100 * s for _, s in rows]
+
+
+def fig_capture_coverage(coverage: dict[str, Any] | None) -> Any:
+    """EN2002b timeline: share of each 15 s window each app caught, threshold and control."""
+    if coverage is None:
+        return None
+    meta, summary = coverage["meta"], coverage["summary"]
+    meetings = coverage["meetings"]
+    m = next(x for x in meetings if x["meeting_id"] == COVERAGE_MEETING)
+    thr = 100 * meta["threshold"]
+    fig, ax = fs.new_figure(5.2)
+    handles = []
+    for p in COVERAGE_PRODUCTS:
+        cov = m["products"].get(p)
+        if cov is None:
+            continue
+        x, y = _cov_series(cov["windows"])
+        (h,) = ax.plot(x, y, color=fs.colour(p), lw=1.4, label=fs.label(p), zorder=3)
+        handles.append(h)
+    cx, cy = _cov_series(m["control"]["windows"])
+    passed = 100 * m["control"]["coverage"]
+    (hc,) = ax.plot(cx, cy, color="#999999", lw=1.2, ls=":", zorder=2,
+                    label=f"wrong meeting (control): {passed:.0f}% of windows pass")  # fmt: skip
+    ht = ax.axhline(thr, color=fs.MUTED, lw=1.1, ls="--", zorder=1,
+                    label=f"counts as captured ({thr:.0f}%)")  # fmt: skip
+    handles += [ht, hc]
+    ax.set_xlim(0, 30)
+    ax.set_ylim(-3, 104)
+    ax.set_xticks(range(0, 31, 5))
+    ax.set_yticks(range(0, 101, 20), [f"{v}%" for v in range(0, 101, 20)])
+    ax.set_xlabel("Minutes into the meeting")
+    ax.set_ylabel("Caught (% of what was said)")
+    fig.legend(handles=handles, loc="upper left", bbox_to_anchor=(0.005, 0.885), ncol=4,
+               handlelength=1.8, columnspacing=1.2, handletextpad=0.5)  # fmt: skip
+    fs.title(
+        fig,
+        "How much of what was said did each app catch?",
+        f"Real (unstaged) AMI meeting {COVERAGE_MEETING}, every 15 seconds; "
+        f"{len(meetings)}-meeting summary in the footnote.",
+    )
+    ctrl = [100 * x["control"]["coverage"] for x in meetings]
+    overall = "; ".join(
+        f"{fs.label(p)} {100 * summary[p]['coverage']:.1f}% ({summary[p]['meetings']} meetings)"
+        for p in COVERAGE_PRODUCTS
+        if p in summary
+    )
+    fs.footnote(
+        fig,
+        f"All {len(meetings)} AMI meetings, share of 15 s windows caught (≥{thr:.0f}%): "
+        f"{overall}; wrong-meeting control {min(ctrl):.0f} to {max(ctrl):.0f}% of windows pass. "
+        "Method: share of each window's distinctive word pairs (AMI's human transcript) found "
+        "anywhere in the app's transcript. Both apps dip at the same moments (overlapping "
+        "speech): hard audio, not lost recording. Threshold-sensitive: at 50% the gaps change.",
+    )
+    fig.subplots_adjust(left=0.1, right=0.98, top=0.8, bottom=0.22)
+    return fig

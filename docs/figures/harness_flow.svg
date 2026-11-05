@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="576pt" height="532.8pt" viewBox="0 0 576 532.8" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>concentrate figures</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 532.8 
+L 576 532.8 
+L 576 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 156.96 108 
+L 419.04 108 
+Q 424.8 108 424.8 102.24 
+L 424.8 74.16 
+Q 424.8 68.4 419.04 68.4 
+L 156.96 68.4 
+Q 151.2 68.4 151.2 74.16 
+L 151.2 102.24 
+Q 151.2 108 156.96 108 
+z
+" clip-path="url(#p1028305c35)" style="fill: #f2f2f2"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 56.16 194.4 
+L 260.64 194.4 
+Q 266.4 194.4 266.4 188.64 
+L 266.4 160.56 
+Q 266.4 154.8 260.64 154.8 
+L 56.16 154.8 
+Q 50.4 154.8 50.4 160.56 
+L 50.4 188.64 
+Q 50.4 194.4 56.16 194.4 
+z
+" clip-path="url(#p1028305c35)"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 315.36 194.4 
+L 519.84 194.4 
+Q 525.6 194.4 525.6 188.64 
+L 525.6 160.56 
+Q 525.6 154.8 519.84 154.8 
+L 315.36 154.8 
+Q 309.6 154.8 309.6 160.56 
+L 309.6 188.64 
+Q 309.6 194.4 315.36 194.4 
+z
+" clip-path="url(#p1028305c35)" style="fill: #009988"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 156.96 280.8 
+L 419.04 280.8 
+Q 424.8 280.8 424.8 275.04 
+L 424.8 246.96 
+Q 424.8 241.2 419.04 241.2 
+L 156.96 241.2 
+Q 151.2 241.2 151.2 246.96 
+L 151.2 275.04 
+Q 151.2 280.8 156.96 280.8 
+z
+" clip-path="url(#p1028305c35)" style="fill: #ffffff; stroke: #e5e5e5; stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 156.96 352.8 
+L 419.04 352.8 
+Q 424.8 352.8 424.8 347.04 
+L 424.8 318.96 
+Q 424.8 313.2 419.04 313.2 
+L 156.96 313.2 
+Q 151.2 313.2 151.2 318.96 
+L 151.2 347.04 
+Q 151.2 352.8 156.96 352.8 
+z
+" clip-path="url(#p1028305c35)" style="fill: #f2f2f2"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 56.16 439.2 
+L 260.64 439.2 
+Q 266.4 439.2 266.4 433.44 
+L 266.4 405.36 
+Q 266.4 399.6 260.64 399.6 
+L 56.16 399.6 
+Q 50.4 399.6 50.4 405.36 
+L 50.4 433.44 
+Q 50.4 439.2 56.16 439.2 
+z
+" clip-path="url(#p1028305c35)" style="fill: #ffffff; stroke: #e5e5e5; stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 315.36 439.2 
+L 519.84 439.2 
+Q 525.6 439.2 525.6 433.44 
+L 525.6 405.36 
+Q 525.6 399.6 519.84 399.6 
+L 315.36 399.6 
+Q 309.6 399.6 309.6 405.36 
+L 309.6 433.44 
+Q 309.6 439.2 315.36 439.2 
+z
+" clip-path="url(#p1028305c35)" style="fill: #ffffff; stroke: #e5e5e5; stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 128.16 522 
+L 447.84 522 
+Q 453.6 522 453.6 516.24 
+L 453.6 488.16 
+Q 453.6 482.4 447.84 482.4 
+L 128.16 482.4 
+Q 122.4 482.4 122.4 488.16 
+L 122.4 516.24 
+Q 122.4 522 128.16 522 
+z
+" clip-path="url(#p1028305c35)" style="fill: #e8e8e8"/>
+   </g>
+   <g id="text_1">
+    <text style="font-weight: 700; font-size: 13px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; text-anchor: start; fill: #222222" x="7.2" y="21.377461" transform="rotate(-0 7.2 21.377461)">How does the outside-in evaluation harness work?</text>
+   </g>
+   <g id="text_2">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; text-anchor: start; fill: #666666" x="7.2" y="40.138242" transform="rotate(-0 7.2 40.138242)">Public meetings go in as audio; we read only what each app exposes, and score it against a human answer key.</text>
+   </g>
+   <g id="text_3">
+    <text style="font-weight: 700; font-size: 9.5px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; text-anchor: middle; fill: #222222" x="288" y="85.124145" transform="rotate(-0 288 85.124145)">AMI audio (public)</text>
+   </g>
+   <g id="text_4">
+    <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; text-anchor: middle; fill: #222222" x="288" y="98.198437" transform="rotate(-0 288 98.198437)">7 meetings · 3 h 00 m</text>
+   </g>
+   <g id="patch_10">
+    <path d="M 249.12 108 
+Q 203.76 131.4 159.791056 154.082392 
+" style="fill: none; stroke: #666666; stroke-width: 1.4; stroke-linecap: round"/>
+    <path d="M 164.262836 154.025965 
+L 159.791056 154.082392 
+L 162.428983 150.471112 
+z
+" style="fill: #666666; stroke: #666666; stroke-width: 1.4; stroke-linecap: round"/>
+   </g>
+   <g id="patch_11">
+    <path d="M 326.88 108 
+Q 372.24 131.4 416.208944 154.082392 
+" style="fill: none; stroke: #666666; stroke-width: 1.4; stroke-linecap: round"/>
+    <path d="M 413.571017 150.471112 
+L 416.208944 154.082392 
+L 411.737164 154.025965 
+z
+" style="fill: #666666; stroke: #666666; stroke-width: 1.4; stroke-linecap: round"/>
+   </g>
+   <g id="text_5">
+    <text style="font-style: italic; font-size: 7.5px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; text-anchor: middle; fill: #666666" x="288" y="133.348535" transform="rotate(-0 288 133.348535)">played as system audio</text>
+   </g>
+   <g id="text_6">
+    <text style="font-weight: 700; font-size: 9.5px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; text-anchor: middle; fill: #ffffff" x="158.4" y="171.524145" transform="rotate(-0 158.4 171.524145)">Granola</text>
+   </g>
+   <g id="text_7">
+    <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; text-anchor: middle; fill: #ffffff" x="158.4" y="184.598437" transform="rotate(-0 158.4 184.598437)">transcript · notes · Chat</text>
+   </g>
+   <g id="text_8">
+    <text style="font-weight: 700; font-size: 9.5px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; text-anchor: middle; fill: #ffffff" x="417.6" y="171.524145" transform="rotate(-0 417.6 171.524145)">Wispr Flow</text>
+   </g>
+   <g id="text_9">
+    <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; text-anchor: middle; fill: #ffffff" x="417.6" y="184.598437" transform="rotate(-0 417.6 184.598437)">transcript · notes</text>
+   </g>
+   <g id="patch_12">
+    <path d="M 158.4 194.4 
+Q 203.76 217.8 247.728944 240.482392 
+" style="fill: none; stroke: #666666; stroke-width: 1.4; stroke-linecap: round"/>
+    <path d="M 245.091017 236.871112 
+L 247.728944 240.482392 
+L 243.257164 240.425965 
+z
+" style="fill: #666666; stroke: #666666; stroke-width: 1.4; stroke-linecap: round"/>
+   </g>
+   <g id="patch_13">
+    <path d="M 417.6 194.4 
+Q 372.24 217.8 328.271056 240.482392 
+" style="fill: none; stroke: #666666; stroke-width: 1.4; stroke-linecap: round"/>
+    <path d="M 332.742836 240.425965 
+L 328.271056 240.482392 
+L 330.908983 236.871112 
+z
+" style="fill: #666666; stroke: #666666; stroke-width: 1.4; stroke-linecap: round"/>
+   </g>
+   <g id="text_10">
+    <text style="font-style: italic; font-size: 7.5px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; text-anchor: middle; fill: #666666" x="288" y="219.748535" transform="rotate(-0 288 219.748535)">what each app exposes</text>
+   </g>
+   <g id="text_11">
+    <text style="font-weight: 700; font-size: 9.5px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; text-anchor: middle; fill: #222222" x="288" y="257.924145" transform="rotate(-0 288 257.924145)">read-only MCP tools</text>
+   </g>
+   <g id="text_12">
+    <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; text-anchor: middle; fill: #222222" x="288" y="270.998437" transform="rotate(-0 288 270.998437)">the products' official servers; no writes</text>
+   </g>
+   <g id="patch_14">
+    <path d="M 288 280.8 
+Q 288 297 288 311.634752 
+" style="fill: none; stroke: #666666; stroke-width: 1.4; stroke-linecap: round"/>
+    <path d="M 290 307.634752 
+L 288 311.634752 
+L 286 307.634752 
+z
+" style="fill: #666666; stroke: #666666; stroke-width: 1.4; stroke-linecap: round"/>
+   </g>
+   <g id="text_13">
+    <text style="font-style: italic; font-size: 7.5px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; text-anchor: start; fill: #666666" x="295.2" y="298.948535" transform="rotate(-0 295.2 298.948535)">transcripts, notes, answers</text>
+   </g>
+   <g id="text_14">
+    <text style="font-weight: 700; font-size: 9.5px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; text-anchor: middle; fill: #222222" x="288" y="329.924145" transform="rotate(-0 288 329.924145)">Synced, private store</text>
+   </g>
+   <g id="text_15">
+    <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; text-anchor: middle; fill: #222222" x="288" y="342.998438" transform="rotate(-0 288 342.998438)">local only; results publish numbers</text>
+   </g>
+   <g id="text_16">
+    <text style="font-style: italic; font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; fill: #666666" transform="translate(435.6 325.47625)">Daily drift check:</text>
+    <text style="font-style: italic; font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; fill: #666666" transform="translate(435.6 335.078438)">caught 1 silent</text>
+    <text style="font-style: italic; font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; fill: #666666" transform="translate(435.6 344.680625)">MCP change</text>
+   </g>
+   <g id="patch_15">
+    <path d="M 249.12 352.8 
+Q 203.76 376.2 159.791056 398.882392 
+" style="fill: none; stroke: #666666; stroke-width: 1.4; stroke-linecap: round"/>
+    <path d="M 164.262836 398.825965 
+L 159.791056 398.882392 
+L 162.428983 395.271112 
+z
+" style="fill: #666666; stroke: #666666; stroke-width: 1.4; stroke-linecap: round"/>
+   </g>
+   <g id="patch_16">
+    <path d="M 326.88 352.8 
+Q 372.24 376.2 416.208944 398.882392 
+" style="fill: none; stroke: #666666; stroke-width: 1.4; stroke-linecap: round"/>
+    <path d="M 413.571017 395.271112 
+L 416.208944 398.882392 
+L 411.737164 398.825965 
+z
+" style="fill: #666666; stroke: #666666; stroke-width: 1.4; stroke-linecap: round"/>
+   </g>
+   <g id="text_17">
+    <text style="font-style: italic; font-size: 7.5px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; text-anchor: end; fill: #666666" x="162" y="378.148535" transform="rotate(-0 162 378.148535)">transcripts, notes</text>
+   </g>
+   <g id="text_18">
+    <text style="font-style: italic; font-size: 7.5px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; text-anchor: start; fill: #666666" x="414" y="378.148535" transform="rotate(-0 414 378.148535)">notes, Chat answers</text>
+   </g>
+   <g id="text_19">
+    <text style="font-weight: 700; font-size: 9.5px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; text-anchor: middle; fill: #222222" x="158.4" y="416.323773" transform="rotate(-0 158.4 416.323773)">Free scorers</text>
+   </g>
+   <g id="text_20">
+    <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; text-anchor: middle; fill: #222222" x="158.4" y="429.398438" transform="rotate(-0 158.4 429.398438)">WER · coverage · facts</text>
+   </g>
+   <g id="text_21">
+    <text style="font-weight: 700; font-size: 9.5px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; text-anchor: middle; fill: #222222" x="417.6" y="416.324145" transform="rotate(-0 417.6 416.324145)">Calibrated judge</text>
+   </g>
+   <g id="text_22">
+    <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; text-anchor: middle; fill: #222222" x="417.6" y="429.398438" transform="rotate(-0 417.6 429.398438)">strong model + speaker roster</text>
+   </g>
+   <g id="text_23">
+    <text style="font-weight: 700; font-size: 9.5px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; text-anchor: middle; fill: #222222" x="288" y="499.124145" transform="rotate(-0 288 499.124145)">Ground truth</text>
+   </g>
+   <g id="text_24">
+    <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; text-anchor: middle; fill: #222222" x="288" y="512.198438" transform="rotate(-0 288 512.198438)">AMI answer key + human labels</text>
+   </g>
+   <g id="patch_17">
+    <path d="M 229.68 482.4 
+Q 194.04 460.8 159.738596 440.011271 
+" style="fill: none; stroke-dasharray: 5.6,4.2; stroke-dashoffset: 0; stroke: #666666; stroke-width: 1.4; stroke-linecap: round"/>
+    <path d="M 162.122784 443.794873 
+L 159.738596 440.011271 
+L 164.195991 440.374082 
+z
+" style="fill: #666666; stroke-dasharray: 5.6,4.2; stroke-dashoffset: 0; stroke: #666666; stroke-width: 1.4; stroke-linecap: round"/>
+   </g>
+   <g id="patch_18">
+    <path d="M 346.32 482.4 
+Q 381.96 460.8 416.261404 440.011271 
+" style="fill: none; stroke-dasharray: 5.6,4.2; stroke-dashoffset: 0; stroke: #666666; stroke-width: 1.4; stroke-linecap: round"/>
+    <path d="M 411.804009 440.374082 
+L 416.261404 440.011271 
+L 413.877216 443.794873 
+z
+" style="fill: #666666; stroke-dasharray: 5.6,4.2; stroke-dashoffset: 0; stroke: #666666; stroke-width: 1.4; stroke-linecap: round"/>
+   </g>
+   <g id="text_25">
+    <text style="font-style: italic; font-size: 7.5px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; text-anchor: middle; fill: #666666" x="288" y="462.748535" transform="rotate(-0 288 462.748535)">reference to score against</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p1028305c35">
+   <rect x="0" y="0" width="576" height="532.8"/>
+  </clipPath>
+ </defs>
+</svg>

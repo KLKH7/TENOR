@@ -144,6 +144,20 @@ def make_root(root: Path) -> Path:
                                   "notes_facts_fallback vs notes_facts")}}},
         },
     )  # fmt: skip
+    cov = {"windows": [[0.0, 0.9], [15.0, 0.3], [30.0, 0.8]], "coverage": 0.667, "gaps": []}
+    ctrl = {"windows": [[0.0, 0.1], [15.0, 0.0], [30.0, 0.0]], "coverage": 0.0, "gaps": []}
+    _write(
+        reports / "ami" / "coverage.json",
+        {
+            "meta": {"threshold": 0.4, "window_s": 15.0},
+            "summary": {p: {"coverage": 0.667, "meetings": 2} for p in ("granola", "wispr")},
+            "meetings": [
+                {"meeting_id": mid, "duration_s": 45, "control_meeting": "IB4003",
+                 "control": ctrl, "products": {"granola": cov, "wispr": cov}}
+                for mid in ("EN2002b", "IS1008a")
+            ],
+        },
+    )  # fmt: skip
     return root
 
 
@@ -163,6 +177,8 @@ def test_renders_every_figure_as_valid_svg(tmp_path: Path) -> None:
     for name in ("retention_steps", "answer_types", "question_heatmap"):
         assert b"DEV" in rendered[f"{name}.svg"]
     assert b"How does Hindsight work?" in rendered["overview.svg"]
+    assert b"2 meetings" in rendered["harness_flow.svg"]
+    assert b"EN2002b" in rendered["capture_coverage.svg"]
 
 
 def test_answer_types_partition_every_answer() -> None:

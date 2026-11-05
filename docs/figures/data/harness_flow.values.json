@@ -1,0 +1,243 @@
+{
+ "axes": [
+  {
+   "collections": [],
+   "images": [],
+   "legend": [],
+   "lines": [],
+   "patches": [],
+   "texts": [
+    [
+     "How does the outside-in evaluation harness work?",
+     2.0,
+     143.0
+    ],
+    [
+     "Public meetings go in as audio; we read only what each app exposes, and score it against a human answer key.",
+     2.0,
+     137.5
+    ],
+    [
+     "AMI audio (public)",
+     80.0,
+     125.04
+    ],
+    [
+     "7 meetings · 3 h 00 m",
+     80.0,
+     121.3
+    ],
+    [
+     "",
+     69.2,
+     118.0
+    ],
+    [
+     "",
+     90.8,
+     118.0
+    ],
+    [
+     "played as system audio",
+     80.0,
+     111.5
+    ],
+    [
+     "Granola",
+     44.0,
+     101.04
+    ],
+    [
+     "transcript · notes · Chat",
+     44.0,
+     97.3
+    ],
+    [
+     "Wispr Flow",
+     116.0,
+     101.04
+    ],
+    [
+     "transcript · notes",
+     116.0,
+     97.3
+    ],
+    [
+     "",
+     44.0,
+     94.0
+    ],
+    [
+     "",
+     116.0,
+     94.0
+    ],
+    [
+     "what each app exposes",
+     80.0,
+     87.5
+    ],
+    [
+     "read-only MCP tools",
+     80.0,
+     77.04
+    ],
+    [
+     "the products' official servers; no writes",
+     80.0,
+     73.3
+    ],
+    [
+     "",
+     80.0,
+     70.0
+    ],
+    [
+     "transcripts, notes, answers",
+     82.0,
+     65.5
+    ],
+    [
+     "Synced, private store",
+     80.0,
+     57.04
+    ],
+    [
+     "local only; results publish numbers",
+     80.0,
+     53.3
+    ],
+    [
+     "Daily drift check:\ncaught 1 silent\nMCP change",
+     121.0,
+     55.5
+    ],
+    [
+     "",
+     69.2,
+     50.0
+    ],
+    [
+     "",
+     90.8,
+     50.0
+    ],
+    [
+     "transcripts, notes",
+     45.0,
+     43.5
+    ],
+    [
+     "notes, Chat answers",
+     115.0,
+     43.5
+    ],
+    [
+     "Free scorers",
+     44.0,
+     33.04
+    ],
+    [
+     "WER · coverage · facts",
+     44.0,
+     29.3
+    ],
+    [
+     "Calibrated judge",
+     116.0,
+     33.04
+    ],
+    [
+     "strong model + speaker roster",
+     116.0,
+     29.3
+    ],
+    [
+     "Ground truth",
+     80.0,
+     10.04
+    ],
+    [
+     "AMI answer key + human labels",
+     80.0,
+     6.3
+    ],
+    [
+     "",
+     63.8,
+     14.0
+    ],
+    [
+     "",
+     96.2,
+     14.0
+    ],
+    [
+     "reference to score against",
+     80.0,
+     20.0
+    ]
+   ],
+   "title": "",
+   "xlabel": "",
+   "xlim": [
+    0.0,
+    160.0
+   ],
+   "xscale": "linear",
+   "xticklabels": [
+    "0",
+    "20",
+    "40",
+    "60",
+    "80",
+    "100",
+    "120",
+    "140",
+    "160"
+   ],
+   "xticks": [
+    0.0,
+    20.0,
+    40.0,
+    60.0,
+    80.0,
+    100.0,
+    120.0,
+    140.0,
+    160.0
+   ],
+   "ylabel": "",
+   "ylim": [
+    0.0,
+    148.0
+   ],
+   "yscale": "linear",
+   "yticklabels": [
+    "0",
+    "20",
+    "40",
+    "60",
+    "80",
+    "100",
+    "120",
+    "140",
+    "160"
+   ],
+   "yticks": [
+    0.0,
+    20.0,
+    40.0,
+    60.0,
+    80.0,
+    100.0,
+    120.0,
+    140.0,
+    160.0
+   ]
+  }
+ ],
+ "figure_legends": [],
+ "suptitle": "",
+ "texts": []
+}

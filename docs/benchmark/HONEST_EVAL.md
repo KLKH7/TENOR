@@ -2,6 +2,8 @@
 
 *Decided 2026-11-05 after the first AMI results. Method: calibrated evaluation. Product angle: completeness.*
 
+![How does the outside-in evaluation harness work? Public AMI audio is played into Granola and Wispr Flow, read back through read-only MCP tools into a private store, and scored by free scorers and a calibrated judge against the AMI answer key and human labels](../figures/harness_flow.svg)
+
 ## Why
 
 Automated checks on meeting AI over-count errors. On 7 AMI meetings recorded into Granola and Wispr Flow:

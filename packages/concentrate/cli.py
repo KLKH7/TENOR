@@ -2775,6 +2775,80 @@ def ami_wer(
     typer.echo(f"wrote {out}")
 
 
+AMI_COVERAGE_OUT = Path("evals/reports/ami/coverage.json")  # committed: numbers only
+
+
+@ami_app.command("coverage")
+def ami_coverage(
+    granola_db: Annotated[
+        Path, typer.Option(help="Synced Granola AMI account (read-only).")
+    ] = Path("data/ami_granola.db"),
+    wispr_db: Annotated[Path, typer.Option(help="Synced Wispr AMI account (read-only).")] = Path(
+        "data/ami_wispr.db"
+    ),
+    out: Annotated[Path, typer.Option(help="Committed result (numbers only).")] = AMI_COVERAGE_OUT,
+) -> None:
+    """Per-15 s capture coverage of the AMI meetings, per product, with a wrong-meeting control.
+
+    No LLM calls. Writes numbers and AMI meeting IDs only: no transcript text, note IDs or titles.
+    """
+    import json
+    import subprocess
+    from datetime import UTC, datetime
+
+    from concentrate.ami import coverage as C
+    from concentrate.ami.corpus import load_meeting
+    from concentrate.ami.products import AMI_SET, match_recordings, read_overrides, transcript_text
+    from concentrate.ami.wer import NORMALISER_VERSION
+    from concentrate.core.store import read_notes
+
+    pins = read_overrides(AMI_RESULTS / "recording_ids.txt")
+    dbs = {"granola": granola_db, "wispr": wispr_db}
+    recs = {p: match_recordings(read_notes(db), pins.get(p)) for p, db in dbs.items()}
+    meets = {mid: load_meeting(mid) for mid in AMI_SET}
+    rows = []
+    for mid, m in meets.items():
+        texts = {
+            p: transcript_text(r[mid], drop_mic=(p == "granola")) if mid in r else None
+            for p, r in recs.items()
+        }
+        row = C.score_meeting(m, texts, meets[C.control_for(mid, AMI_SET)])
+        rows.append(row)
+        typer.echo(
+            f"{mid}  control={row.control.coverage:.0%}  "
+            + "  ".join(
+                f"{p}={c.coverage:.0%} gaps={len(c.gaps)}" if c else f"{p}=not recorded"
+                for p, c in row.products.items()
+            )
+        )
+    sha = subprocess.run(["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True)
+    payload = {
+        "meta": {
+            "git_sha": sha.stdout.strip(),
+            "date": datetime.now(UTC).isoformat(timespec="seconds"),
+            "window_s": C.WINDOW_S,
+            "threshold": C.THRESHOLD,
+            "min_gap_s": C.MIN_GAP_S,
+            "min_bigrams": C.MIN_BIGRAMS,
+            "normaliser_version": NORMALISER_VERSION,
+            "method": C.METHOD,
+            "corpus": "AMI Meeting Corpus manual annotations 1.6.2 (CC BY 4.0)",
+            "llm": None,
+        },
+        "summary": {
+            p: {
+                "coverage": C.pooled(rows, p, C.THRESHOLD),
+                "meetings": sum(r.products.get(p) is not None for r in rows),
+            }
+            for p in dbs
+        },
+        "meetings": [r.model_dump() for r in rows],
+    }
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(payload, indent=1) + "\n")
+    typer.echo(f"wrote {out}")
+
+
 # -- anatomy of a wrong fact (docs/benchmark/WRONG_FACTS.md) ----------------------------------
 
 facts_app = typer.Typer(

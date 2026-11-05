@@ -49,6 +49,9 @@ SYSTEM_COLOURS: dict[str, str] = {
     "notes_only": "#D55E00",  # vermillion: same family as summaries-only
     "notes_facts": "#0072B2",  # blue: Concentrate's fact layer
     "notes_facts_fallback": "#56B4E9",  # sky blue: + transcript fallback
+    # Products captured from the outside (docs/benchmark/CAPTURE_TESTS.md).
+    "granola": "#000000",  # black, like Granola's agent: the real product
+    "wispr": "#009988",  # teal (Tol vibrant): the second real product
 }
 
 SYSTEM_LABELS: dict[str, str] = {
@@ -64,6 +67,8 @@ SYSTEM_LABELS: dict[str, str] = {
     "notes_only": "Notes only",
     "notes_facts": "Notes + facts",
     "notes_facts_fallback": "Notes + facts + fallback",
+    "granola": "Granola",
+    "wispr": "Wispr Flow",
 }
 
 # Categorical palette for things that are *not* systems (failure types, cost parts), so a

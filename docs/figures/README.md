@@ -13,6 +13,7 @@ Prices for every dollar figure: $4/M input and $20/M output tokens, applied to e
 | | |
 |---|---|
 | [<img src="overview.svg" width="400" alt="How does Hindsight work?">](overview.svg)<br>**How does Hindsight work?**<br>Belongs in [`ARCHITECTURE.md`](../ARCHITECTURE.md) | [<img src="tracks.svg" width="400" alt="What does each track test, and how far along is it?">](tracks.svg)<br>**What does each track test, and how far along is it?**<br>Belongs in [`PLAN.md`](../PLAN.md) |
+| [<img src="harness_flow.svg" width="400" alt="How does the outside-in evaluation harness work?">](harness_flow.svg)<br>**How does the outside-in evaluation harness work?**<br>Belongs in [`benchmark/HONEST_EVAL.md`](../benchmark/HONEST_EVAL.md) |  |
 
 ## Real meetings: the evidence
 
@@ -20,7 +21,7 @@ Prices for every dollar figure: $4/M input and $20/M output tokens, applied to e
 |---|---|
 | [<img src="retention_steps.svg" width="400" alt="What does deleting transcripts cost, and what brings it back?">](retention_steps.svg)<br>**What does deleting transcripts cost, and what brings it back?**<br>Belongs in [`benchmark/DELETION_SIM.md`](../benchmark/DELETION_SIM.md) | [<img src="answer_types.svg" width="400" alt="When the answer isn't right, does it say so?">](answer_types.svg)<br>**When the answer isn't right, does it say so?**<br>Belongs in [`benchmark/DELETION_SIM.md`](../benchmark/DELETION_SIM.md) |
 | [<img src="question_heatmap.svg" width="400" alt="Which questions does deletion hurt, and which layer brings them back?">](question_heatmap.svg)<br>**Which questions does deletion hurt, and which layer brings them back?**<br>Belongs in [`benchmark/DELETION_SIM.md`](../benchmark/DELETION_SIM.md) | [<img src="deletion_sim.svg" width="400" alt="What does deleting transcripts cost on real meetings?">](deletion_sim.svg)<br>**What does deleting transcripts cost on real meetings?**<br>Belongs in [`benchmark/DELETION_SIM.md`](../benchmark/DELETION_SIM.md) |
-| [<img src="fallback_dev.svg" width="400" alt="Did the transcript fallback help, and where? (DEV)">](fallback_dev.svg)<br>**Did the transcript fallback help, and where? (DEV)**<br>Belongs in [`systems/concentrate/fallback.md`](../systems/concentrate/fallback.md) |  |
+| [<img src="capture_coverage.svg" width="400" alt="How much of what was said did each app catch?">](capture_coverage.svg)<br>**How much of what was said did each app catch?**<br>Belongs in [`benchmark/CAPTURE_TESTS.md`](../benchmark/CAPTURE_TESTS.md) | [<img src="fallback_dev.svg" width="400" alt="Did the transcript fallback help, and where? (DEV)">](fallback_dev.svg)<br>**Did the transcript fallback help, and where? (DEV)**<br>Belongs in [`systems/concentrate/fallback.md`](../systems/concentrate/fallback.md) |
 
 ## Synthetic data: diagnostics, not evidence
 
@@ -43,6 +44,8 @@ Prices for every dollar figure: $4/M input and $20/M output tokens, applied to e
 | [answer_types.svg](answer_types.svg) | When the answer isn't right, does it say so? | `evals/reports/real-deletion-sim-dev.aggregate.json` (6bc288f59ce8) |
 | [question_heatmap.svg](question_heatmap.svg) | Which questions does deletion hurt, and which layer brings them back? | `evals/reports/real-deletion-sim-dev.aggregate.json` (6bc288f59ce8) |
 | [deletion_sim.svg](deletion_sim.svg) | What does deleting transcripts cost on real meetings? | `evals/reports/real-deletion-sim-dev.aggregate.json` (6bc288f59ce8) |
+| [harness_flow.svg](harness_flow.svg) | How does the outside-in evaluation harness work? | `evals/reports/ami/coverage.json` (b5c2d4951f7c) |
+| [capture_coverage.svg](capture_coverage.svg) | How much of what was said did each app catch? | `evals/reports/ami/coverage.json` (b5c2d4951f7c) |
 | [synthetic_vs_real.svg](synthetic_vs_real.svg) | Why did synthetic data mislead us? | `evals/reports/20261103T002456Z.json` (6e5919e818fe), `evals/reports/20261103T002456Z.jsonl` (b8a38cd419b9), `evals/reports/20261103T002456Z.analysis.json` (6098c8d08e82), `docs/figures/data/real_slice.json` (1458a32d7155), `evals/reports/retirement/20261102T224523Z.curve.json` (0e070673f87e), `evals/reports/real-deletion-sim-dev.aggregate.json` (6bc288f59ce8) |
 | [hero_synthetic_vs_real.svg](hero_synthetic_vs_real.svg) | Why did a tie on synthetic data become a loss on real meetings? | `evals/reports/20261103T002456Z.json` (6e5919e818fe), `evals/reports/20261103T002456Z.jsonl` (b8a38cd419b9), `evals/reports/20261103T002456Z.analysis.json` (6098c8d08e82), `docs/figures/data/real_slice.json` (1458a32d7155) |
 | [leaderboard.svg](leaderboard.svg) | Who's ahead, and is it real? | `evals/reports/20261103T002456Z.json` (6e5919e818fe), `evals/reports/20261103T002456Z.jsonl` (b8a38cd419b9), `evals/reports/20261103T002456Z.analysis.json` (6098c8d08e82) |

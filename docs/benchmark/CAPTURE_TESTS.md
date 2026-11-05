@@ -11,6 +11,12 @@
 
 ## A. Capture reliability
 
+![How much of what was said did each app catch? EN2002b timeline for Granola and Wispr Flow, every 15 seconds, with the 40% threshold and a wrong-meeting control](../figures/capture_coverage.svg)
+
+**A0 result (baseline, no stress): both apps caught 94–100% of each of the 7 meetings; no silent failures.** The only flagged gap (Granola, EN2002b, 51 s near minute 27) falls where Wispr Flow dips too (overlapping speech). Stress conditions A1–A6 are where failures, if any, will show.
+
+*Method used for A0* (`concentrate ami coverage`, numbers in [`evals/reports/ami/coverage.json`](../../evals/reports/ami/coverage.json)): per 15 s window of AMI's human words, the share of distinctive word pairs found anywhere in the product transcript; ≥ 40% counts as captured. A bigram match, not the stage-1 aligner below. Wrong-meeting control: 0–2% of windows pass.
+
 **Measures** (all $0: AMI gives timed human words, so coverage is computed by alignment, no LLM):
 
 | Measure | Definition |

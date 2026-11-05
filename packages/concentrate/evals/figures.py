@@ -9,6 +9,8 @@ Inputs, all committed except where noted:
   synthetic eval report the figures describe;
 - ``evals/reports/retirement/*.curve.json`` (latest): the transcript-deletion curve;
 - ``evals/scale/*/scale.json`` (latest): the scale curve;
+- ``evals/reports/ami/coverage.json``: AMI capture coverage per 15 s window (numbers and AMI
+  meeting IDs only), written by ``concentrate ami coverage``;
 - ``docs/figures/data/real_slice.json``: a content-free snapshot of the real-meeting slice
   (scores and paired counts only, all already public in ``docs/results/REAL_SLICE.md`` and
   ``docs/systems/concentrate/fallback.md``). It is rebuilt from the gitignored ``data/real``
@@ -78,6 +80,7 @@ class Inputs:
     root: Path = Path()
     by_tag: dict[str, Any] | None = None  # evals/reports/notes_vs_transcript.json
     deletion: dict[str, Any] | None = None  # evals/reports/real-deletion-sim-dev.aggregate.json
+    coverage: dict[str, Any] | None = None  # evals/reports/ami/coverage.json
     files: dict[str, list[Path]] = field(default_factory=dict)
 
 
@@ -102,6 +105,7 @@ def load_inputs(stamp: str, root: Path = Path()) -> Inputs:
     real_path = root / REAL_SNAPSHOT
     tag_path = reports / "notes_vs_transcript.json"
     del_path = reports / "real-deletion-sim-dev.aggregate.json"
+    cov_path = reports / "ami" / "coverage.json"
     rows = [json.loads(x) for x in rows_path.read_text().splitlines() if x.strip()]
     core = [report_path, rows_path, analysis_path]
     return Inputs(
@@ -116,6 +120,7 @@ def load_inputs(stamp: str, root: Path = Path()) -> Inputs:
         root=root,
         by_tag=_json(tag_path) if tag_path.exists() else None,
         deletion=_json(del_path) if del_path.exists() else None,
+        coverage=_json(cov_path) if cov_path.exists() else None,
         files={
             "report": core,
             "judge": [judge_path] if judge_path else [],
@@ -124,6 +129,7 @@ def load_inputs(stamp: str, root: Path = Path()) -> Inputs:
             "real": [real_path] if real_path.exists() else [],
             "by_tag": [tag_path] if tag_path.exists() else [],
             "deletion": [del_path] if del_path.exists() else [],
+            "coverage": [cov_path] if cov_path.exists() else [],
         },
     )
 
@@ -1008,6 +1014,22 @@ FIGURES: tuple[Spec, ...] = (
         fig_deletion,
         ("deletion",),
         "benchmark/DELETION_SIM.md",
+        "real",
+    ),
+    Spec(
+        "harness_flow",
+        "How does the outside-in evaluation harness work?",
+        lambda inp: FD.fig_harness_flow(inp.coverage),
+        ("coverage",),
+        "benchmark/HONEST_EVAL.md",
+        "start",
+    ),
+    Spec(
+        "capture_coverage",
+        "How much of what was said did each app catch?",
+        lambda inp: FR.fig_capture_coverage(inp.coverage),
+        ("coverage",),
+        "benchmark/CAPTURE_TESTS.md",
         "real",
     ),
     Spec(

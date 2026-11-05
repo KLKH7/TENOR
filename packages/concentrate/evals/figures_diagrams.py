@@ -385,3 +385,106 @@ def fig_tracks(real: dict[str, Any] | None, deletion: dict[str, Any] | None) -> 
         if glyph in heads:
             ax.text(14, y - 0.3, "▸ " + heads[glyph], fontsize=7.5, color=fs.MUTED, va="center")
     return fig
+
+
+# -- the outside-in evaluation harness (docs/benchmark/HONEST_EVAL.md) -------------------------
+
+
+def _varrow(ax: Any, x0: float, y0: float, x1: float, y1: float, dashed: bool = False) -> None:
+    ax.annotate(
+        "",
+        xy=(x1, y1),
+        xytext=(x0, y0),
+        arrowprops={
+            "arrowstyle": "-|>",
+            "color": fs.MUTED,
+            "lw": 1.4,
+            "linestyle": (0, (4, 3)) if dashed else "-",
+            "shrinkA": 0,
+            "shrinkB": 0,
+        },
+    )
+
+
+def _node(
+    ax: Any, cx: float, y: float, w: float, h: float, head: str, sub: str, fc: str, tc: str
+) -> None:
+    """A box centred on ``cx`` with a bold head line and a smaller sub line."""
+    ec = fs.GRID if fc == "white" else "none"
+    _box(ax, cx - w / 2, y, w, h, fc, ec=ec, lw=1.2)
+    ax.text(cx, y + h * 0.64, head, ha="center", va="center", fontsize=9.5,
+            fontweight="bold", color=tc)  # fmt: skip
+    ax.text(cx, y + h * 0.3, sub, ha="center", va="center", fontsize=8, color=tc)
+
+
+def _edge_label(ax: Any, x: float, y: float, text: str, ha: str = "left") -> None:
+    ax.text(x, y, text, ha=ha, va="center", fontsize=7.5, color=fs.MUTED, style="italic")
+
+
+def _hm(seconds: int) -> str:
+    h, m = divmod(round(seconds / 60), 60)
+    return f"{h} h {m:02d} m"
+
+
+def fig_harness_flow(coverage: dict[str, Any] | None) -> Any:
+    """AMI audio -> two apps -> read-only MCP -> private store -> scorers, checked against truth.
+
+    Meeting count and audio length come from the committed coverage report.
+    """
+    if coverage is None:
+        return None
+    meetings = coverage["meetings"]
+    total = sum(int(m["duration_s"]) for m in meetings)
+    fig, ax = _canvas(7.4)  # canvas is 160 x 148
+    ax.text(2, 143, "How does the outside-in evaluation harness work?", fontsize=13,
+            fontweight="bold", color=fs.INK, va="center")  # fmt: skip
+    ax.text(2, 137.5, "Public meetings go in as audio; we read only what each app exposes, "
+            "and score it against a human answer key.", fontsize=9, color=fs.MUTED,
+            va="center")  # fmt: skip
+    L, R, C = 44.0, 116.0, 80.0  # left / right column centres, middle
+    bw, bh = 60.0, 11.0
+
+    # 1: audio in.
+    _node(ax, C, 118, 76, bh, "AMI audio (public)",
+          f"{len(meetings)} meetings · {_hm(total)}", fs.REAL_TINT, fs.INK)  # fmt: skip
+    for x in (L, R):
+        _varrow(ax, C + (x - C) * 0.3, 118, x, 105)
+    _edge_label(ax, C, 111.5, "played as system audio", ha="center")
+
+    # 2: the two apps.
+    _node(ax, L, 94, bw, bh, "Granola", "transcript · notes · Chat",
+          fs.colour("granola"), "white")  # fmt: skip
+    _node(ax, R, 94, bw, bh, "Wispr Flow", "transcript · notes",
+          fs.colour("wispr"), "white")  # fmt: skip
+    for x in (L, R):
+        _varrow(ax, x, 94, C + (x - C) * 0.3, 81)
+    _edge_label(ax, C, 87.5, "what each app exposes", ha="center")
+
+    # 3: read-only MCP.
+    _node(ax, C, 70, 76, bh, "read-only MCP tools", "the products' official servers; no writes",
+          "white", fs.INK)  # fmt: skip
+    _varrow(ax, C, 70, C, 61)
+    _edge_label(ax, C + 2, 65.5, "transcripts, notes, answers")
+
+    # 4: private store + drift check.
+    _node(ax, C, 50, 76, bh, "Synced, private store", "local only; results publish numbers",
+          fs.REAL_TINT, fs.INK)  # fmt: skip
+    ax.text(C + 41, 55.5, "Daily drift check:\ncaught 1 silent\nMCP change", ha="left",
+            va="center", fontsize=8, color=fs.MUTED, style="italic")  # fmt: skip
+
+    # 5: scorers.
+    for x in (L, R):
+        _varrow(ax, C + (x - C) * 0.3, 50, x, 37)
+    _edge_label(ax, L + 1, 43.5, "transcripts, notes", ha="right")
+    _edge_label(ax, R - 1, 43.5, "notes, Chat answers", ha="left")
+    _node(ax, L, 26, bw, bh, "Free scorers", "WER · coverage · facts", "white", fs.INK)
+    _node(ax, R, 26, bw, bh, "Calibrated judge", "strong model + speaker roster",
+          "white", fs.INK)  # fmt: skip
+
+    # 6: ground truth, dashed arrows up.
+    _node(ax, C, 3, 92, bh, "Ground truth", "AMI answer key + human labels",
+          "#E8E8E8", fs.INK)  # fmt: skip
+    for x in (L, R):
+        _varrow(ax, C + (x - C) * 0.45, 14, x, 26, dashed=True)
+    _edge_label(ax, C, 20, "reference to score against", ha="center")
+    return fig
