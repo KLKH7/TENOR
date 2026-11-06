@@ -33,3 +33,22 @@ Users ask their note-taker about past meetings ("what did we decide about the pr
 - **Preliminary.** One run, one automated judge, 3 human-checked answers.
 - **Summary-level answer key.** Most gold answers are AMI summary sentences, which drop nuance a product may keep; a product can be "partial" against the key and right against the transcript.
 - **Contamination.** AMI has been public for about 20 years; a closed-book control (the same questions with no meeting access) is part of the protocol and has not run yet.
+
+## E1: list then check (designed; pilot run)
+
+**Question.** Most real shortfalls on list questions are missing items. Does listing every item from the transcript, then checking each one against its quote, raise recall without adding wrong items?
+
+| Condition | What answers |
+|---|---|
+| **N** | Granola's notes only (`answer.v1`; the deletion run's `notes_only`) |
+| **L** | List every item from Granola's transcript: map over ~3k-token chunks (`enumerate.v1`, each item with a verbatim quote and line numbers), then merge duplicates (`enumerate_merge.v1`) |
+| **LD** | L, then one verifier call per item against its quoted lines (`verify_item.v2`); unsupported items dropped |
+| **LM** | Same check; unsupported items kept and marked "unconfirmed" |
+
+- **Slice.** The 30 list questions (decision, action_what, problem) among the 68 the deletion run used (meetings recorded by Granola and Wispr). Each condition reads only the question's own meeting.
+- **Gold.** One item per AMI human DECISIONS / ACTIONS / PROBLEMS sentence behind the question, plus the speaker roster.
+- **Scoring is per item, not one label.** A Sonnet judge (`judge_items.v1`) maps each answer item to the gold items it states and checks it against AMI's reference transcript. Recall = gold items covered. Precision is reported twice: strict (states a gold item) and lenient (gold, or true per the transcript), so true items the gold left out are not counted wrong. F1 of each.
+- **LD and LM are scored from L's item judgments** (one judge call, not three), so their difference from L is the filter alone, not judge noise. LM lists the same items as L, so its recall and precision equal L's by construction; its test is whether "unconfirmed" items are less often right than confirmed ones.
+- **Tests.** Paired sign tests per question: L vs N, LD vs L, LM vs L, LM vs LD, on recall and both precisions. With 30 questions only large effects can reach significance.
+- **Known limits.** Granola's AMI transcripts label every line "Them", so the speaker label carries no information and owners are inferred. The lenient precision accepts any true item, so a decision question answered with true action items scores well on it; the strict precision does not. `verify_item.v1` rejected items whose owner the lines could not show; v2 judges content only (changed on DEV).
+- **Status.** Pilot on DEV only (sanity check, not a result). Full run not started; it needs approval. Code: `concentrate ami list-check` ([`list_check.py`](../../packages/concentrate/evals/list_check.py)).
