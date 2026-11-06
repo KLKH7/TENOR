@@ -21,8 +21,8 @@ uv run concentrate brief not_McGrj4gw9NNyT2
 uv run concentrate brief-eval --split test --limit 36 --baseline
 ```
 
-Code: [`memory/brief.py`](../../../packages/concentrate/memory/brief.py) (the brief, no LLM),
-[`evals/brief.py`](../../../packages/concentrate/evals/brief.py) (gold, scoring, baseline),
+Code: [`memory/brief.py`](../../../packages/tenor/memory/brief.py) (the brief, no LLM),
+[`evals/brief.py`](../../../packages/tenor/evals/brief.py) (gold, scoring, baseline),
 [`prompts/brief_baseline.v1.md`](../../../prompts/brief_baseline.v1.md), tests in
 [`tests/test_brief.py`](../../../tests/test_brief.py).
 

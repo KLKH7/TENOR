@@ -45,7 +45,7 @@ ENV_PLACEHOLDERS = re.compile(rb"^(grn_\xe2\x80\xa6|sk-ant-\xe2\x80\xa6|\.\.\.|<
 EMAIL = re.compile(
     rb"[A-Za-z0-9._%+\-]+@([A-Za-z][A-Za-z0-9\-]*(?:\.[A-Za-z0-9\-]+)*\.[A-Za-z]{2,})"
 )
-# Fictional organisations in the synthetic Northwind corpus (packages/concentrate/synth/roster.py)
+# Fictional organisations in the synthetic Northwind corpus (packages/tenor/synth/roster.py)
 # and the test fixtures. They are made-up people at made-up or reserved domains.
 SYNTHETIC_DOMAINS = {
     "northwind.dev",

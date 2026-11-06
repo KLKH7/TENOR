@@ -8,9 +8,9 @@ from pathlib import Path
 
 import pytest
 
-from concentrate.ami.corpus import load_meeting
-from concentrate.ami.products import ami_tag, match_notes, score_note, wer_report
-from concentrate.ami.wer import content_recall, edit_distance, normalise, score, spell_number
+from tenor.ami.corpus import load_meeting
+from tenor.ami.products import ami_tag, match_notes, score_note, wer_report
+from tenor.ami.wer import content_recall, edit_distance, normalise, score, spell_number
 from tests.memory_helpers import make_note
 
 NS = 'xmlns:nite="http://nite.sourceforge.net/"'

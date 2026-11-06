@@ -18,8 +18,8 @@ from typing import Any
 
 import httpx
 
-from concentrate.core import granola
-from concentrate.sources.ratelimit import FakeClock
+from tenor.core import granola
+from tenor.sources.ratelimit import FakeClock
 
 API_KEY = "grn_test_SECRET_do_not_log_1234"
 

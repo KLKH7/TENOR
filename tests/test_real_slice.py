@@ -9,8 +9,8 @@ from typing import Any
 
 import pytest
 
-from concentrate.evals.judge_check import load_report
-from concentrate.evals.real_slice import (
+from tenor.evals.judge_check import load_report
+from tenor.evals.real_slice import (
     READ_ONLY_TOOLS,
     DraftItem,
     DraftOutput,
@@ -30,8 +30,8 @@ from concentrate.evals.real_slice import (
     run_slice,
     save_questions,
 )
-from concentrate.evals.runner import load_corpus
-from concentrate.llm.client import Completion, LLMClient, LLMRequest
+from tenor.evals.runner import load_corpus
+from tenor.llm.client import Completion, LLMClient, LLMRequest
 
 FIXTURES = Path(__file__).resolve().parent.parent / "data" / "fixtures" / "northwind"
 NOTE = "00000000-0000-4000-8000-000000000001"
@@ -193,7 +193,7 @@ def test_run_slice_writes_judge_check_compatible_report(tmp_path: Path) -> None:
 
 
 def test_probes_are_timed_errors_recorded_and_writes_refused(tmp_path: Path) -> None:
-    from concentrate.evals.real_slice import run_probes
+    from tenor.evals.real_slice import run_probes
 
     class Flaky(FakeMcp):
         def call(self, tool: str, arguments: dict[str, Any]) -> str:
@@ -219,7 +219,7 @@ def test_probes_are_timed_errors_recorded_and_writes_refused(tmp_path: Path) -> 
 
 
 def test_real_store_lookup_needs_a_complete_build(tmp_path: Path) -> None:
-    from concentrate.evals.real_slice import find_real_store
+    from tenor.evals.real_slice import find_real_store
 
     notes = load_corpus(FIXTURES)[:2]
     with pytest.raises(FileNotFoundError):
@@ -227,7 +227,7 @@ def test_real_store_lookup_needs_a_complete_build(tmp_path: Path) -> None:
 
 
 def test_spotcheck_lists_disagreements_first() -> None:
-    from concentrate.evals.real_slice import spotcheck_markdown
+    from tenor.evals.real_slice import spotcheck_markdown
 
     def row(s: str, qid: str, v: str) -> dict[str, Any]:
         return {"system": s, "qid": qid, "category": "decision", "verdict": v,
@@ -242,7 +242,7 @@ def test_spotcheck_lists_disagreements_first() -> None:
 
 
 def test_interleave_round_robins_categories() -> None:
-    from concentrate.evals.real_slice import interleave
+    from tenor.evals.real_slice import interleave
 
     qs = [_q("a1"), _q("a2"), _q("t1", category="temporal"), _q("u1", category="unanswerable")]
     assert [q.id for q in interleave(qs)] == ["a1", "t1", "u1", "a2"]

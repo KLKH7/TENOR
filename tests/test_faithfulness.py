@@ -9,9 +9,9 @@ import json
 
 import pytest
 
-from concentrate.blackbox.kit import check_committable
-from concentrate.evals import faithfulness as A
-from concentrate.llm.client import Completion, LLMClient, LLMRequest, structured_params
+from tenor.blackbox.kit import check_committable
+from tenor.evals import faithfulness as A
+from tenor.llm.client import Completion, LLMClient, LLMRequest, structured_params
 from tests.memory_helpers import make_note
 
 NOTES = """# Pricing review

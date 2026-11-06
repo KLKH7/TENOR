@@ -6,8 +6,8 @@ import sqlite3
 from datetime import date
 from pathlib import Path
 
-from concentrate.evals import scale_curve as scv
-from concentrate.synth.questions import Question
+from tenor.evals import scale_curve as scv
+from tenor.synth.questions import Question
 from tests.memory_helpers import ScriptedLLM, make_note
 from tests.test_concentrate_system import _notes, _script, _system
 

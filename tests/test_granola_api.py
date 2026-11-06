@@ -8,9 +8,9 @@ from datetime import UTC, datetime
 
 import pytest
 
-from concentrate.sources.base import NoteNotReady
-from concentrate.sources.granola_api import GranolaAPIError, GranolaAPISource
-from concentrate.sources.ratelimit import FakeClock
+from tenor.sources.base import NoteNotReady
+from tenor.sources.granola_api import GranolaAPIError, GranolaAPISource
+from tenor.sources.ratelimit import FakeClock
 from tests.conftest import many_notes
 from tests.fake_granola import API_KEY, FakeGranola
 

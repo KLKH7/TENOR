@@ -7,15 +7,15 @@ import shutil
 from pathlib import Path
 from typing import Any
 
-from concentrate.agents.baselines import MeetingRetriever, TopKSystem
-from concentrate.evals.runner import (
+from tenor.agents.baselines import MeetingRetriever, TopKSystem
+from tenor.evals.runner import (
     fixtures_version,
     load_corpus,
     load_questions,
     run_eval,
     system_settings,
 )
-from concentrate.llm.client import LLMClient
+from tenor.llm.client import LLMClient
 from tests.test_baselines import FIXTURES, FakeLLM, HashEmbedder
 
 

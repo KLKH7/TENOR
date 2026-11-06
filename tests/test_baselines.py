@@ -11,7 +11,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from concentrate.agents.baselines import (
+from tenor.agents.baselines import (
     AgenticSystem,
     AgentTools,
     FullContextSystem,
@@ -20,10 +20,10 @@ from concentrate.agents.baselines import (
     SummariesOnlySystem,
     TopKSystem,
 )
-from concentrate.core.models import MeetingNote
-from concentrate.evals.runner import estimate, load_corpus, load_questions, run_eval
-from concentrate.evals.scoring import bootstrap_ci, citation_scores, exact_match, judge_request
-from concentrate.llm.client import (
+from tenor.core.models import MeetingNote
+from tenor.evals.runner import estimate, load_corpus, load_questions, run_eval
+from tenor.evals.scoring import bootstrap_ci, citation_scores, exact_match, judge_request
+from tenor.llm.client import (
     Completion,
     LLMClient,
     LLMRequest,
@@ -31,7 +31,7 @@ from concentrate.llm.client import (
     TurnRequest,
     _turn_key,
 )
-from concentrate.synth.questions import Question
+from tenor.synth.questions import Question
 
 FIXTURES = Path(__file__).resolve().parent.parent / "data" / "fixtures" / "northwind"
 UID = re.compile(r"not_[A-Za-z0-9]{14}:\d{4}")

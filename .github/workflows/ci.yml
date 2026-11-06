@@ -45,4 +45,4 @@ jobs:
       # (docs/figures/data/*.values.json) must match exactly; SVGs are compared structurally,
       # since font metrics differ between macOS and Linux.
       - name: Figures match committed data
-        run: uv run concentrate figures 20261103T002456Z --check
+        run: uv run tenor figures 20261103T002456Z --check

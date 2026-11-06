@@ -78,7 +78,7 @@ export default async function ReportPage({
           title="Is the ranking real?"
           hint={
             <>
-              From <code>concentrate analyze</code> ({stamp}.analysis.json): paired tests, power and the
+              From <code>tenor analyze</code> ({stamp}.analysis.json): paired tests, power and the
               cost–accuracy frontier. See docs/archive/northwind/ANALYSIS.md.
             </>
           }
@@ -90,7 +90,7 @@ export default async function ReportPage({
       <Section
         id="questions"
         title="Questions"
-        hint="Dots are verdicts: green correct, orange partial, red wrong. Open a question to compare answers and follow citations into the transcript. Failure types come from concentrate analyze."
+        hint="Dots are verdicts: green correct, orange partial, red wrong. Open a question to compare answers and follow citations into the transcript. Failure types come from tenor analyze."
       >
         <QuestionList
           items={items}

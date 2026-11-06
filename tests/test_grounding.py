@@ -9,12 +9,12 @@ from pathlib import Path
 
 import pytest
 
-from concentrate.ami.corpus import load_meeting, meeting_note
-from concentrate.core.models import Channel
-from concentrate.evals import grounding as G
-from concentrate.evals import grounding_ami as V
-from concentrate.evals.faithfulness import Claim
-from concentrate.llm.client import Completion, LLMClient, LLMRequest
+from tenor.ami.corpus import load_meeting, meeting_note
+from tenor.core.models import Channel
+from tenor.evals import grounding as G
+from tenor.evals import grounding_ami as V
+from tenor.evals.faithfulness import Claim
+from tenor.llm.client import Completion, LLMClient, LLMRequest
 from tests.memory_helpers import make_note
 
 NS = 'xmlns:nite="http://nite.sourceforge.net/"'

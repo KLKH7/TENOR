@@ -13,19 +13,19 @@ from typing import Any
 
 import pytest
 
-from concentrate.core import granola
-from concentrate.core.models import Channel
-from concentrate.core.store import NoteStore
-from concentrate.sources.base import NoteNotReady
-from concentrate.sources.granola_mcp import (
+from tenor.core import granola
+from tenor.core.models import Channel
+from tenor.core.store import NoteStore
+from tenor.sources.base import NoteNotReady
+from tenor.sources.granola_mcp import (
     GranolaMCPSource,
     McpToolError,
     parse_participants,
     passages_to_transcript,
     rendered_to_passages,
 )
-from concentrate.sources.poller import sync
-from concentrate.sources.ratelimit import FakeClock
+from tenor.sources.poller import sync
+from tenor.sources.ratelimit import FakeClock
 
 A = "11111111-1111-4111-8111-111111111111"  # calendar meeting, 25 transcript chunks
 B = "22222222-2222-4222-8222-222222222222"  # ad-hoc meeting, transcript unavailable

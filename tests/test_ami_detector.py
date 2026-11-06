@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import numpy as np
 
-from concentrate.ami import detector as D
-from concentrate.ami.corpus import Word
+from tenor.ami import detector as D
+from tenor.ami.corpus import Word
 
 
 def test_alert_fires_once_when_speech_continues_but_transcript_stops() -> None:

@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from concentrate.ami import coverage as C
-from concentrate.ami.corpus import AmiMeeting, Word
+from tenor.ami import coverage as C
+from tenor.ami.corpus import AmiMeeting, Word
 
 TOPICS = (
     "remote control budget twenty euros",

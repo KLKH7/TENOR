@@ -21,11 +21,11 @@ import httpx2
 import pytest
 from pydantic import BaseModel
 
-from concentrate import watchdog
-from concentrate.agents.mem0_system import MeteredAnthropic, UsageMeter
-from concentrate.agents.progress import read_progress
-from concentrate.llm import resilience
-from concentrate.llm.client import (
+from tenor import watchdog
+from tenor.agents.mem0_system import MeteredAnthropic, UsageMeter
+from tenor.agents.progress import read_progress
+from tenor.llm import resilience
+from tenor.llm.client import (
     AnthropicBackend,
     Completion,
     LLMClient,
@@ -34,7 +34,7 @@ from concentrate.llm.client import (
     _SdkToolBackend,
     run_turn,
 )
-from concentrate.llm.resilience import (
+from tenor.llm.resilience import (
     RetryPolicy,
     acall_with_retries,
     anthropic_client,
@@ -283,7 +283,7 @@ def test_retries_are_logged_loudly(caplog: pytest.LogCaptureFixture) -> None:
             raise item
         return item
 
-    with caplog.at_level("WARNING", logger="concentrate.llm"):
+    with caplog.at_level("WARNING", logger="tenor.llm"):
         call_with_retries(fn, what="extract (extract.v2)", policy=FAST, sleep=lambda s: None)
     assert "extract (extract.v2) failed (APITimeoutError); retry 1/3" in caplog.text
 
@@ -392,7 +392,7 @@ def test_first_sigterm_asks_second_interrupts() -> None:
 def test_cli_turns_a_clean_stop_into_exit_75() -> None:
     import typer
 
-    from concentrate.cli import _stall_guard
+    from tenor.cli import _stall_guard
 
     with pytest.raises(typer.Exit) as exc, _stall_guard(0, "ingest b5"):
         watchdog.request_stop("SIGTERM")
@@ -466,7 +466,7 @@ def _kuzu_with_wal(tmp_path: Path) -> Path:
 
 
 def test_probe_replays_a_healthy_wal_in_a_child(tmp_path: Path) -> None:
-    from concentrate.agents.kuzu_safety import needs_probe, probe_kuzu, wal_path
+    from tenor.agents.kuzu_safety import needs_probe, probe_kuzu, wal_path
 
     db = _kuzu_with_wal(tmp_path)
     assert wal_path(db).stat().st_size > 0 and needs_probe(db)
@@ -474,7 +474,7 @@ def test_probe_replays_a_healthy_wal_in_a_child(tmp_path: Path) -> None:
 
 
 def test_probe_reports_a_native_crash_instead_of_dying(tmp_path: Path) -> None:
-    from concentrate.agents.kuzu_safety import probe_kuzu
+    from tenor.agents.kuzu_safety import probe_kuzu
 
     # Any fatal signal exercises the same path. SIGKILL is used instead of a real SIGBUS
     # because macOS shows a "Python quit unexpectedly" dialog for SIGBUS/SIGSEGV crashes.
@@ -487,7 +487,7 @@ def test_probe_reports_a_native_crash_instead_of_dying(tmp_path: Path) -> None:
 def test_close_kuzu_checkpoints_away_the_wal(tmp_path: Path) -> None:
     import kuzu
 
-    from concentrate.agents.kuzu_safety import close_kuzu, needs_probe, wal_path
+    from tenor.agents.kuzu_safety import close_kuzu, needs_probe, wal_path
 
     db_path = _kuzu_with_wal(tmp_path)
     db = kuzu.Database(str(db_path))

@@ -6,7 +6,7 @@ import json
 from datetime import UTC, date, datetime
 from typing import Any
 
-from concentrate.evals.brief import (
+from tenor.evals.brief import (
     GoldBuilder,
     Item,
     TopKBriefBaseline,
@@ -17,10 +17,10 @@ from concentrate.evals.brief import (
     score_section,
     shown_from_brief,
 )
-from concentrate.llm.client import Completion, LLMClient, LLMRequest
-from concentrate.memory.brief import UpcomingMeeting, build_brief, to_markdown
-from concentrate.memory.store import MemoryStore
-from concentrate.synth.world import Commitment, Evidence, Fact, Meeting, World
+from tenor.llm.client import Completion, LLMClient, LLMRequest
+from tenor.memory.brief import UpcomingMeeting, build_brief, to_markdown
+from tenor.memory.store import MemoryStore
+from tenor.synth.world import Commitment, Evidence, Fact, Meeting, World
 from tests.memory_helpers import make_note
 
 T = "T09:00:00+00:00"

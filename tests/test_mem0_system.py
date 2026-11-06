@@ -10,9 +10,9 @@ from typing import Any
 
 import pytest
 
-from concentrate.agents import corpus as cv
-from concentrate.agents.baselines import ANSWER_PROMPT, ANSWER_SCHEMA
-from concentrate.agents.mem0_system import (
+from tenor.agents import corpus as cv
+from tenor.agents.baselines import ANSWER_PROMPT, ANSWER_SCHEMA
+from tenor.agents.mem0_system import (
     COMPLETE_MARKER,
     EXTRACTION_SCHEMA,
     PROGRESS_FILE,
@@ -24,9 +24,9 @@ from concentrate.agents.mem0_system import (
     corpus_hash,
     ingest_chunks,
 )
-from concentrate.core.models import MeetingNote
-from concentrate.evals.runner import load_corpus
-from concentrate.llm.client import LLMClient, TurnCompletion, TurnRequest, cost_usd
+from tenor.core.models import MeetingNote
+from tenor.evals.runner import load_corpus
+from tenor.llm.client import LLMClient, TurnCompletion, TurnRequest, cost_usd
 
 FIXTURES = Path(__file__).resolve().parent.parent / "data" / "fixtures" / "northwind"
 MODEL = "claude-sonnet-5-5"

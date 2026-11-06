@@ -15,12 +15,12 @@ from typing import Any
 import pytest
 from mcp import Client
 
-from concentrate.agents.concentrate_system import DB_FILE
-from concentrate.llm.client import LLMClient
-from concentrate.mcp_server.server import build_server
-from concentrate.mcp_server.service import Answerer, MemoryService, find_store
-from concentrate.memory.entities import load_directory
-from concentrate.memory.store import MemoryStore
+from tenor.agents.concentrate_system import DB_FILE
+from tenor.llm.client import LLMClient
+from tenor.mcp_server.server import build_server
+from tenor.mcp_server.service import Answerer, MemoryService, find_store
+from tenor.memory.entities import load_directory
+from tenor.memory.store import MemoryStore
 from tests.memory_helpers import ScriptedLLM
 from tests.test_concentrate_system import DIRECTORY, A, B, C, _notes, _script, _system
 

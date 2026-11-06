@@ -66,7 +66,7 @@ export default async function MemoryPage({ searchParams }: { searchParams: Promi
         <h1 className="mt-8 font-serif text-[2.75rem] leading-[1.08] text-ink">Memory</h1>
         <p className="mt-4 text-[15px] text-muted">
           No finished memory store under <code>data/cache/concentrate/*/*/</code>. Build one with{" "}
-          <code>concentrate eval --xl --systems c</code> (or symlink <code>data/cache</code> from the main checkout).
+          <code>tenor eval --xl --systems c</code> (or symlink <code>data/cache</code> from the main checkout).
         </p>
       </PageShell>
     );
@@ -104,7 +104,7 @@ export default async function MemoryPage({ searchParams }: { searchParams: Promi
         what had been heard by that day. Every item links to the transcript lines it rests on.
       </p>
       <div className="mt-4 flex flex-wrap gap-1.5">
-        <Chip title={`${m.store}: the newest build with complete.json under data/cache/concentrate (same rule as \`concentrate brief\`)`}>
+        <Chip title={`${m.store}: the newest build with complete.json under data/cache/concentrate (same rule as \`tenor brief\`)`}>
           store {m.store.split("/").slice(-2).join("/")}
         </Chip>
         <Chip>{m.meetings.size} meetings (Northwind-XL)</Chip>

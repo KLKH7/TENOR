@@ -7,8 +7,8 @@ from pathlib import Path
 
 import pytest
 
-from concentrate.evals import economics as ec
-from concentrate.llm.client import cost_usd
+from tenor.evals import economics as ec
+from tenor.llm.client import cost_usd
 
 
 def _write_jsonl(path: Path, rows: list[dict[str, object]]) -> None:

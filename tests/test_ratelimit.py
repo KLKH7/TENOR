@@ -1,4 +1,4 @@
-from concentrate.sources.ratelimit import FakeClock, RateLimiter
+from tenor.sources.ratelimit import FakeClock, RateLimiter
 
 
 def _send_times(n: int) -> list[float]:

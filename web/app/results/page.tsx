@@ -9,7 +9,7 @@ export default function ResultsIndex() {
   if (!latest) {
     return (
       <main className="mx-auto max-w-xl p-16 text-[15px] text-muted">
-        No eval reports found in <code>evals/reports/</code>. Run <code>concentrate eval</code> first.
+        No eval reports found in <code>evals/reports/</code>. Run <code>tenor eval</code> first.
       </main>
     );
   }

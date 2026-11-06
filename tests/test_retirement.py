@@ -5,10 +5,10 @@ from __future__ import annotations
 from datetime import date
 from pathlib import Path
 
-from concentrate.agents.baselines import MeetingRetriever, TopKSystem
-from concentrate.core.models import MeetingNote
-from concentrate.evals import retirement as rt
-from concentrate.llm.client import LLMClient
+from tenor.agents.baselines import MeetingRetriever, TopKSystem
+from tenor.core.models import MeetingNote
+from tenor.evals import retirement as rt
+from tenor.llm.client import LLMClient
 from tests.test_baselines import HashEmbedder, _q, client, llm, notes  # noqa: F401
 
 

@@ -8,9 +8,9 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from concentrate.ami import stress as S
-from concentrate.ami.corpus import AmiMeeting, Word
-from concentrate.ami.products import ami_tag, match_recordings, match_stress, read_overrides
+from tenor.ami import stress as S
+from tenor.ami.corpus import AmiMeeting, Word
+from tenor.ami.products import ami_tag, match_recordings, match_stress, read_overrides
 from tests.memory_helpers import make_note
 
 RATE = 100  # a tiny sample rate keeps test WAVs small

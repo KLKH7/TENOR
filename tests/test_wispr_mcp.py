@@ -7,14 +7,14 @@ from datetime import UTC, datetime
 
 import pytest
 
-from concentrate.core import granola
-from concentrate.core.models import Channel
-from concentrate.core.store import NoteStore
-from concentrate.sources.allowlist import ToolNotAllowed
-from concentrate.sources.base import NoteNotReady
-from concentrate.sources.poller import sync
-from concentrate.sources.ratelimit import FakeClock
-from concentrate.sources.wispr_mcp import (
+from tenor.core import granola
+from tenor.core.models import Channel
+from tenor.core.store import NoteStore
+from tenor.sources.allowlist import ToolNotAllowed
+from tenor.sources.base import NoteNotReady
+from tenor.sources.poller import sync
+from tenor.sources.ratelimit import FakeClock
+from tenor.sources.wispr_mcp import (
     SOURCE_TOOLS,
     WISPR_READ_TOOLS,
     WisprMCPSource,

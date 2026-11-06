@@ -8,10 +8,10 @@ from pathlib import Path
 
 import pytest
 
-from concentrate.core.models import Channel, MeetingNote, Person, Utterance
-from concentrate.enhance import Directory, EnhancedNote, enhance, enhanced_line
-from concentrate.enhance.evaluate import evaluate, format_report
-from concentrate.enhance.strings import (
+from tenor.core.models import Channel, MeetingNote, Person, Utterance
+from tenor.enhance import Directory, EnhancedNote, enhance, enhanced_line
+from tenor.enhance.evaluate import evaluate, format_report
+from tenor.enhance.strings import (
     double_metaphone,
     fold,
     jaro_winkler,
@@ -256,8 +256,8 @@ def test_diarization_clusters_propagate_a_confident_cue(directory: Directory) ->
 
 
 def test_every_utterance_gets_exactly_one_resolution(directory: Directory) -> None:
-    from concentrate.core.models import normalize_note
-    from concentrate.sources.fixtures import FixtureSource
+    from tenor.core.models import normalize_note
+    from tenor.sources.fixtures import FixtureSource
 
     src = FixtureSource(BASE)
     note = normalize_note(src.get_note(next(iter(src.list_notes())).id))
@@ -277,7 +277,7 @@ def test_enhance_never_reads_ground_truth() -> None:
         assert "asr_variants" not in source and "world.json" not in source, path.name
         for node in ast.walk(ast.parse(source)):
             if isinstance(node, ast.ImportFrom):
-                assert not (node.module or "").startswith("concentrate.synth"), path.name
+                assert not (node.module or "").startswith("tenor.synth"), path.name
 
 
 # -- evaluation --------------------------------------------------------------------------------

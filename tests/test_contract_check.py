@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from typing import Any
 
-from concentrate.sources.contract import diff, probe_granola, response_shape, text_shape
+from tenor.sources.contract import diff, probe_granola, response_shape, text_shape
 
 MID = "11111111-1111-4111-8111-111111111111"
 LISTING = (

@@ -9,11 +9,11 @@ from typing import Any
 
 import pytest
 
-from concentrate.evals import figstyle as fs
-from concentrate.evals import figures as F
-from concentrate.evals import figures_ami as FA
-from concentrate.evals import figures_diagrams as FD
-from concentrate.evals import figures_real as FR
+from tenor.evals import figstyle as fs
+from tenor.evals import figures as F
+from tenor.evals import figures_ami as FA
+from tenor.evals import figures_diagrams as FD
+from tenor.evals import figures_real as FR
 
 STAMP = "20990101T000000Z"
 SYSTEMS = ("b0_topk", "concentrate", "b3_agentic")
@@ -506,4 +506,4 @@ COMMITTED = "20261103T002456Z"
 )
 def test_committed_figures_are_up_to_date() -> None:
     rendered, _ = F.render(F.load_inputs(COMMITTED))
-    assert F.check(rendered, F.OUT_DIR) == [], f"run `uv run concentrate figures {COMMITTED}`"
+    assert F.check(rendered, F.OUT_DIR) == [], f"run `uv run tenor figures {COMMITTED}`"

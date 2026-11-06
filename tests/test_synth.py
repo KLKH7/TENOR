@@ -8,16 +8,16 @@ from pathlib import Path
 
 import pytest
 
-from concentrate.core import granola
-from concentrate.core.spoken import written
-from concentrate.core.store import NoteStore
-from concentrate.llm.client import Completion, LLMClient, LLMRequest
-from concentrate.sources.fixtures import FixtureSource
-from concentrate.sources.poller import sync
-from concentrate.synth.pipeline import build, generate_dataset
-from concentrate.synth.polish import check_turn
-from concentrate.synth.questions import Question
-from concentrate.synth.world import Beat
+from tenor.core import granola
+from tenor.core.spoken import written
+from tenor.core.store import NoteStore
+from tenor.llm.client import Completion, LLMClient, LLMRequest
+from tenor.sources.fixtures import FixtureSource
+from tenor.sources.poller import sync
+from tenor.synth.pipeline import build, generate_dataset
+from tenor.synth.polish import check_turn
+from tenor.synth.questions import Question
+from tenor.synth.world import Beat
 
 REPO_SET = Path(__file__).resolve().parent.parent / "data" / "fixtures" / "northwind"
 
@@ -40,7 +40,7 @@ def test_same_seed_is_byte_identical(dataset: Path, tmp_path: Path) -> None:
 
 
 def test_committed_fixtures_match_generator(dataset: Path) -> None:
-    """data/fixtures/northwind must be exactly what `concentrate synth --seed 42` produces."""
+    """data/fixtures/northwind must be exactly what `tenor synth --seed 42` produces."""
     assert _files(REPO_SET) == _files(dataset)
 
 
@@ -202,8 +202,8 @@ def test_transcripts_match_live_granola_format(dataset: Path) -> None:
 def test_filler_is_varied_and_fact_free() -> None:
     import random
 
-    from concentrate.synth.filler import FillerContext, summary_points, turn
-    from concentrate.synth.roster import PEOPLE
+    from tenor.synth.filler import FillerContext, summary_points, turn
+    from tenor.synth.roster import PEOPLE
 
     rng = random.Random(0)
     ctx = FillerContext("eng", ("Falcon", "Acmeway"))

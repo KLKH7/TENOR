@@ -6,15 +6,15 @@ from pathlib import Path
 
 import pytest
 
-from concentrate.memory.entities import load_directory
-from concentrate.memory.extract import full_id, local_line, to_full_ids, windows
-from concentrate.memory.schema import (
+from tenor.memory.entities import load_directory
+from tenor.memory.extract import full_id, local_line, to_full_ids, windows
+from tenor.memory.schema import (
     ExtractedCommitment,
     ExtractedFact,
     Extraction,
 )
-from concentrate.memory.store import MemoryStore, norm_value
-from concentrate.memory.verify import check_item, check_value, gate_eval, quote_supported
+from tenor.memory.store import MemoryStore, norm_value
+from tenor.memory.verify import check_item, check_value, gate_eval, quote_supported
 
 DIRECTORY = (
     Path(__file__).resolve().parent.parent / "data" / "fixtures" / "northwind" / "directory.json"
@@ -323,9 +323,9 @@ def test_check_value_still_rejects_unsupported_values(value: str, line: str) -> 
 
 
 def test_unresolved_owner_is_kept_with_candidates_not_guessed() -> None:
-    from concentrate.memory.pipeline import owner_key
-    from concentrate.memory.schema import ExtractedCommitment
-    from concentrate.memory.verify import claim_text
+    from tenor.memory.pipeline import owner_key
+    from tenor.memory.schema import ExtractedCommitment
+    from tenor.memory.verify import claim_text
 
     assert owner_key("sam_p") == "sam_p"
     assert owner_key("unresolved", ["sam_p", "Kofi", "sam_p"]) == "?sam_p|kofi"
@@ -350,7 +350,7 @@ def test_unresolved_owner_is_kept_with_candidates_not_guessed() -> None:
 def test_role_in_question_narrows_an_ambiguous_first_name() -> None:
     from datetime import date
 
-    from concentrate.memory.query import parse_question
+    from tenor.memory.query import parse_question
 
     d = load_directory(DIRECTORY)
     day = date(2026, 10, 24)
@@ -363,7 +363,7 @@ def test_role_in_question_narrows_an_ambiguous_first_name() -> None:
 def test_question_anchors_the_named_meeting_by_title_and_date() -> None:
     from datetime import date
 
-    from concentrate.memory.query import anchored_meetings
+    from tenor.memory.query import anchored_meetings
 
     ms = [
         {"note_id": "not_a", "title": "Eng standup", "day": "2026-08-31"},
@@ -384,7 +384,7 @@ def test_question_anchors_the_named_meeting_by_title_and_date() -> None:
 def test_list_questions_about_reassignments_get_every_reassigned_commitment() -> None:
     from datetime import date
 
-    from concentrate.memory.query import MemoryIndex, build_context, parse_question
+    from tenor.memory.query import MemoryIndex, build_context, parse_question
 
     s = MemoryStore(":memory:")
     common = {"recorded_at": "2026-09-01T10:00:00+00:00", "quote": "q", "confidence": 0.9}

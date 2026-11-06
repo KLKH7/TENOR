@@ -7,9 +7,9 @@ from pathlib import Path
 
 import pytest
 
-from concentrate.blackbox.base import ProductAnswer
-from concentrate.blackbox.kit import check_committable
-from concentrate.evals import agent_interface as A
+from tenor.blackbox.base import ProductAnswer
+from tenor.blackbox.kit import check_committable
+from tenor.evals import agent_interface as A
 
 DISCLAIMER = (
     "<transcript_note>This answer comes from meeting notes. Before answering, call "

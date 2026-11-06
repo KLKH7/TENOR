@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pytest
 
-from concentrate.ami.corpus import (
+from tenor.ami.corpus import (
     DEFAULT_ZIP,
     AmiMeeting,
     DialogueAct,
@@ -18,7 +18,7 @@ from concentrate.ami.corpus import (
     SummarySentence,
     Word,
 )
-from concentrate.ami.questions import (
+from tenor.ami.questions import (
     RECORDED,
     TARGET_QUESTIONS,
     build_questions,
@@ -32,8 +32,8 @@ from concentrate.ami.questions import (
     split_subject,
     write_jsonl,
 )
-from concentrate.evals import compression as C
-from concentrate.llm.client import (
+from tenor.evals import compression as C
+from tenor.llm.client import (
     Completion,
     Ledger,
     LLMClient,
@@ -349,7 +349,7 @@ def test_quote_prices_without_spending() -> None:
 
 @pytest.mark.skipif(not DEFAULT_ZIP.exists(), reason="AMI annotations zip not downloaded")
 def test_committed_question_set_matches_builder(tmp_path: Path) -> None:
-    from concentrate.ami.corpus import load_meeting
+    from tenor.ami.corpus import load_meeting
 
     meetings, sel = select_meetings(DEFAULT_ZIP, load_meeting, 42)
     write_jsonl(build_questions(meetings, 42), tmp_path / "q.jsonl")

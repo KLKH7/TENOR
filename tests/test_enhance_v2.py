@@ -6,11 +6,11 @@ from datetime import timedelta
 
 import pytest
 
-from concentrate.core.models import MeetingNote
-from concentrate.enhance import Directory, enhance, enhance_all
-from concentrate.enhance.context import Priors
-from concentrate.enhance.tasks import task_phrases
-from concentrate.memory.enhance_stub import real_enhancer
+from tenor.core.models import MeetingNote
+from tenor.enhance import Directory, enhance, enhance_all
+from tenor.enhance.context import Priors
+from tenor.enhance.tasks import task_phrases
+from tenor.memory.enhance_stub import real_enhancer
 from tests.test_enhance import BASE, OWNER, T0, _note, _p
 
 

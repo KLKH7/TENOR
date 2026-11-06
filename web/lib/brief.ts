@@ -2,7 +2,7 @@ import { execFile } from "node:child_process";
 import path from "node:path";
 import { promisify } from "node:util";
 
-// Runs `concentrate brief <note> --json` (memory/brief.py: SQL reads over the newest complete
+// Runs `tenor brief <note> --json` (memory/brief.py: SQL reads over the newest complete
 // store, no LLM, $0) and memoises the result per meeting for the life of the server.
 const REPO = process.env.CONCENTRATE_ROOT ?? path.join(process.cwd(), "..");
 const UV = process.env.CONCENTRATE_UV ?? "uv";
@@ -39,7 +39,7 @@ export interface Brief {
 const cache = new Map<string, Promise<Brief>>();
 
 export function briefCommand(noteId: string): string {
-  return `uv run concentrate brief ${noteId}`;
+  return `uv run tenor brief ${noteId}`;
 }
 
 /** The brief for a meeting, as of its start. Throws with the CLI's stderr on failure. */
@@ -47,7 +47,7 @@ export function getBrief(noteId: string): Promise<Brief> {
   if (!/^not_[A-Za-z0-9]{14}$/.test(noteId)) return Promise.reject(new Error("bad note id"));
   let p = cache.get(noteId);
   if (!p) {
-    p = run(UV, ["run", "concentrate", "brief", noteId, "--json"], {
+    p = run(UV, ["run", "tenor", "brief", noteId, "--json"], {
       cwd: REPO,
       timeout: 120_000,
       maxBuffer: 8 * 1024 * 1024,

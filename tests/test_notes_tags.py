@@ -9,12 +9,12 @@ from typing import Any
 
 import pytest
 
-from concentrate.evals import by_tag as bt
-from concentrate.evals import metrics as mx
-from concentrate.evals import notes_tags as nt
-from concentrate.evals import notes_vs_transcript as nvt
-from concentrate.evals.runner import load_corpus, load_questions
-from concentrate.synth.world import World
+from tenor.evals import by_tag as bt
+from tenor.evals import metrics as mx
+from tenor.evals import notes_tags as nt
+from tenor.evals import notes_vs_transcript as nvt
+from tenor.evals.runner import load_corpus, load_questions
+from tenor.synth.world import World
 
 NORTHWIND = Path("data/fixtures/northwind")
 XL = Path("data/fixtures/large/northwind-xl")

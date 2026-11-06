@@ -5,12 +5,12 @@ import type { ResultRow, Verdict } from "./results";
 
 export type LineMark = "correct" | "extra" | "missed";
 
-/** Same normalisation as concentrate.evals.scoring.citation_scores: strip [ ] brackets. */
+/** Same normalisation as tenor.evals.scoring.citation_scores: strip [ ] brackets. */
 export function cleanCitation(c: string): string {
   return c.replace(/^\[+|\]+$/g, "");
 }
 
-/** Mirror of concentrate.evals.scoring.citation_scores: (precision, recall) of cited line ids
+/** Mirror of tenor.evals.scoring.citation_scores: (precision, recall) of cited line ids
  *  vs gold. Precision is null with no line citations; both are null with no gold lines. */
 export function citationScores(gold: string[], cited: string[]): [number | null, number | null] {
   const g = new Set(gold);
@@ -58,7 +58,7 @@ export interface Filters {
   systems: string[]; // empty = all systems
   disagree: boolean;
   wrong: boolean;
-  /** Primary failure type (`concentrate analyze`): some selected system failed this way. */
+  /** Primary failure type (`tenor analyze`): some selected system failed this way. */
   failure: string | null;
 }
 
@@ -175,7 +175,7 @@ export function paretoFront<T extends { cost: number; accuracy: number }>(pts: T
     .sort((a, b) => a.cost - b.cost);
 }
 
-/** Order categories as concentrate.synth.questions.Category lists them, unknown ones last. */
+/** Order categories as tenor.synth.questions.Category lists them, unknown ones last. */
 const CATEGORY_ORDER = [
   "single_hop",
   "multi_hop",

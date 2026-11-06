@@ -1,5 +1,5 @@
 // Bitemporal "as of" logic for the Memory view. Pure, so it is unit-tested
-// (asof.test.mts) and mirrors concentrate.memory.store: Fact.live_at and Commitment.status_at,
+// (asof.test.mts) and mirrors tenor.memory.store: Fact.live_at and Commitment.status_at,
 // as used by the MCP server's get_facts / get_commitments.
 
 export interface FactRow {

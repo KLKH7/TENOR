@@ -10,12 +10,12 @@ from typing import Any
 
 import pytest
 
-from concentrate.blackbox.kit import write_committable
-from concentrate.core.models import MeetingNote
-from concentrate.evals import deletion_sim as D
-from concentrate.evals.real_slice import GranolaAgentSystem
-from concentrate.llm.client import LLMClient, write_turn_cache
-from concentrate.memory.enhance_stub import STUB_ENHANCER
+from tenor.blackbox.kit import write_committable
+from tenor.core.models import MeetingNote
+from tenor.evals import deletion_sim as D
+from tenor.evals.real_slice import GranolaAgentSystem
+from tenor.llm.client import LLMClient, write_turn_cache
+from tenor.memory.enhance_stub import STUB_ENHANCER
 from tests.memory_helpers import ScriptedLLM, completion
 from tests.test_concentrate_system import DIRECTORY, A, _notes, _q, _script
 from tests.test_fallback import PASSAGES, AbstainingLLM

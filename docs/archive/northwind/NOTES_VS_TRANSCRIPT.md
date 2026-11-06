@@ -26,7 +26,7 @@ A question is **notes-sufficient** when its gold answer can be recovered from th
 
 The *notes* of a meeting are what a notes-only reader sees: the title, the date, the AI summary (`summary_markdown`) and the owner's typed notes (`private_notes_markdown`). The gold meetings are the meetings holding the gold evidence lines (synthetic) or the owner-approved `evidence_note_ids` (real).
 
-There are two taggers, both deterministic, in [`evals/notes_tags.py`](../../../packages/concentrate/evals/notes_tags.py):
+There are two taggers, both deterministic, in [`evals/notes_tags.py`](../../../packages/tenor/evals/notes_tags.py):
 
 | Tagger | Used for | How it decides |
 |---|---|---|

@@ -7,8 +7,8 @@ import re
 from datetime import UTC, datetime, timedelta
 from typing import Any
 
-from concentrate.core.models import Channel, MeetingNote, Person, Utterance
-from concentrate.llm.client import TurnCompletion, TurnRequest
+from tenor.core.models import Channel, MeetingNote, Person, Utterance
+from tenor.llm.client import TurnCompletion, TurnRequest
 
 OWNER = Person(name="Priya Raman", email="priya@northwind.dev")
 

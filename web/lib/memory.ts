@@ -6,7 +6,7 @@ import type { CommitmentEvent, CommitmentRow, FactRow } from "./asof";
 import { getDirectory, XL_ROOT } from "./data";
 
 // Read-only view of a built Concentrate memory (memory.sqlite). Store choice follows
-// `concentrate brief` / `mcp-serve`: the newest build whose complete.json exists, under
+// `tenor brief` / `mcp-serve`: the newest build whose complete.json exists, under
 // data/cache/concentrate/<corpus hash>/<config>/. CONCENTRATE_STORE (a build dir) overrides.
 const REPO = process.env.CONCENTRATE_ROOT ?? path.join(process.cwd(), "..");
 const CACHE = path.join(REPO, "data", "cache", "concentrate");

@@ -1,5 +1,5 @@
 [project]
-name = "concentrate"
+name = "tenor"
 version = "0.1.0"
 description = "TENOR (Transcripts, Evidence, Notes, Outcomes, Recall): an open benchmark for meeting note-takers, with the archived Concentrate memory system (research prototype)."
 readme = "README.md"
@@ -22,7 +22,9 @@ dependencies = [
 ]
 
 [project.scripts]
-concentrate = "concentrate.cli:app"
+tenor = "tenor.cli:app"
+# Temporary alias: prints a deprecation notice, then runs the same app.
+concentrate = "tenor.cli:deprecated_alias"
 
 [dependency-groups]
 dev = ["pytest>=8", "pytest-timeout>=2.3", "ruff>=0.6", "mypy>=1.11"]
@@ -32,7 +34,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["packages/concentrate"]
+packages = ["packages/tenor"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -53,26 +55,26 @@ exclude = ["*.md"]
 select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["concentrate", "tests"]
+known-first-party = ["tenor", "tests"]
 
 [tool.mypy]
 python_version = "3.11"
 strict = true
 plugins = ["pydantic.mypy"]
 files = [
-    "packages/concentrate/core",
-    "packages/concentrate/sources",
-    "packages/concentrate/llm",
-    "packages/concentrate/synth",
-    "packages/concentrate/agents",
-    "packages/concentrate/evals",
-    "packages/concentrate/blackbox",
-    "packages/concentrate/memory",
-    "packages/concentrate/enhance",
-    "packages/concentrate/cli.py",
-    "packages/concentrate/watchdog.py",
-    "packages/concentrate/mcp_server",
-    "packages/concentrate/ami",
+    "packages/tenor/core",
+    "packages/tenor/sources",
+    "packages/tenor/llm",
+    "packages/tenor/synth",
+    "packages/tenor/agents",
+    "packages/tenor/evals",
+    "packages/tenor/blackbox",
+    "packages/tenor/memory",
+    "packages/tenor/enhance",
+    "packages/tenor/cli.py",
+    "packages/tenor/watchdog.py",
+    "packages/tenor/mcp_server",
+    "packages/tenor/ami",
 ]
 
 [[tool.mypy.overrides]]

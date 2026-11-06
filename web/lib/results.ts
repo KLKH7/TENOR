@@ -5,7 +5,7 @@ import path from "node:path";
 import { citationScores, scoresMatch } from "./explore";
 import type { Note } from "./types";
 
-// Reads eval reports written by concentrate.evals.runner (evals/reports/<stamp>.{json,jsonl,md})
+// Reads eval reports written by tenor.evals.runner (evals/reports/<stamp>.{json,jsonl,md})
 // and the fixture set they were run on (questions.jsonl + notes/*.json). Files only, no DB.
 const REPO = process.env.CONCENTRATE_ROOT ?? path.join(process.cwd(), "..");
 const REPORTS = process.env.CONCENTRATE_REPORTS ?? path.join(REPO, "evals", "reports");
@@ -13,7 +13,7 @@ const STAMP = /^\d{8}T\d{6}Z$/;
 
 export type Verdict = "correct" | "partially_correct" | "incorrect";
 
-/** One system's metrics as computed by concentrate.evals.metrics.summarize. */
+/** One system's metrics as computed by tenor.evals.metrics.summarize. */
 export interface SystemMetrics {
   n: number;
   accuracy: number;
@@ -92,7 +92,7 @@ export interface ResultRow {
   latency_measured?: boolean;
   /** The judge's one-line reason, when the report carries it (see normalizeRow). */
   judge_reason?: string;
-  /** From <stamp>.failures.jsonl (`concentrate analyze`), for answers not judged correct. */
+  /** From <stamp>.failures.jsonl (`tenor analyze`), for answers not judged correct. */
   failure?: Failure;
 }
 
@@ -173,7 +173,7 @@ export interface LoadedReport {
   questions: Map<string, Question>;
   fixtures: ResolvedFixtures | null;
   judgechecks: { model: string; markdown: string }[];
-  /** <stamp>.analysis.json when `concentrate analyze` has been run on this report. */
+  /** <stamp>.analysis.json when `tenor analyze` has been run on this report. */
   analysis: Analysis | null;
 }
 

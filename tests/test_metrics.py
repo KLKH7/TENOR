@@ -10,11 +10,11 @@ from typing import Any
 import pytest
 from typer.testing import CliRunner
 
-from concentrate.cli import app
-from concentrate.evals import economics as ec
-from concentrate.evals import metrics as mx
-from concentrate.llm.client import cost_usd
-from concentrate.synth.questions import UNANSWERABLE, Question
+from tenor.cli import app
+from tenor.evals import economics as ec
+from tenor.evals import metrics as mx
+from tenor.llm.client import cost_usd
+from tenor.synth.questions import UNANSWERABLE, Question
 
 REPORT = Path("evals/reports/20261103T002456Z.jsonl")
 

@@ -9,8 +9,8 @@ from typing import Any
 
 import pytest
 
-from concentrate.sources.granola_api import GranolaAPISource
-from concentrate.sources.ratelimit import FakeClock
+from tenor.sources.granola_api import GranolaAPISource
+from tenor.sources.ratelimit import FakeClock
 from tests.fake_granola import API_KEY, FakeGranola
 
 SAMPLE = Path(__file__).resolve().parent.parent / "data" / "fixtures" / "sample"

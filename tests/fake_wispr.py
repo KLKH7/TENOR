@@ -13,7 +13,7 @@ import json
 from dataclasses import dataclass, field
 from typing import Any
 
-from concentrate.sources.granola_mcp import McpToolError
+from tenor.sources.granola_mcp import McpToolError
 
 TRANSCRIPT = (
     "Kian Lakhani: Morning. Shall we start with the pilot timeline?\n"

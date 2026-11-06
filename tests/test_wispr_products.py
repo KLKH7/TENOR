@@ -11,20 +11,20 @@ from typing import Any
 
 import pytest
 
-from concentrate.blackbox.base import Product, ToolNotAllowed
-from concentrate.blackbox.notes_source import notes_case, paired_cases
-from concentrate.blackbox.outside_agent import (
+from tenor.blackbox.base import Product, ToolNotAllowed
+from tenor.blackbox.notes_source import notes_case, paired_cases
+from tenor.blackbox.outside_agent import (
     GRANOLA_BINDING,
     WISPR_BINDING,
     OutsideAgentProduct,
     ToolBudget,
     bind_tools,
 )
-from concentrate.blackbox.pairing import Overrides, PairOverride, pair_meetings
-from concentrate.core.models import Channel, MeetingNote, Person, Utterance, normalize_note
-from concentrate.llm.client import LLMClient, TurnCompletion, TurnRequest
-from concentrate.sources.ratelimit import FakeClock
-from concentrate.sources.wispr_mcp import WisprMCPSource
+from tenor.blackbox.pairing import Overrides, PairOverride, pair_meetings
+from tenor.core.models import Channel, MeetingNote, Person, Utterance, normalize_note
+from tenor.llm.client import LLMClient, TurnCompletion, TurnRequest
+from tenor.sources.ratelimit import FakeClock
+from tenor.sources.wispr_mcp import WisprMCPSource
 from tests.fake_wispr import FakeWispr, meeting
 
 T0 = datetime(2026, 11, 3, 15, tzinfo=UTC)
@@ -335,9 +335,9 @@ def test_unparseable_final_text_is_recorded_as_abstention(tmp_path: Path) -> Non
 def test_pair_cli_writes_ids_and_scores(tmp_path: Path) -> None:
     from typer.testing import CliRunner
 
-    from concentrate.cli import app
-    from concentrate.core.store import NoteStore
-    from concentrate.sources.poller import sync
+    from tenor.cli import app
+    from tenor.core.store import NoteStore
+    from tenor.sources.poller import sync
 
     for name, mid in (("g.db", "g-1"), ("w.db", "m-1")):
         store = NoteStore(tmp_path / name)

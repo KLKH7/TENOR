@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from concentrate.evals.judge_check import (
+from tenor.evals.judge_check import (
     SavedAnswer,
     cohen_kappa,
     compare,
@@ -20,8 +20,8 @@ from concentrate.evals.judge_check import (
     score_hand_check,
     write_hand_check,
 )
-from concentrate.evals.scoring import JudgeOutput, judge_request
-from concentrate.synth.questions import UNANSWERABLE, Question
+from tenor.evals.scoring import JudgeOutput, judge_request
+from tenor.synth.questions import UNANSWERABLE, Question
 
 
 def _answer(system: str, qid: str, verdict: str, **kw: object) -> SavedAnswer:

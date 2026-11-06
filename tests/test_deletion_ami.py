@@ -9,13 +9,13 @@ from typing import Any
 
 import pytest
 
-from concentrate.ami.questions import AmiQuestion
-from concentrate.blackbox.kit import NotCommittable, check_committable
-from concentrate.core.models import Channel, MeetingNote
-from concentrate.evals import deletion_ami as DA
-from concentrate.evals import deletion_sim as D
-from concentrate.evals.scoring import judge_request_for
-from concentrate.llm.client import Ledger, LLMClient
+from tenor.ami.questions import AmiQuestion
+from tenor.blackbox.kit import NotCommittable, check_committable
+from tenor.core.models import Channel, MeetingNote
+from tenor.evals import deletion_ami as DA
+from tenor.evals import deletion_sim as D
+from tenor.evals.scoring import judge_request_for
+from tenor.llm.client import Ledger, LLMClient
 from tests.memory_helpers import ScriptedLLM, make_note
 from tests.test_real_slice import FakeJudge
 
@@ -234,13 +234,13 @@ def test_original_reader_model_comes_from_the_original_meta(tmp_path: Path) -> N
 
 
 def test_cli_quote_needs_no_paid_call(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    """``concentrate ami deletion-sim --quote --heuristic`` end to end on fake recordings:
+    """``tenor ami deletion-sim --quote --heuristic`` end to end on fake recordings:
     prices the full run and the pilot, writes the quote, makes no LLM call."""
     from typer.testing import CliRunner
 
-    from concentrate.ami.questions import write_jsonl
-    from concentrate.cli import app
-    from concentrate.core import store
+    from tenor.ami.questions import write_jsonl
+    from tenor.cli import app
+    from tenor.core import store
 
     recs = _recordings()
     dbs = {p: tmp_path / f"{p}.db" for p in recs}

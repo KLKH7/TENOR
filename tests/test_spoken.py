@@ -2,7 +2,7 @@ from datetime import date
 
 import pytest
 
-from concentrate.core.spoken import (
+from tenor.core.spoken import (
     say_code,
     say_date,
     say_int,
@@ -47,7 +47,7 @@ def test_renderers() -> None:
 
 
 def test_written_form_matches_asr_smart_formatting() -> None:
-    from concentrate.core.spoken import written
+    from tenor.core.spoken import written
 
     cases = {
         "So twenty five dollars a seat.": "So $25 a seat.",

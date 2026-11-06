@@ -12,14 +12,14 @@ import pytest
 from pydantic import ValidationError
 from typer.testing import CliRunner
 
-from concentrate.blackbox.base import (
+from tenor.blackbox.base import (
     AllowlistCaller,
     McpProduct,
     ToolInfo,
     ToolNotAllowed,
     preflight,
 )
-from concentrate.blackbox.kit import (
+from tenor.blackbox.kit import (
     NotCommittable,
     ProductSystem,
     TemplateError,
@@ -27,21 +27,21 @@ from concentrate.blackbox.kit import (
     parse_test_markdown,
     write_committable,
 )
-from concentrate.blackbox.products import (
+from tenor.blackbox.products import (
     ConcentrateProduct,
     GranolaProduct,
     ProductSpec,
     SpecProduct,
 )
-from concentrate.blackbox.transport import SyncMcpClient
-from concentrate.evals.real_slice import (
+from tenor.blackbox.transport import SyncMcpClient
+from tenor.evals.real_slice import (
     CATEGORIES,
     RealQuestion,
     load_split,
     run_slice,
     save_questions,
 )
-from concentrate.llm.client import Completion, LLMClient, LLMRequest
+from tenor.llm.client import Completion, LLMClient, LLMRequest
 
 NOTE = "00000000-0000-4000-8000-000000000001"
 GRANOLA_RAW = (
@@ -181,11 +181,11 @@ def test_spec_adapter_maps_arguments_and_json_paths() -> None:
 
 
 def test_concentrate_adapter_over_its_real_mcp_server(tmp_path: Path) -> None:
-    from concentrate.agents.concentrate_system import DB_FILE
-    from concentrate.mcp_server.server import build_server
-    from concentrate.mcp_server.service import Answerer, MemoryService
-    from concentrate.memory.entities import load_directory
-    from concentrate.memory.store import MemoryStore
+    from tenor.agents.concentrate_system import DB_FILE
+    from tenor.mcp_server.server import build_server
+    from tenor.mcp_server.service import Answerer, MemoryService
+    from tenor.memory.entities import load_directory
+    from tenor.memory.store import MemoryStore
     from tests.memory_helpers import ScriptedLLM
     from tests.test_concentrate_system import DIRECTORY, _notes, _script, _system
 
@@ -211,7 +211,7 @@ def test_concentrate_adapter_over_its_real_mcp_server(tmp_path: Path) -> None:
 
 
 def test_the_documented_example_spec_is_valid() -> None:
-    from concentrate.blackbox.products import load_spec
+    from tenor.blackbox.products import load_spec
 
     spec = load_spec(str(Path(__file__).parent.parent / "docs/method/product.example.json"))
     assert spec.read_only_tools == [spec.tool]
@@ -320,7 +320,7 @@ def test_import_test_rejects_malformed_blocks(block: str, msg: str) -> None:
 def test_import_test_cli_writes_the_test_split_only(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    from concentrate.cli import app
+    from tenor.cli import app
 
     monkeypatch.chdir(tmp_path)
     save_questions([_q("real-001", split="dev")], Path("data/real/questions.jsonl"))

@@ -1,4 +1,4 @@
-// Paired significance + Pareto frontier from <stamp>.analysis.json (`concentrate analyze`).
+// Paired significance + Pareto frontier from <stamp>.analysis.json (`tenor analyze`).
 // Read-only rendering of numbers computed in Python; see docs/archive/northwind/ANALYSIS.md for the methods.
 
 import { Card, systemLabel } from "@/components/results/ui";

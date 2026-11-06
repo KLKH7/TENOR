@@ -14,7 +14,7 @@ from typing import Any
 import pytest
 from pydantic import ValidationError
 
-from concentrate.core import granola
+from tenor.core import granola
 from tests.conftest import SAMPLE
 
 SETS = [SAMPLE, SAMPLE.parent / "northwind"]

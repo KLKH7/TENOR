@@ -15,14 +15,14 @@ from pathlib import Path
 
 import pytest
 
-from concentrate.ami import facts as F
-from concentrate.ami.corpus import load_meeting, meeting_note
-from concentrate.ami.products import match_recordings, read_overrides
-from concentrate.ami.questions import AmiQuestion
-from concentrate.core.models import MeetingNote, Person
-from concentrate.core.store import NoteStore, read_notes
-from concentrate.evals import wrong_facts as W
-from concentrate.llm.client import Completion, LLMClient, LLMRequest
+from tenor.ami import facts as F
+from tenor.ami.corpus import load_meeting, meeting_note
+from tenor.ami.products import match_recordings, read_overrides
+from tenor.ami.questions import AmiQuestion
+from tenor.core.models import MeetingNote, Person
+from tenor.core.store import NoteStore, read_notes
+from tenor.evals import wrong_facts as W
+from tenor.llm.client import Completion, LLMClient, LLMRequest
 from tests.memory_helpers import make_note
 
 MID = "XX0001a"
@@ -456,7 +456,7 @@ def test_stage3_quote_and_pilot_need_no_calls(meeting) -> None:  # type: ignore[
 
 
 def test_clean_answer_strips_product_boilerplate() -> None:
-    from concentrate.evals.wrong_facts import clean_answer
+    from tenor.evals.wrong_facts import clean_answer
 
     raw = "<transcript_note>Call search_transcripts.</transcript_note>\n\nShreedhar."
     assert clean_answer(raw) == "Shreedhar."

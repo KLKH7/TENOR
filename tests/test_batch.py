@@ -13,12 +13,12 @@ from typing import Any
 
 import pytest
 
-from concentrate.agents.baselines import AgenticSystem, MeetingRetriever, TopKSystem
-from concentrate.core.models import MeetingNote
-from concentrate.evals.runner import estimate, load_corpus, load_questions, run_eval
-from concentrate.evals.scoring import JUDGE_SCHEMA, JudgeOutput
-from concentrate.llm import client as llm_client
-from concentrate.llm.client import (
+from tenor.agents.baselines import AgenticSystem, MeetingRetriever, TopKSystem
+from tenor.core.models import MeetingNote
+from tenor.evals.runner import estimate, load_corpus, load_questions, run_eval
+from tenor.evals.scoring import JUDGE_SCHEMA, JudgeOutput
+from tenor.llm import client as llm_client
+from tenor.llm.client import (
     BatchItemResult,
     Completion,
     LLMClient,

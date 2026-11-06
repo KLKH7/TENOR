@@ -11,8 +11,8 @@ from typing import Any
 
 import pytest
 
-from concentrate.evals import list_check as E
-from concentrate.llm.client import Completion, Ledger, LLMClient, LLMRequest
+from tenor.evals import list_check as E
+from tenor.llm.client import Completion, Ledger, LLMClient, LLMRequest
 from tests.memory_helpers import make_note
 
 
@@ -247,7 +247,7 @@ def test_list_questions_and_pilot_pick_one_per_type() -> None:
 
 
 def test_gold_for_keeps_sentence_order_and_roster() -> None:
-    from concentrate.ami.questions import AmiQuestion
+    from tenor.ami.questions import AmiQuestion
 
     q = AmiQuestion(
         id="q", type="decision", template="t", meetings=["M"], question="?", gold_answer="x",
@@ -419,7 +419,7 @@ def test_quote_is_exact_and_free_after_a_cached_run(tmp_path: Path) -> None:
 def test_chat_condition_is_judged_as_free_text_and_aggregate_is_committable(
     tmp_path: Path,
 ) -> None:
-    from concentrate.blackbox.kit import check_committable
+    from tenor.blackbox.kit import check_committable
 
     backend, ledger = Scripted(), Ledger()
     reader = LLMClient(backend, model="claude-opus-5-5", cache_dir=tmp_path, ledger=ledger)

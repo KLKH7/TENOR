@@ -39,7 +39,7 @@ export function QuestionList({
   systems: string[];
   categories: string[];
   base: string;
-  /** Primary failure types from `concentrate analyze`; empty when the report has none. */
+  /** Primary failure types from `tenor analyze`; empty when the report has none. */
   failureTypes?: string[];
 }) {
   const shown = applyFilters(items, filters, systems);

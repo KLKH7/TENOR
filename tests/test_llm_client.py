@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 from pydantic import BaseModel
 
-from concentrate.llm.client import (
+from tenor.llm.client import (
     Completion,
     LLMClient,
     LLMError,
@@ -84,7 +84,7 @@ def test_default_model_comes_from_env(monkeypatch: pytest.MonkeyPatch, tmp_path:
 
 
 def test_spend_cap_stops_live_calls_but_not_cache_hits(tmp_path: Path) -> None:
-    from concentrate.llm.client import BudgetExceeded
+    from tenor.llm.client import BudgetExceeded
 
     one_call = cost_usd("claude-sonnet-5-5", 1000, 500)  # 1000 in, 500 out per fake call
     backend = FakeBackend()
@@ -101,7 +101,7 @@ def test_spend_cap_stops_live_calls_but_not_cache_hits(tmp_path: Path) -> None:
 
 
 def test_spend_cap_from_env(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    from concentrate.llm.client import BudgetExceeded
+    from tenor.llm.client import BudgetExceeded
 
     monkeypatch.setenv("CONCENTRATE_MAX_USD", "0")
     client = LLMClient(FakeBackend(), model="claude-sonnet-5-5", cache_dir=tmp_path)
@@ -110,7 +110,7 @@ def test_spend_cap_from_env(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> 
 
 
 def test_batch_refused_before_submit_when_worst_case_exceeds_cap(tmp_path: Path) -> None:
-    from concentrate.llm.client import BudgetExceeded, prefetch_structured
+    from tenor.llm.client import BudgetExceeded, prefetch_structured
 
     class NeverSubmit:
         def create(self, requests: list[dict[str, object]]) -> str:

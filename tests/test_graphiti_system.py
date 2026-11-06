@@ -12,9 +12,9 @@ import pytest
 from graphiti_core.prompts.dedupe_edges import EdgeDuplicate
 from graphiti_core.prompts.models import Message
 
-from concentrate import watchdog
-from concentrate.agents.baselines import ANSWER_PROMPT, ANSWER_SCHEMA
-from concentrate.agents.graphiti_system import (
+from tenor import watchdog
+from tenor.agents.baselines import ANSWER_PROMPT, ANSWER_SCHEMA
+from tenor.agents.graphiti_system import (
     AccountedAnthropicClient,
     Entity,
     Episode,
@@ -26,15 +26,15 @@ from concentrate.agents.graphiti_system import (
     build_context,
     episodes_for,
 )
-from concentrate.agents.kuzu_safety import (
+from tenor.agents.kuzu_safety import (
     FORCED_EXIT_MARKER,
     ORPHANED_FILE,
     GraphStoreError,
     Probe,
 )
-from concentrate.core.models import MeetingNote
-from concentrate.evals.runner import load_corpus
-from concentrate.llm.client import LLMClient, cost_usd
+from tenor.core.models import MeetingNote
+from tenor.evals.runner import load_corpus
+from tenor.llm.client import LLMClient, cost_usd
 from tests.test_baselines import FIXTURES, FakeLLM, HashEmbedder, _q
 
 W2, W5 = "not_TifZvvCb7IQQHS", "not_i0kpeW6NCQ4Jpe"  # Teams pricing reviews ($20, then $25)

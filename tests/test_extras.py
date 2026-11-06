@@ -8,14 +8,14 @@ from pathlib import Path
 
 import pytest
 
-from concentrate.core import granola
-from concentrate.synth.extras import PREFIX, ROOM, ROOM_EMAIL
-from concentrate.synth.extras_checks import probe
-from concentrate.synth.noise import NoiseRates
-from concentrate.synth.pipeline import EXTRAS_VERSION, build, generate_dataset
-from concentrate.synth.questions import NEEDS_TRANSCRIPT, Question
-from concentrate.synth.render import GoldMap, folder_models, render_meeting
-from concentrate.synth.world import World
+from tenor.core import granola
+from tenor.synth.extras import PREFIX, ROOM, ROOM_EMAIL
+from tenor.synth.extras_checks import probe
+from tenor.synth.noise import NoiseRates
+from tenor.synth.pipeline import EXTRAS_VERSION, build, generate_dataset
+from tenor.synth.questions import NEEDS_TRANSCRIPT, Question
+from tenor.synth.render import GoldMap, folder_models, render_meeting
+from tenor.synth.world import World
 
 REPO_SET = Path(__file__).resolve().parent.parent / "data" / "fixtures" / "northwind"
 

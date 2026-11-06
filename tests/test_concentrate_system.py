@@ -8,10 +8,10 @@ from types import SimpleNamespace
 
 import pytest
 
-from concentrate.agents.concentrate_system import COMPLETE_MARKER, ConcentrateSystem
-from concentrate.core.models import MeetingNote
-from concentrate.llm.client import LLMClient, cost_usd, turn_cache_path
-from concentrate.memory.enhance_stub import STUB_ENHANCER
+from tenor.agents.concentrate_system import COMPLETE_MARKER, ConcentrateSystem
+from tenor.core.models import MeetingNote
+from tenor.llm.client import LLMClient, cost_usd, turn_cache_path
+from tenor.memory.enhance_stub import STUB_ENHANCER
 from tests.memory_helpers import ScriptedLLM, extraction, fact, make_note
 
 A, B, C = "not_AAAAAAAAAAAAAA", "not_BBBBBBBBBBBBBB", "not_CCCCCCCCCCCCCC"

@@ -33,7 +33,7 @@ body:
     id: cost
     attributes:
       label: Cost estimate
-      description: Output of `concentrate eval --xl --split dev --systems <key> --estimate`, including ingest cost for write-time systems.
+      description: Output of `tenor eval --xl --split dev --systems <key> --estimate`, including ingest cost for write-time systems.
   - type: textarea
     id: results
     attributes:
@@ -52,4 +52,4 @@ body:
           required: true
         - label: Tests run without network or API keys
           required: true
-        - label: LLM calls go through `concentrate.llm`
+        - label: LLM calls go through `tenor.llm`

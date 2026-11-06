@@ -5,11 +5,11 @@ from __future__ import annotations
 from collections.abc import Callable
 from datetime import UTC, datetime
 
-from concentrate.core.models import Channel
-from concentrate.core.store import NoteStore
-from concentrate.sources.fixtures import FixtureSource
-from concentrate.sources.granola_api import GranolaAPISource
-from concentrate.sources.poller import sync
+from tenor.core.models import Channel
+from tenor.core.store import NoteStore
+from tenor.sources.fixtures import FixtureSource
+from tenor.sources.granola_api import GranolaAPISource
+from tenor.sources.poller import sync
 from tests.conftest import SAMPLE
 from tests.fake_granola import FakeGranola
 

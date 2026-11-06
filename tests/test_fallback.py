@@ -10,11 +10,11 @@ from pathlib import Path
 
 import pytest
 
-from concentrate.agents.concentrate_system import ConcentrateSystem
-from concentrate.core.models import MeetingNote
-from concentrate.llm.client import LLMClient, TurnCompletion, TurnRequest, estimate_tokens
-from concentrate.memory.enhance_stub import STUB_ENHANCER
-from concentrate.memory.fallback import (
+from tenor.agents.concentrate_system import ConcentrateSystem
+from tenor.core.models import MeetingNote
+from tenor.llm.client import LLMClient, TurnCompletion, TurnRequest, estimate_tokens
+from tenor.memory.enhance_stub import STUB_ENHANCER
+from tenor.memory.fallback import (
     TranscriptFallback,
     cited_line_ids,
     resolved_labels,

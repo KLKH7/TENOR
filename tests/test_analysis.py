@@ -10,17 +10,17 @@ from typing import Any
 import pytest
 from typer.testing import CliRunner
 
-from concentrate.cli import app
-from concentrate.evals import stats
-from concentrate.evals.analyze import load_rows, pairwise, write_analysis
-from concentrate.evals.failures import (
+from tenor.cli import app
+from tenor.evals import stats
+from tenor.evals.analyze import load_rows, pairwise, write_analysis
+from tenor.evals.failures import (
     GroundTruth,
     classify,
     failure_table,
     failures,
     llm_request,
 )
-from concentrate.evals.pareto import SystemPoint, breakeven_volume, frontier
+from tenor.evals.pareto import SystemPoint, breakeven_volume, frontier
 
 # -- stats ---------------------------------------------------------------------------------------
 
