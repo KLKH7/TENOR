@@ -181,8 +181,8 @@ RETENTION_ROWS = (  # (condition, label, product colour)
     ("A", "Granola Chat (transcript kept)", "granola"),
     ("B", "Answers from Granola's notes", "granola"),
     ("B_wispr", "Answers from Wispr Flow's notes", "wispr"),
-    ("C", "Notes + extracted facts", "granola"),
-    ("D", "Notes + transcript when needed", "granola"),
+    ("C", "Granola's notes\n+ extracted facts", "granola"),
+    ("D", "Granola's notes\n+ transcript when needed", "granola"),
 )
 
 
