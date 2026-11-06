@@ -448,3 +448,15 @@ def test_wilson_and_bootstrap_ci() -> None:
     ci = E.bootstrap_ci([0.0, 1.0] * 10, seed=3)
     assert ci == E.bootstrap_ci([0.0, 1.0] * 10, seed=3)
     assert ci is not None and ci[0] < 0.5 < ci[1]
+
+
+def test_staged_run_caches_map_then_merge(tmp_path: Path) -> None:
+    backend, ledger = Scripted(), Ledger()
+    reader = LLMClient(backend, model="claude-opus-5-5", cache_dir=tmp_path, ledger=ledger)
+    E.run_stage(reader, _ctx(), "map", chunk_chars=120)
+    assert set(backend.calls) == {E.ENUMERATE_PROMPT}
+    E.run_stage(reader, _ctx(), "merge", chunk_chars=120)
+    assert backend.calls.count(E.MERGE_PROMPT) == 1
+    assert backend.calls.count(E.ENUMERATE_PROMPT) == len(E.chunk_lines(_ctx().transcript, 120))
+    with pytest.raises(ValueError):
+        E.run_stage(reader, _ctx(), "verify")

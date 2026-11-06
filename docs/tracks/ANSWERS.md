@@ -40,6 +40,7 @@ Users ask their note-taker about past meetings ("what did we decide about the pr
 
 | Condition | What answers |
 |---|---|
+| **C** | Granola Chat with transcripts kept: its recorded answers, scored item by item (the fair baseline) |
 | **N** | Granola's notes only (`answer.v1`; the deletion run's `notes_only`) |
 | **L** | List every item from Granola's transcript: map over ~3k-token chunks (`enumerate.v1`, each item with a verbatim quote and line numbers), then merge duplicates (`enumerate_merge.v1`) |
 | **LD** | L, then one verifier call per item against its quoted lines (`verify_item.v2`); unsupported items dropped |
@@ -49,6 +50,41 @@ Users ask their note-taker about past meetings ("what did we decide about the pr
 - **Gold.** One item per AMI human DECISIONS / ACTIONS / PROBLEMS sentence behind the question, plus the speaker roster.
 - **Scoring is per item, not one label.** A Sonnet judge (`judge_items.v1`) maps each answer item to the gold items it states and checks it against AMI's reference transcript. Recall = gold items covered. Precision is reported twice: strict (states a gold item) and lenient (gold, or true per the transcript), so true items the gold left out are not counted wrong. F1 of each.
 - **LD and LM are scored from L's item judgments** (one judge call, not three), so their difference from L is the filter alone, not judge noise. LM lists the same items as L, so its recall and precision equal L's by construction; its test is whether "unconfirmed" items are less often right than confirmed ones.
-- **Tests.** Paired sign tests per question: L vs N, LD vs L, LM vs L, LM vs LD, on recall and both precisions. With 30 questions only large effects can reach significance.
+- **Tests.** Paired sign tests per question: L vs C and LD vs C (headline), then L vs N, LD vs L, LM vs L, LM vs LD, on recall and both precisions. With 30 questions only large effects can reach significance.
 - **Known limits.** Granola's AMI transcripts label every line "Them", so the speaker label carries no information and owners are inferred. The lenient precision accepts any true item, so a decision question answered with true action items scores well on it; the strict precision does not. `verify_item.v1` rejected items whose owner the lines could not show; v2 judges content only (changed on DEV).
-- **Status.** Pilot on DEV only (sanity check, not a result). Full run not started; it needs approval. Code: `concentrate ami list-check` ([`list_check.py`](../../packages/concentrate/evals/list_check.py)).
+- **Status.** Full run done (results below). Code: `concentrate ami list-check` ([`list_check.py`](../../packages/concentrate/evals/list_check.py)).
+
+### E1 results (Preliminary)
+
+Real AMI meetings played into Granola. 30 list questions (DEV 6 + TEST 24) on 5 meetings. Automated judge. Mean per question, 95% bootstrap CI. Numbers: [`evals/reports/ami/list_check.json`](../../evals/reports/ami/list_check.json).
+
+| Condition | Items listed | Recall | Precision, lenient | Precision, strict | F1, lenient |
+|---|---|---|---|---|---|
+| C: Granola Chat | 97 | 0.74 [0.61, 0.87] | 0.86 [0.77, 0.93] | 0.44 | 0.71 [0.58, 0.83] |
+| N: notes only | 94 | 0.73 [0.58, 0.86] | 0.72 [0.61, 0.83] | 0.42 | 0.61 [0.48, 0.74] |
+| L: list every item | 357 | **0.90** [0.79, 0.98] | 0.61 [0.51, 0.71] | 0.22 | 0.68 [0.58, 0.78] |
+| LD: list, check, drop | 278 | 0.80 [0.66, 0.91] | 0.65 [0.55, 0.76] | 0.23 | 0.68 [0.56, 0.79] |
+| LM: list, check, mark | 357 | 0.90 | 0.61 | 0.22 | 0.68 |
+
+| Paired test (sign test, n = 30) | Recall: wins / losses | Lenient precision: wins / losses |
+|---|---|---|
+| **L vs Chat** | **8 / 0, p = 0.008** | **3 / 23, p < 0.001** |
+| **LD vs Chat** | 6 / 2, p = 0.29 (not significant) | **3 / 22, p < 0.001** |
+| L vs notes only | 8 / 0, p = 0.008 | 12 / 16, p = 0.57 (not significant) |
+| LD vs L | 0 / 4, p = 0.13 (not significant) | 16 / 6, p = 0.053 (not significant) |
+
+- **Listing everything finds more gold items than Chat, and adds many wrong or off-topic ones.** L covers 0.90 of gold items vs Chat's 0.74 (8 questions better, 0 worse). But 39% of L's items are not right answers to the question, vs 14% of Chat's. F1 is a tie (0.68 vs 0.71).
+- **Dropping unchecked items does not fix it.** LD gives back recall (0.80, no longer better than Chat) and gains only 4 points of precision.
+- **The "unconfirmed" mark carries some information.** Confirmed items: 72% right (199 / 278, Wilson CI 66–77%). Unconfirmed: 43% (34 / 79, CI 33–54%). Against the gold alone the mark carries none (21% vs 25%).
+- **L's wrong items look like over-inclusion, not invention.** The judge marked 124 of 357 L items wrong. In a sample of 8, every judge reason was "proposed but not decided", "not assigned" or "another topic"; none was "never said". Every one of the 357 quotes appears in the transcript.
+- **By category,** L's recall gain is largest on decisions (0.82 vs Chat 0.57, n = 10). Its precision loss is largest on action items (0.50 vs 0.84, n = 16).
+
+**Threats to validity**
+- **One meeting set.** 5 meetings and 30 questions; 25 of the questions come from one 4-meeting series. With this n, only large effects reach significance.
+- **Gold lists are short (1–2 items, templated).** Strict precision mostly measures list length, not error. Read the lenient column.
+- **No speaker names.** Granola's transcript labels every line "Them", so "who owns it" can't be checked against a quote. Owners are inferred.
+- **Automated judge, lenient on category.** One Sonnet judge, no human check yet. It accepts any true item, even when it is a different kind of item than the one asked for. Our judge over-counts errors elsewhere ([`CALIBRATED_JUDGING.md`](../method/CALIBRATED_JUDGING.md)).
+- **Checker = reader model.** The checker and the lister are both Opus, so they may share blind spots. The judge is a different model.
+- **Chat answers were recorded once,** on another day. L reads the full transcript of one meeting, while Chat chose what to read.
+
+Cost: $7.83 in total (pilot $0.37, map $2.23, merge $0.44, check + judge $4.78), under the $11.00 cap.

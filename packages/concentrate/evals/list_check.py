@@ -866,6 +866,23 @@ def list_items(
     return cands, apply_groups(cands, [(g.members, g.item) for g in merged.groups])
 
 
+STAGES = ("map", "merge", "all")  # a staged run: map only, map + merge, or everything
+STAGE_LINES = {"map": ("L map",), "merge": ("L map", "L merge")}
+
+
+def run_stage(reader: LLMClient, ctx: Context, stage: str, chunk_chars: int = CHUNK_CHARS) -> None:
+    """Run (and cache) only the first steps of L for ``ctx``: the map calls (``map``) or map
+    and merge (``merge``). A later full run replays them, so the rest can be priced exactly."""
+    if stage == "merge":
+        list_items(reader, ctx, chunk_chars)
+        return
+    if stage != "map":
+        raise ValueError(f"stage must be map or merge, not {stage!r}")
+    chunks = chunk_lines(ctx.transcript, chunk_chars)
+    for i, ch in enumerate(chunks):
+        reader.structured(enumerate_request(ctx.question, ch, i, len(chunks)), EnumerateOut)
+
+
 def check_items(
     reader: LLMClient, ctx: Context, items: Sequence[Item]
 ) -> tuple[dict[str, bool], dict[str, str]]:

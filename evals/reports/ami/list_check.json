@@ -1,0 +1,1024 @@
+{
+ "meta": {
+  "chunk_chars": 12000,
+  "context_lines": 2,
+  "date": "20261106T002704Z",
+  "git": {
+   "dirty": true,
+   "sha": "db0ad38"
+  },
+  "judge_model": "claude-sonnet-5-5",
+  "labels": {
+   "C": "C: Granola Chat (transcripts kept; recorded answers)",
+   "L": "L: list every item (transcript, chunked)",
+   "LD": "LD: list, check, drop unsupported",
+   "LM": "LM: list, check, mark unsupported 'unconfirmed'",
+   "N": "N: Granola notes only"
+  },
+  "max_usd": 8.32,
+  "n_questions": 30,
+  "overlap_lines": 3,
+  "pilot": false,
+  "prompts": {
+   "C": [
+    "granola:chat"
+   ],
+   "L": [
+    "enumerate.v1",
+    "enumerate_merge.v1"
+   ],
+   "LD": [
+    "enumerate.v1",
+    "enumerate_merge.v1",
+    "verify_item.v2"
+   ],
+   "LM": [
+    "enumerate.v1",
+    "enumerate_merge.v1",
+    "verify_item.v2"
+   ],
+   "N": [
+    "answer.v1"
+   ],
+   "judge": [
+    "judge_items.v1"
+   ]
+  },
+  "reader_model": "claude-opus-5-5",
+  "seed": 42,
+  "spent_usd": 4.781716000000001,
+  "stopped_early": null
+ },
+ "summary": {
+  "by_category": {
+   "action_what": {
+    "C": {
+     "ci_f1_any": [
+      0.5821,
+      0.8952
+     ],
+     "ci_f1_gold": [
+      0.4267,
+      0.7392
+     ],
+     "ci_precision_any": [
+      0.7406,
+      0.9323
+     ],
+     "ci_precision_gold": [
+      0.3385,
+      0.6719
+     ],
+     "ci_recall": [
+      0.6312,
+      0.9688
+     ],
+     "mean_f1_any": 0.7571428571428571,
+     "mean_f1_gold": 0.5925,
+     "mean_precision_any": 0.8395833333333333,
+     "mean_precision_gold": 0.509375,
+     "mean_recall": 0.81875,
+     "micro": {
+      "any_hits": 34,
+      "covered": 17,
+      "gold_hits": 18,
+      "n_gold": 22,
+      "n_items": 43
+     },
+     "micro_precision_any": 0.7906976744186046,
+     "micro_precision_gold": 0.4186046511627907,
+     "micro_recall": 0.7727272727272727,
+     "n_questions": 16,
+     "n_with_items": 16
+    },
+    "L": {
+     "ci_f1_any": [
+      0.4847,
+      0.7318
+     ],
+     "ci_f1_gold": [
+      0.2444,
+      0.4321
+     ],
+     "ci_precision_any": [
+      0.381,
+      0.6297
+     ],
+     "ci_precision_gold": [
+      0.1504,
+      0.3028
+     ],
+     "ci_recall": [
+      0.7875,
+      1.0
+     ],
+     "mean_f1_any": 0.6128251308011822,
+     "mean_f1_gold": 0.3332153308788823,
+     "mean_precision_any": 0.5029060502406091,
+     "mean_precision_gold": 0.21887602797529268,
+     "mean_recall": 0.925,
+     "micro": {
+      "any_hits": 61,
+      "covered": 20,
+      "gold_hits": 27,
+      "n_gold": 22,
+      "n_items": 134
+     },
+     "micro_precision_any": 0.4552238805970149,
+     "micro_precision_gold": 0.20149253731343283,
+     "micro_recall": 0.9090909090909091,
+     "n_questions": 16,
+     "n_with_items": 16
+    },
+    "LD": {
+     "ci_f1_any": [
+      0.433,
+      0.7662
+     ],
+     "ci_f1_gold": [
+      0.2415,
+      0.5018
+     ],
+     "ci_precision_any": [
+      0.4083,
+      0.7101
+     ],
+     "ci_precision_gold": [
+      0.158,
+      0.3995
+     ],
+     "ci_recall": [
+      0.5625,
+      0.9375
+     ],
+     "mean_f1_any": 0.6052820725785842,
+     "mean_f1_gold": 0.36499284791435954,
+     "mean_precision_any": 0.5552421536796537,
+     "mean_precision_gold": 0.2673633658008658,
+     "mean_recall": 0.76875,
+     "micro": {
+      "any_hits": 51,
+      "covered": 17,
+      "gold_hits": 23,
+      "n_gold": 22,
+      "n_items": 96
+     },
+     "micro_precision_any": 0.53125,
+     "micro_precision_gold": 0.23958333333333334,
+     "micro_recall": 0.7727272727272727,
+     "n_questions": 16,
+     "n_with_items": 16
+    },
+    "LM": {
+     "ci_f1_any": [
+      0.4847,
+      0.7318
+     ],
+     "ci_f1_gold": [
+      0.2444,
+      0.4321
+     ],
+     "ci_precision_any": [
+      0.381,
+      0.6297
+     ],
+     "ci_precision_gold": [
+      0.1504,
+      0.3028
+     ],
+     "ci_recall": [
+      0.7875,
+      1.0
+     ],
+     "mean_f1_any": 0.6128251308011822,
+     "mean_f1_gold": 0.3332153308788823,
+     "mean_precision_any": 0.5029060502406091,
+     "mean_precision_gold": 0.21887602797529268,
+     "mean_recall": 0.925,
+     "micro": {
+      "any_hits": 61,
+      "covered": 20,
+      "gold_hits": 27,
+      "n_gold": 22,
+      "n_items": 134
+     },
+     "micro_precision_any": 0.4552238805970149,
+     "micro_precision_gold": 0.20149253731343283,
+     "micro_recall": 0.9090909090909091,
+     "n_questions": 16,
+     "n_with_items": 16
+    },
+    "N": {
+     "ci_f1_any": [
+      0.4625,
+      0.797
+     ],
+     "ci_f1_gold": [
+      0.3829,
+      0.6904
+     ],
+     "ci_precision_any": [
+      0.52,
+      0.8311
+     ],
+     "ci_precision_gold": [
+      0.3267,
+      0.6389
+     ],
+     "ci_recall": [
+      0.575,
+      0.95
+     ],
+     "mean_f1_any": 0.6386904761904761,
+     "mean_f1_gold": 0.5445833333333333,
+     "mean_precision_any": 0.6811111111111111,
+     "mean_precision_gold": 0.4766666666666667,
+     "mean_recall": 0.7875,
+     "micro": {
+      "any_hits": 24,
+      "covered": 16,
+      "gold_hits": 16,
+      "n_gold": 22,
+      "n_items": 39
+     },
+     "micro_precision_any": 0.6153846153846154,
+     "micro_precision_gold": 0.41025641025641024,
+     "micro_recall": 0.7272727272727273,
+     "n_questions": 16,
+     "n_with_items": 15
+    }
+   },
+   "decision": {
+    "C": {
+     "ci_f1_any": [
+      0.2905,
+      0.7867
+     ],
+     "ci_f1_gold": [
+      0.24,
+      0.6
+     ],
+     "ci_precision_any": [
+      0.6417,
+      1.0
+     ],
+     "ci_precision_gold": [
+      0.2,
+      0.6
+     ],
+     "ci_recall": [
+      0.3,
+      0.8167
+     ],
+     "mean_f1_any": 0.5438095238095239,
+     "mean_f1_gold": 0.42666666666666664,
+     "mean_precision_any": 0.825,
+     "mean_precision_gold": 0.39166666666666666,
+     "mean_recall": 0.5666666666666667,
+     "micro": {
+      "any_hits": 24,
+      "covered": 9,
+      "gold_hits": 11,
+      "n_gold": 16,
+      "n_items": 30
+     },
+     "micro_precision_any": 0.8,
+     "micro_precision_gold": 0.36666666666666664,
+     "micro_recall": 0.5625,
+     "n_questions": 10,
+     "n_with_items": 10
+    },
+    "L": {
+     "ci_f1_any": [
+      0.4842,
+      0.8329
+     ],
+     "ci_f1_gold": [
+      0.1866,
+      0.4442
+     ],
+     "ci_precision_any": [
+      0.4819,
+      0.7843
+     ],
+     "ci_precision_gold": [
+      0.1132,
+      0.3311
+     ],
+     "ci_recall": [
+      0.6,
+      0.9667
+     ],
+     "mean_f1_any": 0.6760708266902297,
+     "mean_f1_gold": 0.3112527815142513,
+     "mean_precision_any": 0.6422430510665805,
+     "mean_precision_gold": 0.21602133160956688,
+     "mean_recall": 0.8166666666666667,
+     "micro": {
+      "any_hits": 95,
+      "covered": 13,
+      "gold_hits": 33,
+      "n_gold": 16,
+      "n_items": 143
+     },
+     "micro_precision_any": 0.6643356643356644,
+     "micro_precision_gold": 0.23076923076923078,
+     "micro_recall": 0.8125,
+     "n_questions": 10,
+     "n_with_items": 10
+    },
+    "LD": {
+     "ci_f1_any": [
+      0.49,
+      0.8304
+     ],
+     "ci_f1_gold": [
+      0.166,
+      0.4132
+     ],
+     "ci_precision_any": [
+      0.5322,
+      0.8431
+     ],
+     "ci_precision_gold": [
+      0.0966,
+      0.312
+     ],
+     "ci_recall": [
+      0.55,
+      0.95
+     ],
+     "mean_f1_any": 0.676423782951916,
+     "mean_f1_gold": 0.283968253968254,
+     "mean_precision_any": 0.695975135975136,
+     "mean_precision_gold": 0.1966501554001554,
+     "mean_recall": 0.7666666666666667,
+     "micro": {
+      "any_hits": 78,
+      "covered": 12,
+      "gold_hits": 21,
+      "n_gold": 16,
+      "n_items": 109
+     },
+     "micro_precision_any": 0.7155963302752294,
+     "micro_precision_gold": 0.1926605504587156,
+     "micro_recall": 0.75,
+     "n_questions": 10,
+     "n_with_items": 10
+    },
+    "LM": {
+     "ci_f1_any": [
+      0.4842,
+      0.8329
+     ],
+     "ci_f1_gold": [
+      0.1866,
+      0.4442
+     ],
+     "ci_precision_any": [
+      0.4819,
+      0.7843
+     ],
+     "ci_precision_gold": [
+      0.1132,
+      0.3311
+     ],
+     "ci_recall": [
+      0.6,
+      0.9667
+     ],
+     "mean_f1_any": 0.6760708266902297,
+     "mean_f1_gold": 0.3112527815142513,
+     "mean_precision_any": 0.6422430510665805,
+     "mean_precision_gold": 0.21602133160956688,
+     "mean_recall": 0.8166666666666667,
+     "micro": {
+      "any_hits": 95,
+      "covered": 13,
+      "gold_hits": 33,
+      "n_gold": 16,
+      "n_items": 143
+     },
+     "micro_precision_any": 0.6643356643356644,
+     "micro_precision_gold": 0.23076923076923078,
+     "micro_recall": 0.8125,
+     "n_questions": 10,
+     "n_with_items": 10
+    },
+    "N": {
+     "ci_f1_any": [
+      0.2619,
+      0.7133
+     ],
+     "ci_f1_gold": [
+      0.2133,
+      0.5874
+     ],
+     "ci_precision_any": [
+      0.585,
+      0.925
+     ],
+     "ci_precision_gold": [
+      0.165,
+      0.6
+     ],
+     "ci_recall": [
+      0.3,
+      0.8167
+     ],
+     "mean_f1_any": 0.49428571428571433,
+     "mean_f1_gold": 0.40034632034632034,
+     "mean_precision_any": 0.77,
+     "mean_precision_gold": 0.375,
+     "mean_recall": 0.5666666666666667,
+     "micro": {
+      "any_hits": 27,
+      "covered": 9,
+      "gold_hits": 13,
+      "n_gold": 16,
+      "n_items": 37
+     },
+     "micro_precision_any": 0.7297297297297297,
+     "micro_precision_gold": 0.35135135135135137,
+     "micro_recall": 0.5625,
+     "n_questions": 10,
+     "n_with_items": 10
+    }
+   },
+   "problem": {
+    "C": {
+     "ci_f1_any": [
+      0.75,
+      1.0
+     ],
+     "ci_f1_gold": [
+      0.2857,
+      0.4722
+     ],
+     "ci_precision_any": [
+      1.0,
+      1.0
+     ],
+     "ci_precision_gold": [
+      0.1833,
+      0.3095
+     ],
+     "ci_recall": [
+      0.625,
+      1.0
+     ],
+     "mean_f1_any": 0.9166666666666666,
+     "mean_f1_gold": 0.37896825396825395,
+     "mean_precision_any": 1.0,
+     "mean_precision_gold": 0.2464285714285714,
+     "mean_recall": 0.875,
+     "micro": {
+      "any_hits": 24,
+      "covered": 6,
+      "gold_hits": 6,
+      "n_gold": 7,
+      "n_items": 24
+     },
+     "micro_precision_any": 1.0,
+     "micro_precision_gold": 0.25,
+     "micro_recall": 0.8571428571428571,
+     "n_questions": 4,
+     "n_with_items": 4
+    },
+    "L": {
+     "ci_f1_any": [
+      0.9464,
+      1.0
+     ],
+     "ci_f1_gold": [
+      0.2732,
+      0.4583
+     ],
+     "ci_precision_any": [
+      0.9,
+      1.0
+     ],
+     "ci_precision_gold": [
+      0.16,
+      0.3
+     ],
+     "ci_recall": [
+      1.0,
+      1.0
+     ],
+     "mean_f1_any": 0.9735221674876847,
+     "mean_f1_gold": 0.36393105629348516,
+     "mean_precision_any": 0.95,
+     "mean_precision_gold": 0.22666666666666666,
+     "mean_recall": 1.0,
+     "micro": {
+      "any_hits": 77,
+      "covered": 7,
+      "gold_hits": 18,
+      "n_gold": 7,
+      "n_items": 80
+     },
+     "micro_precision_any": 0.9625,
+     "micro_precision_gold": 0.225,
+     "micro_recall": 1.0,
+     "n_questions": 4,
+     "n_with_items": 4
+    },
+    "LD": {
+     "ci_f1_any": [
+      0.9458,
+      1.0
+     ],
+     "ci_f1_gold": [
+      0.2598,
+      0.4048
+     ],
+     "ci_precision_any": [
+      0.8976,
+      1.0
+     ],
+     "ci_precision_gold": [
+      0.15,
+      0.256
+     ],
+     "ci_recall": [
+      1.0,
+      1.0
+     ],
+     "mean_f1_any": 0.9728835978835979,
+     "mean_f1_gold": 0.3246965452847806,
+     "mean_precision_any": 0.9488095238095238,
+     "mean_precision_gold": 0.19642857142857142,
+     "mean_recall": 1.0,
+     "micro": {
+      "any_hits": 70,
+      "covered": 7,
+      "gold_hits": 14,
+      "n_gold": 7,
+      "n_items": 73
+     },
+     "micro_precision_any": 0.958904109589041,
+     "micro_precision_gold": 0.1917808219178082,
+     "micro_recall": 1.0,
+     "n_questions": 4,
+     "n_with_items": 4
+    },
+    "LM": {
+     "ci_f1_any": [
+      0.9464,
+      1.0
+     ],
+     "ci_f1_gold": [
+      0.2732,
+      0.4583
+     ],
+     "ci_precision_any": [
+      0.9,
+      1.0
+     ],
+     "ci_precision_gold": [
+      0.16,
+      0.3
+     ],
+     "ci_recall": [
+      1.0,
+      1.0
+     ],
+     "mean_f1_any": 0.9735221674876847,
+     "mean_f1_gold": 0.36393105629348516,
+     "mean_precision_any": 0.95,
+     "mean_precision_gold": 0.22666666666666666,
+     "mean_recall": 1.0,
+     "micro": {
+      "any_hits": 77,
+      "covered": 7,
+      "gold_hits": 18,
+      "n_gold": 7,
+      "n_items": 80
+     },
+     "micro_precision_any": 0.9625,
+     "micro_precision_gold": 0.225,
+     "micro_recall": 1.0,
+     "n_questions": 4,
+     "n_with_items": 4
+    },
+    "N": {
+     "ci_f1_any": [
+      0.6558,
+      0.9545
+     ],
+     "ci_f1_gold": [
+      0.3667,
+      0.6
+     ],
+     "ci_precision_any": [
+      0.6333,
+      0.9167
+     ],
+     "ci_precision_gold": [
+      0.2333,
+      0.4583
+     ],
+     "ci_recall": [
+      0.625,
+      1.0
+     ],
+     "mean_f1_any": 0.8076298701298701,
+     "mean_f1_gold": 0.475,
+     "mean_precision_any": 0.775,
+     "mean_precision_gold": 0.3416666666666667,
+     "mean_recall": 0.875,
+     "micro": {
+      "any_hits": 14,
+      "covered": 6,
+      "gold_hits": 6,
+      "n_gold": 7,
+      "n_items": 18
+     },
+     "micro_precision_any": 0.7777777777777778,
+     "micro_precision_gold": 0.3333333333333333,
+     "micro_recall": 0.8571428571428571,
+     "n_questions": 4,
+     "n_with_items": 4
+    }
+   }
+  },
+  "conditions": {
+   "C": {
+    "ci_f1_any": [
+     0.5762,
+     0.8295
+    ],
+    "ci_f1_gold": [
+     0.4002,
+     0.6172
+    ],
+    "ci_precision_any": [
+     0.7678,
+     0.9311
+    ],
+    "ci_precision_gold": [
+     0.3224,
+     0.5507
+    ],
+    "ci_recall": [
+     0.6056,
+     0.8733
+    ],
+    "mean_f1_any": 0.7073015873015873,
+    "mean_f1_gold": 0.5087513227513227,
+    "mean_precision_any": 0.8561111111111112,
+    "mean_precision_gold": 0.43507936507936507,
+    "mean_recall": 0.7422222222222222,
+    "micro": {
+     "any_hits": 82,
+     "covered": 32,
+     "gold_hits": 35,
+     "n_gold": 45,
+     "n_items": 97
+    },
+    "micro_precision_any": 0.845360824742268,
+    "micro_precision_gold": 0.36082474226804123,
+    "micro_recall": 0.7111111111111111,
+    "n_questions": 30,
+    "n_with_items": 30
+   },
+   "L": {
+    "ci_f1_any": [
+     0.5787,
+     0.7796
+    ],
+    "ci_f1_gold": [
+     0.2625,
+     0.4009
+    ],
+    "ci_precision_any": [
+     0.5102,
+     0.7078
+    ],
+    "ci_precision_gold": [
+     0.1647,
+     0.2787
+    ],
+    "ci_recall": [
+     0.7933,
+     0.9833
+    ],
+    "mean_f1_any": 0.6819999676557317,
+    "mean_f1_gold": 0.3299899111459524,
+    "mean_precision_any": 0.6089642438171851,
+    "mean_precision_gold": 0.21896321434556726,
+    "mean_recall": 0.8988888888888888,
+    "micro": {
+     "any_hits": 233,
+     "covered": 40,
+     "gold_hits": 78,
+     "n_gold": 45,
+     "n_items": 357
+    },
+    "micro_precision_any": 0.6526610644257703,
+    "micro_precision_gold": 0.2184873949579832,
+    "micro_recall": 0.8888888888888888,
+    "n_questions": 30,
+    "n_with_items": 30
+   },
+   "LD": {
+    "ci_f1_any": [
+     0.5573,
+     0.7879
+    ],
+    "ci_f1_gold": [
+     0.253,
+     0.4218
+    ],
+    "ci_precision_any": [
+     0.545,
+     0.7595
+    ],
+    "ci_precision_gold": [
+     0.1658,
+     0.3217
+    ],
+    "ci_recall": [
+     0.6611,
+     0.91
+    ],
+    "mean_f1_any": 0.6780095127436966,
+    "mean_f1_gold": 0.3326118095817138,
+    "mean_precision_any": 0.6546287971287972,
+    "mean_precision_gold": 0.23433432308432306,
+    "mean_recall": 0.7988888888888889,
+    "micro": {
+     "any_hits": 199,
+     "covered": 36,
+     "gold_hits": 58,
+     "n_gold": 45,
+     "n_items": 278
+    },
+    "micro_precision_any": 0.7158273381294964,
+    "micro_precision_gold": 0.20863309352517986,
+    "micro_recall": 0.8,
+    "n_questions": 30,
+    "n_with_items": 30
+   },
+   "LM": {
+    "ci_f1_any": [
+     0.5787,
+     0.7796
+    ],
+    "ci_f1_gold": [
+     0.2625,
+     0.4009
+    ],
+    "ci_precision_any": [
+     0.5102,
+     0.7078
+    ],
+    "ci_precision_gold": [
+     0.1647,
+     0.2787
+    ],
+    "ci_recall": [
+     0.7933,
+     0.9833
+    ],
+    "mean_f1_any": 0.6819999676557317,
+    "mean_f1_gold": 0.3299899111459524,
+    "mean_precision_any": 0.6089642438171851,
+    "mean_precision_gold": 0.21896321434556726,
+    "mean_recall": 0.8988888888888888,
+    "micro": {
+     "any_hits": 233,
+     "covered": 40,
+     "gold_hits": 78,
+     "n_gold": 45,
+     "n_items": 357
+    },
+    "micro_precision_any": 0.6526610644257703,
+    "micro_precision_gold": 0.2184873949579832,
+    "micro_recall": 0.8888888888888888,
+    "n_questions": 30,
+    "n_with_items": 30
+   },
+   "N": {
+    "ci_f1_any": [
+     0.4806,
+     0.7355
+    ],
+    "ci_f1_gold": [
+     0.3749,
+     0.5961
+    ],
+    "ci_precision_any": [
+     0.6144,
+     0.827
+    ],
+    "ci_precision_gold": [
+     0.319,
+     0.5408
+    ],
+    "ci_recall": [
+     0.5833,
+     0.8611
+    ],
+    "mean_f1_any": 0.613080808080808,
+    "mean_f1_gold": 0.48722655122655123,
+    "mean_precision_any": 0.7247126436781609,
+    "mean_precision_gold": 0.4229885057471265,
+    "mean_recall": 0.7255555555555555,
+    "micro": {
+     "any_hits": 65,
+     "covered": 31,
+     "gold_hits": 35,
+     "n_gold": 45,
+     "n_items": 94
+    },
+    "micro_precision_any": 0.6914893617021277,
+    "micro_precision_gold": 0.3723404255319149,
+    "micro_recall": 0.6888888888888889,
+    "n_questions": 30,
+    "n_with_items": 29
+   }
+  },
+  "items_confirmed": {
+   "confirmed": 278,
+   "items": 357
+  },
+  "items_quote_found": {
+   "found": 357,
+   "items": 357
+  },
+  "lm_marks": {
+   "confirmed": {
+    "any_hits": 199,
+    "ci_precision_any": [
+     0.6601,
+     0.7656
+    ],
+    "ci_precision_gold": [
+     0.165,
+     0.2602
+    ],
+    "gold_hits": 58,
+    "items": 278,
+    "precision_any": 0.7158273381294964,
+    "precision_gold": 0.20863309352517986
+   },
+   "unconfirmed": {
+    "any_hits": 34,
+    "ci_precision_any": [
+     0.3269,
+     0.5403
+    ],
+    "ci_precision_gold": [
+     0.1703,
+     0.3589
+    ],
+    "gold_hits": 20,
+    "items": 79,
+    "precision_any": 0.43037974683544306,
+    "precision_gold": 0.25316455696202533
+   }
+  },
+  "paired": {
+   "L vs C": {
+    "precision_any": {
+     "losses": 23,
+     "n": 30,
+     "sign_p": 8.797645568847656e-05,
+     "ties": 4,
+     "wins": 3
+    },
+    "precision_gold": {
+     "losses": 23,
+     "n": 30,
+     "sign_p": 0.0009122341871261597,
+     "ties": 2,
+     "wins": 5
+    },
+    "recall": {
+     "losses": 0,
+     "n": 30,
+     "sign_p": 0.0078125,
+     "ties": 22,
+     "wins": 8
+    }
+   },
+   "L vs N": {
+    "precision_any": {
+     "losses": 16,
+     "n": 29,
+     "sign_p": 0.5715881884098053,
+     "ties": 1,
+     "wins": 12
+    },
+    "precision_gold": {
+     "losses": 22,
+     "n": 29,
+     "sign_p": 0.0015137195587158203,
+     "ties": 2,
+     "wins": 5
+    },
+    "recall": {
+     "losses": 0,
+     "n": 30,
+     "sign_p": 0.0078125,
+     "ties": 22,
+     "wins": 8
+    }
+   },
+   "LD vs C": {
+    "precision_any": {
+     "losses": 22,
+     "n": 30,
+     "sign_p": 0.00015652179718017578,
+     "ties": 5,
+     "wins": 3
+    },
+    "precision_gold": {
+     "losses": 20,
+     "n": 30,
+     "sign_p": 0.009355306625366211,
+     "ties": 4,
+     "wins": 6
+    },
+    "recall": {
+     "losses": 2,
+     "n": 30,
+     "sign_p": 0.2890625,
+     "ties": 22,
+     "wins": 6
+    }
+   },
+   "LD vs L": {
+    "precision_any": {
+     "losses": 6,
+     "n": 30,
+     "sign_p": 0.052478790283203125,
+     "ties": 8,
+     "wins": 16
+    },
+    "precision_gold": {
+     "losses": 10,
+     "n": 30,
+     "sign_p": 0.8318119049072266,
+     "ties": 8,
+     "wins": 12
+    },
+    "recall": {
+     "losses": 4,
+     "n": 30,
+     "sign_p": 0.125,
+     "ties": 26,
+     "wins": 0
+    }
+   },
+   "LM vs L": {
+    "precision_any": {
+     "losses": 0,
+     "n": 30,
+     "sign_p": 1.0,
+     "ties": 30,
+     "wins": 0
+    },
+    "precision_gold": {
+     "losses": 0,
+     "n": 30,
+     "sign_p": 1.0,
+     "ties": 30,
+     "wins": 0
+    },
+    "recall": {
+     "losses": 0,
+     "n": 30,
+     "sign_p": 1.0,
+     "ties": 30,
+     "wins": 0
+    }
+   },
+   "LM vs LD": {
+    "precision_any": {
+     "losses": 16,
+     "n": 30,
+     "sign_p": 0.052478790283203125,
+     "ties": 8,
+     "wins": 6
+    },
+    "precision_gold": {
+     "losses": 12,
+     "n": 30,
+     "sign_p": 0.8318119049072266,
+     "ties": 8,
+     "wins": 10
+    },
+    "recall": {
+     "losses": 0,
+     "n": 30,
+     "sign_p": 0.125,
+     "ties": 26,
+     "wins": 4
+    }
+   }
+  }
+ }
+}

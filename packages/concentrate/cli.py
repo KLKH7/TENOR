@@ -3810,6 +3810,13 @@ def ami_list_check(
         Path | None,
         typer.Option(help="Also write the numbers-only aggregate here (checked). Not a pilot."),
     ] = None,
+    stage: Annotated[
+        str,
+        typer.Option(
+            help="Staged run: 'map' (map calls only), 'merge' (map + merge), or 'all'. Each "
+            "stage caches its calls, so the next is priced exactly."
+        ),
+    ] = "all",
 ) -> None:
     """E1: list then check on AMI list questions (notes only vs list every item vs list +
     check, drop or mark). Item-level recall / precision. Start with --quote, then --pilot."""
@@ -3977,6 +3984,15 @@ def ami_list_check(
     assert cap is not None
     run_ctx = pilot_ctx if pilot else full_ctx
     high = ph if pilot else fh
+    if stage not in E.STAGES:
+        raise typer.BadParameter(f"--stage must be one of {E.STAGES}")
+    if stage != "all":
+        part = [
+            x for x in (pilot_lines if pilot else full_lines)
+            if x.stage.startswith(E.STAGE_LINES[stage])
+        ]  # fmt: skip
+        high = E.totals(part)[1]
+        typer.echo(f"stage {stage}: ${E.totals(part)[0]:.2f} expected, ${high:.2f} high")
     if high > cap:
         typer.echo(f"high estimate ${high:.2f} exceeds the cap ${cap:.2f}", err=True)
         raise typer.Exit(1)
@@ -3986,6 +4002,16 @@ def ami_list_check(
             f"(hard cap ${cap:.2f}, quoted high ${high:.2f})?",
             abort=True,
         )
+
+    if stage != "all":
+        try:
+            for c in run_ctx:
+                E.run_stage(reader_c, c, stage)
+        except BudgetExceeded as e:
+            typer.echo(f"STOPPED: {e}", err=True)
+        by = {k: round(v["usd"], 4) for k, v in ledger.by_stage().items()}
+        typer.echo(f"stage {stage}: spent ${ledger.spent_usd():.4f} (cap ${cap:.2f}); {by}")
+        return
 
     n_line = next((x for x in full_lines if x.stage.startswith("N answer")), None)
     free = ["eval.notes_only"] if n_line is not None and n_line.calls == 0 else []
