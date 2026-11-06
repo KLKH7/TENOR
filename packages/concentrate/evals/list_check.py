@@ -4,6 +4,8 @@ Does listing every item from the transcript, then checking each item against its
 list answers more complete without making them wrong? Four conditions, each reading only the
 question's own meeting:
 
+* ``C``: Granola Chat, transcripts kept: its recorded answers (stage 3 / the deletion run's
+  condition A), replayed at $0 and scored item by item like the rest. The fair baseline.
 * ``N``: Granola's notes only (``answer.v1``, the deletion run's ``notes_only``; replays from
   its cache).
 * ``L``: list every item from Granola's transcript. Map over chunks (``enumerate.v1``: each
@@ -44,15 +46,18 @@ from concentrate.evals.stats import binom_two_sided_p
 from concentrate.llm.client import Ledger, LLMClient, LLMRequest, cost_usd, load_prompt
 
 LIST_TYPES = ("decision", "action_what", "problem")
-N, L, LD, LM = "N", "L", "LD", "LM"
-CONDITIONS: tuple[str, ...] = (N, L, LD, LM)
+C, N, L, LD, LM = "C", "N", "L", "LD", "LM"
+CONDITIONS: tuple[str, ...] = (C, N, L, LD, LM)
 LABELS = {
+    C: "C: Granola Chat (transcripts kept; recorded answers)",
     N: "N: Granola notes only",
     L: "L: list every item (transcript, chunked)",
     LD: "LD: list, check, drop unsupported",
     LM: "LM: list, check, mark unsupported 'unconfirmed'",
 }
-PAIRS: tuple[tuple[str, str], ...] = ((N, L), (L, LD), (L, LM), (LD, LM))
+# Headline first: Chat (the fair baseline) vs the list conditions; then the ladder.
+PAIRS: tuple[tuple[str, str], ...] = ((C, L), (C, LD), (N, L), (L, LD), (L, LM), (LD, LM))
+TEST_METRICS = ("recall", "precision_any", "precision_gold")
 METRICS = ("recall", "precision_gold", "precision_any", "f1_gold", "f1_any")
 
 ENUMERATE_PROMPT = "enumerate.v1"
@@ -61,6 +66,7 @@ VERIFY_PROMPT = "verify_item.v2"  # v1 rejected items whose owner the lines coul
 JUDGE_PROMPT = "judge_items.v1"
 ANSWER_PROMPT = "answer.v1"  # N, via deletion_ami's notes_only
 PROMPTS = {
+    C: ["granola:chat"],
     N: [ANSWER_PROMPT],
     L: [ENUMERATE_PROMPT, MERGE_PROMPT],
     LD: [ENUMERATE_PROMPT, MERGE_PROMPT, VERIFY_PROMPT],
@@ -648,12 +654,12 @@ def mark_precision(
 ) -> dict[str, dict[str, int]]:
     """LM: counts of items, gold hits and gold-or-transcript hits, for confirmed vs
     unconfirmed items separately (does the mark carry information?)."""
-    out = {k: {"items": 0, "gold": 0, "any": 0} for k in ("confirmed", "unconfirmed")}
+    out = {k: {"items": 0, "gold_hits": 0, "any_hits": 0} for k in ("confirmed", "unconfirmed")}
     for it in judged:
         row = out["confirmed" if confirmed.get(it.id, False) else "unconfirmed"]
         row["items"] += 1
-        row["gold"] += int(bool(it.gold))
-        row["any"] += int(bool(it.gold) or it.in_transcript)
+        row["gold_hits"] += int(bool(it.gold))
+        row["any_hits"] += int(bool(it.gold) or it.in_transcript)
     return out
 
 
@@ -681,52 +687,120 @@ def _mean(xs: Iterable[float | None]) -> float | None:
     return statistics.fmean(vals) if vals else None
 
 
-def summarize(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
-    """Per-condition means (macro over questions; precision over questions with items) and
-    micro totals, LM's confirmed / unconfirmed precision, and the paired sign tests."""
+def bootstrap_ci(
+    values: Sequence[float], seed: int, n: int = 2000, alpha: float = 0.05
+) -> tuple[float, float] | None:
+    """Percentile bootstrap CI of the mean over questions (seeded, deterministic)."""
+    if not values:
+        return None
+    rng = random.Random(f"{seed}:e1.bootstrap:{len(values)}")
+    k = len(values)
+    means = sorted(statistics.fmean(rng.choices(values, k=k)) for _ in range(n))
+    lo, hi = means[int(alpha / 2 * n)], means[min(n - 1, int((1 - alpha / 2) * n))]
+    return round(lo, 4), round(hi, 4)
+
+
+def _condition_summary(scores: Sequence[Mapping[str, Any]], seed: int) -> dict[str, Any]:
+    tot = {
+        k: sum(s[k] for s in scores)
+        for k in ("n_items", "n_gold", "covered", "gold_hits", "any_hits")
+    }
+    out: dict[str, Any] = {
+        "n_questions": len(scores),
+        "n_with_items": sum(1 for s in scores if s["n_items"]),
+        "micro": tot,
+        "micro_recall": tot["covered"] / tot["n_gold"] if tot["n_gold"] else None,
+        "micro_precision_gold": tot["gold_hits"] / tot["n_items"] if tot["n_items"] else None,
+        "micro_precision_any": tot["any_hits"] / tot["n_items"] if tot["n_items"] else None,
+    }
+    for m in METRICS:
+        vals = [float(s[m]) for s in scores if s[m] is not None]
+        out[f"mean_{m}"] = statistics.fmean(vals) if vals else None
+        out[f"ci_{m}"] = bootstrap_ci(vals, seed)
+    return out
+
+
+def wilson_ci(k: int, n: int, z: float = 1.96) -> tuple[float, float] | None:
+    """Wilson score interval for ``k`` of ``n`` (None when n = 0)."""
+    if n == 0:
+        return None
+    p = k / n
+    d = 1 + z * z / n
+    c = (p + z * z / (2 * n)) / d
+    h = z * (p * (1 - p) / n + z * z / (4 * n * n)) ** 0.5 / d
+    return round(max(0.0, c - h), 4), round(min(1.0, c + h), 4)
+
+
+def summarize(records: Sequence[Mapping[str, Any]], seed: int = 42) -> dict[str, Any]:
+    """Per condition: means over questions with 95% bootstrap CIs (precision over questions
+    with items), micro totals, and the same by category; LM's confirmed / unconfirmed
+    precision with Wilson CIs; paired sign tests (:data:`PAIRS`)."""
     per: dict[str, dict[str, Any]] = {}
+    by_cat: dict[str, dict[str, Any]] = {}
     for c in CONDITIONS:
         scores = [r["scores"][c] for r in records if c in r["scores"]]
-        tot = {
-            k: sum(s[k] for s in scores)
-            for k in ("n_items", "n_gold", "covered", "gold_hits", "any_hits")
-        }
-        per[c] = {
-            "n_questions": len(scores),
-            "n_with_items": sum(1 for s in scores if s["n_items"]),
-            **{f"mean_{m}": _mean(s[m] for s in scores) for m in METRICS},
-            "micro": tot,
-            "micro_recall": tot["covered"] / tot["n_gold"] if tot["n_gold"] else None,
-            "micro_precision_gold": tot["gold_hits"] / tot["n_items"] if tot["n_items"] else None,
-            "micro_precision_any": tot["any_hits"] / tot["n_items"] if tot["n_items"] else None,
-        }
-    marks = {k: {"items": 0, "gold": 0, "any": 0} for k in ("confirmed", "unconfirmed")}
+        if not scores:
+            continue
+        per[c] = _condition_summary(scores, seed)
+        for cat in sorted({r["category"] for r in records}):
+            cs = [r["scores"][c] for r in records if c in r["scores"] and r["category"] == cat]
+            if cs:
+                by_cat.setdefault(cat, {})[c] = _condition_summary(cs, seed)
+    marks: dict[str, dict[str, Any]] = {
+        k: {"items": 0, "gold_hits": 0, "any_hits": 0} for k in ("confirmed", "unconfirmed")
+    }
     for r in records:
         for k, row in r.get("marks", {}).items():
             for f, v in row.items():
                 marks[k][f] += v
     for row in marks.values():
-        row_any = row["items"]
-        row["precision_gold"] = row["gold"] / row_any if row_any else None  # type: ignore[assignment]
-        row["precision_any"] = row["any"] / row_any if row_any else None  # type: ignore[assignment]
+        n = row["items"]
+        row["precision_gold"] = row["gold_hits"] / n if n else None
+        row["precision_any"] = row["any_hits"] / n if n else None
+        row["ci_precision_gold"] = wilson_ci(row["gold_hits"], n)
+        row["ci_precision_any"] = wilson_ci(row["any_hits"], n)
     paired = {}
     for a, b in PAIRS:
+        if a not in per or b not in per:
+            continue
         paired[f"{b} vs {a}"] = {
             m: sign_test(
                 {r["qid"]: r["scores"][a][m] for r in records if a in r["scores"]},
                 {r["qid"]: r["scores"][b][m] for r in records if b in r["scores"]},
             )
-            for m in ("recall", "precision_gold", "precision_any")
+            for m in TEST_METRICS
         }
     quotes = [it["found"] for r in records for it in r.get("items", [])]
     verdicts = [v for r in records for v in r.get("confirmed", {}).values()]
     return {
         "conditions": per,
+        "by_category": by_cat,
         "lm_marks": marks,
         "paired": paired,
         "items_quote_found": {"found": sum(quotes), "items": len(quotes)},
         "items_confirmed": {"confirmed": sum(verdicts), "items": len(verdicts)},
     }
+
+
+def aggregate(result: Mapping[str, Any]) -> dict[str, Any]:
+    """Numbers only, safe to commit: the run's meta (no question IDs) and its summary."""
+    meta = dict(result["meta"])
+    qids = meta.pop("questions", [])
+    meta.pop("ledger_by_stage", None)
+    meta["n_questions"] = len(qids)
+    meta["labels"] = {c: LABELS[c] for c in CONDITIONS}
+    return {"meta": meta, "summary": result["summary"]}
+
+
+def private_texts(records: Sequence[Mapping[str, Any]], questions: Iterable[str]) -> list[str]:
+    """Strings a committed aggregate must not contain: questions, gold, answers, items."""
+    out = list(questions)
+    for r in records:
+        out += [g["text"] for g in r.get("gold", [])]
+        out += list(r.get("answers", {}).values())
+        out += [it["text"] for it in r.get("items", [])]
+        out += [it["quote"] for it in r.get("items", [])]
+    return out
 
 
 # -- selection -------------------------------------------------------------------------------
@@ -810,6 +884,7 @@ def run_question(
     notes_answer: Callable[[], str] | None,
     conditions: Sequence[str] = CONDITIONS,
     chunk_chars: int = CHUNK_CHARS,
+    chat_answer: str | None = None,
 ) -> dict[str, Any]:
     """Every condition on one question, judged; a JSON-ready record (holds transcript text:
     local only)."""
@@ -821,13 +896,18 @@ def run_question(
         "scores": {},
     }
     gids = ctx.gold.ids
+    rec["answers"], rec["judged"] = {}, {}
+    free: list[tuple[str, str]] = []
+    if C in conditions and chat_answer is not None:
+        free.append((C, chat_answer))
     if N in conditions and notes_answer is not None:
-        text = notes_answer()
+        free.append((N, notes_answer()))
+    for cond, text in free:
         out = judge.structured(judge_request(ctx.question, ctx.gold, ctx.reference, text), JudgeOut)
         judged = parse_mapping(out, gids, None)
-        rec["answers"] = {N: text}
-        rec["judged"] = {N: [j.model_dump() for j in judged]}
-        rec["scores"][N] = _score_row(score(judged, gids))
+        rec["answers"][cond] = text
+        rec["judged"][cond] = [j.model_dump() for j in judged]
+        rec["scores"][cond] = _score_row(score(judged, gids))
     if {L, LD, LM} & set(conditions):
         cands, items = list_items(reader, ctx, chunk_chars)
         rec["candidates"] = [asdict(c) for c in cands]
@@ -843,8 +923,7 @@ def run_question(
         judged_a = parse_mapping(out, gids, [a for a, _ in listed])
         # Back to item IDs, so LD/LM can select by item.
         judged = [j.model_copy(update={"id": it.id}) for j, it in zip(judged_a, items, strict=True)]
-        rec.setdefault("answers", {})
-        rec.setdefault("judged", {})[L] = [j.model_dump() for j in judged]
+        rec["judged"][L] = [j.model_dump() for j in judged]
         for c in (L, LD, LM):
             if c not in conditions:
                 continue
@@ -924,6 +1003,7 @@ def quote(
     chunk_chars: int = CHUNK_CHARS,
     a: Assumed = ASSUMED,
     notes_texts: Mapping[str, str] | None = None,
+    chat_texts: Mapping[str, str] | None = None,
 ) -> list[QuoteLine]:
     """Price a run before any call, question by question. Input is exact (count_tokens)
     wherever the request can be built: the map calls always; the merge, verify and judge
@@ -957,6 +1037,10 @@ def quote(
     n_chunks = 0
     for c in contexts:
         ctx_j = judge_counter([judge_context(c.question, c.gold, c.reference)])[0]
+        chat = (chat_texts or {}).get(c.qid)
+        if C in conditions and chat is not None:  # recorded answer: judge request is exact
+            req = judge_request(c.question, c.gold, c.reference, chat)
+            exact(judge, judge_counter, req, _judge_out(a, (4.0, 8.0)))
         if N in conditions:
             text = (notes_texts or {}).get(c.qid)
             if text is not None:
@@ -1054,12 +1138,12 @@ def quote(
                 "shared by LD and LM",
             )
         )
-    if (N in conditions or listing) and contexts:
+    if ({C, N} & set(conditions) or listing) and contexts:
         lines.append(
             st["judge"].line(
                 f"judge ({JUDGE_PROMPT})",
                 jm,
-                "N + L answers (LD/LM scored from L's items); exact once the answer is known",
+                "C + N + L answers (LD/LM scored from L's items); exact once the answer is known",
             )
         )
     return lines

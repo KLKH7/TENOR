@@ -3767,8 +3767,12 @@ def ami_deletion_sim(
 @ami_app.command("list-check")
 def ami_list_check(
     conditions: Annotated[
-        str, typer.Option(help="N (notes), L (list), LD (list+check, drop), LM (mark).")
-    ] = "N,L,LD,LM",
+        str,
+        typer.Option(
+            help="C (Granola Chat, recorded), N (notes), L (list), LD (list+check, drop), "
+            "LM (mark)."
+        ),
+    ] = "C,N,L,LD,LM",
     quote_only: Annotated[
         bool, typer.Option("--quote", help="Price the full run and the pilot; spends nothing.")
     ] = False,
@@ -3802,6 +3806,10 @@ def ami_list_check(
         "data/ami_questions/questions.jsonl"
     ),
     out_dir: OutDirOpt = AMI_RESULTS / "e1",
+    commit_to: Annotated[
+        Path | None,
+        typer.Option(help="Also write the numbers-only aggregate here (checked). Not a pilot."),
+    ] = None,
 ) -> None:
     """E1: list then check on AMI list questions (notes only vs list every item vs list +
     check, drop or mark). Item-level recall / precision. Start with --quote, then --pilot."""
@@ -3812,12 +3820,13 @@ def ami_list_check(
     from concentrate.agents.baselines import Answer
     from concentrate.ami.corpus import load_meeting, meeting_note
     from concentrate.ami.questions import load_questions
+    from concentrate.blackbox.kit import check_committable
     from concentrate.core.store import read_notes
     from concentrate.evals import deletion_ami as DA
     from concentrate.evals import deletion_sim as D
     from concentrate.evals import list_check as E
     from concentrate.evals.runner import _git
-    from concentrate.evals.wrong_facts import load_answers, roster
+    from concentrate.evals.wrong_facts import clean_answer, load_answers, roster
     from concentrate.llm.client import (
         BudgetExceeded,
         Ledger,
@@ -3834,6 +3843,7 @@ def ami_list_check(
     recs = DA.load_recordings({"granola": granola_db, "wispr": wispr_db}, overrides, read_notes)
     notes = {p: DA.reader_notes(r, p) for p, r in recs.items()}
     chat = {a.question_id: a.answer for a in load_answers(answers) if a.product == "granola"}
+    chat_text = {qid: clean_answer(a) for qid, a in chat.items()}  # as stage 3 judged it
     # The deletion run's filter: meetings recorded by Granola and Wispr, answered by Chat.
     picked, skipped = DA.select_questions(
         load_questions(questions_file), {p: list(r) for p, r in recs.items()}, chat, DA.CONDITIONS
@@ -3912,7 +3922,9 @@ def ami_list_check(
         j = LLMClient(model=judge_model, ledger=off, offline=True, cache_dir=judge_c.cache_dir)
         n_sys = DA.notes_only(r, notes.get("granola", []), "notes_only", "question")
         try:
-            E.run_question(c, r, j, notes_answer(n_sys, c.qid), names)
+            E.run_question(
+                c, r, j, notes_answer(n_sys, c.qid), names, chat_answer=chat_text.get(c.qid)
+            )
         except LLMError:
             return False
         return True
@@ -3932,6 +3944,7 @@ def ami_list_check(
         return E.quote(
             todo, reader_c, judge_c, counter, jcount, reqs,
             lambda r: D.cached_turn(reader_c, r) is not None, names, notes_texts=texts,
+            chat_texts=chat_text,
         )  # fmt: skip
 
     full_lines, pilot_lines = quote(full_ctx), quote(pilot_ctx)
@@ -3982,7 +3995,14 @@ def ami_list_check(
     try:
         for c in run_ctx:
             records.append(
-                E.run_question(c, reader_c, judge_c, notes_answer(notes_sys, c.qid), names)
+                E.run_question(
+                    c,
+                    reader_c,
+                    judge_c,
+                    notes_answer(notes_sys, c.qid),
+                    names,
+                    chat_answer=chat_text.get(c.qid),
+                )
             )
             typer.echo(f"{c.qid}: {_json_scores(records[-1])} (spent ${ledger.spent_usd():.4f})")
     except BudgetExceeded as e:
@@ -3994,7 +4014,7 @@ def ami_list_check(
     result = {
         "meta": {**dataclasses.asdict(meta), "stopped_early": stopped,
                  "spent_usd": ledger.spent_usd(), "ledger_by_stage": ledger.by_stage()},
-        "summary": E.summarize(records),
+        "summary": E.summarize(records, seed),
         "reprice": E.reprice(ledger.to_json(), run_ctx, full_ctx, free_stages=free)
         if pilot
         else None,
@@ -4004,6 +4024,12 @@ def ami_list_check(
     path = out_dir / f"{stamp}{'.pilot' if pilot else ''}.json"
     E.write_json(path, result)
     typer.echo(f"spent ${ledger.spent_usd():.4f} (cap ${cap:.2f}) · {path}")
+    agg = E.aggregate(result)
+    check_committable(agg, E.private_texts(records, [c.question for c in run_ctx]))
+    E.write_json(out_dir / f"{stamp}{'.pilot' if pilot else ''}.aggregate.json", agg)
+    if commit_to is not None and not pilot and not stopped:
+        E.write_json(commit_to, agg)
+        typer.echo(f"aggregate (numbers only): {commit_to}")
     if stopped:
         typer.echo(f"STOPPED: {stopped}. Cached calls replay at $0 on a re-run.", err=True)
         raise typer.Exit(1)

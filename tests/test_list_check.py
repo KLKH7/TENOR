@@ -207,8 +207,8 @@ def test_mark_precision_splits_by_verdict() -> None:
     judged = _judged([("I1", ["G1"], True), ("I2", [], True), ("I3", [], False)])
     m = E.mark_precision(judged, {"I1": True, "I2": False})  # I3 missing = unconfirmed
     assert m == {
-        "confirmed": {"items": 1, "gold": 1, "any": 1},
-        "unconfirmed": {"items": 2, "gold": 0, "any": 1},
+        "confirmed": {"items": 1, "gold_hits": 1, "any_hits": 1},
+        "unconfirmed": {"items": 2, "gold_hits": 0, "any_hits": 1},
     }
 
 
@@ -334,7 +334,7 @@ def test_run_question_end_to_end(tmp_path: Path) -> None:
     assert s["L"]["n_items"] == 3 and s["LD"]["n_items"] == 2 and s["LM"]["n_items"] == 3
     assert s["L"]["recall"] == s["LD"]["recall"] == 0.5
     assert s["LD"]["precision_any"] == 1.0 and s["L"]["precision_any"] == pytest.approx(2 / 3)
-    assert rec["marks"]["unconfirmed"] == {"items": 1, "gold": 0, "any": 0}
+    assert rec["marks"]["unconfirmed"] == {"items": 1, "gold_hits": 0, "any_hits": 0}
     assert rec["answers"]["LM"].endswith(E.UNCONFIRMED)
     assert s["N"]["n_items"] == 2 and s["N"]["recall"] == 0.5
     summary = E.summarize([rec])
@@ -414,3 +414,37 @@ def test_quote_is_exact_and_free_after_a_cached_run(tmp_path: Path) -> None:
     lines = E.quote([_ctx()], reader, judge, count, count, chunk_chars=200, notes_texts=texts)
     assert all(x.exact and x.usd_high == 0 and x.calls == 0 for x in lines)
     assert [x.cached for x in lines] == [len(E.chunk_lines(_ctx().transcript, 200)), 1, 3, 2]
+
+
+def test_chat_condition_is_judged_as_free_text_and_aggregate_is_committable(
+    tmp_path: Path,
+) -> None:
+    from concentrate.blackbox.kit import check_committable
+
+    backend, ledger = Scripted(), Ledger()
+    reader = LLMClient(backend, model="claude-opus-5-5", cache_dir=tmp_path, ledger=ledger)
+    judge = LLMClient(backend, model="claude-sonnet-5-5", cache_dir=tmp_path, ledger=ledger)
+    rec = E.run_question(
+        _ctx(), reader, judge, lambda: "Buttons are blue", chat_answer="The case is red. invented"
+    )
+    assert backend.calls.count(E.JUDGE_PROMPT) == 3  # C, N, L
+    assert rec["scores"]["C"]["recall"] == 0.5 and rec["scores"]["C"]["n_items"] == 2
+    summary = E.summarize([rec, {**rec, "qid": "q2"}], seed=1)
+    assert list(summary["paired"])[:2] == ["L vs C", "LD vs C"]
+    assert summary["conditions"]["C"]["ci_recall"] == (0.5, 0.5)
+    assert summary["by_category"]["decision"]["L"]["n_questions"] == 2
+    assert summary["lm_marks"]["unconfirmed"]["ci_precision_any"] == E.wilson_ci(0, 2)
+    result = {"meta": {"date": "d", "questions": ["q1", "q2"], "ledger_by_stage": {}}}
+    agg = E.aggregate({**result, "summary": summary})
+    assert agg["meta"]["n_questions"] == 2 and "questions" not in agg["meta"]
+    check_committable(agg, E.private_texts([rec], ["What was decided?"]))
+
+
+def test_wilson_and_bootstrap_ci() -> None:
+    assert E.wilson_ci(0, 0) is None
+    lo, hi = E.wilson_ci(14, 15)  # type: ignore[misc]
+    assert 0.68 < lo < 0.71 and 0.98 < hi <= 1.0
+    assert E.bootstrap_ci([], 0) is None
+    ci = E.bootstrap_ci([0.0, 1.0] * 10, seed=3)
+    assert ci == E.bootstrap_ci([0.0, 1.0] * 10, seed=3)
+    assert ci is not None and ci[0] < 0.5 < ci[1]
