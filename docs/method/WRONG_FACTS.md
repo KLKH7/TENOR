@@ -2,7 +2,7 @@
 
 When a meeting product gets a fact wrong (a name, number, role, commitment or decision), at which stage did it go wrong? This doc says how we answer that on AMI meetings played into Granola and Wispr Flow. For engineers who want to run it or attack it.
 
-**Status.** Stage 1 runs at $0. Stage 2 ran once (2026-11-05, $0.08, 387 claims). Most of what that run called `transcript_propagated` was measurement noise, so the class rules and the checker's input changed ([§4](#4-stage-2-first-run-and-what-it-got-wrong)). The re-run is quoted, not yet run. Stage 3 has not run.
+**Status.** Stage 1 runs at $0. Stage 2 ran twice on 387 claims. The first pass ($0.08) was mostly measurement noise in `transcript_propagated`, so the class rules and the checker's input changed ([§4](#4-stage-2-first-run-and-what-it-got-wrong)). The corrected run ($0.10) is the headline ([§3](#3-stage-2-corrected-run-headline)); the first pass is superseded. Stage 3 has not run.
 
 ## 1. The question and the three stages
 
@@ -77,6 +77,26 @@ Input: a JSONL of `{question_id, product, answer}` for the 68 `recorded` questio
 | yes | yes | `answering` |
 | unknown (no evidence or no recording) | – | `unknown` |
 
+## 3. Stage 2: corrected run (headline)
+
+Run: 2026-11-05 16:16Z, `352698f`, Haiku 5.5 (low effort), prompt `grounding.v1`, input `stage2-input.v2` (borderline class, named AMI speakers, labels note, run retrieval k = 16). Cap $0.15; spent **$0.10** (quoted worst $0.13). 7 meetings × 2 products, 387 claims, real AMI audio, automated checker. Saved to `data/ami/results/facts/stage2.json` (gitignored); counts in [`evals/reports/ami/notes_check.json`](../../evals/reports/ami/notes_check.json).
+
+| Class | Granola (216) | Wispr Flow (171) | First pass (G / W) |
+|---|---|---|---|
+| `ok` | **195 (90.3%)** [85.6, 93.6] | **138 (80.7%)** [74.1, 85.9] | 202 / 136 |
+| `borderline` | 12 (5.6%) [3.2, 9.5] | 19 (11.1%) [7.2, 16.7] | 10 / 18 |
+| `transcript_propagated` | 4 (1.9%) [0.7, 4.7] | 6 (3.5%) [1.6, 7.4] | 1 / 6 |
+| `inferred` | 4 (1.9%) [0.7, 4.7] | 5 (2.9%) [1.3, 6.7] | 1 / 8 |
+| `note_error` | 0 (0%) [0, 1.7] | 2 (1.2%) [0.3, 4.2] | 1 / 0 |
+| `human_only` | 1 (0.5%) [0.1, 2.6] | 1 (0.6%) [0.1, 3.2] | 1 / 3 |
+
+Cells: count (rate) [95% Wilson CI]. First pass = the `b68b0df` verdicts re-classified with the same rules at $0 (§4); superseded.
+
+- **Granola is 9.6 points higher; the interval is wide.** Treating claims as independent, the 95% CI on the difference is 2.5 to 16.7 points. Claims cluster in 7 meetings, so the true interval is wider. By meeting, Granola is higher in 4, Wispr Flow in 2, tied in 1.
+- **About half the gap is one-notch disagreement.** Counting `borderline` as fine: Granola 95.8%, Wispr Flow 91.8% (4.0 points).
+- **`transcript_propagated` did not fall.** Granola's went from 1 to 4; Wispr Flow's stayed at 6. Not re-read by hand on this run. 4 of the 10 are in the human sample: the human found 2 supported, 1 overreach, 1 could not judge, none wrong. The one clear real case from the first pass (a misheard name repeated in the note) is still flagged. Read the class as an upper bound.
+- **Better agreement with the human, on a biased sample.** The 20 human-labelled claims (drawn on the first pass) all match claims in this run by product, meeting and text (the sheet has no claim IDs). Of the 12 the human could judge, this run's AMI verdict agrees on 7; the first pass agreed on 4. One verifier; the sample leans towards flagged claims.
+
 ## 4. Stage 2: first run and what it got wrong
 
 First full run: 2026-11-05, `b68b0df`, Haiku 5.5, `grounding.v1`, $0.08, 7 meetings × 2 products, 387 claims.
@@ -86,7 +106,7 @@ First full run: 2026-11-05, `b68b0df`, Haiku 5.5, `grounding.v1`, $0.08, 7 meeti
 | Of the 20 | n | What it was |
 |---|---|---|
 | own supported / AMI **inferred** | 13 | one-notch disagreement, now `borderline` |
-| own supported / AMI contradicted, the checker's own reason is a label mismatch ("Speaker D, not Speaker 3") | 4 | label noise; needs the v2 re-run to clear |
+| own supported / AMI contradicted, the checker's own reason is a label mismatch ("Speaker D, not Speaker 3") | 4 | label noise; the v2 input was meant to clear it |
 | who was assigned the UI concept: AMI gives the line to another role | 2 | ambiguous |
 | a real transcription error carried into the note | 1 | Wispr heard "Pierrette" as "Garrett"; the note repeats "Garrett" |
 
@@ -103,7 +123,7 @@ So about **1 of 20** is clearly real.
 | `human_only` | 1 | 3 |
 | `note_error` | 1 | 0 |
 
-`borderline` (a + b) = own supported/AMI inferred + own inferred/AMI supported. The 7 left in `transcript_propagated` still include the 4 label cases and 2 ambiguous ones above: the v2 input should move them, but only a re-run can show it.
+`borderline` (a + b) = own supported/AMI inferred + own inferred/AMI supported. The 7 left in `transcript_propagated` still include the 4 label cases and 2 ambiguous ones above. The corrected run (§3) did not lower the count: 10 claims, 4 + 6.
 
 **"Irrelevant cited lines" were a lookup bug, not retrieval.** `own_lines` are positions in the stripped own transcript (Wispr's `<<<…>>>` banner and Granola's mic turns removed, then re-indexed). Read against the raw note they are off: Wispr is off by one, Granola by the number of mic turns before the line. Example: Wispr ES2006a cites own lines 67, 86, 87 (the interface designer describing her role); raw line 67 is "there's an eraser there". Also, all 4 own `contradicted` verdicts came from the full-transcript pass, which sees every line, so retrieval could not have caused them. Fix: rows now save utterance IDs too.
 
@@ -127,7 +147,7 @@ The gain is small: +1.7 points (Granola) and +0.3 (Wispr) held out, for 10–17%
 
 Retrieval was not the problem: v1 already got at least half the gold words for 93% (Granola) and 99% (Wispr) of claims, and anything the excerpt pass doesn't support is re-checked against the full transcript.
 
-**Re-run quote** (`concentrate facts stage2 --quote`, offline): 14 notes, 387 claims, **$0.059 (no escalation) – $0.130 (worst)**. The first run quoted $0.126 worst and spent $0.08 (measured ÷ quoted = 0.83), so expect about **$0.11**. Every call misses the cache, because the input changed. Not run: it needs Kian's approval.
+**Re-run quote** (`concentrate facts stage2 --quote`, offline): 14 notes, 387 claims, **$0.059 (no escalation) – $0.130 (worst)**. The first run quoted $0.126 worst and spent $0.08 (measured ÷ quoted = 0.83), so expect about **$0.11**. Every call misses the cache, because the input changed. Ran on 2026-11-05: **$0.10** measured (§3).
 
 ## 5. What's built
 
@@ -154,7 +174,7 @@ Quoted offline with Haiku 5.5 on 2026-11-05. Only IS1008a was synced, so the ful
 | Stage 2 pilot (IS1008a, both products, 44 claims) | $0.006 – $0.013 |
 | Stage 2 full (6 meetings × 2 products, extrapolated) | $0.04 – $0.10 |
 | Stage 2 first full run (7 meetings, measured) | **$0.08** |
-| Stage 2 re-run with `stage2-input.v2` | $0.059 – $0.130; expect ≈ $0.11 |
+| Stage 2 re-run with `stage2-input.v2` | quoted $0.059 – $0.130; **$0.10 measured** |
 | Stage 3 full (136 answers; ASSUMED 80-token answers) | judge $0.012 + notes check ≤ $0.061 = **≤ $0.073** |
 
 Every paid run needs `--max-usd` (pilots default to a $0.05 cap). After a pilot, the command prints measured ÷ quoted cost and re-prices the full run × 1.5.

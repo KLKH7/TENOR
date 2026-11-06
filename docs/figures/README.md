@@ -46,9 +46,9 @@ Prices for every dollar figure: $4/M input and $20/M output tokens, applied to e
 | [answer_types.svg](answer_types.svg) | When the answer isn't right, does it say so? | `evals/reports/real-deletion-sim-dev.aggregate.json` (6bc288f59ce8) |
 | [question_heatmap.svg](question_heatmap.svg) | Which questions does deletion hurt, and which layer brings them back? | `evals/reports/real-deletion-sim-dev.aggregate.json` (6bc288f59ce8) |
 | [deletion_sim.svg](deletion_sim.svg) | What does deleting transcripts cost on real meetings? | `evals/reports/real-deletion-sim-dev.aggregate.json` (6bc288f59ce8) |
-| [results_overview.svg](results_overview.svg) | Where do Granola and Wispr Flow differ, and by how much? | `evals/reports/ami/coverage.json` (b5c2d4951f7c), `evals/reports/ami/deletion_ami.json` (0de05fa94f03), `evals/reports/ami/notes_check.json` (8410465d34c2) |
+| [results_overview.svg](results_overview.svg) | Where do Granola and Wispr Flow differ, and by how much? | `evals/reports/ami/coverage.json` (b5c2d4951f7c), `evals/reports/ami/deletion_ami.json` (0de05fa94f03), `evals/reports/ami/notes_check.json` (8d982072eb3a) |
 | [ami_retention.svg](ami_retention.svg) | What does deleting transcripts cost, and what wins it back? (68 AMI questions) | `evals/reports/ami/deletion_ami.json` (0de05fa94f03), `evals/reports/real-deletion-sim-dev.aggregate.json` (6bc288f59ce8) |
-| [judge_vs_human.svg](judge_vs_human.svg) | When an automated judge says “wrong”, does a human agree? | `evals/reports/ami/notes_check.json` (8410465d34c2) |
+| [judge_vs_human.svg](judge_vs_human.svg) | When an automated judge says “wrong”, does a human agree? | `evals/reports/ami/notes_check.json` (8d982072eb3a) |
 | [harness_flow.svg](harness_flow.svg) | How does the outside-in evaluation harness work? | `evals/reports/ami/coverage.json` (b5c2d4951f7c) |
 | [capture_coverage.svg](capture_coverage.svg) | How much of what was said did each app catch? | `evals/reports/ami/coverage.json` (b5c2d4951f7c) |
 | [capture_health.svg](capture_health.svg) | Can a product tell when its transcript has stopped? | `evals/reports/ami/detector.json` (ef467b486793) |

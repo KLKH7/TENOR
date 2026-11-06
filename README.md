@@ -51,7 +51,7 @@ Meeting note-takers are now ordinary work tools. People rely on them to record w
 
 Each table gives the measure, both products side by side, n, an interval or note, and a status. *Preliminary* means small n or a method still changing; read it as a direction, not a ranking. Intervals are 95% Wilson intervals unless stated. Dated log of every result: [`docs/results/INDEX.md`](docs/results/INDEX.md).
 
-![Where do Granola and Wispr Flow differ, and by how much? On every measure both products have: both captured almost all speech (98.5% and 99.4% of 15-second windows); Granola's notes had more claims supported by both transcripts (94% vs 80%, partly checker noise); notes-only answers were close (50% vs 44% not wrong, 21% vs 12% correct, neither paired difference significant)](docs/figures/results_overview.svg)
+![Where do Granola and Wispr Flow differ, and by how much? On every measure both products have: both captured almost all speech (98.5% and 99.4% of 15-second windows); Granola's notes had more claims supported by both transcripts (90% vs 81%, about half of the gap one-notch checker disagreement); notes-only answers were close (50% vs 44% not wrong, 21% vs 12% correct, neither paired difference significant)](docs/figures/results_overview.svg)
 
 Measures only one product has (Granola Chat answers; Wispr Flow's MCP has no question-answering tool) are left out of this chart and given in the tables below.
 
@@ -82,12 +82,14 @@ The 7-meeting WER table is next and costs nothing to compute. Because AMI is a s
 
 | Measure | Granola | Wispr Flow | n | Interval / notes | Status |
 |---|---|---|---|---|---|
-| Note claims supported by both the product's and AMI's transcript (first automated pass) | 94% (202 of 216) | 80% (136 of 171) | 387 claims, 7 meetings | Granola [89, 96], Wispr Flow [73, 85]. Much of the Wispr Flow gap is checker noise (one-notch disagreements, generic "Speaker N" labels); a re-run with corrected input is quoted, not run | Preliminary |
-| Claims where the note repeats a transcription error | 1 of 216 | 6 of 171 | 387 claims | Of these 7, on manual reading 4 are speaker-label noise, 2 ambiguous and 1 clearly real | Preliminary |
+| Note claims supported by both the product's and AMI's transcript | 90% (195 of 216) | 81% (138 of 171) | 387 claims, 7 meetings | Granola [86, 94], Wispr Flow [74, 86]. Corrected automated run (`352698f`); supersedes the first pass (94% / 80%) | Preliminary |
+| One-notch checker disagreement (`borderline`) | 12 of 216 (6%) | 19 of 171 (11%) | 387 claims | Mostly checker noise: one check says supported, the other inferred | Preliminary |
+| Claims where the note may repeat a transcription error | 4 of 216 | 6 of 171 | 387 claims | Upper bound, not re-read by hand. 4 of the 10 are in the human sample: 2 supported, 1 overreach, 1 could not judge, none wrong | Preliminary |
+| Claims the note-writer added (`note_error`) / overreach (`inferred`) | 0 / 4 of 216 | 2 / 5 of 171 | 387 claims | note_error 95% CI: Granola [0, 2%], Wispr Flow [0.3, 4%] | Preliminary |
 | Human check of sampled claims | 20 sampled claims (per-product split not reported): 12 judgeable, 0 wrong, 1 overreach | | 20 | The automated checker had flagged most of these | Preliminary |
 | *Earlier, 4 private meetings:* claims supported / inferred / unsupported | 84% / 14% / 0% | not measured | 132 claims | Supported [77, 89]; Granola only | Superseded by AMI |
 
-On the first pass Granola's notes were grounded more often than Wispr Flow's; whether that gap survives the corrected re-run and human calibration is open. Track: [`docs/tracks/NOTES.md`](docs/tracks/NOTES.md); method: [`docs/method/WRONG_FACTS.md`](docs/method/WRONG_FACTS.md).
+On the corrected run Granola's notes were grounded 9.6 points more often than Wispr Flow's (95% CI 2.5 to 16.7 treating claims as independent; wider in truth, since claims cluster in 7 meetings). Granola was higher in 4 meetings, Wispr Flow in 2, tied in 1. About half the gap is one-notch checker disagreement: counting `borderline` as fine, 95.8% vs 91.8%. Human calibration is still pending. Track: [`docs/tracks/NOTES.md`](docs/tracks/NOTES.md); method: [`docs/method/WRONG_FACTS.md`](docs/method/WRONG_FACTS.md).
 
 ### Answers (Chat), and judge over-count
 
@@ -96,9 +98,9 @@ On the first pass Granola's notes were grounded more often than Wispr Flow's; wh
 | Answers judged wrong, automated judge | 16 (24%) | not applicable | 68 questions | [15, 35]. Wispr Flow's MCP has no question-answering tool | Preliminary |
 | Answers judged partial, automated judge | 24 (35%) | not applicable | 68 | [25, 47] | Preliminary |
 | Of the 3 strongest automated "confident contradictions", clearly wrong on human check | 0 of 3 | — | 3 | All three were partly right | Preliminary |
-| Note claims judged wrong by a human, of those the automated checker could be compared on | 0 of 12 | (pooled) | 12 | Human agreed with the checker on 4 of 12 | Preliminary |
+| Note claims judged wrong by a human, of those the automated checker could be compared on | 0 of 12 | (pooled) | 12 | Human agreed with the checker on 4 of 12 (first pass, on which the sample was drawn); 7 of 12 on the corrected run | Preliminary |
 
-![When an automated judge says "wrong", does a human agree? Of 23 human labels, none found an output wrong: of 7 note claims the checker called contradicted, the human found 4 supported and could not judge 3; all 3 Chat answers the judge called confidently wrong were partly right](docs/figures/judge_vs_human.svg)
+![When an automated judge says "wrong", does a human agree? Of 23 human labels, none found an output wrong: of 7 note claims the first-pass checker called contradicted, the human found 4 supported and could not judge 3; all 3 Chat answers the judge called confidently wrong were partly right](docs/figures/judge_vs_human.svg)
 
 **Automated judges over-count errors on these outputs.** In both human-checked samples, most automated error verdicts did not survive a human reading. With 23 labels this is a direction, not a rate: the over-count factor will be reported once about 100 labels exist. A comparison of both products through one fixed outside agent is built and not yet run. Track: [`docs/tracks/ANSWERS.md`](docs/tracks/ANSWERS.md).
 
@@ -191,7 +193,7 @@ uv run concentrate facts stage2 --quote                                 # notes 
 uv run concentrate mcp-contract                                         # reply-format check (harness)
 ```
 
-**Costs.** Capture, WER, fact recall and the contract check make no LLM calls. Judged steps need `ANTHROPIC_API_KEY` in `.env` (see `.env.example`): notes grounding about $0.11 for all 7 meetings; answer attribution at most about $0.07; the AMI retention replication $5.64 (run; quoted at about $8). Every paid command prints an exact quote first and asks before spending more than $2.
+**Costs.** Capture, WER, fact recall and the contract check make no LLM calls. Judged steps need `ANTHROPIC_API_KEY` in `.env` (see `.env.example`): notes grounding about $0.10 for all 7 meetings (measured); answer attribution at most about $0.07; the AMI retention replication $5.64 (run; quoted at about $8). Every paid command prints an exact quote first and asks before spending more than $2.
 
 **Product plans.** Reading Granola transcripts through its MCP requires a paid plan (a free trial covers it), and Granola accepts work accounts only. Wispr Flow needs its Notetaker, MCP access and cloud sync enabled; plan requirements beyond that have not been verified.
 

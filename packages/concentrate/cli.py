@@ -1922,7 +1922,9 @@ def figures_cmd(
 
         facts = Path("data/ami/results/facts")
         snap = FA.snapshot_notes_check(
-            facts / "stage2.reclassified.json", facts / "human_verification_v3.jsonl"
+            facts / "stage2.json",
+            facts / "human_verification_v3.jsonl",
+            facts / "stage2.claims.jsonl",
         )
         FA.NOTES_CHECK.parent.mkdir(parents=True, exist_ok=True)
         FA.NOTES_CHECK.write_text(_json.dumps(snap, indent=2, sort_keys=True) + "\n")

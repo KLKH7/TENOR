@@ -10,7 +10,7 @@ Automated checks on meeting AI over-count errors. On 7 AMI meetings recorded int
 
 | Check | Automated | After human verification |
 |---|---|---|
-| Note claims (grounding checker, 20 sampled) | most flagged as unsupported, overreach or contradicted | the human could judge 12; agreed with the checker on **4**; found **0 wrong, 1 overreach** |
+| Note claims (grounding checker, 20 sampled) | most flagged as unsupported, overreach or contradicted | the human could judge 12; agreed with the first-pass checker on **4** (the corrected run: 7); found **0 wrong, 1 overreach** |
 | Granola Chat answers (LLM judge, 68) | **16 wrong**, 24 partial | of the 3 strongest "confident contradictions", the human found **0 clearly wrong**: all partly right |
 
 The over-count has identifiable causes, each fixable:

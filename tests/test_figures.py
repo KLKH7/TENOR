@@ -197,10 +197,12 @@ def make_root(root: Path) -> Path:
     _write(
         root / FA.NOTES_CHECK,
         {
-            "grounding": {"products": {"granola": ok, "wispr": {**ok, "k": 6, "rate": 0.6}}},
+            "grounding": {"run": "abc1234",
+                          "products": {"granola": ok, "wispr": {**ok, "k": 6, "rate": 0.6}}},
             "human": {
                 "verifiers": 1,
                 "claims": {"n": 5, "judgeable": 4, "agree_with_checker": 2,
+                           "agree_with_headline_run": 3,
                            "by_automated": {"contradicted": {"supported": 2, "cannot_judge": 1},
                                             "supported": {"supported": 2}}},
                 "chat": {"n": 2, "by_automated": {"confident_contradiction": {"partly_right": 2}}},
@@ -271,10 +273,12 @@ def test_paired_counts_follow_the_direction_of_the_step() -> None:
 
 def test_snapshot_notes_check_keeps_only_counts(tmp_path: Path) -> None:
     secret = "PRIVATE CLAIM TEXT"
-    rec = tmp_path / "stage2.reclassified.json"
+    rec = tmp_path / "stage2.json"
     ok = {"k": 9, "n": 10, "rate": 0.9, "ci95": [0.6, 0.98]}
+    zero = {"k": 0, "n": 10, "rate": 0.0, "ci95": [0.0, 0.28]}
+    classes = {c: (ok if c == "ok" else zero) for c in FA.NOTES_CLASSES}
     rec.write_text(json.dumps({"meta": {"git_sha": "abc"},
-                               "products": {"granola": {"classes": {"ok": ok}}}}))  # fmt: skip
+                               "products": {"granola": {"classes": classes}}}))  # fmt: skip
     sheet = tmp_path / "v3.jsonl"
     rows = [
         {"product": "granola", "meeting": "IS1008a", "claim": secret, "kian": code,
@@ -285,18 +289,25 @@ def test_snapshot_notes_check_keeps_only_counts(tmp_path: Path) -> None:
     rows.append({"set": "stage3_contradictions", "verifier": "V",
                  "items": [{"meeting": "IB4003", "q": secret, "kian": "B"}]})  # fmt: skip
     sheet.write_text("\n".join(json.dumps(r) for r in rows) + "\n")
-    snap = FA.snapshot_notes_check(rec, sheet)
+    # The headline run's claims, matched by (product, meeting, text): all four rows share them.
+    # Its verdict "supported" agrees with both "S" codes, not with "O"; "?" is not judgeable.
+    claims = tmp_path / "stage2.claims.jsonl"
+    claims.write_text(json.dumps({"product": "granola", "meeting_id": "IS1008a", "text": secret,
+                                  "human": "supported"}) + "\n")  # fmt: skip
+    snap = FA.snapshot_notes_check(rec, sheet, claims)
     text = json.dumps(snap)
     assert secret not in text and "IS1008a" not in text and "IB4003" not in text
     cl = snap["human"]["claims"]
     assert (cl["n"], cl["judgeable"], cl["agree_with_checker"]) == (4, 3, 1)
     assert cl["by_automated"]["supported"] == {"overreach": 1, "supported": 1}
     assert snap["human"]["chat"]["by_automated"] == {"confident_contradiction": {"partly_right": 1}}
+    assert (cl["matched_in_headline_run"], cl["agree_with_headline_run"]) == (4, 2)
     assert snap["grounding"]["products"]["granola"]["k"] == 9
+    assert snap["grounding"]["products"]["granola"]["classes"]["borderline"]["k"] == 0
     bad = tmp_path / "bad.jsonl"
     bad.write_text(json.dumps({**rows[0], "kian": "Z"}) + "\n")
     with pytest.raises(KeyError):  # an unknown sheet code is never guessed
-        FA.snapshot_notes_check(rec, bad)
+        FA.snapshot_notes_check(rec, bad, claims)
 
 
 def test_answer_types_partition_every_answer() -> None:

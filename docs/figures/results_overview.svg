@@ -197,13 +197,13 @@ L 391.68 108.108
 " clip-path="url(#pa62151f535)" style="fill: none; stroke-dasharray: 2.4,2.4; stroke-dashoffset: 0; stroke: #009988; stroke-width: 1.6"/>
    </g>
    <g id="line2d_19">
-    <path d="M 363.647232 139.86 
-L 381.34656 139.86 
+    <path d="M 353.499264 139.86 
+L 374.59008 139.86 
 " clip-path="url(#pa62151f535)" style="fill: none; stroke: #000000; stroke-width: 1.6"/>
    </g>
    <g id="line2d_20">
-    <path d="M 319.796352 153.468 
-L 351.67104 153.468 
+    <path d="M 323.161344 153.468 
+L 354.373632 153.468 
 " clip-path="url(#pa62151f535)" style="fill: none; stroke: #009988; stroke-width: 1.6"/>
    </g>
    <g id="line2d_21">
@@ -279,24 +279,24 @@ z
    </g>
    <g id="line2d_31">
     <g>
-     <use xlink:href="#m8a36d6e8a3" x="374.510592" y="139.86" style="stroke: #000000"/>
+     <use xlink:href="#m8a36d6e8a3" x="365.925888" y="139.86" style="stroke: #000000"/>
     </g>
    </g>
    <g id="text_14">
-    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; text-anchor: start" x="399.6288" y="142.197891" transform="rotate(-0 399.6288 142.197891)">94%</text>
+    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; text-anchor: start" x="399.6288" y="142.197891" transform="rotate(-0 399.6288 142.197891)">90%</text>
    </g>
    <g id="line2d_32">
     <g>
-     <use xlink:href="#ma268e7b4b4" x="337.442688" y="153.468" style="fill: #009988; stroke: #009988"/>
+     <use xlink:href="#ma268e7b4b4" x="340.54272" y="153.468" style="fill: #009988; stroke: #009988"/>
     </g>
    </g>
    <g id="text_15">
-    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; text-anchor: start; fill: #009988" x="399.6288" y="155.805891" transform="rotate(-0 399.6288 155.805891)">80%</text>
+    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; text-anchor: start; fill: #009988" x="399.6288" y="155.805891" transform="rotate(-0 399.6288 155.805891)">81%</text>
    </g>
    <g id="text_16">
     <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; fill: #666666" transform="translate(436.7232 139.14025)">different claims, no paired</text>
-    <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; fill: #666666" transform="translate(436.7232 148.742437)">test; checker noise inflates</text>
-    <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; fill: #666666" transform="translate(436.7232 158.344625)">the gap (see Notes)</text>
+    <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; fill: #666666" transform="translate(436.7232 148.742437)">test; one-notch checker</text>
+    <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; fill: #666666" transform="translate(436.7232 158.344625)">disagreements widen it (Notes)</text>
    </g>
    <g id="line2d_33">
     <g>
@@ -347,9 +347,9 @@ z
   </g>
   <g id="text_25">
    <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; fill: #666666" transform="translate(5.76 317.742781)">Capture: share of 15 s windows of AMI speech found in the app's transcript (windows cluster by meeting, so the whisker is the per-meeting</text>
-   <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; fill: #666666" transform="translate(5.76 327.344969)">range, not a CI). Notes: first automated grounding pass; claims differ between apps, so no paired test. Answers: our reader over each app's</text>
-   <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; fill: #666666" transform="translate(5.76 336.947156)">own notes, judged against AMI's human summaries; paired sign test on the same questions. Granola-only measures (Chat answers) are</text>
-   <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; fill: #666666" transform="translate(5.76 346.549344)">omitted here.</text>
+   <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; fill: #666666" transform="translate(5.76 327.344969)">range, not a CI). Notes: corrected automated grounding run (352698f); claims differ between apps, so no paired test. Answers: our reader</text>
+   <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; fill: #666666" transform="translate(5.76 336.947156)">over each app's own notes, judged against AMI's human summaries; paired sign test on the same questions. Granola-only measures (Chat</text>
+   <text style="font-size: 8px; font-family: 'DejaVu Sans', 'Helvetica', 'Arial', sans-serif; fill: #666666" transform="translate(5.76 346.549344)">answers) are omitted here.</text>
   </g>
   <g id="legend_1">
    <g id="line2d_37">

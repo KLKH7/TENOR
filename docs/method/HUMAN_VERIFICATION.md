@@ -33,7 +33,7 @@ Automated judges decide most TENOR verdicts, and on meeting outputs they over-co
 | Labels collected | 23 (20 note claims, 3 Chat answers) | about 100 |
 | Verifiers | 1 (the author, who also designed the study) | at least 2, for agreement between humans |
 
-**What the 23 labels show so far:** of 20 sampled note claims, the verifier could judge 12, agreed with the automated checker on 4, and found 0 wrong and 1 overreach. Of the 3 Chat answers the automated judge called the strongest confident contradictions, 0 were clearly wrong; all were partly right. These are counts, not rates: the sample is too small for an interval to be informative.
+**What the 23 labels show so far:** of 20 sampled note claims, the verifier could judge 12, agreed with the automated checker on 4 (its first grounding pass, on which the sample was drawn; 7 on the corrected run), and found 0 wrong and 1 overreach. Of the 3 Chat answers the automated judge called the strongest confident contradictions, 0 were clearly wrong; all were partly right. These are counts, not rates: the sample is too small for an interval to be informative.
 
 ## Threats to validity
 

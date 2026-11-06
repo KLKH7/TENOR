@@ -270,7 +270,7 @@
  "suptitle": "When an automated judge says “wrong”, does a human agree? (23 labels)",
  "texts": [
   "When an automated judge says “wrong”, does a human agree? (23 labels)",
-  "Human: 1 verifier, reading the AMI source. Of 12 note claims the human could judge, they agreed with the checker\non 4. Counts, not rates: the sample is too small for an interval to mean much.",
-  "Note claims: 20 sampled from both apps' notes, leaning towards items the checker flagged (so this overstates the over-count a uniform sample would show); “supported” rows were flagged by the app-transcript check, or are controls. Chat: the 3 answers the automated judge called the strongest confident contradictions. One verifier, who also designed the study; target about 100 labels and a second verifier. docs/method/HUMAN_VERIFICATION.md"
+  "Human: 1 verifier, reading the AMI source. Of 12 note claims the human could judge, they agreed with the checker\non 4 (first pass; 7 on the corrected run). Counts, not rates: the sample is too small for an interval to mean much.",
+  "Note claims: 20 sampled from both apps' notes, leaning towards items the checker flagged (so this overstates the over-count a uniform sample would show); “supported” rows were flagged by the app-transcript check, or are controls. Chat: the 3 answers the automated judge called the strongest confident contradictions. Note-claim verdicts are the first grounding pass's, on which the sample was drawn; the corrected run's verdicts on the same claims agree with the human on 7 of 12. One verifier, who also designed the study; target about 100 labels and a second verifier. docs/method/HUMAN_VERIFICATION.md"
  ]
 }

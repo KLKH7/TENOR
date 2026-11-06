@@ -1,26 +1,140 @@
 {
   "grounding": {
+    "date": "2026-11-05T16:16:21Z",
     "products": {
       "granola": {
         "ci95": [
-          0.8942,
-          0.961
+          0.8559,
+          0.9355
         ],
-        "k": 202,
+        "classes": {
+          "borderline": {
+            "ci95": [
+              0.0321,
+              0.0946
+            ],
+            "k": 12,
+            "n": 216,
+            "rate": 0.0556
+          },
+          "human_only": {
+            "ci95": [
+              0.0008,
+              0.0258
+            ],
+            "k": 1,
+            "n": 216,
+            "rate": 0.0046
+          },
+          "inferred": {
+            "ci95": [
+              0.0072,
+              0.0466
+            ],
+            "k": 4,
+            "n": 216,
+            "rate": 0.0185
+          },
+          "note_error": {
+            "ci95": [
+              0.0,
+              0.0175
+            ],
+            "k": 0,
+            "n": 216,
+            "rate": 0.0
+          },
+          "ok": {
+            "ci95": [
+              0.8559,
+              0.9355
+            ],
+            "k": 195,
+            "n": 216,
+            "rate": 0.9028
+          },
+          "transcript_propagated": {
+            "ci95": [
+              0.0072,
+              0.0466
+            ],
+            "k": 4,
+            "n": 216,
+            "rate": 0.0185
+          }
+        },
+        "k": 195,
         "n": 216,
-        "rate": 0.9352
+        "rate": 0.9028
       },
       "wispr": {
         "ci95": [
-          0.7287,
-          0.849
+          0.7414,
+          0.8592
         ],
-        "k": 136,
+        "classes": {
+          "borderline": {
+            "ci95": [
+              0.0723,
+              0.167
+            ],
+            "k": 19,
+            "n": 171,
+            "rate": 0.1111
+          },
+          "human_only": {
+            "ci95": [
+              0.001,
+              0.0324
+            ],
+            "k": 1,
+            "n": 171,
+            "rate": 0.0058
+          },
+          "inferred": {
+            "ci95": [
+              0.0126,
+              0.0666
+            ],
+            "k": 5,
+            "n": 171,
+            "rate": 0.0292
+          },
+          "note_error": {
+            "ci95": [
+              0.0032,
+              0.0416
+            ],
+            "k": 2,
+            "n": 171,
+            "rate": 0.0117
+          },
+          "ok": {
+            "ci95": [
+              0.7414,
+              0.8592
+            ],
+            "k": 138,
+            "n": 171,
+            "rate": 0.807
+          },
+          "transcript_propagated": {
+            "ci95": [
+              0.0162,
+              0.0744
+            ],
+            "k": 6,
+            "n": 171,
+            "rate": 0.0351
+          }
+        },
+        "k": 138,
         "n": 171,
-        "rate": 0.7953
+        "rate": 0.807
       }
     },
-    "run": "b68b0df",
+    "render": "stage2-input.v2",
+    "run": "352698f",
     "what": "note claims supported by both the app's and AMI's transcript (class ok)"
   },
   "human": {
@@ -34,6 +148,7 @@
     },
     "claims": {
       "agree_with_checker": 4,
+      "agree_with_headline_run": 7,
       "by_automated": {
         "contradicted": {
           "cannot_judge": 3,
@@ -49,7 +164,9 @@
           "supported": 4
         }
       },
+      "checker_run": "first grounding pass (verdicts stored on the sheet)",
       "judgeable": 12,
+      "matched_in_headline_run": 20,
       "n": 20
     },
     "verifiers": 1
@@ -57,6 +174,7 @@
   "note": "Content-free counts from the gitignored data/ami/results/facts files: no claim, question or answer text and no meeting IDs. Rebuild with `concentrate figures <stamp> --refresh-ami`.",
   "sources": [
     "human_verification_v3.jsonl",
-    "stage2.reclassified.json"
+    "stage2.claims.jsonl",
+    "stage2.json"
   ]
 }

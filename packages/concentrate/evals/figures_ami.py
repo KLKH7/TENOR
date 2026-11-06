@@ -6,9 +6,9 @@ Inputs (all committed, numbers only):
 - ``ami_retention``: ``evals/reports/ami/deletion_ami.json`` (the retention replication, 5
   conditions A, B, B', C, D on the same AMI questions, with paired sign tests);
 - ``notes_check``: ``evals/reports/ami/notes_check.json``, a content-free snapshot of the
-  notes-grounding pass and the human verification sheet, built by :func:`snapshot_notes_check`
-  from the gitignored ``data/ami/results/facts`` files (counts only: no claim, question or
-  answer text, no meeting IDs);
+  headline notes-grounding run (the corrected stage-2 run) and the human verification sheet,
+  built by :func:`snapshot_notes_check` from the gitignored ``data/ami/results/facts`` files
+  (counts only: no claim, question or answer text, no meeting IDs);
 - ``deletion``: ``evals/reports/real-deletion-sim-dev.aggregate.json`` (the earlier private
   study), used only for a footnote on the non-replication.
 
@@ -100,8 +100,8 @@ def overview_rows(
             "n": f"n = {g['granola']['n']} / {g['wispr']['n']} claims",
             "whisker": "95% CI",
             "values": {p: _rate_row(g[p]) for p in _PRODUCTS},
-            "note": "different claims, no paired\ntest; checker noise inflates\n"
-            "the gap (see Notes)",
+            "note": "different claims, no paired\ntest; one-notch checker\n"
+            "disagreements widen it (Notes)",
         }
     )
     for metric, name in (("not_wrong", "not wrong"), ("correct", "correct")):
@@ -184,8 +184,9 @@ def fig_results_overview(
     fs.footnote(
         fig,
         "Capture: share of 15 s windows of AMI speech found in the app's transcript (windows "
-        "cluster by meeting, so the whisker is the per-meeting range, not a CI). Notes: first "
-        "automated grounding pass; claims differ between apps, so no paired test. Answers: our "
+        "cluster by meeting, so the whisker is the per-meeting range, not a CI). Notes: corrected "
+        f"automated grounding run ({notes['grounding']['run']}); claims differ between apps, "
+        "so no paired test. Answers: our "
         "reader over each app's own notes, judged against AMI's human summaries; paired sign "
         "test on the same questions. Granola-only measures (Chat answers) are omitted here.",
     )
@@ -389,8 +390,9 @@ def fig_judge_vs_human(notes: dict[str, Any] | None) -> Any:
         fig,
         f"When an automated judge says \u201cwrong\u201d, does a human agree? ({total} labels)",
         f"Human: {h['verifiers']} verifier, reading the AMI source. Of {judgeable} note claims the "
-        f"human could judge, they agreed with the checker\non {agree}. Counts, not rates: "
-        "the sample is too small for an interval to mean much.",
+        f"human could judge, they agreed with the checker\non {agree} (first pass; "
+        f"{cl['agree_with_headline_run']} on the corrected run). Counts, not rates: the sample "
+        "is too small for an interval to mean much.",
     )
     fs.footnote(
         fig,
@@ -398,10 +400,12 @@ def fig_judge_vs_human(notes: dict[str, Any] | None) -> Any:
         "checker flagged (so this overstates the over-count a uniform sample would show); "
         "\u201csupported\u201d rows were flagged by the app-transcript check, or are controls. "
         f"Chat: the {h['chat']['n']} answers the automated judge called the strongest confident "
-        "contradictions. One verifier, who also designed the study; target about 100 labels "
-        "and a second verifier. docs/method/HUMAN_VERIFICATION.md",
+        "contradictions. Note-claim verdicts are the first grounding pass's, on which the "
+        f"sample was drawn; the corrected run's verdicts on the same claims agree with the human "
+        f"on {cl['agree_with_headline_run']} of {judgeable}. One verifier, who also designed the "
+        "study; target about 100 labels and a second verifier. docs/method/HUMAN_VERIFICATION.md",
     )
-    fig.subplots_adjust(left=0.25, right=0.98, top=0.68, bottom=0.25)
+    fig.subplots_adjust(left=0.25, right=0.98, top=0.68, bottom=0.29)
     return fig
 
 
@@ -414,27 +418,54 @@ _CHAT_CODES = {"B": "partly_right"}  # "both partly right"
 _AGREE = {"supported": "supported", "inferred": "overreach"}
 
 
-def snapshot_notes_check(reclassified: Path, verification: Path) -> dict[str, Any]:
-    """Counts only, from the gitignored grounding pass and human verification sheet.
+# Classes copied into the snapshot (each as k / n / rate / Wilson ci95), per product.
+NOTES_CLASSES = (
+    "ok",
+    "transcript_propagated",
+    "note_error",
+    "borderline",
+    "inferred",
+    "human_only",
+)
 
-    ``reclassified``: ``stage2.reclassified.json`` (first grounding pass, re-classified at $0;
-    the numbers in the README's Notes table). ``verification``: the v3 human sheet (JSONL);
-    only its product, automated-verdict and human-code fields are read.
+
+def _human_verdicts(claims: Path) -> dict[tuple[str, str, str], str]:
+    """(product, meeting, claim text) -> the AMI-side verdict, from a stage-2 claims JSONL."""
+    out: dict[tuple[str, str, str], str] = {}
+    for line in claims.read_text().splitlines():
+        if line.strip():
+            r = json.loads(line)
+            out[(str(r["product"]), str(r["meeting_id"]), str(r["text"]))] = str(r["human"])
+    return out
+
+
+def snapshot_notes_check(grounding: Path, verification: Path, claims: Path) -> dict[str, Any]:
+    """Counts only, from the gitignored grounding run and human verification sheet.
+
+    ``grounding``: the headline stage-2 aggregate (``stage2.json``: the corrected run, with the
+    borderline class, named AMI speakers and the labels note). ``verification``: the v3 human
+    sheet (JSONL). Its automated verdicts (``checker_human_verdict_run1``) are stored on the
+    sheet and come from the *first* grounding pass, on which the sample was drawn; the figure
+    compares the human with those. ``claims``: the same run's ``stage2.claims.jsonl``; each
+    sheet row is matched to it by (product, meeting, claim text), the sheet has no claim IDs,
+    to also count agreement with the headline run's verdicts. Only the sheet's product, verdict
+    and human-code fields, and the claims' verdicts, reach the output.
     """
-    rec = json.loads(reclassified.read_text())
-    grounding = {
-        p: {
-            "k": v["classes"]["ok"]["k"],
-            "n": v["classes"]["ok"]["n"],
-            "rate": v["classes"]["ok"]["rate"],
-            "ci95": v["classes"]["ok"]["ci95"],
+    rec = json.loads(grounding.read_text())
+    products: dict[str, Any] = {}
+    for p, v in sorted(rec["products"].items()):
+        cls = v["classes"]
+        products[p] = {
+            **{f: cls["ok"][f] for f in ("k", "n", "rate", "ci95")},
+            "classes": {
+                c: {f: cls[c][f] for f in ("k", "n", "rate", "ci95")} for c in NOTES_CLASSES
+            },
         }
-        for p, v in sorted(rec["products"].items())
-    }
-    claims: dict[str, dict[str, int]] = {}
+    headline = _human_verdicts(claims)
+    claims_by: dict[str, dict[str, int]] = {}
     chat: dict[str, dict[str, int]] = {}
     verifiers: set[str] = set()
-    n_claims = agree = judgeable = n_chat = 0
+    n_claims = agree = judgeable = n_chat = matched = agree_headline = 0
     for line in verification.read_text().splitlines():
         if not line.strip():
             continue
@@ -449,21 +480,27 @@ def snapshot_notes_check(reclassified: Path, verification: Path) -> dict[str, An
             continue
         auto = str(r["checker_human_verdict_run1"])
         human = _CLAIM_CODES[r["kian"]]
-        cell = claims.setdefault(auto, {})
+        cell = claims_by.setdefault(auto, {})
         cell[human] = cell.get(human, 0) + 1
         n_claims += 1
+        now = headline.get((str(r["product"]), str(r["meeting"]), str(r["claim"])))
+        matched += now is not None
         if human != "cannot_judge":
             judgeable += 1
             agree += int(_AGREE.get(auto, auto) == human)
+            if now is not None:
+                agree_headline += int(_AGREE.get(now, now) == human)
     return {
         "note": "Content-free counts from the gitignored data/ami/results/facts files: no claim, "
         "question or answer text and no meeting IDs. Rebuild with `concentrate figures <stamp> "
         "--refresh-ami`.",
-        "sources": sorted(p.name for p in (reclassified, verification)),
+        "sources": sorted(p.name for p in (grounding, verification, claims)),
         "grounding": {
             "what": "note claims supported by both the app's and AMI's transcript (class ok)",
             "run": rec["meta"].get("git_sha"),
-            "products": grounding,
+            "date": rec["meta"].get("date"),
+            "render": rec["meta"].get("render"),
+            "products": products,
         },
         "human": {
             "verifiers": len(verifiers),
@@ -471,7 +508,10 @@ def snapshot_notes_check(reclassified: Path, verification: Path) -> dict[str, An
                 "n": n_claims,
                 "judgeable": judgeable,
                 "agree_with_checker": agree,
-                "by_automated": {k: dict(sorted(v.items())) for k, v in sorted(claims.items())},
+                "checker_run": "first grounding pass (verdicts stored on the sheet)",
+                "matched_in_headline_run": matched,
+                "agree_with_headline_run": agree_headline,
+                "by_automated": {k: dict(sorted(v.items())) for k, v in sorted(claims_by.items())},
             },
             "chat": {
                 "n": n_chat,

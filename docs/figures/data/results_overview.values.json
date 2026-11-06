@@ -39,33 +39,33 @@
     ],
     [
      [
-      89.42,
+      85.59,
       2.15
      ],
      [
-      96.1,
+      93.55,
       2.15
      ]
     ],
     [
      [
-      93.52,
+      90.28,
       2.15
      ]
     ],
     [
      [
-      72.87,
+      74.14,
       1.85
      ],
      [
-      84.9,
+      85.92,
       1.85
      ]
     ],
     [
      [
-      79.53,
+      80.7,
       1.85
      ]
     ],
@@ -169,17 +169,17 @@
      3.0
     ],
     [
-     "94%",
+     "90%",
      103.0,
      2.15
     ],
     [
-     "80%",
+     "81%",
      103.0,
      1.85
     ],
     [
-     "different claims, no paired\ntest; checker noise inflates\nthe gap (see Notes)",
+     "different claims, no paired\ntest; one-notch checker\ndisagreements widen it (Notes)",
      117.0,
      2.0
     ],
@@ -269,6 +269,6 @@
  "texts": [
   "Where do Granola and Wispr Flow differ, and by how much?",
   "Every measure both products have, on public AMI meetings (7 replayed; answers on 5). Preliminary; small n.",
-  "Capture: share of 15 s windows of AMI speech found in the app's transcript (windows cluster by meeting, so the whisker is the per-meeting range, not a CI). Notes: first automated grounding pass; claims differ between apps, so no paired test. Answers: our reader over each app's own notes, judged against AMI's human summaries; paired sign test on the same questions. Granola-only measures (Chat answers) are omitted here."
+  "Capture: share of 15 s windows of AMI speech found in the app's transcript (windows cluster by meeting, so the whisker is the per-meeting range, not a CI). Notes: corrected automated grounding run (352698f); claims differ between apps, so no paired test. Answers: our reader over each app's own notes, judged against AMI's human summaries; paired sign test on the same questions. Granola-only measures (Chat answers) are omitted here."
  ]
 }
