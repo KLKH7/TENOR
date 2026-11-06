@@ -50,7 +50,7 @@ A vendor can measure this internally. An outside benchmark adds independence, co
 | **Concentrate** | extracted facts that cite transcript lines, with the dates they were true [13] |
 | Concentrate + fallback | the facts, plus transcript passages when the facts can't answer [18] |
 
-- **Concentrate is a reference system, not a product.** It shows what precomputing gains and loses.
+- **Concentrate (the archived Concentrate memory system) is a reference system, not a product.** It shows what precomputing gains and loses.
 - **Our systems share one answer model** (Opus 5.5) and one judge.
 
 ## 4. Results
@@ -177,16 +177,16 @@ Figures are regenerated and checked in CI from these inputs [23].
 
 ```bash
 uv sync && uv run pytest                                   # offline tests
-uv run concentrate deletion-sim --quote --split dev        # exact token-counted quote, no paid calls
-uv run concentrate figures 20261103T002456Z                # regenerate every figure
-uv run concentrate synth --seed 42 --scale xl              # regenerate Northwind-XL (deterministic, free)
-uv run concentrate analyze 20261103T002456Z                # paired stats, power, cost frontier
-uv run concentrate notes-vs-transcript                     # re-tag saved answers ($0)
+uv run tenor deletion-sim --quote --split dev              # exact token-counted quote, no paid calls
+uv run tenor figures 20261103T002456Z                      # regenerate every figure
+uv run tenor synth --seed 42 --scale xl                    # regenerate Northwind-XL (deterministic, free)
+uv run tenor analyze 20261103T002456Z                      # paired stats, power, cost frontier
+uv run tenor notes-vs-transcript                           # re-tag saved answers ($0)
 ```
 
 **On your own meetings:**
 1. Write questions: `real-kit add --split test` or `real-kit import-test`.
-2. Price it: `uv run concentrate real-kit run --product granola --split test --estimate`.
+2. Price it: `uv run tenor real-kit run --product granola --split test --estimate`.
 3. Run it without `--estimate`.
 
 Everything about your meetings stays in the gitignored `data/real/`; only a content-free aggregate can be committed [9].

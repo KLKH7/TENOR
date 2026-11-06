@@ -52,7 +52,7 @@ Users ask their note-taker about past meetings ("what did we decide about the pr
 - **LD and LM are scored from L's item judgments** (one judge call, not three), so their difference from L is the filter alone, not judge noise. LM lists the same items as L, so its recall and precision equal L's by construction; its test is whether "unconfirmed" items are less often right than confirmed ones.
 - **Tests.** Paired sign tests per question: L vs C and LD vs C (headline), then L vs N, LD vs L, LM vs L, LM vs LD, on recall and both precisions. With 30 questions only large effects can reach significance.
 - **Known limits.** Granola's AMI transcripts label every line "Them", so the speaker label carries no information and owners are inferred. The lenient precision accepts any true item, so a decision question answered with true action items scores well on it; the strict precision does not. `verify_item.v1` rejected items whose owner the lines could not show; v2 judges content only (changed on DEV).
-- **Status.** Full run done (results below). Code: `concentrate ami list-check` ([`list_check.py`](../../packages/concentrate/evals/list_check.py)).
+- **Status.** Full run done (results below). Code: `tenor ami list-check` ([`list_check.py`](../../packages/tenor/evals/list_check.py)).
 
 ### E1 results (Preliminary)
 

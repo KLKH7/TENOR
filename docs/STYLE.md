@@ -20,7 +20,7 @@ How every TENOR doc and figure is written. One page; follow it for every new doc
 
 - **One question per figure,** written as its title ("What does deleting transcripts cost?").
 - **Caption says what to see,** plus data source, split and n.
-- **Generated, never hand-edited.** `uv run concentrate figures <report>`; CI checks them.
+- **Generated, never hand-edited.** `uv run tenor figures <report>`; CI checks them.
 - **Show uncertainty.** 95% CIs as whiskers.
 - **Same colours for the same system** across figures.
 

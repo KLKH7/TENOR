@@ -43,7 +43,7 @@ Part of [TENOR](../README.md) (archived synthetic diagnostics). Benchmark card: 
 | Config | Meetings | Questions (dev / test) | Shipped |
 |---|---|---|---|
 | `base` | 40 | 230 (71 / 159) | committed at `data/fixtures/northwind/` |
-| `xl` | 184 | 296 (90 / 206) | regenerated with `uv run concentrate synth --seed 42 --scale xl` into `data/fixtures/large/` |
+| `xl` | 184 | 296 (90 / 206) | regenerated with `uv run tenor synth --seed 42 --scale xl` into `data/fixtures/large/` |
 
 Files in a fixture directory:
 

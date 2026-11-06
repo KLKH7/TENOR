@@ -12,7 +12,7 @@ This page defines the retention track (what an answer loses when transcripts are
 | **Earlier result** | Author's 4 private Granola meetings, 47 DEV questions: 89% with transcripts, 57% from notes only (paired 2–17, p = 0.001); 87% with an on-demand transcript. Superseded |
 | **Status** | AMI result preliminary (automated judge, n = 68). Earlier result private and superseded |
 
-Code: [`evals/deletion_sim.py`](../../packages/concentrate/evals/deletion_sim.py), CLI `concentrate deletion-sim`.
+Code: [`evals/deletion_sim.py`](../../packages/tenor/evals/deletion_sim.py), CLI `tenor deletion-sim`.
 Tests: [`tests/test_deletion_sim.py`](../../tests/test_deletion_sim.py) (fakes only, no network).
 AMI replication: **run 5 Nov 2026** ([results](#ami-replication-5-nov-2026), [design](#ami-replication-design)).
 
@@ -108,14 +108,14 @@ Each condition after A adds one layer to the one before it.
 |---|---|---|---|
 | A | `granola` | nothing: Granola's own agent answers (`query_granola_meetings`, black box) | Granola today, transcripts kept |
 | B | `notes_only` | Granola's notes (AI summary + typed notes) for **every** meeting held by the as-of date | Granola chat **after** deletion |
-| C | `notes_facts` | B + Concentrate's verified facts, commitments and digests, every transcript deleted | deletion with a fact layer extracted first |
+| C | `notes_facts` | B + verified facts, commitments and digests from the archived Concentrate memory system, every transcript deleted | deletion with a fact layer extracted first |
 | D | `notes_facts_fallback` | C + transcript passages, only when C's answer abstains or says the material doesn't cover it | the hot transcript deleted, a cold copy read on demand |
 
 B, C and D all use `answer.v1` on the same answer model as every other system. A is Granola's own agent and model.
 
 ### Where the notes come from
 
-The notes are Granola's own AI notes, as the public MCP returns them (`get_meetings`). We use the copy already synced into `data/real.db` by `concentrate sync --source granola-mcp`. That copy came from the same MCP, so no live call is needed. Only reads were ever made (the MCP source is read-only by construction).
+The notes are Granola's own AI notes, as the public MCP returns them (`get_meetings`). We use the copy already synced into `data/real.db` by `tenor sync --source granola-mcp`. That copy came from the same MCP, so no live call is needed. Only reads were ever made (the MCP source is read-only by construction).
 
 ### What each condition can and can't tell us
 
@@ -145,12 +145,12 @@ Files: per-answer rows go to `data/real/reports/<stamp>.deletion.jsonl` (private
 ## Splits
 
 - `--split dev`: the 47 verified questions already seen while building. Granola's answers to 39 of them are recorded; 8 would be asked live (hosted, $0 to us).
-- `--split test`: the user's hand-written held-out questions, imported with `concentrate real-kit import-test data/real/test_questions.md`. None are imported yet.
+- `--split test`: the user's hand-written held-out questions, imported with `tenor real-kit import-test data/real/test_questions.md`. None are imported yet.
   - Until they are, the quote prices 30 test questions (`--test-n`) at the dev per-question rate.
 
 ## The exact cost quote
 
-Run with `concentrate deletion-sim --quote --split dev|test`. It makes no paid calls.
+Run with `tenor deletion-sim --quote --split dev|test`. It makes no paid calls.
 
 How it is counted:
 - **Input tokens are counted exactly.** Every request the system would send is built and counted with the free `count_tokens` endpoint.
@@ -241,7 +241,7 @@ Granola's 6% confident error is the same under P2-T's flag-only definition (answ
 
 The result above rests on the author's 4 private meetings, so nobody else can check it. This replicates it on the public [AMI corpus](../method/AMI_REPLAY.md): AMI meetings played into Granola and Wispr Flow. It can be released, and n grows as more AMI meetings are recorded.
 
-Status: **run 5 Nov 2026**; results [above](#ami-replication-5-nov-2026). Code: [`evals/deletion_ami.py`](../../packages/concentrate/evals/deletion_ami.py), CLI `concentrate ami deletion-sim`. Tests: [`tests/test_deletion_ami.py`](../../tests/test_deletion_ami.py) (fakes only).
+Status: **run 5 Nov 2026**; results [above](#ami-replication-5-nov-2026). Code: [`evals/deletion_ami.py`](../../packages/tenor/evals/deletion_ami.py), CLI `tenor ami deletion-sim`. Tests: [`tests/test_deletion_ami.py`](../../tests/test_deletion_ami.py) (fakes only).
 
 ### Conditions
 
@@ -271,7 +271,7 @@ Same ladder, one product comparison added.
 
 ### Quote (2026-11-05, question scope, $0 to compute)
 
-`concentrate ami deletion-sim --quote`. Inputs counted with the free `count_tokens`; output and fallback rate from the real DEV run.
+`tenor ami deletion-sim --quote`. Inputs counted with the free `count_tokens`; output and fallback rate from the real DEV run.
 
 | Run | Expected | High |
 |---|---|---|
@@ -287,9 +287,9 @@ Same ladder, one product comparison added.
 ### Commands
 
 ```bash
-uv run concentrate ami deletion-sim --quote
-uv run concentrate ami deletion-sim --pilot              # hard cap $1.00, asks first
-uv run concentrate ami deletion-sim --max-usd 11 --commit-to evals/reports/ami/deletion-sim.aggregate.json
+uv run tenor ami deletion-sim --quote
+uv run tenor ami deletion-sim --pilot                    # hard cap $1.00, asks first
+uv run tenor ami deletion-sim --max-usd 11 --commit-to evals/reports/ami/deletion-sim.aggregate.json
 ```
 
 Every client (answers, judge, fact-layer build) shares one ledger and one hard cap (`LLMClient(max_usd=...)`). A run refuses to start if the quote's high estimate exceeds the cap. Per-answer rows stay in `data/ami/results/deletion/` (gitignored); the aggregate is checked by `check_committable` (no question, gold or answer text).
@@ -314,11 +314,11 @@ Every client (answers, judge, fact-layer build) shares one ledger and one hard c
 ## Commands
 
 ```bash
-uv run concentrate deletion-sim --quote --split dev
+uv run tenor deletion-sim --quote --split dev
 ```
 
 ```bash
-uv run concentrate deletion-sim --split dev --tags data/real/tags.json --budget 9
+uv run tenor deletion-sim --split dev --tags data/real/tags.json --budget 9
 ```
 
 The run asks for confirmation unless `--yes` is passed, and it stops at `--budget`.

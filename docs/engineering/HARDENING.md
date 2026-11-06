@@ -1,15 +1,15 @@
 # Hardening: timeouts, retries, stall detection, resumable builds, CI
 
-Workstream I, 2026-11-02. Code: `packages/concentrate/llm/resilience.py`,
-`packages/concentrate/watchdog.py`, `packages/concentrate/agents/progress.py`,
-`packages/concentrate/agents/kuzu_safety.py`,
+Workstream I, 2026-11-02. Code: `packages/tenor/llm/resilience.py`,
+`packages/tenor/watchdog.py`, `packages/tenor/agents/progress.py`,
+`packages/tenor/agents/kuzu_safety.py`,
 `.github/workflows/ci.yml`. Tests: `tests/test_hardening.py` plus kill-and-resume tests in
 `tests/test_mem0_system.py` and `tests/test_graphiti_system.py`.
 
 ## 1. What went wrong
 
-On 2026-11-02 all three long memory builds (`concentrate ingest` for Mem0, Graphiti and
-Concentrate) froze at the same moment and stayed frozen for over 30 minutes. Each process sat at
+On 2026-11-02 all three long memory builds (`tenor ingest` for Mem0, Graphiti and
+the archived Concentrate memory system) froze at the same moment and stayed frozen for over 30 minutes. Each process sat at
 0% CPU, holding a TCP connection to the Anthropic API in `ESTABLISHED` (or half-`CLOSED`) state.
 Nothing was printed.
 
@@ -99,7 +99,7 @@ can crash.
 
 Follow these steps if a build fails with `GraphStoreError ... cannot be opened`:
 
-1. Make sure no build is running on that store (`pgrep -fl "concentrate ingest"`).
+1. Make sure no build is running on that store (`pgrep -fl "tenor ingest"`).
 2. Set the log aside; don't delete it: `mv graph.kuzu.wal graph.kuzu.wal.broken`.
 3. Rerun the same command. It test-opens the main file, reconciles `progress.jsonl` against the
    episodes it holds (step 4 above, which replaces the manual trim we did), and rebuilds only
@@ -123,7 +123,7 @@ on something genuinely stuck.
 ### How to run a long build now
 
 ```bash
-until uv run concentrate ingest --xl --systems b4; do
+until uv run tenor ingest --xl --systems b4; do
   code=$?; [ "$code" -eq 75 ] || [ "$code" -eq 1 ] || exit "$code"
   echo "ingest stopped ($code); resuming in 30s"; sleep 30
 done

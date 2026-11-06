@@ -151,7 +151,7 @@ These exist [spec summary]: `GET /v1/spaces`, `POST /v1/notes/search` (keywords,
 | Item | Value | Status |
 |---|---|---|
 | `query_granola_meetings` | An agent that searches and reads notes; answers are summary-first with `[[n]](https://notes.granola.ai/d/<id>)` citations | VERIFIED (live) |
-| Black-box track (`concentrate.blackbox`): `query_granola_meetings` changes nothing in the account, so it is the only tool the Granola adapter allowlists | ASSUMED from its name and docs ("query"); Granola's tool annotations (`readOnlyHint`) are not checked, because the OAuth caller doesn't list tools. The allowlist still refuses every other tool before sending |
+| Black-box track (`tenor.blackbox`): `query_granola_meetings` changes nothing in the account, so it is the only tool the Granola adapter allowlists | ASSUMED from its name and docs ("query"); Granola's tool annotations (`readOnlyHint`) are not checked, because the OAuth caller doesn't list tools. The allowlist still refuses every other tool before sending |
 | Black-box track: `query_granola_meetings` returns no abstain flag and no structured citations, so abstention is judged from the text and citations are parsed from the `notes.granola.ai/d/<id>` links | VERIFIED (live, 39 recorded answers) for the format; how stable it is over time is ASSUMED, so each recording keeps `asked_at` |
 | Transcript speaker labels via MCP | `Microphone`, `System audio`, or `System audio (<Full Name>)` when identified; plus `recording_context` (recorder, `microphone_sharing`) | VERIFIED (live). **Corrects** our assumption that names are rare |
 | `get_meeting_transcript(chunk_ids)` chunks: until 2026-11-04 a `passages` list (`speaker`, absolute `time`, `text`); **from 2026-11-05 a single rendered `transcript` string** of `[m:ss] Label: text` lines, offsets relative to the earliest timed block. No announcement; our sync silently read 0 lines until fixed. Both formats parsed; rendered offsets anchored at the note's `created_at` (approximate) | VERIFIED (live, 2026-11-05) |
@@ -161,7 +161,7 @@ These exist [spec summary]: `GET /v1/spaces`, `POST /v1/notes/search` (keywords,
 | Account plan seen by the MCP | `mcp_plan: "plus"` | VERIFIED (live) |
 | Unofficial internal API (`api.granola.ai/v1/get-document-transcript`) | utterances have `source`, `start_timestamp`, `end_timestamp`, `confidence` | UNOFFICIAL: reverse-engineered, archived 2026-02-05; **not used** |
 
-## MCP source mapping (`concentrate.sources.granola_mcp`)
+## MCP source mapping (`tenor.sources.granola_mcp`)
 
 How `GranolaMCPSource` turns MCP tool output into our wire models (`McpNote`/`McpNoteSummary`, which are the API models with UUID IDs):
 
@@ -181,7 +181,7 @@ How `GranolaMCPSource` turns MCP tool output into our wire models (`McpNote`/`Mc
 | `deleted_at` | always null (the MCP doesn't return deleted notes) | VERIFIED (documented behaviour) |
 | Rate limit | paced at 100 req/min, burst 10; `retry_after_seconds` honoured on rate-limit errors | VERIFIED (docs: ~100/min); error format ASSUMED |
 
-## Wispr Flow MCP (`concentrate.sources.wispr_mcp`)
+## Wispr Flow MCP (`tenor.sources.wispr_mcp`)
 
 Wispr Flow is the second real product (see [PRODUCTS.md](../method/HARNESS.md)). Sources, read **2026-11-04**:
 

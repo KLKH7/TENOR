@@ -15,7 +15,7 @@ Every later output (notes, answers, action items) is built on the transcript. A 
 | **Fact-token recall** | Recall of numbers, money and percentages, proper names and role words, with substitutions located by local alignment (stage 1 of [`WRONG_FACTS.md`](../method/WRONG_FACTS.md)) | $0 |
 | **Speakers found** | Number of distinct speakers the product's MCP output separates | $0 |
 
-Both products receive the same audio in the same session ([`AMI_REPLAY.md`](../method/AMI_REPLAY.md)). Granola's microphone turns are dropped (on AMI the microphone hears only the room); Wispr Flow has no channel split, so the room is kept silent. Code: `concentrate.ami.wer`, `concentrate.ami.facts`; commands `concentrate ami wer` and `concentrate facts stage1`.
+Both products receive the same audio in the same session ([`AMI_REPLAY.md`](../method/AMI_REPLAY.md)). Granola's microphone turns are dropped (on AMI the microphone hears only the room); Wispr Flow has no channel split, so the room is kept silent. Code: `tenor.ami.wer`, `tenor.ami.facts`; commands `tenor ami wer` and `tenor facts stage1`.
 
 ## Current results
 

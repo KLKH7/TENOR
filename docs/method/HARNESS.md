@@ -19,11 +19,11 @@ A product touches the benchmark in up to three places. Each one goes only throug
 
 | Interface | What it is for | Granola | Wispr Flow |
 |---|---|---|---|
-| **`Source`** (`concentrate.sources`) | Syncing meetings into a local SQLite store, so we can draft questions, pair meetings, and build notes-faithfulness cases | `GranolaMCPSource`: `list_meetings`, `get_meetings`, `get_meeting_transcript` | `WisprMCPSource`: `search_meetings`, `get_meeting`, `get_meeting_participants_enriched` |
-| **`Product`** (`concentrate.blackbox`) | Question answering (black-box track) | `GranolaProduct` (its own agent, `query_granola_meetings`) **and** the outside agent | the outside agent only (Wispr has no QA tool) |
+| **`Source`** (`tenor.sources`) | Syncing meetings into a local SQLite store, so we can draft questions, pair meetings, and build notes-faithfulness cases | `GranolaMCPSource`: `list_meetings`, `get_meetings`, `get_meeting_transcript` | `WisprMCPSource`: `search_meetings`, `get_meeting`, `get_meeting_participants_enriched` |
+| **`Product`** (`tenor.blackbox`) | Question answering (black-box track) | `GranolaProduct` (its own agent, `query_granola_meetings`) **and** the outside agent | the outside agent only (Wispr has no QA tool) |
 | **`NotesCase`** (`blackbox.notes_source`) | Notes faithfulness: the product's notes plus a transcript to check them against | `summary_markdown` (AI-enhanced notes) | the Flow Summary, optionally plus its `content` notes body |
 
-**Read-only by construction.** Every caller is wrapped in `AllowlistCaller` (`concentrate.sources.allowlist`). It refuses any tool outside the allowlist **before anything is sent**. Wispr's server is read-only too, according to its help centre, but we don't rely on that. Tests check the refusal for write-shaped and unknown names: `tests/test_wispr_mcp.py`, `tests/test_wispr_products.py`.
+**Read-only by construction.** Every caller is wrapped in `AllowlistCaller` (`tenor.sources.allowlist`). It refuses any tool outside the allowlist **before anything is sent**. Wispr's server is read-only too, according to its help centre, but we don't rely on that. Tests check the refusal for write-shaped and unknown names: `tests/test_wispr_mcp.py`, `tests/test_wispr_products.py`.
 
 ### Connecting to Wispr Flow
 
@@ -32,12 +32,12 @@ A product touches the benchmark in up to three places. Each one goes only throug
 - **The open question.** Wispr documents a browser sign-in but not whether it accepts dynamically registered clients. If sign-in fails at the registration step, Wispr only supports its listed clients (Claude, ChatGPT, Cursor, Gemini). In that case the sync needs a different route, and nothing here should be worked around.
 
 ```bash
-uv run concentrate sync --source wispr-mcp --db data/real_wispr.db
+uv run tenor sync --source wispr-mcp --db data/real_wispr.db
 ```
 
 ## The standard outside agent (agent-interface track)
 
-Granola's MCP has its own question-answering agent. Wispr's has none. Comparing Granola's agent with "nothing" would say nothing. Comparing two vendors' agents would mix model, prompt and data together. So the track holds the agent fixed and varies only the data interface (`concentrate.blackbox.outside_agent`).
+Granola's MCP has its own question-answering agent. Wispr's has none. Comparing Granola's agent with "nothing" would say nothing. Comparing two vendors' agents would mix model, prompt and data together. So the track holds the agent fixed and varies only the data interface (`tenor.blackbox.outside_agent`).
 
 **Held fixed for every product:**
 - the model (`LLMClient.model`);
@@ -66,7 +66,7 @@ Those differences are what the track measures, not noise.
 
 ## Pairing the same meeting across products
 
-Kian records each meeting in both products at once. `concentrate pair` then matches them (`concentrate.blackbox.pairing`):
+Kian records each meeting in both products at once. `tenor pair` then matches them (`tenor.blackbox.pairing`):
 
 1. **Time gate.** Start times (calendar start, else creation) must be within **±10 minutes**. Pairs outside the window are never made automatically.
 2. **Score.** A weighted mean of the signals both sides have, renormalised over the signals present:
@@ -77,7 +77,7 @@ Kian records each meeting in both products at once. `concentrate pair` then matc
 4. **Manual overrides win.** `data/real/pairs.override.json` holds `{"pairs": [{"a": <granola id>, "b": <wispr id>}], "never": [...]}`. Entries in `pairs` are forced; entries in `never` are blocked.
 
 ```bash
-uv run concentrate pair --granola-db data/real.db --wispr-db data/real_wispr.db
+uv run tenor pair --granola-db data/real.db --wispr-db data/real_wispr.db
 ```
 
 The command writes `data/real/pairs.json` (gitignored). It prints only meeting IDs, scores and counts: no titles, names or text.
@@ -117,9 +117,9 @@ The command writes `data/real/pairs.json` (gitignored). It prints only meeting I
    - Wait until both products have finished processing; Wispr's `finalized` flag must be true.
    - Then run both syncs:
      ```bash
-     uv run concentrate sync --source granola-mcp --db data/real.db
-     uv run concentrate sync --source wispr-mcp --db data/real_wispr.db
-     uv run concentrate pair
+     uv run tenor sync --source granola-mcp --db data/real.db
+     uv run tenor sync --source wispr-mcp --db data/real_wispr.db
+     uv run tenor pair
      ```
 4. **Check the pairs.**
    - Look over the printed pairs.

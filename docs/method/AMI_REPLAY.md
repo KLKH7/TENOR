@@ -54,7 +54,7 @@ This page is TENOR's protocol for replaying public AMI Meeting Corpus recordings
 | **Human ground truth** | Who said each word and when; decisions, actions and problems written by annotators; links from each summary sentence to the dialogue acts that support it |
 | **Cross-meeting memory** | One team meets four times. Decisions made in meeting b are revisited in c and d. That gives change and commitment questions, not just questions about one meeting |
 | **Shareable and reproducible** | Anyone can download the same files, play them into any product and score them with our code. Unlike Kian's meetings, per-question results can be published |
-| **Comparable with systems** | The same meetings, loaded from the *human* transcript, can run through the public track (Concentrate, Mem0, plain RAG). That puts products and systems on the same questions for the first time |
+| **Comparable with systems** | The same meetings, loaded from the *human* transcript, can run through the public track (the archived Concentrate memory system, Mem0, plain RAG). That puts products and systems on the same questions for the first time |
 
 ## 3. Protocol: playing a meeting into both products
 
@@ -63,7 +63,7 @@ This page is TENOR's protocol for replaying public AMI Meeting Corpus recordings
 | Step | What to do | Why |
 |---|---|---|
 | **Dedicated accounts** | Use a fresh Granola account and a fresh Wispr account that hold only AMI meetings | Keeps Kian's private meetings out of retrieval and out of the cross-meeting bleed check, and makes outputs publishable |
-| **Calendar event** | For each playback, create an event titled `AMI IS1008a` (etc.) at that time, with no attendees. Both apps read the calendar | Both products get the same title and start time, so `concentrate pair` matches them, and the title names the AMI source |
+| **Calendar event** | For each playback, create an event titled `AMI IS1008a` (etc.) at that time, with no attendees. Both apps read the calendar | Both products get the same title and start time, so `tenor pair` matches them, and the title names the AMI source |
 | **Audio file** | `<ID>.Mix-Headset.wav`, unchanged: no conversion, no MP3 | The cleanest mono mix. Far-field array channels would add room reverb, a second variable we don't want in v1 |
 | **Player** | `afplay <file>` (built into macOS) at 1.0× speed | Real time, no player chrome, nothing to misclick |
 | **Microphone** | Input volume at 0, or a muted mic, in the room | Otherwise the speaker output re-enters the mic as a duplicate "Me" track |
@@ -81,9 +81,9 @@ This page is TENOR's protocol for replaying public AMI Meeting Corpus recordings
 - **Variant for later, not v1.** Route the project manager's own headset channel to the mic through a virtual device, and the other three to system audio. Granola then gets a true Me/Them split, as in a real call where Kian is the PM. It needs a local re-mix and a third-party audio driver, so it waits until v1 shows the track is worth it.
 
 **Pairing with the AMI source.**
-1. **Product ↔ product:** the existing `concentrate pair` (±10 min gate, transcript 3-gram containment), with the shared calendar title as the third signal.
+1. **Product ↔ product:** the existing `tenor pair` (±10 min gate, transcript 3-gram containment), with the shared calendar title as the third signal.
 2. **Product ↔ AMI:** the calendar title gives the AMI ID. A check confirms it: the product transcript's word 3-gram containment against the AMI manual transcript must be at least 0.3, and highest for the claimed ID. A mismatch blocks scoring.
-3. **Reference loader:** a new `concentrate.corpora.ami` reads the NXT files into a reference transcript (speaker letter, role, words with times) plus the annotations. It is not a `Source` (it is not a Granola-shaped product). For the public track it can also emit `MeetingNote`s with roles as speaker names.
+3. **Reference loader:** a new `tenor.corpora.ami` reads the NXT files into a reference transcript (speaker letter, role, words with times) plus the annotations. It is not a `Source` (it is not a Granola-shaped product). For the public track it can also emit `MeetingNote`s with roles as speaker names.
 
 **Time.** Real-time playback, plus about 5 minutes of setup and processing wait per meeting. The proposed set (§5) is 2 h 39 min of audio, so about 3 h 10 min of wall-clock time. Kian only needs to be present at the start and end of each meeting. Play the series in order (a → d), on one day if possible: AMI's four sessions were recorded on one day too.
 
@@ -122,7 +122,7 @@ Every eval run states its estimate first and asks before going over $2, as usual
 
 ## 6. Question construction: from annotations, no LLM drafting
 
-Questions are produced by a deterministic script (`concentrate ami-questions --seed`) from the annotation files. No LLM writes or rewrites a question. Kian's only role is **keep or drop** on a printed list; he never edits wording.
+Questions are produced by a deterministic script (`tenor ami-questions --seed`) from the annotation files. No LLM writes or rewrites a question. Kian's only role is **keep or drop** on a printed list; he never edits wording.
 
 | Template | Built from | Example shape | Answer key | Est. n |
 |---|---|---|---|---|
@@ -228,9 +228,9 @@ One meeting, one recording each, personal dictionaries on, and one stray room li
 
 | Command | What it does |
 |---|---|
-| `concentrate ami status [--db data/ami_granola.db]` | Ground truth per meeting (length, speakers, words, summary sections), and which synced DBs hold a recording |
-| `concentrate ami wer --db data/ami_granola.db --product granola` | WER and content-word recall per meeting; numbers only, written to `data/ami/results/` |
+| `tenor ami status [--db data/ami_granola.db]` | Ground truth per meeting (length, speakers, words, summary sections), and which synced DBs hold a recording |
+| `tenor ami wer --db data/ami_granola.db --product granola` | WER and content-word recall per meeting; numbers only, written to `data/ami/results/` |
 
-Code: `concentrate.ami` (`corpus` parses the zip in place, `wer` scores, `products` matches notes tagged `AMI <ID>`). Tests use a hand-made NXT zip, not the corpus.
+Code: `tenor.ami` (`corpus` parses the zip in place, `wer` scores, `products` matches notes tagged `AMI <ID>`). Tests use a hand-made NXT zip, not the corpus.
 
 **Parser finding:** NXT agent letters are per meeting. In IS1008 the same participant is agent B in sessions a and c and agent C in b and d, so cross-meeting questions must key on the participant code, not the letter.

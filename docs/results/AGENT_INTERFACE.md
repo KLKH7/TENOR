@@ -4,13 +4,13 @@
 
 **Short answer (real DEV, one person's meetings):**
 - **Granola** (`query_granola_meetings`, n = 47) is accurate (89% useful and comprehensive [77, 95]), but its payload is one prose string with **meeting-level links only** (0 of 47 point inside a meeting) and **no abstain or coverage field**. Every answer (47/47) carries the same standing note telling the agent to call `search_transcripts` itself. Its confident errors cluster on unanswerable questions: **2 of 6** [10, 70], reproduced unchanged in all three asks.
-- **Concentrate** (`ask_memory`, n = 39, an older in-process run) is **less accurate** (59% useful and comprehensive [43, 73]), but when it is wrong it says so: **0 wrong but confident** [0, 9]. 41% of its answers are *incomplete and clearly so*. Its payload has an abstain field on every answer and **line-level citations** on 74% (the rest are abstentions with no citation). Caveat: its 39 answers include **none** of the unanswerable questions, so its 0 is not comparable with Granola's 2 of 6.
+- **Concentrate** (the archived Concentrate memory system; `ask_memory`, n = 39, an older in-process run) is **less accurate** (59% useful and comprehensive [43, 73]), but when it is wrong it says so: **0 wrong but confident** [0, 9]. 41% of its answers are *incomplete and clearly so*. Its payload has an abstain field on every answer and **line-level citations** on 74% (the rest are abstentions with no citation). Caveat: its 39 answers include **none** of the unanswerable questions, so its 0 is not comparable with Granola's 2 of 6.
 - On the 39 questions **both** were judged on in the **same judge run**, Granola is 36 / 1 / 1 / 1 across the four types and Concentrate 23 / 0 / 16 / 0. One product is mostly right and rarely flags doubt; the other is often unsure and always says so.
 
 $0 of LLM spend. Verdicts are reused from existing judged runs. The only live calls were 24 read-only `query_granola_meetings` re-asks for Granola's stability check. These are DEV results on one account: read them as where to look, not as claims about either product's users.
 
 ```bash
-uv run concentrate agent-interface
+uv run tenor agent-interface
 ```
 
 Aggregate: [`evals/reports/agent-interface.aggregate.json`](../../evals/reports/agent-interface.aggregate.json). Per-question rows, repeats and the human-check lists stay under `data/real/agent_interface/<product>/` (private).
@@ -19,7 +19,7 @@ Aggregate: [`evals/reports/agent-interface.aggregate.json`](../../evals/reports/
 
 | | Granola | Concentrate |
 |---|---|---|
-| Interface | `query_granola_meetings`, Granola's public MCP | `ask_memory(answer=true)`, `concentrate real-kit serve` |
+| Interface | `query_granola_meetings`, Granola's public MCP | `ask_memory(answer=true)`, `tenor real-kit serve` |
 | Payload source | recorded MCP payloads | in-process `answer.v1` output wrapped in the `ask_memory` response shape (same code path, not sent over MCP) |
 | Verdicts | deletion-sim DEV run (judge 1 Opus, judge 2 Sonnet) | real-slice run `20261103T004019Z` (judge 1 only; stopped on budget) |
 | Questions | 47 (6 unanswerable) | 39 (0 unanswerable) |

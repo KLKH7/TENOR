@@ -7,8 +7,8 @@ in it calls an LLM; every number and item is read from files the CLI already wro
 ```bash
 uv sync && (cd web && npm install)
 # gitignored data, only needed for Memory, Brief and XL notes:
-#   data/fixtures/large/northwind-xl  (concentrate synth --xl)
-#   data/cache/concentrate/<corpus>/<cfg>/{memory.sqlite,complete.json}  (concentrate eval --xl --systems c)
+#   data/fixtures/large/northwind-xl  (tenor synth --xl)
+#   data/cache/concentrate/<corpus>/<cfg>/{memory.sqlite,complete.json}  (tenor eval --xl --systems c)
 cd web && npm run dev        # http://localhost:3100
 npm test && npm run typecheck
 ```
@@ -21,14 +21,14 @@ npm test && npm run typecheck
 | `/notes/<id>` | Granola-style note view: enhanced notes, my notes, the channel-attributed transcript with linked entities. The sidebar now carries the section nav and says which corpus it lists | `data/fixtures/northwind`, or Northwind-XL with `?set=xl` |
 | `/results` | The results explorer ([RESULTS_EXPLORER.md](RESULTS_EXPLORER.md)), plus a **failure-type** filter, the failure type on every wrong answer, and an **"Is the ranking real?"** panel | `evals/reports/<stamp>.{json,jsonl}`, and `<stamp>.failures.jsonl` / `<stamp>.analysis.json` when present |
 | `/memory` | The memory store with an **as-of date slider**: facts per entity on a validity timeline, commitments with their event history, and the gate's rejections with reasons | the newest complete `memory.sqlite`, read-only |
-| `/brief?meeting=<id>` | `concentrate brief` for any Northwind-XL meeting | runs the CLI (`--json`), memoised |
+| `/brief?meeting=<id>` | `tenor brief` for any Northwind-XL meeting | runs the CLI (`--json`), memoised |
 
 Every memory and brief item links to `/notes/<id>?set=xl&line=<ids>`: the transcript opens on
 the cited lines, highlighted and scrolled into view.
 
 ### Results: failure types and significance
 
-`concentrate analyze` ([ANALYSIS.md](../archive/northwind/ANALYSIS.md)) writes two files next to a report. The
+`tenor analyze` ([ANALYSIS.md](../archive/northwind/ANALYSIS.md)) writes two files next to a report. The
 explorer joins them in when they exist and says nothing when they don't:
 
 - `failures.jsonl` → each answer not judged correct gets a box with its primary failure type,
@@ -43,7 +43,7 @@ explorer joins them in when they exist and says nothing when they don't:
   says plainly when no pair differs reliably, which is the case for the pilot (n = 10).
 
 The pilot report's `failures.jsonl`/`analysis.json` are the committed ones (generated with
-`--llm`, $0.0003). Re-running `concentrate analyze … --fixtures data/fixtures/northwind`
+`--llm`, $0.0003). Re-running `tenor analyze … --fixtures data/fixtures/northwind`
 without `--llm` drops the two LLM labels, so I kept the committed files. The drift chip still
 warns for the pilot report, as expected (its fixtures were regenerated after the run).
 
@@ -69,8 +69,8 @@ with *D* as a vertical rule, so a supersession reads as one bar ending where the
 The date lives in the URL (`?as_of=`), so any state is a link.
 
 **Which store.** The newest build directory with a `complete.json` under
-`data/cache/concentrate/*/*/` (mtime of the marker), the same rule `concentrate brief` uses.
-`concentrate mcp-serve` adds a filter on the corpus hash of the fixtures it serves; the web
+`data/cache/concentrate/*/*/` (mtime of the marker), the same rule `tenor brief` uses.
+`tenor mcp-serve` adds a filter on the corpus hash of the fixtures it serves; the web
 app can't compute that hash, so instead it checks that every meeting in the store exists in
 the XL fixtures and shows a warning chip if not. Today the two complete builds are both for
 Northwind-XL, and the newest (`6b9c4de7`, prompts `extract.v2`/`entail.v2`) is the one the MCP
@@ -79,7 +79,7 @@ server serves. `CONCENTRATE_STORE=<build dir>` overrides. The file is opened wit
 
 ### Brief
 
-`/brief` runs `uv run concentrate brief <id> --json` in the repo root (~2 s the first time per
+`/brief` runs `uv run tenor brief <id> --json` in the repo root (~2 s the first time per
 meeting, then memoised in the server process) and renders the four sections, with the last
 meeting's digest citations turned into line links, and a link to the meeting itself so you can
 compare the brief with what actually came up. The suggested meetings were picked by briefing

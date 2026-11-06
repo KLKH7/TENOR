@@ -15,14 +15,14 @@ A reusable tool: give it one meeting's transcript and a system's notes, and it r
 - **Its evidence is real.** When it calls a human sentence supported, 92% of the time it cites a line the AMI annotator also linked to that sentence.
 - **It also flags 1 in 5 human sentences.** By our read, about half of those flags are fair: the human summary overreaches or is wrong. The rest are checker errors (§3.2). That read is ours and not independent.
 
-Code: [`evals/grounding.py`](../../packages/concentrate/evals/grounding.py) (the checker), [`evals/grounding_ami.py`](../../packages/concentrate/evals/grounding_ami.py) (the validation). Prompt: [`prompts/grounding.v1.md`](../../prompts/grounding.v1.md). Results: [`evals/reports/grounding/`](../../evals/reports/grounding/).
+Code: [`evals/grounding.py`](../../packages/tenor/evals/grounding.py) (the checker), [`evals/grounding_ami.py`](../../packages/tenor/evals/grounding_ami.py) (the validation). Prompt: [`prompts/grounding.v1.md`](../../prompts/grounding.v1.md). Results: [`evals/reports/grounding/`](../../evals/reports/grounding/).
 
 ```bash
-uv run concentrate ground --meeting note.json --notes notes.md --quote   # price it, $0
-uv run concentrate ground --meeting note.json --notes notes.md --yes     # writes grounding.json
-uv run concentrate ground --ami IS1008a --quote                           # AMI meeting + its human summary
-uv run concentrate ground-ami --quote                                     # the validation's $0 parts
-uv run concentrate ground-ami --yes                                       # the validation (~$0.04)
+uv run tenor ground --meeting note.json --notes notes.md --quote         # price it, $0
+uv run tenor ground --meeting note.json --notes notes.md --yes           # writes grounding.json
+uv run tenor ground --ami IS1008a --quote                                 # AMI meeting + its human summary
+uv run tenor ground-ami --quote                                           # the validation's $0 parts
+uv run tenor ground-ami --yes                                             # the validation (~$0.04)
 ```
 
 ## 1. What it does

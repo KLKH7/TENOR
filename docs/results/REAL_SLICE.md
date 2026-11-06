@@ -2,12 +2,14 @@
 
 Every other number in this project is either synthetic (Northwind) or comes from our *re-implementation* of Granola's agent (b3). This slice is the only comparison against **Granola's production agent** (`query_granola_meetings`), on **real meetings**, with gold answers **drafted by an LLM and approved in bulk by the meeting owner** (see *How the gold was verified*).
 
+Concentrate here is the archived Concentrate memory system (TENOR's earlier fact-memory prototype).
+
 **Privacy.** Questions, gold answers, every system's answers, the LLM cache and the memory store all stay in `data/real/`, which is gitignored. This file and the committed code contain only the method and aggregate scores.
 
 ## Method
 
 1. **Corpus.** The author's own Granola account, synced through `GranolaMCPSource` into `data/real.db`: **4 meetings** (Oct 16–30, 2026; 3 remote, 1 in person; 881 transcript passages). This is small: see *Limits*.
-2. **Questions** (`concentrate real-kit draft | review | add | status`).
+2. **Questions** (`tenor real-kit draft | review | add | status`).
    - An LLM (`prompts/real_draft.v1.md`, Opus 5.5, $0.57) drafted 47 candidates over the whole corpus, stratified into 7 categories with a target mix of ~30:
 
      | Category | Target |
@@ -37,11 +39,11 @@ Every other number in this project is either synthetic (Northwind) or comes from
    - **b3** (our re-implementation of Granola's agent) was **not run**: the user chose to keep this run under the $5 cap, and the real agent is the better reference.
 4. **Scoring.** All systems use the benchmark's judge, `judge.v1` (Opus 5.5), unchanged, against the author's gold answer.
    - Also reported: key-term exact match, and **meeting-level** citation precision/recall (cited meetings vs gold evidence meetings; the real data has no gold lines).
-   - Second judge: `concentrate judge-check` (Sonnet 5.5) on the same report: `CONCENTRATE_CACHE=data/real/cache/llm uv run concentrate judge-check data/real/reports/<stamp>.jsonl`.
+   - Second judge: `tenor judge-check` (Sonnet 5.5) on the same report: `CONCENTRATE_CACHE=data/real/cache/llm uv run tenor judge-check data/real/reports/<stamp>.jsonl`.
    - 95% bootstrap CIs (seed 42).
 5. **Reproduce:**
    ```bash
-   uv run concentrate real-slice --systems granola,c,b0 --estimate
+   uv run tenor real-slice --systems granola,c,b0 --estimate
    ```
    Then run it without `--estimate`. The aggregate (content-free) result lands in `data/real/reports/<stamp>.aggregate.json`, and only that is copied below.
 
@@ -126,7 +128,7 @@ Granola's agent costs us nothing: it runs on Granola's side.
 
 ## Ask both MCPs the same question about the same real meetings
 
-`concentrate real-kit serve` serves Concentrate's memory of **your real meetings** through WS-D's read-only MCP server ([`MCP_SERVER.md`](../archive/concentrate/MCP_SERVER.md)). It offers the same six tools as `mcp-serve`:
+`tenor real-kit serve` serves Concentrate's memory of **your real meetings** through WS-D's read-only MCP server ([`MCP_SERVER.md`](../archive/concentrate/MCP_SERVER.md)). It offers the same six tools as `mcp-serve`:
 - the store is opened SQLite `mode=ro`;
 - the corpus comes from `data/real.db` and the directory from `data/real/directory.json`;
 - `ask_memory(answer: true)` caches in `data/real/cache/llm`;
@@ -145,7 +147,7 @@ Unlike the Northwind demo in `MCP_SERVER.md`, Granola's MCP and this server now 
         "run",
         "--directory",
         "/Users/kianlakhani/Code/concentrate",
-        "concentrate",
+        "tenor",
         "real-kit",
         "serve"
       ]
@@ -159,7 +161,7 @@ Restart Claude Desktop. Granola's MCP is the custom connector `https://mcp.grano
 **Claude Code** (alternative):
 
 ```bash
-claude mcp add --scope user concentrate-real -- /Users/kianlakhani/.local/bin/uv run --directory /Users/kianlakhani/Code/concentrate concentrate real-kit serve
+claude mcp add --scope user concentrate-real -- /Users/kianlakhani/.local/bin/uv run --directory /Users/kianlakhani/Code/concentrate tenor real-kit serve
 ```
 
 **Good same-data prompts** are the probe's misses ([`PROBE_V2.md`](../archive/PROBE_V2.md)):

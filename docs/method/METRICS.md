@@ -10,12 +10,12 @@ This page defines the metrics and statistics TENOR reports; it was written for t
 
 The worked examples come from the 120-question synthetic **test** run [`20261103T002456Z`](../../evals/reports/20261103T002456Z.md), unless they say otherwise. Its analysis is [`20261103T002456Z.analysis.md`](../../evals/reports/20261103T002456Z.analysis.md). Real-slice numbers come from the aggregate-only analyses [`real-20261103T004019Z`](../../evals/reports/real-20261103T004019Z.analysis.md) (Granola's agent vs Concentrate, 39 questions) and [`real-20261103T013240Z`](../../evals/reports/real-20261103T013240Z.analysis.md) (top-k, 47 questions).
 
-**Status key:** **computed** = reported by `eval` since Phase 0. **new** = added in Phase 1 (`concentrate analyze`, $0, from saved rows). **needs runs** = needs new answers or new LLM calls, so it costs money.
+**Status key:** **computed** = reported by `eval` since Phase 0. **new** = added in Phase 1 (`tenor analyze`, $0, from saved rows). **needs runs** = needs new answers or new LLM calls, so it costs money.
 
 Every number on this page is regenerated, for free, by:
 
 ```bash
-uv run concentrate analyze evals/reports/20261103T002456Z.jsonl
+uv run tenor analyze evals/reports/20261103T002456Z.jsonl
 ```
 
 ## Why there is no single score
@@ -49,10 +49,10 @@ The [statistics](#statistics-used-everywhere) section explains how gaps between 
 - **Definition.** The share of questions whose answer an LLM judge marks *correct* against a known gold answer. *Partially correct* counts as wrong here.
 - **Why it matters.** This is the headline question: how often will a user get the right answer?
 - **Computation.** `accuracy = (# verdict == "correct") / n`. The CI resamples the questions with replacement 2,000 times, recomputes the mean each time, and takes the 2.5th and 97.5th percentiles.
-  - Judge: `judge.v1` prompt, [`scoring.py`](../../packages/concentrate/evals/scoring.py) `judge`.
+  - Judge: `judge.v1` prompt, [`scoring.py`](../../packages/tenor/evals/scoring.py) `judge`.
   - Summary and CI: `summarize` and `bootstrap_ci` in the same file.
   - Gold answers are planted by the generator (synthetic) or approved by the meeting owner (real).
-- **Worked example.** Concentrate got 110 of 120 right: **91.7%, CI [85.8%, 95.8%]**. The agent (b3) got 108: 90.0% [84.2%, 95.0%]. The two CIs overlap almost completely. To compare two systems, use the paired test in [Statistics](#statistics-used-everywhere), not overlapping CIs.
+- **Worked example.** Concentrate (the archived Concentrate memory system) got 110 of 120 right: **91.7%, CI [85.8%, 95.8%]**. The agent (b3) got 108: 90.0% [84.2%, 95.0%]. The two CIs overlap almost completely. To compare two systems, use the paired test in [Statistics](#statistics-used-everywhere), not overlapping CIs.
 - **Weaknesses.**
   - The judge is an LLM and can be wrong ([B](#b-judge-reliability)).
   - Synthetic gold answers come from the same planted facts an extraction system is built to find. That is a shared blind spot that favours extraction-based systems.
@@ -64,7 +64,7 @@ The [statistics](#statistics-used-everywhere) section explains how gaps between 
 
 - **Definition.** Accuracy with half a point for *partially correct* answers.
 - **Why it matters.** "Three of the four action items" is more useful than nothing. Strict accuracy can't tell an incomplete answer from a wrong one.
-- **Computation.** `(# correct + 0.5 × # partially_correct) / n`. Code: [`metrics.py`](../../packages/concentrate/evals/metrics.py) `credit_stats`.
+- **Computation.** `(# correct + 0.5 × # partially_correct) / n`. Code: [`metrics.py`](../../packages/tenor/evals/metrics.py) `credit_stats`.
 - **Worked example.** Concentrate had 6 partially correct answers, so its partial credit is (110 + 3) / 120 = **94%**. Mem0 had 14 partials and rises from 81% to 87%: it is more often "incomplete" than "wrong".
 - **Weaknesses.**
   - The 0.5 weight is arbitrary.
@@ -76,8 +76,8 @@ The [statistics](#statistics-used-everywhere) section explains how gaps between 
 - **Definition.** The share of the gold answer's key values (names, dates, numbers, list items) that a deterministic string matcher finds in the answer. No LLM is involved.
 - **Why it matters.** It gives a sanity check on the judge that costs nothing and can't be talked round.
 - **Computation.** For each normalised gold value, check whether it appears in the answer (dates in several spellings, numbers as digits or words, people by full or last name). The score is the mean over the values. An unanswerable question scores 1 if the system abstained.
-  - Code: [`scoring.py`](../../packages/concentrate/evals/scoring.py) `exact_match`.
-  - On the real slice: `key_term_match` in [`real_slice.py`](../../packages/concentrate/evals/real_slice.py) (owner-listed key terms).
+  - Code: [`scoring.py`](../../packages/tenor/evals/scoring.py) `exact_match`.
+  - On the real slice: `key_term_match` in [`real_slice.py`](../../packages/tenor/evals/real_slice.py) (owner-listed key terms).
 - **Worked example.** q002 asks for "the plan for Lighthouse". The gold value is "move onto the new warehouse and retire the old cron jobs". Top-k's answer contains it, so exact match = 1.0, matching the judge's *correct*.
 - **Weaknesses.**
   - It misses paraphrases, so it reads low for wordy systems: b3 scores 77% exact match against 90% judged.
@@ -90,7 +90,7 @@ The [statistics](#statistics-used-everywhere) section explains how gaps between 
 
 - **Definition.** A different model (Sonnet 5.5) re-grades every answer with the same prompt. We report how often the two judges agree, and Cohen's κ, which is agreement corrected for chance.
 - **Why it matters.** Every correctness number depends on the grader. If two graders disagree often, a 2-point gap between systems means nothing.
-- **Computation.** `κ = (p_observed − p_chance) / (1 − p_chance)`. We report it on correct vs not-correct and on the 3-way verdict, plus whether the system ranking changes. Code: [`judge_check.py`](../../packages/concentrate/evals/judge_check.py) `cohen_kappa`; command `concentrate judge-check`.
+- **Computation.** `κ = (p_observed − p_chance) / (1 − p_chance)`. We report it on correct vs not-correct and on the 3-way verdict, plus whether the system ranking changes. Code: [`judge_check.py`](../../packages/tenor/evals/judge_check.py) `cohen_kappa`; command `tenor judge-check`.
 - **Worked example.** On 840 answers, the judges agreed on correct vs not-correct **97.3% of the time, κ 0.90** (3-way: 96.2%, κ 0.87) ([report](../../evals/reports/20261103T002456Z.judgecheck.claude-sonnet-5-5.md)).
   - The ranking changed only at the bottom: Graphiti and summaries swap places, and they are 1 point apart.
   - The second judge never upgraded a primary *incorrect* to *correct*; 3 answers went the other way (primary *correct*, second *incorrect*).
@@ -113,7 +113,7 @@ The [statistics](#statistics-used-everywhere) section explains how gaps between 
 
 - **Definition.** For systems that cite transcript lines: of the lines cited, the share that are gold evidence lines (**precision**); of the gold lines, the share cited (**recall**).
 - **Why it matters.** A user or an auditor can only trust an answer they can check. A citation to the exact line makes checking take seconds.
-- **Computation.** `P = |cited ∩ gold| / |cited|`, `R = |cited ∩ gold| / |gold|`, averaged over the questions where each is defined. Code: [`scoring.py`](../../packages/concentrate/evals/scoring.py) `citation_scores`.
+- **Computation.** `P = |cited ∩ gold| / |cited|`, `R = |cited ∩ gold| / |gold|`, averaged over the questions where each is defined. Code: [`scoring.py`](../../packages/tenor/evals/scoring.py) `citation_scores`.
 - **Worked example.** On q002, top-k cited three lines (`:0072`, `:0125`, `:0126`). The only gold line is `:0072`, so P = 1/3 and R = 1.
   - Means over the run: Concentrate P 0.68 / R 0.89; agent 0.70 / 0.84; top-k 0.64 / 0.89.
 - **Weaknesses.**
@@ -126,7 +126,7 @@ The [statistics](#statistics-used-everywhere) section explains how gaps between 
 
 - **Definition.** The share of answers containing a claim that the cited lines don't support.
 - **Why it matters.** A confidently wrong answer with a real-looking citation is the most damaging failure for a meeting tool.
-- **Computation.** Planned: run the existing entailment checker ([`memory/verify.py`](../../packages/concentrate/memory/verify.py), Haiku) on each answer and its cited lines.
+- **Computation.** Planned: run the existing entailment checker ([`memory/verify.py`](../../packages/tenor/memory/verify.py), Haiku) on each answer and its cited lines.
 - **Weaknesses.**
   - It needs line citations, so it is n/a for Mem0, Graphiti and summaries.
   - The entailment checker is itself an LLM.
@@ -142,7 +142,7 @@ The [statistics](#statistics-used-everywhere) section explains how gaps between 
   - Gold meetings: the note IDs of the gold line IDs (`not_X:0072` → `not_X`). On the real slice, the owner-approved `evidence_note_ids`.
   - Pulled meetings: each row's `retrieved` list, de-duplicated.
   - `recall_any = mean(gold ∩ pulled ≠ ∅)` and `recall_all = mean(gold ⊆ pulled)`, over answerable questions with known gold meetings.
-  - Code: [`metrics.py`](../../packages/concentrate/evals/metrics.py) `source_stats`. The meaning of `retrieved` per system is in `RETRIEVED_MEANS`.
+  - Code: [`metrics.py`](../../packages/tenor/evals/metrics.py) `source_stats`. The meaning of `retrieved` per system is in `RETRIEVED_MEANS`.
 - **What `retrieved` means differs by system,** so the analysis prints it next to every number:
 
   | System | `retrieved` holds |
@@ -167,7 +167,7 @@ The [statistics](#statistics-used-everywhere) section explains how gaps between 
 - **Why it matters.**
   - It is the price of high source recall: more meetings mean more tokens, and more chances to be distracted by an outdated or look-alike fact.
   - For agents, it shows how much they explore.
-- **Computation.** `len(set(retrieved))` per row. Code: [`metrics.py`](../../packages/concentrate/evals/metrics.py) `source_stats`.
+- **Computation.** `len(set(retrieved))` per row. Code: [`metrics.py`](../../packages/tenor/evals/metrics.py) `source_stats`.
 - **Worked example.** On q002 the agent made 5 tool calls and opened the same meeting 4 times, which counts as **1** source. Over the run the agent averaged 3.1 meetings (max 29), against top-k's fixed 10 and Concentrate's 23.6.
 - **Weaknesses.**
   - A "meeting" is not a fixed amount of text. Top-k pulls whole transcripts (81k tokens per question); Concentrate pulls a few facts from each of 23 meetings (8.8k tokens).
@@ -178,7 +178,7 @@ The [statistics](#statistics-used-everywhere) section explains how gaps between 
 
 - **Definition.** On answerable questions with more than one gold item (lists, aggregations, multi-part changes), the mean share of gold items found in the answer. Also reported: the share with *every* item.
 - **Why it matters.** "What did Megan commit to?" is a typical meeting-memory question. A system that reliably finds 7 of 10 items is a different product from one that finds all 10.
-- **Computation.** Per question, the [A3](#a3-exact-match-cross-check) exact-match fraction over the question's `answer_norm` items, averaged over questions with `len(answer_norm) > 1`. Code: [`metrics.py`](../../packages/concentrate/evals/metrics.py) `list_stats`.
+- **Computation.** Per question, the [A3](#a3-exact-match-cross-check) exact-match fraction over the question's `answer_norm` items, averaged over questions with `len(answer_norm) > 1`. Code: [`metrics.py`](../../packages/tenor/evals/metrics.py) `list_stats`.
 - **Worked example.** q796, "List everything Megan Liu committed to across all meetings", has 14 gold items. Concentrate's answer contains 10, so completeness = **71%**, and the judge said *partially correct*.
   - Over 32 list questions: Concentrate 87% complete on average (75% fully complete), agent 81% (62%), top-k 80% (69%), Mem0 77% (62%).
 - **Weaknesses.**
@@ -195,7 +195,7 @@ The [statistics](#statistics-used-everywhere) section explains how gaps between 
   - **Recall:** of the unanswerable questions, the share it declined.
   - Also: the **false-abstain rate**, the share of *answerable* questions it declined.
 - **Why it matters.** For a memory tool, "I don't see that in your meetings" is far better than an invented answer. But a tool that declines too often is useless.
-- **Computation.** `precision = TP / #abstained`, `recall = TP / #unanswerable`, `false_abstain = (#abstained − TP) / #answerable`, where TP = abstained on an unanswerable question. Code: [`metrics.py`](../../packages/concentrate/evals/metrics.py) `abstain_stats` (the base report's `abstain_precision` and `abstain_recall` come from `scoring.summarize`).
+- **Computation.** `precision = TP / #abstained`, `recall = TP / #unanswerable`, `false_abstain = (#abstained − TP) / #answerable`, where TP = abstained on an unanswerable question. Code: [`metrics.py`](../../packages/tenor/evals/metrics.py) `abstain_stats` (the base report's `abstain_precision` and `abstain_recall` come from `scoring.summarize`).
 - **Worked example.** q843 asks for the launch date for Otter, which no meeting gives. Concentrate declined: a true positive.
   - Over the run: Concentrate 92% precision / 85% recall / 1% false abstain. Summaries 55% / 92% / 9%: they decline a lot and catch most unanswerables, but almost half their declines are on questions that had an answer, such as q814, a multi-hop question.
 - **Weaknesses.**
@@ -210,7 +210,7 @@ The [statistics](#statistics-used-everywhere) section explains how gaps between 
   - **Coverage:** the share of questions the system answered at all, rather than declining.
   - **Accuracy when answered:** judged accuracy on those questions only.
 - **Why it matters.** These are the two numbers a product team actually trades off: "how often does it give an answer" against "when it does, can I trust it". Overall accuracy mixes them together.
-- **Computation.** `coverage = #not_abstained / n`, `acc_answered = #correct among not_abstained / #not_abstained`. Code: [`metrics.py`](../../packages/concentrate/evals/metrics.py) `abstain_stats`.
+- **Computation.** `coverage = #not_abstained / n`, `acc_answered = #correct among not_abstained / #not_abstained`. Code: [`metrics.py`](../../packages/tenor/evals/metrics.py) `abstain_stats`.
 - **Worked example.**
   - **Synthetic:** Concentrate covers 90% and is 92% right when it answers. Summaries cover 82% and are 74% right when they answer: worse on both.
   - **Real slice:** this metric explains the headline loss. Concentrate scored 59% against Granola's agent's 92%, but **10 of its 16 wrong answers were declines** on answerable questions (26% false abstain; coverage 74%). When it did answer, it was right **79%** of the time.
@@ -239,7 +239,7 @@ The [statistics](#statistics-used-everywhere) section explains how gaps between 
   - **Confident error:** the share of all questions the system answered (did not abstain on) *and* the judge marked **incorrect**. Partially correct answers are not counted: they are incomplete, not wrong. Answering an unanswerable question counts.
   - **Abstained when the answer existed:** the count of answerable questions it declined (its rate is D1's false-abstain rate).
 - **Why it matters.** Granola's own worst output is the answer that is "wrong, but confident". A wrong answer that looks right costs the user more than "I don't see that in your notes". Accuracy alone can't tell the two apart.
-- **Computation.** `confident_error = #(not abstained and verdict == "incorrect") / n`. Code: [`metrics.py`](../../packages/concentrate/evals/metrics.py) `confident_error`, reported by `abstain_stats` and the D-section table of every `analyze` report. By tag: [`by_tag.py`](../../packages/concentrate/evals/by_tag.py) (bootstrap CI over questions).
+- **Computation.** `confident_error = #(not abstained and verdict == "incorrect") / n`. Code: [`metrics.py`](../../packages/tenor/evals/metrics.py) `confident_error`, reported by `abstain_stats` and the D-section table of every `analyze` report. By tag: [`by_tag.py`](../../packages/tenor/evals/by_tag.py) (bootstrap CI over questions).
 - **Worked example.** Summaries (b1) answered 98 of 120 test questions and 10 of those were judged incorrect: **8%**. Concentrate: 3 of 120, **2%**. On the 17 transcript-needed questions ([`NOTES_VS_TRANSCRIPT.md`](../archive/northwind/NOTES_VS_TRANSCRIPT.md)), summaries' confident error rises to **41%** (7 of 17), against 0–6% for systems that read transcripts.
 - **Weaknesses.**
   - It inherits the judge's errors, and the partial/incorrect boundary is where judges disagree most (B1).
@@ -254,7 +254,7 @@ The [statistics](#statistics-used-everywhere) section explains how gaps between 
 - **Why it matters.** It is the running cost of a deployment. It also has to be comparable: a system can't look cheaper just because its answers happened to go through a discounted channel.
 - **Computation.**
   - `$/answer = (input_tokens × p_in + output_tokens × p_out) / 10⁶`, averaged per system. Opus 5.5: p_in = $4/Mtok, p_out = $20/Mtok.
-  - Code: [`metrics.py`](../../packages/concentrate/evals/metrics.py) `reprice` and `cost_stats`; option `--price-model`.
+  - Code: [`metrics.py`](../../packages/tenor/evals/metrics.py) `reprice` and `cost_stats`; option `--price-model`.
   - Reported separately, never mixed in:
     - **Batch saving**: the same tokens through the Batch API, 50% off.
     - **Recorded** $/q: what the run actually paid.
@@ -285,8 +285,8 @@ The [statistics](#statistics-used-everywhere) section explains how gaps between 
     - A run that reused a cached build records $0 for itself; the original build cost under `detail.built` is used instead.
     - Before this fix, Concentrate and Mem0 were treated as free to ingest, and missing from the break-even table.
   - The oracle is excluded as a rival: it isn't deployable.
-  - Code: [`metrics.py`](../../packages/concentrate/evals/metrics.py) `ingest_usd`; [`pareto.py`](../../packages/concentrate/evals/pareto.py) `breakeven_volume`.
-  - `concentrate economics` gives the per-user-per-month view, with **batch-priced** ingest by default, since ingest can run asynchronously. That halves N. The scenario line says which basis is used.
+  - Code: [`metrics.py`](../../packages/tenor/evals/metrics.py) `ingest_usd`; [`pareto.py`](../../packages/tenor/evals/pareto.py) `breakeven_volume`.
+  - `tenor economics` gives the per-user-per-month view, with **batch-priced** ingest by default, since ingest can run asynchronously. That halves N. The scenario line says which basis is used.
 - **Worked example.** Concentrate's 184-meeting build cost $4.96. Against the agent: 4.96 / (0.1372 − 0.0395) ≈ **51 questions per corpus**.
   - Mem0 ($17.02) needs 142, Graphiti ($59.58) 550.
   - Against summaries, no write-time system ever pays back: summaries answers cost $0.017.
@@ -302,7 +302,7 @@ The [statistics](#statistics-used-everywhere) section explains how gaps between 
   - Median (p50) and 95th-percentile (p95) seconds to answer.
   - Mean tool calls per answer.
 - **Why it matters.** Tokens drive cost, and latency is what a user feels. Tool calls show how much an agent explores, and each one is a round trip.
-- **Computation.** From each row's `input_tokens`, `output_tokens`, `latency_s` and `tool_calls`. Code: [`scoring.py`](../../packages/concentrate/evals/scoring.py) `summarize`.
+- **Computation.** From each row's `input_tokens`, `output_tokens`, `latency_s` and `tool_calls`. Code: [`scoring.py`](../../packages/tenor/evals/scoring.py) `summarize`.
 - **Worked example.** The agent's q002: 18,732 tokens in, 693 out, 5 tool calls, 20.2 s. Over the run the agent's p50 is 13.2 s (n = 120); Concentrate's is 3.8 s.
 - **Weaknesses.**
   - **For batched systems, latency is measured on only 10 interactive sample questions:** Concentrate, top-k, oracle and summaries all have `latency_n` = 10. Their p95 is the 10th-largest of 10 values and shouldn't be quoted (red team R7).
@@ -329,7 +329,7 @@ The same metrics, sliced by condition. No new formulas: the question is whether 
 
 ## Statistics used everywhere
 
-All tests are **paired**: every system answers the same questions, so they are compared question by question. Code: [`stats.py`](../../packages/concentrate/evals/stats.py) and [`analyze.py`](../../packages/concentrate/evals/analyze.py).
+All tests are **paired**: every system answers the same questions, so they are compared question by question. Code: [`stats.py`](../../packages/tenor/evals/stats.py) and [`analyze.py`](../../packages/tenor/evals/analyze.py).
 
 - **Bootstrap CI** (`bootstrap_ci`, `paired_bootstrap`).
   - Resample the questions with replacement 2,000 times and recompute the statistic each time; the middle 95% of the results is the CI.

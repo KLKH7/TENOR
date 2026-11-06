@@ -26,7 +26,7 @@ Window counts are not independent (they cluster by meeting), so no pooled interv
 
 **A0 result (baseline, no stress): both apps caught 94–100% of each of the 7 meetings; no silent failures.** The only flagged gap (Granola, EN2002b, 51 s near minute 27) falls where Wispr Flow dips too (overlapping speech). Stress conditions A1–A6 are where failures, if any, will show.
 
-*Method used for A0* (`concentrate ami coverage`, numbers in [`evals/reports/ami/coverage.json`](../../evals/reports/ami/coverage.json)): per 15 s window of AMI's human words, the share of distinctive word pairs found anywhere in the product transcript; ≥ 40% counts as captured. A bigram match, not the stage-1 aligner below. Wrong-meeting control: 0–2% of windows pass.
+*Method used for A0* (`tenor ami coverage`, numbers in [`evals/reports/ami/coverage.json`](../../evals/reports/ami/coverage.json)): per 15 s window of AMI's human words, the share of distinctive word pairs found anywhere in the product transcript; ≥ 40% counts as captured. A bigram match, not the stage-1 aligner below. Wrong-meeting control: 0–2% of windows pass.
 
 **Measures** (all $0: AMI gives timed human words, so coverage is computed by alignment, no LLM):
 
@@ -54,11 +54,11 @@ Window counts are not independent (they cluster by meeting), so no pooled interv
 
 ### A1 run sheet
 
-**Audio** (built, gitignored): `uv run concentrate ami stress-audio` writes `data/ami/stress/IS1008d.A1.wav` (41.7 min) and a sidecar JSON with the exact splice. IS1008d is the shortest of the 7 meetings with ≥ 10 min of voiced speech after a mid-meeting turn boundary (10.6 min). Silence runs from **12:11 to 29:11** of playback. `--condition A1c` builds the 12-min control (silence 12:11–24:11).
+**Audio** (built, gitignored): `uv run tenor ami stress-audio` writes `data/ami/stress/IS1008d.A1.wav` (41.7 min) and a sidecar JSON with the exact splice. IS1008d is the shortest of the 7 meetings with ≥ 10 min of voiced speech after a mid-meeting turn boundary (10.6 min). Silence runs from **12:11 to 29:11** of playback. `--condition A1c` builds the 12-min control (silence 12:11–24:11).
 
 | # | Step |
 |---|---|
-| 1 | Sign in to both MCPs first: `uv run concentrate sync --source granola-mcp --db data/ami_granola.db` and `... --source wispr-mcp --db data/ami_wispr.db` (read-only) |
+| 1 | Sign in to both MCPs first: `uv run tenor sync --source granola-mcp --db data/ami_granola.db` and `... --source wispr-mcp --db data/ami_wispr.db` (read-only) |
 | 2 | Normal desktop, no full-screen apps; Do Not Disturb on; speakers muted and mic per [`AMI_REPLAY.md`](../method/AMI_REPLAY.md) §3 |
 | 3 | Calendar event titled exactly `AMI IS1008d A1`, no attendees, 45 min |
 | 4 | Start a note for that event in Granola and in Wispr Flow |
@@ -66,7 +66,7 @@ Window counts are not independent (they cluster by meeting), so no pooled interv
 | 6 | Screenshot both apps at about 12:45 (Wispr's 30 s card), 27:15 (past Granola's 15 min), 29:30 (speech is back) and the end, plus any warning when it appears. Don't touch the apps: whether capture resumes on its own is the measurement |
 | 7 | Stop both notes 30 s after playback ends |
 | 8 | Sync both (step 1 commands). If a title differs, pin it in `data/ami/results/recording_ids.txt`: `IS1008d granola_a1=<id> wispr_a1=<id>` |
-| 9 | Score: `uv run concentrate ami coverage --stress data/ami/stress/IS1008d.A1.json` (coverage before and after the silence, resumed or not, time to resume, gaps ≥ 30 s; numbers to `evals/reports/ami/stress_A1_IS1008d.json`) |
+| 9 | Score: `uv run tenor ami coverage --stress data/ami/stress/IS1008d.A1.json` (coverage before and after the silence, resumed or not, time to resume, gaps ≥ 30 s; numbers to `evals/reports/ami/stress_A1_IS1008d.json`) |
 
 **Cost:** $0 for A0–A6 scoring except bleed (grounding checker, ~$0.02 per meeting). Time: ~25 min of playback per condition.
 

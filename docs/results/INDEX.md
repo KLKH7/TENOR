@@ -23,4 +23,4 @@ A dated log of TENOR results, newest first: what was measured, on what, with wha
 | 2026-11-03 | Synthetic Northwind diagnostics | 184 synthetic meetings | Archived; not evidence | [`archive/northwind/`](../archive/northwind/SYNTHETIC_DIAGNOSTICS.md) |
 | 2026-11-02 | Question answering on real speech: Granola's agent 92%, a fact-memory reference system 59% | 4 private meetings, 39 DEV questions | Preliminary | [`REAL_SLICE.md`](REAL_SLICE.md) |
 
-The interim technical report on the earlier private-meeting study is [`TENOR_TECHNICAL_REPORT.md`](TENOR_TECHNICAL_REPORT.md). Figures are generated from saved data by `uv run concentrate figures 20261103T002456Z` and checked in CI ([`figures/README.md`](../figures/README.md)).
+The interim technical report on the earlier private-meeting study is [`TENOR_TECHNICAL_REPORT.md`](TENOR_TECHNICAL_REPORT.md). Figures are generated from saved data by `uv run tenor figures 20261103T002456Z` and checked in CI ([`figures/README.md`](../figures/README.md)).

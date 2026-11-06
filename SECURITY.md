@@ -16,4 +16,4 @@ uv run python scripts/prepublish_check.py --all
 
 If you find a secret, personal data, or a vulnerability in this repo, please **don't open a public issue**. Use GitHub's private vulnerability reporting (the "Report a vulnerability" button under the repository's Security tab) and include the file, commit and what you found. I'll acknowledge within 7 days.
 
-This is a research prototype, not a hosted service: there is no production deployment to attack. The most likely issues are leaked data in history and unsafe handling of tokens in the sync code (`packages/concentrate/sources/`).
+This is a research prototype, not a hosted service: there is no production deployment to attack. The most likely issues are leaked data in history and unsafe handling of tokens in the sync code (`packages/tenor/sources/`).

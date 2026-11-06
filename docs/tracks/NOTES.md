@@ -46,12 +46,12 @@ In one paragraph:
 - **Contradictions:** three claims may contradict the transcript. Each is a small inversion, and each needs the owner's check.
 - **The baseline:** it shows the strict checker is not just strict. It calls the synthetic generator's notes, which are grounded by construction, 98% supported with zero `inferred`. It also caught a real bug in our own generator (§4.3).
 
-Code: [`evals/faithfulness.py`](../../packages/concentrate/evals/faithfulness.py). Prompt: [`prompts/notes_audit.v1.md`](../../prompts/notes_audit.v1.md) (the track's first prompt; the name is kept so cached calls replay). Aggregates: [`evals/reports/notes-faithfulness/`](../../evals/reports/notes-faithfulness/). Total spend for both systems: **$0.40** (Granola $0.26, baseline $0.13), each quoted beforehand with exact input-token counts.
+Code: [`evals/faithfulness.py`](../../packages/tenor/evals/faithfulness.py). Prompt: [`prompts/notes_audit.v1.md`](../../prompts/notes_audit.v1.md) (the track's first prompt; the name is kept so cached calls replay). Aggregates: [`evals/reports/notes-faithfulness/`](../../evals/reports/notes-faithfulness/). Total spend for both systems: **$0.40** (Granola $0.26, baseline $0.13), each quoted beforehand with exact input-token counts.
 
 ```bash
-uv run concentrate notes-faithfulness --system granola --quote          # price it, $0
-uv run concentrate notes-faithfulness --system granola --yes            # real meetings (private store)
-uv run concentrate notes-faithfulness --system northwind-synth --meetings 4 --yes
+uv run tenor notes-faithfulness --system granola --quote                # price it, $0
+uv run tenor notes-faithfulness --system granola --yes                  # real meetings (private store)
+uv run tenor notes-faithfulness --system northwind-synth --meetings 4 --yes
 ```
 
 ## 1. Input, output and pipeline

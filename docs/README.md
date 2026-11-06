@@ -9,7 +9,7 @@ Where every TENOR (Transcripts, Evidence, Notes, Outcomes, Recall) document live
 | [`results/`](results/) | Dated results, the interim technical report, and the earlier study on the author's own meetings | [`INDEX.md`](results/INDEX.md) |
 | [`product/`](product/) | Design implications for meeting note-takers, each tied to evidence and to a TENOR measurement | [`IMPLICATIONS.md`](product/IMPLICATIONS.md) |
 | [`engineering/`](engineering/) | How the code is built: architecture, decision log, field provenance (VERIFIED / ASSUMED), hardening, the web app | [`ARCHITECTURE.md`](engineering/ARCHITECTURE.md), [`DESIGN.md`](engineering/DESIGN.md) |
-| [`archive/`](archive/) | Superseded material kept for the record: the synthetic Northwind benchmark, the Concentrate fact-memory system, old plans and probes | [`archive/README.md`](archive/README.md) |
+| [`archive/`](archive/) | Superseded material kept for the record: the synthetic Northwind benchmark, the archived Concentrate memory system, old plans and probes | [`archive/README.md`](archive/README.md) |
 | [`figures/`](figures/) | Generated SVG figures and the exact inputs they were built from (checked in CI) | [`figures/README.md`](figures/README.md) |
 
 ## Method pages

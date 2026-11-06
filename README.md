@@ -253,21 +253,21 @@ How to rerun every free measure, and what the paid ones cost.
 ```bash
 uv sync                                                   # install (locked)
 uv run pytest                                             # offline tests, no network, no API spend
-uv run concentrate figures 20261103T002456Z --check       # regenerate every figure and compare
+uv run tenor figures 20261103T002456Z --check             # regenerate every figure and compare
 ```
 
 **Replaying AMI and scoring it.** Download the AMI files listed in [`docs/method/AMI_REPLAY.md`](docs/method/AMI_REPLAY.md#8-exact-files-to-download) into `data/ami/` (checksums in [`data/ami/MANIFEST.json`](data/ami/MANIFEST.json)), play each into the products as described there, then sync and score. Synced products stay in local, gitignored SQLite files.
 
 ```bash
-uv run concentrate sync --source granola-mcp --db data/ami_granola.db   # read-only, browser sign-in
-uv run concentrate sync --source wispr-mcp --db data/ami_wispr.db
-uv run concentrate ami status                                           # ground truth and recordings found
-uv run concentrate ami coverage                                         # capture track, $0
-uv run concentrate ami wer --db data/ami_granola.db --product granola   # transcription track, $0
-uv run concentrate ami wer --db data/ami_wispr.db --product wispr --keep-mic  # Wispr Flow has no mic channel
-uv run concentrate facts stage1                                         # fact-token recall, $0
-uv run concentrate facts stage2 --quote                                 # notes grounding: price first
-uv run concentrate mcp-contract                                         # reply-format check (harness)
+uv run tenor sync --source granola-mcp --db data/ami_granola.db         # read-only, browser sign-in
+uv run tenor sync --source wispr-mcp --db data/ami_wispr.db
+uv run tenor ami status                                                 # ground truth and recordings found
+uv run tenor ami coverage                                               # capture track, $0
+uv run tenor ami wer --db data/ami_granola.db --product granola         # transcription track, $0
+uv run tenor ami wer --db data/ami_wispr.db --product wispr --keep-mic        # Wispr Flow has no mic channel
+uv run tenor facts stage1                                               # fact-token recall, $0
+uv run tenor facts stage2 --quote                                       # notes grounding: price first
+uv run tenor mcp-contract                                               # reply-format check (harness)
 ```
 
 **Costs.** Capture, WER, fact recall and the contract check make no LLM calls. Judged steps need `ANTHROPIC_API_KEY` in `.env` (see `.env.example`): notes grounding about $0.10 for all 7 meetings (measured); answer attribution at most about $0.07; the AMI retention replication $5.64 (run; quoted at about $8). Every paid command prints an exact quote first and asks before spending more than $2.
@@ -295,12 +295,12 @@ Where each part of the project lives.
 | Path | What it holds |
 |---|---|
 | [`docs/`](docs/README.md) | Method, tracks, dated results, product implications, engineering notes, archive ([map](docs/README.md)) |
-| [`packages/concentrate/`](packages/concentrate/) | The Python package and `concentrate` CLI: sources (read-only MCP clients), AMI loaders and scorers, evals, figures. The package keeps its earlier name |
+| [`packages/tenor/`](packages/tenor/) | The Python package and `tenor` CLI (`concentrate` still works as a deprecated alias): sources (read-only MCP clients), AMI loaders and scorers, evals, figures |
 | [`evals/reports/`](evals/reports/) | Committed result files: numbers and IDs only. Older files use the earlier project name |
 | [`data/`](data/README.md) | AMI manifest and AMI-derived questions (committed); synced products and private data (gitignored) |
 | [`prompts/`](prompts/) | Versioned judge and checker prompts |
 | [`tests/`](tests/) | Offline tests; HTTP and MCP are faked |
-| [`web/`](web/) | A local web viewer for results (archived Concentrate-era views) |
+| [`web/`](web/) | A local web viewer for results (views of the archived Concentrate memory system) |
 
 Contributing a product or system: [`CONTRIBUTING.md`](CONTRIBUTING.md). Reporting a problem: [`SECURITY.md`](SECURITY.md).
 

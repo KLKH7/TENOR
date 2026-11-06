@@ -18,7 +18,7 @@ The AMI set is the six recorded meetings (IS1008a–d, IB4003, EN2002b; [AMI_DES
 
 ## 2. How each stage is checked
 
-### Stage 1: transcription (`concentrate.ami.facts`)
+### Stage 1: transcription (`tenor.ami.facts`)
 
 **Fact tokens.** Extracted from AMI's manual transcript (dialogue acts; word turns for EN2002b, which has none), after the WER normaliser (`ami/wer.py`):
 
@@ -37,7 +37,7 @@ The AMI set is the six recorded meetings (IS1008a–d, IB4003, EN2002b; [AMI_DES
 
 Same rules for both products. Granola's microphone turns are dropped (on AMI the mic only hears the room); Wispr's are kept (its "me" is a name guess). Validated at $0: AMI's own transcript scored against itself gives 100% recall and 0 substitutions on all six meetings.
 
-### Stage 2: note-writing (`concentrate.evals.wrong_facts`)
+### Stage 2: note-writing (`tenor.evals.wrong_facts`)
 
 Each claim in a product's notes (`split_claims`) goes through the [grounding checker](GROUNDING_CHECKER.md) twice, with the same prompt (`grounding.v1`): against the product's own transcript, and against AMI's. "Bad" = unsupported or contradicted.
 
@@ -51,7 +51,7 @@ Each claim in a product's notes (`split_claims`) goes through the [grounding che
 | bad | bad or inferred | `note_error` | the note-writer added it |
 | inferred | bad or inferred | `inferred` | overreach, not a hard fact error |
 
-The full own × AMI verdict matrix is saved too, so other class boundaries can be recomputed. `concentrate facts reclassify` re-applies the rules to saved verdicts at $0.
+The full own × AMI verdict matrix is saved too, so other class boundaries can be recomputed. `tenor facts reclassify` re-applies the rules to saved verdicts at $0.
 
 **Checker input (`stage2-input.v2`, logged as `render`).** Both checks get the same three changes:
 
@@ -63,7 +63,7 @@ The full own × AMI verdict matrix is saved too, so other class boundaries can b
 
 Each row also saves `own_ids` / `human_ids` (utterance IDs) beside `own_lines` / `human_lines`.
 
-### Stage 3: answering (`concentrate.evals.wrong_facts`)
+### Stage 3: answering (`tenor.evals.wrong_facts`)
 
 Input: a JSONL of `{question_id, product, answer}` for the 68 `recorded` questions (13 DEV). The shared judge (`judge.v1`) grades each answer. For every wrong answer:
 
@@ -147,19 +147,19 @@ The gain is small: +1.7 points (Granola) and +0.3 (Wispr) held out, for 10–17%
 
 Retrieval was not the problem: v1 already got at least half the gold words for 93% (Granola) and 99% (Wispr) of claims, and anything the excerpt pass doesn't support is re-checked against the full transcript.
 
-**Re-run quote** (`concentrate facts stage2 --quote`, offline): 14 notes, 387 claims, **$0.059 (no escalation) – $0.130 (worst)**. The first run quoted $0.126 worst and spent $0.08 (measured ÷ quoted = 0.83), so expect about **$0.11**. Every call misses the cache, because the input changed. Ran on 2026-11-05: **$0.10** measured (§3).
+**Re-run quote** (`tenor facts stage2 --quote`, offline): 14 notes, 387 claims, **$0.059 (no escalation) – $0.130 (worst)**. The first run quoted $0.126 worst and spent $0.08 (measured ÷ quoted = 0.83), so expect about **$0.11**. Every call misses the cache, because the input changed. Ran on 2026-11-05: **$0.10** measured (§3).
 
 ## 5. What's built
 
 | Piece | Where |
 |---|---|
-| Fact extraction, anchoring, alignment, stage-1 scores | [`ami/facts.py`](../../packages/concentrate/ami/facts.py) |
-| Stage 2 classes and runner; stage 3 judge and attribution; quotes | [`evals/wrong_facts.py`](../../packages/concentrate/evals/wrong_facts.py) |
+| Fact extraction, anchoring, alignment, stage-1 scores | [`ami/facts.py`](../../packages/tenor/ami/facts.py) |
+| Stage 2 classes and runner; stage 3 judge and attribution; quotes | [`evals/wrong_facts.py`](../../packages/tenor/evals/wrong_facts.py) |
 | Spoken names from AMI self-introductions; role + name speaker labels | `ami/facts.py` `spoken_names`, `human_note(m, names)` |
 | Run-of-lines retrieval and the `<speaker_labels>` input (both off by default) | `evals/grounding.py` `nearest_spans`, `labels_note` |
-| Recording matcher: `AMI <id>` tags, a title that is just the bare ID, and pins in `data/ami/results/recording_ids.txt` | [`ami/products.py`](../../packages/concentrate/ami/products.py) `match_recordings` |
+| Recording matcher: `AMI <id>` tags, a title that is just the bare ID, and pins in `data/ami/results/recording_ids.txt` | [`ami/products.py`](../../packages/tenor/ami/products.py) `match_recordings` |
 | Read-only DB reader (never creates or migrates a database) | `core/store.py` `read_notes` |
-| CLI `concentrate facts stage1|stage2|reclassify|stage3` | `cli.py` |
+| CLI `tenor facts stage1|stage2|reclassify|stage3` | `cli.py` |
 | Tests: planted "Kian" insertion, misheard number, a claim the own transcript doesn't support, a claim propagated from a transcript error, `borderline` rules, offline reclassify, self-introduced names across a series, run retrieval, labels note | [`tests/test_wrong_facts.py`](../../tests/test_wrong_facts.py), [`tests/test_grounding.py`](../../tests/test_grounding.py) |
 
 No new prompts: stage 2 reuses `grounding.v1` (the labels note is input, versioned as `render`), stage 3 reuses `judge.v1` and `grounding.v1`. With defaults the grounding checker is unchanged: the first run replays fully from cache. Results go to `data/ami/results/facts/` (gitignored: they can hold product text).
@@ -182,14 +182,14 @@ Every paid run needs `--max-usd` (pilots default to a $0.05 cap). After a pilot,
 ## 7. Running it
 
 ```bash
-uv run concentrate facts stage1                                # $0; lists recordings found
-uv run concentrate facts stage2 --quote                        # $0
-uv run concentrate facts stage2 --pilot                        # IS1008a only, cap $0.05
-uv run concentrate facts stage2 --max-usd 0.25                 # after reviewing the pilot
-uv run concentrate facts reclassify                            # $0: current class rules on saved verdicts
-uv run concentrate facts stage3 --answers <answers.jsonl> --quote
-uv run concentrate facts stage3 --answers <answers.jsonl> --pilot   # 3 seeded DEV answers
-uv run concentrate facts stage3 --answers <answers.jsonl> --max-usd 0.15
+uv run tenor facts stage1                                      # $0; lists recordings found
+uv run tenor facts stage2 --quote                              # $0
+uv run tenor facts stage2 --pilot                              # IS1008a only, cap $0.05
+uv run tenor facts stage2 --max-usd 0.25                       # after reviewing the pilot
+uv run tenor facts reclassify                                  # $0: current class rules on saved verdicts
+uv run tenor facts stage3 --answers <answers.jsonl> --quote
+uv run tenor facts stage3 --answers <answers.jsonl> --pilot         # 3 seeded DEV answers
+uv run tenor facts stage3 --answers <answers.jsonl> --max-usd 0.15
 ```
 
 ## 8. Threats to validity

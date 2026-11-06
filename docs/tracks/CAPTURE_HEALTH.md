@@ -10,7 +10,7 @@ This page describes a product-side mechanism that flags a silent capture failure
 | **Result (TEST, injected failures)** | Perfect VAD + live words: **237/237 caught, 0 false alarms in 2.7 h, median delay 11 s**. A plain energy VAD on recorded block times: 234/237, 1.1 false alarms per hour, 13 s |
 | **Status** | Prototype; injected failures only. Not yet tested on a real failure |
 
-Numbers: [`evals/reports/ami/detector.json`](../../evals/reports/ami/detector.json). Code: [`ami/detector.py`](../../packages/concentrate/ami/detector.py), CLI `concentrate ami detector --seed 0`.
+Numbers: [`evals/reports/ami/detector.json`](../../evals/reports/ami/detector.json). Code: [`ami/detector.py`](../../packages/tenor/ami/detector.py), CLI `tenor ami detector --seed 0`.
 
 ## The mechanism
 

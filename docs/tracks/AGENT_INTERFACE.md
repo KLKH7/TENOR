@@ -11,11 +11,11 @@ This page defines the agent-interface track: what an outside agent receives thro
 
 **Task.** An external agent (Claude, ChatGPT, Cursor) reaches a meeting product only through its MCP. This track scores **what that agent receives**: not only whether the answer is right, but whether the payload says when it is unsure, how fine-grained its evidence is, whether the same question gets the same answer twice, and how long it takes. It is product-neutral: every product is asked through its [black-box adapter](../method/BLACKBOX.md) and scored by the same deterministic classifiers. No LLM is used to score (verdicts are reused from the black-box judge, `judge.v1`).
 
-Results: [docs/results/AGENT_INTERFACE.md](../results/AGENT_INTERFACE.md). Code: [`evals/agent_interface.py`](../../packages/concentrate/evals/agent_interface.py). Tests: [`tests/test_agent_interface.py`](../../tests/test_agent_interface.py).
+Results: [docs/results/AGENT_INTERFACE.md](../results/AGENT_INTERFACE.md). Code: [`evals/agent_interface.py`](../../packages/tenor/evals/agent_interface.py). Tests: [`tests/test_agent_interface.py`](../../tests/test_agent_interface.py).
 
 ```bash
-uv run concentrate agent-interface                      # $0: recorded payloads + recorded repeats
-uv run concentrate agent-interface --live granola       # also records missing repeats (<= 24 read-only calls)
+uv run tenor agent-interface                            # $0: recorded payloads + recorded repeats
+uv run tenor agent-interface --live granola             # also records missing repeats (<= 24 read-only calls)
 ```
 
 ## Why this track
@@ -44,8 +44,8 @@ Everything is cross-tabulated by question category and by the notes-sufficient /
 ## Add a product
 
 1. Make it askable on the [black-box track](../method/BLACKBOX.md#adding-a-product): a JSON spec (or a built-in adapter) naming its one read-only question tool and how to read its answer, citations and, if it has one, abstain flag.
-2. Record and judge its answers: `uv run concentrate real-kit run --product <name> --split dev` (this writes `data/real/answers/<name>/` and a report `.jsonl`).
-3. Score it: `uv run concentrate agent-interface --products granola,<name> --report data/real/reports/<that report>.jsonl`.
+2. Record and judge its answers: `uv run tenor real-kit run --product <name> --split dev` (this writes `data/real/answers/<name>/` and a report `.jsonl`).
+3. Score it: `uv run tenor agent-interface --products granola,<name> --report data/real/reports/<that report>.jsonl`.
 4. Stability: `--live <name>` re-asks the stratified sample through the same allowlisted adapter, at most `--max-calls` calls. If the product spends money per call (an LLM answer), price it first: the repo's budget rule applies.
 
 A product scores well on this track by **saying what it doesn't know** (abstain field, coverage flag), **pointing inside meetings** (line or span IDs), and **answering the same way twice**, not only by being right.
@@ -74,8 +74,8 @@ TENOR's sync still parsed the old shape, so it stored 0 transcript lines until t
 ### What the check does
 
 ```bash
-uv run concentrate mcp-contract            # compare with the baseline; exit 1 on drift
-uv run concentrate mcp-contract --update   # accept the current shapes as the new baseline
+uv run tenor mcp-contract                  # compare with the baseline; exit 1 on drift
+uv run tenor mcp-contract --update         # accept the current shapes as the new baseline
 ```
 
 1. Calls Granola's four read tools once, on the newest meeting with a finished transcript. Read-only by construction: the caller is allowlisted.

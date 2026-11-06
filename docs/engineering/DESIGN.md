@@ -5,11 +5,11 @@ A running log of decisions and trade-offs, newest phase last.
 ## Phase 1: models, source layer, sync
 
 ### Package layout
-The brief asked for `packages/core`, `packages/sources`, and so on. Hatchling can't do an editable install that maps `packages/` → `concentrate/` (see pfmoore/editables#20). Generic top-level names like `core` would also collide with other installed packages. So modules live at `packages/concentrate/<module>` and are imported as `concentrate.<module>`. Each module still has its own directory, as the brief laid out.
+The brief asked for `packages/core`, `packages/sources`, and so on. Hatchling can't do an editable install that maps `packages/` → `tenor/` (see pfmoore/editables#20). Generic top-level names like `core` would also collide with other installed packages. So modules live at `packages/tenor/<module>` and are imported as `tenor.<module>` (the package was called `concentrate` until 2026-11-05). Each module still has its own directory, as the brief laid out.
 
 ### Two model layers
-- `concentrate.core.granola` holds **wire models** that mirror the OpenAPI schemas field for field, including camelCase `hasMore` and British `organiser`. They use `extra="ignore"` so additive API changes (six minor versions in 2026) can't break sync.
-- `concentrate.core.models` holds **normalized models** (`MeetingNote`, `Utterance`, `Channel`). Everything downstream uses only these, so it has no idea whether data came from the API or from fixtures.
+- `tenor.core.granola` holds **wire models** that mirror the OpenAPI schemas field for field, including camelCase `hasMore` and British `organiser`. They use `extra="ignore"` so additive API changes (six minor versions in 2026) can't break sync.
+- `tenor.core.models` holds **normalized models** (`MeetingNote`, `Utterance`, `Channel`). Everything downstream uses only these, so it has no idea whether data came from the API or from fixtures.
 - The store keeps the **raw wire JSON** of every note. Normalization can change without a re-sync, and nothing Granola gave us is lost.
 
 ### Utterance identity
@@ -64,7 +64,7 @@ The **seed** controls everything else: which engineers commit to which tasks in 
 ### Padding
 Without padding, scripted beats average about 7 turns per meeting, which is unrealistically clean. `synth.pad` inserts fact-free filler to reach about 40–70 turns per meeting depending on the meeting kind. Filler is never inserted inside an evidence group, so a question like "Megan, what's on your plate?" stays directly before its answer, and all evidence indices are remapped afterwards.
 
-**Honest limitation:** the template-only corpus is about 20k words over 40 meetings (~500 words each). A real 30-minute meeting is closer to 4–5k words. A smaller haystack makes retrieval *easier* for the baselines, so any Concentrate advantage measured here is conservative. `TARGET_TURNS` is the knob for a larger run.
+**Honest limitation:** the template-only corpus is about 20k words over 40 meetings (~500 words each). A real 30-minute meeting is closer to 4–5k words. A smaller haystack makes retrieval *easier* for the baselines, so any advantage of the archived Concentrate memory system measured here is conservative. `TARGET_TURNS` is the knob for a larger run.
 
 ### Hybrid rendering (LLM polish)
 There is one LLM call per meeting (prompt `prompts/synth_polish.v1.md`, effort `low`). It rewrites every turn, and `polish.check_turn` accepts or rejects each rewritten turn independently:
@@ -91,9 +91,9 @@ This proves the answer is *stated* in the evidence, but not that a reader could 
 Distribution (seed 42): single-hop 63, temporal 46, entity disambiguation 25, unanswerable 25 (11%), commitment status 22, latest state 17, multi-hop 12, decision change 10, aggregation 10. Private facts are excluded and reserved for the Phase 5 redaction eval. Split: 71 dev / 159 test, stratified by category. Only dev may be used for tuning.
 
 ### Determinism
-The same seed gives byte-identical files (tested). A test also asserts that the committed `data/fixtures/northwind` equals a fresh `concentrate synth --seed 42`, so fixtures can't drift from the generator. With `--polish`, the LLM cache is the source of truth, and `--offline` re-renders from cache with zero API calls.
+The same seed gives byte-identical files (tested). A test also asserts that the committed `data/fixtures/northwind` equals a fresh `tenor synth --seed 42`, so fixtures can't drift from the generator. With `--polish`, the LLM cache is the source of truth, and `--offline` re-renders from cache with zero API calls.
 
-### LLM client (`concentrate.llm`)
+### LLM client (`tenor.llm`)
 - **Calls:** structured output via `output_config.format`, because the default model (`claude-opus-5-5`) rejects forced tool use.
 - **Refusals:** server-side refusal fallback (`fallbacks: "default"`), with typed errors for refusal and truncation. Failed calls are never cached.
 - **Cache:** a disk cache keyed by (model, prompt id, system, user, schema, max_tokens, effort).
@@ -156,7 +156,7 @@ The remote 38+ word monologue tail is a content limitation of scripted turns and
   - Estimates are offline (heuristic tokens; B3 assumed), so a small pilot run should calibrate them before a full run.
 
 ### Batch mode (2026-11-02)
-- `concentrate eval --batch` (default) sends the single-turn systems (B0, B1, B2, B2o) and the judge through the Message Batches API at 50% of the price. B3 is multi-turn and stays interactive.
+- `tenor eval --batch` (default) sends the single-turn systems (B0, B1, B2, B2o) and the judge through the Message Batches API at 50% of the price. B3 is multi-turn and stays interactive.
 - **No second code path.** Each batch result is written to the exact cache file the interactive call would write (the custom_id is the 64-char cache key), then the normal code replays it. Single-turn systems expose `turn_request(q)`, and a test pins the pre-batch cache keys so old caches still hit.
 - **Honest accounting.** Batch completions are flagged `batch`: the cost is recorded once at the batch rate, and replays are cache hits. Refused or truncated items are billed but not cached. Errored, expired, refused and truncated items fall back to the interactive call during the run, and the report counts them.
 - **Honest latency.** The first `--latency-sample` questions (default 10) run fully interactively at full price, and they are the only latency source for batched systems. The report says how many rows each p50/p95 comes from.
@@ -182,7 +182,7 @@ used its defaults (600 s read timeout), and our `max_retries=4` retried silently
 connection could block for up to 50 minutes. Full write-up: [`HARDENING.md`](HARDENING.md).
 
 **Decisions:**
-- **Own the retry loop** (`concentrate.llm.resilience`) and turn SDK retries off.
+- **Own the retry loop** (`tenor.llm.resilience`) and turn SDK retries off.
   - Why: one policy for sync and async, every SDK entry point, Mem0 and Graphiti; logged at
     WARNING; testable with fake sleeps and clocks; and SDK and outer retries can never multiply.
   - Trade-off: we re-implement `Retry-After` handling, which the SDK already had.
@@ -204,7 +204,7 @@ connection could block for up to 50 minutes. Full write-up: [`HARDENING.md`](HAR
 
 ## Report v2: paired significance, power, Pareto, failure taxonomy (2026-11-02)
 
-`concentrate analyze <report>` works post hoc on any saved report and costs nothing unless `--llm` is passed. Methods are in [`ANALYSIS.md`](../archive/northwind/ANALYSIS.md).
+`tenor analyze <report>` works post hoc on any saved report and costs nothing unless `--llm` is passed. Methods are in [`ANALYSIS.md`](../archive/northwind/ANALYSIS.md).
 - **Paired, not overlapping CIs.** Every system answers the same questions, so pairs are compared with McNemar's exact test and a paired bootstrap CI of the gap. Holm–Bonferroni corrects across all pairs; each category is its own family.
 - **Power from observed discordance.** Sample sizes use Connor's approximation with the observed share of questions on which two systems disagree. A Monte Carlo test confirms about 80% power. Trade-off: discordance from a small pilot is noisy, so the numbers are re-estimated on each report rather than fixed.
 - **Ingest amortised at a stated volume.** The frontier is shown at several volumes, along with break-even volumes, because write-time vs query-time is a volume question.
@@ -213,7 +213,7 @@ connection could block for up to 50 minutes. Full write-up: [`HARDENING.md`](HAR
 
 ## Concentrate as an MCP server (workstream D, 2026-11-02)
 
-`concentrate mcp-serve [--xl]` serves a built memory over stdio with six read-only tools (`ask_memory`, `get_facts`, `get_commitments`, `resolve_entity`, `get_meeting`, `get_transcript_lines`) and one resource (`concentrate://memory`). Details, client config and a demo script are in [`MCP_SERVER.md`](../archive/concentrate/MCP_SERVER.md).
+`tenor mcp-serve [--xl]` serves a built memory over stdio with six read-only tools (`ask_memory`, `get_facts`, `get_commitments`, `resolve_entity`, `get_meeting`, `get_transcript_lines`) and one resource (`concentrate://memory`). Details, client config and a demo script are in [`MCP_SERVER.md`](../archive/concentrate/MCP_SERVER.md).
 
 - **Logic split from protocol.** `mcp_server/service.py` is plain Python over `MemoryStore`, `EntityDirectory` and `build_context`. `server.py` only registers tools (mcp 2.x `MCPServer`; FastMCP was renamed in v2). Tests drive the real protocol through the SDK's in-process client.
 - **Read-only twice over.** The tools carry `readOnlyHint` annotations, and `MemoryStore(read_only=True)` opens SQLite with `mode=ro`, so a write fails at the database. The read-only connection is shared across the SDK's worker threads (`check_same_thread=False`), which is safe because the sqlite3 module serializes access.
@@ -233,7 +233,7 @@ connection could block for up to 50 minutes. Full write-up: [`HARDENING.md`](HAR
 
 ## Pre-meeting brief (workstream H, 2026-11-02)
 
-**Built:** `concentrate brief <note_id>` prints a cited brief for an upcoming meeting: open commitments, what changed since the series last met, open customer requests, and the last meeting's digest. `concentrate brief-eval` grades briefs against the generator's world. Details and results are in [`BRIEF.md`](../archive/concentrate/BRIEF.md).
+**Built:** `tenor brief <note_id>` prints a cited brief for an upcoming meeting: open commitments, what changed since the series last met, open customer requests, and the last meeting's digest. `tenor brief-eval` grades briefs against the generator's world. Details and results are in [`BRIEF.md`](../archive/concentrate/BRIEF.md).
 
 **Decisions:**
 - The brief is a deterministic **as-of query**: it reads only rows recorded before the meeting starts, so a historical brief has no leakage and every meeting is a test case.
@@ -313,7 +313,7 @@ Query-side only, dev only; details, error analysis and ablations in `docs/archiv
 
 Details and results: [`ECONOMICS.md`](../archive/northwind/ECONOMICS.md).
 
-- **Re-price measured tokens, don't estimate costs.** `concentrate economics` reads the builds'
+- **Re-price measured tokens, don't estimate costs.** `tenor economics` reads the builds'
   `progress.jsonl` and an eval report's per-question rows, infers each build's model by
   re-pricing, and re-prices on any model. The only guesses are usage volumes (CLI flags).
 - **Scale curve holds the questions fixed.** Questions are the dev questions answerable inside
@@ -391,7 +391,7 @@ Details: `docs/method/BLACKBOX.md`.
 
 ## Figures pipeline (P1-F, 2026-11-03)
 
-`concentrate figures <stamp>` (`evals/figures.py`, style in `evals/figstyle.py`) renders the
+`tenor figures <stamp>` (`evals/figures.py`, style in `evals/figstyle.py`) renders the
 eleven PLAN section-5 figures into `docs/figures/` as SVG; `docs/results/INDEX.md` lists them.
 
 - **Determinism.** Agg backend, fixed `svg.hashsalt`, no `Date` metadata, constant `Creator`,
@@ -431,7 +431,7 @@ eleven PLAN section-5 figures into `docs/figures/` as SVG; `docs/results/INDEX.m
   reliability diagram waits for X5 (no confidence field yet).
 
 ## P1-M: the measurement framework and the $0 metrics (2026-11-03)
-Definitions: [`docs/method/METRICS.md`](../method/METRICS.md). Code: `evals/metrics.py`, wired into `concentrate analyze`.
+Definitions: [`docs/method/METRICS.md`](../method/METRICS.md). Code: `evals/metrics.py`, wired into `tenor analyze`.
 - **Decision: one price list for every $/question.** `analyze` and `economics` re-price each answer from its tokens at the interactive `--price-model` price (Opus 5.5 by default). The Batch API saving is a separate column, never mixed in.
   - Fixes red-team R1: recorded `cost_usd` mixed 50%-off batched rows with full-price rows.
   - `economics` additionally read that discount as ~50% prompt-cache hits.
@@ -445,7 +445,7 @@ Definitions: [`docs/method/METRICS.md`](../method/METRICS.md). Code: `evals/metr
 - **Open:** partial credit uses an arbitrary 0.5 weight; latency for batched systems still rests on n = 10; calibration (X5) and faithfulness (X2) need runs.
 
 ## P2-T: notes-sufficient vs transcript-needed tags, confident error (2026-11-03)
-Write-up: [`docs/archive/northwind/NOTES_VS_TRANSCRIPT.md`](../archive/northwind/NOTES_VS_TRANSCRIPT.md). Code: `evals/notes_tags.py`, `evals/by_tag.py`, `evals/notes_vs_transcript.py`; command `concentrate notes-vs-transcript` ($0).
+Write-up: [`docs/archive/northwind/NOTES_VS_TRANSCRIPT.md`](../archive/northwind/NOTES_VS_TRANSCRIPT.md). Code: `evals/notes_tags.py`, `evals/by_tag.py`, `evals/notes_vs_transcript.py`; command `tenor notes-vs-transcript` ($0).
 - **Decision: two deterministic taggers, not hand labels.**
   - The *generator reference* (did the planted summary bullet survive?) is the primary synthetic tag: it is exact by construction.
   - The *portable rule* (gold key values string-matched in the gold meetings' title, date, summary and typed notes) is the only option on real data. It is measured against the reference: v1 test 90%, κ 0.63.
@@ -459,7 +459,7 @@ Write-up: [`docs/archive/northwind/NOTES_VS_TRANSCRIPT.md`](../archive/northwind
 - **Open:** a real notes-only run and a v2.1 run would give larger n and a direct real deletion measurement (both cost money).
 
 ## P2-D: the deletion simulation, built not run (2026-11-03)
-Design: [`docs/tracks/RETENTION.md`](../tracks/RETENTION.md). Code: `evals/deletion_sim.py`, `concentrate deletion-sim`.
+Design: [`docs/tracks/RETENTION.md`](../tracks/RETENTION.md). Code: `evals/deletion_sim.py`, `tenor deletion-sim`.
 - **Decision: a ladder of four conditions, each adding one layer.** A Granola's agent (black box) → B Granola's notes only → C + Concentrate facts/digests with every transcript deleted → D + the on-abstain transcript fallback. B, C and D share the answer model, prompt and judges, so C − B and D − C are clean; A − B also mixes in Granola's own model and prompt, and the doc says so.
 - **Decision: B shows all notes, not a retrieval.** With 4 meetings (~4k tokens of notes) retrieval is moot, so B is an upper bound for a notes-only agent. It approximates Granola's degraded chat; it is not Granola's post-deletion behaviour, which we can't observe.
 - **Decision: notes come from the synced `data/real.db`** (the same public-MCP `get_meetings` data), so the run makes no extra live Granola calls beyond `query_granola_meetings` for unrecorded A answers.
@@ -472,7 +472,7 @@ Design: [`docs/tracks/RETENTION.md`](../tracks/RETENTION.md). Code: `evals/delet
 - **Bug fixed during the run:** the committable check refused the aggregate because the gold placeholder "UNANSWERABLE" matched the category name `unanswerable`. The CLI now leaves placeholder golds out of the forbidden-text list, and adds the run's answers to it.
 
 ## Notes faithfulness track (2026-11-05)
-Write-up: [`docs/tracks/NOTES.md`](../tracks/NOTES.md). Code: `evals/faithfulness.py`, prompt `notes_audit.v1`, command `concentrate notes-faithfulness --system granola|northwind-synth` ($0.40 total).
+Write-up: [`docs/tracks/NOTES.md`](../tracks/NOTES.md). Code: `evals/faithfulness.py`, prompt `notes_audit.v1`, command `tenor notes-faithfulness --system granola|northwind-synth` ($0.40 total).
 - **Decision: a product-neutral benchmark track, not a Granola audit** (Kian). Input is a `NotesSystem`, a set of (meeting, that system's notes markdown) pairs plus the account's meeting pool, built by a ~10-line adapter. Granola's AI notes are the first entry and the synthetic Northwind summaries a baseline; any notetaker or our own summariser plugs in the same way.
 - **Decision: one claim per bullet or sentence.** Headings and lead-ins (all-bold items, items ending in ":") are labels, not claims; they are kept as each claim's section/context so an owner's name over a task list still reaches the checker.
 - **Decision: one call per meeting, transcript as a cached system prompt.** `LLMRequest.cache_system` (new, opt-in; it enters the cache key only when set, so old keys are unchanged) marks the system prompt as a cache breakpoint, and `Completion` now records cache read/write tokens so cost is exact. With one call per meeting per model nothing is reused, so caching here costs the 1.25x write premium; it pays off on retries.
@@ -485,7 +485,7 @@ Write-up: [`docs/tracks/NOTES.md`](../tracks/NOTES.md). Code: `evals/faithfulnes
 - **Open:** the owner's hand verification of the 29-claim private spot-check list is the ground truth and has not happened yet.
 
 ## Notes grounding checker, validated on AMI (2026-11-05)
-Write-up: [`docs/method/GROUNDING_CHECKER.md`](../method/GROUNDING_CHECKER.md). Code: `evals/grounding.py`, `evals/grounding_ami.py`, prompt `grounding.v1`, commands `concentrate ground` and `concentrate ground-ami` ($0.0445 spent).
+Write-up: [`docs/method/GROUNDING_CHECKER.md`](../method/GROUNDING_CHECKER.md). Code: `evals/grounding.py`, `evals/grounding_ami.py`, prompt `grounding.v1`, commands `tenor ground` and `tenor ground-ami` ($0.0445 spent).
 - **Decision: a tool, not a leaderboard.** Per claim: verdict, cited `utterance_id`s, a verbatim quote. It reuses the faithfulness track's `split_claims`, `precheck`, labels and `nearest_lines` (now with optional IDF weights and stemming; `claims_message` factored out of `check_request`).
 - **Decision: retrieval first, full transcript only on doubt.** Per claim, the top-8 IDF-weighted lines ±1 go to one excerpt call per meeting; claims with no candidates or not called `supported` go to one full-transcript call whose verdict is final. A retrieval miss costs a call, not a false flag.
 - **Decision: the quote is copied, not generated** (the cited line with most shared words, 25 words max).
@@ -500,14 +500,14 @@ Built with fakes only; nothing has run live and no results exist. Write-up: [PRO
 
 - **Same `Source` protocol, new wire variant.** `WisprMCPSource` maps Wispr's MCP onto the Granola wire models. `WisprNote` is the API `Note` with free-form IDs, stored as `raw_format = 'wispr'`. Sync, storage and every downstream reader work unchanged. The cost is a Granola-shaped vocabulary: Wispr's generated notes body lands in `private_notes_markdown`, and Me/Them is inferred from speaker names because Wispr has no capture channel. Both are ASSUMED rows in SCHEMA_NOTES.md.
 - **Lenient parsing, every guess listed.** Tool names and arguments are verified from the published schemas. Response key names, the continuation-marker text and the transcript line format were not observed, so each is a single tolerant function (`split_range`, `parse_transcript`), easy to fix after the first real sync. We deliberately did not call the connected Wispr tools to look: that would have put real meetings in a session transcript.
-- **Allowlist moved to `concentrate.sources.allowlist`.** Sources now use it too, not only black-box products. `blackbox.base` re-exports it.
+- **Allowlist moved to `tenor.sources.allowlist`.** Sources now use it too, not only black-box products. `blackbox.base` re-exports it.
 - **Pairing** is a hard ±10-minute gate plus a weighted score (transcript 3-gram containment 0.6, attendees 0.2, title 0.2), assigned greedily one-to-one, with manual overrides. We chose a transparent, deterministic heuristic over a learned matcher because a few dozen pairs are checked by hand anyway.
 - **The outside agent** fixes model, prompt, budget and schema, and varies only the product's published read tools. Trade-off: tool *design* (call granularity, transcript search) is part of what's measured, by intent. Granola's own agent stays an extra row.
 - **Open:** whether Wispr accepts dynamically registered OAuth clients (if not, the live sync can't sign in); Wispr has no updated-since filter (every sync re-lists, and edits may be missed without a modified time); wiring the outside agent into `real-kit run`.
 
 ## Evidence compression, $0 parts (2026-11-05)
 
-Plan: [EVIDENCE_COMPRESSION.md](../method/EVIDENCE_COMPRESSION.md). Code: `ami/questions.py`, `evals/compression.py`, prompt `closed_book.v1`, commands `concentrate ami questions` and `concentrate compression`. Nothing paid has run.
+Plan: [EVIDENCE_COMPRESSION.md](../method/EVIDENCE_COMPRESSION.md). Code: `ami/questions.py`, `evals/compression.py`, prompt `closed_book.v1`, commands `tenor ami questions` and `tenor compression`. Nothing paid has run.
 
 - **Decision: questions by template, not by LLM.** Each annotator sentence is split at its first will/decided/discussed/agreed; the subject picks the template, the sentence is the gold. Pronouns take the previous subject. Trade-off: stilted wording and summary-level questions; in return, every gold answer is human-written and the set is reproducible from the seed.
 - **Decision: who-said-it keys on AMI's participant code**, because NXT letters change between IS1008 sessions. Quotes are summary-linked acts of 10–40 words, distinct speakers first.
@@ -522,7 +522,7 @@ Plan: [EVIDENCE_COMPRESSION.md](../method/EVIDENCE_COMPRESSION.md). Code: `ami/q
 
 ## Anatomy of a wrong fact, $0 parts (2026-11-05)
 
-Write-up: [WRONG_FACTS.md](../method/WRONG_FACTS.md). Code: `ami/facts.py`, `evals/wrong_facts.py`, command `concentrate facts stage1|stage2|stage3`. Nothing paid has run.
+Write-up: [WRONG_FACTS.md](../method/WRONG_FACTS.md). Code: `ami/facts.py`, `evals/wrong_facts.py`, command `tenor facts stage1|stage2|stage3`. Nothing paid has run.
 
 - **Decision: stage 1 is deterministic.** Fact tokens (numbers, money/percent, names, roles) come from AMI's manual transcript by rule; substitutions come from n-gram anchoring plus a small word alignment per fact, not a full-meeting alignment (cheaper, and robust to products segmenting and ordering overlapping speech differently). Validated: AMI scored against itself gives 100% recall, 0 substitutions on all six meetings.
 - **Decision: the human side is utterance-based** (dialogue acts, or punctuated word turns for EN2002b), so number runs never cross speakers and sentence starts are visible to the name rule.
@@ -540,3 +540,10 @@ Write-up: [RETENTION.md](../tracks/RETENTION.md#ami-replication-5-nov-2026). Num
 - **Decision: the on-demand transcript is the retained mechanism.** It is the only layer with a significant gain in both studies. It needs the transcript to exist, so it models "keep a cold copy", not deletion.
 - **Trade-off:** A − D still mixes Granola's model with ours. Whether a cold-copy reader with Granola's own model would close the gap is open.
 - **Process:** numbers were recomputed from the local per-answer rows (questions matched across systems) and committed as counts only; no answer, gold or question text.
+
+## Package and CLI renamed to `tenor` (2026-11-05)
+
+- **Decision: code name matches the project name.** `packages/concentrate` → `packages/tenor`, `import tenor`, CLI `tenor`. "Concentrate" now means only the archived Concentrate memory system.
+- **Decision: `concentrate` stays as a temporary CLI alias.** It prints a one-line deprecation notice to stderr and runs the same app, so scheduled jobs (`concentrate mcp-contract`) keep working.
+- **Kept stable on purpose:** `CONCENTRATE_*` env vars, `~/.config/concentrate/` OAuth tokens, `data/cache/concentrate/` stores, the `concentrate` system id in results, and the figure hash salt and SVG metadata. The LLM cache key hashes request content only, so no cached call is invalidated; `synth --seed 42` and `figures --check` stay byte-identical.
+- **Historical files keep their names:** `docs/archive/**`, `evals/reports/**`, `evals/economics/**` and `evals/scale/**` (only archived link targets were repointed to `packages/tenor`).

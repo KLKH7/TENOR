@@ -15,14 +15,14 @@ For comparing two products on the *same* meetings (Granola and Wispr Flow), incl
 
 External agents (Claude, ChatGPT, Cursor) reach a meeting product only through its MCP. They see an answer, maybe some citations, and a wait. So asking a product questions through that same MCP measures exactly what those agents experience: answer quality, citations, latency and failure modes. It makes no claims about how the product works inside.
 
-The kit is the real-data slice ([REAL_SLICE.md](../results/REAL_SLICE.md)), generalised. It started as "Granola's agent vs Concentrate on Kian's meetings". Now it is "any meeting MCP, on anyone's meetings".
+The kit is the real-data slice ([REAL_SLICE.md](../results/REAL_SLICE.md)), generalised. It started as "Granola's agent vs Concentrate on Kian's meetings" (Concentrate: the archived Concentrate memory system). Now it is "any meeting MCP, on anyone's meetings".
 
 ## Which public interfaces are used, and nothing else
 
 | Product | Interface | Tool calls made | Arguments |
 |---|---|---|---|
 | **Granola** (`--product granola`) | Granola's public MCP, `https://mcp.granola.ai/mcp`, Streamable HTTP, browser OAuth sign-in | `query_granola_meetings` only | `{"query": <question>}` |
-| **Concentrate** (`--product concentrate`) | Concentrate's own MCP server (`concentrate real-kit serve`), stdio | `ask_memory` only | `{"question": <question>, "answer": true}` |
+| **Concentrate** (`--product concentrate`) | Concentrate's own MCP server (`tenor real-kit serve`), stdio | `ask_memory` only | `{"question": <question>, "answer": true}` |
 | **Any other product** (`--product <name>`) | Its MCP server, stdio or Streamable HTTP, described in a JSON spec | the one tool named in the spec | `{<question_arg>: <question>, ...extra_args}` |
 
 Nothing else touches the product while it is being scored:
@@ -34,7 +34,7 @@ Nothing else touches the product while it is being scored:
 Each adapter allowlists exactly one tool. A wrapper (`AllowlistCaller`) refuses every other tool name **before anything is sent**. `tests/test_blackbox.py` checks this against every write tool Granola's MCP offers (`update_private_notes`, `create_folder`, `add_note_to_folder`, `give_feedback`, `sign_out`, ...).
 
 **Other interfaces the kit uses, outside scoring**, all optional and read-only:
-- **To draft questions**, the kit reads your meetings into `data/real.db` with `concentrate sync --source granola-mcp`. This calls `list_meetings`, `get_meetings` and `get_meeting_transcript` (see [SCHEMA_NOTES.md](../engineering/SCHEMA_NOTES.md), "MCP source mapping"). Hand-written questions don't need it.
+- **To draft questions**, the kit reads your meetings into `data/real.db` with `tenor sync --source granola-mcp`. This calls `list_meetings`, `get_meetings` and `get_meeting_transcript` (see [SCHEMA_NOTES.md](../engineering/SCHEMA_NOTES.md), "MCP source mapping"). Hand-written questions don't need it.
 - **`real-kit probe`** times Granola's read tools through a 7-tool read-only allowlist (`evals/real_slice.py: READ_ONLY_TOOLS`).
 - **The Anthropic API** is used for the judge (`judge.v1`) and, if you use it, for drafting questions. Its LLM cache lives under `data/real/cache/`.
 
@@ -52,23 +52,23 @@ All commands run from the repo root. Every file they write about your meetings l
      KIND: who_said | decision | change | commitment_status | disambiguation | temporal | unanswerable
      ```
      ```bash
-     uv run concentrate real-kit import-test data/real/test_questions.md
+     uv run tenor real-kit import-test data/real/test_questions.md
      ```
      Re-importing is safe: duplicate questions are skipped. Use `A: UNANSWERABLE` for questions the meetings never answer.
-   - **Dev split (optional, LLM-drafted).** Sync your meetings (`uv run concentrate sync --source granola-mcp --db data/real.db`), then run `real-kit draft --estimate` and `real-kit draft`. Next, `real-kit review` walks you through every draft: accept, edit or reject. Use dev questions to explore and tune. Never tune on test.
+   - **Dev split (optional, LLM-drafted).** Sync your meetings (`uv run tenor sync --source granola-mcp --db data/real.db`), then run `real-kit draft --estimate` and `real-kit draft`. Next, `real-kit review` walks you through every draft: accept, edit or reject. Use dev questions to explore and tune. Never tune on test.
    - `real-kit add --split dev|test` adds a single question by hand.
-3. **Check coverage.** `uv run concentrate real-kit status --split test --product granola` shows questions per kind, and how many answers are already recorded for that product.
+3. **Check coverage.** `uv run tenor real-kit status --split test --product granola` shows questions per kind, and how many answers are already recorded for that product.
 4. **Price it, then run it.**
    ```bash
-   uv run concentrate real-kit run --product granola --split test --estimate
-   uv run concentrate real-kit run --product granola --split test
+   uv run tenor real-kit run --product granola --split test --estimate
+   uv run tenor real-kit run --product granola --split test
    ```
    - The first run asks each question once. The raw response, the parsed answer, the end-to-end latency and a timestamp are recorded in `data/real/answers/<product>/`.
    - Every later run replays the recording, so scores are reproducible and the product isn't asked again.
    - `--offline` scores only questions that already have a recorded answer, and says how many it skipped.
    - Repeat `--product` to ask several products in one run.
-   - For `--product concentrate`, first build the memory (`uv run concentrate real-slice --systems c --estimate`, then without `--estimate`). The adapter then starts `real-kit serve` itself.
-5. **Look at disagreements.** `uv run concentrate real-kit spotcheck data/real/reports/<stamp>.jsonl --split test --product granola` writes `data/real/reports/spotcheck.test.md`. It lists each question where a product disagrees with your gold answer. Sometimes the gold is what's wrong.
+   - For `--product concentrate`, first build the memory (`uv run tenor real-slice --systems c --estimate`, then without `--estimate`). The adapter then starts `real-kit serve` itself.
+5. **Look at disagreements.** `uv run tenor real-kit spotcheck data/real/reports/<stamp>.jsonl --split test --product granola` writes `data/real/reports/spotcheck.test.md`. It lists each question where a product disagrees with your gold answer. Sometimes the gold is what's wrong.
 6. **Share only the aggregate.** Each run writes `data/real/reports/<stamp>.aggregate.json`. Add `--commit-to docs/results/<name>.json` to also write it somewhere you can commit. Either way, the writer (`blackbox.kit.write_committable`) first checks the file and **refuses to write it** if it holds:
    - a per-question field (`qid`, `question`, `gold`, `answer`, `raw`, `citations`, ...);
    - a meeting ID;
@@ -78,7 +78,7 @@ All commands run from the repo root. Every file they write about your meetings l
 ### How answers are scored
 
 The scoring is the same as on the real slice:
-- **The judge.** `judge.v1` grades each answer against your gold answer. The `.jsonl` report has the runner's shape, so `concentrate judge-check` can re-judge it with a second model.
+- **The judge.** `judge.v1` grades each answer against your gold answer. The `.jsonl` report has the runner's shape, so `tenor judge-check` can re-judge it with a second model.
 - **Key-term match**: the fraction of your `KEY` terms found in the answer.
 - **Citations** are scored at the **meeting level**: the meetings a product cites vs the gold evidence meetings. Hand-written test questions usually have no evidence IDs, so citation scores are then n/a.
 - **Latency** is end to end, as an agent waits for it: from the call until the parsed answer, transport included.
@@ -99,7 +99,7 @@ The scoring is the same as on the real slice:
 | `citation_regex` | For text responses: a regex whose group 1 is a cited meeting ID |
 | `read_only_tools` | The allowlist. It must contain `tool`, and should contain nothing else |
 
-**Products that need code** (OAuth over HTTP, or an answer that takes several calls): subclass `McpProduct` in `packages/concentrate/blackbox/products.py`. Set `name`, `tool` and `read_only_tools`, and implement `arguments()` and `parse()`. `GranolaProduct` is the model to copy. Its caller is `sources.mcp_transport.LiveMcpCaller`, which handles OAuth. Then register the name in `open_product()`.
+**Products that need code** (OAuth over HTTP, or an answer that takes several calls): subclass `McpProduct` in `packages/tenor/blackbox/products.py`. Set `name`, `tool` and `read_only_tools`, and implement `arguments()` and `parse()`. `GranolaProduct` is the model to copy. Its caller is `sources.mcp_transport.LiveMcpCaller`, which handles OAuth. Then register the name in `open_product()`.
 
 ### Read-only checklist (do this before the first run)
 
