@@ -10,6 +10,21 @@ This page defines the notes track: whether a product's notes are faithful to wha
 | **Earlier result** | Author's 4 private meetings (Granola only): 84% supported, 14% inferred, 0% unsupported, 2% possibly contradicted (132 claims; §below) |
 | **Status** | Preliminary. The AMI comparison is not a ranking until human calibration is done (about 100 labels, a second verifier) |
 
+## AMI claim types
+
+Moved from the README (5 November 2026). Corrected automated run (`352698f`), 387 claims, 7 AMI meetings. Preliminary; not yet human-calibrated.
+
+| Claim type | Granola (of 216) | Wispr Flow (of 171) | Notes |
+|---|---|---|---|
+| Supported by both transcripts | 195 (90%) [86, 94] | 138 (81%) [74, 86] | The README headline |
+| `borderline`: the two checks differ by one step | 12 (6%) | 19 (11%) | Mostly checker noise: one check says supported, the other inferred. Counting these as supported: 95.8% vs 91.8% |
+| `transcript_propagated`: note may repeat a transcription error | 4 | 6 | Upper bound, not re-read by hand. 4 of the 10 are in the human sample: 2 supported, 1 overreach, 1 could not judge, none wrong |
+| `inferred`: goes beyond what was said | 4 | 5 | |
+| `note_error`: added by the note-writer | 0 [0, 2%] | 2 [0.3, 4%] | 95% Wilson CIs |
+| `human_only` | 1 | 1 | |
+
+Full table and first-pass comparison: [`WRONG_FACTS.md` §3](../method/WRONG_FACTS.md#3-stage-2-corrected-run-headline).
+
 **Task.** Given a meeting's transcript and one system's notes for that meeting, how much of what the notes say can be pointed to in the transcript?
 
 The track is product-neutral: any notetaker, or our own summariser, can be scored the same way.
