@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 
 from concentrate.ami.corpus import load_meeting
-from concentrate.ami.products import ami_tag, match_notes, score_note
+from concentrate.ami.products import ami_tag, match_notes, score_note, wer_report
 from concentrate.ami.wer import content_recall, edit_distance, normalise, score, spell_number
 from tests.memory_helpers import make_note
 
@@ -131,3 +131,26 @@ def test_match_and_score(ami_zip: Path) -> None:
     assert kept.score.hyp_words == r.score.hyp_words + 2  # "room chatter" now scored
     with pytest.raises(ValueError):
         match_notes([note, note])
+
+
+def test_wer_report_pools_counts_not_ratios() -> None:
+    a = score("one two three four", "one two three four")  # 0 edits / 4 words
+    b = score("alpha beta", "gamma delta")  # 2 edits / 2 words
+    rows = [
+        {
+            "meeting_id": m,
+            "product": "p",
+            "score": s.model_dump(),
+            "product_speakers": 0,
+            "mic_utterances": 0,
+            "owner_labelled": 0,
+            "reference_speakers": 2,
+        }
+        for m, s in (("M1", a), ("M2", b))
+    ]
+    out = wer_report({"p": {"meta": {"drop_mic": True}, "meetings": rows}})["products"]["p"]
+    assert out["pooled_wer"] == round(2 / 6, 4)  # not the mean of 0.0 and 1.0
+    assert out["wer_range"] == [0.0, 1.0] and out["n_meetings"] == 2
+    assert out["pooled_content_recall"] == round(
+        a.content_found / (a.content_words + b.content_words), 4
+    )

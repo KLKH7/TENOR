@@ -2751,7 +2751,13 @@ def ami_wer(
     import subprocess
     from datetime import UTC, datetime
 
-    from concentrate.ami.products import AMI_SET, match_recordings, read_overrides, score_note
+    from concentrate.ami.products import (
+        AMI_SET,
+        match_recordings,
+        read_overrides,
+        score_note,
+        wer_report,
+    )
     from concentrate.ami.wer import NORMALISER_VERSION
 
     if not db.exists():
@@ -2793,8 +2799,15 @@ def ami_wer(
     payload = {"meta": meta, "meetings": [r.model_dump() for r in rows]}
     out.write_text(json.dumps(payload, indent=1) + "\n")
     typer.echo(f"wrote {out}")
+    runs = {
+        p.stem.removeprefix("wer_"): json.loads(p.read_text())
+        for p in AMI_RESULTS.glob("wer_*.json")
+    }
+    AMI_WER_OUT.write_text(json.dumps(wer_report(runs), indent=1) + "\n")
+    typer.echo(f"wrote {AMI_WER_OUT} (numbers only, {', '.join(sorted(runs))})")
 
 
+AMI_WER_OUT = Path("evals/reports/ami/wer.json")  # committed: numbers only
 AMI_COVERAGE_OUT = Path("evals/reports/ami/coverage.json")  # committed: numbers only
 
 

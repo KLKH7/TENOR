@@ -24,6 +24,7 @@ import logging
 import re
 from collections.abc import Iterable
 from pathlib import Path
+from typing import Any
 
 from pydantic import BaseModel, ConfigDict
 
@@ -206,3 +207,50 @@ def score_note(
         owner_labelled=len(mine),
         reference_speakers=len(meeting.speakers),
     )
+
+
+def wer_report(by_product: dict[str, dict[str, Any]]) -> dict[str, Any]:
+    """Numbers-only WER summary across products: per meeting and pooled.
+
+    ``by_product`` maps a product label to its ``wer_<product>.json`` payload (``meta`` and
+    ``meetings``). Pooled WER is total edits over total reference words; pooled content-word
+    recall is total content words found over total reference content words. No text or IDs
+    beyond the AMI meeting ID are carried over.
+    """
+    products: dict[str, Any] = {}
+    for name, payload in sorted(by_product.items()):
+        rows = [MeetingWer.model_validate(m) for m in payload["meetings"]]
+        meta = payload["meta"]
+        ref = sum(r.score.ref_words for r in rows)
+        edits = sum(r.score.edits for r in rows)
+        cw = sum(r.score.content_words for r in rows)
+        cf = sum(r.score.content_found for r in rows)
+        wers = [r.score.wer for r in rows]
+        recalls = [r.score.content_recall for r in rows]
+        products[name] = {
+            "meta": meta,
+            "n_meetings": len(rows),
+            "pooled_wer": round(edits / ref, 4) if ref else None,
+            "wer_range": [round(min(wers), 4), round(max(wers), 4)] if rows else None,
+            "pooled_content_recall": round(cf / cw, 4) if cw else None,
+            "content_recall_range": [round(min(recalls), 4), round(max(recalls), 4)]
+            if rows
+            else None,
+            "meetings": [
+                {
+                    "meeting_id": r.meeting_id,
+                    "ref_words": r.score.ref_words,
+                    "hyp_words": r.score.hyp_words,
+                    "edits": r.score.edits,
+                    "wer": round(r.score.wer, 4),
+                    "content_words": r.score.content_words,
+                    "content_found": r.score.content_found,
+                    "content_recall": round(r.score.content_recall, 4),
+                    "mic_utterances_dropped": r.mic_utterances,
+                    "product_speakers": r.product_speakers,
+                    "reference_speakers": r.reference_speakers,
+                }
+                for r in rows
+            ],
+        }
+    return {"products": products}

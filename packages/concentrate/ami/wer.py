@@ -245,12 +245,17 @@ def edit_distance(ref: list[str], hyp: list[str]) -> int:
     return int(row[-1])
 
 
-def content_recall(ref: list[str], hyp: list[str]) -> float:
-    """Share of the reference's content words (with multiplicity) found in ``hyp``, any order."""
+def content_counts(ref: list[str], hyp: list[str]) -> tuple[int, int]:
+    """(reference content words, those found in ``hyp``), with multiplicity, any order."""
     want = Counter(w for w in ref if w not in STOP)
     have = Counter(w for w in hyp if w not in STOP)
-    total = sum(want.values())
-    return sum(min(n, have[w]) for w, n in want.items()) / total if total else 0.0
+    return sum(want.values()), sum(min(n, have[w]) for w, n in want.items())
+
+
+def content_recall(ref: list[str], hyp: list[str]) -> float:
+    """Share of the reference's content words (with multiplicity) found in ``hyp``, any order."""
+    total, found = content_counts(ref, hyp)
+    return found / total if total else 0.0
 
 
 class WerScore(BaseModel):
@@ -261,16 +266,21 @@ class WerScore(BaseModel):
     edits: int
     wer: float
     content_recall: float
+    content_words: int = 0  # reference content words; lets recall be pooled across meetings
+    content_found: int = 0
 
 
 def score(reference: str, hypothesis: str) -> WerScore:
     """Normalise both transcripts and return WER and content-word recall."""
     ref, hyp = normalise(reference), normalise(hypothesis)
     edits = edit_distance(ref, hyp)
+    total, found = content_counts(ref, hyp)
     return WerScore(
         ref_words=len(ref),
         hyp_words=len(hyp),
         edits=edits,
         wer=edits / len(ref) if ref else float(bool(hyp)),
-        content_recall=content_recall(ref, hyp),
+        content_recall=found / total if total else 0.0,
+        content_words=total,
+        content_found=found,
     )
