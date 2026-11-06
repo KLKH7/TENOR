@@ -15,7 +15,7 @@ All findings come from 7 public AMI meetings and are preliminary; read them as d
 - **List answers are precise but incomplete.** On 30 list questions, 86% of Granola Chat's items were true but it found 74% of the annotated items; listing every item from the full transcript found 90% but only 61% of its items were true, through over-inclusion rather than invention ([Answers](#answers)).
 - **Answering from notes alone roughly halves correct answers.** Correct answers fell from 41% with transcripts to 21% from notes alone (68 questions, p = 0.001) ([Retention](#retention-what-deleting-transcripts-costs)).
 - **Automated judges over-counted errors in every human-checked sample.** None of the 3 strongest automated "confident contradictions" was wrong on human reading (23 human labels in total) ([Judges](#how-far-to-trust-the-automated-judges)).
-<!-- A1 bullet -->
+- **Long silences did not cause silent failures; an app update did.** In two runs with 17–19 minutes of silence mid-meeting, both products warned the user and resumed when speech returned; in one run an automatic application update ended an active recording without a visible warning ([Capture under stress](#capture-under-stress)).
 
 ## Status
 
@@ -27,7 +27,7 @@ What has been built and measured so far, as of 5 November 2026.
 | Questions about those meetings | 68, built by fixed templates from AMI's human annotations (13 used during development) |
 | Human labels on product outputs | 23 (20 note claims, 3 Chat answers), from 1 verifier |
 
-**All AMI results are preliminary.** The sample is 7 meetings, the human-labelled set is small, and the automated judges have not yet been calibrated against enough human labels to be trusted on their own. No result below is confirmed. Planned next: capture stress tests and a nightly replay suite ([next research step](#next-research-step-capture-reliability-and-regression-replay)), and about 100 human labels.
+**All AMI results are preliminary.** The sample is 7 meetings, the human-labelled set is small, and the automated judges have not yet been calibrated against enough human labels to be trusted on their own. No result below is confirmed. Planned next: capture stress tests and a nightly replay suite ([next research step](#capture-under-stress)), and about 100 human labels.
 
 Results from an earlier study on the author's own private meetings are collected in one place, [Earlier private study](#earlier-private-study).
 
@@ -90,7 +90,7 @@ Did each product record the whole meeting? We split AMI's human transcript into 
 
 Windows cluster within meetings, so no pooled interval is given. Granola's one gap falls where Wispr Flow's coverage also dips, during overlapping speech. As a control, an unrelated meeting's transcript passes only 0–2% of windows, so the 40% threshold separates capture from chance.
 
-Both products captured almost all of every meeting under normal conditions. Silent failure under stress, the capture question that matters most to users, is not yet tested ([next research step](#next-research-step-capture-reliability-and-regression-replay)). Track: [`docs/tracks/CAPTURE.md`](docs/tracks/CAPTURE.md).
+Both products captured almost all of every meeting under normal conditions. Silent failure under stress, the capture question that matters most to users, is not yet tested ([next research step](#capture-under-stress)). Track: [`docs/tracks/CAPTURE.md`](docs/tracks/CAPTURE.md).
 
 ### Transcription
 
@@ -184,28 +184,47 @@ Before the AMI work, the same measures were run on the author's own 4 private Gr
 
 All questions were used during development. Notes only vs Granola's agent: 2 gained, 17 lost (p = 0.001); the fact layer's gain was not significant. Granola's answers linked to whole meetings only and carried no abstain or coverage field. Details: [`docs/results/TENOR_TECHNICAL_REPORT.md`](docs/results/TENOR_TECHNICAL_REPORT.md), [`docs/tracks/NOTES.md`](docs/tracks/NOTES.md), [`docs/tracks/AGENT_INTERFACE.md`](docs/tracks/AGENT_INTERFACE.md).
 
-## Next research step: capture reliability and regression replay
+## Capture under stress
 
-**Why capture first.** Silent capture failure (a recording that appeared to run but captured nothing, or notes covering only part of a meeting) was the most common theme in a 2026 sample of public user reports about meeting note-takers: about 16 of about 75 items. The sample is small, drawn from one public forum and one product's user community, and has not yet been repeated for other products; but a failure the user cannot see undermines every other measure, whichever product it occurs in. TENOR's baseline found no failures in either product, so the question is which conditions produce them.
+*Does a product keep recording through conditions that break capture in real use, and does it tell the user when it stops?* Silent capture failure (a recording that appears to run but misses part of the meeting) was the most common theme in a 2026 sample of public user reports about meeting note-takers (about 16 of 75 items, from one forum and mostly one product's users). Normal replays showed no failures in either product ([Capture](#capture)), so each stress condition replays a known AMI meeting into both products at once and scores capture before and after the stressor with the free coverage scorer. Full design and run sheet: [`docs/tracks/CAPTURE.md`](docs/tracks/CAPTURE.md).
 
-**Stress-test design.** Each condition replays a known AMI meeting into both products at the same time and is scored by the free coverage scorer; a gap with no visible warning in the app (recorded by screenshot) counts as a silent failure. Full design: [`docs/tracks/CAPTURE.md`](docs/tracks/CAPTURE.md).
+### Long silence (A1)
 
-| # | Condition | What it probes |
-|---|---|---|
-| A1 | 17 minutes of silence spliced mid-meeting (12-minute control) | Whether capture resumes when speech returns after a documented 15-minute no-audio timeout, and whether the user is told |
-| A2 | Two meetings back to back, one recording | Content from one meeting written into another |
-| A3 | Two meetings back to back, second recording started late | Missed openings; which note gets the overlap |
-| A4 | App in the background or on another full-screen desktop | Capture when the app is not visible |
-| A5 | Display sleep or lid closed | Capture across system sleep |
-| A6 | Network drop for 60 seconds | Offline handling |
+Meeting IS1008d with digital silence inserted at 12 minutes: 17 minutes of silence in run 1, 19 minutes in run 2. Microphone input was held at zero; neither product transcribed any microphone speech in either run.
 
-**Live detection.** A prototype capture-health detector (speech heard, transcript not growing, so alert) caught 237 of 237 injected failures with no false alarms in 2.7 h of TEST meetings when given a perfect VAD; injected failures only ([`docs/tracks/CAPTURE_HEALTH.md`](docs/tracks/CAPTURE_HEALTH.md)).
+| Run | Product | Warning during the silence | Speech captured after the silence (15-second windows) | What happened |
+|---|---|---|---|---|
+| 1 (17 min) | Granola | Yes: an "are you still there?" prompt with a 3-minute countdown, about 14½ minutes into the silence | Resumed immediately | Not answered; speech returned before the countdown ended. Later windows are missing only because the run was stopped early |
+| 1 (17 min) | Wispr Flow | None seen | 0% | The app installed an automatic update and restarted about 10 minutes into the silence, which ended the recording; nothing after it was captured |
+| 2 (19 min) | Granola | Yes, same prompt | 100% of 46 windows | The prompt was answered |
+| 2 (19 min) | Wispr Flow | Yes, a prompt | 100% of 46 windows | The prompt was answered |
 
-![Can a product tell when its transcript has stopped? One injected failure on a TEST AMI meeting: speech continues while transcript blocks stop, and each of four detector variants raises an alert 13 to 33 seconds later](docs/figures/capture_health.svg)
+*Note.* Two runs on one meeting; read as observations, not rates. In run 2 both prompts were answered by the person running the test, so run 2 shows the behaviour when a user is present. The restart in run 1 is confirmed by the update installer's own log; whether it was triggered by the silence or would have happened at any time is unknown. Not yet tested: what a product does when its countdown runs out with nobody present (planned: 20 or more minutes of silence, nobody at the machine). Numbers: [`evals/reports/ami/stress_A1_IS1008d_run1.json`](evals/reports/ami/stress_A1_IS1008d_run1.json), [`run2`](evals/reports/ami/stress_A1_IS1008d_run2.json).
 
-Scoring A0–A6 is free apart from cross-meeting bleed (about $0.02 per meeting); each condition takes about 25 minutes of playback.
+**What this shows so far.** Both products warn during a long silence and resume when speech returns, so silence alone did not cause a silent failure. The one loss came from outside the meeting: an application update ended an active recording without a visible warning. Conditions of that kind (another app in front, system sleep, network loss) are the next ones to test.
 
-**Nightly replay suite.** The same harness, run on a frozen, versioned set of public meetings every night, becomes a regression detector: coverage, WER and fact recall per product, compared with the previous run and with human ground truth, plus the MCP contract check. Coverage, WER and fact-recall changes are product regressions; the contract check only keeps the harness itself in step with each product's reply format. This is the centre of TENOR's forward plan, and it applies to any product that can be replayed into.
+### Planned conditions
+
+| Condition | What it tests |
+|---|---|
+| A1, long silence with nobody present | Whether capture ends for good when a prompt goes unanswered |
+| A2, two meetings in one recording | Whether content from one meeting is written into the other |
+| A3, second recording started late | Whether the opening is missed, and which note gets the overlap |
+| A4, app in the background or on another desktop | Capture when the app is not visible |
+| A5, display sleep or lid closed | Capture across system sleep |
+| A6, network drop for 60 seconds | Behaviour while offline |
+
+### Detecting a stopped transcript
+
+*Could a product tell, while recording, that its transcript has stopped growing?* A prototype detector compares two signals the product already has, speech in the incoming audio and new transcript text, and alerts when there is speech but no new text. On Granola transcripts with failures inserted artificially (237 failures across 6 held-out meetings, 2.7 hours), it caught every failure with no false alarms when given an exact speech signal, and 234 of 237 with about one false alarm per hour using a simple loudness-based speech signal. It cannot detect a failure in the audio input itself, because it listens to the same input. Details: [`docs/tracks/CAPTURE_HEALTH.md`](docs/tracks/CAPTURE_HEALTH.md).
+
+![Can a product tell when its transcript has stopped? One artificially inserted failure in a held-out AMI meeting: speech continues while new transcript text stops, and four detector variants raise an alert 13 to 33 seconds later](docs/figures/capture_health.svg)
+
+*Figure 6. Can a product tell when its transcript has stopped? One held-out AMI meeting (IS1008b), minutes 20.5–25. Rows 1–2: when speech is present, from AMI's word timings (exact) and from audio loudness (simple estimate). Row 3: when transcript text arrives; grey marks were removed to simulate a failure (shaded band, 118 s). Row 4: when each detector variant raises its alert (13–33 s after the failure starts). Totals over 237 simulated failures are given in the text.*
+
+### Nightly replay
+
+The same harness, run every night on a fixed, versioned set of public meetings, becomes a regression test: capture coverage, word error rate and fact recall per product, compared with the previous night and with human ground truth. A separate contract check keeps the harness in step with each product's MCP reply format; it maintains the harness and does not measure the product.
 
 ## Design implications for note-takers
 
