@@ -1,6 +1,6 @@
 # Docs map
 
-Where every TENOR document lives. Start with the [repository README](../README.md); every doc follows [`STYLE.md`](STYLE.md).
+Where every TENOR (Transcripts, Evidence, Notes, Outcomes, Recall) document lives. Start with the [repository README](../README.md); every doc follows [`STYLE.md`](STYLE.md).
 
 | Folder | What it holds | Start with |
 |---|---|---|

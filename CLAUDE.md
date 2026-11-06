@@ -1,6 +1,6 @@
-# TENOR — conventions for agents working in this repo
+# TENOR (Transcripts, Evidence, Notes, Outcomes, Recall) — conventions for agents working in this repo
 
-TENOR is an open, outside-in benchmark of meeting note-takers (reference products: Granola and
+TENOR (Transcripts, Evidence, Notes, Outcomes, Recall) is an open, outside-in benchmark of meeting note-takers (reference products: Granola and
 Wispr Flow), built on the `concentrate` Python package, which also holds an earlier fact-memory
 prototype. The audience is researchers and engineers: rigour, neutrality and honesty beat polish.
 

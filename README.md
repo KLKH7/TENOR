@@ -1,8 +1,8 @@
-# TENOR
+# TENOR (Transcripts, Evidence, Notes, Outcomes, Recall)
 
-**Transcripts, Evidence, Notes, Outcomes, Recall: an open benchmark for meeting note-takers.**
+**An open benchmark for meeting note-takers.**
 
-TENOR replays public meeting recordings into real meeting products and measures, from the outside, what their users depend on: whether the meeting was captured, whether the notes are faithful and complete, whether answers about the meeting are right, and what is lost when transcripts are deleted. Granola and Wispr Flow are the reference products.
+TENOR (Transcripts, Evidence, Notes, Outcomes, Recall) replays public meeting recordings into real meeting products and measures, from the outside, what their users depend on: whether the meeting was captured, whether the notes are faithful and complete, whether answers about the meeting are right, and what is lost when transcripts are deleted. Granola and Wispr Flow are the reference products.
 
 *Independent research prototype; [not affiliated with Granola or Wispr](#not-affiliated-with-granola-or-wispr).*
 
