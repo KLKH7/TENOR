@@ -8,226 +8,275 @@
     [
      [
       93.63636364,
-      3.15
+      3.16
      ],
      [
       100.0,
-      3.15
+      3.16
      ]
     ],
     [
      [
       98.4962406,
-      3.15
+      3.16
      ]
     ],
     [
      [
       96.36363636,
-      2.85
+      2.84
      ],
      [
       100.0,
-      2.85
+      2.84
      ]
     ],
     [
      [
       99.39849624,
-      2.85
+      2.84
      ]
     ],
     [
      [
       85.59,
-      2.15
+      2.16
      ],
      [
       93.55,
-      2.15
+      2.16
      ]
     ],
     [
      [
       90.28,
-      2.15
+      2.16
      ]
     ],
     [
      [
       74.14,
-      1.85
+      1.84
      ],
      [
       85.92,
-      1.85
+      1.84
      ]
     ],
     [
      [
       80.7,
-      1.85
+      1.84
      ]
     ],
     [
      [
       38.44,
-      1.15
+      1.16
      ],
      [
       61.56,
-      1.15
+      1.16
      ]
     ],
     [
      [
       50.0,
-      1.15
+      1.16
      ]
     ],
     [
      [
       32.95,
-      0.85
+      0.84
      ],
      [
       55.92,
-      0.85
+      0.84
      ]
     ],
     [
      [
       44.12,
-      0.85
+      0.84
      ]
     ],
     [
      [
       12.68,
-      0.15
+      0.16
      ],
      [
       31.64,
-      0.15
+      0.16
      ]
     ],
     [
      [
       20.59,
-      0.15
+      0.16
      ]
     ],
     [
      [
       6.08,
-      -0.15
+      -0.16
      ],
      [
       21.54,
-      -0.15
+      -0.16
      ]
     ],
     [
      [
       11.76,
-      -0.15
+      -0.16
      ]
-    ],
-    [],
-    [],
-    [],
-    []
-   ],
-   "patches": [
-    [
-     0.0,
-     2.5,
-     1.0,
-     1.0
-    ],
-    [
-     0.0,
-     0.5,
-     1.0,
-     1.0
     ]
    ],
+   "patches": [],
    "texts": [
     [
      "98.5%",
-     103.0,
-     3.15
+     102.0,
+     3.16
     ],
     [
      "99.4%",
-     103.0,
-     2.85
-    ],
-    [
-     "",
-     117.0,
-     3.0
+     102.0,
+     2.84
     ],
     [
      "90%",
-     103.0,
-     2.15
+     102.0,
+     2.16
     ],
     [
      "81%",
-     103.0,
-     1.85
-    ],
-    [
-     "different claims, no paired\ntest; one-notch checker\ndisagreements widen it (Notes)",
-     117.0,
-     2.0
+     102.0,
+     1.84
     ],
     [
      "50%",
-     103.0,
-     1.15
+     102.0,
+     1.16
     ],
     [
      "44%",
-     103.0,
-     0.85
-    ],
-    [
-     "paired: Wispr 7 better,\n11 worse; p = 0.48, n.s.",
-     117.0,
-     1.0
+     102.0,
+     0.84
     ],
     [
      "21%",
-     103.0,
-     0.15
+     102.0,
+     0.16
     ],
     [
      "12%",
-     103.0,
-     -0.15
-    ],
-    [
-     "paired: Wispr 4 better,\n10 worse; p = 0.18, n.s.",
-     117.0,
-     0.0
+     102.0,
+     -0.16
     ]
    ],
    "title": "",
-   "xlabel": "Share (higher is better)",
+   "xlabel": "",
+   "xlim": [
+    0.0,
+    100.0
+   ],
+   "xscale": "linear",
+   "xticklabels": [],
+   "xticks": [
+    0.0,
+    20.0,
+    40.0,
+    60.0,
+    80.0,
+    100.0
+   ],
+   "ylabel": "",
+   "ylim": [
+    -0.55,
+    3.55
+   ],
+   "yscale": "linear",
+   "yticklabels": [
+    "Speech captured\n(15-second windows)",
+    "Note claims supported\nby both transcripts",
+    "Answers from notes:\ncorrect or partly correct",
+    "Answers from notes:\ncorrect"
+   ],
+   "yticks": [
+    3.0,
+    2.0,
+    1.0,
+    0.0
+   ]
+  },
+  {
+   "collections": [],
+   "images": [],
+   "legend": [],
+   "lines": [
+    [
+     [
+      9.3,
+      0.16
+     ],
+     [
+      28.58,
+      0.16
+     ]
+    ],
+    [
+     [
+      16.64,
+      0.16
+     ]
+    ],
+    [
+     [
+      8.0,
+      -0.16
+     ],
+     [
+      26.36,
+      -0.16
+     ]
+    ],
+    [
+     [
+      15.97,
+      -0.16
+     ]
+    ]
+   ],
+   "patches": [],
+   "texts": [
+    [
+     "16.6%",
+     102.0,
+     0.16
+    ],
+    [
+     "16.0%",
+     102.0,
+     -0.16
+    ]
+   ],
+   "title": "",
+   "xlabel": "Percent",
    "xlim": [
     0.0,
     100.0
    ],
    "xscale": "linear",
    "xticklabels": [
-    "0%",
-    "20%",
-    "40%",
-    "60%",
-    "80%",
-    "100%"
+    "0",
+    "20",
+    "40",
+    "60",
+    "80",
+    "100"
    ],
    "xticks": [
     0.0,
@@ -239,20 +288,14 @@
    ],
    "ylabel": "",
    "ylim": [
-    -0.6,
-    3.6
+    -0.55,
+    0.55
    ],
    "yscale": "linear",
    "yticklabels": [
-    "Speech captured\n(15 s windows)\nn = 665 windows each",
-    "Note claims supported\nby both transcripts\nn = 216 / 171 claims",
-    "Notes-only answers\nnot wrong\nn = 68 questions each",
-    "Notes-only answers\ncorrect\nn = 68 questions each"
+    "Word error rate"
    ],
    "yticks": [
-    3.0,
-    2.0,
-    1.0,
     0.0
    ]
   }
@@ -260,15 +303,11 @@
  "figure_legends": [
   [
    "Granola",
-   "Wispr Flow",
-   "95% Wilson CI",
-   "range across the 7 meetings"
+   "Wispr Flow"
   ]
  ],
  "suptitle": "Where do Granola and Wispr Flow differ, and by how much?",
  "texts": [
-  "Where do Granola and Wispr Flow differ, and by how much?",
-  "Every measure both products have, on public AMI meetings (7 replayed; answers on 5). Preliminary; small n.",
-  "Capture: share of 15 s windows of AMI speech found in the app's transcript (windows cluster by meeting, so the whisker is the per-meeting range, not a CI). Notes: corrected automated grounding run (352698f); claims differ between apps, so no paired test. Answers: our reader over each app's own notes, judged against AMI's human summaries; paired sign test on the same questions. Granola-only measures (Chat answers) are omitted here."
+  "Where do Granola and Wispr Flow differ, and by how much?"
  ]
 }

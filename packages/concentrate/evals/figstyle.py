@@ -156,6 +156,42 @@ def footnote(fig: Figure, text: str) -> None:
     fig.text(0.01, 0.01, text, ha="left", va="bottom", fontsize=8, color=MUTED, wrap=True)
 
 
+# -- paper style: the README's headline figures ------------------------------------------------
+#
+# Read like a paper's results figures: the title is the question, axes say what is measured in
+# plain words with units, marks carry at most a short direct label, and every explanation and
+# statistic lives in the README caption, not in the image. Sizes are in points; the SVG is
+# 8 in = 576 pt wide and shows at about 768 px in the README, so 1 pt is about 1.33 px and the
+# smallest text (10 pt) is about 13 px.
+
+PAPER_TITLE = 13.0
+PAPER_LABEL = 11.0  # axis labels
+PAPER_TEXT = 10.0  # tick labels, legends, direct labels
+
+PAPER_RC: dict[Any, Any] = {
+    **RC,
+    "font.size": PAPER_TEXT,
+    "axes.labelsize": PAPER_LABEL,
+    "xtick.labelsize": PAPER_TEXT,
+    "ytick.labelsize": PAPER_TEXT,
+    "legend.fontsize": PAPER_TEXT,
+    "axes.grid": False,
+}
+
+
+def paper_figure(height_in: float, nrows: int = 1, **kw: Any) -> tuple[Figure, Any]:
+    """A README-width figure in the paper style (no grid; consistent text sizes)."""
+    plt.rcParams.update(PAPER_RC)
+    fig, axes = plt.subplots(nrows, 1, figsize=(WIDTH_IN, height_in), **kw)
+    return fig, axes
+
+
+def paper_title(fig: Figure, question: str) -> None:
+    """The figure's question, top left, and nothing else: scope and caveats go in the caption."""
+    fig.suptitle(question, x=0.015, y=0.975, ha="left", va="top", fontsize=PAPER_TITLE,
+                 fontweight="bold", color=INK)  # fmt: skip
+
+
 def svg_bytes(fig: Figure, close: bool = True) -> bytes:
     """Render ``fig`` to deterministic SVG bytes (and close it unless ``close`` is False)."""
     buf = io.StringIO()

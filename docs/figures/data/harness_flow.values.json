@@ -8,159 +8,144 @@
    "patches": [],
    "texts": [
     [
-     "How does the outside-in evaluation harness work?",
-     2.0,
-     143.0
-    ],
-    [
-     "Public meetings go in as audio; we read only what each app exposes, and score it against a human answer key.",
-     2.0,
-     137.5
-    ],
-    [
-     "AMI audio (public)",
+     "AMI meeting audio (public)",
      80.0,
-     125.04
+     121.92
     ],
     [
-     "7 meetings · 3 h 00 m",
+     "7 meetings, 3 h 00 m in total",
      80.0,
-     121.3
+     117.6
     ],
     [
      "",
      69.2,
-     118.0
+     114.0
     ],
     [
      "",
      90.8,
-     118.0
+     114.0
     ],
     [
-     "played as system audio",
+     "played into both at once",
      80.0,
-     111.5
+     108.0
     ],
     [
      "Granola",
      44.0,
-     101.04
+     97.92
     ],
     [
-     "transcript · notes · Chat",
+     "transcript · notes · Chat answers",
      44.0,
-     97.3
+     93.6
     ],
     [
      "Wispr Flow",
      116.0,
-     101.04
+     97.92
     ],
     [
      "transcript · notes",
      116.0,
-     97.3
+     93.6
     ],
     [
      "",
      44.0,
-     94.0
+     90.0
     ],
     [
      "",
      116.0,
-     94.0
+     90.0
     ],
     [
-     "what each app exposes",
+     "read back",
      80.0,
-     87.5
+     84.0
     ],
     [
-     "read-only MCP tools",
+     "Read-only MCP tools",
      80.0,
-     77.04
+     73.92
     ],
     [
-     "the products' official servers; no writes",
+     "each product's official server",
      80.0,
-     73.3
+     69.6
     ],
     [
      "",
      80.0,
-     70.0
+     66.0
     ],
     [
      "transcripts, notes, answers",
      82.0,
-     65.5
+     62.0
     ],
     [
-     "Synced, private store",
+     "Private local store",
      80.0,
-     57.04
+     53.92
     ],
     [
-     "local only; results publish numbers",
+     "only scores are published",
      80.0,
-     53.3
-    ],
-    [
-     "Daily drift check:\ncaught 1 silent\nMCP change",
-     121.0,
-     55.5
+     49.6
     ],
     [
      "",
      69.2,
-     50.0
+     46.0
     ],
     [
      "",
      90.8,
-     50.0
+     46.0
     ],
     [
-     "transcripts, notes",
+     "transcripts",
      45.0,
-     43.5
+     40.0
     ],
     [
-     "notes, Chat answers",
+     "notes, answers",
      115.0,
-     43.5
+     40.0
     ],
     [
-     "Free scorers",
+     "Scorers without an LLM",
      44.0,
-     33.04
+     29.92
     ],
     [
-     "WER · coverage · facts",
+     "word error rate · coverage · facts",
      44.0,
-     29.3
+     25.6
     ],
     [
-     "Calibrated judge",
+     "LLM judge",
      116.0,
-     33.04
+     29.92
     ],
     [
-     "strong model + speaker roster",
+     "checked against human labels",
      116.0,
-     29.3
+     25.6
     ],
     [
-     "Ground truth",
+     "AMI ground truth",
      80.0,
-     10.04
+     9.92
     ],
     [
-     "AMI answer key + human labels",
+     "human transcripts · annotations · human labels",
      80.0,
-     6.3
+     5.6
     ],
     [
      "",
@@ -173,9 +158,9 @@
      14.0
     ],
     [
-     "reference to score against",
+     "answer key",
      80.0,
-     20.0
+     18.0
     ]
    ],
    "title": "",
@@ -210,7 +195,7 @@
    "ylabel": "",
    "ylim": [
     0.0,
-    148.0
+    140.0
    ],
    "yscale": "linear",
    "yticklabels": [
@@ -221,8 +206,7 @@
     "80",
     "100",
     "120",
-    "140",
-    "160"
+    "140"
    ],
    "yticks": [
     0.0,
@@ -232,12 +216,13 @@
     80.0,
     100.0,
     120.0,
-    140.0,
-    160.0
+    140.0
    ]
   }
  ],
  "figure_legends": [],
- "suptitle": "",
- "texts": []
+ "suptitle": "How does the outside-in evaluation harness work?",
+ "texts": [
+  "How does the outside-in evaluation harness work?"
+ ]
 }

@@ -22,7 +22,7 @@ Window counts are not independent (they cluster by meeting), so no pooled interv
 
 ## A. Capture reliability
 
-![How much of what was said did each app catch? EN2002b timeline for Granola and Wispr Flow, every 15 seconds, with the 40% threshold and a wrong-meeting control](../figures/capture_coverage.svg)
+![How much of what was said did each product capture? EN2002b timeline for Granola and Wispr Flow, every 15 seconds, with the 40% threshold and a different-meeting control](../figures/capture_coverage.svg)
 
 **A0 result (baseline, no stress): both apps caught 94–100% of each of the 7 meetings; no silent failures.** The only flagged gap (Granola, EN2002b, 51 s near minute 27) falls where Wispr Flow dips too (overlapping speech). Stress conditions A1–A6 are where failures, if any, will show.
 

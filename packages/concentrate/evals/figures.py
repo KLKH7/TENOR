@@ -1,7 +1,10 @@
 """``concentrate figures``: every committed results figure, generated from saved data.
 
-Each figure answers one question (PLAN.md section 5) and carries its scope and caveats on the
-image itself: split (DEV or TEST), n, CI method, and the price list used for any dollar figure.
+Each figure answers one question (PLAN.md section 5). The README's headline figures use the
+paper style (``figstyle.paper_*``): the image holds only the question, plainly labelled axes and
+short direct labels, and scope, n and statistics live in the README caption. The other figures
+carry their scope and caveats on the image itself: split (DEV or TEST), n, CI method, and the
+price list used for any dollar figure.
 
 Inputs, all committed except where noted:
 
@@ -14,6 +17,8 @@ Inputs, all committed except where noted:
 - ``evals/reports/ami/detector.json``: the capture-health detector's results and one example
   timeline (numbers only), written by ``concentrate ami detector``;
 - ``evals/reports/ami/deletion_ami.json``: the AMI retention replication (numbers only);
+- ``evals/reports/ami/wer.json``: AMI word error rate per product (numbers only), written by
+  ``concentrate ami wer``;
 - ``evals/reports/ami/notes_check.json``: content-free counts from the notes-grounding pass and
   the human verification sheet, rebuilt from gitignored files by
   :func:`concentrate.evals.figures_ami.snapshot_notes_check` (``--refresh-ami``);
@@ -92,6 +97,7 @@ class Inputs:
     ami_deletion: dict[str, Any] | None = None  # evals/reports/ami/deletion-sim.aggregate.json
     ami_retention: dict[str, Any] | None = None  # evals/reports/ami/deletion_ami.json
     notes_check: dict[str, Any] | None = None  # evals/reports/ami/notes_check.json
+    wer: dict[str, Any] | None = None  # evals/reports/ami/wer.json
     files: dict[str, list[Path]] = field(default_factory=dict)
 
 
@@ -121,6 +127,7 @@ def load_inputs(stamp: str, root: Path = Path()) -> Inputs:
     ami_del_path = reports / "ami" / "deletion-sim.aggregate.json"
     ami_ret_path = reports / "ami" / "deletion_ami.json"
     notes_path = root / FA.NOTES_CHECK
+    wer_path = reports / "ami" / "wer.json"
     rows = [json.loads(x) for x in rows_path.read_text().splitlines() if x.strip()]
     core = [report_path, rows_path, analysis_path]
     return Inputs(
@@ -140,6 +147,7 @@ def load_inputs(stamp: str, root: Path = Path()) -> Inputs:
         ami_deletion=_json(ami_del_path) if ami_del_path.exists() else None,
         ami_retention=_json(ami_ret_path) if ami_ret_path.exists() else None,
         notes_check=_json(notes_path) if notes_path.exists() else None,
+        wer=_json(wer_path) if wer_path.exists() else None,
         files={
             "report": core,
             "judge": [judge_path] if judge_path else [],
@@ -153,6 +161,7 @@ def load_inputs(stamp: str, root: Path = Path()) -> Inputs:
             "ami_deletion": [ami_del_path] if ami_del_path.exists() else [],
             "ami_retention": [ami_ret_path] if ami_ret_path.exists() else [],
             "notes_check": [notes_path] if notes_path.exists() else [],
+            "wer": [wer_path] if wer_path.exists() else [],
         },
     )
 
@@ -1066,16 +1075,18 @@ FIGURES: tuple[Spec, ...] = (
     Spec(
         "results_overview",
         "Where do Granola and Wispr Flow differ, and by how much?",
-        lambda inp: FA.fig_results_overview(inp.coverage, inp.ami_retention, inp.notes_check),
-        ("coverage", "ami_retention", "notes_check"),
+        lambda inp: FA.fig_results_overview(
+            inp.coverage, inp.ami_retention, inp.notes_check, inp.wer
+        ),
+        ("coverage", "ami_retention", "notes_check", "wer"),
         "../README.md",
         "real",
     ),
     Spec(
         "ami_retention",
-        "What does deleting transcripts cost, and what wins it back? (68 AMI questions)",
-        lambda inp: FA.fig_ami_retention(inp.ami_retention, inp.deletion),
-        ("ami_retention", "deletion"),
+        "What does deleting transcripts cost, and what wins it back?",
+        lambda inp: FA.fig_ami_retention(inp.ami_retention),
+        ("ami_retention",),
         "tracks/RETENTION.md",
         "real",
     ),
@@ -1097,7 +1108,7 @@ FIGURES: tuple[Spec, ...] = (
     ),
     Spec(
         "capture_coverage",
-        "How much of what was said did each app catch?",
+        "How much of what was said did each product capture?",
         lambda inp: FR.fig_capture_coverage(inp.coverage),
         ("coverage",),
         "tracks/CAPTURE.md",
@@ -1243,8 +1254,10 @@ def readme(inp: Inputs, rendered: dict[str, bytes]) -> str:
         f"Prices for every dollar figure: ${PRICE_IN:g}/M input and ${PRICE_OUT:g}/M output "
         "tokens, applied to every system and every token (equal prices, no discounts).",
         "",
-        "**One visual language.** Every figure is titled with the question it answers and "
-        "carries its scope and caveats. One colour per system or condition everywhere "
+        "**One visual language.** Every figure is titled with the question it answers. The "
+        "README's headline figures read like a paper's: plain axis labels with units, short "
+        "direct labels, and scope, n and statistics in the README caption; the other figures "
+        "carry their scope and caveats on the image. One colour per system or condition everywhere "
         "(`figstyle.py`); Granola's agent is always black; where real and synthetic share a "
         "chart, filled marks are real meetings and hollow marks synthetic.",
     ]

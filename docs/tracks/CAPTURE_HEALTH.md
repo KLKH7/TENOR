@@ -50,7 +50,7 @@ Both rows are in [`SCHEMA_NOTES.md`](../engineering/SCHEMA_NOTES.md).
 
 ## Results
 
-![Can a product tell when its transcript has stopped? One injected failure on TEST meeting IS1008b, with speech, transcript blocks and each variant's alert](../figures/capture_health.svg)
+![Can a product tell when its transcript has stopped? One simulated failure in held-out meeting IS1008b, with speech, transcript text and when each detector variant raises its alert](../figures/capture_health.svg)
 
 **TEST, 6 meetings, 2.7 h, 237 confirmed injected failures:**
 

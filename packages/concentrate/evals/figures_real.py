@@ -615,6 +615,7 @@ def fig_question_heatmap(deletion: dict[str, Any] | None) -> Any:
 
 COVERAGE_MEETING = "EN2002b"  # the one real (unstaged) meeting with a flagged gap
 COVERAGE_PRODUCTS = ("granola", "wispr")
+CONTROL_COLOUR = "#999999"
 
 
 def _cov_series(rows: list[list[float]]) -> tuple[list[float], list[float]]:
@@ -622,14 +623,13 @@ def _cov_series(rows: list[list[float]]) -> tuple[list[float], list[float]]:
 
 
 def fig_capture_coverage(coverage: dict[str, Any] | None) -> Any:
-    """EN2002b timeline: share of each 15 s window each app caught, threshold and control."""
+    """One meeting's timeline: share of each 15 s window each product caught, with the
+    threshold and a wrong-meeting control. The meeting and all summaries go in the caption."""
     if coverage is None:
         return None
-    meta, summary = coverage["meta"], coverage["summary"]
-    meetings = coverage["meetings"]
-    m = next(x for x in meetings if x["meeting_id"] == COVERAGE_MEETING)
-    thr = 100 * meta["threshold"]
-    fig, ax = fs.new_figure(5.2)
+    m = next(x for x in coverage["meetings"] if x["meeting_id"] == COVERAGE_MEETING)
+    thr = 100 * coverage["meta"]["threshold"]
+    fig, ax = fs.paper_figure(4.4)
     handles = []
     for p in COVERAGE_PRODUCTS:
         cov = m["products"].get(p)
@@ -639,113 +639,73 @@ def fig_capture_coverage(coverage: dict[str, Any] | None) -> Any:
         (h,) = ax.plot(x, y, color=fs.colour(p), lw=1.4, label=fs.label(p), zorder=3)
         handles.append(h)
     cx, cy = _cov_series(m["control"]["windows"])
-    passed = 100 * m["control"]["coverage"]
-    (hc,) = ax.plot(cx, cy, color="#999999", lw=1.2, ls=":", zorder=2,
-                    label=f"wrong meeting (control): {passed:.0f}% of windows pass")  # fmt: skip
-    ht = ax.axhline(thr, color=fs.MUTED, lw=1.1, ls="--", zorder=1,
-                    label=f"counts as captured ({thr:.0f}%)")  # fmt: skip
-    handles += [ht, hc]
+    (hc,) = ax.plot(cx, cy, color=CONTROL_COLOUR, lw=1.2, ls=":", zorder=2,
+                    label="Control: a different meeting's transcript")  # fmt: skip
+    (ht,) = ax.plot([0, 30], [thr, thr], color=fs.MUTED, lw=1.1, ls="--", zorder=1,
+                    label=f"Threshold for “captured” ({thr:.0f}%)")  # fmt: skip
     ax.set_xlim(0, 30)
-    ax.set_ylim(-3, 104)
+    ax.set_ylim(0, 102)
     ax.set_xticks(range(0, 31, 5))
-    ax.set_yticks(range(0, 101, 20), [f"{v}%" for v in range(0, 101, 20)])
+    ax.set_yticks(range(0, 101, 20))
     ax.set_xlabel("Minutes into the meeting")
-    ax.set_ylabel("Caught (% of what was said)")
-    fig.legend(handles=handles, loc="upper left", bbox_to_anchor=(0.005, 0.885), ncol=4,
-               handlelength=1.8, columnspacing=1.2, handletextpad=0.5)  # fmt: skip
-    fs.title(
-        fig,
-        "How much of what was said did each app catch?",
-        f"Real (unstaged) AMI meeting {COVERAGE_MEETING}, every 15 seconds; "
-        f"{len(meetings)}-meeting summary in the footnote.",
-    )
-    ctrl = [100 * x["control"]["coverage"] for x in meetings]
-    overall = "; ".join(
-        f"{fs.label(p)} {100 * summary[p]['coverage']:.1f}% ({summary[p]['meetings']} meetings)"
-        for p in COVERAGE_PRODUCTS
-        if p in summary
-    )
-    fs.footnote(
-        fig,
-        f"All {len(meetings)} AMI meetings, share of 15 s windows caught (≥{thr:.0f}%): "
-        f"{overall}; wrong-meeting control {min(ctrl):.0f} to {max(ctrl):.0f}% of windows pass. "
-        "Method: share of each window's distinctive word pairs (AMI's human transcript) found "
-        "anywhere in the app's transcript. Both apps dip at the same moments (overlapping "
-        "speech): hard audio, not lost recording. Threshold-sensitive: at 50% the gaps change.",
-    )
-    fig.subplots_adjust(left=0.1, right=0.98, top=0.8, bottom=0.22)
+    ax.set_ylabel("Speech captured per\n15-second window (%)")
+    fig.legend(handles=[*handles, ht, hc], loc="upper left", bbox_to_anchor=(0.01, 0.925),
+               ncol=2, handlelength=2.0, columnspacing=1.6, handletextpad=0.5)  # fmt: skip
+    fs.paper_title(fig, "How much of what was said did each product capture?")
+    fig.subplots_adjust(left=0.13, right=0.97, top=0.76, bottom=0.14)
     return fig
 
 
 # -- capture health (docs/tracks/CAPTURE_HEALTH.md) ------------------------------------------
 
-HEALTH_VARIANTS = (  # (key, label, colour, marker)
-    ("energy/start", "energy VAD + block starts", fs.OTHER_COLOURS[0], "o"),
-    ("oracle/start", "perfect VAD + block starts", fs.OTHER_COLOURS[2], "o"),
-    ("energy/span", "energy VAD + live words (est.)", fs.OTHER_COLOURS[0], "^"),
-    ("oracle/span", "perfect VAD + live words (est.)", fs.OTHER_COLOURS[2], "^"),
+SPEECH_COLOURS = {"oracle": "#555555", "energy": "#4477AA"}  # exact timing, loudness-based
+HEALTH_VARIANTS = (  # (key, row label, speech signal, marker): marker = what triggers the alert
+    ("oracle/start", "Alert: exact timing,\nnew transcript blocks", "oracle", "o"),
+    ("energy/start", "Alert: loudness-based,\nnew transcript blocks", "energy", "o"),
+    ("oracle/span", "Alert: exact timing,\nestimated live words", "oracle", "^"),
+    ("energy/span", "Alert: loudness-based,\nestimated live words", "energy", "^"),
 )
+_FAILURE_TINT = "#F4E3E7"
 
 
 def fig_capture_health(detector: dict[str, Any] | None) -> Any:
-    """One injected failure on a TEST meeting: speech, transcript blocks, and each alert."""
+    """One simulated failure in a held-out meeting: speech, transcript text, and each alert."""
     if detector is None or detector.get("example") is None:
         return None
-    ex, variants = detector["example"], detector["variants"]
+    ex = detector["example"]
     t0, t1 = ex["window_s"]
     start, length = ex["fault"]
     secs = [(t0 + i) / 60 for i in range(len(ex["oracle"]))]
-    fig, ax = fs.new_figure(5.2)
-    ax.axvspan(start / 60, (start + length) / 60, color="#CC6677", alpha=0.12, lw=0, zorder=0)
-    ax.text((start + length / 2) / 60, 4.05, f"injected failure: {length} s of transcript deleted",
-            ha="center", va="bottom", fontsize=8.5, color="#882255")  # fmt: skip
-    for row, key, colour in (
-        (3, "oracle", fs.OTHER_COLOURS[2]),
-        (2, "energy", fs.OTHER_COLOURS[0]),
-    ):
-        base = row - 0.4
-        ax.fill_between(secs, base, [base + 0.8 * v for v in ex[key]], step="post",
-                        color=colour, alpha=0.75, lw=0)  # fmt: skip
+    fig, ax = fs.paper_figure(5.0)
+    ax.axvspan(start / 60, (start + length) / 60, color=_FAILURE_TINT, lw=0, zorder=0)
+    ax.text((start + length / 2) / 60, 6.62, "Simulated failure", ha="center", va="center",
+            color=fs.MUTED)  # fmt: skip
+    for row, key in ((6, "oracle"), (5, "energy")):
+        base = row - 0.35
+        ax.fill_between(secs, base, [base + 0.7 * v for v in ex[key]], step="post",
+                        color=SPEECH_COLOURS[key], lw=0)  # fmt: skip
     for t in ex["blocks_kept"]:
-        ax.plot([t / 60, t / 60], [0.62, 1.38], color=fs.INK, lw=1.0)
+        ax.plot([t / 60, t / 60], [3.65, 4.35], color=fs.colour("granola"), lw=1.0)
     for t in ex["blocks_deleted"]:
-        ax.plot([t / 60, t / 60], [0.62, 1.38], color="#BBBBBB", lw=1.0, ls=(0, (2, 1.5)))
-    for i, (key, label, colour, marker) in enumerate(HEALTH_VARIANTS):
-        y = 0.5 - 0.36 * i
+        ax.plot([t / 60, t / 60], [3.65, 4.35], color="#BBBBBB", lw=1.0, ls=(0, (2, 1.5)))
+    for i, (key, _, speech, marker) in enumerate(HEALTH_VARIANTS):
+        y = 3 - i
         onset = ex["alert_onset"].get(key)
         if onset is None:
-            ax.text(t1 / 60, y, f"{label}: missed", fontsize=8, va="center", ha="right")
+            ax.text((start + length) / 60, y, "No alert", va="center", ha="right")
             continue
-        ax.plot([start / 60, onset / 60], [y, y], color=colour, lw=1.0, alpha=0.6)
-        ax.plot([onset / 60], [y], marker=marker, color=colour, ms=6, ls="none")
-        ax.text(onset / 60 + 0.05, y, f"{label}: alert after {onset - start} s",
-                fontsize=8, va="center", color=fs.INK)  # fmt: skip
-    rows = ["Speech heard\n(AMI word timings)", "Speech heard\n(energy VAD)",
-            "Transcript blocks\n(grey: deleted)", "Alert"]  # fmt: skip
-    ax.set_yticks([3, 2, 1, -0.04], rows)
-    ax.set_ylim(-0.85, 4.4)
+        colour = SPEECH_COLOURS[speech]
+        ax.plot([start / 60, onset / 60], [y, y], color=colour, lw=1.2)
+        ax.plot([onset / 60], [y], marker=marker, color=colour, ms=7, ls="none")
+        ax.text(onset / 60 + 0.06, y, f"{onset - start} s", va="center", color=fs.INK)
+    labels = ["Speech present\n(exact timing)", "Speech present\n(loudness-based)",
+              "Transcript text\narriving"] + [lab for _, lab, _, _ in HEALTH_VARIANTS]  # fmt: skip
+    ax.set_yticks([6, 5, 4, 3, 2, 1, 0], labels)
+    ax.tick_params(axis="y", length=0, pad=8)
+    ax.spines["left"].set_visible(False)
+    ax.set_ylim(-0.6, 7.0)
     ax.set_xlim(t0 / 60, t1 / 60)
-    ax.grid(axis="y", visible=False)
-    ax.set_xlabel(f"Minutes into AMI meeting {ex['meeting_id']} (TEST)")
-    fs.title(
-        fig,
-        "Can a product tell when its transcript has stopped?",
-        "Alert when speech is heard but no new transcript arrives for T seconds. One injected "
-        "failure, TEST meeting.",
-    )
-    parts = []
-    for key, label, _, _ in HEALTH_VARIANTS:
-        r, p = variants[key]["test"], variants[key]["params"]
-        parts.append(f"{label} (T={p['t_s']} s): {r['detected']}/{r['faults_confirmed']} caught, "
-                     f"{r['false_alarms_per_hour']:.1f} false alarms/h, median delay "
-                     f"{r['delay_s_median']:.0f} s")  # fmt: skip
-    test = variants["energy/start"]["test"]
-    fs.footnote(
-        fig,
-        f"TEST, {test['meetings']} AMI meetings, {test['hours']:.1f} h, injected failures of "
-        "30 s to 5 min confirmed by the coverage scorer. " + "; ".join(parts) + ". Tuned on DEV "
-        "(1 meeting, 15 min) only. 'Live words' spreads each block over its estimated speaking "
-        "time (2.6 words/s, assumed). Injected failures, not observed ones.",
-    )
-    fig.subplots_adjust(left=0.2, right=0.98, top=0.85, bottom=0.3)
+    ax.set_xlabel("Minutes into the meeting")
+    fs.paper_title(fig, "Can a product tell when its transcript has stopped?")
+    fig.subplots_adjust(left=0.27, right=0.97, top=0.9, bottom=0.12)
     return fig

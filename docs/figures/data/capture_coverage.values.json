@@ -1337,7 +1337,7 @@
       40.0
      ],
      [
-      1.0,
+      30.0,
       40.0
      ]
     ]
@@ -1369,19 +1369,19 @@
     25.0,
     30.0
    ],
-   "ylabel": "Caught (% of what was said)",
+   "ylabel": "Speech captured per\n15-second window (%)",
    "ylim": [
-    -3.0,
-    104.0
+    0.0,
+    102.0
    ],
    "yscale": "linear",
    "yticklabels": [
-    "0%",
-    "20%",
-    "40%",
-    "60%",
-    "80%",
-    "100%"
+    "0",
+    "20",
+    "40",
+    "60",
+    "80",
+    "100"
    ],
    "yticks": [
     0.0,
@@ -1397,14 +1397,12 @@
   [
    "Granola",
    "Wispr Flow",
-   "counts as captured (40%)",
-   "wrong meeting (control): 1% of windows pass"
+   "Threshold for “captured” (40%)",
+   "Control: a different meeting's transcript"
   ]
  ],
- "suptitle": "How much of what was said did each app catch?",
+ "suptitle": "How much of what was said did each product capture?",
  "texts": [
-  "How much of what was said did each app catch?",
-  "Real (unstaged) AMI meeting EN2002b, every 15 seconds; 7-meeting summary in the footnote.",
-  "All 7 AMI meetings, share of 15 s windows caught (≥40%): Granola 98.5% (7 meetings); Wispr Flow 99.4% (7 meetings); wrong-meeting control 0 to 2% of windows pass. Method: share of each window's distinctive word pairs (AMI's human transcript) found anywhere in the app's transcript. Both apps dip at the same moments (overlapping speech): hard audio, not lost recording. Threshold-sensitive: at 50% the gaps change."
+  "How much of what was said did each product capture?"
  ]
 }

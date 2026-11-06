@@ -8,342 +8,231 @@
     [
      [
       30.26,
-      4.12
+      4.14
      ],
      [
       53.04,
-      4.12
+      4.14
      ]
     ],
     [
      [
       41.18,
-      4.12
+      4.14
      ]
     ],
     [
      [
       65.14,
-      3.88
+      3.86
      ],
      [
       84.97,
-      3.88
+      3.86
      ]
     ],
     [
      [
       76.47,
-      3.88
+      3.86
      ]
     ],
     [
      [
       12.68,
-      3.12
+      3.14
      ],
      [
       31.64,
-      3.12
+      3.14
      ]
     ],
     [
      [
       20.59,
-      3.12
+      3.14
      ]
     ],
     [
      [
       38.44,
-      2.88
+      2.86
      ],
      [
       61.56,
-      2.88
+      2.86
      ]
     ],
     [
      [
       50.0,
-      2.88
+      2.86
      ]
     ],
     [
      [
       6.08,
-      2.12
+      2.14
      ],
      [
       21.54,
-      2.12
+      2.14
      ]
     ],
     [
      [
       11.76,
-      2.12
+      2.14
      ]
     ],
     [
      [
       32.95,
-      1.88
+      1.86
      ],
      [
       55.92,
-      1.88
+      1.86
      ]
     ],
     [
      [
       44.12,
-      1.88
+      1.86
      ]
     ],
     [
      [
       11.53,
-      1.12
+      1.14
      ],
      [
       30.01,
-      1.12
+      1.14
      ]
     ],
     [
      [
       19.12,
-      1.12
+      1.14
      ]
     ],
     [
      [
       39.83,
-      0.88
+      0.86
      ],
      [
       62.95,
-      0.88
+      0.86
      ]
     ],
     [
      [
       51.47,
-      0.88
+      0.86
      ]
     ],
     [
      [
       22.44,
-      0.12
+      0.14
      ],
      [
       44.16,
-      0.12
+      0.14
      ]
     ],
     [
      [
       32.35,
-      0.12
+      0.14
      ]
     ],
     [
      [
       48.42,
-      -0.12
+      -0.14
      ],
      [
       71.07,
-      -0.12
+      -0.14
      ]
     ],
     [
      [
       60.29,
-      -0.12
+      -0.14
      ]
-    ],
-    [
-     [
-      116.0,
-      3.92
-     ],
-     [
-      116.0,
-      3.08
-     ]
-    ],
-    [
-     [
-      116.0,
-      3.08
-     ]
-    ],
-    [
-     [
-      116.0,
-      2.92
-     ],
-     [
-      116.0,
-      2.08
-     ]
-    ],
-    [
-     [
-      116.0,
-      2.08
-     ]
-    ],
-    [
-     [
-      112.0,
-      2.92
-     ],
-     [
-      112.0,
-      1.08
-     ]
-    ],
-    [
-     [
-      112.0,
-      1.08
-     ]
-    ],
-    [
-     [
-      116.0,
-      0.92
-     ],
-     [
-      116.0,
-      0.08
-     ]
-    ],
-    [
-     [
-      116.0,
-      0.08
-     ]
-    ],
-    [],
-    [],
-    []
-   ],
-   "patches": [
-    [
-     0.0,
-     2.5,
-     1.0,
-     1.0
-    ],
-    [
-     0.0,
-     1.5,
-     1.0,
-     1.0
-    ],
-    [
-     0.0,
-     0.5,
-     1.0,
-     1.0
     ]
    ],
+   "patches": [],
    "texts": [
     [
      "41%",
-     54.24,
-     4.12
+     54.54,
+     4.14
     ],
     [
      "76%",
-     86.17,
-     3.88
+     86.47,
+     3.86
     ],
     [
      "21%",
-     32.84,
-     3.12
+     33.14,
+     3.14
     ],
     [
      "50%",
-     62.76,
-     2.88
+     63.06,
+     2.86
     ],
     [
      "12%",
-     22.74,
-     2.12
+     23.04,
+     2.14
     ],
     [
      "44%",
-     57.12,
-     1.88
+     57.42,
+     1.86
     ],
     [
      "19%",
-     31.21,
-     1.12
+     31.51,
+     1.14
     ],
     [
      "51%",
-     64.15,
-     0.88
+     64.45,
+     0.86
     ],
     [
      "32%",
-     45.36,
-     0.12
+     45.66,
+     0.14
     ],
     [
      "60%",
-     72.27,
-     -0.12
-    ],
-    [
-     "transcripts deleted",
-     2.0,
-     3.38
-    ],
-    [
-     "A→B: correct 2–16, p = 0.001\nnot wrong 1–19, p < 0.001",
-     117.5,
-     3.5
-    ],
-    [
-     "B→B′: correct 4–10, p = 0.18, n.s.\nnot wrong 7–11, p = 0.48, n.s.",
-     117.5,
-     2.5
-    ],
-    [
-     "B→C: correct 2–3, p = 1, n.s.\nnot wrong 4–3, p = 1, n.s.",
-     113.5,
-     1.5
-    ],
-    [
-     "C→D: correct 9–0, p = 0.004\nnot wrong 10–4, p = 0.18, n.s.",
-     117.5,
-     0.5
+     72.57,
+     -0.14
     ]
    ],
    "title": "",
-   "xlabel": "Share of the 68 questions",
+   "xlabel": "Share of questions (%)",
    "xlim": [
     0.0,
     100.0
    ],
    "xscale": "linear",
    "xticklabels": [
-    "0%",
-    "20%",
-    "40%",
-    "60%",
-    "80%",
-    "100%"
+    "0",
+    "20",
+    "40",
+    "60",
+    "80",
+    "100"
    ],
    "xticks": [
     0.0,
@@ -355,16 +244,16 @@
    ],
    "ylabel": "",
    "ylim": [
-    -0.6,
-    4.6
+    -0.55,
+    4.55
    ],
    "yscale": "linear",
    "yticklabels": [
-    "A  Granola Chat,\ntranscript kept",
-    "B  Granola notes only",
-    "B′ Wispr Flow notes only",
-    "C  B + fact layer",
-    "D  C + transcript when\nC abstains or hedges"
+    "Granola Chat (transcript kept)",
+    "Answers from Granola's notes",
+    "Answers from Wispr Flow's notes",
+    "Notes + extracted facts",
+    "Notes + transcript when needed"
    ],
    "yticks": [
     4.0,
@@ -377,15 +266,14 @@
  ],
  "figure_legends": [
   [
-   "correct",
-   "not wrong (correct or partly correct)",
-   "95% Wilson CI"
+   "Granola",
+   "Wispr Flow",
+   "Correct",
+   "Correct or partly correct"
   ]
  ],
- "suptitle": "What does deleting transcripts cost, and what wins it back? (68 AMI questions)",
+ "suptitle": "What does deleting transcripts cost, and what wins it back?",
  "texts": [
-  "What does deleting transcripts cost, and what wins it back? (68 AMI questions)",
-  "AMI, 5 meetings, 68 questions (13 DEV + 55 TEST), each answered over its own meeting(s).\nRight: paired wins–losses on the same questions (exact sign test); bold = p < 0.05 on correct.",
-  "A is Granola's own Chat; B to D are our reader (claude-opus-5-5) over each app's notes, so A→B mixes deletion with a change of model. Judge claude-sonnet-5-5 against AMI's human summaries; it over-counts errors (see Answers). Not replicated: in the earlier private study (author's 4 meetings, 47 DEV questions) D scored 87% vs Granola's agent 89%; here A beats D on not wrong, 17–6 (p = 0.035, uncorrected)."
+  "What does deleting transcripts cost, and what wins it back?"
  ]
 }

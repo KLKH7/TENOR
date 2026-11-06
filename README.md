@@ -47,9 +47,9 @@ Meeting note-takers are now ordinary work tools. People rely on them to record w
 
 How audio goes in, how outputs come back, and how they are scored.
 
-![How does the outside-in evaluation harness work? Public AMI audio is played into Granola and Wispr Flow, read back through read-only MCP tools into a private store, and scored by free scorers and a calibrated judge against the AMI answer key and human labels](docs/figures/harness_flow.svg)
+![How does the outside-in evaluation harness work? Public AMI meeting audio is played into Granola and Wispr Flow at once; transcripts, notes and answers are read back through each product's read-only MCP tools into a private local store, then scored by scorers that use no LLM and by an LLM judge against AMI's human transcripts, annotations and human labels](docs/figures/harness_flow.svg)
 
-*Figure 1. How does the evaluation harness work? Public AMI audio is played into both products at once, read back through read-only MCP tools, and scored against AMI's human annotations and human labels.*
+*Figure 1. How does the evaluation harness work? Boxes are stages; solid arrows show what passes from one stage to the next, and dashed arrows show the answer key each scorer uses. Granola is black and Wispr Flow teal, as in every figure. The 7 AMI meetings total 3 hours of audio. Only scores leave the private store.*
 
 **AMI replay protocol.** Meetings come from the AMI Meeting Corpus: real recorded speech with human transcripts, word timings and annotations (decisions, actions, problems), licensed CC BY 4.0. The set is the four-meeting IS1008 design-team series, ES2006a (another design-team role-play), IB4003 (a staged meeting) and EN2002b (a naturally occurring meeting). Each meeting's headset mix is played in real time as system audio into both products at once. The protocol for scored runs clears personal dictionaries, mutes the speakers so the room stays silent, and drops and counts any microphone turns. Details, licence analysis and risks: [`docs/method/AMI_REPLAY.md`](docs/method/AMI_REPLAY.md).
 
@@ -67,9 +67,9 @@ How audio goes in, how outputs come back, and how they are scored.
 
 What each product did on the 7 AMI meetings, one measure per row, Granola first. *Preliminary* means small n or a method still changing; read it as a direction, not a ranking. Intervals in brackets are 95% confidence intervals (Wilson score intervals unless stated). Dated log of every result: [`docs/results/INDEX.md`](docs/results/INDEX.md).
 
-![Where do Granola and Wispr Flow differ, and by how much? On every measure both products have: both captured almost all speech (98.5% and 99.4% of 15-second windows); Granola's notes had more claims supported by both transcripts (90% vs 81%); notes-only answers were close (50% vs 44% not wrong, 21% vs 12% correct, neither paired difference significant)](docs/figures/results_overview.svg)
+![Where do Granola and Wispr Flow differ, and by how much? Dot plot of five measures both products have. Speech captured: Granola 98.5%, Wispr Flow 99.4% of 15-second windows. Note claims supported by both transcripts: 90% vs 81%. Answers from notes, correct or partly correct: 50% vs 44%; correct: 21% vs 12%. Word error rate: 16.6% vs 16.0%](docs/figures/results_overview.svg)
 
-*Figure 2. Where do Granola and Wispr Flow differ, and by how much? Every measure both products have, side by side. Error bars: 95% confidence intervals; n for each measure in the tables below.*
+*Figure 2. Where do Granola and Wispr Flow differ, and by how much? Each dot is one product's value on a measure both products have (Granola black, Wispr Flow teal); higher is better in the top panel and lower is better in the bottom one. Solid whiskers are 95% confidence intervals (Wilson score). Dotted whiskers are the lowest and highest meeting, used for speech captured and word error rate because windows and words cluster within meetings. n: speech captured, 665 15-second windows per product over 7 meetings; note claims, 216 (Granola) and 171 (Wispr Flow) over 7 meetings; answers from notes, the same 68 questions over 5 meetings, answered by our reader from each product's notes; word error rate, 28,581 reference words over 7 meetings, pooled. Paired sign tests on the answers: Wispr Flow was better on 7 questions and worse on 11 for correct or partly correct (p = 0.48), and better on 4 and worse on 10 for correct (p = 0.18); neither difference is significant. Note claims differ between the products, so they have no paired test. Data: AMI Meeting Corpus.*
 
 Measures only one product has (Granola Chat answers; Wispr Flow's MCP has no question-answering tool) are left out of Figure 2 and given in the tables below.
 
@@ -77,9 +77,9 @@ Measures only one product has (Granola Chat answers; Wispr Flow's MCP has no que
 
 Did each product record the whole meeting? We split AMI's human transcript into 15-second windows and count a window as captured when at least 40% of its distinctive word pairs appear in the product's transcript.
 
-![How much of what was said did each app catch? Coverage timeline for one AMI meeting for Granola and Wispr Flow, every 15 seconds, with the 40% threshold and a wrong-meeting control](docs/figures/capture_coverage.svg)
+![How much of what was said did each product capture? Line chart over one 30-minute AMI meeting: the share of speech captured in each 15-second window by Granola and Wispr Flow stays mostly above the 40% threshold and dips at the same moments, while a different meeting's transcript, used as a control, stays below it](docs/figures/capture_coverage.svg)
 
-*Figure 3. How much of what was said did each app catch? Share of AMI speech captured in each 15-second window of one meeting, with the 40% threshold and a wrong-meeting control.*
+*Figure 3. How much of what was said did each product capture? Share of AMI's human-transcribed speech found in each product's transcript, per 15-second window, over one meeting (EN2002b, the one naturally occurring meeting, 30 minutes). A window counts as captured above the dashed 40% line. The dotted grey line scores an unrelated meeting's human transcript (IB4003) as if it were a product's, as a control: 0.9% of its windows pass. In this meeting Granola captured 93.6% of windows and Wispr Flow 96.4%; over all 7 meetings, 98.5% and 99.4% of 665 windows each. Data: [`evals/reports/ami/coverage.json`](evals/reports/ami/coverage.json).*
 
 | Measure | Granola | Wispr Flow | n | Status |
 |---|---|---|---|---|
@@ -138,9 +138,9 @@ Values are means per question with 95% bootstrap intervals. An item counts as tr
 
 Do automated "wrong" verdicts survive a human reading? A human labelled a sample of outputs the automated judges had flagged, against the AMI source.
 
-![When an automated judge says "wrong", does a human agree? Of 23 human labels, none found an output wrong: of 7 note claims the first-pass checker called contradicted, the human found 4 supported and could not judge 3; all 3 Chat answers the judge called confidently wrong were partly right](docs/figures/judge_vs_human.svg)
+![When an automated judge says "wrong", does a human agree? Stacked bars of human verdicts on 23 flagged outputs: of 20 note claims, the human found 11 supported, 1 going beyond what was said and none wrong, and could not judge 8; all 3 Chat answers the judge called confidently wrong were partly right](docs/figures/judge_vs_human.svg)
 
-*Figure 4. When an automated judge says "wrong", does a human agree? Human verdicts on outputs the automated judges flagged; n = 23 human labels (20 note claims, 3 Chat answers).*
+*Figure 4. When an automated judge says "wrong", does a human agree? Each bar groups outputs by the automated verdict; its segments show what one human verifier decided, with counts. n = 23 human labels: 20 note claims sampled from both products' notes, mostly from claims the checker had flagged, and the 3 Chat answers the automated judge called most confidently wrong. Note-claim verdicts are from the first checking pass, on which the sample was drawn. No interval is shown: counts this small give a direction, not a rate. The verifier also designed the study.*
 
 | Measure | Granola | Wispr Flow | n | Status |
 |---|---|---|---|---|
@@ -155,9 +155,9 @@ All 3 Chat answers were partly right. On the note claims, the human agreed with 
 
 If a product keeps only its notes and deletes transcripts, how many questions can still be answered? We answer the same 68 AMI questions (5 meetings) five ways, each over the question's own meetings, and score each answer correct, partially correct or wrong with an automated judge.
 
-![What does deleting transcripts cost, and what wins it back? On 68 AMI questions, correct answers fell from 41% (Granola Chat, transcript kept) to 21% from Granola's notes alone (2 gained, 16 lost, p = 0.001); Wispr Flow's notes scored 12% (not significantly different); a fact layer added nothing (2-3); reading the transcript when notes fall short won back part of the loss (32%, 9-0, p = 0.004)](docs/figures/ami_retention.svg)
+![What does deleting transcripts cost, and what wins it back? Dot plot of 68 AMI questions answered five ways. Correct: Granola Chat with transcripts 41%, from Granola's notes 21%, from Wispr Flow's notes 12%, notes plus extracted facts 19%, notes plus the transcript when needed 32%](docs/figures/ami_retention.svg)
 
-*Figure 5. What does deleting transcripts cost, and what wins it back? Share of answers judged correct for each way of answering. Error bars: 95% confidence intervals; n = 68 questions.*
+*Figure 5. What does deleting transcripts cost, and what wins it back? Share of 68 AMI questions (5 meetings) answered correctly (filled dots) and correctly or partly correctly (open dots), five ways. Whiskers are 95% confidence intervals (Wilson score). Granola Chat answers with Granola's own model and its transcripts. Every other row uses our reader: over Granola's notes (black) or Wispr Flow's notes (teal), then Granola's notes plus extracted facts, then those plus the transcript, read only when the answer abstains or hedges. An automated judge scored every answer against AMI's human summaries. Paired tests are given below the table.*
 
 | How the answer was produced | Correct (%) | Correct or partly correct (%) | n | Status |
 |---|---|---|---|---|
@@ -218,9 +218,9 @@ Meeting IS1008d with digital silence inserted at 12 minutes: 17 minutes of silen
 
 *Could a product tell, while recording, that its transcript has stopped growing?* A prototype detector compares two signals the product already has, speech in the incoming audio and new transcript text, and alerts when there is speech but no new text. On Granola transcripts with failures inserted artificially (237 failures across 6 held-out meetings, 2.7 hours), it caught every failure with no false alarms when given an exact speech signal, and 234 of 237 with about one false alarm per hour using a simple loudness-based speech signal. It cannot detect a failure in the audio input itself, because it listens to the same input. Details: [`docs/tracks/CAPTURE_HEALTH.md`](docs/tracks/CAPTURE_HEALTH.md).
 
-![Can a product tell when its transcript has stopped? One artificially inserted failure in a held-out AMI meeting: speech continues while new transcript text stops, and four detector variants raise an alert 13 to 33 seconds later](docs/figures/capture_health.svg)
+![Can a product tell when its transcript has stopped? Timeline of one simulated failure: speech continues while new transcript text stops for 118 seconds, and four detector variants raise an alert 13 to 33 seconds after it starts](docs/figures/capture_health.svg)
 
-*Figure 6. Can a product tell when its transcript has stopped? One held-out AMI meeting (IS1008b), minutes 20.5–25. Rows 1–2: when speech is present, from AMI's word timings (exact) and from audio loudness (simple estimate). Row 3: when transcript text arrives; grey marks were removed to simulate a failure (shaded band, 118 s). Row 4: when each detector variant raises its alert (13–33 s after the failure starts). Totals over 237 simulated failures are given in the text.*
+*Figure 6. Can a product tell when its transcript has stopped? One simulated failure in a held-out AMI meeting (IS1008b, minutes 20.5–25). The top two rows show when speech is present, from AMI's word timings (exact) and from audio loudness. The third row shows when transcript text arrives; the text that arrived in the shaded 118 seconds was removed (grey dashed marks) to simulate the failure. The bottom four rows show when each detector variant raises its alert, labelled with the seconds since the failure began. Variants differ in the speech signal they use and in whether they watch for new transcript blocks or for estimated live words. Totals over 237 simulated failures are given in the text above.*
 
 ### Nightly replay
 

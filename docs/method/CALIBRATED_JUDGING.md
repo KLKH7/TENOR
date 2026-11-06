@@ -2,7 +2,7 @@
 
 This page explains why automated judges over-count errors on meeting AI outputs and how TENOR's calibrated judge corrects for it. Decided 2026-11-05 after the first AMI results; status: plan, partly built.
 
-![How does the outside-in evaluation harness work? Public AMI audio is played into Granola and Wispr Flow, read back through read-only MCP tools into a private store, and scored by free scorers and a calibrated judge against the AMI answer key and human labels](../figures/harness_flow.svg)
+![How does the outside-in evaluation harness work? Public AMI audio is played into Granola and Wispr Flow, read back through read-only MCP tools into a private store, and scored by scorers that use no LLM and by an LLM judge against AMI's human transcripts, annotations and human labels](../figures/harness_flow.svg)
 
 ## Why
 

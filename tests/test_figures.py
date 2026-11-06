@@ -229,7 +229,22 @@ def make_root(root: Path) -> Path:
                                         "energy/span": 3, "oracle/span": 3}},
         },
     )  # fmt: skip
+    _write(
+        reports / "ami" / "wer.json",
+        {"products": {p: {"n_meetings": 2, "pooled_wer": w, "wer_range": [w - 0.05, w + 0.05]}
+                      for p, w in (("granola", 0.17), ("wispr", 0.16))}},
+    )  # fmt: skip
     return root
+
+
+PAPER_FIGURES = (
+    "harness_flow",
+    "results_overview",
+    "capture_coverage",
+    "judge_vs_human",
+    "ami_retention",
+    "capture_health",
+)
 
 
 def test_renders_every_figure_as_valid_svg(tmp_path: Path) -> None:
@@ -251,24 +266,14 @@ def test_renders_every_figure_as_valid_svg(tmp_path: Path) -> None:
     assert b"Wispr" in rendered["ami_retention_steps.svg"]  # the notes-only product panel
     assert b"How does TENOR work?" in rendered["overview.svg"]
     assert b"2 meetings" in rendered["harness_flow.svg"]
-    assert b"EN2002b" in rendered["capture_coverage.svg"]
-    assert b"9/10 caught" in rendered["capture_health.svg"]
-    assert b"missed" in rendered["capture_health.svg"]
-    assert b"n = 6 windows each" in rendered["results_overview.svg"]
-    assert b"paired: Wispr 1 better" in rendered["results_overview.svg"]
-    assert b"(10 AMI questions)" in rendered["ami_retention.svg"]
-    assert b"3 DEV + 7 TEST" in rendered["ami_retention.svg"]
-    assert b"(7 labels)" in rendered["judge_vs_human.svg"]
-
-
-def test_paired_counts_follow_the_direction_of_the_step() -> None:
-    """Wins are questions only the later condition gets right, whichever way the row is stored."""
-    rows = [{"a": "D", "b": "C", "metric": "correct", "a_only": 9, "b_only": 0,
-             "p_two_sided": 0.004}]  # fmt: skip
-    assert FA._paired(rows, "C", "D", "correct") == {"wins": 9, "losses": 0, "p": 0.004}
-    assert FA._paired(rows, "D", "C", "correct") == {"wins": 0, "losses": 9, "p": 0.004}
-    with pytest.raises(KeyError):
-        FA._paired(rows, "A", "B", "correct")
+    assert b"No alert" in rendered["capture_health.svg"]  # the fixture's missed variant
+    assert b"Word error rate" in rendered["results_overview.svg"]
+    assert b"Wrong (none)" in rendered["judge_vs_human.svg"]
+    # Paper-style headline figures: no internal codes or in-image statistics.
+    for name in PAPER_FIGURES:
+        svg = rendered[f"{name}.svg"]
+        for jargon in (b"DEV", b"TEST", b"VAD", b"n.s.", b"B\xe2\x80\xb2", b"T=", b"p = "):
+            assert jargon not in svg, (name, jargon)
 
 
 def test_snapshot_notes_check_keeps_only_counts(tmp_path: Path) -> None:
