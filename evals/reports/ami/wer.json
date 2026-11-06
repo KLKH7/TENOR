@@ -1,0 +1,232 @@
+{
+ "products": {
+  "granola": {
+   "meta": {
+    "git_sha": "39163c4",
+    "date": "2026-11-06T01:09:53+00:00",
+    "product": "granola",
+    "normaliser_version": 1,
+    "drop_mic": true,
+    "llm": null
+   },
+   "n_meetings": 7,
+   "pooled_wer": 0.1664,
+   "wer_range": [
+    0.093,
+    0.2858
+   ],
+   "pooled_content_recall": 0.878,
+   "content_recall_range": [
+    0.7769,
+    0.9444
+   ],
+   "meetings": [
+    {
+     "meeting_id": "IS1008a",
+     "ref_words": 2301,
+     "hyp_words": 2224,
+     "edits": 214,
+     "wer": 0.093,
+     "content_words": 990,
+     "content_found": 935,
+     "content_recall": 0.9444,
+     "mic_utterances_dropped": 0,
+     "product_speakers": 0,
+     "reference_speakers": 4
+    },
+    {
+     "meeting_id": "IS1008b",
+     "ref_words": 4014,
+     "hyp_words": 3898,
+     "edits": 471,
+     "wer": 0.1173,
+     "content_words": 1862,
+     "content_found": 1717,
+     "content_recall": 0.9221,
+     "mic_utterances_dropped": 1,
+     "product_speakers": 0,
+     "reference_speakers": 4
+    },
+    {
+     "meeting_id": "IS1008c",
+     "ref_words": 3795,
+     "hyp_words": 3577,
+     "edits": 516,
+     "wer": 0.136,
+     "content_words": 1740,
+     "content_found": 1568,
+     "content_recall": 0.9011,
+     "mic_utterances_dropped": 3,
+     "product_speakers": 0,
+     "reference_speakers": 4
+    },
+    {
+     "meeting_id": "IS1008d",
+     "ref_words": 3911,
+     "hyp_words": 3573,
+     "edits": 621,
+     "wer": 0.1588,
+     "content_words": 1764,
+     "content_found": 1540,
+     "content_recall": 0.873,
+     "mic_utterances_dropped": 0,
+     "product_speakers": 0,
+     "reference_speakers": 4
+    },
+    {
+     "meeting_id": "IB4003",
+     "ref_words": 6149,
+     "hyp_words": 5669,
+     "edits": 991,
+     "wer": 0.1612,
+     "content_words": 2555,
+     "content_found": 2262,
+     "content_recall": 0.8853,
+     "mic_utterances_dropped": 0,
+     "product_speakers": 0,
+     "reference_speakers": 4
+    },
+    {
+     "meeting_id": "EN2002b",
+     "ref_words": 5815,
+     "hyp_words": 4778,
+     "edits": 1662,
+     "wer": 0.2858,
+     "content_words": 2389,
+     "content_found": 1856,
+     "content_recall": 0.7769,
+     "mic_utterances_dropped": 0,
+     "product_speakers": 0,
+     "reference_speakers": 4
+    },
+    {
+     "meeting_id": "ES2006a",
+     "ref_words": 2596,
+     "hyp_words": 2477,
+     "edits": 281,
+     "wer": 0.1082,
+     "content_words": 1152,
+     "content_found": 1055,
+     "content_recall": 0.9158,
+     "mic_utterances_dropped": 0,
+     "product_speakers": 0,
+     "reference_speakers": 4
+    }
+   ]
+  },
+  "wispr": {
+   "meta": {
+    "git_sha": "39163c4",
+    "date": "2026-11-06T01:09:55+00:00",
+    "product": "wispr",
+    "normaliser_version": 1,
+    "drop_mic": false,
+    "llm": null
+   },
+   "n_meetings": 7,
+   "pooled_wer": 0.1597,
+   "wer_range": [
+    0.08,
+    0.2636
+   ],
+   "pooled_content_recall": 0.9,
+   "content_recall_range": [
+    0.8288,
+    0.9687
+   ],
+   "meetings": [
+    {
+     "meeting_id": "IS1008a",
+     "ref_words": 2301,
+     "hyp_words": 2277,
+     "edits": 184,
+     "wer": 0.08,
+     "content_words": 990,
+     "content_found": 959,
+     "content_recall": 0.9687,
+     "mic_utterances_dropped": 0,
+     "product_speakers": 3,
+     "reference_speakers": 4
+    },
+    {
+     "meeting_id": "IS1008b",
+     "ref_words": 4014,
+     "hyp_words": 3916,
+     "edits": 498,
+     "wer": 0.1241,
+     "content_words": 1862,
+     "content_found": 1726,
+     "content_recall": 0.927,
+     "mic_utterances_dropped": 0,
+     "product_speakers": 4,
+     "reference_speakers": 4
+    },
+    {
+     "meeting_id": "IS1008c",
+     "ref_words": 3795,
+     "hyp_words": 3552,
+     "edits": 518,
+     "wer": 0.1365,
+     "content_words": 1740,
+     "content_found": 1583,
+     "content_recall": 0.9098,
+     "mic_utterances_dropped": 0,
+     "product_speakers": 4,
+     "reference_speakers": 4
+    },
+    {
+     "meeting_id": "IS1008d",
+     "ref_words": 3911,
+     "hyp_words": 3688,
+     "edits": 602,
+     "wer": 0.1539,
+     "content_words": 1764,
+     "content_found": 1572,
+     "content_recall": 0.8912,
+     "mic_utterances_dropped": 0,
+     "product_speakers": 4,
+     "reference_speakers": 4
+    },
+    {
+     "meeting_id": "IB4003",
+     "ref_words": 6149,
+     "hyp_words": 5959,
+     "edits": 905,
+     "wer": 0.1472,
+     "content_words": 2555,
+     "content_found": 2321,
+     "content_recall": 0.9084,
+     "mic_utterances_dropped": 0,
+     "product_speakers": 4,
+     "reference_speakers": 4
+    },
+    {
+     "meeting_id": "EN2002b",
+     "ref_words": 5815,
+     "hyp_words": 5165,
+     "edits": 1533,
+     "wer": 0.2636,
+     "content_words": 2389,
+     "content_found": 1980,
+     "content_recall": 0.8288,
+     "mic_utterances_dropped": 0,
+     "product_speakers": 3,
+     "reference_speakers": 4
+    },
+    {
+     "meeting_id": "ES2006a",
+     "ref_words": 2596,
+     "hyp_words": 2428,
+     "edits": 324,
+     "wer": 0.1248,
+     "content_words": 1152,
+     "content_found": 1066,
+     "content_recall": 0.9253,
+     "mic_utterances_dropped": 0,
+     "product_speakers": 2,
+     "reference_speakers": 4
+    }
+   ]
+  }
+ }
+}
